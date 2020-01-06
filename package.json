@@ -1,0 +1,75 @@
+{
+  "name": "pay-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.8.3",
+    "@types/dotenv": "^8.2.0",
+    "@types/express-session": "^1.15.16",
+    "@types/jest": "24.0.24",
+    "@types/json-server": "^0.14.2",
+    "@types/lowdb": "^1.0.9",
+    "@types/node": "12.12.24",
+    "@types/passport": "^1.0.2",
+    "@types/react": "16.9.17",
+    "@types/react-dom": "16.9.4",
+    "@types/react-redux": "7.1.5",
+    "@types/react-router": "5.1.3",
+    "@types/react-router-dom": "5.1.3",
+    "@types/webpack-env": "1.15.0",
+    "axios": "0.19.0",
+    "dotenv": "^8.2.0",
+    "express-session": "^1.17.0",
+    "json-server": "0.15.1",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
+    "react-redux": "7.1.3",
+    "react-router": "5.1.2",
+    "react-router-dom": "5.1.2",
+    "react-scripts": "3.3.0",
+    "redux": "4.0.5",
+    "redux-devtools-extension": "2.13.8",
+    "redux-logger": "3.0.6",
+    "redux-logic": "2.1.1",
+    "ts-node": "^8.5.4",
+    "typescript": "3.7.4"
+  },
+  "devDependencies": {
+    "cypress": "3.8.1",
+    "start-server-and-test": "1.10.6"
+  },
+  "scripts": {
+    "db:seed:dev": "cp src/data/dev-seed.json src/data/database.json",
+    "db:seed:test": "cp src/data/test-seed.json src/data/database.test.json",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "cypress:run:record": "cypress run --record",
+    "prestart:dev": "yarn db:seed:dev",
+    "start": "react-scripts start",
+    "start:dev": "NODE_ENV=development yarn start:api & yarn start",
+    "start:api": "ts-node src/api.ts",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "start:server-and-api": "start-test start:api 3001 start",
+    "test:e2e": "NODE_ENV=test start-test start:server-and-api 3000 cypress:run",
+    "test:e2e:ci": "NODE_ENV=test yarn start:server-and-api"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

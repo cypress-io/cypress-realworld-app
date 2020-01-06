@@ -1,0 +1,20 @@
+{
+  "extends": ["config:base"],
+  "automerge": true,
+  "commitMessage": "{{semanticPrefix}}Update {{depName}} to {{newVersion}} 🌟",
+  "prTitle": "{{semanticPrefix}}{{#if isPin}}Pin{{else}}Update{{/if}} dependency {{depName}} to version {{#if isRange}}{{newVersion}}{{else}}{{#if isMajor}}{{newVersionMajor}}.x{{else}}{{newVersion}}{{/if}}{{/if}} 🌟",
+  "major": {
+    "automerge": false
+  },
+  "minor": {
+    "automerge": false
+  },
+  "prHourlyLimit": 1,
+  "updateNotScheduled": false,
+  "timezone": "America/New_York",
+  "schedule": ["after 10pm", "before 6am"],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "masterIssue": true
+}
