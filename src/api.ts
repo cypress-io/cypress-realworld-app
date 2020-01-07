@@ -21,10 +21,9 @@ if (process.env.NODE_ENV === "test") {
 const databaseFile = path.join(__dirname, "data", databaseFileName);
 
 const adapter = new FileSync(databaseFile);
-const db = low(adapter);
 
 const server = jsonServer.create();
-//const router = jsonServer.router(databaseFile);
+const router = jsonServer.router(databaseFile);
 
 // @ts-ignore
 const middlewares = jsonServer.defaults({ watch: false });
@@ -39,6 +38,8 @@ passport.use(
     password: string,
     done: Function
   ) {
+    // create db handle inside each route so data is refreshed between requests
+    const db = low(adapter);
     db.get("users")
       // @ts-ignore
       .find({ username: username })
@@ -96,21 +97,34 @@ server.get("/users", (req, res) => {
   //   - default: scoped user contacts first, then all other users
   //   - "top_first": contacts with most transactions first
 
+  // create db handle inside each route so data is refreshed between requests
+  const db = low(adapter);
   const users = db.get("users").value();
   res.status(200).json({ users });
 });
 
-server.post("/users", async (req, res) => {
+server.post("/users", (req, res) => {
   // TODO: validate post via joi
   const user = req.body;
 
   const id = shortid();
-  await db
+  user.id = id;
+
+  // create db handle inside each route so data is refreshed between requests
+  const db = low(adapter);
+  db.get("users")
+    // @ts-ignore
+    .push(user)
+    .write();
+
+  const record = db
     .get("users")
     // @ts-ignore
-    .push({ id, ...user })
-    .write()
-    .then((record: any) => res.status(201).json({ user: record }));
+    .find({ id })
+    .value();
+
+  res.status(201);
+  res.json({ user: record });
 });
 
 // Uncomment to use json-server routes
