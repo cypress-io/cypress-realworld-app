@@ -66,7 +66,8 @@
     "eject": "react-scripts eject",
     "start:server-and-api": "start-test start:api 3001 start",
     "test:e2e": "NODE_ENV=test start-test start:server-and-api 3000 cypress:run",
-    "test:e2e:ci": "NODE_ENV=test yarn start:server-and-api"
+    "test:e2e:ci": "NODE_ENV=test yarn start:server-and-api",
+    "test:e2e:api": "NODE_ENV=test start-test start:server-and-api 3000 cypress:open"
   },
   "eslintConfig": {
     "extends": "react-app"
