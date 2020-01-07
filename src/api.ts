@@ -89,6 +89,9 @@ server.get("/logout", (req, res) => {
 });
 
 server.get("/users", (req, res) => {
+  // create db handle inside each route so data is refreshed between requests
+  const db = low(adapter);
+
   // TODO: validate order query param(s)
 
   // TODO:
@@ -97,21 +100,19 @@ server.get("/users", (req, res) => {
   //   - default: scoped user contacts first, then all other users
   //   - "top_first": contacts with most transactions first
 
-  // create db handle inside each route so data is refreshed between requests
-  const db = low(adapter);
   const users = db.get("users").value();
   res.status(200).json({ users });
 });
 
 server.post("/users", (req, res) => {
+  // create db handle inside each route so data is refreshed between requests
+  const db = low(adapter);
   // TODO: validate post via joi
   const user = req.body;
 
   const id = shortid();
   user.id = id;
 
-  // create db handle inside each route so data is refreshed between requests
-  const db = low(adapter);
   db.get("users")
     // @ts-ignore
     .push(user)
@@ -125,6 +126,32 @@ server.post("/users", (req, res) => {
 
   res.status(201);
   res.json({ user: record });
+});
+
+server.patch("/users/:user_id", (req, res) => {
+  // create db handle inside each route so data is refreshed between requests
+  const db = low(adapter);
+
+  // TODO: validate post via joi
+  const { user_id } = req.params;
+
+  const edits = req.body;
+
+  // make update to record
+  db.get("users")
+    // @ts-ignore
+    .find({ id: user_id })
+    .assign(edits)
+    .write();
+
+  const updatedRecord = db
+    .get("users")
+    // @ts-ignore
+    .find({ id: user_id })
+    .value();
+
+  res.status(204);
+  res.json({ user: updatedRecord });
 });
 
 // Uncomment to use json-server routes
