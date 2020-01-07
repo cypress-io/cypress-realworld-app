@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/cli": "^7.7.7",
+    "@babel/plugin-transform-typescript": "^7.7.4",
+    "@babel/preset-env": "^7.7.7",
     "@material-ui/core": "^4.8.3",
     "@types/dotenv": "^8.2.0",
     "@types/express-session": "^1.15.16",
