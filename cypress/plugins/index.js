@@ -21,8 +21,7 @@ let adapter = new FileSync(
 let db = low(adapter);
 
 const defaultStructure = {
-  transactions: [],
-  stooges: []
+  users: []
 };
 
 module.exports = (on, config) => {

@@ -8,7 +8,7 @@ const faker = require("faker");
 
 describe("App", function() {
   beforeEach(function() {
-    cy.task("db:reset");
+    //cy.task("db:reset");
     cy.task("db:seed");
   });
 
@@ -32,7 +32,7 @@ describe("App", function() {
       avatar: faker.internet.avatar()
     }).then(response => {
       expect(response.status).to.eq(201);
-      expect(response.body).to.contain({ first_name });
+      expect(response.body.user).to.contain({ first_name });
     });
   });
 });
