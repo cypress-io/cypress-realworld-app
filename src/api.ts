@@ -84,8 +84,12 @@ server.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
+server.get("/users", (req, res) => {
+  const users = db.get("users").value();
+  res.json({ users });
+});
 server.post("/users", (req, res) => {});
 
-server.use(router);
+//server.use(router);
 
 export default server;

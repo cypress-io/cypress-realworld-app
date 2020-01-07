@@ -1,88 +1,154 @@
 {
-  "transactions": [
+  "users": [
     {
-      "id": 1,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 100,
-      "currency": "USD"
+      "id": "9IUK0xpw",
+      "uuid": "a6218702-3254-4d3e-af48-9ebb7ee73e76",
+      "first_name": "Lizzie",
+      "last_name": "Heathcote",
+      "username": "Teresa34",
+      "password": "tWOZQPsy8OzOTDq",
+      "email": "Zakary.Bashirian@yahoo.com",
+      "phone_number": "(523) 344-8550 x6663",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/ilya_pestov/128.jpg",
+      "default_privacy_level": "private",
+      "balance": 58681,
+      "created_at": "2020-01-02T04:17:12.289Z",
+      "modified_at": "2020-01-06T20:43:57.569Z"
     },
     {
-      "id": 2,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 50,
-      "currency": "USD"
+      "id": "8CKHEu7Bb",
+      "uuid": "16df7866-b5c1-4840-8796-ebd3df147dc1",
+      "first_name": "Verda",
+      "last_name": "Rohan",
+      "username": "Guadalupe.Padberg86",
+      "password": "doCD753ScCiboMp",
+      "email": "Emelia.Dare@hotmail.com",
+      "phone_number": "154-023-4116 x58144",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/malykhinv/128.jpg",
+      "default_privacy_level": "contacts",
+      "balance": 60377,
+      "created_at": "2019-07-08T15:21:15.524Z",
+      "modified_at": "2020-01-07T14:54:31.133Z"
     },
     {
-      "id": 3,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 120,
-      "currency": "USD"
+      "id": "Z49-pZ0VP",
+      "uuid": "e9fe51a5-db66-48ca-bd2a-a5b178f8fcd3",
+      "first_name": "Aylin",
+      "last_name": "Huel",
+      "username": "Alexa81",
+      "password": "jz3Jm7y6kR5HIQG",
+      "email": "Parker.Leannon2@yahoo.com",
+      "phone_number": "067-925-5679 x561",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/ilya_pestov/128.jpg",
+      "default_privacy_level": "public",
+      "balance": 30496,
+      "created_at": "2019-07-19T05:42:31.689Z",
+      "modified_at": "2020-01-07T15:16:06.137Z"
     },
     {
-      "id": 4,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 200,
-      "currency": "USD"
+      "id": "8jlDHFobj",
+      "uuid": "8110e643-2513-4e17-bbe9-7577d1f99d39",
+      "first_name": "Earnestine",
+      "last_name": "Dietrich",
+      "username": "Travon.Prohaska87",
+      "password": "aDRzt4xtk6EuCaC",
+      "email": "Clare_Beier@gmail.com",
+      "phone_number": "611.483.1376 x783",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/evanshajed/128.jpg",
+      "default_privacy_level": "private",
+      "balance": 99877,
+      "created_at": "2019-01-19T14:18:55.754Z",
+      "modified_at": "2020-01-07T00:10:49.416Z"
     },
     {
-      "id": 5,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 3000,
-      "currency": "USD"
+      "id": "B2NczT5pm",
+      "uuid": "114c406e-5bce-4ca4-8389-7c5f91026c16",
+      "first_name": "Naomie",
+      "last_name": "O'Hara",
+      "username": "Alec93",
+      "password": "Llkuv13GaULNhL3",
+      "email": "Damion_Osinski16@yahoo.com",
+      "phone_number": "257-175-1918 x654",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/kurafire/128.jpg",
+      "default_privacy_level": "public",
+      "balance": 38127,
+      "created_at": "2019-02-09T14:17:06.223Z",
+      "modified_at": "2020-01-07T17:25:50.812Z"
     },
     {
-      "id": 6,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 700,
-      "currency": "USD"
+      "id": "6VhSm-R4i",
+      "uuid": "5749a026-fb79-4cdc-9079-6718a59f8965",
+      "first_name": "Garnet",
+      "last_name": "Klein",
+      "username": "Raphael55",
+      "password": "4OqJQmuoCwZfWXW",
+      "email": "Matteo_Schowalter@yahoo.com",
+      "phone_number": "383-303-5538 x727",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/liminha/128.jpg",
+      "default_privacy_level": "contacts",
+      "balance": 91529,
+      "created_at": "2019-07-26T01:50:01.882Z",
+      "modified_at": "2020-01-07T16:21:16.977Z"
     },
     {
-      "id": 7,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 10,
-      "currency": "USD"
+      "id": "kNNEA6mLb",
+      "uuid": "c32e7bf7-a3a2-42fb-b65c-8d9a83a91629",
+      "first_name": "Kaden",
+      "last_name": "Kunze",
+      "username": "Ambrose_Prohaska",
+      "password": "IPqN5mLACjXYBlk",
+      "email": "Diamond.Borer@gmail.com",
+      "phone_number": "201.776.1749 x66786",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/twittypork/128.jpg",
+      "default_privacy_level": "public",
+      "balance": 49263,
+      "created_at": "2019-04-20T19:43:07.347Z",
+      "modified_at": "2020-01-06T22:06:47.190Z"
     },
     {
-      "id": 8,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 400,
-      "currency": "USD"
+      "id": "l8j5MFSU5",
+      "uuid": "6af7e3a5-a4e9-4a9c-9c21-e12bde4b4455",
+      "first_name": "Crystel",
+      "last_name": "Hermann",
+      "username": "Kenny_Batz",
+      "password": "X2Jk29QTtLh9Tfz",
+      "email": "Lisa27@hotmail.com",
+      "phone_number": "135-534-5749",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/algunsanabria/128.jpg",
+      "default_privacy_level": "contacts",
+      "balance": 55937,
+      "created_at": "2019-12-14T00:10:17.873Z",
+      "modified_at": "2020-01-07T10:30:31.190Z"
     },
     {
-      "id": 9,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 60,
-      "currency": "USD"
+      "id": "LFTFzXJug",
+      "uuid": "50a2e1e4-9f97-48ad-92e2-f78e123b5520",
+      "first_name": "Dena",
+      "last_name": "Jacobs",
+      "username": "Nia_Waelchi43",
+      "password": "E1k1AgkbuayDPXP",
+      "email": "Tom.Wilderman@hotmail.com",
+      "phone_number": "080.331.0862 x078",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/nepdud/128.jpg",
+      "default_privacy_level": "private",
+      "balance": 10735,
+      "created_at": "2019-01-22T21:31:45.821Z",
+      "modified_at": "2020-01-07T12:37:49.930Z"
     },
     {
-      "id": 10,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 800,
-      "currency": "USD"
-    }
-  ],
-  "stooges": [
-    {
-      "id": 1,
-      "name": "Moe"
-    },
-    {
-      "id": 2,
-      "name": "Curly"
-    },
-    {
-      "id": 3,
-      "name": "Larry"
+      "id": "abi3cURPF",
+      "uuid": "0b218c69-bdea-4798-aebe-ad1329a667a1",
+      "first_name": "Adeline",
+      "last_name": "Stroman",
+      "username": "Luigi26",
+      "password": "JYSNfJizTjqubSw",
+      "email": "Dora.Emard@gmail.com",
+      "phone_number": "(590) 608-4423 x99301",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/maxlinderman/128.jpg",
+      "default_privacy_level": "public",
+      "balance": 20709,
+      "created_at": "2019-10-10T13:15:37.749Z",
+      "modified_at": "2020-01-06T19:23:48.803Z"
     }
   ]
 }
