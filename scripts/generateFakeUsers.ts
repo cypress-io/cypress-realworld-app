@@ -1,3 +1,5 @@
+import fs from "fs";
+import shortid from "shortid";
 import faker from "faker";
 import { User } from "../src/models/user";
 
@@ -7,7 +9,7 @@ const users = Array(10)
     (x: any, i: number): User => {
       //
       return {
-        id: i,
+        id: shortid(),
         uuid: faker.random.uuid(),
         first_name: faker.name.firstName(),
         last_name: faker.name.lastName(),
@@ -29,6 +31,6 @@ const users = Array(10)
     }
   );
 
-console.log(users);
-
-export {}; //try hack to make it a module
+fs.writeFile(__dirname + "/users.json", JSON.stringify(users), function() {
+  console.log("users generated");
+});
