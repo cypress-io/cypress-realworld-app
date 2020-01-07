@@ -84,7 +84,8 @@ server.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
+server.post("/users", (req, res) => {});
+
 server.use(router);
-server.listen(3001, () => {
-  console.log("JSON Server is running");
-});
+
+export default server;
