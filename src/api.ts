@@ -1,5 +1,6 @@
 //require("dotenv").config();
 
+import express from "express";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 import path from "path";
@@ -28,6 +29,7 @@ const server = jsonServer.create();
 // @ts-ignore
 const middlewares = jsonServer.defaults({ watch: false });
 
+server.use(express.json());
 server.use(middlewares);
 
 // configure passport for local strategy
@@ -107,17 +109,8 @@ server.post("/users", async (req, res) => {
     .get("users")
     // @ts-ignore
     .push({ id, ...user })
-    .write();
-
-  const userRecord = db
-    .get("users")
-    // @ts-ignore
-    .find({ id })
-    .value();
-
-  //console.log("UR: ", userRecord);
-
-  res.status(201).json({ user: userRecord });
+    .write()
+    .then((record: any) => res.status(201).json({ user: record }));
 });
 
 // Uncomment to use json-server routes
