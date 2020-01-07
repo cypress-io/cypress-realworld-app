@@ -1,24 +1,6 @@
 {
-  "transactions": [
-    { "id": 1, "from": "Moe", "to": "Curly", "amount": 100, "currency": "USD" },
-    { "id": 2, "from": "Moe", "to": "Curly", "amount": 50, "currency": "USD" },
-    { "id": 3, "from": "Moe", "to": "Curly", "amount": 120, "currency": "USD" },
-    { "id": 4, "from": "Moe", "to": "Curly", "amount": 200, "currency": "USD" },
-    {
-      "id": 5,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 3000,
-      "currency": "USD"
-    },
-    { "id": 6, "from": "Moe", "to": "Curly", "amount": 700, "currency": "USD" },
-    { "id": 7, "from": "Moe", "to": "Curly", "amount": 10, "currency": "USD" },
-    { "id": 8, "from": "Moe", "to": "Curly", "amount": 400, "currency": "USD" },
-    { "id": 9, "from": "Moe", "to": "Curly", "amount": 60, "currency": "USD" },
-    { "id": 10, "from": "Moe", "to": "Curly", "amount": 800, "currency": "USD" }
-  ],
-  "stooges": [
-    { "id": 1, "name": "Moe" },
+  "users": [
+    { "id": 1, "first_name": "Moe" },
     { "id": 2, "name": "Curly" },
     { "id": 3, "name": "Larry" }
   ]

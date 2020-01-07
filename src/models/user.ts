@@ -1,4 +1,4 @@
-enum DefaultPrivacyLevel {
+export enum DefaultPrivacyLevel {
   "public",
   "private",
   "contacts"
