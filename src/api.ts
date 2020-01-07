@@ -6,6 +6,7 @@ import path from "path";
 import jsonServer from "json-server";
 import passport from "passport";
 import session from "express-session";
+import shortid from "shortid";
 const LocalStrategy = require("passport-local").Strategy;
 
 let databaseFileName;
@@ -25,7 +26,7 @@ const server = jsonServer.create();
 const router = jsonServer.router(databaseFile);
 
 // @ts-ignore
-const middlewares = jsonServer.defaults({ watch: true });
+const middlewares = jsonServer.defaults({ watch: false });
 
 server.use(middlewares);
 
@@ -85,11 +86,39 @@ server.get("/logout", (req, res) => {
 });
 
 server.get("/users", (req, res) => {
+  // TODO: validate order query param(s)
+
+  // TODO:
+  // Query Params:
+  // order
+  //   - default: scoped user contacts first, then all other users
+  //   - "top_first": contacts with most transactions first
+
   const users = db.get("users").value();
   res.json({ users });
 });
-server.post("/users", (req, res) => {});
 
+server.post("/users", async (req, res) => {
+  // TODO: validate post via joi
+  const user = req.body;
+
+  const id = shortid();
+  await db
+    .get("users")
+    // @ts-ignore
+    .push({ id, ...user })
+    .write();
+
+  const userRecord = db
+    .get("users")
+    // @ts-ignore
+    .find({ id })
+    .value();
+
+  res.status(201).json({ user: userRecord });
+});
+
+// Uncomment to use json-server routes
 //server.use(router);
 
 export default server;
