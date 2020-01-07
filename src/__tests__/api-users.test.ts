@@ -3,20 +3,20 @@ import api from "../api";
 import faker from "faker";
 import _ from "lodash";
 
-describe("Users API", () => {
-  it("get users", () => {
-    request(api)
-      .get(`/users`)
-      .expect(200)
-      .expect(json => expect(json.body.users.length).toBe(10))
-      .catch(e => {
-        console.log(e, e.response, e.status);
-      });
-  });
+describe("GET /users", () => {
+  it("should retrieve a list of users", async done => {
+    const resp = await request(api).get(`/users`);
 
-  it("creates a new user", done => {
+    expect(resp.status).toBe(200);
+    expect(resp.body.users.length).toBe(10);
+    done();
+  });
+});
+
+describe("POST /users", () => {
+  it("should create a new user", async done => {
     const first_name = faker.name.firstName();
-    request(api)
+    const response = await request(api)
       .post(`/users`)
       .send({
         first_name,
@@ -26,17 +26,15 @@ describe("Users API", () => {
         email: faker.internet.email(),
         phone_number: faker.phone.phoneNumber(),
         avatar: faker.internet.avatar()
-      })
-      .expect(201)
-      .expect(json => expect(json.body).toContain({ first_name }))
-      .end(done)
-      .catch(e => {
-        console.log(e, e.response, e.status);
-        done();
       });
-  });
 
-  it.skip("updates a user", () => {
+    expect(response.body.toContain({ first_name }));
+    done();
+  });
+});
+
+describe("PATCH /users", () => {
+  it.skip("should update a user", () => {
     const first_name = faker.name.firstName();
 
     request(api)
