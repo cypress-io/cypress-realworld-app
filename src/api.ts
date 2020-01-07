@@ -23,7 +23,7 @@ const adapter = new FileSync(databaseFile);
 const db = low(adapter);
 
 const server = jsonServer.create();
-const router = jsonServer.router(databaseFile);
+//const router = jsonServer.router(databaseFile);
 
 // @ts-ignore
 const middlewares = jsonServer.defaults({ watch: false });
@@ -95,7 +95,7 @@ server.get("/users", (req, res) => {
   //   - "top_first": contacts with most transactions first
 
   const users = db.get("users").value();
-  res.json({ users });
+  res.status(200).json({ users });
 });
 
 server.post("/users", async (req, res) => {
@@ -114,6 +114,8 @@ server.post("/users", async (req, res) => {
     // @ts-ignore
     .find({ id })
     .value();
+
+  //console.log("UR: ", userRecord);
 
   res.status(201).json({ user: userRecord });
 });
