@@ -145,6 +145,24 @@ server.get("/users/:user_id", (req, res) => {
   res.json({ user });
 });
 
+server.get("/users/profile/:username", (req, res) => {
+  // create db handle inside each route so data is refreshed between requests
+  const db = low(adapter);
+
+  // TODO: validate post via joi
+  const { username } = req.params;
+
+  const user = db
+    .get("users")
+    // @ts-ignore
+    .find({ username })
+    .pick(["first_name", "last_name", "avatar"])
+    .value();
+
+  res.status(200);
+  res.json({ user });
+});
+
 server.patch("/users/:user_id", (req, res) => {
   // create db handle inside each route so data is refreshed between requests
   const db = low(adapter);
