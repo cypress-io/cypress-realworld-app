@@ -26,6 +26,23 @@ describe("Users API", function() {
     });
   });
 
+  context("GET /users/:user_id", function() {
+    it("get a user", function() {
+      cy.request("GET", "http://localhost:3001/users").as("users");
+      cy.get("@users").then(resp => {
+        cy.log(resp.body.users);
+        const user = resp.body.users[0];
+
+        cy.request("GET", `http://localhost:3001/users/${user.id}`).then(
+          response => {
+            expect(response.status).to.eq(200);
+            expect(response.body.user).to.have.property("first_name");
+          }
+        );
+      });
+    });
+  });
+
   context("POST /users", function() {
     it("creates a new user", function() {
       const first_name = faker.name.firstName();

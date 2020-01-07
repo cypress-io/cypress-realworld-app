@@ -128,6 +128,23 @@ server.post("/users", (req, res) => {
   res.json({ user: record });
 });
 
+server.get("/users/:user_id", (req, res) => {
+  // create db handle inside each route so data is refreshed between requests
+  const db = low(adapter);
+
+  // TODO: validate post via joi
+  const { user_id } = req.params;
+
+  const user = db
+    .get("users")
+    // @ts-ignore
+    .find({ id: user_id })
+    .value();
+
+  res.status(200);
+  res.json({ user });
+});
+
 server.patch("/users/:user_id", (req, res) => {
   // create db handle inside each route so data is refreshed between requests
   const db = low(adapter);
