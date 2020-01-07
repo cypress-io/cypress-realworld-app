@@ -51,7 +51,7 @@
     "prestart:dev": "yarn db:seed:dev",
     "start": "react-scripts start",
     "start:dev": "NODE_ENV=development yarn start:api & yarn start",
-    "start:api": "ts-node src/api.ts",
+    "start:api": "ts-node src/app.ts",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
