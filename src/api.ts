@@ -1,6 +1,6 @@
 //require("dotenv").config();
 
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 import path from "path";
@@ -9,6 +9,7 @@ import passport from "passport";
 import session from "express-session";
 import shortid from "shortid";
 import bcrypt from "bcrypt";
+import flash from "connect-flash";
 import { User } from "./models/user";
 const LocalStrategy = require("passport-local").Strategy;
 
@@ -71,10 +72,25 @@ passport.deserializeUser(function(id, done) {
     .get("users")
     // @ts-ignore
     .find({ id })
+    // TODO: Limit fields returned in deserialized user object?
+    //.pick(["id", "first_name", "last_name"])
     .value();
 
   done(null, user);
 });
+
+const ensureAuthenticated = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.status(401).send({
+    error: "Unauthorized"
+  });
+};
 
 server.use(
   session({
@@ -86,6 +102,8 @@ server.use(
 );
 server.use(passport.initialize());
 server.use(passport.session());
+
+server.use(flash());
 
 // authentication routes
 server.post(
@@ -103,7 +121,7 @@ server.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-server.get("/users", (req, res) => {
+server.get("/users", ensureAuthenticated, (req, res) => {
   // create db handle inside each route so data is refreshed between requests
   const db = low(adapter);
 
@@ -116,10 +134,10 @@ server.get("/users", (req, res) => {
   //   - "top_first": contacts with most transactions first
 
   const users = db.get("users").value();
-  res.status(200).json({ users });
+  res.status(200).json({ users, user: req.user });
 });
 
-server.post("/users", (req, res) => {
+server.post("/users", ensureAuthenticated, (req, res) => {
   // create db handle inside each route so data is refreshed between requests
   const db = low(adapter);
   // TODO: validate post via joi
@@ -143,22 +161,37 @@ server.post("/users", (req, res) => {
   res.json({ user: record });
 });
 
-server.get("/users/:user_id", (req, res) => {
-  // create db handle inside each route so data is refreshed between requests
-  const db = low(adapter);
+server.get(
+  "/users/:user_id",
+  ensureAuthenticated,
+  (req: Request, res: Response) => {
+    // create db handle inside each route so data is refreshed between requests
+    const db = low(adapter);
 
-  // TODO: validate post via joi
-  const { user_id } = req.params;
+    // TODO: validate post via joi
+    const { user_id } = req.params;
 
-  const user = db
-    .get("users")
+    console.log("UID: ", user_id);
+    console.log("USER: ", req.user);
+
+    // Permission: account owner
     // @ts-ignore
-    .find({ id: user_id })
-    .value();
+    if (user_id !== req.user.id) {
+      res.status(401).send({
+        error: "Unauthorized"
+      });
+    }
 
-  res.status(200);
-  res.json({ user });
-});
+    const user = db
+      .get("users")
+      // @ts-ignore
+      .find({ id: user_id })
+      .value();
+
+    res.status(200);
+    res.json({ user });
+  }
+);
 
 server.get("/users/profile/:username", (req, res) => {
   // create db handle inside each route so data is refreshed between requests
@@ -178,7 +211,7 @@ server.get("/users/profile/:username", (req, res) => {
   res.json({ user });
 });
 
-server.patch("/users/:user_id", (req, res) => {
+server.patch("/users/:user_id", ensureAuthenticated, (req, res) => {
   // create db handle inside each route so data is refreshed between requests
   const db = low(adapter);
 
