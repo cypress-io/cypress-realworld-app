@@ -1,12 +1,15 @@
 import fs from "fs";
 import shortid from "shortid";
 import faker from "faker";
+import bcrypt from "bcrypt";
 import { User } from "../src/models/user";
+
+const passwordHash = bcrypt.hashSync("s3cret", 10);
 
 const users = Array(10)
   .fill(null)
   .map(
-    (x: any, i: number): User => {
+    (): User => {
       //
       return {
         id: shortid(),
@@ -14,7 +17,7 @@ const users = Array(10)
         first_name: faker.name.firstName(),
         last_name: faker.name.lastName(),
         username: faker.internet.userName(),
-        password: faker.internet.password(),
+        password: passwordHash,
         email: faker.internet.email(),
         phone_number: faker.phone.phoneNumber(),
         avatar: faker.internet.avatar(),
