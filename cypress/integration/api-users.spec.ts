@@ -103,4 +103,15 @@ describe("Users API", function() {
       });
     });
   });
+
+  context("POST /login", function() {
+    it("login as user", function() {
+      cy.request("POST", "http://localhost:3001/login", {
+        username: "Teresa34",
+        password: "s3cret"
+      }).then(response => {
+        expect(response.status).to.eq(200);
+      });
+    });
+  });
 });

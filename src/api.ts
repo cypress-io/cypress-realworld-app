@@ -8,6 +8,8 @@ import jsonServer from "json-server";
 import passport from "passport";
 import session from "express-session";
 import shortid from "shortid";
+import bcrypt from "bcrypt";
+import { User } from "./models/user";
 const LocalStrategy = require("passport-local").Strategy;
 
 let databaseFileName;
@@ -40,26 +42,39 @@ passport.use(
   ) {
     // create db handle inside each route so data is refreshed between requests
     const db = low(adapter);
-    db.get("users")
+    const user = db
+      .get("users")
       // @ts-ignore
       .find({ username: username })
-      .value()
-      .then(function(err: Error, user: object) {
-        if (err) {
-          return done(err);
-        }
-        const failureMessage = "Incorrect username or password.";
-        if (!user) {
-          return done(null, false, { message: failureMessage });
-        }
-        // validate password
-        //if (!user.validPassword(password)) {
-        //  return done(null, false, { message: failureMessage });
-        //}
-        return done(null, user);
-      });
+      .value();
+
+    const failureMessage = "Incorrect username or password.";
+    if (!user) {
+      return done(null, false, { message: failureMessage });
+    }
+    // validate password
+    if (!bcrypt.compareSync(password, user.password)) {
+      return done(null, false, { message: failureMessage });
+    }
+    return done(null, user);
   })
 );
+
+passport.serializeUser(function(user: User, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  // create db handle inside each route so data is refreshed between requests
+  const db = low(adapter);
+  const user = db
+    .get("users")
+    // @ts-ignore
+    .find({ id })
+    .value();
+
+  done(null, user);
+});
 
 server.use(
   session({
