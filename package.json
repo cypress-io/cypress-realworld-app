@@ -63,14 +63,16 @@
     "start": "react-scripts start",
     "start:dev": "NODE_ENV=development yarn start:api & yarn start",
     "start:api": "yarn tsnode src/app.ts",
+    "start:api:watch": "nodemon --exec yarn tsnode --watch 'src/app.ts' src/app.ts",
     "build": "react-scripts build",
     "pretest": "yarn db:seed:test",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start:server-and-api": "start-test start:api 3001 start",
+    "start:server-and-api:watch": "start-test start:api:watch 3001 start",
     "test:e2e": "NODE_ENV=test start-test start:server-and-api 3000 cypress:run",
     "test:e2e:ci": "NODE_ENV=test yarn start:server-and-api",
-    "test:e2e:api": "NODE_ENV=test start-test start:server-and-api 3000 cypress:open"
+    "test:e2e:api": "NODE_ENV=test start-test start:server-and-api:watch 3000 cypress:open"
   },
   "eslintConfig": {
     "extends": "react-app"
