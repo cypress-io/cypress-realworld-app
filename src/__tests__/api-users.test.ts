@@ -1,7 +1,6 @@
 import request from "supertest";
 import api from "../api";
 import faker from "faker";
-import _ from "lodash";
 
 describe("GET /users", () => {
   it("should retrieve a list of users", async done => {
@@ -30,28 +29,5 @@ describe("POST /users", () => {
 
     expect(response.body.toContain({ first_name }));
     done();
-  });
-});
-
-describe("PATCH /users", () => {
-  it.skip("should update a user", () => {
-    const first_name = faker.name.firstName();
-
-    request(api)
-      .get(`/users`)
-      .expect(404);
-    //.expect(json => expect(json.body).toContain({ first_name }));
-    //.then(users => {
-    //const user_id = _.first(users);
-    //console.log("users", users);
-
-    /*request(api)
-          .patch(`/users/${user_id}`)
-          .send({
-            first_name
-          })
-          .expect(204)
-          .expect(json => expect(json.body).toContain({ first_name }));*/
-    //});
   });
 });
