@@ -12,6 +12,7 @@
     "@types/connect-flash": "^0.0.35",
     "@types/dotenv": "^8.2.0",
     "@types/express-session": "^1.15.16",
+    "@types/express-validator": "^3.0.0",
     "@types/faker": "^4.1.8",
     "@types/hapi__joi": "^16.0.6",
     "@types/jest": "24.0.24",
