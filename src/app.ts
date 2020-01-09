@@ -5,7 +5,6 @@ import path from "path";
 import logger from "morgan";
 import passport from "passport";
 import session from "express-session";
-
 import bodyParser from "body-parser";
 
 import auth from "./backend/auth";
