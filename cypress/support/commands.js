@@ -23,3 +23,10 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("apiLogin", (username, password = "s3cret") => {
+  cy.request("POST", "http://localhost:3001/login", {
+    username,
+    password
+  });
+});

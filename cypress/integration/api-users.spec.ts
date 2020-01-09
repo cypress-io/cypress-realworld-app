@@ -6,10 +6,17 @@
 
 const faker = require("faker");
 
+const apiUrl = "http://localhost:3001";
+const apiUsers = `${apiUrl}/users`;
+
 describe("Users API", function() {
   before(function() {
     //cy.task("db:reset");
     cy.task("db:seed");
+    // TODO: Refactor
+    // hacks/experiements
+    cy.fixture("users").as("users");
+    cy.get("@users").then(user => (this.currentUser = this.users[0]));
   });
 
   afterEach(function() {
@@ -19,7 +26,9 @@ describe("Users API", function() {
 
   context("GET /users", function() {
     it("gets a list of users", function() {
-      cy.request("GET", "http://localhost:3001/users").then(response => {
+      cy.apiLogin(this.currentUser.username);
+
+      cy.request("GET", apiUsers).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.users.length).to.eq(10);
       });
@@ -28,40 +37,28 @@ describe("Users API", function() {
 
   context("GET /users/:user_id", function() {
     it("get a user", function() {
-      cy.request("GET", "http://localhost:3001/users").as("users");
-      cy.get("@users").then(resp => {
-        cy.log(resp.body.users);
-        const user = resp.body.users[0];
+      const { id, username } = this.currentUser;
+      cy.apiLogin(username);
 
-        cy.request("GET", `http://localhost:3001/users/${user.id}`).then(
-          response => {
-            expect(response.status).to.eq(200);
-            expect(response.body.user).to.have.property("first_name");
-          }
-        );
+      cy.request("GET", `${apiUsers}/${id}`).then(response => {
+        expect(response.status).to.eq(200);
+        expect(response.body.user).to.have.property("first_name");
       });
     });
   });
 
   context("GET /users/profile/:username", function() {
     it("get a user profile by username", function() {
-      cy.request("GET", "http://localhost:3001/users").as("users");
-      cy.get("@users").then(resp => {
-        cy.log(resp.body.users);
-        const user = resp.body.users[0];
-
-        cy.request(
-          "GET",
-          `http://localhost:3001/users/profile/${user.username}`
-        ).then(response => {
-          expect(response.status).to.eq(200);
-          expect(response.body.user).to.deep.equal({
-            first_name: user.first_name,
-            last_name: user.last_name,
-            avatar: user.avatar
-          });
-          expect(response.body.user).not.to.have.property("balance");
+      const { username, first_name, last_name, avatar } = this.currentUser;
+      cy.apiLogin(username);
+      cy.request("GET", `${apiUsers}/profile/${username}`).then(response => {
+        expect(response.status).to.eq(200);
+        expect(response.body.user).to.deep.equal({
+          first_name: first_name,
+          last_name: last_name,
+          avatar: avatar
         });
+        expect(response.body.user).not.to.have.property("balance");
       });
     });
   });
@@ -70,7 +67,7 @@ describe("Users API", function() {
     it("creates a new user", function() {
       const first_name = faker.name.firstName();
 
-      cy.request("POST", "http://localhost:3001/users", {
+      cy.request("POST", `${apiUsers}`, {
         first_name,
         last_name: faker.name.lastName(),
         username: faker.internet.userName(),
@@ -88,28 +85,20 @@ describe("Users API", function() {
   context("PATCH /users/:user_id", function() {
     it("updates a user", function() {
       const first_name = faker.name.firstName();
-      cy.request("GET", "http://localhost:3001/users").as("users");
+      const { id, username } = this.currentUser;
+      cy.apiLogin(username);
 
-      cy.get("@users").then(resp => {
-        cy.log(resp.body.users);
-        const user = resp.body.users[0];
-
-        cy.request("PATCH", `http://localhost:3001/users/${user.id}`, {
-          first_name
-        }).then(response => {
-          expect(response.status).to.eq(204);
-          //expect(response.body).to.contain({ first_name });
-        });
+      cy.request("PATCH", `${apiUsers}/${id}`, {
+        first_name
+      }).then(response => {
+        expect(response.status).to.eq(204);
       });
     });
   });
 
   context("POST /login", function() {
     it("login as user", function() {
-      cy.request("POST", "http://localhost:3001/login", {
-        username: "Teresa34",
-        password: "s3cret"
-      }).then(response => {
+      cy.apiLogin(this.currentUser.username).then(response => {
         expect(response.status).to.eq(200);
       });
     });
