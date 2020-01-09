@@ -1,17 +1,17 @@
 //require("dotenv").config();
 
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response } from "express";
 import path from "path";
 import _ from "lodash";
 import logger from "morgan";
 import passport from "passport";
 import session from "express-session";
 import shortid from "shortid";
-import bcrypt from "bcrypt";
 import bodyParser from "body-parser";
-import { User } from "./models/user";
+
 import db from "./backend/database";
-const LocalStrategy = require("passport-local").Strategy;
+import auth from "./backend/auth";
+import { ensureAuthenticated } from "./backend/helpers";
 
 const app = express();
 
@@ -19,84 +19,13 @@ app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// configure passport for local strategy
-passport.use(
-  new LocalStrategy(function(
-    username: string,
-    password: string,
-    done: Function
-  ) {
-    const user = db
-      .get("users")
-      // @ts-ignore
-      .find({ username: username })
-      .value();
-
-    const failureMessage = "Incorrect username or password.";
-    if (!user) {
-      return done(null, false, { message: failureMessage });
-    }
-
-    // validate password
-    if (!bcrypt.compareSync(password, user.password)) {
-      return done(null, false, { message: failureMessage });
-    }
-
-    return done(null, user);
-  })
-);
-
-passport.serializeUser(function(user: User, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-  const user = db
-    .get("users")
-    // @ts-ignore
-    .find({ id })
-    // TODO: Limit fields returned in deserialized user object?
-    //.pick(["id", "first_name", "last_name"])
-    .value();
-
-  done(null, user);
-});
-
-const ensureAuthenticated = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.status(401).send({
-    error: "Unauthorized"
-  });
-};
-
 app.use(
   session({ secret: "session secret", resave: false, saveUninitialized: true })
 );
 app.use(passport.initialize());
 app.use(passport.session());
 
-// authentication routes
-app.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/"
-  }),
-  (req: Request, res: Response): void => {
-    res.sendStatus(200);
-  }
-);
-
-app.post("/logout", (req: Request, res: Response): void => {
-  req.logout();
-  res.sendStatus(200);
-});
+app.use(auth);
 
 app.get("/users", ensureAuthenticated, (req, res) => {
   console.log("RU", req.user);
