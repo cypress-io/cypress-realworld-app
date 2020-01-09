@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import _ from "lodash";
 import shortid, { isValid } from "shortid";
 import db from "./database";
@@ -42,7 +42,7 @@ router.post("/", ensureAuthenticated, (req, res) => {
   res.json({ user: record });
 });
 
-router.get("/:user_id", ensureAuthenticated, (req: Request, res: Response) => {
+router.get("/:user_id", ensureAuthenticated, (req, res) => {
   // TODO: validate post via joi
   const { user_id } = req.params;
 
@@ -51,8 +51,7 @@ router.get("/:user_id", ensureAuthenticated, (req: Request, res: Response) => {
   }
 
   // Permission: account owner
-  // @ts-ignore
-  if (!_.isEqual(user_id, req.user.id)) {
+  if (!_.isEqual(user_id, req.user?.id)) {
     return res.status(401).send({
       error: "Unauthorized"
     });
