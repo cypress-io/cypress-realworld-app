@@ -1,3 +1,5 @@
+///<reference path="types.ts" />
+
 import express from "express";
 import _ from "lodash";
 import shortid, { isValid } from "shortid";
