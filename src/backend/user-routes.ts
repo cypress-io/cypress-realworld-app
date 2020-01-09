@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import _ from "lodash";
-import shortid from "shortid";
+import shortid, { isValid } from "shortid";
 import db from "./database";
 import { ensureAuthenticated } from "./helpers";
 const router = express.Router();
@@ -45,6 +45,10 @@ router.post("/", ensureAuthenticated, (req, res) => {
 router.get("/:user_id", ensureAuthenticated, (req: Request, res: Response) => {
   // TODO: validate post via joi
   const { user_id } = req.params;
+
+  if (!isValid(user_id)) {
+    return res.status(422);
+  }
 
   // Permission: account owner
   // @ts-ignore
