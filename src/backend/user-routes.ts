@@ -67,28 +67,33 @@ router.get("/", ensureAuthenticated, (req, res) => {
   res.status(200).json({ users, user: req.user });
 });
 
-router.post("/", (req, res) => {
-  // TODO: validate post via joi
-  const user = req.body;
+router.post(
+  "/",
+  userFieldsValidator,
+  validateMiddleware(isUserValidator),
+  (req, res) => {
+    // TODO: validate post via joi
+    const user: User = req.body;
 
-  const id = shortid();
-  user.id = id;
+    const id = shortid();
+    user.id = id;
 
-  db()
-    .get("users")
-    // @ts-ignore
-    .push(user)
-    .write();
+    db()
+      .get("users")
+      // @ts-ignore
+      .push(user)
+      .write();
 
-  const record = db()
-    .get("users")
-    // @ts-ignore
-    .find({ id })
-    .value();
+    const record = db()
+      .get("users")
+      // @ts-ignore
+      .find({ id })
+      .value();
 
-  res.status(201);
-  res.json({ user: record });
-});
+    res.status(201);
+    res.json({ user: record });
+  }
+);
 
 router.get(
   "/:user_id",
