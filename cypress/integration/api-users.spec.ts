@@ -45,6 +45,20 @@ describe("Users API", function() {
         expect(response.body.user).to.have.property("first_name");
       });
     });
+
+    it("error when invalid user_id", function() {
+      const { username } = this.currentUser;
+      cy.apiLogin(username);
+
+      cy.request({
+        method: "GET",
+        url: `${apiUsers}/1234`,
+        failOnStatusCode: false
+      }).then(response => {
+        expect(response.status).to.eq(422);
+        expect(response.body.errors.length).to.eq(1);
+      });
+    });
   });
 
   context("GET /users/profile/:username", function() {

@@ -1,6 +1,7 @@
 ///<reference path="types.ts" />
 
 import express from "express";
+import { param, validationResult } from "express-validator";
 import _ from "lodash";
 import shortid, { isValid } from "shortid";
 import db from "./database";
@@ -47,13 +48,18 @@ router.post("/", (req, res) => {
   res.json({ user: record });
 });
 
-router.get("/:user_id", ensureAuthenticated, (req, res) => {
-  // TODO: validate post via joi
-  const { user_id } = req.params;
+const shortIdValidation = param("user_id").custom(value => {
+  return isValid(value);
+});
 
-  if (!isValid(user_id)) {
-    return res.status(422);
+router.get("/:user_id", ensureAuthenticated, shortIdValidation, (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
   }
+
+  const { user_id } = req.params;
 
   // Permission: account owner
   if (!_.isEqual(user_id, req.user?.id)) {
