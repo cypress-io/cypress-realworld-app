@@ -77,6 +77,24 @@ describe("Users API", function() {
     });
   });
 
+  context("GET /users/search", function() {
+    it("get users by email", function() {
+      const { username, email } = this.currentUser;
+      cy.apiLogin(username);
+
+      cy.request({
+        method: "GET",
+        url: `${apiUsers}/search`,
+        qs: { q: email }
+      }).then(response => {
+        expect(response.status).to.eq(200);
+        expect(response.body.users).to.contain({
+          first_name: "Lizzie"
+        });
+      });
+    });
+  });
+
   context("POST /users", function() {
     it("creates a new user", function() {
       const first_name = faker.name.firstName();

@@ -1,7 +1,8 @@
 ///<reference path="types.ts" />
 
 import express from "express";
-import { check, param, oneOf } from "express-validator";
+import validator from "validator";
+import { check, param, oneOf, query } from "express-validator";
 import _ from "lodash";
 import shortid, { isValid } from "shortid";
 import db from "./database";
@@ -13,6 +14,8 @@ const router = express.Router();
 const shortIdValidation = param("user_id").custom(value => {
   return isValid(value);
 });
+
+const searchValidation = query("q").isString();
 
 const userFieldsValidator = oneOf([
   check("first_name").exists(),
@@ -32,7 +35,19 @@ const isUserValidator = [
     .optional({ checkFalsy: true })
     .isString()
     .trim(),
+  check("username")
+    .optional({ checkFalsy: true })
+    .isString()
+    .trim(),
   check("password")
+    .optional({ checkFalsy: true })
+    .isString()
+    .trim(),
+  check("email")
+    .optional({ checkFalsy: true })
+    .isString()
+    .trim(),
+  check("phone_number")
     .optional({ checkFalsy: true })
     .isString()
     .trim(),
@@ -51,8 +66,6 @@ const isUserValidator = [
 
 // Routes
 router.get("/", ensureAuthenticated, (req, res) => {
-  console.log("RU", req.user);
-
   // TODO: validate order query param(s)
 
   // TODO:
@@ -64,8 +77,34 @@ router.get("/", ensureAuthenticated, (req, res) => {
   const users = db()
     .get("users")
     .value();
-  res.status(200).json({ users, user: req.user });
+  res.status(200).json({ users });
 });
+
+router.get(
+  "/search",
+  ensureAuthenticated,
+  validateMiddleware([searchValidation]),
+  (req, res) => {
+    const { q } = req.query;
+
+    let users;
+
+    // Reference:
+    // lowdb full-text search in json-server
+    // https://github.com/typicode/json-server/blob/dfea2b34007e731770ca2f4e576b1f1908952b68/src/server/router/plural.js#L86
+
+    if (validator.isEmail(q)) {
+      users = db()
+        .get("users")
+        // @ts-ignore
+        .find({ email: q })
+        .value();
+      return res.status(200).json({ users });
+    }
+
+    res.status(403);
+  }
+);
 
 router.post(
   "/",
