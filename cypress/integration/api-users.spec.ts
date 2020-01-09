@@ -110,7 +110,7 @@ describe("Users API", function() {
     });
 
     // TODO: get validator working to error on invalid user fields
-    it.skip("error when invalid field sent", function() {
+    it("error when invalid field sent", function() {
       const { id, username } = this.currentUser;
       cy.apiLogin(username);
 

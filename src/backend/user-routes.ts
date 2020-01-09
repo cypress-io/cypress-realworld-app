@@ -1,7 +1,7 @@
 ///<reference path="types.ts" />
 
 import express from "express";
-import { check, param } from "express-validator";
+import { check, param, oneOf } from "express-validator";
 import _ from "lodash";
 import shortid, { isValid } from "shortid";
 import db from "./database";
@@ -14,15 +14,14 @@ const shortIdValidation = param("user_id").custom(value => {
   return isValid(value);
 });
 
-/*
-const isUserValidatorSchema = checkSchema({
-  first_name: {
-    optional: { options: { checkFalsy: true } },
-    isString: true,
-    trim: true
-  }
-});
-*/
+const userFieldsValidator = oneOf([
+  check("first_name").exists(),
+  check("last_name").exists(),
+  check("password").exists(),
+  check("balance").exists(),
+  check("avatar").exists(),
+  check("default_privacy_level").exists()
+]);
 
 const isUserValidator = [
   check("first_name")
@@ -47,7 +46,7 @@ const isUserValidator = [
     .trim(),
   check("default_privacy_level")
     .optional({ checkFalsy: true })
-    .matches(/public|private|contacts/)
+    .isIn(["public", "private", "contacts"])
 ];
 
 // Routes
@@ -133,11 +132,11 @@ router.get("/profile/:username", (req, res) => {
 router.patch(
   "/:user_id",
   ensureAuthenticated,
+  userFieldsValidator,
   validateMiddleware([shortIdValidation, ...isUserValidator]),
   (req, res) => {
     const { user_id } = req.params;
 
-    // TODO get isUserValidator / isUserValidatorSchema working to validate valid User fields
     const edits: User = req.body;
 
     // make update to record
