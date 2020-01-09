@@ -1,10 +1,8 @@
 //require("dotenv").config();
 
 import express, { Request, Response, NextFunction } from "express";
-import _ from "lodash";
-import low from "lowdb";
-import FileSync from "lowdb/adapters/FileSync";
 import path from "path";
+import _ from "lodash";
 import logger from "morgan";
 import passport from "passport";
 import session from "express-session";
@@ -12,18 +10,8 @@ import shortid from "shortid";
 import bcrypt from "bcrypt";
 import bodyParser from "body-parser";
 import { User } from "./models/user";
+import db from "./backend/database";
 const LocalStrategy = require("passport-local").Strategy;
-
-let databaseFileName;
-
-if (process.env.NODE_ENV === "test") {
-  databaseFileName = "database.test.json";
-} else {
-  databaseFileName = "database.json";
-}
-
-const databaseFile = path.join(__dirname, "data", databaseFileName);
-const adapter = new FileSync(databaseFile);
 
 const app = express();
 
@@ -38,8 +26,6 @@ passport.use(
     password: string,
     done: Function
   ) {
-    // create db handle inside each route so data is refreshed between requests
-    const db = low(adapter);
     const user = db
       .get("users")
       // @ts-ignore
@@ -65,8 +51,6 @@ passport.serializeUser(function(user: User, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  // create db handle inside each route so data is refreshed between requests
-  const db = low(adapter);
   const user = db
     .get("users")
     // @ts-ignore
@@ -116,8 +100,6 @@ app.post("/logout", (req: Request, res: Response): void => {
 
 app.get("/users", ensureAuthenticated, (req, res) => {
   console.log("RU", req.user);
-  // create db handle inside each route so data is refreshed between requests
-  const db = low(adapter);
 
   // TODO: validate order query param(s)
 
@@ -132,8 +114,6 @@ app.get("/users", ensureAuthenticated, (req, res) => {
 });
 
 app.post("/users", ensureAuthenticated, (req, res) => {
-  // create db handle inside each route so data is refreshed between requests
-  const db = low(adapter);
   // TODO: validate post via joi
   const user = req.body;
 
@@ -159,9 +139,6 @@ app.get(
   "/users/:user_id",
   ensureAuthenticated,
   (req: Request, res: Response) => {
-    // create db handle inside each route so data is refreshed between requests
-    const db = low(adapter);
-
     // TODO: validate post via joi
     const { user_id } = req.params;
 
@@ -185,9 +162,6 @@ app.get(
 );
 
 app.get("/users/profile/:username", (req, res) => {
-  // create db handle inside each route so data is refreshed between requests
-  const db = low(adapter);
-
   // TODO: validate post via joi
   const { username } = req.params;
 
@@ -203,9 +177,6 @@ app.get("/users/profile/:username", (req, res) => {
 });
 
 app.patch("/users/:user_id", ensureAuthenticated, (req, res) => {
-  // create db handle inside each route so data is refreshed between requests
-  const db = low(adapter);
-
   // TODO: validate post via joi
   const { user_id } = req.params;
 
