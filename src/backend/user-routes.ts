@@ -1,13 +1,56 @@
 ///<reference path="types.ts" />
 
 import express from "express";
-import { param, validationResult } from "express-validator";
+import { check, param } from "express-validator";
 import _ from "lodash";
 import shortid, { isValid } from "shortid";
 import db from "./database";
-import { ensureAuthenticated } from "./helpers";
+import { User } from "../models/user";
+import { ensureAuthenticated, validateMiddleware } from "./helpers";
 const router = express.Router();
 
+// Validators
+const shortIdValidation = param("user_id").custom(value => {
+  return isValid(value);
+});
+
+/*
+const isUserValidatorSchema = checkSchema({
+  first_name: {
+    optional: { options: { checkFalsy: true } },
+    isString: true,
+    trim: true
+  }
+});
+*/
+
+const isUserValidator = [
+  check("first_name")
+    .optional({ checkFalsy: true })
+    .isString()
+    .trim(),
+  check("last_name")
+    .optional({ checkFalsy: true })
+    .isString()
+    .trim(),
+  check("password")
+    .optional({ checkFalsy: true })
+    .isString()
+    .trim(),
+  check("balance")
+    .optional({ checkFalsy: true })
+    .isNumeric()
+    .trim(),
+  check("avatar")
+    .optional({ checkFalsy: true })
+    .isURL()
+    .trim(),
+  check("default_privacy_level")
+    .optional({ checkFalsy: true })
+    .matches(/public|private|contacts/)
+];
+
+// Routes
 router.get("/", ensureAuthenticated, (req, res) => {
   console.log("RU", req.user);
 
@@ -48,38 +91,32 @@ router.post("/", (req, res) => {
   res.json({ user: record });
 });
 
-const shortIdValidation = param("user_id").custom(value => {
-  return isValid(value);
-});
+router.get(
+  "/:user_id",
+  ensureAuthenticated,
+  validateMiddleware([shortIdValidation]),
+  (req, res) => {
+    const { user_id } = req.params;
 
-router.get("/:user_id", ensureAuthenticated, shortIdValidation, (req, res) => {
-  const errors = validationResult(req);
+    // Permission: account owner
+    if (!_.isEqual(user_id, req.user?.id)) {
+      return res.status(401).send({
+        error: "Unauthorized"
+      });
+    }
 
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
+    const user = db()
+      .get("users")
+      // @ts-ignore
+      .find({ id: user_id })
+      .value();
+
+    res.status(200);
+    res.json({ user });
   }
-
-  const { user_id } = req.params;
-
-  // Permission: account owner
-  if (!_.isEqual(user_id, req.user?.id)) {
-    return res.status(401).send({
-      error: "Unauthorized"
-    });
-  }
-
-  const user = db()
-    .get("users")
-    // @ts-ignore
-    .find({ id: user_id })
-    .value();
-
-  res.status(200);
-  res.json({ user });
-});
+);
 
 router.get("/profile/:username", (req, res) => {
-  // TODO: validate post via joi
   const { username } = req.params;
 
   const user = db()
@@ -93,28 +130,33 @@ router.get("/profile/:username", (req, res) => {
   res.json({ user });
 });
 
-router.patch("/:user_id", ensureAuthenticated, (req, res) => {
-  // TODO: validate post via joi
-  const { user_id } = req.params;
+router.patch(
+  "/:user_id",
+  ensureAuthenticated,
+  validateMiddleware([shortIdValidation, ...isUserValidator]),
+  (req, res) => {
+    const { user_id } = req.params;
 
-  const edits = req.body;
+    // TODO get isUserValidator / isUserValidatorSchema working to validate valid User fields
+    const edits: User = req.body;
 
-  // make update to record
-  db()
-    .get("users")
-    // @ts-ignore
-    .find({ id: user_id })
-    .assign(edits)
-    .write();
+    // make update to record
+    db()
+      .get("users")
+      // @ts-ignore
+      .find({ id: user_id })
+      .assign(edits)
+      .write();
 
-  const updatedRecord = db()
-    .get("users")
-    // @ts-ignore
-    .find({ id: user_id })
-    .value();
+    const updatedRecord = db()
+      .get("users")
+      // @ts-ignore
+      .find({ id: user_id })
+      .value();
 
-  res.status(204);
-  res.json({ user: updatedRecord });
-});
+    res.status(204);
+    res.json({ user: updatedRecord });
+  }
+);
 
 export default router;

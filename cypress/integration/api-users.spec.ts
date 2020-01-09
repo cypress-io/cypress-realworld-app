@@ -108,6 +108,24 @@ describe("Users API", function() {
         expect(response.status).to.eq(204);
       });
     });
+
+    // TODO: get validator working to error on invalid user fields
+    it.skip("error when invalid field sent", function() {
+      const { id, username } = this.currentUser;
+      cy.apiLogin(username);
+
+      cy.request({
+        method: "PATCH",
+        url: `${apiUsers}/${id}`,
+        failOnStatusCode: false,
+        body: {
+          notAUserField: "not a user field"
+        }
+      }).then(response => {
+        expect(response.status).to.eq(422);
+        expect(response.body.errors.length).to.eq(1);
+      });
+    });
   });
 
   context("POST /login", function() {
