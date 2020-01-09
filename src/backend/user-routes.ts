@@ -5,6 +5,8 @@ import validator from "validator";
 import { check, param, oneOf, query } from "express-validator";
 import _ from "lodash";
 import shortid, { isValid } from "shortid";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
+
 import db from "./database";
 import { User } from "../models/user";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
@@ -15,7 +17,7 @@ const shortIdValidation = param("user_id").custom(value => {
   return isValid(value);
 });
 
-const searchValidation = query("q").isString();
+const searchValidation = query("q").exists();
 
 const userFieldsValidator = oneOf([
   check("first_name").exists(),
@@ -98,6 +100,16 @@ router.get(
         .get("users")
         // @ts-ignore
         .find({ email: q })
+        .value();
+      return res.status(200).json({ users });
+    }
+
+    const phoneNumber = parsePhoneNumberFromString(q);
+    if (phoneNumber) {
+      users = db()
+        .get("users")
+        // @ts-ignore
+        .find({ phone_number: phoneNumber.number })
         .value();
       return res.status(200).json({ users });
     }

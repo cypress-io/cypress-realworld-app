@@ -93,6 +93,22 @@ describe("Users API", function() {
         });
       });
     });
+
+    it("get users by phone number", function() {
+      const { username } = this.currentUser;
+      cy.apiLogin(username);
+
+      cy.request({
+        method: "GET",
+        url: `${apiUsers}/search`,
+        qs: { q: "+12133734253" }
+      }).then(response => {
+        expect(response.status).to.eq(200);
+        expect(response.body.users).to.contain({
+          first_name: "Lizzie"
+        });
+      });
+    });
   });
 
   context("POST /users", function() {
