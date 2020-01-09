@@ -13,6 +13,6 @@ if (process.env.NODE_ENV === "test") {
 const databaseFile = path.join(__dirname, "../data", databaseFileName);
 const adapter = new FileSync(databaseFile);
 
-const db = low(adapter);
+const db = () => low(adapter);
 
 export default db;

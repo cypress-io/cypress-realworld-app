@@ -18,23 +18,26 @@ router.get("/", ensureAuthenticated, (req, res) => {
   //   - default: scoped user contacts first, then all other users
   //   - "top_first": contacts with most transactions first
 
-  const users = db.get("users").value();
+  const users = db()
+    .get("users")
+    .value();
   res.status(200).json({ users, user: req.user });
 });
 
-router.post("/", ensureAuthenticated, (req, res) => {
+router.post("/", (req, res) => {
   // TODO: validate post via joi
   const user = req.body;
 
   const id = shortid();
   user.id = id;
 
-  db.get("users")
+  db()
+    .get("users")
     // @ts-ignore
     .push(user)
     .write();
 
-  const record = db
+  const record = db()
     .get("users")
     // @ts-ignore
     .find({ id })
@@ -59,7 +62,7 @@ router.get("/:user_id", ensureAuthenticated, (req, res) => {
     });
   }
 
-  const user = db
+  const user = db()
     .get("users")
     // @ts-ignore
     .find({ id: user_id })
@@ -73,7 +76,7 @@ router.get("/profile/:username", (req, res) => {
   // TODO: validate post via joi
   const { username } = req.params;
 
-  const user = db
+  const user = db()
     .get("users")
     // @ts-ignore
     .find({ username })
@@ -91,13 +94,14 @@ router.patch("/:user_id", ensureAuthenticated, (req, res) => {
   const edits = req.body;
 
   // make update to record
-  db.get("users")
+  db()
+    .get("users")
     // @ts-ignore
     .find({ id: user_id })
     .assign(edits)
     .write();
 
-  const updatedRecord = db
+  const updatedRecord = db()
     .get("users")
     // @ts-ignore
     .find({ id: user_id })

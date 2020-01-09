@@ -13,7 +13,7 @@ passport.use(
     password: string,
     done: Function
   ) {
-    const user = db
+    const user = db()
       .get("users")
       // @ts-ignore
       .find({ username: username })
@@ -38,7 +38,7 @@ passport.serializeUser(function(user: User, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  const user = db
+  const user = db()
     .get("users")
     // @ts-ignore
     .find({ id })
