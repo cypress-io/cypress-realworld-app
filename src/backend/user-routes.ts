@@ -114,7 +114,13 @@ router.get(
       return res.status(200).json({ users });
     }
 
-    res.status(403);
+    users = db()
+      .get("users")
+      // @ts-ignore
+      .find({ username: q })
+      .value();
+
+    res.status(200).json({ users });
   }
 );
 

@@ -79,7 +79,7 @@ describe("Users API", function() {
 
   context("GET /users/search", function() {
     it("get users by email", function() {
-      const { username, email } = this.currentUser;
+      const { username, email, first_name } = this.currentUser;
       cy.apiLogin(username);
 
       cy.request({
@@ -89,13 +89,13 @@ describe("Users API", function() {
       }).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.users).to.contain({
-          first_name: "Lizzie"
+          first_name
         });
       });
     });
 
     it("get users by phone number", function() {
-      const { username } = this.currentUser;
+      const { username, first_name } = this.currentUser;
       cy.apiLogin(username);
 
       cy.request({
@@ -105,7 +105,23 @@ describe("Users API", function() {
       }).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.users).to.contain({
-          first_name: "Lizzie"
+          first_name
+        });
+      });
+    });
+
+    it("get users by username", function() {
+      const { username, first_name } = this.currentUser;
+      cy.apiLogin(username);
+
+      cy.request({
+        method: "GET",
+        url: `${apiUsers}/search`,
+        qs: { q: username }
+      }).then(response => {
+        expect(response.status).to.eq(200);
+        expect(response.body.users).to.contain({
+          first_name
         });
       });
     });
