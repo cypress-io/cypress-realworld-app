@@ -3,7 +3,7 @@ import { isValid } from "shortid";
 
 // Validators
 export const shortIdValidation = (key: string) =>
-  param(key).custom(value => {
+  check(key).custom(value => {
     return isValid(value);
   });
 
