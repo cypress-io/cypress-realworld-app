@@ -9,6 +9,7 @@ import bodyParser from "body-parser";
 
 import auth from "./backend/auth";
 import userRoutes from "./backend/user-routes";
+import contactRoutes from "./backend/contact-routes";
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(passport.session());
 
 app.use(auth);
 app.use("/users", userRoutes);
+app.use("/contacts", contactRoutes);
 
 app.use(express.static(path.join(__dirname, "../public")));
 
