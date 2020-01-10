@@ -3,7 +3,11 @@
 import express from "express";
 //import _ from "lodash";
 
-import { getContactsByUsername, removeContactById } from "./database";
+import {
+  getContactsByUsername,
+  removeContactById,
+  createContactForUser
+} from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import { shortIdValidation } from "./validators";
 const router = express.Router();
@@ -20,6 +24,19 @@ router.get("/:username", (req, res) => {
 });
 
 //POST /contacts (scoped-user)
+router.post(
+  "/",
+  ensureAuthenticated,
+  validateMiddleware([shortIdValidation("contact_user_id")]),
+  (req, res) => {
+    const { contact_user_id } = req.body;
+
+    const contact = createContactForUser(req.user?.id!, contact_user_id);
+
+    res.status(200);
+    res.json({ contact });
+  }
+);
 //DELETE /contacts/:contact_id (scoped-user)
 router.delete(
   "/:contact_id",
