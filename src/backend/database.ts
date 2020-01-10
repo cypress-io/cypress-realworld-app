@@ -6,6 +6,7 @@ import FileSync from "lowdb/adapters/FileSync";
 import { User } from "../models/user";
 import { Contact } from "../models/contact";
 import shortid from "shortid";
+import { BankAccount } from "../models/bankaccount";
 
 const testSeed = require(path.join(__dirname, "../data/", "test-seed.json"));
 let databaseFileName;
@@ -107,6 +108,15 @@ export const createContactForUser = (
   const result = createContact(contact);
 
   return result;
+};
+
+export const getBankAccountsBy = (key: string, value: any) => {
+  const accounts = getBy("bankaccounts", key, value);
+  return accounts ? Array.of(accounts) : [];
+};
+export const getBankAccountsByUserId = (user_id: string) => {
+  const accounts: BankAccount[] = getBankAccountsBy("user_id", user_id);
+  return accounts;
 };
 
 // dev/test private methods
