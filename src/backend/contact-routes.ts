@@ -6,7 +6,7 @@ import express from "express";
 //import _ from "lodash";
 //import shortid, { isValid } from "shortid";
 
-import { getContactsByUsername } from "./database";
+import { getContactsByUsername, removeContactById } from "./database";
 //import { ensureAuthenticated, validateMiddleware } from "./helpers";
 const router = express.Router();
 
@@ -28,5 +28,13 @@ router.get("/:username", (req, res) => {
 
 //POST /contacts (scoped-user)
 //DELETE /contacts/:contact_id (scoped-user)
+router.delete("/:contact_id", (req, res) => {
+  const { contact_id } = req.params;
+
+  const contacts = removeContactById(contact_id);
+
+  res.status(200);
+  res.json({ contacts });
+});
 
 export default router;

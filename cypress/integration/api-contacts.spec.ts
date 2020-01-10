@@ -16,7 +16,9 @@ describe("Contacts API", function() {
     // TODO: Refactor
     // hacks/experiements
     cy.fixture("users").as("users");
+    cy.fixture("contacts").as("contacts");
     cy.get("@users").then(user => (this.currentUser = this.users[0]));
+    cy.get("@contacts").then(contacts => (this.contacts = contacts));
   });
 
   afterEach(function() {
@@ -32,6 +34,18 @@ describe("Contacts API", function() {
       cy.request("GET", `${apiContacts}/${username}`).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.contacts[0]).to.have.property("user_id");
+      });
+    });
+  });
+
+  context("DELETE /contacts/:contact_id", function() {
+    it("deletes a contact", function() {
+      const { username } = this.currentUser;
+      const contact = this.contacts[0];
+      cy.apiLogin(username);
+
+      cy.request("DELETE", `${apiContacts}/${contact.id}`).then(response => {
+        expect(response.status).to.eq(200);
       });
     });
   });
