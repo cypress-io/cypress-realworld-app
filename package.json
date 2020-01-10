@@ -17,6 +17,7 @@
     "@types/hapi__joi": "^16.0.6",
     "@types/jest": "24.0.24",
     "@types/json-server": "^0.14.2",
+    "@types/lodash": "^4.14.149",
     "@types/lowdb": "^1.0.9",
     "@types/morgan": "^1.7.37",
     "@types/node": "12.12.24",
