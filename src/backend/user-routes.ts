@@ -2,69 +2,20 @@
 
 import express from "express";
 import validator from "validator";
-import { check, param, oneOf, query } from "express-validator";
 import _ from "lodash";
-import shortid, { isValid } from "shortid";
+import shortid from "shortid";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 import db from "./database";
 import { User } from "../models/user";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
+import {
+  shortIdValidation,
+  searchValidation,
+  userFieldsValidator,
+  isUserValidator
+} from "./validators";
 const router = express.Router();
-
-// Validators
-const shortIdValidation = param("user_id").custom(value => {
-  return isValid(value);
-});
-
-const searchValidation = query("q").exists();
-
-const userFieldsValidator = oneOf([
-  check("first_name").exists(),
-  check("last_name").exists(),
-  check("password").exists(),
-  check("balance").exists(),
-  check("avatar").exists(),
-  check("default_privacy_level").exists()
-]);
-
-const isUserValidator = [
-  check("first_name")
-    .optional({ checkFalsy: true })
-    .isString()
-    .trim(),
-  check("last_name")
-    .optional({ checkFalsy: true })
-    .isString()
-    .trim(),
-  check("username")
-    .optional({ checkFalsy: true })
-    .isString()
-    .trim(),
-  check("password")
-    .optional({ checkFalsy: true })
-    .isString()
-    .trim(),
-  check("email")
-    .optional({ checkFalsy: true })
-    .isString()
-    .trim(),
-  check("phone_number")
-    .optional({ checkFalsy: true })
-    .isString()
-    .trim(),
-  check("balance")
-    .optional({ checkFalsy: true })
-    .isNumeric()
-    .trim(),
-  check("avatar")
-    .optional({ checkFalsy: true })
-    .isURL()
-    .trim(),
-  check("default_privacy_level")
-    .optional({ checkFalsy: true })
-    .isIn(["public", "private", "contacts"])
-];
 
 // Routes
 router.get("/", ensureAuthenticated, (req, res) => {
@@ -155,7 +106,7 @@ router.post(
 router.get(
   "/:user_id",
   ensureAuthenticated,
-  validateMiddleware([shortIdValidation]),
+  validateMiddleware([shortIdValidation("user_id")]),
   (req, res) => {
     const { user_id } = req.params;
 
@@ -195,7 +146,7 @@ router.patch(
   "/:user_id",
   ensureAuthenticated,
   userFieldsValidator,
-  validateMiddleware([shortIdValidation, ...isUserValidator]),
+  validateMiddleware([shortIdValidation("user_id"), ...isUserValidator]),
   (req, res) => {
     const { user_id } = req.params;
 
