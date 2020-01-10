@@ -51,10 +51,14 @@ export const getContactBy = (key: string, value: any) =>
   getBy("contacts", key, value);
 export const getUserBy = (key: string, value: any) =>
   getBy("users", key, value);
-export const getUsersBy = (key: string, value: any) =>
-  Array.of(getBy("users", key, value));
-export const getContactsBy = (key: string, value: any) =>
-  Array.of(getBy("contacts", key, value));
+export const getUsersBy = (key: string, value: any) => {
+  const users = getBy("users", key, value);
+  return users ? Array.of(getBy("users", key, value)) : [];
+};
+export const getContactsBy = (key: string, value: any) => {
+  const contacts = getBy("contacts", key, value);
+  return contacts ? Array.of(getBy("contacts", key, value)) : [];
+};
 
 export const getContactsByUsername = (username: string) => {
   const user: User = getUserBy("username", username);
@@ -71,6 +75,16 @@ export const createContact = (contact: Contact) => {
 
   // manual lookup after create
   return getContactBy("id", contact.id);
+};
+
+export const removeContactById = (contact_id: string) => {
+  const contact = getContactBy("id", contact_id);
+
+  db()
+    .get("contacts")
+    // @ts-ignore
+    .remove(contact)
+    .write();
 };
 
 export const createContactForUser = (
