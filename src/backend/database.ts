@@ -2,6 +2,8 @@ import path from "path";
 import _ from "lodash";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
+import { User } from "../models/user";
+import { Contact } from "../models/contact";
 
 let databaseFileName;
 
@@ -40,6 +42,12 @@ export const getUsersBy = (key: string, value: any) =>
   Array.of(getBy("users", key, value));
 export const getContactsBy = (key: string, value: any) =>
   Array.of(getBy("contacts", key, value));
+
+export const getContactsByUsername = (username: string) => {
+  const user: User = getUserBy("username", username);
+  const userContacts: Contact[] = getContactsBy("user_id", user.id);
+  return userContacts;
+};
 
 // dev/test private methods
 export const getRandomUser = () => {
