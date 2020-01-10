@@ -110,6 +110,10 @@ export const createContactForUser = (
   return result;
 };
 
+export const getBankAccountBy = (key: string, value: any) =>
+  getBy("bankaccounts", key, value);
+
+export const getBankAccountById = (id: string) => getBankAccountBy("id", id);
 export const getBankAccountsBy = (key: string, value: any) => {
   const accounts = getBy("bankaccounts", key, value);
   return accounts ? Array.of(accounts) : [];

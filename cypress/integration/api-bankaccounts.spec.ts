@@ -43,6 +43,17 @@ describe("Bank Accounts API", function() {
     });
   });
 
+  context("GET /bank_accounts/:bank_account_id", function() {
+    it("gets a bank account", function() {
+      const userId = this.currentUser.id;
+      const { id } = this.bankAccounts[0];
+      cy.request("GET", `${apiBankAccounts}/${id}`).then(response => {
+        expect(response.status).to.eq(200);
+        expect(response.body.account.user_id).to.eq(userId);
+      });
+    });
+  });
+
   /*
   context("POST /contacts", function() {
     it("creates a new contact", function() {
