@@ -88,6 +88,14 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "jest": {
+    "watchPathIgnorePatterns": [
+      "<rootDir>/src/data/database.json",
+      "<rootDir>/src/data/database.test.json",
+      "<rootDir>/src/data/test-seed.json",
+      "<rootDir>/src/data/dev-seed.json"
+    ]
+  },
   "browserslist": {
     "production": [
       ">0.2%",
