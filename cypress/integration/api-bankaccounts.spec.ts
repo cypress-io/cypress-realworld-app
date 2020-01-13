@@ -70,15 +70,12 @@ describe("Bank Accounts API", function() {
     });
   });
 
-  /*
-  context("DELETE /contacts/:contact_id", function() {
-    it("deletes a contact", function() {
-      const contact = this.contacts[0];
-
-      cy.request("DELETE", `${apiContacts}/${contact.id}`).then(response => {
+  context("DELETE /contacts/:bank_account_id", function() {
+    it("deletes a bank account", function() {
+      const { id } = this.bankAccounts[0];
+      cy.request("DELETE", `${apiBankAccounts}/${id}`).then(response => {
         expect(response.status).to.eq(200);
       });
     });
   });
-  */
 });

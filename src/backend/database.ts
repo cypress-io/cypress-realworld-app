@@ -161,6 +161,15 @@ export const createBankAccountForUser = (
   return result;
 };
 
+export const removeBankAccountById = (bank_account_id: string) => {
+  db()
+    .get(BANK_ACCOUNT_TABLE)
+    // @ts-ignore
+    .find({ id: bank_account_id })
+    .assign({ is_deleted: true }) // soft delete
+    .write();
+};
+
 // dev/test private methods
 export const getRandomUser = () => {
   const users = getAllUsers();

@@ -5,7 +5,8 @@ import express from "express";
 import {
   getBankAccountsByUserId,
   getBankAccountById,
-  createBankAccountForUser
+  createBankAccountForUser,
+  removeBankAccountById
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import { shortIdValidation, isBankAccountValidator } from "./validators";
@@ -48,6 +49,20 @@ router.post(
     res.json({ account });
   }
 );
+
 //DELETE (soft) /bank_accounts (scoped-user)
+router.delete(
+  "/:bank_account_id",
+  ensureAuthenticated,
+  validateMiddleware([shortIdValidation("bank_account_id")]),
+  (req, res) => {
+    const { bank_account_id } = req.params;
+
+    const account = removeBankAccountById(bank_account_id);
+
+    res.status(200);
+    res.json({ account });
+  }
+);
 
 export default router;

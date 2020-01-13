@@ -4,7 +4,8 @@ import {
   getBankAccountsByUserId,
   getRandomUser,
   seedDatabase,
-  createBankAccountForUser
+  createBankAccountForUser,
+  removeBankAccountById
 } from "../database";
 import { User } from "../../models/user";
 import { BankAccount } from "../../models/bankaccount";
@@ -45,5 +46,17 @@ describe("BankAccounts", () => {
     };
     const result = createBankAccountForUser(user.id, account_details);
     expect(result.user_id).toBe(user.id);
+  });
+
+  it("should delete a bank account", () => {
+    const userToLookup: User = getRandomUser();
+
+    const accounts = getBankAccountsByUserId(userToLookup.id);
+    const bankAccountId = accounts[0].id;
+
+    removeBankAccountById(bankAccountId);
+
+    const updatedBankAccounts = getBankAccountsByUserId(userToLookup.id);
+    expect(updatedBankAccounts[0].is_deleted).toBe(true);
   });
 });
