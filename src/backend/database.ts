@@ -7,8 +7,10 @@ import { User } from "../models/user";
 import { Contact } from "../models/contact";
 import shortid from "shortid";
 import { BankAccount } from "../models/bankaccount";
+import { Transaction } from "../models";
 
 const BANK_ACCOUNT_TABLE = "bankaccounts";
+const TRANSACTION_TABLE = "transactions";
 
 const testSeed = require(path.join(__dirname, "../data/", "test-seed.json"));
 let databaseFileName;
@@ -49,15 +51,26 @@ export const getBy = (entity: string, key: string, value: any) =>
     .find({ [`${key}`]: value })
     .value();
 
+export const getByObj = (entity: string, query: object) =>
+  db()
+    .get(entity)
+    // @ts-ignore
+    .find(query)
+    .value();
+
 // convenience methods
-export const getContactBy = (key: string, value: any) =>
-  getBy("contacts", key, value);
+
+// User
 export const getUserBy = (key: string, value: any) =>
   getBy("users", key, value);
 export const getUsersBy = (key: string, value: any) => {
   const users = getBy("users", key, value);
   return users ? Array.of(getBy("users", key, value)) : [];
 };
+
+// Contact
+export const getContactBy = (key: string, value: any) =>
+  getBy("contacts", key, value);
 export const getContactsBy = (key: string, value: any) => {
   const contacts = getBy("contacts", key, value);
   return contacts ? Array.of(getBy("contacts", key, value)) : [];
@@ -112,6 +125,7 @@ export const createContactForUser = (
   return result;
 };
 
+// Bank Account
 export const getBankAccountBy = (key: string, value: any) =>
   getBy(BANK_ACCOUNT_TABLE, key, value);
 
@@ -168,6 +182,25 @@ export const removeBankAccountById = (bank_account_id: string) => {
     .find({ id: bank_account_id })
     .assign({ is_deleted: true }) // soft delete
     .write();
+};
+
+// Transaction
+
+export const getTransactionBy = (key: string, value: any) =>
+  getBy(TRANSACTION_TABLE, key, value);
+
+export const getTransactionById = (id: string) => getTransactionBy("id", id);
+export const getTransactionsBy = (key: string, value: string) => {
+  const transactions = getBy(TRANSACTION_TABLE, key, value);
+  return transactions ? Array.of(transactions) : [];
+};
+export const getTransactionsByObj = (query: object) => {
+  const transactions = getByObj(TRANSACTION_TABLE, query);
+  return transactions ? Array.of(transactions) : [];
+};
+export const getTransactionsByUserId = (user_id: string) => {
+  const transactions: Transaction[] = getTransactionsBy("receiver_id", user_id);
+  return transactions;
 };
 
 // dev/test private methods
