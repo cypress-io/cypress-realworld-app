@@ -8,6 +8,8 @@ import { Contact } from "../models/contact";
 import shortid from "shortid";
 import { BankAccount } from "../models/bankaccount";
 
+const BANK_ACCOUNT_TABLE = "bankaccounts";
+
 const testSeed = require(path.join(__dirname, "../data/", "test-seed.json"));
 let databaseFileName;
 
@@ -111,16 +113,52 @@ export const createContactForUser = (
 };
 
 export const getBankAccountBy = (key: string, value: any) =>
-  getBy("bankaccounts", key, value);
+  getBy(BANK_ACCOUNT_TABLE, key, value);
 
 export const getBankAccountById = (id: string) => getBankAccountBy("id", id);
 export const getBankAccountsBy = (key: string, value: any) => {
-  const accounts = getBy("bankaccounts", key, value);
+  const accounts = getBy(BANK_ACCOUNT_TABLE, key, value);
   return accounts ? Array.of(accounts) : [];
 };
 export const getBankAccountsByUserId = (user_id: string) => {
   const accounts: BankAccount[] = getBankAccountsBy("user_id", user_id);
   return accounts;
+};
+
+export const createBankAccount = (bankaccount: BankAccount) => {
+  db()
+    .get(BANK_ACCOUNT_TABLE)
+    // @ts-ignore
+    .push(bankaccount)
+    .write();
+
+  // manual lookup after create
+  return getBankAccountBy("id", bankaccount.id);
+};
+
+export const createBankAccountForUser = (
+  user_id: string,
+  account_details: Partial<BankAccount>
+) => {
+  const accountId = shortid();
+  const bankaccount: BankAccount = {
+    id: accountId,
+    uuid: v4(),
+    user_id,
+    bank_name: account_details.bank_name!,
+    account_number: account_details.account_number!,
+    routing_number: account_details.routing_number!,
+    is_deleted: false,
+    created_at: new Date(),
+    modified_at: new Date()
+  };
+
+  // TODO: check if bank account exists
+
+  // Write bank account record to the database
+  const result = createBankAccount(bankaccount);
+
+  return result;
 };
 
 // dev/test private methods

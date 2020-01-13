@@ -54,35 +54,23 @@ describe("Bank Accounts API", function() {
     });
   });
 
-  /*
-  context("POST /contacts", function() {
-    it("creates a new contact", function() {
+  context("POST /bank_accounts", function() {
+    it("creates a new bank account", function() {
       const { id } = this.currentUser;
-      const contact = this.contacts[0];
 
-      cy.request("POST", `${apiContacts}`, {
-        contact_user_id: contact.id
+      cy.request("POST", `${apiBankAccounts}`, {
+        bank_name: `${faker.company.companyName()} Bank`,
+        account_number: faker.finance.account(10),
+        routing_number: faker.finance.account(9)
       }).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.contact.id).to.be.a("string");
-        expect(response.body.contact.user_id).to.eq(id);
-      });
-    });
-
-    it("error when invalid contact_user_id", function() {
-      cy.request({
-        method: "POST",
-        url: `${apiContacts}`,
-        failOnStatusCode: false,
-        body: {
-          contact_user_id: "1234"
-        }
-      }).then(response => {
-        expect(response.status).to.eq(422);
-        expect(response.body.errors.length).to.eq(1);
+        expect(response.body.account.id).to.be.a("string");
+        expect(response.body.account.user_id).to.eq(id);
       });
     });
   });
+
+  /*
   context("DELETE /contacts/:contact_id", function() {
     it("deletes a contact", function() {
       const contact = this.contacts[0];

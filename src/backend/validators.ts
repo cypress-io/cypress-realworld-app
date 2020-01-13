@@ -1,4 +1,4 @@
-import { check, param, oneOf, query } from "express-validator";
+import { body, check, oneOf, query } from "express-validator";
 import { isValid } from "shortid";
 
 // Validators
@@ -17,6 +17,18 @@ export const userFieldsValidator = oneOf([
   check("avatar").exists(),
   check("default_privacy_level").exists()
 ]);
+
+export const isBankAccountValidator = [
+  body("bank_name")
+    .isString()
+    .trim(),
+  body("account_number")
+    .isString()
+    .trim(),
+  body("routing_number")
+    .isString()
+    .trim()
+];
 
 export const isUserValidator = [
   check("first_name")

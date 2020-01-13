@@ -2,9 +2,13 @@
 
 import express from "express";
 
-import { getBankAccountsByUserId, getBankAccountById } from "./database";
+import {
+  getBankAccountsByUserId,
+  getBankAccountById,
+  createBankAccountForUser
+} from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
-import { shortIdValidation } from "./validators";
+import { shortIdValidation, isBankAccountValidator } from "./validators";
 const router = express.Router();
 
 // Routes
@@ -33,6 +37,17 @@ router.get(
 );
 
 //POST /bank_accounts (scoped-user)
+router.post(
+  "/",
+  ensureAuthenticated,
+  validateMiddleware(isBankAccountValidator),
+  (req, res) => {
+    const account = createBankAccountForUser(req.user?.id!, req.body);
+
+    res.status(200);
+    res.json({ account });
+  }
+);
 //DELETE (soft) /bank_accounts (scoped-user)
 
 export default router;
