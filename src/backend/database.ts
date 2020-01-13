@@ -198,6 +198,13 @@ export const getTransactionsByObj = (query: object) => {
   const transactions = getByObj(TRANSACTION_TABLE, query);
   return transactions ? Array.of(transactions) : [];
 };
+export const getTransactionsForUserByObj = (user_id: string, query: object) => {
+  const transactions: Transaction[] = getTransactionsByObj({
+    receiver_id: user_id,
+    ...query
+  });
+  return transactions;
+};
 export const getTransactionsByUserId = (user_id: string) => {
   const transactions: Transaction[] = getTransactionsBy("receiver_id", user_id);
   return transactions;

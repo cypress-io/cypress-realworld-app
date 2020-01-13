@@ -1,5 +1,10 @@
-import { body, check, oneOf, query } from "express-validator";
+import { body, check, oneOf, query, sanitizeQuery } from "express-validator";
 import { isValid } from "shortid";
+import { TransactionStatus, RequestStatus } from "../models";
+import _ from "lodash";
+
+const TransactionStatusValues = Object.values(TransactionStatus);
+const RequestStatusValues = Object.values(RequestStatus);
 
 // Validators
 export const shortIdValidation = (key: string) =>
@@ -66,4 +71,58 @@ export const isUserValidator = [
   check("default_privacy_level")
     .optional({ checkFalsy: true })
     .isIn(["public", "private", "contacts"])
+];
+
+// default status to "complete" if not provided
+export const sanitizeTransactionStatus = sanitizeQuery(
+  "status"
+).customSanitizer(value => {
+  return (
+    _.includes(TransactionStatusValues, value) || TransactionStatus.complete
+  );
+});
+
+// default request status to undefined if not provided
+export const sanitizeRequestStatus = sanitizeQuery(
+  "request_status"
+).customSanitizer(value => {
+  if (_.includes(RequestStatusValues, value)) {
+    return value;
+  }
+  return;
+});
+
+export const isTransactionQSValidator = [
+  query("status")
+    .optional({ checkFalsy: true })
+    .isIn(TransactionStatusValues)
+    .trim(),
+  query("request_status")
+    .optional({ checkFalsy: true })
+    .isIn(RequestStatusValues)
+    .trim(),
+  query("receiver_id")
+    .optional({ checkFalsy: true })
+    .isString()
+    .trim(),
+  query("sender_id")
+    .optional({ checkFalsy: true })
+    .isString()
+    .trim(),
+  query("range_start_ts")
+    .optional({ checkFalsy: true })
+    .isString()
+    .trim(),
+  query("range_end_ts")
+    .optional({ checkFalsy: true })
+    .isString()
+    .trim(),
+  query("amount_max")
+    .optional({ checkFalsy: true })
+    .isNumeric()
+    .trim(),
+  query("amount_min")
+    .optional({ checkFalsy: true })
+    .isNumeric()
+    .trim()
 ];
