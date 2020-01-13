@@ -118,10 +118,12 @@ export const getBankAccountBy = (key: string, value: any) =>
 export const getBankAccountById = (id: string) => getBankAccountBy("id", id);
 export const getBankAccountsBy = (key: string, value: any) => {
   const accounts = getBy(BANK_ACCOUNT_TABLE, key, value);
+  console.log("GBAB: <", key, "><", value, ">");
   return accounts ? Array.of(accounts) : [];
 };
 export const getBankAccountsByUserId = (user_id: string) => {
   const accounts: BankAccount[] = getBankAccountsBy("user_id", user_id);
+  console.log("GBAB: ", user_id, accounts);
   return accounts;
 };
 
