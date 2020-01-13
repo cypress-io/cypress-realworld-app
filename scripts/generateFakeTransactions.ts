@@ -2,7 +2,7 @@ import fs from "fs";
 import _ from "lodash";
 import shortid from "shortid";
 import faker from "faker";
-import { getBankAccountsBy } from "../src/backend/database";
+import { getBankAccountsByUserId } from "../src/backend/database";
 import {
   User,
   BankAccount,
@@ -13,10 +13,7 @@ import {
 } from "../src/models";
 
 const testSeed = require("../src/data/test-seed.json");
-//const testSeedObj = JSON.parse(JSON.stringify(testSeed));
-//const users = testSeedObj.users;
 const users = testSeed.users;
-console.log("users: ", users);
 
 // returns a random user other than the one passed in
 const getOtherRandomUser = (user_id: string) =>
@@ -64,28 +61,34 @@ const createTransaction = (
 });
 
 const createPayment = (account: BankAccount, user: User) =>
-  createTransaction(account, user.id, getOtherRandomUser(user.id), "payment");
+  createTransaction(
+    account,
+    user.id,
+    getOtherRandomUser(user.id).id,
+    "payment"
+  );
 
 const createRequest = (account: BankAccount, user: User) =>
-  createTransaction(account, user.id, getOtherRandomUser(user.id), "request");
+  createTransaction(
+    account,
+    user.id,
+    getOtherRandomUser(user.id).id,
+    "request"
+  );
 
-const transactions = users.map((user: User): Transaction[] => {
-  console.log({ user });
-  console.log("UID: <", user.id, ">");
-  const accounts = getBankAccountsBy("user_id", user.id.trim());
-  console.log({ accounts });
+const transactions = users.map((user: User): Transaction[][] => {
+  const accounts = getBankAccountsByUserId(user.id);
 
   return accounts.map((account: BankAccount) => {
-    return createPayment(account, user);
-    //return [createPayment(account, user), createRequest(account, user)];
+    return [createPayment(account, user), createRequest(account, user)];
   });
-
-  //return _.flatten(transactions);
 });
+
+const flatTransactions = _.flattenDeep(transactions);
 
 fs.writeFile(
   __dirname + "/transactions.json",
-  JSON.stringify(transactions),
+  JSON.stringify(flatTransactions),
   function() {
     console.log("transaction records generated");
   }

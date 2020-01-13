@@ -1,14 +1,14 @@
 import { DefaultPrivacyLevel } from "./user";
 export enum TransactionStatus {
-  "pending",
-  "incomplete",
-  "complete"
+  pending = "pending",
+  incomplete = "incomplete",
+  complete = "complete"
 }
 
 export enum RequestStatus {
-  "pending",
-  "accepted",
-  "rejected"
+  pending = "pending",
+  accepted = "accepted",
+  rejected = "rejected"
 }
 
 export interface Transaction {
