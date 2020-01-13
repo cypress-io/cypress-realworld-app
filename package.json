@@ -65,6 +65,7 @@
   },
   "scripts": {
     "tsnode": "ts-node -O '{\"isolatedModules\": false, \"module\": \"commonjs\" }'",
+    "tsnode:test": "NODE_ENV=test ts-node -O '{\"isolatedModules\": false, \"module\": \"commonjs\" }'",
     "db:seed:dev": "cp src/data/dev-seed.json src/data/database.json",
     "db:seed:test": "cp src/data/test-seed.json src/data/database.test.json",
     "cypress:open": "cypress open",
