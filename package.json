@@ -3,12 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/cli": "^7.7.7",
+    "@babel/plugin-transform-typescript": "^7.7.4",
+    "@babel/preset-env": "^7.7.7",
+    "@hapi/joi": "^17.0.0",
     "@material-ui/core": "^4.8.3",
+    "@types/bcrypt": "^3.0.0",
+    "@types/connect-flash": "^0.0.35",
     "@types/dotenv": "^8.2.0",
     "@types/express-session": "^1.15.16",
+    "@types/express-validator": "^3.0.0",
+    "@types/faker": "^4.1.8",
+    "@types/hapi__joi": "^16.0.6",
     "@types/jest": "24.0.24",
     "@types/json-server": "^0.14.2",
+    "@types/lodash": "^4.14.149",
     "@types/lowdb": "^1.0.9",
+    "@types/morgan": "^1.7.37",
     "@types/node": "12.12.24",
     "@types/passport": "^1.0.2",
     "@types/react": "16.9.17",
@@ -16,11 +27,21 @@
     "@types/react-redux": "7.1.5",
     "@types/react-router": "5.1.3",
     "@types/react-router-dom": "5.1.3",
+    "@types/shortid": "^0.0.29",
+    "@types/supertest": "^2.0.8",
+    "@types/uuid": "^3.4.6",
+    "@types/validator": "^12.0.1",
     "@types/webpack-env": "1.15.0",
     "axios": "0.19.0",
+    "bcrypt": "^3.0.7",
+    "connect-flash": "^0.1.1",
     "dotenv": "^8.2.0",
     "express-session": "^1.17.0",
+    "express-validator": "^6.3.1",
+    "faker": "^4.1.0",
     "json-server": "0.15.1",
+    "libphonenumber-js": "^1.7.30",
+    "nodemon": "^2.0.2",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "react": "16.12.0",
@@ -33,6 +54,8 @@
     "redux-devtools-extension": "2.13.8",
     "redux-logger": "3.0.6",
     "redux-logic": "2.1.1",
+    "shortid": "^2.2.15",
+    "supertest": "^4.0.2",
     "ts-node": "^8.5.4",
     "typescript": "3.7.4"
   },
@@ -41,6 +64,7 @@
     "start-server-and-test": "1.10.6"
   },
   "scripts": {
+    "tsnode": "ts-node -O '{\"isolatedModules\": false, \"module\": \"commonjs\" }'",
     "db:seed:dev": "cp src/data/dev-seed.json src/data/database.json",
     "db:seed:test": "cp src/data/test-seed.json src/data/database.test.json",
     "cypress:open": "cypress open",
@@ -49,16 +73,28 @@
     "prestart:dev": "yarn db:seed:dev",
     "start": "react-scripts start",
     "start:dev": "NODE_ENV=development yarn start:api & yarn start",
-    "start:api": "ts-node src/api.ts",
+    "start:api": "yarn tsnode --files src/app.ts",
+    "start:api:watch": "nodemon --exec yarn tsnode --watch 'src/app.ts' --watch 'src/backend' src/app.ts",
     "build": "react-scripts build",
+    "pretest": "yarn db:seed:test",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start:server-and-api": "start-test start:api 3001 start",
+    "start:server-and-api:watch": "start-test start:api:watch 3001 start",
     "test:e2e": "NODE_ENV=test start-test start:server-and-api 3000 cypress:run",
-    "test:e2e:ci": "NODE_ENV=test yarn start:server-and-api"
+    "test:e2e:ci": "NODE_ENV=test yarn start:server-and-api",
+    "test:e2e:api": "NODE_ENV=test start-test start:server-and-api:watch 3000 cypress:open"
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "jest": {
+    "watchPathIgnorePatterns": [
+      "<rootDir>/src/data/database.json",
+      "<rootDir>/src/data/database.test.json",
+      "<rootDir>/src/data/test-seed.json",
+      "<rootDir>/src/data/dev-seed.json"
+    ]
   },
   "browserslist": {
     "production": [

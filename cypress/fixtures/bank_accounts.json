@@ -1,0 +1,112 @@
+[
+  {
+    "id": "2bMLh_uI",
+    "uuid": "32190bf7-a0bb-46fd-8a2d-a49da9c5c9fc",
+    "user_id": "9IUK0xpw",
+    "bank_name": "Stoltenberg Group Bank",
+    "account_number": "0080433425",
+    "routing_number": "939111192",
+    "is_deleted": false,
+    "created_at": "2019-07-26T11:38:54.758Z",
+    "modified_at": "2020-01-10T12:46:47.878Z"
+  },
+  {
+    "id": "fUbkXtZT-",
+    "uuid": "476831cc-258e-49af-ba0b-87622f645128",
+    "user_id": "8CKHEu7Bb",
+    "bank_name": "Bruen, Bailey and Effertz Bank",
+    "account_number": "9053173215",
+    "routing_number": "812093679",
+    "is_deleted": true,
+    "created_at": "2020-01-10T16:16:34.526Z",
+    "modified_at": "2020-01-09T23:27:39.552Z"
+  },
+  {
+    "id": "b5f3lwalo",
+    "uuid": "a081bd1c-b37a-4e07-88fc-b925995a4a1d",
+    "user_id": "Z49-pZ0VP",
+    "bank_name": "Marks - Harvey Bank",
+    "account_number": "1809500207",
+    "routing_number": "031730738",
+    "is_deleted": false,
+    "created_at": "2019-02-04T14:18:52.483Z",
+    "modified_at": "2020-01-10T08:40:46.385Z"
+  },
+  {
+    "id": "qItdCgs_X",
+    "uuid": "6250a130-8966-4435-88c8-1e5d73352fa3",
+    "user_id": "8jlDHFobj",
+    "bank_name": "McLaughlin, Gutkowski and Kunde Bank",
+    "account_number": "3527724416",
+    "routing_number": "992417022",
+    "is_deleted": false,
+    "created_at": "2019-12-04T17:29:16.764Z",
+    "modified_at": "2020-01-10T20:03:21.293Z"
+  },
+  {
+    "id": "T3zxSfwxK",
+    "uuid": "d472ad36-9d22-407f-84e0-f2dc6b81643a",
+    "user_id": "B2NczT5pm",
+    "bank_name": "Rempel - Mraz Bank",
+    "account_number": "0362260950",
+    "routing_number": "455660327",
+    "is_deleted": false,
+    "created_at": "2019-11-13T16:46:15.025Z",
+    "modified_at": "2020-01-10T04:20:48.277Z"
+  },
+  {
+    "id": "9gtg7gQws",
+    "uuid": "65454949-817c-431a-8692-44e8cf40b8d1",
+    "user_id": "6VhSm-R4i",
+    "bank_name": "Tremblay, Kuhlman and Fritsch Bank",
+    "account_number": "7484972600",
+    "routing_number": "509918004",
+    "is_deleted": false,
+    "created_at": "2019-01-17T08:24:43.653Z",
+    "modified_at": "2020-01-10T19:25:45.405Z"
+  },
+  {
+    "id": "nlOO-jP2S",
+    "uuid": "348d0da7-144a-4b28-93fa-29599783920c",
+    "user_id": "kNNEA6mLb",
+    "bank_name": "Emard - Bosco Bank",
+    "account_number": "0821066994",
+    "routing_number": "509103709",
+    "is_deleted": true,
+    "created_at": "2019-08-21T19:41:56.228Z",
+    "modified_at": "2020-01-10T17:48:30.500Z"
+  },
+  {
+    "id": "3Wbvz6M23",
+    "uuid": "60629a3d-067d-4a2d-a1b5-778d623532dc",
+    "user_id": "l8j5MFSU5",
+    "bank_name": "Romaguera, Sporer and Harber Bank",
+    "account_number": "6505625731",
+    "routing_number": "016730620",
+    "is_deleted": false,
+    "created_at": "2019-08-11T04:52:53.951Z",
+    "modified_at": "2020-01-10T15:30:29.581Z"
+  },
+  {
+    "id": "hL_Bu5ZqZ",
+    "uuid": "8706b4d8-20a5-4805-8c43-f2e4152fcb7a",
+    "user_id": "LFTFzXJug",
+    "bank_name": "O'Kon and Sons Bank",
+    "account_number": "6062772949",
+    "routing_number": "906026658",
+    "is_deleted": true,
+    "created_at": "2019-11-05T14:08:25.000Z",
+    "modified_at": "2020-01-10T16:05:05.520Z"
+  },
+  {
+    "id": "53Yjv0Xdf",
+    "uuid": "f75d0777-439b-4433-b743-889b24cf3c5b",
+    "user_id": "abi3cURPF",
+    "bank_name": "VonRueden, Tremblay and Kunze Bank",
+    "account_number": "1243463609",
+    "routing_number": "826492010",
+    "is_deleted": false,
+    "created_at": "2019-05-24T08:49:33.385Z",
+    "modified_at": "2020-01-10T14:26:47.643Z"
+  }
+]

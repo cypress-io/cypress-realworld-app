@@ -1,88 +1,348 @@
 {
-  "transactions": [
+  "users": [
     {
-      "id": 1,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 100,
-      "currency": "USD"
+      "id": "9IUK0xpw",
+      "uuid": "a6218702-3254-4d3e-af48-9ebb7ee73e76",
+      "first_name": "Lizzie",
+      "last_name": "Heathcote",
+      "username": "Teresa34",
+      "password": "$2b$10$D12H6XSK7XF61yjhZgNn3urSCGQEGzbY6agMXZihTtyk1TIKXil0C",
+      "email": "Zakary.Bashirian@yahoo.com",
+      "phone_number": "+12133734253",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/ilya_pestov/128.jpg",
+      "default_privacy_level": "private",
+      "balance": 58681,
+      "created_at": "2020-01-02T04:17:12.289Z",
+      "modified_at": "2020-01-06T20:43:57.569Z"
     },
     {
-      "id": 2,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 50,
-      "currency": "USD"
+      "id": "8CKHEu7Bb",
+      "uuid": "16df7866-b5c1-4840-8796-ebd3df147dc1",
+      "first_name": "Verda",
+      "last_name": "Rohan",
+      "username": "Guadalupe.Padberg86",
+      "password": "$2b$10$D12H6XSK7XF61yjhZgNn3urSCGQEGzbY6agMXZihTtyk1TIKXil0C",
+      "email": "Emelia.Dare@hotmail.com",
+      "phone_number": "154-023-4116 x58144",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/malykhinv/128.jpg",
+      "default_privacy_level": "contacts",
+      "balance": 60377,
+      "created_at": "2019-07-08T15:21:15.524Z",
+      "modified_at": "2020-01-07T14:54:31.133Z"
     },
     {
-      "id": 3,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 120,
-      "currency": "USD"
+      "id": "Z49-pZ0VP",
+      "uuid": "e9fe51a5-db66-48ca-bd2a-a5b178f8fcd3",
+      "first_name": "Aylin",
+      "last_name": "Huel",
+      "username": "Alexa81",
+      "password": "$2b$10$D12H6XSK7XF61yjhZgNn3urSCGQEGzbY6agMXZihTtyk1TIKXil0C",
+      "email": "Parker.Leannon2@yahoo.com",
+      "phone_number": "067-925-5679 x561",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/ilya_pestov/128.jpg",
+      "default_privacy_level": "public",
+      "balance": 30496,
+      "created_at": "2019-07-19T05:42:31.689Z",
+      "modified_at": "2020-01-07T15:16:06.137Z"
     },
     {
-      "id": 4,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 200,
-      "currency": "USD"
+      "id": "8jlDHFobj",
+      "uuid": "8110e643-2513-4e17-bbe9-7577d1f99d39",
+      "first_name": "Earnestine",
+      "last_name": "Dietrich",
+      "username": "Travon.Prohaska87",
+      "password": "$2b$10$D12H6XSK7XF61yjhZgNn3urSCGQEGzbY6agMXZihTtyk1TIKXil0C",
+      "email": "Clare_Beier@gmail.com",
+      "phone_number": "611.483.1376 x783",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/evanshajed/128.jpg",
+      "default_privacy_level": "private",
+      "balance": 99877,
+      "created_at": "2019-01-19T14:18:55.754Z",
+      "modified_at": "2020-01-07T00:10:49.416Z"
     },
     {
-      "id": 5,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 3000,
-      "currency": "USD"
+      "id": "B2NczT5pm",
+      "uuid": "114c406e-5bce-4ca4-8389-7c5f91026c16",
+      "first_name": "Naomie",
+      "last_name": "O'Hara",
+      "username": "Alec93",
+      "password": "$2b$10$D12H6XSK7XF61yjhZgNn3urSCGQEGzbY6agMXZihTtyk1TIKXil0C",
+      "email": "Damion_Osinski16@yahoo.com",
+      "phone_number": "257-175-1918 x654",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/kurafire/128.jpg",
+      "default_privacy_level": "public",
+      "balance": 38127,
+      "created_at": "2019-02-09T14:17:06.223Z",
+      "modified_at": "2020-01-07T17:25:50.812Z"
     },
     {
-      "id": 6,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 700,
-      "currency": "USD"
+      "id": "6VhSm-R4i",
+      "uuid": "5749a026-fb79-4cdc-9079-6718a59f8965",
+      "first_name": "Garnet",
+      "last_name": "Klein",
+      "username": "Raphael55",
+      "password": "$2b$10$D12H6XSK7XF61yjhZgNn3urSCGQEGzbY6agMXZihTtyk1TIKXil0C",
+      "email": "Matteo_Schowalter@yahoo.com",
+      "phone_number": "383-303-5538 x727",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/liminha/128.jpg",
+      "default_privacy_level": "contacts",
+      "balance": 91529,
+      "created_at": "2019-07-26T01:50:01.882Z",
+      "modified_at": "2020-01-07T16:21:16.977Z"
     },
     {
-      "id": 7,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 10,
-      "currency": "USD"
+      "id": "kNNEA6mLb",
+      "uuid": "c32e7bf7-a3a2-42fb-b65c-8d9a83a91629",
+      "first_name": "Kaden",
+      "last_name": "Kunze",
+      "username": "Ambrose_Prohaska",
+      "password": "$2b$10$D12H6XSK7XF61yjhZgNn3urSCGQEGzbY6agMXZihTtyk1TIKXil0C",
+      "email": "Diamond.Borer@gmail.com",
+      "phone_number": "201.776.1749 x66786",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/twittypork/128.jpg",
+      "default_privacy_level": "public",
+      "balance": 49263,
+      "created_at": "2019-04-20T19:43:07.347Z",
+      "modified_at": "2020-01-06T22:06:47.190Z"
     },
     {
-      "id": 8,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 400,
-      "currency": "USD"
+      "id": "l8j5MFSU5",
+      "uuid": "6af7e3a5-a4e9-4a9c-9c21-e12bde4b4455",
+      "first_name": "Crystel",
+      "last_name": "Hermann",
+      "username": "Kenny_Batz",
+      "password": "$2b$10$D12H6XSK7XF61yjhZgNn3urSCGQEGzbY6agMXZihTtyk1TIKXil0C",
+      "email": "Lisa27@hotmail.com",
+      "phone_number": "135-534-5749",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/algunsanabria/128.jpg",
+      "default_privacy_level": "contacts",
+      "balance": 55937,
+      "created_at": "2019-12-14T00:10:17.873Z",
+      "modified_at": "2020-01-07T10:30:31.190Z"
     },
     {
-      "id": 9,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 60,
-      "currency": "USD"
+      "id": "LFTFzXJug",
+      "uuid": "50a2e1e4-9f97-48ad-92e2-f78e123b5520",
+      "first_name": "Dena",
+      "last_name": "Jacobs",
+      "username": "Nia_Waelchi43",
+      "password": "$2b$10$D12H6XSK7XF61yjhZgNn3urSCGQEGzbY6agMXZihTtyk1TIKXil0C",
+      "email": "Tom.Wilderman@hotmail.com",
+      "phone_number": "080.331.0862 x078",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/nepdud/128.jpg",
+      "default_privacy_level": "private",
+      "balance": 10735,
+      "created_at": "2019-01-22T21:31:45.821Z",
+      "modified_at": "2020-01-07T12:37:49.930Z"
     },
     {
-      "id": 10,
-      "from": "Moe",
-      "to": "Curly",
-      "amount": 800,
-      "currency": "USD"
+      "id": "abi3cURPF",
+      "uuid": "0b218c69-bdea-4798-aebe-ad1329a667a1",
+      "first_name": "Adeline",
+      "last_name": "Stroman",
+      "username": "Luigi26",
+      "password": "$2b$10$D12H6XSK7XF61yjhZgNn3urSCGQEGzbY6agMXZihTtyk1TIKXil0C",
+      "email": "Dora.Emard@gmail.com",
+      "phone_number": "(590) 608-4423 x99301",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/maxlinderman/128.jpg",
+      "default_privacy_level": "public",
+      "balance": 20709,
+      "created_at": "2019-10-10T13:15:37.749Z",
+      "modified_at": "2020-01-06T19:23:48.803Z"
     }
   ],
-  "stooges": [
+  "contacts": [
     {
-      "id": 1,
-      "name": "Moe"
+      "id": "scib_2iO",
+      "uuid": "7692d871-1ffa-4b12-9856-1299140eba09",
+      "user_id": "9IUK0xpw",
+      "contact_user_id": "abi3cURPF",
+      "created_at": "2019-05-18T17:01:50.737Z",
+      "modified_at": "2020-01-09T17:53:17.537Z"
     },
     {
-      "id": 2,
-      "name": "Curly"
+      "id": "GZizKVmPd",
+      "uuid": "f3d5d3f2-30c5-4f6e-af7b-b06918fcaee1",
+      "user_id": "8CKHEu7Bb",
+      "contact_user_id": "8jlDHFobj",
+      "created_at": "2019-12-15T12:50:32.488Z",
+      "modified_at": "2020-01-09T16:08:07.674Z"
     },
     {
-      "id": 3,
-      "name": "Larry"
+      "id": "3uE82YjZ6",
+      "uuid": "d002cfe4-78a8-44cf-b9ce-422f3e68a120",
+      "user_id": "Z49-pZ0VP",
+      "contact_user_id": "8jlDHFobj",
+      "created_at": "2019-12-08T13:37:40.671Z",
+      "modified_at": "2020-01-10T12:34:46.841Z"
+    },
+    {
+      "id": "Ni6hG_yjL",
+      "uuid": "89a0bb78-5854-4eeb-b29c-61a396bc1bad",
+      "user_id": "8jlDHFobj",
+      "contact_user_id": "l8j5MFSU5",
+      "created_at": "2019-10-26T14:18:34.276Z",
+      "modified_at": "2020-01-10T01:43:25.569Z"
+    },
+    {
+      "id": "sbbYA7Qop",
+      "uuid": "3d50fe74-2870-4bb5-b4a6-6ae81cd2321f",
+      "user_id": "B2NczT5pm",
+      "contact_user_id": "LFTFzXJug",
+      "created_at": "2019-04-13T00:08:37.145Z",
+      "modified_at": "2020-01-10T04:17:33.166Z"
+    },
+    {
+      "id": "nF5ExBH03",
+      "uuid": "c25c379b-ce38-469a-a863-a925fba47799",
+      "user_id": "6VhSm-R4i",
+      "contact_user_id": "LFTFzXJug",
+      "created_at": "2019-10-06T04:23:39.404Z",
+      "modified_at": "2020-01-09T23:52:36.859Z"
+    },
+    {
+      "id": "GI2984tyY",
+      "uuid": "42a125d2-820a-474a-b95d-b280a9973aee",
+      "user_id": "kNNEA6mLb",
+      "contact_user_id": "abi3cURPF",
+      "created_at": "2019-11-16T08:54:26.842Z",
+      "modified_at": "2020-01-10T02:41:38.536Z"
+    },
+    {
+      "id": "WmGxPDsRJ",
+      "uuid": "4d7cf76e-0647-4969-971a-d92352ea5494",
+      "user_id": "l8j5MFSU5",
+      "contact_user_id": "B2NczT5pm",
+      "created_at": "2019-08-18T15:58:50.915Z",
+      "modified_at": "2020-01-10T06:05:44.608Z"
+    },
+    {
+      "id": "X7W-hR_M4",
+      "uuid": "6849d97f-a334-41e7-9b3d-855a9e92c839",
+      "user_id": "LFTFzXJug",
+      "contact_user_id": "9IUK0xpw",
+      "created_at": "2020-01-01T17:56:02.350Z",
+      "modified_at": "2020-01-09T20:13:15.931Z"
+    },
+    {
+      "id": "smIxYypRZ",
+      "uuid": "c2cfb4bb-49d4-44d1-88c2-c334a0d67909",
+      "user_id": "abi3cURPF",
+      "contact_user_id": "8jlDHFobj",
+      "created_at": "2019-10-04T21:28:14.123Z",
+      "modified_at": "2020-01-09T22:02:02.270Z"
+    }
+  ],
+  "bankaccounts": [
+    {
+      "id": "2bMLh_uI",
+      "uuid": "32190bf7-a0bb-46fd-8a2d-a49da9c5c9fc",
+      "user_id": "9IUK0xpw",
+      "bank_name": "Stoltenberg Group Bank",
+      "account_number": "0080433425",
+      "routing_number": "939111192",
+      "is_deleted": false,
+      "created_at": "2019-07-26T11:38:54.758Z",
+      "modified_at": "2020-01-10T12:46:47.878Z"
+    },
+    {
+      "id": "fUbkXtZT-",
+      "uuid": "476831cc-258e-49af-ba0b-87622f645128",
+      "user_id": "8CKHEu7Bb",
+      "bank_name": "Bruen, Bailey and Effertz Bank",
+      "account_number": "9053173215",
+      "routing_number": "812093679",
+      "is_deleted": true,
+      "created_at": "2020-01-10T16:16:34.526Z",
+      "modified_at": "2020-01-09T23:27:39.552Z"
+    },
+    {
+      "id": "b5f3lwalo",
+      "uuid": "a081bd1c-b37a-4e07-88fc-b925995a4a1d",
+      "user_id": "Z49-pZ0VP",
+      "bank_name": "Marks - Harvey Bank",
+      "account_number": "1809500207",
+      "routing_number": "031730738",
+      "is_deleted": false,
+      "created_at": "2019-02-04T14:18:52.483Z",
+      "modified_at": "2020-01-10T08:40:46.385Z"
+    },
+    {
+      "id": "qItdCgs_X",
+      "uuid": "6250a130-8966-4435-88c8-1e5d73352fa3",
+      "user_id": "8jlDHFobj",
+      "bank_name": "McLaughlin, Gutkowski and Kunde Bank",
+      "account_number": "3527724416",
+      "routing_number": "992417022",
+      "is_deleted": false,
+      "created_at": "2019-12-04T17:29:16.764Z",
+      "modified_at": "2020-01-10T20:03:21.293Z"
+    },
+    {
+      "id": "T3zxSfwxK",
+      "uuid": "d472ad36-9d22-407f-84e0-f2dc6b81643a",
+      "user_id": "B2NczT5pm",
+      "bank_name": "Rempel - Mraz Bank",
+      "account_number": "0362260950",
+      "routing_number": "455660327",
+      "is_deleted": false,
+      "created_at": "2019-11-13T16:46:15.025Z",
+      "modified_at": "2020-01-10T04:20:48.277Z"
+    },
+    {
+      "id": "9gtg7gQws",
+      "uuid": "65454949-817c-431a-8692-44e8cf40b8d1",
+      "user_id": "6VhSm-R4i",
+      "bank_name": "Tremblay, Kuhlman and Fritsch Bank",
+      "account_number": "7484972600",
+      "routing_number": "509918004",
+      "is_deleted": false,
+      "created_at": "2019-01-17T08:24:43.653Z",
+      "modified_at": "2020-01-10T19:25:45.405Z"
+    },
+    {
+      "id": "nlOO-jP2S",
+      "uuid": "348d0da7-144a-4b28-93fa-29599783920c",
+      "user_id": "kNNEA6mLb",
+      "bank_name": "Emard - Bosco Bank",
+      "account_number": "0821066994",
+      "routing_number": "509103709",
+      "is_deleted": true,
+      "created_at": "2019-08-21T19:41:56.228Z",
+      "modified_at": "2020-01-10T17:48:30.500Z"
+    },
+    {
+      "id": "3Wbvz6M23",
+      "uuid": "60629a3d-067d-4a2d-a1b5-778d623532dc",
+      "user_id": "l8j5MFSU5",
+      "bank_name": "Romaguera, Sporer and Harber Bank",
+      "account_number": "6505625731",
+      "routing_number": "016730620",
+      "is_deleted": false,
+      "created_at": "2019-08-11T04:52:53.951Z",
+      "modified_at": "2020-01-10T15:30:29.581Z"
+    },
+    {
+      "id": "hL_Bu5ZqZ",
+      "uuid": "8706b4d8-20a5-4805-8c43-f2e4152fcb7a",
+      "user_id": "LFTFzXJug",
+      "bank_name": "O'Kon and Sons Bank",
+      "account_number": "6062772949",
+      "routing_number": "906026658",
+      "is_deleted": true,
+      "created_at": "2019-11-05T14:08:25.000Z",
+      "modified_at": "2020-01-10T16:05:05.520Z"
+    },
+    {
+      "id": "53Yjv0Xdf",
+      "uuid": "f75d0777-439b-4433-b743-889b24cf3c5b",
+      "user_id": "abi3cURPF",
+      "bank_name": "VonRueden, Tremblay and Kunze Bank",
+      "account_number": "1243463609",
+      "routing_number": "826492010",
+      "is_deleted": false,
+      "created_at": "2019-05-24T08:49:33.385Z",
+      "modified_at": "2020-01-10T14:26:47.643Z"
     }
   ]
 }
