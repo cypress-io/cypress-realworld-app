@@ -68,6 +68,8 @@
     "tsnode:test": "NODE_ENV=test ts-node -O '{\"isolatedModules\": false, \"module\": \"commonjs\" }'",
     "db:seed:dev": "cp src/data/dev-seed.json src/data/database.json",
     "db:seed:test": "cp src/data/test-seed.json src/data/database.test.json",
+    "db:updatedevseed": "cp src/data/test-seed.json src/data/dev-seed.json",
+    "postdb:updatedevseed": "yarn db:seed:dev",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "cypress:run:record": "cypress run --record",
