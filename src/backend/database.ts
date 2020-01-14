@@ -10,7 +10,6 @@ import {
   User,
   Contact,
   TransactionStatus,
-  DefaultPrivacyLevel,
   RequestStatus
 } from "../models";
 
@@ -258,6 +257,21 @@ export const getTransactionsForUserContacts = (
   return contactIds.flatMap((contactId): Transaction[] => {
     return getTransactionsForUserByObj(contactId, query);
   });
+};
+
+export const getPublicTransactionsDefaultSort = (userId: string) => {
+  const contactsTransactions = getTransactionsForUserContacts(userId);
+  const contactsTransactionIds = _.map(contactsTransactions, "id");
+  const allPublicTransactions = getAllPublicTransactions();
+
+  const nonContactPublicTransactions = _.reject(allPublicTransactions, t =>
+    _.includes(contactsTransactionIds, t.id)
+  );
+
+  return {
+    contacts: contactsTransactions,
+    public: nonContactPublicTransactions
+  };
 };
 
 export const createTransaction = (

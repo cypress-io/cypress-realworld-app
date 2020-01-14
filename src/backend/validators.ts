@@ -157,3 +157,9 @@ export const isTransactionPayloadValidator = [
 export const isTransactionPatchValidator = [
   body("request_status").isIn(RequestStatusValues)
 ];
+
+export const isTransactionPublicQSValidator = [
+  query("order")
+    .optional({ checkFalsy: true })
+    .isIn(["default"])
+];

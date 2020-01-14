@@ -7,7 +7,8 @@ import {
   getTransactionsForUserContacts,
   getAllPublicTransactions,
   createTransaction,
-  updateTransactionById
+  updateTransactionById,
+  getPublicTransactionsDefaultSort
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import {
@@ -16,7 +17,8 @@ import {
   isTransactionQSValidator,
   isTransactionPayloadValidator,
   shortIdValidation,
-  isTransactionPatchValidator
+  isTransactionPatchValidator,
+  isTransactionPublicQSValidator
 } from "./validators";
 const router = express.Router();
 
@@ -61,12 +63,19 @@ router.get(
 );
 
 //GET /transactions/public - auth-required
-router.get("/public", ensureAuthenticated, (req, res) => {
-  const transactions = getAllPublicTransactions();
+router.get(
+  "/public",
+  ensureAuthenticated,
+  validateMiddleware(isTransactionPublicQSValidator),
+  (req, res) => {
+    // TODO: expand order outside of "default"
+    // const { order } = req.query;
+    const transactions = getPublicTransactionsDefaultSort(req.user?.id!);
 
-  res.status(200);
-  res.json({ transactions });
-});
+    res.status(200);
+    res.json({ transactions });
+  }
+);
 
 //POST /transactions - scoped-user
 router.post(

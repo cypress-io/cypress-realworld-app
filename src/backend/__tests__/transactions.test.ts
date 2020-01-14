@@ -10,7 +10,8 @@ import {
   createTransaction,
   getTransactionsByUserId,
   updateTransactionById,
-  getTransactionById
+  getTransactionById,
+  getPublicTransactionsDefaultSort
 } from "../database";
 
 import {
@@ -60,6 +61,20 @@ describe("Transactions", () => {
       { status: "incomplete" }
     );
     expect(result.length).toBe(1);
+  });
+
+  it("should retrieve a list of public transactions, default sort", () => {
+    const user: User = getAllUsers()[0];
+    const contactsTransactions: Transaction[] = getTransactionsForUserContacts(
+      user.id
+    );
+    expect(contactsTransactions.length).toBe(9);
+
+    const response = getPublicTransactionsDefaultSort(user.id);
+
+    expect(response.contacts.length).toBe(9);
+    expect(response.public.length).toBe(4);
+    expect(response.contacts[8].id).toBe(contactsTransactions[8].id);
   });
 
   it("should create a payment", () => {
