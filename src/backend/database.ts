@@ -265,8 +265,6 @@ export const createTransaction = (
   transactionType: "payment" | "request",
   transactionDetails: Partial<Transaction>
 ): Transaction => {
-  const sender = getUserBy("id", userId);
-
   const transaction: Transaction = {
     id: shortid(),
     uuid: v4(),
@@ -275,7 +273,7 @@ export const createTransaction = (
     description: transactionDetails.description!,
     receiver_id: transactionDetails.receiver_id!,
     sender_id: userId,
-    privacy_level: sender.privacy_level,
+    privacy_level: transactionDetails.privacy_level!,
     status: TransactionStatus.pending,
     request_status:
       transactionType === "request" ? RequestStatus.pending : undefined,

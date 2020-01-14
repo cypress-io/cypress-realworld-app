@@ -13,7 +13,12 @@ import {
   getTransactionById
 } from "../database";
 
-import { User, Transaction, RequestStatus } from "../../models";
+import {
+  User,
+  Transaction,
+  RequestStatus,
+  DefaultPrivacyLevel
+} from "../../models";
 
 describe("Transactions", () => {
   afterEach(() => {
@@ -67,7 +72,8 @@ describe("Transactions", () => {
       source: senderBankAccount.id!,
       receiver_id: receiver.id,
       description: `Payment: ${sender.id} to ${receiver.id}`,
-      amount
+      amount,
+      privacy_level: DefaultPrivacyLevel.public
     };
 
     const result = createTransaction(sender.id, "payment", paymentDetails);
@@ -76,7 +82,7 @@ describe("Transactions", () => {
     expect(result.request_status).not.toBeDefined();
   });
 
-  it("should create a payment", () => {
+  it("should create a request", () => {
     const sender: User = getAllUsers()[0];
     const receiver: User = getAllUsers()[1];
     const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
@@ -86,7 +92,8 @@ describe("Transactions", () => {
       source: senderBankAccount.id!,
       receiver_id: receiver.id,
       description: `Request: ${sender.id} to ${receiver.id}`,
-      amount
+      amount,
+      privacy_level: DefaultPrivacyLevel.public
     };
 
     const result = createTransaction(sender.id, "request", requestDetails);

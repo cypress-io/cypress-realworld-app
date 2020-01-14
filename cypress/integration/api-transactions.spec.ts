@@ -103,7 +103,8 @@ describe("Transactions API", function() {
         source: senderBankAccount.id,
         receiver_id: receiver.id,
         description: `Payment: ${sender.id} to ${receiver.id}`,
-        amount: faker.finance.amount()
+        amount: faker.finance.amount(),
+        privacy_level: "public"
       }).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.transaction.id).to.be.a("string");
@@ -122,7 +123,8 @@ describe("Transactions API", function() {
         source: senderBankAccount.id,
         receiver_id: receiver.id,
         description: `Request: ${sender.id} from ${receiver.id}`,
-        amount: faker.finance.amount()
+        amount: faker.finance.amount(),
+        privacy_level: "public"
       }).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.transaction.id).to.be.a("string");

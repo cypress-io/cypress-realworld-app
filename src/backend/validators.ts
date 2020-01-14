@@ -1,10 +1,15 @@
 import { body, check, oneOf, query, sanitizeQuery } from "express-validator";
 import { isValid } from "shortid";
-import { TransactionStatus, RequestStatus } from "../models";
+import {
+  TransactionStatus,
+  RequestStatus,
+  DefaultPrivacyLevel
+} from "../models";
 import _ from "lodash";
 
 const TransactionStatusValues = Object.values(TransactionStatus);
 const RequestStatusValues = Object.values(RequestStatus);
+const DefaultPrivacyLevelValues = Object.values(DefaultPrivacyLevel);
 
 // Validators
 export const shortIdValidation = (key: string) =>
@@ -131,6 +136,9 @@ export const isTransactionQSValidator = [
 export const isTransactionPayloadValidator = [
   body("type")
     .isIn(["payment", "request"])
+    .trim(),
+  body("privacy_level")
+    .isIn(DefaultPrivacyLevelValues)
     .trim(),
   body("source")
     .isString()
