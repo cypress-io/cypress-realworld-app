@@ -4,7 +4,8 @@ import express from "express";
 
 import {
   getTransactionsForUserByObj,
-  getTransactionsForUserContacts
+  getTransactionsForUserContacts,
+  getAllPublicTransactions
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import {
@@ -55,6 +56,12 @@ router.get(
 );
 
 //GET /transactions/public - auth-required
+router.get("/public", ensureAuthenticated, (req, res) => {
+  const transactions = getAllPublicTransactions();
+
+  res.status(200);
+  res.json({ transactions });
+});
 
 //POST /transactions - scoped-user
 

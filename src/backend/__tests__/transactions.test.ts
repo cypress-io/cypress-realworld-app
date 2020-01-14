@@ -3,7 +3,9 @@ import {
   getRandomUser,
   getTransactionsForUserByObj,
   getTransactionsForUserContacts,
-  getAllUsers
+  getAllUsers,
+  getAllTransactions,
+  getAllPublicTransactions
 } from "../database";
 
 import { User, Transaction } from "../../models";
@@ -14,6 +16,14 @@ describe("Transactions", () => {
   });
   afterAll(() => {
     seedDatabase();
+  });
+
+  it("should retrieve a list of all transactions", () => {
+    expect(getAllTransactions().length).toBe(20);
+  });
+
+  it("should retrieve a list of all public transactions", () => {
+    expect(getAllPublicTransactions().length).toBe(7);
   });
 
   it("should retrieve a list of transactions for a user", () => {

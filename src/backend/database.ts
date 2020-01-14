@@ -3,12 +3,11 @@ import v4 from "uuid";
 import _ from "lodash";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
-import { User } from "../models/user";
-import { Contact } from "../models/contact";
 import shortid from "shortid";
-import { BankAccount } from "../models/bankaccount";
-import { Transaction } from "../models";
+import { BankAccount, Transaction, User, Contact } from "../models";
 
+const USER_TABLE = "users";
+const CONTACT_TABLE = "contacts";
 const BANK_ACCOUNT_TABLE = "bankaccounts";
 const TRANSACTION_TABLE = "transactions";
 
@@ -36,12 +35,24 @@ export const seedDatabase = () => {
 };
 export const getAllUsers = () =>
   db()
-    .get("users")
+    .get(USER_TABLE)
     .value();
 
 export const getAllContacts = () =>
   db()
-    .get("contacts")
+    .get(CONTACT_TABLE)
+    .value();
+
+export const getAllTransactions = () =>
+  db()
+    .get(TRANSACTION_TABLE)
+    .value();
+
+export const getAllPublicTransactions = () =>
+  db()
+    .get(TRANSACTION_TABLE)
+    // @ts-ignore
+    .filter({ privacy_level: "public" })
     .value();
 
 export const getAllBy = (entity: string, key: string, value: any) => {
@@ -82,17 +93,17 @@ export const getByObj = (entity: string, query: object) =>
 
 // User
 export const getUserBy = (key: string, value: any) =>
-  getBy("users", key, value);
+  getBy(USER_TABLE, key, value);
 export const getUsersBy = (key: string, value: any) => {
-  const users = getBy("users", key, value);
-  return users ? Array.of(getBy("users", key, value)) : [];
+  const users = getBy(USER_TABLE, key, value);
+  return users ? Array.of(getBy(USER_TABLE, key, value)) : [];
 };
 
 // Contact
 export const getContactBy = (key: string, value: any) =>
-  getBy("contacts", key, value);
+  getBy(CONTACT_TABLE, key, value);
 export const getContactsBy = (key: string, value: any) =>
-  getAllBy("contacts", key, value);
+  getAllBy(CONTACT_TABLE, key, value);
 
 export const getContactsByUsername = (username: string) => {
   const user: User = getUserBy("username", username);
@@ -105,7 +116,7 @@ export const getContactsByUserId = (user_id: string): Contact[] =>
 
 export const createContact = (contact: Contact) => {
   db()
-    .get("contacts")
+    .get(CONTACT_TABLE)
     // @ts-ignore
     .push(contact)
     .write();
@@ -118,7 +129,7 @@ export const removeContactById = (contact_id: string) => {
   const contact = getContactBy("id", contact_id);
 
   db()
-    .get("contacts")
+    .get(CONTACT_TABLE)
     // @ts-ignore
     .remove(contact)
     .write();

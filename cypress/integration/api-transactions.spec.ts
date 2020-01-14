@@ -82,4 +82,13 @@ describe("Transactions API", function() {
       });
     });
   });
+
+  context("GET /transactions/public", function() {
+    it("gets a list of public transactions", function() {
+      cy.request("GET", `${apiTransactions}/public`).then(response => {
+        expect(response.status).to.eq(200);
+        expect(response.body.transactions.length).to.eq(7);
+      });
+    });
+  });
 });
