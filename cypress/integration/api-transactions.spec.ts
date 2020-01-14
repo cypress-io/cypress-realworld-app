@@ -131,4 +131,32 @@ describe("Transactions API", function() {
       });
     });
   });
+
+  context("PATCH /transactions/:transaction_id", function() {
+    it("updates a transaction", function() {
+      const transaction = this.transactions[0];
+
+      cy.request("PATCH", `${apiTransactions}/${transaction.id}`, {
+        request_status: "rejected"
+      }).then(response => {
+        expect(response.status).to.eq(204);
+      });
+    });
+
+    it("error when invalid field sent", function() {
+      const transaction = this.transactions[0];
+
+      cy.request({
+        method: "PATCH",
+        url: `${apiTransactions}/${transaction.id}`,
+        failOnStatusCode: false,
+        body: {
+          notAUserField: "not a user field"
+        }
+      }).then(response => {
+        expect(response.status).to.eq(422);
+        expect(response.body.errors.length).to.eq(1);
+      });
+    });
+  });
 });

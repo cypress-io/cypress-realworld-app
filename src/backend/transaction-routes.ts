@@ -6,14 +6,17 @@ import {
   getTransactionsForUserByObj,
   getTransactionsForUserContacts,
   getAllPublicTransactions,
-  createTransaction
+  createTransaction,
+  updateTransactionById
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import {
   sanitizeTransactionStatus,
   sanitizeRequestStatus,
   isTransactionQSValidator,
-  isTransactionPayloadValidator
+  isTransactionPayloadValidator,
+  shortIdValidation,
+  isTransactionPatchValidator
 } from "./validators";
 const router = express.Router();
 
@@ -88,5 +91,20 @@ router.post(
 );
 
 //PATCH /transactions/:transaction_id - scoped-user
+router.patch(
+  "/:transaction_id",
+  ensureAuthenticated,
+  validateMiddleware([
+    shortIdValidation("transaction_id"),
+    ...isTransactionPatchValidator
+  ]),
+  (req, res) => {
+    const { transaction_id } = req.params;
+
+    updateTransactionById(req.user?.id!, transaction_id, req.body);
+
+    res.sendStatus(204);
+  }
+);
 
 export default router;

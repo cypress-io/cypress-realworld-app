@@ -297,6 +297,24 @@ const saveTransaction = (transaction: Transaction): Transaction => {
   return getTransactionBy("id", transaction.id);
 };
 
+export const updateTransactionById = (
+  userId: string,
+  transactionId: string,
+  edits: Partial<Transaction>
+) => {
+  const transaction = getTransactionBy("id", transactionId);
+
+  if (userId === transaction.sender_id || userId === transaction.receiver_id) {
+    console.log("updating transaction");
+    db()
+      .get(TRANSACTION_TABLE)
+      // @ts-ignore
+      .find(transaction)
+      .assign(edits)
+      .write();
+  }
+};
+
 // dev/test private methods
 export const getRandomUser = () => {
   const users = getAllUsers();

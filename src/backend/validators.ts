@@ -145,3 +145,7 @@ export const isTransactionPayloadValidator = [
     .isNumeric()
     .trim()
 ];
+
+export const isTransactionPatchValidator = [
+  body("request_status").isIn(RequestStatusValues)
+];

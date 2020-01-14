@@ -1,19 +1,19 @@
 import faker from "faker";
 import {
   seedDatabase,
-  getRandomUser,
   getTransactionsForUserByObj,
   getTransactionsForUserContacts,
   getAllUsers,
   getAllTransactions,
   getAllPublicTransactions,
   getBankAccountsByUserId,
-  createPayment,
-  createRequest,
-  createTransaction
+  createTransaction,
+  getTransactionsByUserId,
+  updateTransactionById,
+  getTransactionById
 } from "../database";
 
-import { User, Transaction } from "../../models";
+import { User, Transaction, RequestStatus } from "../../models";
 
 describe("Transactions", () => {
   afterEach(() => {
@@ -93,5 +93,23 @@ describe("Transactions", () => {
     expect(result.id).toBeDefined();
     expect(result.status).toEqual("pending");
     expect(result.request_status).toEqual("pending");
+  });
+
+  it("should update a transaction", () => {
+    const user: User = getAllUsers()[0];
+
+    const transactions = getTransactionsByUserId(user.id);
+    expect(transactions.length).toBe(4);
+
+    const transaction = transactions[0];
+    expect(transaction.request_status).not.toEqual("rejected");
+
+    const edits: Partial<Transaction> = {
+      request_status: RequestStatus.rejected
+    };
+    updateTransactionById(user.id, transaction.id, edits);
+
+    const updatedTransaction = getTransactionById(transaction.id);
+    expect(updatedTransaction.request_status).toEqual("rejected");
   });
 });
