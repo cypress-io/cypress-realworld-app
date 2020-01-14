@@ -1,17 +1,19 @@
 ///<reference path="types.ts" />
 
 import express from "express";
-
+import _ from "lodash";
 import {
   getTransactionsForUserByObj,
   getTransactionsForUserContacts,
-  getAllPublicTransactions
+  getAllPublicTransactions,
+  createTransaction
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import {
   sanitizeTransactionStatus,
   sanitizeRequestStatus,
-  isTransactionQSValidator
+  isTransactionQSValidator,
+  isTransactionPayloadValidator
 } from "./validators";
 const router = express.Router();
 
@@ -64,6 +66,26 @@ router.get("/public", ensureAuthenticated, (req, res) => {
 });
 
 //POST /transactions - scoped-user
+router.post(
+  "/",
+  ensureAuthenticated,
+  validateMiddleware(isTransactionPayloadValidator),
+  (req, res) => {
+    const transactionPayload = req.body;
+    const transactionType = transactionPayload.type;
+
+    _.remove(transactionPayload, "type");
+
+    const transaction = createTransaction(
+      req.user?.id!,
+      transactionType,
+      transactionPayload
+    );
+
+    res.status(200);
+    res.json({ transaction });
+  }
+);
 
 //PATCH /transactions/:transaction_id - scoped-user
 

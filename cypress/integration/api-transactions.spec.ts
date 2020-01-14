@@ -91,4 +91,44 @@ describe("Transactions API", function() {
       });
     });
   });
+
+  context("POST /transactions", function() {
+    it("creates a new payment", function() {
+      const sender = this.currentUser;
+      const receiver = this.users[1];
+      const senderBankAccount = this.bankAccounts[0];
+
+      cy.request("POST", `${apiTransactions}`, {
+        type: "payment",
+        source: senderBankAccount.id,
+        receiver_id: receiver.id,
+        description: `Payment: ${sender.id} to ${receiver.id}`,
+        amount: faker.finance.amount()
+      }).then(response => {
+        expect(response.status).to.eq(200);
+        expect(response.body.transaction.id).to.be.a("string");
+        expect(response.body.transaction.status).to.eq("pending");
+        expect(response.body.transaction.request_status).to.eq(undefined);
+      });
+    });
+
+    it("creates a new request", function() {
+      const sender = this.currentUser;
+      const receiver = this.users[1];
+      const senderBankAccount = this.bankAccounts[0];
+
+      cy.request("POST", `${apiTransactions}`, {
+        type: "request",
+        source: senderBankAccount.id,
+        receiver_id: receiver.id,
+        description: `Request: ${sender.id} from ${receiver.id}`,
+        amount: faker.finance.amount()
+      }).then(response => {
+        expect(response.status).to.eq(200);
+        expect(response.body.transaction.id).to.be.a("string");
+        expect(response.body.transaction.status).to.eq("pending");
+        expect(response.body.transaction.request_status).to.eq("pending");
+      });
+    });
+  });
 });

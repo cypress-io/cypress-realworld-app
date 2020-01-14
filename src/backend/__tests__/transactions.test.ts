@@ -9,7 +9,8 @@ import {
   getAllPublicTransactions,
   getBankAccountsByUserId,
   createPayment,
-  createRequest
+  createRequest,
+  createTransaction
 } from "../database";
 
 import { User, Transaction } from "../../models";
@@ -64,13 +65,12 @@ describe("Transactions", () => {
 
     const paymentDetails: Partial<Transaction> = {
       source: senderBankAccount.id!,
-      sender_id: sender.id,
       receiver_id: receiver.id,
       description: `Payment: ${sender.id} to ${receiver.id}`,
       amount
     };
 
-    const result = createPayment(paymentDetails);
+    const result = createTransaction(sender.id, "payment", paymentDetails);
     expect(result.id).toBeDefined();
     expect(result.status).toEqual("pending");
     expect(result.request_status).not.toBeDefined();
@@ -84,13 +84,12 @@ describe("Transactions", () => {
 
     const requestDetails: Partial<Transaction> = {
       source: senderBankAccount.id!,
-      sender_id: sender.id,
       receiver_id: receiver.id,
       description: `Request: ${sender.id} to ${receiver.id}`,
       amount
     };
 
-    const result = createRequest(requestDetails);
+    const result = createTransaction(sender.id, "request", requestDetails);
     expect(result.id).toBeDefined();
     expect(result.status).toEqual("pending");
     expect(result.request_status).toEqual("pending");

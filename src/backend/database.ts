@@ -260,26 +260,13 @@ export const getTransactionsForUserContacts = (
   });
 };
 
-export const createPayment = (
-  paymentDetails: Partial<Transaction>
-): Transaction => {
-  const transaction = createTransaction("payment", paymentDetails);
-  return transaction;
-};
-
-export const createRequest = (
-  requestDetails: Partial<Transaction>
-): Transaction => {
-  const transaction = createTransaction("request", requestDetails);
-  return transaction;
-};
-
-// private methods
-const createTransaction = (
+export const createTransaction = (
+  userId: User["id"],
   transactionType: "payment" | "request",
   transactionDetails: Partial<Transaction>
 ): Transaction => {
-  const sender = getUserBy("id", transactionDetails.sender_id);
+  const sender = getUserBy("id", userId);
+
   const transaction: Transaction = {
     id: shortid(),
     uuid: v4(),
@@ -287,7 +274,7 @@ const createTransaction = (
     amount: transactionDetails.amount!,
     description: transactionDetails.description!,
     receiver_id: transactionDetails.receiver_id!,
-    sender_id: transactionDetails.sender_id!,
+    sender_id: userId,
     privacy_level: sender.privacy_level,
     status: TransactionStatus.pending,
     request_status:

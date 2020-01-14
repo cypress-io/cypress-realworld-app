@@ -127,3 +127,21 @@ export const isTransactionQSValidator = [
     .isNumeric()
     .trim()
 ];
+
+export const isTransactionPayloadValidator = [
+  body("type")
+    .isIn(["payment", "request"])
+    .trim(),
+  body("source")
+    .isString()
+    .trim(),
+  body("receiver_id")
+    .isString()
+    .trim(),
+  body("description")
+    .isString()
+    .trim(),
+  body("amount")
+    .isNumeric()
+    .trim()
+];
