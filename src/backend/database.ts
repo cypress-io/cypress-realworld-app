@@ -44,12 +44,25 @@ export const getAllContacts = () =>
     .get("contacts")
     .value();
 
-export const getBy = (entity: string, key: string, value: any) =>
-  db()
+export const getAllBy = (entity: string, key: string, value: any) => {
+  const result = db()
+    .get(entity)
+    // @ts-ignore
+    .filter({ [`${key}`]: value })
+    .value();
+
+  return result;
+};
+
+export const getBy = (entity: string, key: string, value: any) => {
+  const result = db()
     .get(entity)
     // @ts-ignore
     .find({ [`${key}`]: value })
     .value();
+
+  return result;
+};
 
 export const getByObj = (entity: string, query: object) =>
   db()
@@ -71,10 +84,8 @@ export const getUsersBy = (key: string, value: any) => {
 // Contact
 export const getContactBy = (key: string, value: any) =>
   getBy("contacts", key, value);
-export const getContactsBy = (key: string, value: any) => {
-  const contacts = getBy("contacts", key, value);
-  return contacts ? Array.of(getBy("contacts", key, value)) : [];
-};
+export const getContactsBy = (key: string, value: any) =>
+  getAllBy("contacts", key, value);
 
 export const getContactsByUsername = (username: string) => {
   const user: User = getUserBy("username", username);

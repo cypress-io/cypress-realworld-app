@@ -2,6 +2,7 @@ import {
   createContactForUser,
   getContactsByUsername,
   getAllContacts,
+  getAllUsers,
   getRandomUser,
   seedDatabase,
   removeContactById
@@ -13,13 +14,14 @@ describe("Contacts", () => {
   });
 
   it("should retrieve a list of contacts", () => {
-    expect(getAllContacts().length).toBe(10);
+    expect(getAllContacts().length).toBe(11);
   });
 
   it("should retrieve a list of contacts for a username", () => {
-    const userToLookup: User = getRandomUser();
+    const userToLookup: User = getAllUsers()[0];
 
     const result = getContactsByUsername(userToLookup.username);
+    expect(result.length).toBe(2);
     expect(result[0].user_id).toBe(userToLookup.id);
   });
 
