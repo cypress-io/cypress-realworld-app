@@ -32,4 +32,13 @@ describe("Transactions", () => {
     );
     expect(result.length).toBe(9);
   });
+
+  it("should retrieve a list of transactions for a users contacts - status 'incomplete'", () => {
+    const userToLookup: User = getAllUsers()[0];
+    const result: Transaction[] = getTransactionsForUserContacts(
+      userToLookup.id,
+      { status: "incomplete" }
+    );
+    expect(result.length).toBe(1);
+  });
 });

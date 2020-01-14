@@ -215,7 +215,10 @@ export const getTransactionsBy = (key: string, value: string) =>
   getAllBy(TRANSACTION_TABLE, key, value);
 export const getTransactionsByObj = (query: object) =>
   getAllByObj(TRANSACTION_TABLE, query);
-export const getTransactionsForUserByObj = (user_id: string, query: object) => {
+export const getTransactionsForUserByObj = (
+  user_id: string,
+  query?: object
+) => {
   const transactions: Transaction[] = getTransactionsByObj({
     receiver_id: user_id,
     ...query
@@ -227,11 +230,14 @@ export const getTransactionsByUserId = (user_id: string) => {
   return transactions;
 };
 
-export const getTransactionsForUserContacts = (user_id: string) => {
+export const getTransactionsForUserContacts = (
+  user_id: string,
+  query?: object
+) => {
   const contacts = getContactsByUserId(user_id);
   const contactIds = _.map(contacts, "contact_user_id");
   return contactIds.flatMap((contactId): Transaction[] => {
-    return getTransactionsByUserId(contactId);
+    return getTransactionsForUserByObj(contactId, query);
   });
 };
 

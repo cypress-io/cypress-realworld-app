@@ -60,4 +60,26 @@ describe("Transactions API", function() {
       });
     });
   });
+
+  context("GET /transactions/contacts", function() {
+    it("gets a list of transactions for users list of contacts", function() {
+      cy.request("GET", `${apiTransactions}/contacts`).then(response => {
+        expect(response.status).to.eq(200);
+        expect(response.body.transactions.length).to.eq(5);
+      });
+    });
+
+    it("gets a list of transactions for users list of contacts - status 'incomplete'", function() {
+      cy.request({
+        method: "GET",
+        url: `${apiTransactions}/contacts`,
+        qs: {
+          status: "incomplete"
+        }
+      }).then(response => {
+        expect(response.status).to.eq(200);
+        expect(response.body.transactions.length).to.eq(1);
+      });
+    });
+  });
 });

@@ -77,9 +77,10 @@ export const isUserValidator = [
 export const sanitizeTransactionStatus = sanitizeQuery(
   "status"
 ).customSanitizer(value => {
-  return (
-    _.includes(TransactionStatusValues, value) || TransactionStatus.complete
-  );
+  if (_.includes(TransactionStatusValues, value)) {
+    return value;
+  }
+  return TransactionStatus.complete;
 });
 
 // default request status to undefined if not provided
