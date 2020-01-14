@@ -11,13 +11,7 @@ import {
   TransactionStatus,
   RequestStatus
 } from "../src/models";
-
-const testSeed = require("../src/data/test-seed.json");
-const users = testSeed.users;
-
-// returns a random user other than the one passed in
-const getOtherRandomUser = (user_id: string) =>
-  _.sample(_.reject(users, ["id", user_id]));
+import { users, getOtherRandomUser } from "./utils";
 
 const isPayment = (type: string) => type === "payment";
 
