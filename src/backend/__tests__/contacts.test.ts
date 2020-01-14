@@ -5,11 +5,15 @@ import {
   getAllUsers,
   getRandomUser,
   seedDatabase,
-  removeContactById
+  removeContactById,
+  getContactsByUserId
 } from "../database";
 import { User } from "../../models/user";
 describe("Contacts", () => {
   afterEach(() => {
+    seedDatabase();
+  });
+  afterAll(() => {
     seedDatabase();
   });
 
@@ -21,6 +25,14 @@ describe("Contacts", () => {
     const userToLookup: User = getAllUsers()[0];
 
     const result = getContactsByUsername(userToLookup.username);
+    expect(result.length).toBe(3);
+    expect(result[0].user_id).toBe(userToLookup.id);
+  });
+
+  it("should retrieve a list of contacts for a user_id", () => {
+    const userToLookup: User = getAllUsers()[0];
+
+    const result = getContactsByUserId(userToLookup.id);
     expect(result.length).toBe(3);
     expect(result[0].user_id).toBe(userToLookup.id);
   });

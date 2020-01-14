@@ -64,6 +64,13 @@ export const getBy = (entity: string, key: string, value: any) => {
   return result;
 };
 
+export const getAllByObj = (entity: string, query: object) =>
+  db()
+    .get(entity)
+    // @ts-ignore
+    .filter(query)
+    .value();
+
 export const getByObj = (entity: string, query: object) =>
   db()
     .get(entity)
@@ -92,6 +99,9 @@ export const getContactsByUsername = (username: string) => {
   const userContacts: Contact[] = getContactsBy("user_id", user.id);
   return userContacts;
 };
+
+export const getContactsByUserId = (user_id: string): Contact[] =>
+  getContactsBy("user_id", user_id);
 
 export const createContact = (contact: Contact) => {
   db()
@@ -201,14 +211,10 @@ export const getTransactionBy = (key: string, value: any) =>
   getBy(TRANSACTION_TABLE, key, value);
 
 export const getTransactionById = (id: string) => getTransactionBy("id", id);
-export const getTransactionsBy = (key: string, value: string) => {
-  const transactions = getBy(TRANSACTION_TABLE, key, value);
-  return transactions ? Array.of(transactions) : [];
-};
-export const getTransactionsByObj = (query: object) => {
-  const transactions = getByObj(TRANSACTION_TABLE, query);
-  return transactions ? Array.of(transactions) : [];
-};
+export const getTransactionsBy = (key: string, value: string) =>
+  getAllBy(TRANSACTION_TABLE, key, value);
+export const getTransactionsByObj = (query: object) =>
+  getAllByObj(TRANSACTION_TABLE, query);
 export const getTransactionsForUserByObj = (user_id: string, query: object) => {
   const transactions: Transaction[] = getTransactionsByObj({
     receiver_id: user_id,
@@ -219,6 +225,14 @@ export const getTransactionsForUserByObj = (user_id: string, query: object) => {
 export const getTransactionsByUserId = (user_id: string) => {
   const transactions: Transaction[] = getTransactionsBy("receiver_id", user_id);
   return transactions;
+};
+
+export const getTransactionsForUserContacts = (user_id: string) => {
+  const contacts = getContactsByUserId(user_id);
+  const contactIds = _.map(contacts, "contact_user_id");
+  return contactIds.flatMap((contactId): Transaction[] => {
+    return getTransactionsByUserId(contactId);
+  });
 };
 
 // dev/test private methods
