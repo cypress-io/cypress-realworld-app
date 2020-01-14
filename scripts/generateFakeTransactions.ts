@@ -15,7 +15,7 @@ import { users, getOtherRandomUser } from "./utils";
 
 const isPayment = (type: string) => type === "payment";
 
-const createTransaction = (
+export const createTransaction = (
   account: BankAccount,
   sender_id: string,
   receiver_id: string,
@@ -54,7 +54,7 @@ const createTransaction = (
   modified_at: faker.date.recent()
 });
 
-const createPayment = (account: BankAccount, user: User) =>
+export const createPayment = (account: BankAccount, user: User) =>
   createTransaction(
     account,
     user.id,
@@ -62,7 +62,7 @@ const createPayment = (account: BankAccount, user: User) =>
     "payment"
   );
 
-const createRequest = (account: BankAccount, user: User) =>
+export const createRequest = (account: BankAccount, user: User) =>
   createTransaction(
     account,
     user.id,

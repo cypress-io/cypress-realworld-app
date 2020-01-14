@@ -1,3 +1,4 @@
+import faker from "faker";
 import {
   seedDatabase,
   getRandomUser,
@@ -5,7 +6,10 @@ import {
   getTransactionsForUserContacts,
   getAllUsers,
   getAllTransactions,
-  getAllPublicTransactions
+  getAllPublicTransactions,
+  getBankAccountsByUserId,
+  createPayment,
+  createRequest
 } from "../database";
 
 import { User, Transaction } from "../../models";
@@ -50,5 +54,45 @@ describe("Transactions", () => {
       { status: "incomplete" }
     );
     expect(result.length).toBe(1);
+  });
+
+  it("should create a payment", () => {
+    const sender: User = getAllUsers()[0];
+    const receiver: User = getAllUsers()[1];
+    const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
+    const amount = faker.finance.amount();
+
+    const paymentDetails: Partial<Transaction> = {
+      source: senderBankAccount.id!,
+      sender_id: sender.id,
+      receiver_id: receiver.id,
+      description: `Payment: ${sender.id} to ${receiver.id}`,
+      amount
+    };
+
+    const result = createPayment(paymentDetails);
+    expect(result.id).toBeDefined();
+    expect(result.status).toEqual("pending");
+    expect(result.request_status).not.toBeDefined();
+  });
+
+  it("should create a payment", () => {
+    const sender: User = getAllUsers()[0];
+    const receiver: User = getAllUsers()[1];
+    const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
+    const amount = faker.finance.amount();
+
+    const requestDetails: Partial<Transaction> = {
+      source: senderBankAccount.id!,
+      sender_id: sender.id,
+      receiver_id: receiver.id,
+      description: `Request: ${sender.id} to ${receiver.id}`,
+      amount
+    };
+
+    const result = createRequest(requestDetails);
+    expect(result.id).toBeDefined();
+    expect(result.status).toEqual("pending");
+    expect(result.request_status).toEqual("pending");
   });
 });

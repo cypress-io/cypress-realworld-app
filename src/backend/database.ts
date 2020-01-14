@@ -4,7 +4,15 @@ import _ from "lodash";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 import shortid from "shortid";
-import { BankAccount, Transaction, User, Contact } from "../models";
+import {
+  BankAccount,
+  Transaction,
+  User,
+  Contact,
+  TransactionStatus,
+  DefaultPrivacyLevel,
+  RequestStatus
+} from "../models";
 
 const USER_TABLE = "users";
 const CONTACT_TABLE = "contacts";
@@ -250,6 +258,56 @@ export const getTransactionsForUserContacts = (
   return contactIds.flatMap((contactId): Transaction[] => {
     return getTransactionsForUserByObj(contactId, query);
   });
+};
+
+export const createPayment = (
+  paymentDetails: Partial<Transaction>
+): Transaction => {
+  const transaction = createTransaction("payment", paymentDetails);
+  return transaction;
+};
+
+export const createRequest = (
+  requestDetails: Partial<Transaction>
+): Transaction => {
+  const transaction = createTransaction("request", requestDetails);
+  return transaction;
+};
+
+// private methods
+const createTransaction = (
+  transactionType: "payment" | "request",
+  transactionDetails: Partial<Transaction>
+): Transaction => {
+  const sender = getUserBy("id", transactionDetails.sender_id);
+  const transaction: Transaction = {
+    id: shortid(),
+    uuid: v4(),
+    source: transactionDetails.source!,
+    amount: transactionDetails.amount!,
+    description: transactionDetails.description!,
+    receiver_id: transactionDetails.receiver_id!,
+    sender_id: transactionDetails.sender_id!,
+    privacy_level: sender.privacy_level,
+    status: TransactionStatus.pending,
+    request_status:
+      transactionType === "request" ? RequestStatus.pending : undefined,
+    created_at: new Date(),
+    modified_at: new Date()
+  };
+
+  const savedTransaction = saveTransaction(transaction);
+  return savedTransaction;
+};
+const saveTransaction = (transaction: Transaction): Transaction => {
+  db()
+    .get(TRANSACTION_TABLE)
+    // @ts-ignore
+    .push(transaction)
+    .write();
+
+  // manual lookup after transaction created
+  return getTransactionBy("id", transaction.id);
 };
 
 // dev/test private methods
