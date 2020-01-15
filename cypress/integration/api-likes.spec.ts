@@ -7,21 +7,17 @@
 const faker = require("faker");
 
 const apiUrl = "http://localhost:3001";
-const apiTransactions = `${apiUrl}/transactions`;
+const apiLikes = `${apiUrl}/likes`;
 
-describe("Transactions API", function() {
+describe("Likes API", function() {
   before(function() {
     //cy.task("db:reset");
     cy.task("db:seed");
     // TODO: Refactor
     // hacks/experiements
     cy.fixture("users").as("users");
-    cy.fixture("contacts").as("contacts");
-    cy.fixture("bank_accounts").as("bank_accounts");
     cy.fixture("transactions").as("transactions");
     cy.get("@users").then(user => (this.currentUser = this.users[0]));
-    cy.get("@contacts").then(contacts => (this.contacts = contacts));
-    cy.get("@bank_accounts").then(accounts => (this.bankAccounts = accounts));
     cy.get("@transactions").then(
       transactions => (this.transactions = transactions)
     );
@@ -33,132 +29,29 @@ describe("Transactions API", function() {
   });
 
   afterEach(function() {
-    //cy.task("db:reset");
     cy.task("db:seed");
   });
 
-  context("GET /transactions", function() {
-    it("gets a list of transactions for user (default)", function() {
-      const { id } = this.currentUser;
-      cy.request("GET", `${apiTransactions}`).then(response => {
-        expect(response.status).to.eq(200);
-        expect(response.body.transactions[0].receiver_id).to.eq(id);
-      });
-    });
-
-    it("gets a list of pending request transactions for user", function() {
-      const { id } = this.currentUser;
-      cy.request({
-        method: "GET",
-        url: `${apiTransactions}`,
-        qs: {
-          request_status: "pending"
-        }
-      }).then(response => {
-        expect(response.status).to.eq(200);
-        expect(response.body.transactions[0].receiver_id).to.eq(id);
-      });
-    });
-  });
-
-  context("GET /transactions/contacts", function() {
-    it("gets a list of transactions for users list of contacts", function() {
-      cy.request("GET", `${apiTransactions}/contacts`).then(response => {
-        expect(response.status).to.eq(200);
-        expect(response.body.transactions.length).to.eq(5);
-      });
-    });
-
-    it("gets a list of transactions for users list of contacts - status 'incomplete'", function() {
-      cy.request({
-        method: "GET",
-        url: `${apiTransactions}/contacts`,
-        qs: {
-          status: "incomplete"
-        }
-      }).then(response => {
-        expect(response.status).to.eq(200);
-        expect(response.body.transactions.length).to.eq(1);
-      });
-    });
-  });
-
-  context("GET /transactions/public", function() {
-    it("gets a list of public transactions", function() {
-      cy.request("GET", `${apiTransactions}/public`).then(response => {
-        expect(response.status).to.eq(200);
-        expect(response.body.transactions.contacts.length).to.eq(9);
-        expect(response.body.transactions.public.length).to.eq(4);
-      });
-    });
-  });
-
-  context("POST /transactions", function() {
-    it("creates a new payment", function() {
-      const sender = this.currentUser;
-      const receiver = this.users[1];
-      const senderBankAccount = this.bankAccounts[0];
-
-      cy.request("POST", `${apiTransactions}`, {
-        type: "payment",
-        source: senderBankAccount.id,
-        receiver_id: receiver.id,
-        description: `Payment: ${sender.id} to ${receiver.id}`,
-        amount: faker.finance.amount(),
-        privacy_level: "public"
-      }).then(response => {
-        expect(response.status).to.eq(200);
-        expect(response.body.transaction.id).to.be.a("string");
-        expect(response.body.transaction.status).to.eq("pending");
-        expect(response.body.transaction.request_status).to.eq(undefined);
-      });
-    });
-
-    it("creates a new request", function() {
-      const sender = this.currentUser;
-      const receiver = this.users[1];
-      const senderBankAccount = this.bankAccounts[0];
-
-      cy.request("POST", `${apiTransactions}`, {
-        type: "request",
-        source: senderBankAccount.id,
-        receiver_id: receiver.id,
-        description: `Request: ${sender.id} from ${receiver.id}`,
-        amount: faker.finance.amount(),
-        privacy_level: "public"
-      }).then(response => {
-        expect(response.status).to.eq(200);
-        expect(response.body.transaction.id).to.be.a("string");
-        expect(response.body.transaction.status).to.eq("pending");
-        expect(response.body.transaction.request_status).to.eq("pending");
-      });
-    });
-  });
-
-  context("PATCH /transactions/:transaction_id", function() {
-    it("updates a transaction", function() {
+  context("GET /likes/:transaction_id", function() {
+    it("gets a list of likes for a transaction", function() {
       const transaction = this.transactions[0];
 
-      cy.request("PATCH", `${apiTransactions}/${transaction.id}`, {
-        request_status: "rejected"
-      }).then(response => {
-        expect(response.status).to.eq(204);
+      cy.request("GET", `${apiLikes}/${transaction.id}`).then(response => {
+        expect(response.status).to.eq(200);
+        expect(response.body.likes.length).to.eq(1);
       });
     });
+  });
 
-    it("error when invalid field sent", function() {
+  context("POST /likes/:transaction_id", function() {
+    it("creates a new like for a transaction", function() {
       const transaction = this.transactions[0];
 
-      cy.request({
-        method: "PATCH",
-        url: `${apiTransactions}/${transaction.id}`,
-        failOnStatusCode: false,
-        body: {
-          notAUserField: "not a user field"
-        }
+      cy.request("POST", `${apiLikes}/${transaction.id}`, {
+        transaction_id: transaction.id
       }).then(response => {
-        expect(response.status).to.eq(422);
-        expect(response.body.errors.length).to.eq(1);
+        expect(response.status).to.eq(200);
+        expect(response.body.like.id).to.be.a("string");
       });
     });
   });
