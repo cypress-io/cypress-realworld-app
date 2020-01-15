@@ -1,12 +1,14 @@
 import fs from "fs";
-import _ from "lodash";
 import shortid from "shortid";
 import faker from "faker";
 import { getTransactionsForUserContacts } from "../src/backend/database";
 import { User, Like } from "../src/models";
-import { users, getRandomTransactions, getOtherRandomUser } from "./utils";
+import { users, getRandomTransactions } from "./utils";
 
-export const createLike = (user_id: string, transaction_id: string): Like => ({
+export const createFakeLike = (
+  user_id: string,
+  transaction_id: string
+): Like => ({
   id: shortid(),
   uuid: faker.random.uuid(),
   user_id,
@@ -15,17 +17,19 @@ export const createLike = (user_id: string, transaction_id: string): Like => ({
   modified_at: faker.date.recent()
 });
 
-const likes = users.map((user: User): Like[] => {
+const likes = users.flatMap((user: User): Like[] => {
   const transactions = getTransactionsForUserContacts(user.id);
 
   // choose random transactions
-  const randomTransactions = getRandomTransactions(5, transactions).slice(0, 2);
+  const randomTransactions = getRandomTransactions(5, transactions);
+
+  // get a slice of random transactions
+  const selectedTransactions = randomTransactions.slice(0, 2);
 
   // iterate over transactions and like
-  const likes = randomTransactions.map(transaction =>
-    createLike(user.id, transaction.id)
+  return selectedTransactions.map(transaction =>
+    createFakeLike(user.id, transaction!.id)
   );
-  return likes;
 });
 
 fs.writeFile(__dirname + "/likes.json", JSON.stringify(likes), function() {

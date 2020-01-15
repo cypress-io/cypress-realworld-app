@@ -12,10 +12,10 @@ export const getOtherRandomUser = (user_id: string) =>
 
 export const getRandomTransactions = (
   baseCount: number,
-  transactions: Transaction[]
+  baseTransactions: Transaction[]
 ) =>
   _.uniq(
     Array(baseCount)
       .fill(null)
-      .map(() => _.sample(transactions))
+      .map(() => _.sample(baseTransactions))
   );
