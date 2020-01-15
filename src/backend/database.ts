@@ -17,6 +17,7 @@ const USER_TABLE = "users";
 const CONTACT_TABLE = "contacts";
 const BANK_ACCOUNT_TABLE = "bankaccounts";
 const TRANSACTION_TABLE = "transactions";
+const LIKE_TABLE = "likes";
 
 const testSeed = require(path.join(__dirname, "../data/", "test-seed.json"));
 let databaseFileName;
@@ -326,6 +327,8 @@ export const updateTransactionById = (
       .write();
   }
 };
+
+// Likes
 
 // dev/test private methods
 export const getRandomUser = () => {
