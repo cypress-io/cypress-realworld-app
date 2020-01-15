@@ -10,7 +10,8 @@ import {
   User,
   Contact,
   TransactionStatus,
-  RequestStatus
+  RequestStatus,
+  Like
 } from "../models";
 
 const USER_TABLE = "users";
@@ -329,6 +330,36 @@ export const updateTransactionById = (
 };
 
 // Likes
+
+export const getLikeBy = (key: string, value: any): Like =>
+  getBy(LIKE_TABLE, key, value);
+
+export const getLikeById = (id: string): Like => getLikeBy("id", id);
+
+export const createLike = (user_id: string, transaction_id: string): Like => {
+  const like = {
+    id: shortid(),
+    uuid: v4(),
+    user_id,
+    transaction_id,
+    created_at: new Date(),
+    modified_at: new Date()
+  };
+
+  const savedLike = saveLike(like);
+  return savedLike;
+};
+
+const saveLike = (like: Like): Like => {
+  db()
+    .get(LIKE_TABLE)
+    // @ts-ignore
+    .push(like)
+    .write();
+
+  // manual lookup after like created
+  return getLikeById(like.id);
+};
 
 // dev/test private methods
 export const getRandomUser = () => {

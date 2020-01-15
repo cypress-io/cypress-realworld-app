@@ -2,7 +2,8 @@ import {
   seedDatabase,
   getTransactionsForUserContacts,
   getAllUsers,
-  getTransactionsByUserId
+  getTransactionsByUserId,
+  createLike
 } from "../database";
 
 import { User, Transaction } from "../../models";
@@ -30,7 +31,7 @@ describe("Transactions", () => {
     const user: User = getAllUsers()[0];
     const transactions: Transaction[] = getTransactionsForUserContacts(user.id);
 
-    const like = createLike(transactions[0].id);
+    const like = createLike(user.id, transactions[0].id);
 
     expect(like.transaction_id).toBe(transactions[0].id);
   });
