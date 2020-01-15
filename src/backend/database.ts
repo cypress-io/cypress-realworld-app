@@ -333,8 +333,11 @@ export const updateTransactionById = (
 
 export const getLikeBy = (key: string, value: any): Like =>
   getBy(LIKE_TABLE, key, value);
+export const getLikesByObj = (query: object) => getAllByObj(LIKE_TABLE, query);
 
 export const getLikeById = (id: string): Like => getLikeBy("id", id);
+export const getLikesByTransactionId = (transaction_id: string) =>
+  getLikesByObj({ transaction_id });
 
 export const createLike = (user_id: string, transaction_id: string): Like => {
   const like = {
