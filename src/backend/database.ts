@@ -10,13 +10,15 @@ import {
   User,
   Contact,
   TransactionStatus,
-  RequestStatus
+  RequestStatus,
+  Like
 } from "../models";
 
 const USER_TABLE = "users";
 const CONTACT_TABLE = "contacts";
 const BANK_ACCOUNT_TABLE = "bankaccounts";
 const TRANSACTION_TABLE = "transactions";
+const LIKE_TABLE = "likes";
 
 const testSeed = require(path.join(__dirname, "../data/", "test-seed.json"));
 let databaseFileName;
@@ -325,6 +327,41 @@ export const updateTransactionById = (
       .assign(edits)
       .write();
   }
+};
+
+// Likes
+
+export const getLikeBy = (key: string, value: any): Like =>
+  getBy(LIKE_TABLE, key, value);
+export const getLikesByObj = (query: object) => getAllByObj(LIKE_TABLE, query);
+
+export const getLikeById = (id: string): Like => getLikeBy("id", id);
+export const getLikesByTransactionId = (transaction_id: string) =>
+  getLikesByObj({ transaction_id });
+
+export const createLike = (user_id: string, transaction_id: string): Like => {
+  const like = {
+    id: shortid(),
+    uuid: v4(),
+    user_id,
+    transaction_id,
+    created_at: new Date(),
+    modified_at: new Date()
+  };
+
+  const savedLike = saveLike(like);
+  return savedLike;
+};
+
+const saveLike = (like: Like): Like => {
+  db()
+    .get(LIKE_TABLE)
+    // @ts-ignore
+    .push(like)
+    .write();
+
+  // manual lookup after like created
+  return getLikeById(like.id);
 };
 
 // dev/test private methods
