@@ -5,8 +5,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Unit tests
-        run: yarn test:ci
       - name: Cypress run
         uses: cypress-io/github-action@v1
         with:
@@ -15,3 +13,5 @@ jobs:
           wait-on: "http://localhost:3000"
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+      - name: Unit tests
+        run: yarn test:ci
