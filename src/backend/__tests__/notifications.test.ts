@@ -2,11 +2,11 @@ import {
   seedDatabase,
   getTransactionsForUserContacts,
   getAllUsers,
-  getTransactionsByUserId,
-  createPaymentNotification,
-  getNotificationsByUserId,
-  createComment,
-  createLike
+  //getTransactionsByUserId,
+  createPaymentNotification
+  //getNotificationsByUserId,
+  //createComment,
+  //createLike
 } from "../database";
 
 import { User, Transaction, PaymentNotificationStatus } from "../../models";
@@ -33,6 +33,7 @@ describe("Notifications", () => {
     expect(notification.status).toBe(PaymentNotificationStatus.received);
   });
 
+  /*
   it("should get a list of notifications for a user", () => {
     const user: User = getAllUsers()[0];
     const transactions: Transaction[] = getTransactionsByUserId(user.id);
@@ -47,4 +48,5 @@ describe("Notifications", () => {
     expect(notifications.length).toBe(2);
     expect(notifications[0].transaction_id).toBe(transaction.id);
   });
+  */
 });
