@@ -3,9 +3,7 @@ import shortid from "shortid";
 import faker from "faker";
 import { User } from "../src/models/user";
 import { BankAccount } from "../src/models/bankaccount";
-
-const testSeed = require("../src/data/test-seed.json");
-const users = testSeed.users;
+import { users } from "./utils";
 
 const bankAccounts = users.map(
   (x: User): BankAccount => {

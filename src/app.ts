@@ -11,6 +11,7 @@ import auth from "./backend/auth";
 import userRoutes from "./backend/user-routes";
 import contactRoutes from "./backend/contact-routes";
 import bankAccountRoutes from "./backend/bankaccount-routes";
+import transactionRoutes from "./backend/transaction-routes";
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use(auth);
 app.use("/users", userRoutes);
 app.use("/contacts", contactRoutes);
 app.use("/bank_accounts", bankAccountRoutes);
+app.use("/transactions", transactionRoutes);
 
 app.use(express.static(path.join(__dirname, "../public")));
 

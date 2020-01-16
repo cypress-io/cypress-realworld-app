@@ -1,5 +1,15 @@
-import { body, check, oneOf, query } from "express-validator";
+import { body, check, oneOf, query, sanitizeQuery } from "express-validator";
 import { isValid } from "shortid";
+import {
+  TransactionStatus,
+  RequestStatus,
+  DefaultPrivacyLevel
+} from "../models";
+import _ from "lodash";
+
+const TransactionStatusValues = Object.values(TransactionStatus);
+const RequestStatusValues = Object.values(RequestStatus);
+const DefaultPrivacyLevelValues = Object.values(DefaultPrivacyLevel);
 
 // Validators
 export const shortIdValidation = (key: string) =>
@@ -66,4 +76,90 @@ export const isUserValidator = [
   check("default_privacy_level")
     .optional({ checkFalsy: true })
     .isIn(["public", "private", "contacts"])
+];
+
+// default status to "complete" if not provided
+export const sanitizeTransactionStatus = sanitizeQuery(
+  "status"
+).customSanitizer(value => {
+  if (_.includes(TransactionStatusValues, value)) {
+    return value;
+  }
+  return TransactionStatus.complete;
+});
+
+// default request status to undefined if not provided
+export const sanitizeRequestStatus = sanitizeQuery(
+  "request_status"
+).customSanitizer(value => {
+  if (_.includes(RequestStatusValues, value)) {
+    return value;
+  }
+  return;
+});
+
+export const isTransactionQSValidator = [
+  query("status")
+    .optional({ checkFalsy: true })
+    .isIn(TransactionStatusValues)
+    .trim(),
+  query("request_status")
+    .optional({ checkFalsy: true })
+    .isIn(RequestStatusValues)
+    .trim(),
+  query("receiver_id")
+    .optional({ checkFalsy: true })
+    .isString()
+    .trim(),
+  query("sender_id")
+    .optional({ checkFalsy: true })
+    .isString()
+    .trim(),
+  query("range_start_ts")
+    .optional({ checkFalsy: true })
+    .isString()
+    .trim(),
+  query("range_end_ts")
+    .optional({ checkFalsy: true })
+    .isString()
+    .trim(),
+  query("amount_max")
+    .optional({ checkFalsy: true })
+    .isNumeric()
+    .trim(),
+  query("amount_min")
+    .optional({ checkFalsy: true })
+    .isNumeric()
+    .trim()
+];
+
+export const isTransactionPayloadValidator = [
+  body("type")
+    .isIn(["payment", "request"])
+    .trim(),
+  body("privacy_level")
+    .isIn(DefaultPrivacyLevelValues)
+    .trim(),
+  body("source")
+    .isString()
+    .trim(),
+  body("receiver_id")
+    .isString()
+    .trim(),
+  body("description")
+    .isString()
+    .trim(),
+  body("amount")
+    .isNumeric()
+    .trim()
+];
+
+export const isTransactionPatchValidator = [
+  body("request_status").isIn(RequestStatusValues)
+];
+
+export const isTransactionPublicQSValidator = [
+  query("order")
+    .optional({ checkFalsy: true })
+    .isIn(["default"])
 ];
