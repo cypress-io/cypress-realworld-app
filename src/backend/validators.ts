@@ -163,3 +163,7 @@ export const isTransactionPublicQSValidator = [
     .optional({ checkFalsy: true })
     .isIn(["default"])
 ];
+
+export const isCommentValidator = body("content")
+  .isString()
+  .trim();

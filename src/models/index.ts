@@ -3,3 +3,4 @@ export * from "./bankaccount";
 export * from "./contact";
 export * from "./transaction";
 export * from "./like";
+export * from "./comment";
