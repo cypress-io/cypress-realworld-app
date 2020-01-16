@@ -9,7 +9,7 @@ import {
 
 import { User, Transaction } from "../../models";
 
-describe("Transactions", () => {
+describe("Comments", () => {
   afterEach(() => {
     seedDatabase();
   });
@@ -33,7 +33,7 @@ describe("Transactions", () => {
     const transactions: Transaction[] = getTransactionsByUserId(user.id);
     const transaction = transactions[0];
 
-    createComment(user.id, transaction.id);
+    createComment(user.id, transaction.id, "This is my comment");
 
     const comments = getCommentsByTransactionId(transaction.id);
 
