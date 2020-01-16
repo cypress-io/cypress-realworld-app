@@ -42,7 +42,6 @@ export const seedDatabase = () => {
   db()
     .setState(testSeed)
     .write();
-  console.log("test data seeded into test database");
 };
 export const getAllUsers = () =>
   db()
