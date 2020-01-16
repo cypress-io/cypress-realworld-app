@@ -12,7 +12,12 @@ import {
   TransactionStatus,
   RequestStatus,
   Like,
-  Comment
+  Comment,
+  PaymentNotification,
+  PaymentNotificationStatus,
+  LikeNotification,
+  CommentNotification,
+  NotificationType
 } from "../models";
 
 const USER_TABLE = "users";
@@ -21,6 +26,7 @@ const BANK_ACCOUNT_TABLE = "bankaccounts";
 const TRANSACTION_TABLE = "transactions";
 const LIKE_TABLE = "likes";
 const COMMENT_TABLE = "comments";
+const NOTIFICATION_TABLE = "notifications";
 
 const testSeed = require(path.join(__dirname, "../data/", "test-seed.json"));
 let databaseFileName;
@@ -404,6 +410,54 @@ const saveComment = (comment: Comment): Comment => {
 
   // manual lookup after comment created
   return getCommentById(comment.id);
+};
+
+// Notifications
+
+export const getNotificationBy = (key: string, value: any): NotificationType =>
+  getBy(NOTIFICATION_TABLE, key, value);
+
+export const getNotificationsByObj = (query: object): Notification[] =>
+  getAllByObj(NOTIFICATION_TABLE, query);
+
+export const getNotificationById = (id: string): NotificationType =>
+  getNotificationBy("id", id);
+
+export const getNotificationsByTransactionId = (transaction_id: string) =>
+  getNotificationsByObj({ transaction_id });
+
+export const getNotificationsByLikeId = (like_id: string) =>
+  getNotificationsByObj({ like_id });
+
+export const getNotificationsByCommentId = (comment_id: string) =>
+  getNotificationsByObj({ comment_id });
+
+export const createPaymentNotification = (
+  userId: string,
+  transactionId: string,
+  status: PaymentNotificationStatus
+): PaymentNotification => {
+  const notification: PaymentNotification = {
+    id: shortid(),
+    uuid: v4(),
+    user_id: userId,
+    transaction_id: transactionId,
+    status,
+    is_read: false,
+    created_at: new Date(),
+    modified_at: new Date()
+  };
+
+  saveNotification(notification);
+  return notification;
+};
+
+const saveNotification = (notification: NotificationType) => {
+  db()
+    .get(NOTIFICATION_TABLE)
+    // @ts-ignore
+    .push(notification)
+    .write();
 };
 
 // dev/test private methods
