@@ -5,6 +5,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Unit tests
+      - run: yarn test:ci
       - name: Cypress run
         uses: cypress-io/github-action@v1
         with:
