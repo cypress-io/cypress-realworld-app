@@ -13,6 +13,7 @@ import contactRoutes from "./backend/contact-routes";
 import bankAccountRoutes from "./backend/bankaccount-routes";
 import transactionRoutes from "./backend/transaction-routes";
 import likeRoutes from "./backend/like-routes";
+import commentRoutes from "./backend/comment-routes";
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use("/contacts", contactRoutes);
 app.use("/bank_accounts", bankAccountRoutes);
 app.use("/transactions", transactionRoutes);
 app.use("/likes", likeRoutes);
+app.use("/comments", commentRoutes);
 
 app.use(express.static(path.join(__dirname, "../public")));
 

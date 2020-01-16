@@ -11,7 +11,8 @@ import {
   Contact,
   TransactionStatus,
   RequestStatus,
-  Like
+  Like,
+  Comment
 } from "../models";
 
 const USER_TABLE = "users";
@@ -19,6 +20,7 @@ const CONTACT_TABLE = "contacts";
 const BANK_ACCOUNT_TABLE = "bankaccounts";
 const TRANSACTION_TABLE = "transactions";
 const LIKE_TABLE = "likes";
+const COMMENT_TABLE = "comments";
 
 const testSeed = require(path.join(__dirname, "../data/", "test-seed.json"));
 let databaseFileName;
@@ -362,6 +364,47 @@ const saveLike = (like: Like): Like => {
 
   // manual lookup after like created
   return getLikeById(like.id);
+};
+
+// Comments
+
+export const getCommentBy = (key: string, value: any): Comment =>
+  getBy(COMMENT_TABLE, key, value);
+export const getCommentsByObj = (query: object) =>
+  getAllByObj(COMMENT_TABLE, query);
+
+export const getCommentById = (id: string): Comment => getCommentBy("id", id);
+export const getCommentsByTransactionId = (transaction_id: string) =>
+  getCommentsByObj({ transaction_id });
+
+export const createComment = (
+  user_id: string,
+  transaction_id: string,
+  content: string
+): Comment => {
+  const comment = {
+    id: shortid(),
+    uuid: v4(),
+    content,
+    user_id,
+    transaction_id,
+    created_at: new Date(),
+    modified_at: new Date()
+  };
+
+  const savedComment = saveComment(comment);
+  return savedComment;
+};
+
+const saveComment = (comment: Comment): Comment => {
+  db()
+    .get(COMMENT_TABLE)
+    // @ts-ignore
+    .push(comment)
+    .write();
+
+  // manual lookup after comment created
+  return getCommentById(comment.id);
 };
 
 // dev/test private methods
