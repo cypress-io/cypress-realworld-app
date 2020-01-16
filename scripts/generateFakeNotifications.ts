@@ -2,12 +2,20 @@ import fs from "fs";
 import _ from "lodash";
 import shortid from "shortid";
 import faker from "faker";
-import { getTransactionsForUserContacts } from "../src/backend/database";
+import {
+  getTransactionsForUserContacts,
+  getLikesByTransactionId,
+  getCommentsByTransactionId
+} from "../src/backend/database";
 import {
   User,
   PaymentNotification,
   PaymentNotificationStatus,
-  NotificationType
+  NotificationType,
+  LikeNotification,
+  CommentNotification,
+  Like,
+  Comment
 } from "../src/models";
 import { users, getRandomTransactions } from "./utils";
 
@@ -29,6 +37,36 @@ export const createFakePaymentNotification = (
   modified_at: faker.date.recent()
 });
 
+export const createFakeLikeNotification = (
+  user_id: string,
+  transaction_id: string,
+  like_id: string
+): LikeNotification => ({
+  id: shortid(),
+  uuid: faker.random.uuid(),
+  user_id,
+  like_id,
+  transaction_id,
+  is_read: faker.helpers.randomize([true, false]),
+  created_at: faker.date.past(),
+  modified_at: faker.date.recent()
+});
+
+export const createFakeCommentNotification = (
+  user_id: string,
+  transaction_id: string,
+  comment_id: string
+): CommentNotification => ({
+  id: shortid(),
+  uuid: faker.random.uuid(),
+  user_id,
+  comment_id,
+  transaction_id,
+  is_read: faker.helpers.randomize([true, false]),
+  created_at: faker.date.past(),
+  modified_at: faker.date.recent()
+});
+
 const notifications = users.flatMap((user: User): NotificationType[] => {
   const transactions = getTransactionsForUserContacts(user.id);
 
@@ -39,11 +77,31 @@ const notifications = users.flatMap((user: User): NotificationType[] => {
   const selectedTransactions = randomTransactions.slice(0, 2);
 
   // iterate over transactions and notification
-  const paymentNotifications = selectedTransactions.map(transaction =>
-    createFakePaymentNotification(user.id, transaction!.id)
-  );
+  const transactionNotifications = selectedTransactions.map(transaction => {
+    const likes = getLikesByTransactionId(transaction!.id);
+    const comments = getCommentsByTransactionId(transaction!.id);
 
-  return _.flatten([paymentNotifications]);
+    let allNotifications = [];
+
+    // payment notification
+    allNotifications.push(
+      createFakePaymentNotification(user.id, transaction!.id)
+    );
+
+    // like notifications
+    const likeNotifications = likes.map((like: Like) =>
+      createFakeLikeNotification(user.id, transaction!.id, like!.id)
+    );
+
+    // comment notifications
+    const commentNotifications = comments.map((comment: Comment) =>
+      createFakeCommentNotification(user.id, transaction!.id, comment!.id)
+    );
+
+    return [allNotifications, likeNotifications, commentNotifications];
+  });
+
+  return _.flattenDeep(transactionNotifications);
 });
 
 fs.writeFile(
