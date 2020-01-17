@@ -4,6 +4,12 @@ export enum PaymentNotificationStatus {
   incomplete = "incomplete"
 }
 
+export enum NotificationsType {
+  payment = "payment",
+  like = "like",
+  comment = "comment"
+}
+
 export interface PaymentNotification {
   id: string;
   uuid: string;
@@ -37,7 +43,29 @@ export interface CommentNotification {
   modified_at: Date;
 }
 
+export interface PaymentNotificationPayload {
+  type: NotificationsType;
+  transaction_id: string;
+  status: PaymentNotificationStatus;
+}
+
+export interface LikeNotificationPayload {
+  type: NotificationsType;
+  transaction_id: string;
+  like_id: string;
+}
+
+export interface CommentNotificationPayload {
+  type: NotificationsType;
+  transaction_id: string;
+  comment_id: string;
+}
+
 export type NotificationType =
   | PaymentNotification
   | LikeNotification
   | CommentNotification;
+
+export type NotificationPayloadType = PaymentNotificationPayload &
+  LikeNotificationPayload &
+  CommentNotificationPayload;

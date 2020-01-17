@@ -3,19 +3,25 @@ import { isValid } from "shortid";
 import {
   TransactionStatus,
   RequestStatus,
-  DefaultPrivacyLevel
+  DefaultPrivacyLevel,
+  NotificationsType,
+  PaymentNotificationStatus
 } from "../models";
 import _ from "lodash";
 
 const TransactionStatusValues = Object.values(TransactionStatus);
 const RequestStatusValues = Object.values(RequestStatus);
 const DefaultPrivacyLevelValues = Object.values(DefaultPrivacyLevel);
+const NotificationsTypeValues = Object.values(NotificationsType);
+const PaymentNotificationStatusValues = Object.values(
+  PaymentNotificationStatus
+);
 
 // Validators
-export const shortIdValidation = (key: string) =>
-  check(key).custom(value => {
-    return isValid(value);
-  });
+
+const isShortId = (value: string) => isValid(value);
+
+export const shortIdValidation = (key: string) => check(key).custom(isShortId);
 
 export const searchValidation = query("q").exists();
 
@@ -167,3 +173,18 @@ export const isTransactionPublicQSValidator = [
 export const isCommentValidator = body("content")
   .isString()
   .trim();
+
+export const isNotificationsBodyValidator = [
+  body("items.*.type")
+    .isIn(NotificationsTypeValues)
+    .trim(),
+  body("items.*.transaction_id").custom(isShortId)
+  // TODO: figure out how to get working
+  /*oneOf([
+    body("items.*.like_id").custom(isShortId),
+    body("items.*.comment_id").custom(isShortId),
+    body("items.*.status")
+      .isIn(PaymentNotificationStatusValues)
+      .trim()
+  ])*/
+];
