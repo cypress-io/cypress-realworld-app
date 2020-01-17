@@ -5,7 +5,9 @@ import {
   //getTransactionsByUserId,
   createPaymentNotification,
   createLikeNotification,
-  createLike
+  createLike,
+  createComment,
+  createCommentNotification
   //getNotificationsByUserId,
   //createComment,
   //createLike
@@ -51,6 +53,23 @@ describe("Notifications", () => {
 
     expect(notification.transaction_id).toBe(transaction.id);
     expect(notification.like_id).toBe(like.id);
+  });
+
+  it("should create a comment notification for a transaction", () => {
+    const comment = createComment(
+      user.id,
+      transaction.id,
+      "This is my comment"
+    );
+
+    const notification = createCommentNotification(
+      user.id,
+      transaction.id,
+      comment.id
+    );
+
+    expect(notification.transaction_id).toBe(transaction.id);
+    expect(notification.comment_id).toBe(comment.id);
   });
 
   /*

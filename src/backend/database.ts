@@ -472,6 +472,26 @@ export const createLikeNotification = (
   return notification;
 };
 
+export const createCommentNotification = (
+  userId: string,
+  transactionId: string,
+  commentId: string
+): CommentNotification => {
+  const notification: CommentNotification = {
+    id: shortid(),
+    uuid: v4(),
+    user_id: userId,
+    transaction_id: transactionId,
+    comment_id: commentId,
+    is_read: false,
+    created_at: new Date(),
+    modified_at: new Date()
+  };
+
+  saveNotification(notification);
+  return notification;
+};
+
 const saveNotification = (notification: NotificationType) => {
   db()
     .get(NOTIFICATION_TABLE)
