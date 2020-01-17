@@ -452,6 +452,26 @@ export const createPaymentNotification = (
   return notification;
 };
 
+export const createLikeNotification = (
+  userId: string,
+  transactionId: string,
+  likeId: string
+): LikeNotification => {
+  const notification: LikeNotification = {
+    id: shortid(),
+    uuid: v4(),
+    user_id: userId,
+    transaction_id: transactionId,
+    like_id: likeId,
+    is_read: false,
+    created_at: new Date(),
+    modified_at: new Date()
+  };
+
+  saveNotification(notification);
+  return notification;
+};
+
 const saveNotification = (notification: NotificationType) => {
   db()
     .get(NOTIFICATION_TABLE)

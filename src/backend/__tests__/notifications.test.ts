@@ -3,7 +3,9 @@ import {
   getTransactionsForUserContacts,
   getAllUsers,
   //getTransactionsByUserId,
-  createPaymentNotification
+  createPaymentNotification,
+  createLikeNotification,
+  createLike
   //getNotificationsByUserId,
   //createComment,
   //createLike
@@ -12,6 +14,14 @@ import {
 import { User, Transaction, PaymentNotificationStatus } from "../../models";
 
 describe("Notifications", () => {
+  let user: User;
+  let transactions: Transaction[];
+  let transaction: Transaction;
+  beforeEach(() => {
+    user = getAllUsers()[0];
+    transactions = getTransactionsForUserContacts(user.id);
+    transaction = transactions[0];
+  });
   afterEach(() => {
     seedDatabase();
   });
@@ -20,17 +30,27 @@ describe("Notifications", () => {
   });
 
   it("should create a payment notification for a transaction", () => {
-    const user: User = getAllUsers()[0];
-    const transactions: Transaction[] = getTransactionsForUserContacts(user.id);
-
     const notification = createPaymentNotification(
       user.id,
-      transactions[0].id,
+      transaction.id,
       PaymentNotificationStatus.received
     );
 
-    expect(notification.transaction_id).toBe(transactions[0].id);
+    expect(notification.transaction_id).toBe(transaction.id);
     expect(notification.status).toBe(PaymentNotificationStatus.received);
+  });
+
+  it("should create a like notification for a transaction", () => {
+    const like = createLike(user.id, transaction.id);
+
+    const notification = createLikeNotification(
+      user.id,
+      transaction.id,
+      like.id
+    );
+
+    expect(notification.transaction_id).toBe(transaction.id);
+    expect(notification.like_id).toBe(like.id);
   });
 
   /*
