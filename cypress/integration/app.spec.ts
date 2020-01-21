@@ -4,25 +4,23 @@
 // check this file using TypeScript if available
 // @ts-check
 
-/*
 describe("App", function() {
   beforeEach(function() {
-    cy.task("db:reset");
     cy.task("db:seed");
     cy.visit("/");
   });
 
   it("renders the app", function() {
-    cy.get("#root").should("contain", "PayMeNow");
+    cy.getTest("app-name-logo").should("contain", "Pay App");
+  });
+
+  it("defaults side navigation to open", function() {
+    cy.getTest("drawer-icon").should("not.be.visible");
   });
 
   it("renders transaction list", function() {
-    //cy.request("GET", "http://localhost:3001/transactions").then(response => {
-    //  expect(response.body[0]).to.have.property("id");
-    //});
-    cy.get("[data-cy='transaction-list']")
+    cy.getTest("transaction-list")
       .children()
-      .should("have.length", 10);
+      .should("have.length", 1);
   });
 });
-*/

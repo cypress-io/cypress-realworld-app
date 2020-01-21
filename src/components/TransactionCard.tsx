@@ -1,4 +1,5 @@
 import React from "react";
+import { ListItemText, ListItem } from "@material-ui/core";
 
 interface Transaction {
   id: number;
@@ -12,18 +13,9 @@ type TransactionProps = {
 };
 
 const TransactionCard: React.FC<TransactionProps> = ({ transaction }) => (
-  <li>
-    <div>
-      <p>
-        <span>{transaction.from}</span>
-        <span> paid </span>
-        <span>{transaction.to}</span>
-      </p>
-    </div>
-    <div>
-      <div>${transaction.amount}</div>
-    </div>
-  </li>
+  <ListItem>
+    <ListItemText primary="Test Item" />
+  </ListItem>
 );
 
 export default TransactionCard;
