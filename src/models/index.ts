@@ -5,3 +5,5 @@ export * from "./transaction";
 export * from "./like";
 export * from "./comment";
 export * from "./notification";
+
+export * from "./appstate";

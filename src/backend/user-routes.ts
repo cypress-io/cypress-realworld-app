@@ -171,4 +171,12 @@ router.patch(
   }
 );
 
+router.get("/checkAuth", (req, res) => {
+  if (!req.user) {
+    res.status(401).json({ error: "User is unauthorised" });
+  } else {
+    res.status(200).json({ user: req.user });
+  }
+});
+
 export default router;

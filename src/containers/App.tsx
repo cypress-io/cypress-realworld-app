@@ -38,6 +38,7 @@ export interface OwnProps {
 
 interface StateProps {
   isBootstrapped: boolean;
+  isLoggedIn: boolean;
 }
 
 interface DispatchProps {
@@ -255,7 +256,8 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
 
 const mapStateToProps = (state: IAppState, ownProps: OwnProps) => ({
   history: ownProps.history,
-  isBootstrapped: state.app.isBootstrapped
+  isBootstrapped: state.app.isBootstrapped,
+  isLoggedIn: state.app.isLoggedIn
 });
 
 const dispatchProps = {

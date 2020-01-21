@@ -1,19 +1,10 @@
 import { EAppActionTypes } from "./";
 import { TAppReducerActions } from "../actions/app";
-
-export interface Data {
-  id: number;
-  name: string;
-}
-
-export interface AppState {
-  isBootstrapped: boolean;
-  sampleData: Data[];
-}
+import { AppState } from "../models";
 
 const initialState = {
   isBootstrapped: false,
-  sampleData: []
+  isLoggedIn: false
 };
 
 export default function reducer(
@@ -23,13 +14,19 @@ export default function reducer(
   switch (action.type) {
     case EAppActionTypes.APP_BOOTSTRAP:
       return {
-        ...state,
-        isBootstrapped: true
+        ...state
       };
-    case EAppActionTypes.APP_DATA_SUCCESS:
+    case EAppActionTypes.APP_BOOTSTRAP_SUCCESS:
       return {
         ...state,
-        sampleData: action.payload.data
+        isBootstrapped: true,
+        isLoggedIn: true
+      };
+    case EAppActionTypes.APP_BOOTSTRAP_ERROR:
+      return {
+        ...state,
+        isBootstrapped: false,
+        isLoggedIn: false
       };
     default:
       return state;

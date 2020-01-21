@@ -1,5 +1,5 @@
 import { EAppActionTypes } from "../reducers";
-import { Data } from "../reducers/app";
+import { User } from "../models";
 
 export interface IReduxBaseAction {
   type: EAppActionTypes;
@@ -9,20 +9,20 @@ export interface IBootstrapAction extends IReduxBaseAction {
   type: EAppActionTypes.APP_BOOTSTRAP;
 }
 
-export interface IAppDataPendingAction extends IReduxBaseAction {
-  type: EAppActionTypes.APP_DATA_PENDING;
+export interface IAppBootstrapPendingAction extends IReduxBaseAction {
+  type: EAppActionTypes.APP_BOOTSTRAP_PENDING;
   payload: object;
 }
 
-export interface IAppDataSuccessAction extends IReduxBaseAction {
-  type: EAppActionTypes.APP_DATA_SUCCESS;
+export interface IAppBootstrapSuccessAction extends IReduxBaseAction {
+  type: EAppActionTypes.APP_BOOTSTRAP_SUCCESS;
   payload: {
-    data: Data[];
+    user: Partial<User>;
   };
 }
 
-export interface IAppDataErrorAction extends IReduxBaseAction {
-  type: EAppActionTypes.APP_DATA_ERROR;
+export interface IAppBootstrapErrorAction extends IReduxBaseAction {
+  type: EAppActionTypes.APP_BOOTSTRAP_ERROR;
   payload: object;
   error: true;
 }
@@ -31,24 +31,30 @@ export const bootstrap = (): IBootstrapAction => ({
   type: EAppActionTypes.APP_BOOTSTRAP
 });
 
-export const appDataPending = (payload: any): IAppDataPendingAction => ({
-  type: EAppActionTypes.APP_DATA_PENDING,
+export const appBootstrapPending = (
+  payload: any
+): IAppBootstrapPendingAction => ({
+  type: EAppActionTypes.APP_BOOTSTRAP_PENDING,
   payload
 });
 
-export const appDataSuccess = (payload: any): IAppDataSuccessAction => ({
-  type: EAppActionTypes.APP_DATA_SUCCESS,
+export const appBootstrapSuccess = (
+  payload: any
+): IAppBootstrapSuccessAction => ({
+  type: EAppActionTypes.APP_BOOTSTRAP_SUCCESS,
   payload
 });
 
-export const appDataError = (payload: any): IAppDataErrorAction => ({
-  type: EAppActionTypes.APP_DATA_ERROR,
+export const appBootstrapError = (
+  payload: object
+): IAppBootstrapErrorAction => ({
+  type: EAppActionTypes.APP_BOOTSTRAP_ERROR,
   payload,
   error: true
 });
 
 export type TAppReducerActions =
   | IBootstrapAction
-  | IAppDataPendingAction
-  | IAppDataSuccessAction
-  | IAppDataErrorAction;
+  | IAppBootstrapPendingAction
+  | IAppBootstrapSuccessAction
+  | IAppBootstrapErrorAction;
