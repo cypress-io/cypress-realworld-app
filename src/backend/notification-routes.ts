@@ -3,20 +3,15 @@
 import express from "express";
 import {
   getNotificationsByUserId,
-  createPaymentNotification,
-  createLikeNotification,
-  createCommentNotification,
-  createNotifications
+  createNotifications,
+  updateNotificationById
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
-import { isNotificationsBodyValidator } from "./validators";
 import {
-  NotificationsType,
-  NotificationPayloadType,
-  PaymentNotificationPayload,
-  LikeNotificationPayload,
-  CommentNotificationPayload
-} from "../models";
+  isNotificationsBodyValidator,
+  shortIdValidation,
+  isNotificationPatchValidator
+} from "./validators";
 const router = express.Router();
 
 // Routes
@@ -42,6 +37,23 @@ router.post(
     res.status(200);
     // @ts-ignore
     res.json({ notifications });
+  }
+);
+
+//PATCH /notifications/:notification_id - scoped-user
+router.patch(
+  "/:notification_id",
+  ensureAuthenticated,
+  validateMiddleware([
+    shortIdValidation("notification_id"),
+    ...isNotificationPatchValidator
+  ]),
+  (req, res) => {
+    const { notification_id } = req.params;
+
+    updateNotificationById(req.user?.id!, notification_id, req.body);
+
+    res.sendStatus(204);
   }
 );
 

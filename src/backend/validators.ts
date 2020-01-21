@@ -188,3 +188,5 @@ export const isNotificationsBodyValidator = [
       .trim()
   ])*/
 ];
+
+export const isNotificationPatchValidator = [body("is_read").isBoolean()];

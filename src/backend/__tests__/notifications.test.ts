@@ -9,7 +9,9 @@ import {
   createCommentNotification,
   getTransactionsByUserId,
   getNotificationsByUserId,
-  createNotifications
+  createNotifications,
+  updateNotificationById,
+  getNotificationById
 } from "../database";
 
 import {
@@ -21,7 +23,8 @@ import {
   Comment,
   LikeNotification,
   CommentNotification,
-  NotificationsType
+  NotificationsType,
+  NotificationType
 } from "../../models";
 
 describe("Notifications", () => {
@@ -132,5 +135,18 @@ describe("Notifications", () => {
 
     expect(notifications.length).toBe(9);
     expect(notifications[8]).toMatchObject({ transaction_id: transaction.id });
+  });
+
+  it("should update a notification", () => {
+    const notifications = getNotificationsByUserId(user.id);
+    const edits: Partial<NotificationType> = {
+      is_read: true
+    };
+    // @ts-ignore
+    updateNotificationById(user.id, notifications[0].id, edits);
+
+    // @ts-ignore
+    const updatedNotification = getNotificationById(notifications[0].id);
+    expect(updatedNotification.is_read).toBe(true);
   });
 });

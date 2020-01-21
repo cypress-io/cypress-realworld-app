@@ -329,7 +329,6 @@ export const updateTransactionById = (
   const transaction = getTransactionBy("id", transactionId);
 
   if (userId === transaction.sender_id || userId === transaction.receiver_id) {
-    console.log("updating transaction");
     db()
       .get(TRANSACTION_TABLE)
       // @ts-ignore
@@ -511,7 +510,6 @@ export const createNotifications = (
   notifications: NotificationPayloadType[]
 ) =>
   notifications.flatMap((item: NotificationPayloadType) => {
-    // TODO: Fix typescript to make happy with multiple payload types
     if ("status" in item && item.type === NotificationsType.payment) {
       return createPaymentNotification(
         userId,
@@ -530,6 +528,23 @@ export const createNotifications = (
       }
     }
   });
+
+export const updateNotificationById = (
+  userId: string,
+  notificationId: string,
+  edits: Partial<NotificationType>
+) => {
+  const notification = getNotificationBy("id", notificationId);
+
+  if (userId === notification.user_id) {
+    db()
+      .get(NOTIFICATION_TABLE)
+      // @ts-ignore
+      .find(notification)
+      .assign(edits)
+      .write();
+  }
+};
 
 // dev/test private methods
 export const getRandomUser = () => {

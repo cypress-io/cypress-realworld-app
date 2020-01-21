@@ -17,11 +17,15 @@ describe("Notifications API", function() {
     cy.fixture("transactions").as("transactions");
     cy.fixture("likes").as("likes");
     cy.fixture("comments").as("comments");
+    cy.fixture("notifications").as("notifications");
     cy.get("@users").then(users => (this.currentUser = users[0]));
     cy.get("@likes").then(likes => (this.likes = likes));
     cy.get("@comments").then(comments => (this.comments = comments));
     cy.get("@transactions").then(
       transactions => (this.transactions = transactions)
+    );
+    cy.get("@notifications").then(
+      notifications => (this.notifications = notifications)
     );
   });
 
@@ -73,6 +77,34 @@ describe("Notifications API", function() {
         expect(response.body.notifications[0].transaction_id).to.equal(
           transaction.id
         );
+      });
+    });
+  });
+
+  context("PATCH /notifications/:notification_id", function() {
+    it("updates a notification", function() {
+      const notification = this.notifications[0];
+
+      cy.request("PATCH", `${apiNotifications}/${notification.id}`, {
+        is_read: true
+      }).then(response => {
+        expect(response.status).to.eq(204);
+      });
+    });
+
+    it("error when invalid field sent", function() {
+      const notification = this.notifications[0];
+
+      cy.request({
+        method: "PATCH",
+        url: `${apiNotifications}/${notification.id}`,
+        failOnStatusCode: false,
+        body: {
+          notAUserField: "not a user field"
+        }
+      }).then(response => {
+        expect(response.status).to.eq(422);
+        expect(response.body.errors.length).to.eq(1);
       });
     });
   });
