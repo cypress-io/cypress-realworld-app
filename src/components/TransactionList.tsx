@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import Typography from "@material-ui/core/Typography";
 import { IAppState } from "../reducers";
 import { Data } from "../reducers/app";
-import TransactionCard from "./TransactionCard";
+import TransactionItem from "./TransactionItem";
 import List from "@material-ui/core/List";
 
 export interface OwnProps {
@@ -24,11 +24,11 @@ const TransactionList: React.FC<Props> = ({ data }) => (
       Recent Transactions
     </Typography>
     <List data-test="transaction-list">
-      <TransactionCard
+      <TransactionItem
         transaction={{ id: 1, to: "Kevin", from: "Amir", amount: 50 }}
       />
       {data.map((i: any) => (
-        <TransactionCard transaction={i} />
+        <TransactionItem transaction={i} />
       ))}
     </List>
   </>

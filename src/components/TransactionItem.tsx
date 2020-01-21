@@ -12,10 +12,10 @@ type TransactionProps = {
   transaction: Transaction;
 };
 
-const TransactionCard: React.FC<TransactionProps> = ({ transaction }) => (
+const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => (
   <ListItem>
     <ListItemText primary="Test Item" />
   </ListItem>
 );
 
-export default TransactionCard;
+export default TransactionItem;
