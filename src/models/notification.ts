@@ -66,6 +66,7 @@ export type NotificationType =
   | LikeNotification
   | CommentNotification;
 
-export type NotificationPayloadType = PaymentNotificationPayload &
-  LikeNotificationPayload &
-  CommentNotificationPayload;
+export type NotificationPayloadType =
+  | PaymentNotificationPayload
+  | LikeNotificationPayload
+  | CommentNotificationPayload;

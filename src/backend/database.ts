@@ -17,7 +17,10 @@ import {
   PaymentNotificationStatus,
   LikeNotification,
   CommentNotification,
-  NotificationType
+  NotificationType,
+  NotificationPayloadType,
+  NotificationsType,
+  PaymentNotificationPayload
 } from "../models";
 
 const USER_TABLE = "users";
@@ -502,6 +505,31 @@ const saveNotification = (notification: NotificationType) => {
     .push(notification)
     .write();
 };
+
+export const createNotifications = (
+  userId: string,
+  notifications: NotificationPayloadType[]
+) =>
+  notifications.flatMap((item: NotificationPayloadType) => {
+    // TODO: Fix typescript to make happy with multiple payload types
+    if ("status" in item && item.type === NotificationsType.payment) {
+      return createPaymentNotification(
+        userId,
+        item.transaction_id,
+        item.status
+      );
+    } else if ("like_id" in item && item.type === NotificationsType.like) {
+      return createLikeNotification(userId, item.transaction_id, item.like_id);
+    } else {
+      if ("comment_id" in item) {
+        return createCommentNotification(
+          userId,
+          item.transaction_id,
+          item.comment_id
+        );
+      }
+    }
+  });
 
 // dev/test private methods
 export const getRandomUser = () => {

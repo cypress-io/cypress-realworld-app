@@ -8,10 +8,21 @@ import {
   createComment,
   createCommentNotification,
   getTransactionsByUserId,
-  getNotificationsByUserId
+  getNotificationsByUserId,
+  createNotifications
 } from "../database";
 
-import { User, Transaction, PaymentNotificationStatus } from "../../models";
+import {
+  User,
+  Transaction,
+  PaymentNotificationStatus,
+  PaymentNotification,
+  Like,
+  Comment,
+  LikeNotification,
+  CommentNotification,
+  NotificationsType
+} from "../../models";
 
 describe("Notifications", () => {
   let user: User;
@@ -28,51 +39,78 @@ describe("Notifications", () => {
   describe("create notifications", () => {
     let transactions: Transaction[];
     let transaction: Transaction;
+    let paymentNotification: PaymentNotification;
+    let like: Like;
+    let likeNotification: LikeNotification;
+    let comment: Comment;
+    let commentNotification: CommentNotification;
     beforeEach(() => {
       user = getAllUsers()[0];
       transactions = getTransactionsForUserContacts(user.id);
       transaction = transactions[0];
-    });
-
-    it("should create a payment notification for a transaction", () => {
-      const notification = createPaymentNotification(
+      paymentNotification = createPaymentNotification(
         user.id,
         transaction.id,
         PaymentNotificationStatus.received
       );
-
-      expect(notification.transaction_id).toBe(transaction.id);
-      expect(notification.status).toBe(PaymentNotificationStatus.received);
-    });
-
-    it("should create a like notification for a transaction", () => {
-      const like = createLike(user.id, transaction.id);
-
-      const notification = createLikeNotification(
+      like = createLike(user.id, transaction.id);
+      likeNotification = createLikeNotification(
         user.id,
         transaction.id,
         like.id
       );
+      comment = createComment(user.id, transaction.id, "This is my comment");
 
-      expect(notification.transaction_id).toBe(transaction.id);
-      expect(notification.like_id).toBe(like.id);
-    });
-
-    it("should create a comment notification for a transaction", () => {
-      const comment = createComment(
-        user.id,
-        transaction.id,
-        "This is my comment"
-      );
-
-      const notification = createCommentNotification(
+      commentNotification = createCommentNotification(
         user.id,
         transaction.id,
         comment.id
       );
+    });
 
-      expect(notification.transaction_id).toBe(transaction.id);
-      expect(notification.comment_id).toBe(comment.id);
+    it("should create a payment notification for a transaction", () => {
+      expect(paymentNotification.transaction_id).toBe(transaction.id);
+      expect(paymentNotification.status).toBe(
+        PaymentNotificationStatus.received
+      );
+    });
+
+    it("should create a like notification for a transaction", () => {
+      expect(likeNotification.transaction_id).toBe(transaction.id);
+      expect(likeNotification.like_id).toBe(like.id);
+    });
+
+    it("should create a comment notification for a transaction", () => {
+      expect(commentNotification.transaction_id).toBe(transaction.id);
+      expect(commentNotification.comment_id).toBe(comment.id);
+    });
+
+    it("should create notifications for a transaction", () => {
+      const notificationsPayload = [
+        {
+          type: NotificationsType.payment,
+          transaction_id: transaction.id,
+          status: PaymentNotificationStatus.received
+        },
+        {
+          type: NotificationsType.like,
+          transaction_id: transaction.id,
+          like_id: like.id
+        },
+        {
+          type: NotificationsType.comment,
+          transaction_id: transaction.id,
+          comment_id: comment.id
+        }
+      ];
+
+      const notifications = createNotifications(user.id, notificationsPayload);
+
+      expect(notifications[0]!.transaction_id).toBe(transaction.id);
+      // @ts-ignore
+      expect(notifications[1]!.like_id).toBe(like.id);
+      // @ts-ignore
+      expect(notifications[2]!.comment_id).toBe(comment.id);
     });
   });
 

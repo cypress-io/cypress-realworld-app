@@ -5,11 +5,18 @@ import {
   getNotificationsByUserId,
   createPaymentNotification,
   createLikeNotification,
-  createCommentNotification
+  createCommentNotification,
+  createNotifications
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import { isNotificationsBodyValidator } from "./validators";
-import { NotificationsType, NotificationPayloadType } from "../models";
+import {
+  NotificationsType,
+  NotificationPayloadType,
+  PaymentNotificationPayload,
+  LikeNotificationPayload,
+  CommentNotificationPayload
+} from "../models";
 const router = express.Router();
 
 // Routes
@@ -30,27 +37,7 @@ router.post(
   (req, res) => {
     const { items } = req.body;
 
-    const notifications = items.flatMap((item: NotificationPayloadType) => {
-      if (item.type === NotificationsType.payment) {
-        return createPaymentNotification(
-          req.user?.id!,
-          item.transaction_id,
-          item.status
-        );
-      } else if (item.type === NotificationsType.like) {
-        return createLikeNotification(
-          req.user?.id!,
-          item.transaction_id,
-          item.like_id
-        );
-      } else {
-        return createCommentNotification(
-          req.user?.id!,
-          item.transaction_id,
-          item.comment_id
-        );
-      }
-    });
+    const notifications = createNotifications(req.user?.id!, items);
 
     res.status(200);
     // @ts-ignore
