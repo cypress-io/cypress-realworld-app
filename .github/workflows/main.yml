@@ -13,3 +13,5 @@ jobs:
           wait-on: "http://localhost:3000"
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+      - name: Unit tests
+        run: yarn test:ci
