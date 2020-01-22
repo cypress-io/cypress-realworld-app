@@ -66,4 +66,12 @@ router.post("/logout", (req: Request, res: Response): void => {
   res.sendStatus(200);
 });
 
+router.get("/checkAuth", (req, res) => {
+  if (!req.user) {
+    res.status(401).json({ error: "User is unauthorised" });
+  } else {
+    res.status(200).json({ user: req.user });
+  }
+});
+
 export default router;

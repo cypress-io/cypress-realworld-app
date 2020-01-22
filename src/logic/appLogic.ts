@@ -10,7 +10,7 @@ const appBootstrapLogic = createLogic({
     let checkAuth;
 
     try {
-      checkAuth = await httpClient.get(`http://localhost:3001/users/checkAuth`);
+      checkAuth = await httpClient.get(`http://localhost:3001/checkAuth`);
 
       // additional async
       // e.g. transactions, etc
