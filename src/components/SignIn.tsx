@@ -54,11 +54,12 @@ const SignIn: React.FC = () => {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="username"
+            label="Username"
+            name="username"
+            type="text"
             autoFocus
+            data-test="signin-username"
           />
           <TextField
             variant="outlined"
@@ -69,11 +70,12 @@ const SignIn: React.FC = () => {
             label="Password"
             type="password"
             id="password"
-            autoComplete="current-password"
+            data-test="signin-password"
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
+            data-test="signin-remember-me"
           />
           <Button
             type="submit"
@@ -81,6 +83,7 @@ const SignIn: React.FC = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
+            data-test="signin-submit"
           >
             Sign In
           </Button>
