@@ -16,11 +16,12 @@ import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 
 import Copyright from "./Copyright";
+import { SignInPendingPayload } from "../actions/signin";
 
 const validationSchema = object({
   username: string().required("Username is required"),
   password: string()
-    .min(8, "Password must contain at least 8 characters")
+    .min(4, "Password must contain at least 4 characters")
     .required("Enter your password")
 });
 
@@ -49,7 +50,12 @@ interface SignInFormValues {
   password: string;
 }
 
-const SignIn: React.FC = () => {
+export interface Props {
+  history?: object;
+  signInPending: (payload: SignInPendingPayload) => void;
+}
+
+const SignIn: React.FC<Props> = ({ signInPending }) => {
   const classes = useStyles();
   const initialValues: SignInFormValues = { username: "", password: "" };
 
@@ -69,7 +75,8 @@ const SignIn: React.FC = () => {
           onSubmit={async (values, { setSubmitting, setFieldValue }) => {
             setSubmitting(true);
 
-            console.log("submit: ", values);
+            signInPending(values);
+
             setFieldValue("username", "");
             setFieldValue("password", "");
             setSubmitting(false);

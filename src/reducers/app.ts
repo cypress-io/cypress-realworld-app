@@ -1,5 +1,6 @@
-import { EAppActionTypes } from "./";
+import { EAppActionTypes, ESignInActionTypes } from "./";
 import { TAppReducerActions } from "../actions/app";
+import { TSignInReducerActions } from "../actions/signin";
 import { AppState } from "../models";
 
 const initialState = {
@@ -9,7 +10,7 @@ const initialState = {
 
 export default function reducer(
   state: AppState = initialState,
-  action: TAppReducerActions
+  action: TAppReducerActions | TSignInReducerActions
 ) {
   switch (action.type) {
     case EAppActionTypes.APP_BOOTSTRAP:
@@ -19,13 +20,21 @@ export default function reducer(
     case EAppActionTypes.APP_BOOTSTRAP_SUCCESS:
       return {
         ...state,
-        isBootstrapped: true,
-        isLoggedIn: true
+        isBootstrapped: true
       };
     case EAppActionTypes.APP_BOOTSTRAP_ERROR:
       return {
         ...state,
-        isBootstrapped: false,
+        isBootstrapped: false
+      };
+    case ESignInActionTypes.SIGNIN_SUCCESS:
+      return {
+        ...state,
+        isLoggedIn: true
+      };
+    case ESignInActionTypes.SIGNIN_ERROR:
+      return {
+        ...state,
         isLoggedIn: false
       };
     default:

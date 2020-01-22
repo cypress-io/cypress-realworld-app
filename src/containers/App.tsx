@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router";
 import { connect } from "react-redux";
 
 import { bootstrap } from "../actions/app";
+import { signInPending, SignInPendingPayload } from "../actions/signin";
 import { IAppState } from "../reducers";
 import TransactionList from "../components/TransactionList";
 import PrivateRoute from "../components/PrivateRoute";
@@ -20,11 +21,16 @@ interface StateProps {
 
 interface DispatchProps {
   bootstrapApp: () => void;
+  signInPending: (payload: SignInPendingPayload) => void;
 }
 
 type Props = StateProps & DispatchProps & OwnProps;
 
-const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
+const App: React.FC<Props> = ({
+  isBootstrapped,
+  bootstrapApp,
+  signInPending
+}) => {
   useEffect(() => {
     if (!isBootstrapped) {
       bootstrapApp();
@@ -33,7 +39,9 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
 
   return (
     <Switch>
-      <Route exact path="/signin" component={SignIn} />
+      <Route exact path="/signin">
+        <SignIn signInPending={signInPending} />
+      </Route>
       <PrivateRoute exact path="/">
         <Layout>
           <TransactionList />
@@ -50,7 +58,8 @@ const mapStateToProps = (state: IAppState, ownProps: OwnProps) => ({
 });
 
 const dispatchProps = {
-  bootstrapApp: bootstrap
+  bootstrapApp: bootstrap,
+  signInPending
 };
 
 export default connect(mapStateToProps, dispatchProps)(App);
