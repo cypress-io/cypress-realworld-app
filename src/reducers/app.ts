@@ -13,10 +13,6 @@ export default function reducer(
   action: TAppReducerActions | TSignInReducerActions
 ) {
   switch (action.type) {
-    case EAppActionTypes.APP_BOOTSTRAP:
-      return {
-        ...state
-      };
     case EAppActionTypes.APP_BOOTSTRAP_SUCCESS:
       return {
         ...state,

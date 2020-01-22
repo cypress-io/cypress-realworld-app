@@ -1,5 +1,4 @@
 import { ESignInActionTypes } from "../reducers";
-import { User } from "../models";
 
 export interface IReduxBaseAction {
   type: ESignInActionTypes;
@@ -12,9 +11,6 @@ export interface ISigninPendingAction extends IReduxBaseAction {
 
 export interface ISigninSuccessAction extends IReduxBaseAction {
   type: ESignInActionTypes.SIGNIN_SUCCESS;
-  payload: {
-    user: Partial<User>;
-  };
 }
 
 export interface ISigninErrorAction extends IReduxBaseAction {
@@ -35,9 +31,8 @@ export const signInPending = (
   payload
 });
 
-export const signInSuccess = (payload: any): ISigninSuccessAction => ({
-  type: ESignInActionTypes.SIGNIN_SUCCESS,
-  payload
+export const signInSuccess = (): ISigninSuccessAction => ({
+  type: ESignInActionTypes.SIGNIN_SUCCESS
 });
 
 export const signInError = (payload: object): ISigninErrorAction => ({

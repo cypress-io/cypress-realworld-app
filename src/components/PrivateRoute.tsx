@@ -1,5 +1,5 @@
 import React from "react";
-import { AppState } from "../models";
+import { IAppState } from "../reducers";
 import { connect } from "react-redux";
 import { Route, Redirect, RouteProps } from "react-router-dom";
 
@@ -27,9 +27,9 @@ function PrivateRoute({ isLoggedIn, children, ...rest }: IPrivateRouteProps) {
   );
 }
 
-const mapStateToProps = (state: AppState) => {
+const mapStateToProps = (state: IAppState) => {
   return {
-    isLoggedIn: state.isLoggedIn
+    isLoggedIn: state.app.isLoggedIn
   };
 };
 

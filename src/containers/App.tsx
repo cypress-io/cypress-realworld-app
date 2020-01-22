@@ -39,14 +39,14 @@ const App: React.FC<Props> = ({
 
   return (
     <Switch>
-      <Route exact path="/signin">
-        <SignIn signInPending={signInPending} />
-      </Route>
       <PrivateRoute exact path="/">
         <Layout>
           <TransactionList />
         </Layout>
       </PrivateRoute>
+      <Route path="/signin">
+        <SignIn signInPending={signInPending} />
+      </Route>
     </Switch>
   );
 };

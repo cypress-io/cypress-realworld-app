@@ -1,3 +1,4 @@
 import appLogic from "./appLogic";
+import signInLogic from "./signInLogic";
 
-export default [appLogic];
+export default [appLogic, signInLogic];

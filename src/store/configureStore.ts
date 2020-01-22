@@ -9,6 +9,7 @@ const logicDeps = {
   httpClient: axios.create({ withCredentials: true })
 };
 
+// @ts-ignore
 const middlewares = [createLogicMiddleware(logic, logicDeps)];
 
 if (process.env.NODE_ENV === `development`) {
