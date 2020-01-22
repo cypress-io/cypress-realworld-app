@@ -16,7 +16,7 @@ import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 
 import Copyright from "./Copyright";
-import { SignInPendingPayload } from "../actions/signin";
+import { SignInPendingPayload } from "../actions/auth";
 
 const validationSchema = object({
   username: string().required("Username is required"),

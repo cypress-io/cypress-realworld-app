@@ -3,7 +3,7 @@ import { Switch, Route } from "react-router";
 import { connect } from "react-redux";
 
 import { bootstrap } from "../actions/app";
-import { signInPending, SignInPendingPayload } from "../actions/signin";
+import { signInPending, SignInPendingPayload } from "../actions/auth";
 import { IAppState } from "../reducers";
 import TransactionList from "../components/TransactionList";
 import PrivateRoute from "../components/PrivateRoute";

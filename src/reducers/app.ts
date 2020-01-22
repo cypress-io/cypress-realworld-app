@@ -1,6 +1,6 @@
 import { EAppActionTypes } from "./";
 import { TAppReducerActions } from "../actions/app";
-import { TSignInReducerActions } from "../actions/signin";
+import { TSignInReducerActions } from "../actions/auth";
 import { AppState } from "../models";
 
 const initialState = {

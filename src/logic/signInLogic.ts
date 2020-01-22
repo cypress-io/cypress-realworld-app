@@ -1,7 +1,7 @@
 import { createLogic } from "redux-logic";
 import { ESignInActionTypes } from "../reducers";
 import { bootstrap } from "../actions/app";
-import { signInSuccess, signInError } from "../actions/signin";
+import { signInSuccess, signInError } from "../actions/auth";
 import { history } from "../index";
 
 const signInLogic = createLogic({
