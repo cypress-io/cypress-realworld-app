@@ -54,7 +54,7 @@ const App: React.FC<Props> = ({
 const mapStateToProps = (state: IAppState, ownProps: OwnProps) => ({
   history: ownProps.history,
   isBootstrapped: state.app.isBootstrapped,
-  isLoggedIn: state.app.isLoggedIn
+  isLoggedIn: state.user.isLoggedIn
 });
 
 const dispatchProps = {

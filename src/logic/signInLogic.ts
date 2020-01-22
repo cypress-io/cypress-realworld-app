@@ -1,5 +1,6 @@
 import { createLogic } from "redux-logic";
 import { ESignInActionTypes } from "../reducers";
+import { bootstrap } from "../actions/app";
 import { signInSuccess, signInError } from "../actions/signin";
 import { history } from "../index";
 
@@ -15,6 +16,8 @@ const signInLogic = createLogic({
         action.payload
       );
       dispatch(signInSuccess());
+
+      dispatch(bootstrap());
 
       history.push("/");
     } catch (error) {

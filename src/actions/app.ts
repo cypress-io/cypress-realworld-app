@@ -17,7 +17,7 @@ export interface IAppBootstrapPendingAction extends IReduxBaseAction {
 export interface IAppBootstrapSuccessAction extends IReduxBaseAction {
   type: EAppActionTypes.APP_BOOTSTRAP_SUCCESS;
   payload: {
-    user: Partial<User>;
+    user: User;
   };
 }
 

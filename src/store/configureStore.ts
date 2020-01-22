@@ -9,7 +9,8 @@ import logic from "../logic";
 
 const persistConfig = {
   key: "root",
-  storage
+  storage,
+  blacklist: ["app"]
 };
 
 const logicDeps = {

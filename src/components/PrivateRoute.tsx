@@ -29,7 +29,7 @@ function PrivateRoute({ isLoggedIn, children, ...rest }: IPrivateRouteProps) {
 
 const mapStateToProps = (state: IAppState) => {
   return {
-    isLoggedIn: state.app.isLoggedIn
+    isLoggedIn: state.user.isLoggedIn
   };
 };
 

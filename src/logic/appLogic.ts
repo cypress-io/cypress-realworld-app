@@ -15,7 +15,7 @@ const appBootstrapLogic = createLogic({
       // additional async
       // e.g. transactions, etc
 
-      const { user } = checkAuth;
+      const { user } = checkAuth.data;
 
       dispatch(appBootstrapSuccess({ user }));
     } catch (error) {
