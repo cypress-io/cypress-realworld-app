@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { bootstrap } from "../actions/app";
 import { IAppState } from "../reducers";
 import TransactionList from "../components/TransactionList";
+import PrivateRoute from "../components/PrivateRoute";
 import Layout from "../components/Layout";
 import SignIn from "../components/SignIn";
 
@@ -33,11 +34,11 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
   return (
     <Switch>
       <Route exact path="/signin" component={SignIn} />
-      <Route exact path="/">
+      <PrivateRoute exact path="/">
         <Layout>
           <TransactionList />
         </Layout>
-      </Route>
+      </PrivateRoute>
     </Switch>
   );
 };
