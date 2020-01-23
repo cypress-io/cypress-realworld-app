@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { bootstrap } from "../actions/app";
 import { signInPending, signUpPending, signOutPending } from "../actions/auth";
-import { IAppState } from "../reducers";
+import { IRootReducerState } from "../reducers";
 import TransactionList from "../components/TransactionList";
 import PrivateRoute from "../components/PrivateRoute";
 import Layout from "../components/Layout";
@@ -60,7 +60,7 @@ const App: React.FC<Props> = ({
   );
 };
 
-const mapStateToProps = (state: IAppState, ownProps: OwnProps) => ({
+const mapStateToProps = (state: IRootReducerState, ownProps: OwnProps) => ({
   history: ownProps.history,
   isBootstrapped: state.app.isBootstrapped,
   isLoggedIn: state.user.isLoggedIn

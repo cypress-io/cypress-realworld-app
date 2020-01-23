@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import Typography from "@material-ui/core/Typography";
-import { IAppState } from "../reducers";
+import { IRootReducerState } from "../reducers";
 import TransactionItem from "./TransactionItem";
 import List from "@material-ui/core/List";
 
@@ -31,7 +31,7 @@ const TransactionList: React.FC<Props> = () => (
   </>
 );
 
-const mapStateToProps = (state: IAppState, ownProps: OwnProps) => ({
+const mapStateToProps = (state: IRootReducerState, ownProps: OwnProps) => ({
   //data: state.app.sampleData
 });
 
