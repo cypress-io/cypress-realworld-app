@@ -1,28 +1,29 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Formik, Form, Field, FieldProps } from "formik";
-import { string, object } from "yup";
+import { string, object, ref } from "yup";
 
 import Copyright from "./Copyright";
 import { User } from "../models";
 
 const validationSchema = object({
+  first_name: string().required("First Name is required"),
+  last_name: string().required("Last Name is required"),
   username: string().required("Username is required"),
   password: string()
     .min(4, "Password must contain at least 4 characters")
-    .required("Enter your password")
+    .required("Enter your password"),
+  confirmPassword: string()
+    .required("Confirm your password")
+    .oneOf([ref("password")], "Password does not match")
 });
 
 const useStyles = makeStyles(theme => ({
@@ -47,22 +48,25 @@ const useStyles = makeStyles(theme => ({
 
 export interface Props {
   history?: object;
-  signInPending: (payload: Partial<User>) => void;
+  signUpPending: (payload: Partial<User>) => void;
 }
 
-const SignIn: React.FC<Props> = ({ signInPending }) => {
+const SignUp: React.FC<Props> = ({ signUpPending }) => {
   const classes = useStyles();
-  const initialValues: Partial<User> = { username: "", password: "" };
+  const initialValues: Partial<User> & { confirmPassword: string } = {
+    first_name: "",
+    last_name: "",
+    username: "",
+    password: "",
+    confirmPassword: ""
+  };
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Sign Up
         </Typography>
         <Formik
           initialValues={initialValues}
@@ -70,27 +74,43 @@ const SignIn: React.FC<Props> = ({ signInPending }) => {
           onSubmit={async (values, { setSubmitting, setFieldValue }) => {
             setSubmitting(true);
 
-            signInPending(values);
+            signUpPending(values);
 
-            setFieldValue("username", "");
-            setFieldValue("password", "");
             setSubmitting(false);
           }}
         >
           {({ isValid, isSubmitting }) => (
             <Form className={classes.form}>
-              <Field name="username">
+              <Field name="first_name">
                 {({ field, meta }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="normal"
                     required
                     fullWidth
-                    id="username"
-                    label="Username"
+                    id="first_name"
+                    label="First Name"
                     type="text"
                     autoFocus
-                    data-test="signin-username"
+                    data-test="signup-first-name"
+                    error={meta.touched && Boolean(meta.error)}
+                    helperText={meta.touched ? meta.error : ""}
+                    {...field}
+                  />
+                )}
+              </Field>
+              <Field name="last_name">
+                {({ field, meta }: FieldProps) => (
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="last_name"
+                    label="Last Name"
+                    type="text"
+                    autoFocus
+                    data-test="signup-last-name"
                     error={meta.touched && Boolean(meta.error)}
                     helperText={meta.touched ? meta.error : ""}
                     {...field}
@@ -107,35 +127,44 @@ const SignIn: React.FC<Props> = ({ signInPending }) => {
                     label="Password"
                     type="password"
                     id="password"
-                    data-test="signin-password"
+                    data-test="signup-password"
                     error={meta.touched && Boolean(meta.error)}
                     helperText={meta.touched ? meta.error : ""}
                     {...field}
                   />
                 )}
               </Field>
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-                data-test="signin-remember-me"
-              />
+              <Field name="confirmpassword">
+                {({ field, meta }: FieldProps) => (
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    label="ConfirmPassword"
+                    id="confirmpassword"
+                    data-test="signup-confirmpassword"
+                    type="password"
+                    error={meta.touched && Boolean(meta.error)}
+                    helperText={meta.touched ? meta.error : ""}
+                    {...field}
+                  />
+                )}
+              </Field>
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 color="primary"
                 className={classes.submit}
-                data-test="signin-submit"
+                data-test="signup-submit"
                 disabled={!isValid || isSubmitting}
               >
                 Sign In
               </Button>
               <Grid container>
-                <Grid item xs>
-                  <Link to="/forgotpassword">Forgot password?</Link>
-                </Grid>
                 <Grid item>
-                  <Link to="/signup">{"Don't have an account? Sign Up"}</Link>
+                  <Link to="/signin">{"Have an account? Sign In"}</Link>
                 </Grid>
               </Grid>
             </Form>
@@ -149,4 +178,4 @@ const SignIn: React.FC<Props> = ({ signInPending }) => {
   );
 };
 
-export default SignIn;
+export default SignUp;
