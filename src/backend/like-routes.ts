@@ -9,29 +9,29 @@ const router = express.Router();
 
 // Routes
 
-//GET /likes/:transaction_id
+//GET /likes/:transactionId
 router.get(
-  "/:transaction_id",
+  "/:transactionId",
   ensureAuthenticated,
-  validateMiddleware([shortIdValidation("transaction_id")]),
+  validateMiddleware([shortIdValidation("transactionId")]),
   (req, res) => {
-    const { transaction_id } = req.params;
-    const likes = getLikesByTransactionId(transaction_id);
+    const { transactionId } = req.params;
+    const likes = getLikesByTransactionId(transactionId);
 
     res.status(200);
     res.json({ likes });
   }
 );
 
-//POST /likes/:transaction_id
+//POST /likes/:transactionId
 router.post(
-  "/:transaction_id",
+  "/:transactionId",
   ensureAuthenticated,
-  validateMiddleware([shortIdValidation("transaction_id")]),
+  validateMiddleware([shortIdValidation("transactionId")]),
   (req, res) => {
-    const { transaction_id } = req.params;
+    const { transactionId } = req.params;
 
-    const like = createLike(req.user?.id!, transaction_id);
+    const like = createLike(req.user?.id!, transactionId);
 
     res.status(200);
     res.json({ like });

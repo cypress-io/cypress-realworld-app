@@ -7,7 +7,7 @@
 const faker = require("faker");
 
 const apiUrl = "http://localhost:3001";
-const apiBankAccounts = `${apiUrl}/bank_accounts`;
+const apiBankAccounts = `${apiUrl}/bankAccounts`;
 
 describe("Bank Accounts API", function() {
   before(function() {
@@ -17,10 +17,10 @@ describe("Bank Accounts API", function() {
     // hacks/experiements
     cy.fixture("users").as("users");
     cy.fixture("contacts").as("contacts");
-    cy.fixture("bank_accounts").as("bank_accounts");
+    cy.fixture("bankAccounts").as("bankAccounts");
     cy.get("@users").then(user => (this.currentUser = this.users[0]));
     cy.get("@contacts").then(contacts => (this.contacts = contacts));
-    cy.get("@bank_accounts").then(accounts => (this.bankAccounts = accounts));
+    cy.get("@bankAccounts").then(accounts => (this.bankAccounts = accounts));
   });
 
   beforeEach(function() {
@@ -33,44 +33,44 @@ describe("Bank Accounts API", function() {
     cy.task("db:seed");
   });
 
-  context("GET /bank_accounts", function() {
+  context("GET /bankAccounts", function() {
     it("gets a list of bank accounts for user", function() {
       const { id } = this.currentUser;
       cy.request("GET", `${apiBankAccounts}`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.accounts[0].user_id).to.eq(id);
+        expect(response.body.accounts[0].userId).to.eq(id);
       });
     });
   });
 
-  context("GET /bank_accounts/:bank_account_id", function() {
+  context("GET /bankAccounts/:bankAccountId", function() {
     it("gets a bank account", function() {
       const userId = this.currentUser.id;
       const { id } = this.bankAccounts[0];
       cy.request("GET", `${apiBankAccounts}/${id}`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.account.user_id).to.eq(userId);
+        expect(response.body.account.userId).to.eq(userId);
       });
     });
   });
 
-  context("POST /bank_accounts", function() {
+  context("POST /bankAccounts", function() {
     it("creates a new bank account", function() {
       const { id } = this.currentUser;
 
       cy.request("POST", `${apiBankAccounts}`, {
-        bank_name: `${faker.company.companyName()} Bank`,
-        account_number: faker.finance.account(10),
-        routing_number: faker.finance.account(9)
+        bankName: `${faker.company.companyName()} Bank`,
+        accountNumber: faker.finance.account(10),
+        routingNumber: faker.finance.account(9)
       }).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.account.id).to.be.a("string");
-        expect(response.body.account.user_id).to.eq(id);
+        expect(response.body.account.userId).to.eq(id);
       });
     });
   });
 
-  context("DELETE /contacts/:bank_account_id", function() {
+  context("DELETE /contacts/:bankAccountId", function() {
     it("deletes a bank account", function() {
       const { id } = this.bankAccounts[0];
       cy.request("DELETE", `${apiBankAccounts}/${id}`).then(response => {

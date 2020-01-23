@@ -43,7 +43,7 @@ describe("Transactions", () => {
     const result: Transaction[] = getTransactionsForUserByObj(userToLookup.id, {
       status: "complete"
     });
-    expect(result[0].receiver_id).toBe(userToLookup.id);
+    expect(result[0].receiverId).toBe(userToLookup.id);
   });
 
   it("should retrieve a list of transactions for a users contacts", () => {
@@ -85,16 +85,16 @@ describe("Transactions", () => {
 
     const paymentDetails: Partial<Transaction> = {
       source: senderBankAccount.id!,
-      receiver_id: receiver.id,
+      receiverId: receiver.id,
       description: `Payment: ${sender.id} to ${receiver.id}`,
       amount,
-      privacy_level: DefaultPrivacyLevel.public
+      privacyLevel: DefaultPrivacyLevel.public
     };
 
     const result = createTransaction(sender.id, "payment", paymentDetails);
     expect(result.id).toBeDefined();
     expect(result.status).toEqual("pending");
-    expect(result.request_status).not.toBeDefined();
+    expect(result.requestStatus).not.toBeDefined();
   });
 
   it("should create a request", () => {
@@ -105,16 +105,16 @@ describe("Transactions", () => {
 
     const requestDetails: Partial<Transaction> = {
       source: senderBankAccount.id!,
-      receiver_id: receiver.id,
+      receiverId: receiver.id,
       description: `Request: ${sender.id} to ${receiver.id}`,
       amount,
-      privacy_level: DefaultPrivacyLevel.public
+      privacyLevel: DefaultPrivacyLevel.public
     };
 
     const result = createTransaction(sender.id, "request", requestDetails);
     expect(result.id).toBeDefined();
     expect(result.status).toEqual("pending");
-    expect(result.request_status).toEqual("pending");
+    expect(result.requestStatus).toEqual("pending");
   });
 
   it("should update a transaction", () => {
@@ -124,14 +124,14 @@ describe("Transactions", () => {
     expect(transactions.length).toBe(4);
 
     const transaction = transactions[0];
-    expect(transaction.request_status).not.toEqual("rejected");
+    expect(transaction.requestStatus).not.toEqual("rejected");
 
     const edits: Partial<Transaction> = {
-      request_status: RequestStatus.rejected
+      requestStatus: RequestStatus.rejected
     };
     updateTransactionById(user.id, transaction.id, edits);
 
     const updatedTransaction = getTransactionById(transaction.id);
-    expect(updatedTransaction.request_status).toEqual("rejected");
+    expect(updatedTransaction.requestStatus).toEqual("rejected");
   });
 });

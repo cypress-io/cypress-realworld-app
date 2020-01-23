@@ -27,25 +27,25 @@ router.get("/:username", (req, res) => {
 router.post(
   "/",
   ensureAuthenticated,
-  validateMiddleware([shortIdValidation("contact_user_id")]),
+  validateMiddleware([shortIdValidation("contactUserId")]),
   (req, res) => {
-    const { contact_user_id } = req.body;
+    const { contactUserId } = req.body;
 
-    const contact = createContactForUser(req.user?.id!, contact_user_id);
+    const contact = createContactForUser(req.user?.id!, contactUserId);
 
     res.status(200);
     res.json({ contact });
   }
 );
-//DELETE /contacts/:contact_id (scoped-user)
+//DELETE /contacts/:contactId (scoped-user)
 router.delete(
-  "/:contact_id",
+  "/:contactId",
   ensureAuthenticated,
-  validateMiddleware([shortIdValidation("contact_id")]),
+  validateMiddleware([shortIdValidation("contactId")]),
   (req, res) => {
-    const { contact_id } = req.params;
+    const { contactId } = req.params;
 
-    const contacts = removeContactById(contact_id);
+    const contacts = removeContactById(contactId);
 
     res.status(200);
     res.json({ contacts });

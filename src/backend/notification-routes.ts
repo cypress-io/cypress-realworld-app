@@ -40,18 +40,18 @@ router.post(
   }
 );
 
-//PATCH /notifications/:notification_id - scoped-user
+//PATCH /notifications/:notificationId - scoped-user
 router.patch(
-  "/:notification_id",
+  "/:notificationId",
   ensureAuthenticated,
   validateMiddleware([
-    shortIdValidation("notification_id"),
+    shortIdValidation("notificationId"),
     ...isNotificationPatchValidator
   ]),
   (req, res) => {
-    const { notification_id } = req.params;
+    const { notificationId } = req.params;
 
-    updateNotificationById(req.user?.id!, notification_id, req.body);
+    updateNotificationById(req.user?.id!, notificationId, req.body);
 
     res.sendStatus(204);
   }

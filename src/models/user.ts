@@ -7,15 +7,15 @@ export enum DefaultPrivacyLevel {
 export interface User {
   id: string;
   uuid: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   username: string;
   password: string;
   email: string;
-  phone_number: string;
+  phoneNumber: string;
   balance: number;
   avatar: string;
-  default_privacy_level: DefaultPrivacyLevel;
-  created_at: Date;
-  modified_at: Date;
+  defaultPrivacyLevel: DefaultPrivacyLevel;
+  createdAt: Date;
+  modifiedAt: Date;
 }

@@ -24,7 +24,7 @@ describe("Comments", () => {
     const content = "This is my comment content";
     const comment = createComment(user.id, transactions[0].id, content);
 
-    expect(comment.transaction_id).toBe(transactions[0].id);
+    expect(comment.transactionId).toBe(transactions[0].id);
     expect(comment.content).toBe(content);
   });
 
@@ -37,6 +37,6 @@ describe("Comments", () => {
 
     const comments = getCommentsByTransactionId(transaction.id);
 
-    expect(comments[0].transaction_id).toBe(transaction.id);
+    expect(comments[0].transactionId).toBe(transaction.id);
   });
 });

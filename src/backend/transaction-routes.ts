@@ -99,18 +99,18 @@ router.post(
   }
 );
 
-//PATCH /transactions/:transaction_id - scoped-user
+//PATCH /transactions/:transactionId - scoped-user
 router.patch(
-  "/:transaction_id",
+  "/:transactionId",
   ensureAuthenticated,
   validateMiddleware([
-    shortIdValidation("transaction_id"),
+    shortIdValidation("transactionId"),
     ...isTransactionPatchValidator
   ]),
   (req, res) => {
-    const { transaction_id } = req.params;
+    const { transactionId } = req.params;
 
-    updateTransactionById(req.user?.id!, transaction_id, req.body);
+    updateTransactionById(req.user?.id!, transactionId, req.body);
 
     res.sendStatus(204);
   }

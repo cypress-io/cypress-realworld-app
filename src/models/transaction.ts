@@ -17,13 +17,13 @@ export interface Transaction {
   source: string;
   amount: string;
   description: string;
-  privacy_level: DefaultPrivacyLevel;
-  receiver_id: string;
-  sender_id: string;
-  balance_at_completion?: string;
+  privacyLevel: DefaultPrivacyLevel;
+  receiverId: string;
+  senderId: string;
+  balanceAtCompletion?: string;
   status: TransactionStatus;
-  request_status?: RequestStatus;
-  request_resolved_at?: Date;
-  created_at: Date;
-  modified_at: Date;
+  requestStatus?: RequestStatus;
+  requestResolvedAt?: Date;
+  createdAt: Date;
+  modifiedAt: Date;
 }

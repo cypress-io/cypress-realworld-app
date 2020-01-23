@@ -26,15 +26,15 @@ describe("Contacts", () => {
 
     const result = getContactsByUsername(userToLookup.username);
     expect(result.length).toBe(3);
-    expect(result[0].user_id).toBe(userToLookup.id);
+    expect(result[0].userId).toBe(userToLookup.id);
   });
 
-  it("should retrieve a list of contacts for a user_id", () => {
+  it("should retrieve a list of contacts for a userId", () => {
     const userToLookup: User = getAllUsers()[0];
 
     const result = getContactsByUserId(userToLookup.id);
     expect(result.length).toBe(3);
-    expect(result[0].user_id).toBe(userToLookup.id);
+    expect(result[0].userId).toBe(userToLookup.id);
   });
 
   it("should create a contact for user", () => {
@@ -42,14 +42,14 @@ describe("Contacts", () => {
     const contactToBe: User = getRandomUser();
 
     const result = createContactForUser(user.id, contactToBe.id);
-    expect(result.user_id).toBe(user.id);
+    expect(result.userId).toBe(user.id);
   });
 
   it("should delete a contact", () => {
     const userToLookup: User = getRandomUser();
 
     const contacts = getContactsByUsername(userToLookup.username);
-    //expect(result[0].user_id).toBe(userToLookup.id);
+    //expect(result[0].userId).toBe(userToLookup.id);
 
     const contactId = contacts[0].id;
 

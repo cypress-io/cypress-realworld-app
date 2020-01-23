@@ -32,7 +32,7 @@ describe("Comments API", function() {
     cy.task("db:seed");
   });
 
-  context("GET /comments/:transaction_id", function() {
+  context("GET /comments/:transactionId", function() {
     it("gets a list of comments for a transaction", function() {
       const transaction = this.transactions[0];
 
@@ -43,7 +43,7 @@ describe("Comments API", function() {
     });
   });
 
-  context("POST /comments/:transaction_id", function() {
+  context("POST /comments/:transactionId", function() {
     it("creates a new comment for a transaction", function() {
       const transaction = this.transactions[0];
 
