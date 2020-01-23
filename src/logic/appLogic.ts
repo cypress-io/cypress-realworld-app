@@ -1,6 +1,7 @@
 import { createLogic } from "redux-logic";
 import { APP_BOOTSTRAP } from "../actions/app";
 import { appBootstrapSuccess, appBootstrapError } from "../actions/app";
+import { transactionsPublicPending } from "../actions/transactions";
 
 const appBootstrapLogic = createLogic({
   type: APP_BOOTSTRAP,
@@ -18,6 +19,7 @@ const appBootstrapLogic = createLogic({
       const { user } = checkAuth.data;
 
       dispatch(appBootstrapSuccess({ user }));
+      dispatch(transactionsPublicPending());
     } catch (error) {
       // @ts-ignore
       dispatch(appBootstrapError({ error: "Unauthorized" }));

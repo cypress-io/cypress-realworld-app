@@ -4,9 +4,8 @@ import { connect } from "react-redux";
 
 import { bootstrap } from "../actions/app";
 import { IRootReducerState } from "../reducers";
-import TransactionList from "../components/TransactionList";
 import PrivateRoute from "./PrivateRoute";
-import MainContainer from "../containers/MainContainer";
+import TransactionsContainer from "../containers/TransactionsContainer";
 import SignIn from "../containers/SignIn";
 import SignUp from "../containers/SignUp";
 
@@ -31,9 +30,7 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
   return (
     <Switch>
       <PrivateRoute exact path="/">
-        <MainContainer>
-          <TransactionList />
-        </MainContainer>
+        <TransactionsContainer />
       </PrivateRoute>
       <Route path="/signin">
         <SignIn />
