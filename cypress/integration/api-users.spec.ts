@@ -35,18 +35,18 @@ describe("Users API", function() {
     });
   });
 
-  context("GET /users/:user_id", function() {
+  context("GET /users/:userId", function() {
     it("get a user", function() {
       const { id, username } = this.currentUser;
       cy.apiLogin(username);
 
       cy.request("GET", `${apiUsers}/${id}`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.user).to.have.property("first_name");
+        expect(response.body.user).to.have.property("firstName");
       });
     });
 
-    it("error when invalid user_id", function() {
+    it("error when invalid userId", function() {
       const { username } = this.currentUser;
       cy.apiLogin(username);
 
@@ -63,13 +63,13 @@ describe("Users API", function() {
 
   context("GET /users/profile/:username", function() {
     it("get a user profile by username", function() {
-      const { username, first_name, last_name, avatar } = this.currentUser;
+      const { username, firstName, lastName, avatar } = this.currentUser;
       cy.apiLogin(username);
       cy.request("GET", `${apiUsers}/profile/${username}`).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.user).to.deep.equal({
-          first_name: first_name,
-          last_name: last_name,
+          firstName: firstName,
+          lastName: lastName,
           avatar: avatar
         });
         expect(response.body.user).not.to.have.property("balance");
@@ -79,7 +79,7 @@ describe("Users API", function() {
 
   context("GET /users/search", function() {
     it("get users by email", function() {
-      const { username, email, first_name } = this.currentUser;
+      const { username, email, firstName } = this.currentUser;
       cy.log(this.currentUser);
       cy.apiLogin(username);
 
@@ -90,13 +90,13 @@ describe("Users API", function() {
       }).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.users).to.contain({
-          first_name
+          firstName
         });
       });
     });
 
     it("get users by phone number", function() {
-      const { username, first_name } = this.currentUser;
+      const { username, firstName } = this.currentUser;
       cy.apiLogin(username);
 
       cy.request({
@@ -106,13 +106,13 @@ describe("Users API", function() {
       }).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.users).to.contain({
-          first_name
+          firstName
         });
       });
     });
 
     it("get users by username", function() {
-      const { username, first_name } = this.currentUser;
+      const { username, firstName } = this.currentUser;
       cy.apiLogin(username);
 
       cy.request({
@@ -122,7 +122,7 @@ describe("Users API", function() {
       }).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.users).to.contain({
-          first_name
+          firstName
         });
       });
     });
@@ -130,19 +130,19 @@ describe("Users API", function() {
 
   context("POST /users", function() {
     it("creates a new user", function() {
-      const first_name = faker.name.firstName();
+      const firstName = faker.name.firstName();
 
       cy.request("POST", `${apiUsers}`, {
-        first_name,
-        last_name: faker.name.lastName(),
+        firstName,
+        lastName: faker.name.lastName(),
         username: faker.internet.userName(),
         password: faker.internet.password(),
         email: faker.internet.email(),
-        phone_number: faker.phone.phoneNumber(),
+        phoneNumber: faker.phone.phoneNumber(),
         avatar: faker.internet.avatar()
       }).then(response => {
         expect(response.status).to.eq(201);
-        expect(response.body.user).to.contain({ first_name });
+        expect(response.body.user).to.contain({ firstName });
       });
     });
 
@@ -164,14 +164,14 @@ describe("Users API", function() {
     });
   });
 
-  context("PATCH /users/:user_id", function() {
+  context("PATCH /users/:userId", function() {
     it("updates a user", function() {
-      const first_name = faker.name.firstName();
+      const firstName = faker.name.firstName();
       const { id, username } = this.currentUser;
       cy.apiLogin(username);
 
       cy.request("PATCH", `${apiUsers}/${id}`, {
-        first_name
+        firstName
       }).then(response => {
         expect(response.status).to.eq(204);
       });

@@ -32,7 +32,7 @@ describe("Likes API", function() {
     cy.task("db:seed");
   });
 
-  context("GET /likes/:transaction_id", function() {
+  context("GET /likes/:transactionId", function() {
     it("gets a list of likes for a transaction", function() {
       const transaction = this.transactions[0];
 
@@ -43,12 +43,12 @@ describe("Likes API", function() {
     });
   });
 
-  context("POST /likes/:transaction_id", function() {
+  context("POST /likes/:transactionId", function() {
     it("creates a new like for a transaction", function() {
       const transaction = this.transactions[0];
 
       cy.request("POST", `${apiLikes}/${transaction.id}`, {
-        transaction_id: transaction.id
+        transactionId: transaction.id
       }).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.like.id).to.be.a("string");

@@ -14,7 +14,7 @@ const router = express.Router();
 
 // Routes
 
-//GET /bank_accounts (scoped-user)
+//GET /bankAccounts (scoped-user)
 router.get("/", ensureAuthenticated, (req, res) => {
   const accounts = getBankAccountsByUserId(req.user?.id!);
 
@@ -22,22 +22,22 @@ router.get("/", ensureAuthenticated, (req, res) => {
   res.json({ accounts });
 });
 
-//GET /bank_accounts/:bank_account_id (scoped-user)
+//GET /bankAccounts/:bankAccountId (scoped-user)
 router.get(
-  "/:bank_account_id",
+  "/:bankAccountId",
   ensureAuthenticated,
-  validateMiddleware([shortIdValidation("bank_account_id")]),
+  validateMiddleware([shortIdValidation("bankAccountId")]),
   (req, res) => {
-    const { bank_account_id } = req.params;
+    const { bankAccountId } = req.params;
 
-    const account = getBankAccountById(bank_account_id);
+    const account = getBankAccountById(bankAccountId);
 
     res.status(200);
     res.json({ account });
   }
 );
 
-//POST /bank_accounts (scoped-user)
+//POST /bankAccounts (scoped-user)
 router.post(
   "/",
   ensureAuthenticated,
@@ -50,15 +50,15 @@ router.post(
   }
 );
 
-//DELETE (soft) /bank_accounts (scoped-user)
+//DELETE (soft) /bankAccounts (scoped-user)
 router.delete(
-  "/:bank_account_id",
+  "/:bankAccountId",
   ensureAuthenticated,
-  validateMiddleware([shortIdValidation("bank_account_id")]),
+  validateMiddleware([shortIdValidation("bankAccountId")]),
   (req, res) => {
-    const { bank_account_id } = req.params;
+    const { bankAccountId } = req.params;
 
-    const account = removeBankAccountById(bank_account_id);
+    const account = removeBankAccountById(bankAccountId);
 
     res.status(200);
     res.json({ account });

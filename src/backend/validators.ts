@@ -26,32 +26,32 @@ export const shortIdValidation = (key: string) => check(key).custom(isShortId);
 export const searchValidation = query("q").exists();
 
 export const userFieldsValidator = oneOf([
-  check("first_name").exists(),
-  check("last_name").exists(),
+  check("firstName").exists(),
+  check("lastName").exists(),
   check("password").exists(),
   check("balance").exists(),
   check("avatar").exists(),
-  check("default_privacy_level").exists()
+  check("defaultPrivacyLevel").exists()
 ]);
 
 export const isBankAccountValidator = [
-  body("bank_name")
+  body("bankName")
     .isString()
     .trim(),
-  body("account_number")
+  body("accountNumber")
     .isString()
     .trim(),
-  body("routing_number")
+  body("routingNumber")
     .isString()
     .trim()
 ];
 
 export const isUserValidator = [
-  check("first_name")
+  check("firstName")
     .optional({ checkFalsy: true })
     .isString()
     .trim(),
-  check("last_name")
+  check("lastName")
     .optional({ checkFalsy: true })
     .isString()
     .trim(),
@@ -67,7 +67,7 @@ export const isUserValidator = [
     .optional({ checkFalsy: true })
     .isString()
     .trim(),
-  check("phone_number")
+  check("phoneNumber")
     .optional({ checkFalsy: true })
     .isString()
     .trim(),
@@ -79,7 +79,7 @@ export const isUserValidator = [
     .optional({ checkFalsy: true })
     .isURL()
     .trim(),
-  check("default_privacy_level")
+  check("defaultPrivacyLevel")
     .optional({ checkFalsy: true })
     .isIn(["public", "private", "contacts"])
 ];
@@ -96,7 +96,7 @@ export const sanitizeTransactionStatus = sanitizeQuery(
 
 // default request status to undefined if not provided
 export const sanitizeRequestStatus = sanitizeQuery(
-  "request_status"
+  "requestStatus"
 ).customSanitizer(value => {
   if (_.includes(RequestStatusValues, value)) {
     return value;
@@ -109,31 +109,31 @@ export const isTransactionQSValidator = [
     .optional({ checkFalsy: true })
     .isIn(TransactionStatusValues)
     .trim(),
-  query("request_status")
+  query("requestStatus")
     .optional({ checkFalsy: true })
     .isIn(RequestStatusValues)
     .trim(),
-  query("receiver_id")
+  query("receiverId")
     .optional({ checkFalsy: true })
     .isString()
     .trim(),
-  query("sender_id")
+  query("senderId")
     .optional({ checkFalsy: true })
     .isString()
     .trim(),
-  query("range_start_ts")
+  query("rangeStartTs")
     .optional({ checkFalsy: true })
     .isString()
     .trim(),
-  query("range_end_ts")
+  query("rangeEndTs")
     .optional({ checkFalsy: true })
     .isString()
     .trim(),
-  query("amount_max")
+  query("amountMax")
     .optional({ checkFalsy: true })
     .isNumeric()
     .trim(),
-  query("amount_min")
+  query("amountMin")
     .optional({ checkFalsy: true })
     .isNumeric()
     .trim()
@@ -143,13 +143,13 @@ export const isTransactionPayloadValidator = [
   body("type")
     .isIn(["payment", "request"])
     .trim(),
-  body("privacy_level")
+  body("privacyLevel")
     .isIn(DefaultPrivacyLevelValues)
     .trim(),
   body("source")
     .isString()
     .trim(),
-  body("receiver_id")
+  body("receiverId")
     .isString()
     .trim(),
   body("description")
@@ -161,7 +161,7 @@ export const isTransactionPayloadValidator = [
 ];
 
 export const isTransactionPatchValidator = [
-  body("request_status").isIn(RequestStatusValues)
+  body("requestStatus").isIn(RequestStatusValues)
 ];
 
 export const isTransactionPublicQSValidator = [
@@ -178,15 +178,15 @@ export const isNotificationsBodyValidator = [
   body("items.*.type")
     .isIn(NotificationsTypeValues)
     .trim(),
-  body("items.*.transaction_id").custom(isShortId)
+  body("items.*.transactionId").custom(isShortId)
   // TODO: figure out how to get working
   /*oneOf([
-    body("items.*.like_id").custom(isShortId),
-    body("items.*.comment_id").custom(isShortId),
+    body("items.*.likeId").custom(isShortId),
+    body("items.*.commentId").custom(isShortId),
     body("items.*.status")
       .isIn(PaymentNotificationStatusValues)
       .trim()
   ])*/
 ];
 
-export const isNotificationPatchValidator = [body("is_read").isBoolean()];
+export const isNotificationPatchValidator = [body("isRead").isBoolean()];

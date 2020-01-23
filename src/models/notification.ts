@@ -13,52 +13,52 @@ export enum NotificationsType {
 export interface PaymentNotification {
   id: string;
   uuid: string;
-  user_id: string;
+  userId: string;
   status: PaymentNotificationStatus;
-  transaction_id: string;
-  is_read: boolean;
-  created_at: Date;
-  modified_at: Date;
+  transactionId: string;
+  isRead: boolean;
+  createdAt: Date;
+  modifiedAt: Date;
 }
 
 export interface LikeNotification {
   id: string;
   uuid: string;
-  user_id: string;
-  like_id: string;
-  transaction_id: string;
-  is_read: boolean;
-  created_at: Date;
-  modified_at: Date;
+  userId: string;
+  likeId: string;
+  transactionId: string;
+  isRead: boolean;
+  createdAt: Date;
+  modifiedAt: Date;
 }
 
 export interface CommentNotification {
   id: string;
   uuid: string;
-  user_id: string;
-  comment_id: string;
-  transaction_id: string;
-  is_read: boolean;
-  created_at: Date;
-  modified_at: Date;
+  userId: string;
+  commentId: string;
+  transactionId: string;
+  isRead: boolean;
+  createdAt: Date;
+  modifiedAt: Date;
 }
 
 export interface PaymentNotificationPayload {
   type: NotificationsType;
-  transaction_id: string;
+  transactionId: string;
   status: PaymentNotificationStatus;
 }
 
 export interface LikeNotificationPayload {
   type: NotificationsType;
-  transaction_id: string;
-  like_id: string;
+  transactionId: string;
+  likeId: string;
 }
 
 export interface CommentNotificationPayload {
   type: NotificationsType;
-  transaction_id: string;
-  comment_id: string;
+  transactionId: string;
+  commentId: string;
 }
 
 export type NotificationType =

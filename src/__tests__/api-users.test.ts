@@ -18,20 +18,20 @@ describe("GET /users", () => {
 
 describe("POST /users", () => {
   it("should create a new user", async done => {
-    const first_name = faker.name.firstName();
+    const firstName = faker.name.firstName();
     const response = await request(api)
       .post(`/users`)
       .send({
-        first_name,
-        last_name: faker.name.lastName(),
+        firstName,
+        lastName: faker.name.lastName(),
         username: faker.internet.userName(),
         password: faker.internet.password(),
         email: faker.internet.email(),
-        phone_number: faker.phone.phoneNumber(),
+        phoneNumber: faker.phone.phoneNumber(),
         avatar: faker.internet.avatar()
       });
 
-    expect(response.body.toContain({ first_name }));
+    expect(response.body.toContain({ firstName }));
     done();
   });
 });
@@ -50,20 +50,20 @@ describe("GET /users", () => {
 
 describe("POST /users", () => {
   it("should create a new user", () => {
-    const first_name = faker.name.firstName();
+    const firstName = faker.name.firstName();
     return request(api) // without return will report false-positive if status code is changed
       .post(`/users`)
       .send({
-        first_name,
-        last_name: faker.name.lastName(),
+        firstName,
+        lastName: faker.name.lastName(),
         username: faker.internet.userName(),
         password: faker.internet.password(),
         email: faker.internet.email(),
-        phone_number: faker.phone.phoneNumber(),
+        phoneNumber: faker.phone.phoneNumber(),
         avatar: faker.internet.avatar()
       })
       .expect(201) // without return, when changed to 400 reports false-positive
-      .expect(json => expect(json.body.user).toContain({ first_name })); // any failure is reported, but Jest continues to loop over
+      .expect(json => expect(json.body.user).toContain({ firstName })); // any failure is reported, but Jest continues to loop over
   });
 });
 */
@@ -84,20 +84,20 @@ describe("GET /users", () => {
 
 describe("POST /users", () => {
   it("should create a new user", done => {
-    const first_name = faker.name.firstName();
+    const firstName = faker.name.firstName();
     request(api)
       .post(`/users`)
       .send({
-        first_name,
-        last_name: faker.name.lastName(),
+        firstName,
+        lastName: faker.name.lastName(),
         username: faker.internet.userName(),
         password: faker.internet.password(),
         email: faker.internet.email(),
-        phone_number: faker.phone.phoneNumber(),
+        phoneNumber: faker.phone.phoneNumber(),
         avatar: faker.internet.avatar()
       })
       .expect(201) // change to 204 and reports false-positive
-      .expect(json => expect((json.body.user.first_name = first_name)));
+      .expect(json => expect((json.body.user.firstName = firstName)));
     //.then(done); // reports success, but jest continues to loop over passing test suite
     //.then(() => done()); // variation, reports success, but jest continues to loop over passing test suite
     //.end(done); // creates jest loop even though test passes

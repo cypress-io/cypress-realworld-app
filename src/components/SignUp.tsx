@@ -15,8 +15,8 @@ import Copyright from "./Copyright";
 import { User } from "../models";
 
 const validationSchema = object({
-  first_name: string().required("First Name is required"),
-  last_name: string().required("Last Name is required"),
+  firstName: string().required("First Name is required"),
+  lastName: string().required("Last Name is required"),
   username: string().required("Username is required"),
   password: string()
     .min(4, "Password must contain at least 4 characters")
@@ -54,8 +54,8 @@ export interface Props {
 const SignUp: React.FC<Props> = ({ signUpPending }) => {
   const classes = useStyles();
   const initialValues: Partial<User> & { confirmPassword: string } = {
-    first_name: "",
-    last_name: "",
+    firstName: "",
+    lastName: "",
     username: "",
     password: "",
     confirmPassword: ""
@@ -81,14 +81,14 @@ const SignUp: React.FC<Props> = ({ signUpPending }) => {
         >
           {({ isValid, isSubmitting }) => (
             <Form className={classes.form}>
-              <Field name="first_name">
+              <Field name="firstName">
                 {({ field, meta }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="normal"
                     required
                     fullWidth
-                    id="first_name"
+                    id="firstName"
                     label="First Name"
                     type="text"
                     autoFocus
@@ -99,14 +99,14 @@ const SignUp: React.FC<Props> = ({ signUpPending }) => {
                   />
                 )}
               </Field>
-              <Field name="last_name">
+              <Field name="lastName">
                 {({ field, meta }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="normal"
                     required
                     fullWidth
-                    id="last_name"
+                    id="lastName"
                     label="Last Name"
                     type="text"
                     autoFocus

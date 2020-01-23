@@ -24,7 +24,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
   // Query Params:
   // order
   //   - default: scoped user contacts first, then all other users
-  //   - "top_first": contacts with most transactions first
+  //   - "topFirst": contacts with most transactions first
 
   const users = getAllUsers();
   res.status(200).json({ users });
@@ -50,7 +50,7 @@ router.get(
 
     const phoneNumber = parsePhoneNumberFromString(q);
     if (phoneNumber) {
-      users = getUserBy("phone_number", phoneNumber.number);
+      users = getUserBy("phoneNumber", phoneNumber.number);
       return res.status(200).json({ users });
     }
 
@@ -75,20 +75,20 @@ router.post(
 );
 
 router.get(
-  "/:user_id",
+  "/:userId",
   ensureAuthenticated,
-  validateMiddleware([shortIdValidation("user_id")]),
+  validateMiddleware([shortIdValidation("userId")]),
   (req, res) => {
-    const { user_id } = req.params;
+    const { userId } = req.params;
 
     // Permission: account owner
-    if (!_.isEqual(user_id, req.user?.id)) {
+    if (!_.isEqual(userId, req.user?.id)) {
       return res.status(401).send({
         error: "Unauthorized"
       });
     }
 
-    const user = getUserBy("id", user_id);
+    const user = getUserBy("id", userId);
 
     res.status(200);
     res.json({ user });
@@ -99,8 +99,8 @@ router.get("/profile/:username", (req, res) => {
   const { username } = req.params;
 
   const user = _.pick(getUserBy("username", username), [
-    "first_name",
-    "last_name",
+    "firstName",
+    "lastName",
     "avatar"
   ]);
 
@@ -109,16 +109,16 @@ router.get("/profile/:username", (req, res) => {
 });
 
 router.patch(
-  "/:user_id",
+  "/:userId",
   ensureAuthenticated,
   userFieldsValidator,
-  validateMiddleware([shortIdValidation("user_id"), ...isUserValidator]),
+  validateMiddleware([shortIdValidation("userId"), ...isUserValidator]),
   (req, res) => {
-    const { user_id } = req.params;
+    const { userId } = req.params;
 
     const edits: User = req.body;
 
-    updateUserById(user_id, edits);
+    updateUserById(userId, edits);
 
     res.sendStatus(204);
   }

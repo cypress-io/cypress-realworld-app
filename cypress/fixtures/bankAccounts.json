@@ -1,0 +1,112 @@
+[
+  {
+    "id": "2bMLhUI",
+    "uuid": "32190bf7-a0bb-46fd-8a2d-a49da9c5c9fc",
+    "userId": "9IUK0xpw",
+    "bankName": "Stoltenberg Group Bank",
+    "accountNumber": "0080433425",
+    "routingNumber": "939111192",
+    "isDeleted": false,
+    "createdAt": "2019-07-26T11:38:54.758Z",
+    "modifiedAt": "2020-01-10T12:46:47.878Z"
+  },
+  {
+    "id": "fUbkXtZT-",
+    "uuid": "476831cc-258e-49af-ba0b-87622f645128",
+    "userId": "8CKHEu7Bb",
+    "bankName": "Bruen, Bailey and Effertz Bank",
+    "accountNumber": "9053173215",
+    "routingNumber": "812093679",
+    "isDeleted": true,
+    "createdAt": "2020-01-10T16:16:34.526Z",
+    "modifiedAt": "2020-01-09T23:27:39.552Z"
+  },
+  {
+    "id": "b5f3lwalo",
+    "uuid": "a081bd1c-b37a-4e07-88fc-b925995a4a1d",
+    "userId": "Z49-pZ0VP",
+    "bankName": "Marks - Harvey Bank",
+    "accountNumber": "1809500207",
+    "routingNumber": "031730738",
+    "isDeleted": false,
+    "createdAt": "2019-02-04T14:18:52.483Z",
+    "modifiedAt": "2020-01-10T08:40:46.385Z"
+  },
+  {
+    "id": "qItdCgsX",
+    "uuid": "6250a130-8966-4435-88c8-1e5d73352fa3",
+    "userId": "8jlDHFobj",
+    "bankName": "McLaughlin, Gutkowski and Kunde Bank",
+    "accountNumber": "3527724416",
+    "routingNumber": "992417022",
+    "isDeleted": false,
+    "createdAt": "2019-12-04T17:29:16.764Z",
+    "modifiedAt": "2020-01-10T20:03:21.293Z"
+  },
+  {
+    "id": "T3zxSfwxK",
+    "uuid": "d472ad36-9d22-407f-84e0-f2dc6b81643a",
+    "userId": "B2NczT5pm",
+    "bankName": "Rempel - Mraz Bank",
+    "accountNumber": "0362260950",
+    "routingNumber": "455660327",
+    "isDeleted": false,
+    "createdAt": "2019-11-13T16:46:15.025Z",
+    "modifiedAt": "2020-01-10T04:20:48.277Z"
+  },
+  {
+    "id": "9gtg7gQws",
+    "uuid": "65454949-817c-431a-8692-44e8cf40b8d1",
+    "userId": "6VhSm-R4i",
+    "bankName": "Tremblay, Kuhlman and Fritsch Bank",
+    "accountNumber": "7484972600",
+    "routingNumber": "509918004",
+    "isDeleted": false,
+    "createdAt": "2019-01-17T08:24:43.653Z",
+    "modifiedAt": "2020-01-10T19:25:45.405Z"
+  },
+  {
+    "id": "nlOO-jP2S",
+    "uuid": "348d0da7-144a-4b28-93fa-29599783920c",
+    "userId": "kNNEA6mLb",
+    "bankName": "Emard - Bosco Bank",
+    "accountNumber": "0821066994",
+    "routingNumber": "509103709",
+    "isDeleted": true,
+    "createdAt": "2019-08-21T19:41:56.228Z",
+    "modifiedAt": "2020-01-10T17:48:30.500Z"
+  },
+  {
+    "id": "3Wbvz6M23",
+    "uuid": "60629a3d-067d-4a2d-a1b5-778d623532dc",
+    "userId": "l8j5MFSU5",
+    "bankName": "Romaguera, Sporer and Harber Bank",
+    "accountNumber": "6505625731",
+    "routingNumber": "016730620",
+    "isDeleted": false,
+    "createdAt": "2019-08-11T04:52:53.951Z",
+    "modifiedAt": "2020-01-10T15:30:29.581Z"
+  },
+  {
+    "id": "hLBu5ZqZ",
+    "uuid": "8706b4d8-20a5-4805-8c43-f2e4152fcb7a",
+    "userId": "LFTFzXJug",
+    "bankName": "O'Kon and Sons Bank",
+    "accountNumber": "6062772949",
+    "routingNumber": "906026658",
+    "isDeleted": true,
+    "createdAt": "2019-11-05T14:08:25.000Z",
+    "modifiedAt": "2020-01-10T16:05:05.520Z"
+  },
+  {
+    "id": "53Yjv0Xdf",
+    "uuid": "f75d0777-439b-4433-b743-889b24cf3c5b",
+    "userId": "abi3cURPF",
+    "bankName": "VonRueden, Tremblay and Kunze Bank",
+    "accountNumber": "1243463609",
+    "routingNumber": "826492010",
+    "isDeleted": false,
+    "createdAt": "2019-05-24T08:49:33.385Z",
+    "modifiedAt": "2020-01-10T14:26:47.643Z"
+  }
+]

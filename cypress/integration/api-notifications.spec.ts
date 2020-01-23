@@ -57,36 +57,36 @@ describe("Notifications API", function() {
         items: [
           {
             type: "payment",
-            transaction_id: transaction.id,
+            transactionId: transaction.id,
             status: "received"
           },
           {
             type: "like",
-            transaction_id: transaction.id,
-            like_id: like.id
+            transactionId: transaction.id,
+            likeId: like.id
           },
           {
             type: "comment",
-            transaction_id: transaction.id,
-            comment_id: comment.id
+            transactionId: transaction.id,
+            commentId: comment.id
           }
         ]
       }).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.notifications.length).to.equal(3);
-        expect(response.body.notifications[0].transaction_id).to.equal(
+        expect(response.body.notifications[0].transactionId).to.equal(
           transaction.id
         );
       });
     });
   });
 
-  context("PATCH /notifications/:notification_id", function() {
+  context("PATCH /notifications/:notificationId", function() {
     it("updates a notification", function() {
       const notification = this.notifications[0];
 
       cy.request("PATCH", `${apiNotifications}/${notification.id}`, {
-        is_read: true
+        isRead: true
       }).then(response => {
         expect(response.status).to.eq(204);
       });

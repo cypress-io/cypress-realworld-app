@@ -36,7 +36,7 @@ passport.serializeUser(function(user: User, done) {
 passport.deserializeUser(function(id, done) {
   const user = getUserBy("id", id);
   // TODO: Limit fields returned in deserialized user object?
-  //.pick(["id", "first_name", "last_name"])
+  //.pick(["id", "firstName", "lastName"])
 
   done(null, user);
 });

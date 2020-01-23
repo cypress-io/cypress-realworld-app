@@ -17,11 +17,11 @@ describe("Transactions API", function() {
     // hacks/experiements
     cy.fixture("users").as("users");
     cy.fixture("contacts").as("contacts");
-    cy.fixture("bank_accounts").as("bank_accounts");
+    cy.fixture("bankAccounts").as("bankAccounts");
     cy.fixture("transactions").as("transactions");
     cy.get("@users").then(user => (this.currentUser = this.users[0]));
     cy.get("@contacts").then(contacts => (this.contacts = contacts));
-    cy.get("@bank_accounts").then(accounts => (this.bankAccounts = accounts));
+    cy.get("@bankAccounts").then(accounts => (this.bankAccounts = accounts));
     cy.get("@transactions").then(
       transactions => (this.transactions = transactions)
     );
@@ -42,7 +42,7 @@ describe("Transactions API", function() {
       const { id } = this.currentUser;
       cy.request("GET", `${apiTransactions}`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions[0].receiver_id).to.eq(id);
+        expect(response.body.transactions[0].receiverId).to.eq(id);
       });
     });
 
@@ -52,11 +52,11 @@ describe("Transactions API", function() {
         method: "GET",
         url: `${apiTransactions}`,
         qs: {
-          request_status: "pending"
+          requestStatus: "pending"
         }
       }).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions[0].receiver_id).to.eq(id);
+        expect(response.body.transactions[0].receiverId).to.eq(id);
       });
     });
   });
@@ -102,15 +102,15 @@ describe("Transactions API", function() {
       cy.request("POST", `${apiTransactions}`, {
         type: "payment",
         source: senderBankAccount.id,
-        receiver_id: receiver.id,
+        receiverId: receiver.id,
         description: `Payment: ${sender.id} to ${receiver.id}`,
         amount: faker.finance.amount(),
-        privacy_level: "public"
+        privacyLevel: "public"
       }).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.transaction.id).to.be.a("string");
         expect(response.body.transaction.status).to.eq("pending");
-        expect(response.body.transaction.request_status).to.eq(undefined);
+        expect(response.body.transaction.requestStatus).to.eq(undefined);
       });
     });
 
@@ -122,25 +122,25 @@ describe("Transactions API", function() {
       cy.request("POST", `${apiTransactions}`, {
         type: "request",
         source: senderBankAccount.id,
-        receiver_id: receiver.id,
+        receiverId: receiver.id,
         description: `Request: ${sender.id} from ${receiver.id}`,
         amount: faker.finance.amount(),
-        privacy_level: "public"
+        privacyLevel: "public"
       }).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.transaction.id).to.be.a("string");
         expect(response.body.transaction.status).to.eq("pending");
-        expect(response.body.transaction.request_status).to.eq("pending");
+        expect(response.body.transaction.requestStatus).to.eq("pending");
       });
     });
   });
 
-  context("PATCH /transactions/:transaction_id", function() {
+  context("PATCH /transactions/:transactionId", function() {
     it("updates a transaction", function() {
       const transaction = this.transactions[0];
 
       cy.request("PATCH", `${apiTransactions}/${transaction.id}`, {
-        request_status: "rejected"
+        requestStatus: "rejected"
       }).then(response => {
         expect(response.status).to.eq(204);
       });

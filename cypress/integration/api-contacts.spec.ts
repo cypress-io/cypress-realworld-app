@@ -36,7 +36,7 @@ describe("Contacts API", function() {
       const { username } = this.currentUser;
       cy.request("GET", `${apiContacts}/${username}`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.contacts[0]).to.have.property("user_id");
+        expect(response.body.contacts[0]).to.have.property("userId");
       });
     });
   });
@@ -47,21 +47,21 @@ describe("Contacts API", function() {
       const contact = this.contacts[0];
 
       cy.request("POST", `${apiContacts}`, {
-        contact_user_id: contact.id
+        contactUserId: contact.id
       }).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.contact.id).to.be.a("string");
-        expect(response.body.contact.user_id).to.eq(id);
+        expect(response.body.contact.userId).to.eq(id);
       });
     });
 
-    it("error when invalid contact_user_id", function() {
+    it("error when invalid contactUserId", function() {
       cy.request({
         method: "POST",
         url: `${apiContacts}`,
         failOnStatusCode: false,
         body: {
-          contact_user_id: "1234"
+          contactUserId: "1234"
         }
       }).then(response => {
         expect(response.status).to.eq(422);
@@ -69,7 +69,7 @@ describe("Contacts API", function() {
       });
     });
   });
-  context("DELETE /contacts/:contact_id", function() {
+  context("DELETE /contacts/:contactId", function() {
     it("deletes a contact", function() {
       const contact = this.contacts[0];
 

@@ -23,7 +23,7 @@ describe("Transactions", () => {
 
     const like = createLike(user.id, transactions[0].id);
 
-    expect(like.transaction_id).toBe(transactions[0].id);
+    expect(like.transactionId).toBe(transactions[0].id);
   });
 
   it("should get a list of likes for a transaction", () => {
@@ -35,6 +35,6 @@ describe("Transactions", () => {
 
     const likes = getLikesByTransactionId(transaction.id);
 
-    expect(likes[0].transaction_id).toBe(transaction.id);
+    expect(likes[0].transactionId).toBe(transaction.id);
   });
 });

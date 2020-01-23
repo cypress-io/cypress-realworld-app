@@ -70,7 +70,7 @@ export const getAllPublicTransactions = () =>
   db()
     .get(TRANSACTION_TABLE)
     // @ts-ignore
-    .filter({ privacy_level: "public" })
+    .filter({ privacyLevel: "public" })
     .value();
 
 export const getAllBy = (entity: string, key: string, value: any) => {
@@ -120,17 +120,17 @@ export const createUser = (userDetails: Partial<User>): User => {
   const user: User = {
     id: shortid(),
     uuid: v4(),
-    first_name: userDetails.first_name!,
-    last_name: userDetails.last_name!,
+    firstName: userDetails.firstName!,
+    lastName: userDetails.lastName!,
     username: userDetails.username!,
     password: userDetails.password!,
     email: userDetails.email!,
-    phone_number: userDetails.phone_number!,
+    phoneNumber: userDetails.phoneNumber!,
     balance: userDetails.balance!,
     avatar: userDetails.avatar!,
-    default_privacy_level: userDetails.default_privacy_level!,
-    created_at: new Date(),
-    modified_at: new Date()
+    defaultPrivacyLevel: userDetails.defaultPrivacyLevel!,
+    createdAt: new Date(),
+    modifiedAt: new Date()
   };
 
   saveUser(user);
@@ -166,12 +166,12 @@ export const getContactsBy = (key: string, value: any) =>
 
 export const getContactsByUsername = (username: string) => {
   const user: User = getUserBy("username", username);
-  const userContacts: Contact[] = getContactsBy("user_id", user.id);
+  const userContacts: Contact[] = getContactsBy("userId", user.id);
   return userContacts;
 };
 
-export const getContactsByUserId = (user_id: string): Contact[] =>
-  getContactsBy("user_id", user_id);
+export const getContactsByUserId = (userId: string): Contact[] =>
+  getContactsBy("userId", userId);
 
 export const createContact = (contact: Contact) => {
   db()
@@ -184,8 +184,8 @@ export const createContact = (contact: Contact) => {
   return getContactBy("id", contact.id);
 };
 
-export const removeContactById = (contact_id: string) => {
-  const contact = getContactBy("id", contact_id);
+export const removeContactById = (contactId: string) => {
+  const contact = getContactBy("id", contactId);
 
   db()
     .get(CONTACT_TABLE)
@@ -194,18 +194,15 @@ export const removeContactById = (contact_id: string) => {
     .write();
 };
 
-export const createContactForUser = (
-  user_id: string,
-  contact_user_id: string
-) => {
+export const createContactForUser = (userId: string, contactUserId: string) => {
   const contactId = shortid();
   const contact: Contact = {
     id: contactId,
     uuid: v4(),
-    user_id,
-    contact_user_id,
-    created_at: new Date(),
-    modified_at: new Date()
+    userId,
+    contactUserId,
+    createdAt: new Date(),
+    modifiedAt: new Date()
   };
 
   // TODO: check if contact exists
@@ -225,8 +222,8 @@ export const getBankAccountsBy = (key: string, value: any) => {
   const accounts = getBy(BANK_ACCOUNT_TABLE, key, value);
   return accounts ? Array.of(accounts) : [];
 };
-export const getBankAccountsByUserId = (user_id: string) => {
-  const accounts: BankAccount[] = getBankAccountsBy("user_id", user_id);
+export const getBankAccountsByUserId = (userId: string) => {
+  const accounts: BankAccount[] = getBankAccountsBy("userId", userId);
   return accounts;
 };
 
@@ -242,20 +239,20 @@ export const createBankAccount = (bankaccount: BankAccount) => {
 };
 
 export const createBankAccountForUser = (
-  user_id: string,
-  account_details: Partial<BankAccount>
+  userId: string,
+  accountDetails: Partial<BankAccount>
 ) => {
   const accountId = shortid();
   const bankaccount: BankAccount = {
     id: accountId,
     uuid: v4(),
-    user_id,
-    bank_name: account_details.bank_name!,
-    account_number: account_details.account_number!,
-    routing_number: account_details.routing_number!,
-    is_deleted: false,
-    created_at: new Date(),
-    modified_at: new Date()
+    userId,
+    bankName: accountDetails.bankName!,
+    accountNumber: accountDetails.accountNumber!,
+    routingNumber: accountDetails.routingNumber!,
+    isDeleted: false,
+    createdAt: new Date(),
+    modifiedAt: new Date()
   };
 
   // TODO: check if bank account exists
@@ -266,12 +263,12 @@ export const createBankAccountForUser = (
   return result;
 };
 
-export const removeBankAccountById = (bank_account_id: string) => {
+export const removeBankAccountById = (bankAccountId: string) => {
   db()
     .get(BANK_ACCOUNT_TABLE)
     // @ts-ignore
-    .find({ id: bank_account_id })
-    .assign({ is_deleted: true }) // soft delete
+    .find({ id: bankAccountId })
+    .assign({ isDeleted: true }) // soft delete
     .write();
 };
 
@@ -285,27 +282,24 @@ export const getTransactionsBy = (key: string, value: string) =>
   getAllBy(TRANSACTION_TABLE, key, value);
 export const getTransactionsByObj = (query: object) =>
   getAllByObj(TRANSACTION_TABLE, query);
-export const getTransactionsForUserByObj = (
-  user_id: string,
-  query?: object
-) => {
+export const getTransactionsForUserByObj = (userId: string, query?: object) => {
   const transactions: Transaction[] = getTransactionsByObj({
-    receiver_id: user_id,
+    receiverId: userId,
     ...query
   });
   return transactions;
 };
-export const getTransactionsByUserId = (user_id: string) => {
-  const transactions: Transaction[] = getTransactionsBy("receiver_id", user_id);
+export const getTransactionsByUserId = (userId: string) => {
+  const transactions: Transaction[] = getTransactionsBy("receiverId", userId);
   return transactions;
 };
 
 export const getTransactionsForUserContacts = (
-  user_id: string,
+  userId: string,
   query?: object
 ) => {
-  const contacts = getContactsByUserId(user_id);
-  const contactIds = _.map(contacts, "contact_user_id");
+  const contacts = getContactsByUserId(userId);
+  const contactIds = _.map(contacts, "contactUserId");
   return contactIds.flatMap((contactId): Transaction[] => {
     return getTransactionsForUserByObj(contactId, query);
   });
@@ -337,14 +331,14 @@ export const createTransaction = (
     source: transactionDetails.source!,
     amount: transactionDetails.amount!,
     description: transactionDetails.description!,
-    receiver_id: transactionDetails.receiver_id!,
-    sender_id: userId,
-    privacy_level: transactionDetails.privacy_level!,
+    receiverId: transactionDetails.receiverId!,
+    senderId: userId,
+    privacyLevel: transactionDetails.privacyLevel!,
     status: TransactionStatus.pending,
-    request_status:
+    requestStatus:
       transactionType === "request" ? RequestStatus.pending : undefined,
-    created_at: new Date(),
-    modified_at: new Date()
+    createdAt: new Date(),
+    modifiedAt: new Date()
   };
 
   const savedTransaction = saveTransaction(transaction);
@@ -368,7 +362,7 @@ export const updateTransactionById = (
 ) => {
   const transaction = getTransactionBy("id", transactionId);
 
-  if (userId === transaction.sender_id || userId === transaction.receiver_id) {
+  if (userId === transaction.senderId || userId === transaction.receiverId) {
     db()
       .get(TRANSACTION_TABLE)
       // @ts-ignore
@@ -385,17 +379,17 @@ export const getLikeBy = (key: string, value: any): Like =>
 export const getLikesByObj = (query: object) => getAllByObj(LIKE_TABLE, query);
 
 export const getLikeById = (id: string): Like => getLikeBy("id", id);
-export const getLikesByTransactionId = (transaction_id: string) =>
-  getLikesByObj({ transaction_id });
+export const getLikesByTransactionId = (transactionId: string) =>
+  getLikesByObj({ transactionId });
 
-export const createLike = (user_id: string, transaction_id: string): Like => {
+export const createLike = (userId: string, transactionId: string): Like => {
   const like = {
     id: shortid(),
     uuid: v4(),
-    user_id,
-    transaction_id,
-    created_at: new Date(),
-    modified_at: new Date()
+    userId,
+    transactionId,
+    createdAt: new Date(),
+    modifiedAt: new Date()
   };
 
   const savedLike = saveLike(like);
@@ -421,22 +415,22 @@ export const getCommentsByObj = (query: object) =>
   getAllByObj(COMMENT_TABLE, query);
 
 export const getCommentById = (id: string): Comment => getCommentBy("id", id);
-export const getCommentsByTransactionId = (transaction_id: string) =>
-  getCommentsByObj({ transaction_id });
+export const getCommentsByTransactionId = (transactionId: string) =>
+  getCommentsByObj({ transactionId });
 
 export const createComment = (
-  user_id: string,
-  transaction_id: string,
+  userId: string,
+  transactionId: string,
   content: string
 ): Comment => {
   const comment = {
     id: shortid(),
     uuid: v4(),
     content,
-    user_id,
-    transaction_id,
-    created_at: new Date(),
-    modified_at: new Date()
+    userId,
+    transactionId,
+    createdAt: new Date(),
+    modifiedAt: new Date()
   };
 
   const savedComment = saveComment(comment);
@@ -465,17 +459,17 @@ export const getNotificationsByObj = (query: object): Notification[] =>
 export const getNotificationById = (id: string): NotificationType =>
   getNotificationBy("id", id);
 
-export const getNotificationsByUserId = (user_id: string) =>
-  getNotificationsByObj({ user_id });
+export const getNotificationsByUserId = (userId: string) =>
+  getNotificationsByObj({ userId });
 
-export const getNotificationsByTransactionId = (transaction_id: string) =>
-  getNotificationsByObj({ transaction_id });
+export const getNotificationsByTransactionId = (transactionId: string) =>
+  getNotificationsByObj({ transactionId });
 
-export const getNotificationsByLikeId = (like_id: string) =>
-  getNotificationsByObj({ like_id });
+export const getNotificationsByLikeId = (likeId: string) =>
+  getNotificationsByObj({ likeId });
 
-export const getNotificationsByCommentId = (comment_id: string) =>
-  getNotificationsByObj({ comment_id });
+export const getNotificationsByCommentId = (commentId: string) =>
+  getNotificationsByObj({ commentId });
 
 export const createPaymentNotification = (
   userId: string,
@@ -485,12 +479,12 @@ export const createPaymentNotification = (
   const notification: PaymentNotification = {
     id: shortid(),
     uuid: v4(),
-    user_id: userId,
-    transaction_id: transactionId,
+    userId: userId,
+    transactionId: transactionId,
     status,
-    is_read: false,
-    created_at: new Date(),
-    modified_at: new Date()
+    isRead: false,
+    createdAt: new Date(),
+    modifiedAt: new Date()
   };
 
   saveNotification(notification);
@@ -505,12 +499,12 @@ export const createLikeNotification = (
   const notification: LikeNotification = {
     id: shortid(),
     uuid: v4(),
-    user_id: userId,
-    transaction_id: transactionId,
-    like_id: likeId,
-    is_read: false,
-    created_at: new Date(),
-    modified_at: new Date()
+    userId: userId,
+    transactionId: transactionId,
+    likeId: likeId,
+    isRead: false,
+    createdAt: new Date(),
+    modifiedAt: new Date()
   };
 
   saveNotification(notification);
@@ -525,12 +519,12 @@ export const createCommentNotification = (
   const notification: CommentNotification = {
     id: shortid(),
     uuid: v4(),
-    user_id: userId,
-    transaction_id: transactionId,
-    comment_id: commentId,
-    is_read: false,
-    created_at: new Date(),
-    modified_at: new Date()
+    userId: userId,
+    transactionId: transactionId,
+    commentId: commentId,
+    isRead: false,
+    createdAt: new Date(),
+    modifiedAt: new Date()
   };
 
   saveNotification(notification);
@@ -551,19 +545,15 @@ export const createNotifications = (
 ) =>
   notifications.flatMap((item: NotificationPayloadType) => {
     if ("status" in item && item.type === NotificationsType.payment) {
-      return createPaymentNotification(
-        userId,
-        item.transaction_id,
-        item.status
-      );
-    } else if ("like_id" in item && item.type === NotificationsType.like) {
-      return createLikeNotification(userId, item.transaction_id, item.like_id);
+      return createPaymentNotification(userId, item.transactionId, item.status);
+    } else if ("likeId" in item && item.type === NotificationsType.like) {
+      return createLikeNotification(userId, item.transactionId, item.likeId);
     } else {
-      if ("comment_id" in item) {
+      if ("commentId" in item) {
         return createCommentNotification(
           userId,
-          item.transaction_id,
-          item.comment_id
+          item.transactionId,
+          item.commentId
         );
       }
     }
@@ -576,7 +566,7 @@ export const updateNotificationById = (
 ) => {
   const notification = getNotificationBy("id", notificationId);
 
-  if (userId === notification.user_id) {
+  if (userId === notification.userId) {
     db()
       .get(NOTIFICATION_TABLE)
       // @ts-ignore

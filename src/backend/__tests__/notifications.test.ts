@@ -72,48 +72,48 @@ describe("Notifications", () => {
     });
 
     it("should create a payment notification for a transaction", () => {
-      expect(paymentNotification.transaction_id).toBe(transaction.id);
+      expect(paymentNotification.transactionId).toBe(transaction.id);
       expect(paymentNotification.status).toBe(
         PaymentNotificationStatus.received
       );
     });
 
     it("should create a like notification for a transaction", () => {
-      expect(likeNotification.transaction_id).toBe(transaction.id);
-      expect(likeNotification.like_id).toBe(like.id);
+      expect(likeNotification.transactionId).toBe(transaction.id);
+      expect(likeNotification.likeId).toBe(like.id);
     });
 
     it("should create a comment notification for a transaction", () => {
-      expect(commentNotification.transaction_id).toBe(transaction.id);
-      expect(commentNotification.comment_id).toBe(comment.id);
+      expect(commentNotification.transactionId).toBe(transaction.id);
+      expect(commentNotification.commentId).toBe(comment.id);
     });
 
     it("should create notifications for a transaction", () => {
       const notificationsPayload = [
         {
           type: NotificationsType.payment,
-          transaction_id: transaction.id,
+          transactionId: transaction.id,
           status: PaymentNotificationStatus.received
         },
         {
           type: NotificationsType.like,
-          transaction_id: transaction.id,
-          like_id: like.id
+          transactionId: transaction.id,
+          likeId: like.id
         },
         {
           type: NotificationsType.comment,
-          transaction_id: transaction.id,
-          comment_id: comment.id
+          transactionId: transaction.id,
+          commentId: comment.id
         }
       ];
 
       const notifications = createNotifications(user.id, notificationsPayload);
 
-      expect(notifications[0]!.transaction_id).toBe(transaction.id);
+      expect(notifications[0]!.transactionId).toBe(transaction.id);
       // @ts-ignore
-      expect(notifications[1]!.like_id).toBe(like.id);
+      expect(notifications[1]!.likeId).toBe(like.id);
       // @ts-ignore
-      expect(notifications[2]!.comment_id).toBe(comment.id);
+      expect(notifications[2]!.commentId).toBe(comment.id);
     });
   });
 
@@ -134,19 +134,19 @@ describe("Notifications", () => {
     const notifications = getNotificationsByUserId(user.id);
 
     expect(notifications.length).toBe(9);
-    expect(notifications[8]).toMatchObject({ transaction_id: transaction.id });
+    expect(notifications[8]).toMatchObject({ transactionId: transaction.id });
   });
 
   it("should update a notification", () => {
     const notifications = getNotificationsByUserId(user.id);
     const edits: Partial<NotificationType> = {
-      is_read: true
+      isRead: true
     };
     // @ts-ignore
     updateNotificationById(user.id, notifications[0].id, edits);
 
     // @ts-ignore
     const updatedNotification = getNotificationById(notifications[0].id);
-    expect(updatedNotification.is_read).toBe(true);
+    expect(updatedNotification.isRead).toBe(true);
   });
 });

@@ -38,7 +38,7 @@ app.use(passport.session());
 app.use(auth);
 app.use("/users", userRoutes);
 app.use("/contacts", contactRoutes);
-app.use("/bank_accounts", bankAccountRoutes);
+app.use("/bankAccounts", bankAccountRoutes);
 app.use("/transactions", transactionRoutes);
 app.use("/likes", likeRoutes);
 app.use("/comments", commentRoutes);

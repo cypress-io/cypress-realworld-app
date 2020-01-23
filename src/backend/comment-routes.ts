@@ -9,30 +9,30 @@ const router = express.Router();
 
 // Routes
 
-//GET /comments/:transaction_id
+//GET /comments/:transactionId
 router.get(
-  "/:transaction_id",
+  "/:transactionId",
   ensureAuthenticated,
-  validateMiddleware([shortIdValidation("transaction_id")]),
+  validateMiddleware([shortIdValidation("transactionId")]),
   (req, res) => {
-    const { transaction_id } = req.params;
-    const comments = getCommentsByTransactionId(transaction_id);
+    const { transactionId } = req.params;
+    const comments = getCommentsByTransactionId(transactionId);
 
     res.status(200);
     res.json({ comments });
   }
 );
 
-//POST /comments/:transaction_id
+//POST /comments/:transactionId
 router.post(
-  "/:transaction_id",
+  "/:transactionId",
   ensureAuthenticated,
-  validateMiddleware([shortIdValidation("transaction_id"), isCommentValidator]),
+  validateMiddleware([shortIdValidation("transactionId"), isCommentValidator]),
   (req, res) => {
-    const { transaction_id } = req.params;
+    const { transactionId } = req.params;
     const { content } = req.body;
 
-    const comment = createComment(req.user?.id!, transaction_id, content);
+    const comment = createComment(req.user?.id!, transactionId, content);
 
     res.status(200);
     res.json({ comment });
