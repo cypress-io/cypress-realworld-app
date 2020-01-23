@@ -4,8 +4,8 @@ import {
   TransactionStatus,
   RequestStatus,
   DefaultPrivacyLevel,
-  NotificationsType,
-  PaymentNotificationStatus
+  NotificationsType
+  //PaymentNotificationStatus
 } from "../models";
 import _ from "lodash";
 
@@ -13,9 +13,9 @@ const TransactionStatusValues = Object.values(TransactionStatus);
 const RequestStatusValues = Object.values(RequestStatus);
 const DefaultPrivacyLevelValues = Object.values(DefaultPrivacyLevel);
 const NotificationsTypeValues = Object.values(NotificationsType);
-const PaymentNotificationStatusValues = Object.values(
+/*const PaymentNotificationStatusValues = Object.values(
   PaymentNotificationStatus
-);
+);*/
 
 // Validators
 

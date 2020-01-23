@@ -1,54 +1,36 @@
-import { EAppActionTypes } from "../reducers";
-import { Data } from "../reducers/app";
+export const APP_BOOTSTRAP = "APP_BOOTSTRAP";
+export const APP_BOOTSTRAP_PENDING = "APP_BOOTSTRAP_PENDING";
+export const APP_BOOTSTRAP_SUCCESS = "APP_BOOTSTRAP_SUCCESS";
+export const APP_BOOTSTRAP_ERROR = "APP_BOOTSTRAP_ERROR";
 
-export interface IReduxBaseAction {
-  type: EAppActionTypes;
-}
+export const bootstrap = () =>
+  ({
+    type: APP_BOOTSTRAP
+  } as const);
 
-export interface IBootstrapAction extends IReduxBaseAction {
-  type: EAppActionTypes.APP_BOOTSTRAP;
-}
+export const appBootstrapPending = (payload: any) =>
+  ({
+    type: APP_BOOTSTRAP_PENDING,
+    payload
+  } as const);
 
-export interface IAppDataPendingAction extends IReduxBaseAction {
-  type: EAppActionTypes.APP_DATA_PENDING;
-  payload: object;
-}
+export const appBootstrapSuccess = (payload: any) =>
+  ({
+    type: APP_BOOTSTRAP_SUCCESS,
+    payload
+  } as const);
 
-export interface IAppDataSuccessAction extends IReduxBaseAction {
-  type: EAppActionTypes.APP_DATA_SUCCESS;
-  payload: {
-    data: Data[];
-  };
-}
-
-export interface IAppDataErrorAction extends IReduxBaseAction {
-  type: EAppActionTypes.APP_DATA_ERROR;
-  payload: object;
-  error: true;
-}
-
-export const bootstrap = (): IBootstrapAction => ({
-  type: EAppActionTypes.APP_BOOTSTRAP
-});
-
-export const appDataPending = (payload: any): IAppDataPendingAction => ({
-  type: EAppActionTypes.APP_DATA_PENDING,
-  payload
-});
-
-export const appDataSuccess = (payload: any): IAppDataSuccessAction => ({
-  type: EAppActionTypes.APP_DATA_SUCCESS,
-  payload
-});
-
-export const appDataError = (payload: any): IAppDataErrorAction => ({
-  type: EAppActionTypes.APP_DATA_ERROR,
-  payload,
-  error: true
-});
+export const appBootstrapError = (payload: any) =>
+  ({
+    type: APP_BOOTSTRAP_ERROR,
+    payload,
+    error: true
+  } as const);
 
 export type TAppReducerActions =
-  | IBootstrapAction
-  | IAppDataPendingAction
-  | IAppDataSuccessAction
-  | IAppDataErrorAction;
+  | ReturnType<typeof bootstrap>
+  | ReturnType<typeof appBootstrapPending>
+  | ReturnType<typeof appBootstrapSuccess>
+  | ReturnType<typeof appBootstrapError>;
+
+export type AppActionDataTypes = TAppReducerActions["type"];

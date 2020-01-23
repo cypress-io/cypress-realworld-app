@@ -1,9 +1,16 @@
 import React, { useEffect } from "react";
 import { Switch, Route } from "react-router";
 import { connect } from "react-redux";
+
 import { bootstrap } from "../actions/app";
+import { signInPending, signUpPending, signOutPending } from "../actions/auth";
 import { IAppState } from "../reducers";
 import TransactionList from "../components/TransactionList";
+import PrivateRoute from "../components/PrivateRoute";
+import Layout from "../components/Layout";
+import SignIn from "../components/SignIn";
+import { User } from "../models";
+import SignUp from "../components/SignUp";
 
 export interface OwnProps {
   history?: object;
@@ -11,17 +18,25 @@ export interface OwnProps {
 
 interface StateProps {
   isBootstrapped: boolean;
+  isLoggedIn: boolean;
 }
 
 interface DispatchProps {
   bootstrapApp: () => void;
+  signInPending: (payload: Partial<User>) => void;
+  signUpPending: (payload: Partial<User>) => void;
+  signOutPending: () => void;
 }
 
 type Props = StateProps & DispatchProps & OwnProps;
 
-const TransactionDetail = () => <div>Transaction Detail</div>;
-
-const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
+const App: React.FC<Props> = ({
+  isBootstrapped,
+  bootstrapApp,
+  signInPending,
+  signUpPending,
+  signOutPending
+}) => {
   useEffect(() => {
     if (!isBootstrapped) {
       bootstrapApp();
@@ -29,24 +44,33 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
   });
 
   return (
-    <>
-      <div>
-        <Switch>
-          <Route exact path="/" component={TransactionList} />
-          <Route path="/t/:id" component={TransactionDetail} />
-        </Switch>
-      </div>
-    </>
+    <Switch>
+      <PrivateRoute exact path="/">
+        <Layout signOutPending={signOutPending}>
+          <TransactionList />
+        </Layout>
+      </PrivateRoute>
+      <Route path="/signin">
+        <SignIn signInPending={signInPending} />
+      </Route>
+      <Route path="/signup">
+        <SignUp signUpPending={signUpPending} />
+      </Route>
+    </Switch>
   );
 };
 
 const mapStateToProps = (state: IAppState, ownProps: OwnProps) => ({
   history: ownProps.history,
-  isBootstrapped: state.app.isBootstrapped
+  isBootstrapped: state.app.isBootstrapped,
+  isLoggedIn: state.user.isLoggedIn
 });
 
 const dispatchProps = {
-  bootstrapApp: bootstrap
+  bootstrapApp: bootstrap,
+  signInPending,
+  signUpPending,
+  signOutPending
 };
 
 export default connect(mapStateToProps, dispatchProps)(App);

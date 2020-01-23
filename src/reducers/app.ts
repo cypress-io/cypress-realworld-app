@@ -1,35 +1,40 @@
-import { EAppActionTypes } from "./";
-import { TAppReducerActions } from "../actions/app";
-
-export interface Data {
-  id: number;
-  name: string;
-}
+import {
+  TAppReducerActions,
+  APP_BOOTSTRAP_PENDING,
+  APP_BOOTSTRAP_SUCCESS,
+  APP_BOOTSTRAP_ERROR
+} from "../actions/app";
+import { SIGNOUT_SUCCESS, SIGNOUT_ERROR, TAuthActions } from "../actions/auth";
 
 export interface AppState {
   isBootstrapped: boolean;
-  sampleData: Data[];
 }
 
 const initialState = {
-  isBootstrapped: false,
-  sampleData: []
+  isBootstrapped: false
 };
 
 export default function reducer(
   state: AppState = initialState,
-  action: TAppReducerActions
+  action: TAppReducerActions | TAuthActions
 ) {
   switch (action.type) {
-    case EAppActionTypes.APP_BOOTSTRAP:
+    case APP_BOOTSTRAP_PENDING:
+      return {
+        ...state,
+        isBootstrapped: false
+      };
+    case APP_BOOTSTRAP_SUCCESS:
       return {
         ...state,
         isBootstrapped: true
       };
-    case EAppActionTypes.APP_DATA_SUCCESS:
+    case APP_BOOTSTRAP_ERROR:
+    case SIGNOUT_SUCCESS:
+    case SIGNOUT_ERROR:
       return {
         ...state,
-        sampleData: action.payload.data
+        isBootstrapped: false
       };
     default:
       return state;

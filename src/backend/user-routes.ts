@@ -3,10 +3,9 @@
 import express from "express";
 import validator from "validator";
 import _ from "lodash";
-import shortid from "shortid";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
-import db from "./database";
+import { getAllUsers, createUser, getUserBy, updateUserById } from "./database";
 import { User } from "../models/user";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import {
@@ -27,9 +26,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
   //   - default: scoped user contacts first, then all other users
   //   - "top_first": contacts with most transactions first
 
-  const users = db()
-    .get("users")
-    .value();
+  const users = getAllUsers();
   res.status(200).json({ users });
 });
 
@@ -47,29 +44,17 @@ router.get(
     // https://github.com/typicode/json-server/blob/dfea2b34007e731770ca2f4e576b1f1908952b68/src/server/router/plural.js#L86
 
     if (validator.isEmail(q)) {
-      users = db()
-        .get("users")
-        // @ts-ignore
-        .find({ email: q })
-        .value();
+      users = getUserBy("email", q);
       return res.status(200).json({ users });
     }
 
     const phoneNumber = parsePhoneNumberFromString(q);
     if (phoneNumber) {
-      users = db()
-        .get("users")
-        // @ts-ignore
-        .find({ phone_number: phoneNumber.number })
-        .value();
+      users = getUserBy("phone_number", phoneNumber.number);
       return res.status(200).json({ users });
     }
 
-    users = db()
-      .get("users")
-      // @ts-ignore
-      .find({ username: q })
-      .value();
+    users = getUserBy("username", q);
 
     res.status(200).json({ users });
   }
@@ -80,26 +65,12 @@ router.post(
   userFieldsValidator,
   validateMiddleware(isUserValidator),
   (req, res) => {
-    // TODO: validate post via joi
-    const user: User = req.body;
+    const userDetails: User = req.body;
 
-    const id = shortid();
-    user.id = id;
-
-    db()
-      .get("users")
-      // @ts-ignore
-      .push(user)
-      .write();
-
-    const record = db()
-      .get("users")
-      // @ts-ignore
-      .find({ id })
-      .value();
+    const user = createUser(userDetails);
 
     res.status(201);
-    res.json({ user: record });
+    res.json({ user: user });
   }
 );
 
@@ -117,11 +88,7 @@ router.get(
       });
     }
 
-    const user = db()
-      .get("users")
-      // @ts-ignore
-      .find({ id: user_id })
-      .value();
+    const user = getUserBy("id", user_id);
 
     res.status(200);
     res.json({ user });
@@ -131,12 +98,11 @@ router.get(
 router.get("/profile/:username", (req, res) => {
   const { username } = req.params;
 
-  const user = db()
-    .get("users")
-    // @ts-ignore
-    .find({ username })
-    .pick(["first_name", "last_name", "avatar"])
-    .value();
+  const user = _.pick(getUserBy("username", username), [
+    "first_name",
+    "last_name",
+    "avatar"
+  ]);
 
   res.status(200);
   res.json({ user });
@@ -152,22 +118,9 @@ router.patch(
 
     const edits: User = req.body;
 
-    // make update to record
-    db()
-      .get("users")
-      // @ts-ignore
-      .find({ id: user_id })
-      .assign(edits)
-      .write();
+    updateUserById(user_id, edits);
 
-    const updatedRecord = db()
-      .get("users")
-      // @ts-ignore
-      .find({ id: user_id })
-      .value();
-
-    res.status(204);
-    res.json({ user: updatedRecord });
+    res.sendStatus(204);
   }
 );
 

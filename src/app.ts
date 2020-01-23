@@ -6,6 +6,7 @@ import logger from "morgan";
 import passport from "passport";
 import session from "express-session";
 import bodyParser from "body-parser";
+import cors from "cors";
 
 import auth from "./backend/auth";
 import userRoutes from "./backend/user-routes";
@@ -16,8 +17,14 @@ import likeRoutes from "./backend/like-routes";
 import commentRoutes from "./backend/comment-routes";
 import notificationRoutes from "./backend/notification-routes";
 
+const corsOption = {
+  origin: "http://localhost:3000",
+  credentials: true
+};
+
 const app = express();
 
+app.use(cors(corsOption));
 app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

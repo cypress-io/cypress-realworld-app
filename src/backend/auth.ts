@@ -1,7 +1,7 @@
 import passport from "passport";
 import express, { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import db from "./database";
+import { getUserBy } from "./database";
 import { User } from "../models/user";
 const LocalStrategy = require("passport-local").Strategy;
 const router = express.Router();
@@ -13,11 +13,7 @@ passport.use(
     password: string,
     done: Function
   ) {
-    const user = db()
-      .get("users")
-      // @ts-ignore
-      .find({ username: username })
-      .value();
+    const user = getUserBy("username", username);
 
     const failureMessage = "Incorrect username or password.";
     if (!user) {
@@ -38,13 +34,9 @@ passport.serializeUser(function(user: User, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  const user = db()
-    .get("users")
-    // @ts-ignore
-    .find({ id })
-    // TODO: Limit fields returned in deserialized user object?
-    //.pick(["id", "first_name", "last_name"])
-    .value();
+  const user = getUserBy("id", id);
+  // TODO: Limit fields returned in deserialized user object?
+  //.pick(["id", "first_name", "last_name"])
 
   done(null, user);
 });
@@ -64,6 +56,14 @@ router.post(
 router.post("/logout", (req: Request, res: Response): void => {
   req.logout();
   res.sendStatus(200);
+});
+
+router.get("/checkAuth", (req, res) => {
+  if (!req.user) {
+    res.status(401).json({ error: "User is unauthorised" });
+  } else {
+    res.status(200).json({ user: req.user });
+  }
 });
 
 export default router;

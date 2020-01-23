@@ -80,6 +80,7 @@ describe("Users API", function() {
   context("GET /users/search", function() {
     it("get users by email", function() {
       const { username, email, first_name } = this.currentUser;
+      cy.log(this.currentUser);
       cy.apiLogin(username);
 
       cy.request({
