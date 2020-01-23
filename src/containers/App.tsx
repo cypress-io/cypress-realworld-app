@@ -3,11 +3,10 @@ import { Switch, Route } from "react-router";
 import { connect } from "react-redux";
 
 import { bootstrap } from "../actions/app";
-import { signOutPending } from "../actions/auth";
 import { IRootReducerState } from "../reducers";
 import TransactionList from "../components/TransactionList";
 import PrivateRoute from "../components/PrivateRoute";
-import MainLayout from "../components/MainLayout";
+import MainContainer from "../containers/MainContainer";
 import SignIn from "../containers/SignIn";
 import SignUp from "../containers/SignUp";
 
@@ -18,16 +17,11 @@ interface StateProps {
 
 interface DispatchProps {
   bootstrapApp: () => void;
-  signOutPending: () => void;
 }
 
 type Props = StateProps & DispatchProps;
 
-const App: React.FC<Props> = ({
-  isBootstrapped,
-  bootstrapApp,
-  signOutPending
-}) => {
+const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
   useEffect(() => {
     if (!isBootstrapped) {
       bootstrapApp();
@@ -37,9 +31,9 @@ const App: React.FC<Props> = ({
   return (
     <Switch>
       <PrivateRoute exact path="/">
-        <MainLayout signOutPending={signOutPending}>
+        <MainContainer>
           <TransactionList />
-        </MainLayout>
+        </MainContainer>
       </PrivateRoute>
       <Route path="/signin">
         <SignIn />
@@ -57,8 +51,7 @@ const mapStateToProps = (state: IRootReducerState) => ({
 });
 
 const dispatchProps = {
-  bootstrapApp: bootstrap,
-  signOutPending
+  bootstrapApp: bootstrap
 };
 
 export default connect(mapStateToProps, dispatchProps)(App);

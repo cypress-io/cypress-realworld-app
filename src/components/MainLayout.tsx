@@ -47,6 +47,7 @@ interface Props {
 const MainLayout: React.FC<Props> = ({ signOutPending, children }) => {
   const classes = useStyles();
 
+  // TODO: Move drawer open/close state to MainContainer / Redux
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
