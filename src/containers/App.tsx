@@ -7,7 +7,7 @@ import { signInPending, signUpPending, signOutPending } from "../actions/auth";
 import { IRootReducerState } from "../reducers";
 import TransactionList from "../components/TransactionList";
 import PrivateRoute from "../components/PrivateRoute";
-import Layout from "../components/Layout";
+import MainLayout from "../components/MainLayout";
 import SignIn from "../components/SignIn";
 import { User } from "../models";
 import SignUp from "../components/SignUp";
@@ -46,9 +46,9 @@ const App: React.FC<Props> = ({
   return (
     <Switch>
       <PrivateRoute exact path="/">
-        <Layout signOutPending={signOutPending}>
+        <MainLayout signOutPending={signOutPending}>
           <TransactionList />
-        </Layout>
+        </MainLayout>
       </PrivateRoute>
       <Route path="/signin">
         <SignIn signInPending={signInPending} />
