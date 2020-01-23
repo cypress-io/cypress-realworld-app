@@ -1,9 +1,9 @@
 import { createLogic } from "redux-logic";
-import { EAppActionTypes } from "../reducers";
+import { APP_BOOTSTRAP } from "../actions/app";
 import { appBootstrapSuccess, appBootstrapError } from "../actions/app";
 
 const appBootstrapLogic = createLogic({
-  type: EAppActionTypes.APP_BOOTSTRAP,
+  type: APP_BOOTSTRAP,
 
   // @ts-ignore
   async process({ httpClient }, dispatch, done) {

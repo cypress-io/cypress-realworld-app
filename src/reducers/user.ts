@@ -1,5 +1,5 @@
-import { EAppActionTypes, ESignInActionTypes } from "./";
-import { TAppReducerActions } from "../actions/app";
+import { ESignInActionTypes } from "./";
+import { TAppReducerActions, APP_BOOTSTRAP_SUCCESS } from "../actions/app";
 import { TSignInReducerActions } from "../actions/auth";
 import { User } from "../models";
 
@@ -18,7 +18,7 @@ export default function reducer(
   action: TSignInReducerActions | TAppReducerActions
 ): UserState {
   switch (action.type) {
-    case EAppActionTypes.APP_BOOTSTRAP_SUCCESS:
+    case APP_BOOTSTRAP_SUCCESS:
       return {
         ...state,
         profile: action.payload.user

@@ -1,60 +1,36 @@
-import { EAppActionTypes } from "../reducers";
-import { User } from "../models";
+export const APP_BOOTSTRAP = "APP_BOOTSTRAP";
+export const APP_BOOTSTRAP_PENDING = "APP_BOOTSTRAP_PENDING";
+export const APP_BOOTSTRAP_SUCCESS = "APP_BOOTSTRAP_SUCCESS";
+export const APP_BOOTSTRAP_ERROR = "APP_BOOTSTRAP_ERROR";
 
-export interface IReduxBaseAction {
-  type: EAppActionTypes;
-}
+export const bootstrap = () =>
+  ({
+    type: APP_BOOTSTRAP
+  } as const);
 
-export interface IBootstrapAction extends IReduxBaseAction {
-  type: EAppActionTypes.APP_BOOTSTRAP;
-}
+export const appBootstrapPending = (payload: any) =>
+  ({
+    type: APP_BOOTSTRAP_PENDING,
+    payload
+  } as const);
 
-export interface IAppBootstrapPendingAction extends IReduxBaseAction {
-  type: EAppActionTypes.APP_BOOTSTRAP_PENDING;
-  payload: object;
-}
+export const appBootstrapSuccess = (payload: any) =>
+  ({
+    type: APP_BOOTSTRAP_SUCCESS,
+    payload
+  } as const);
 
-export interface IAppBootstrapSuccessAction extends IReduxBaseAction {
-  type: EAppActionTypes.APP_BOOTSTRAP_SUCCESS;
-  payload: {
-    user: User;
-  };
-}
-
-export interface IAppBootstrapErrorAction extends IReduxBaseAction {
-  type: EAppActionTypes.APP_BOOTSTRAP_ERROR;
-  payload: object;
-  error: true;
-}
-
-export const bootstrap = (): IBootstrapAction => ({
-  type: EAppActionTypes.APP_BOOTSTRAP
-});
-
-export const appBootstrapPending = (
-  payload: any
-): IAppBootstrapPendingAction => ({
-  type: EAppActionTypes.APP_BOOTSTRAP_PENDING,
-  payload
-});
-
-export const appBootstrapSuccess = (
-  payload: any
-): IAppBootstrapSuccessAction => ({
-  type: EAppActionTypes.APP_BOOTSTRAP_SUCCESS,
-  payload
-});
-
-export const appBootstrapError = (
-  payload: object
-): IAppBootstrapErrorAction => ({
-  type: EAppActionTypes.APP_BOOTSTRAP_ERROR,
-  payload,
-  error: true
-});
+export const appBootstrapError = (payload: any) =>
+  ({
+    type: APP_BOOTSTRAP_ERROR,
+    payload,
+    error: true
+  } as const);
 
 export type TAppReducerActions =
-  | IBootstrapAction
-  | IAppBootstrapPendingAction
-  | IAppBootstrapSuccessAction
-  | IAppBootstrapErrorAction;
+  | ReturnType<typeof bootstrap>
+  | ReturnType<typeof appBootstrapPending>
+  | ReturnType<typeof appBootstrapSuccess>
+  | ReturnType<typeof appBootstrapError>;
+
+export type AppActionDataTypes = TAppReducerActions["type"];

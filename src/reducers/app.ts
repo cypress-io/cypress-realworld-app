@@ -1,5 +1,9 @@
-import { EAppActionTypes } from "./";
-import { TAppReducerActions } from "../actions/app";
+import {
+  TAppReducerActions,
+  APP_BOOTSTRAP_PENDING,
+  APP_BOOTSTRAP_SUCCESS,
+  APP_BOOTSTRAP_ERROR
+} from "../actions/app";
 import { TSignInReducerActions } from "../actions/auth";
 import { AppState } from "../models";
 
@@ -12,17 +16,17 @@ export default function reducer(
   action: TAppReducerActions | TSignInReducerActions
 ) {
   switch (action.type) {
-    case EAppActionTypes.APP_BOOTSTRAP_PENDING:
+    case APP_BOOTSTRAP_PENDING:
       return {
         ...state,
         isBootstrapped: false
       };
-    case EAppActionTypes.APP_BOOTSTRAP_SUCCESS:
+    case APP_BOOTSTRAP_SUCCESS:
       return {
         ...state,
         isBootstrapped: true
       };
-    case EAppActionTypes.APP_BOOTSTRAP_ERROR:
+    case APP_BOOTSTRAP_ERROR:
       return {
         ...state,
         isBootstrapped: false
