@@ -3,7 +3,7 @@ import { Switch, Route } from "react-router";
 import { connect } from "react-redux";
 
 import { bootstrap } from "../actions/app";
-import { signInPending, signUpPending } from "../actions/auth";
+import { signInPending, signUpPending, signOutPending } from "../actions/auth";
 import { IAppState } from "../reducers";
 import TransactionList from "../components/TransactionList";
 import PrivateRoute from "../components/PrivateRoute";
@@ -25,6 +25,7 @@ interface DispatchProps {
   bootstrapApp: () => void;
   signInPending: (payload: Partial<User>) => void;
   signUpPending: (payload: Partial<User>) => void;
+  signOutPending: () => void;
 }
 
 type Props = StateProps & DispatchProps & OwnProps;
@@ -33,7 +34,8 @@ const App: React.FC<Props> = ({
   isBootstrapped,
   bootstrapApp,
   signInPending,
-  signUpPending
+  signUpPending,
+  signOutPending
 }) => {
   useEffect(() => {
     if (!isBootstrapped) {
@@ -44,7 +46,7 @@ const App: React.FC<Props> = ({
   return (
     <Switch>
       <PrivateRoute exact path="/">
-        <Layout>
+        <Layout signOutPending={signOutPending}>
           <TransactionList />
         </Layout>
       </PrivateRoute>
@@ -67,7 +69,8 @@ const mapStateToProps = (state: IAppState, ownProps: OwnProps) => ({
 const dispatchProps = {
   bootstrapApp: bootstrap,
   signInPending,
-  signUpPending
+  signUpPending,
+  signOutPending
 };
 
 export default connect(mapStateToProps, dispatchProps)(App);

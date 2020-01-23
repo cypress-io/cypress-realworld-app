@@ -1,5 +1,11 @@
 import { TAppReducerActions, APP_BOOTSTRAP_SUCCESS } from "../actions/app";
-import { TAuthActions, SIGNIN_SUCCESS, SIGNIN_ERROR } from "../actions/auth";
+import {
+  TAuthActions,
+  SIGNIN_SUCCESS,
+  SIGNIN_ERROR,
+  SIGNOUT_SUCCESS,
+  SIGNOUT_ERROR
+} from "../actions/auth";
 import { User } from "../models";
 
 export interface UserState {
@@ -28,6 +34,8 @@ export default function reducer(
         isLoggedIn: true
       };
     case SIGNIN_ERROR:
+    case SIGNOUT_SUCCESS:
+    case SIGNOUT_ERROR:
       return {
         ...state,
         isLoggedIn: false,

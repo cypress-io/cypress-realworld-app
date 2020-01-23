@@ -4,6 +4,7 @@ import {
   APP_BOOTSTRAP_SUCCESS,
   APP_BOOTSTRAP_ERROR
 } from "../actions/app";
+import { SIGNOUT_SUCCESS, SIGNOUT_ERROR, TAuthActions } from "../actions/auth";
 
 export interface AppState {
   isBootstrapped: boolean;
@@ -15,7 +16,7 @@ const initialState = {
 
 export default function reducer(
   state: AppState = initialState,
-  action: TAppReducerActions
+  action: TAppReducerActions | TAuthActions
 ) {
   switch (action.type) {
     case APP_BOOTSTRAP_PENDING:
@@ -29,6 +30,8 @@ export default function reducer(
         isBootstrapped: true
       };
     case APP_BOOTSTRAP_ERROR:
+    case SIGNOUT_SUCCESS:
+    case SIGNOUT_ERROR:
       return {
         ...state,
         isBootstrapped: false

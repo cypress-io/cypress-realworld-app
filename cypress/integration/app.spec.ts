@@ -55,5 +55,10 @@ describe("App", function() {
         .children()
         .should("have.length", 1);
     });
+
+    it("logs out", function() {
+      cy.getTest("sidenav-signout").click();
+      cy.location("pathname").should("eq", "/signin");
+    });
   });
 });

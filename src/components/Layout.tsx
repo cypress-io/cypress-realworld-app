@@ -52,13 +52,17 @@ export const mainListItems = (
   </div>
 );
 
-export const secondaryListItems = (
+export const secondaryListItems = (signOutPending: Function) => (
   <div>
     <ListItem button>
       <ListItemIcon>
         <LogoutIcon />
       </ListItemIcon>
-      <ListItemText primary="Logout" />
+      <ListItemText
+        primary="Logout"
+        data-test="sidenav-signout"
+        onClick={() => signOutPending()}
+      />
     </ListItem>
   </div>
 );
@@ -142,7 +146,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Layout: React.FC = ({ children }) => {
+interface Props {
+  signOutPending: () => void;
+  children: React.ReactNode;
+}
+
+const Layout: React.FC<Props> = ({ signOutPending, children }) => {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(true);
@@ -206,7 +215,7 @@ const Layout: React.FC = ({ children }) => {
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
-        <List>{secondaryListItems}</List>
+        <List>{secondaryListItems(signOutPending)}</List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
