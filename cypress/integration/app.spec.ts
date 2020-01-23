@@ -8,11 +8,30 @@ describe("App", function() {
   beforeEach(function() {
     cy.task("db:seed");
   });
+  beforeEach(function() {
+    cy.task("db:seed");
+  });
   context("Public Routes", function() {
     it("renders the signin page", function() {
       cy.visit("/signin")
         .get("#root")
         .should("contain", "Sign In");
+    });
+    it("signs up a user", function() {
+      cy.visit("/signup")
+        .get("#root")
+        .should("contain", "Sign Up");
+
+      cy.getTest("signup-first-name").type("First");
+      cy.getTest("signup-last-name").type("Last");
+      cy.getTest("signup-username").type("Username");
+
+      cy.getTest("signup-password").type("password");
+      cy.getTest("signup-confirmPassword").type("password");
+
+      cy.getTest("signup-submit").click();
+
+      cy.location("pathname").should("eq", "/signin");
     });
   });
 

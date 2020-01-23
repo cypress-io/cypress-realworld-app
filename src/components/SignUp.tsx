@@ -117,6 +117,24 @@ const SignUp: React.FC<Props> = ({ signUpPending }) => {
                   />
                 )}
               </Field>
+              <Field name="username">
+                {({ field, meta }: FieldProps) => (
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="username"
+                    label="Username"
+                    type="text"
+                    autoFocus
+                    data-test="signup-username"
+                    error={meta.touched && Boolean(meta.error)}
+                    helperText={meta.touched ? meta.error : ""}
+                    {...field}
+                  />
+                )}
+              </Field>
               <Field name="password">
                 {({ field, meta }: FieldProps) => (
                   <TextField
@@ -134,16 +152,16 @@ const SignUp: React.FC<Props> = ({ signUpPending }) => {
                   />
                 )}
               </Field>
-              <Field name="confirmpassword">
+              <Field name="confirmPassword">
                 {({ field, meta }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="normal"
                     required
                     fullWidth
-                    label="ConfirmPassword"
-                    id="confirmpassword"
-                    data-test="signup-confirmpassword"
+                    label="Confirm Password"
+                    id="confirmPassword"
+                    data-test="signup-confirmPassword"
                     type="password"
                     error={meta.touched && Boolean(meta.error)}
                     helperText={meta.touched ? meta.error : ""}
