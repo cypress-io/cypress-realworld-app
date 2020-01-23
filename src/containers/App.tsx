@@ -3,18 +3,14 @@ import { Switch, Route } from "react-router";
 import { connect } from "react-redux";
 
 import { bootstrap } from "../actions/app";
-import { signInPending, signUpPending, signOutPending } from "../actions/auth";
+import { signInPending, signOutPending } from "../actions/auth";
 import { IRootReducerState } from "../reducers";
 import TransactionList from "../components/TransactionList";
 import PrivateRoute from "../components/PrivateRoute";
 import MainLayout from "../components/MainLayout";
 import SignIn from "../components/SignIn";
 import { User } from "../models";
-import SignUp from "../components/SignUp";
-
-export interface OwnProps {
-  history?: object;
-}
+import SignUp from "../containers/SignUp";
 
 interface StateProps {
   isBootstrapped: boolean;
@@ -24,17 +20,15 @@ interface StateProps {
 interface DispatchProps {
   bootstrapApp: () => void;
   signInPending: (payload: Partial<User>) => void;
-  signUpPending: (payload: Partial<User>) => void;
   signOutPending: () => void;
 }
 
-type Props = StateProps & DispatchProps & OwnProps;
+type Props = StateProps & DispatchProps;
 
 const App: React.FC<Props> = ({
   isBootstrapped,
   bootstrapApp,
   signInPending,
-  signUpPending,
   signOutPending
 }) => {
   useEffect(() => {
@@ -54,14 +48,13 @@ const App: React.FC<Props> = ({
         <SignIn signInPending={signInPending} />
       </Route>
       <Route path="/signup">
-        <SignUp signUpPending={signUpPending} />
+        <SignUp />
       </Route>
     </Switch>
   );
 };
 
-const mapStateToProps = (state: IRootReducerState, ownProps: OwnProps) => ({
-  history: ownProps.history,
+const mapStateToProps = (state: IRootReducerState) => ({
   isBootstrapped: state.app.isBootstrapped,
   isLoggedIn: state.user.isLoggedIn
 });
@@ -69,7 +62,6 @@ const mapStateToProps = (state: IRootReducerState, ownProps: OwnProps) => ({
 const dispatchProps = {
   bootstrapApp: bootstrap,
   signInPending,
-  signUpPending,
   signOutPending
 };
 
