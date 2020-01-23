@@ -1751,10 +1751,10 @@
   resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.0.0.tgz#ba83436edfac1d1ffd0e94797d43419c20ad49b8"
   integrity sha512-XxD4A5YMIH70ddjG7BJBUz7RWVQAwIP/36Eoyh0DsaWp92OAeXkrbtSEaYkynBPTsN9Uv2mZq9QWZYILl2Svrw==
 
-"@hapi/joi@17.0.0":
-  version "17.0.0"
-  resolved "https://registry.yarnpkg.com/@hapi/joi/-/joi-17.0.0.tgz#db72e68cf1741b422ff7efe84e0218aae755ce6f"
-  integrity sha512-96Su6qSTW0OcFb95GHELBiqI2hmnWvo1doJ0BAFsmDcSKkOvGUSUbG6g0koh6oLI7RBd2hNljnkJw61WYyfIhw==
+"@hapi/joi@17.1.0":
+  version "17.1.0"
+  resolved "https://registry.yarnpkg.com/@hapi/joi/-/joi-17.1.0.tgz#cc4000b6c928a6a39b9bef092151b6bdee10ce55"
+  integrity sha512-ob67RcPlwRWxBzLCnWvcwx5qbwf88I3ykD7gcJLWOTRfLLgosK7r6aeChz4thA3XRvuBfI0KB1tPVl2EQFlPXw==
   dependencies:
     "@hapi/address" "^4.0.0"
     "@hapi/formula" "^2.0.0"
