@@ -1,11 +1,10 @@
 import { createLogic } from "redux-logic";
-import { ESignInActionTypes } from "../reducers";
 import { bootstrap } from "../actions/app";
-import { signInSuccess, signInError } from "../actions/auth";
+import { SIGNIN_PENDING, signInSuccess, signInError } from "../actions/auth";
 import { history } from "../index";
 
 const signInLogic = createLogic({
-  type: ESignInActionTypes.SIGNIN_PENDING,
+  type: SIGNIN_PENDING,
 
   // @ts-ignore
   async process({ httpClient, action }, dispatch, done) {

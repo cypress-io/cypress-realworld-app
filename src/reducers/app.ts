@@ -4,8 +4,10 @@ import {
   APP_BOOTSTRAP_SUCCESS,
   APP_BOOTSTRAP_ERROR
 } from "../actions/app";
-import { TSignInReducerActions } from "../actions/auth";
-import { AppState } from "../models";
+
+export interface AppState {
+  isBootstrapped: boolean;
+}
 
 const initialState = {
   isBootstrapped: false
@@ -13,7 +15,7 @@ const initialState = {
 
 export default function reducer(
   state: AppState = initialState,
-  action: TAppReducerActions | TSignInReducerActions
+  action: TAppReducerActions
 ) {
   switch (action.type) {
     case APP_BOOTSTRAP_PENDING:
