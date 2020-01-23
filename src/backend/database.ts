@@ -19,8 +19,7 @@ import {
   CommentNotification,
   NotificationType,
   NotificationPayloadType,
-  NotificationsType,
-  PaymentNotificationPayload
+  NotificationsType
 } from "../models";
 
 const USER_TABLE = "users";
@@ -114,8 +113,49 @@ export const getByObj = (entity: string, query: object) =>
 export const getUserBy = (key: string, value: any) =>
   getBy(USER_TABLE, key, value);
 export const getUsersBy = (key: string, value: any) => {
-  const users = getBy(USER_TABLE, key, value);
-  return users ? Array.of(getBy(USER_TABLE, key, value)) : [];
+  getAllBy(USER_TABLE, key, value);
+};
+
+export const createUser = (userDetails: Partial<User>): User => {
+  const user: User = {
+    id: shortid(),
+    uuid: v4(),
+    first_name: userDetails.first_name!,
+    last_name: userDetails.last_name!,
+    username: userDetails.username!,
+    password: userDetails.password!,
+    email: userDetails.email!,
+    phone_number: userDetails.phone_number!,
+    balance: userDetails.balance!,
+    avatar: userDetails.avatar!,
+    default_privacy_level: userDetails.default_privacy_level!,
+    created_at: new Date(),
+    modified_at: new Date()
+  };
+
+  saveUser(user);
+  return user;
+};
+
+const saveUser = (user: User) => {
+  db()
+    .get(USER_TABLE)
+    // @ts-ignore
+    .push(user)
+    .write();
+};
+
+export const updateUserById = (userId: string, edits: Partial<User>) => {
+  const user = getUserBy("id", userId);
+
+  if (user) {
+    db()
+      .get(USER_TABLE)
+      // @ts-ignore
+      .find(user)
+      .assign(edits)
+      .write();
+  }
 };
 
 // Contact
