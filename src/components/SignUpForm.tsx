@@ -47,11 +47,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface Props {
-  history?: object;
   signUpPending: (payload: Partial<User>) => void;
 }
 
-const SignUp: React.FC<Props> = ({ signUpPending }) => {
+const SignUpForm: React.FC<Props> = ({ signUpPending }) => {
   const classes = useStyles();
   const initialValues: Partial<User> & { confirmPassword: string } = {
     firstName: "",
@@ -196,4 +195,4 @@ const SignUp: React.FC<Props> = ({ signUpPending }) => {
   );
 };
 
-export default SignUp;
+export default SignUpForm;

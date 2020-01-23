@@ -7,6 +7,6 @@ const rootReducer = combineReducers({
   user
 });
 
-export type IAppState = ReturnType<typeof rootReducer>;
+export type IRootReducerState = ReturnType<typeof rootReducer>;
 
 export default rootReducer;
