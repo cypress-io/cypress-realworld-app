@@ -63,7 +63,7 @@
     "shortid": "2.2.15",
     "supertest": "4.0.2",
     "ts-node": "8.6.2",
-    "typescript": "3.7.4",
+    "typescript": "3.7.5",
     "yup": "0.28.0"
   },
   "devDependencies": {
