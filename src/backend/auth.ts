@@ -1,7 +1,7 @@
 import passport from "passport";
 import express, { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { getUserBy } from "./database";
+import { getUserBy, getUserById } from "./database";
 import { User } from "../models/user";
 const LocalStrategy = require("passport-local").Strategy;
 const router = express.Router();
@@ -33,8 +33,8 @@ passport.serializeUser(function(user: User, done) {
   done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
-  const user = getUserBy("id", id);
+passport.deserializeUser(function(id: string, done) {
+  const user = getUserById(id);
   // TODO: Limit fields returned in deserialized user object?
   //.pick(["id", "firstName", "lastName"])
 

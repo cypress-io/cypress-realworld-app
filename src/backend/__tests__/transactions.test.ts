@@ -11,14 +11,17 @@ import {
   getTransactionsByUserId,
   updateTransactionById,
   getTransactionById,
-  getPublicTransactionsDefaultSort
+  getPublicTransactionsDefaultSort,
+  getUserBy,
+  getUserById
 } from "../database";
 
 import {
   User,
   Transaction,
   RequestStatus,
-  DefaultPrivacyLevel
+  DefaultPrivacyLevel,
+  TransactionResponseItem
 } from "../../models";
 
 describe("Transactions", () => {
@@ -133,5 +136,19 @@ describe("Transactions", () => {
 
     const updatedTransaction = getTransactionById(transaction.id);
     expect(updatedTransaction.requestStatus).toEqual("rejected");
+  });
+
+  it("should add retreiverName and senderName to a list of transactions for a user for API response", () => {
+    const userToLookup: User = getAllUsers()[0];
+
+    const result = getPublicTransactionsDefaultSort(userToLookup.id);
+
+    const transaction = result.public[0];
+    const { receiverId, senderId, receiverName, senderName } = transaction;
+    const receiver = getUserById(receiverId);
+    const sender = getUserById(senderId);
+
+    expect(receiverName).toBe(`${receiver.firstName} ${receiver.lastName}`);
+    expect(senderName).toBe(`${sender.firstName} ${sender.lastName}`);
   });
 });

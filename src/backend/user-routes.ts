@@ -88,7 +88,7 @@ router.get(
       });
     }
 
-    const user = getUserBy("id", userId);
+    const user = getUserById(userId);
 
     res.status(200);
     res.json({ user });

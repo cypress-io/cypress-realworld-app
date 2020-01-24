@@ -1,4 +1,5 @@
 import { DefaultPrivacyLevel } from "./user";
+
 export enum TransactionStatus {
   pending = "pending",
   incomplete = "incomplete",
@@ -26,4 +27,9 @@ export interface Transaction {
   requestResolvedAt?: Date;
   createdAt: Date;
   modifiedAt: Date;
+}
+
+export interface TransactionResponseItem extends Transaction {
+  receiverName: string;
+  senderName: string;
 }

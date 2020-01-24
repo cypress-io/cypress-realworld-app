@@ -19,7 +19,8 @@ import {
   CommentNotification,
   NotificationType,
   NotificationPayloadType,
-  NotificationsType
+  NotificationsType,
+  TransactionResponseItem
 } from "../models";
 
 const USER_TABLE = "users";
@@ -112,6 +113,7 @@ export const getByObj = (entity: string, query: object) =>
 // User
 export const getUserBy = (key: string, value: any) =>
   getBy(USER_TABLE, key, value);
+export const getUserById = (id: string) => getUserBy("id", id);
 export const getUsersBy = (key: string, value: any) => {
   getAllBy(USER_TABLE, key, value);
 };
@@ -146,7 +148,7 @@ const saveUser = (user: User) => {
 };
 
 export const updateUserById = (userId: string, edits: Partial<User>) => {
-  const user = getUserBy("id", userId);
+  const user = getUserById(userId);
 
   if (user) {
     db()
@@ -282,13 +284,30 @@ export const getTransactionsBy = (key: string, value: string) =>
   getAllBy(TRANSACTION_TABLE, key, value);
 export const getTransactionsByObj = (query: object) =>
   getAllByObj(TRANSACTION_TABLE, query);
+
+export const formatTransactionsForApiResponse = (
+  transactions: Transaction[]
+): TransactionResponseItem[] =>
+  transactions.map(transaction => {
+    const receiver = getUserById(transaction.receiverId);
+    const sender = getUserById(transaction.senderId);
+
+    return {
+      receiverName: `${receiver.firstName} ${receiver.lastName}`,
+      senderName: `${sender.firstName} ${sender.lastName}`,
+      ...transaction
+    };
+  });
+
 export const getTransactionsForUserByObj = (userId: string, query?: object) => {
   const transactions: Transaction[] = getTransactionsByObj({
     receiverId: userId,
     ...query
   });
+
   return transactions;
 };
+
 export const getTransactionsByUserId = (userId: string) => {
   const transactions: Transaction[] = getTransactionsBy("receiverId", userId);
   return transactions;
@@ -315,8 +334,8 @@ export const getPublicTransactionsDefaultSort = (userId: string) => {
   );
 
   return {
-    contacts: contactsTransactions,
-    public: nonContactPublicTransactions
+    contacts: formatTransactionsForApiResponse(contactsTransactions),
+    public: formatTransactionsForApiResponse(nonContactPublicTransactions)
   };
 };
 
