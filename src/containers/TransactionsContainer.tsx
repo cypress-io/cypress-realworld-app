@@ -3,22 +3,26 @@ import { connect } from "react-redux";
 import MainContainer from "./MainContainer";
 import TransactionList from "../components/TransactionList";
 import { IRootReducerState } from "../reducers";
-import { Transaction } from "../models";
+import { TransactionResponseItem } from "../models";
 import { useRouteMatch } from "react-router";
 
 export interface Props {
-  publicTransactions: Transaction[];
+  publicTransactions: TransactionResponseItem[];
 }
 
 const TransactionsContainer: React.FC<Props> = ({ publicTransactions }) => {
   const match = useRouteMatch();
 
   let transactions = publicTransactions;
-  if (match.url === "/friends") {
-    // transactions = friendsTransactions;
-  } else if (match.url === "/personal") {
-    // transactions = personalTransactions;
-  }
+
+  const transactionUrls: any = {
+    "/": publicTransactions,
+    "/public": publicTransactions
+    // '/friends': contactTransactions,
+    // '/personal': personalTransactions,
+  };
+
+  transactions = transactionUrls[match.url];
 
   return (
     <MainContainer>
