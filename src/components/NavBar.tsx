@@ -9,6 +9,8 @@ import Badge from "@material-ui/core/Badge";
 import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 
+import NavTabs from "./NavTabs";
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -83,6 +85,7 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, handleDrawerOpen }) => {
           </Badge>
         </IconButton>
       </Toolbar>
+      <NavTabs />
     </AppBar>
   );
 };
