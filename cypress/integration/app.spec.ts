@@ -53,7 +53,7 @@ describe("App", function() {
     it("renders transaction list", function() {
       cy.getTest("transaction-list")
         .children()
-        .should("have.length", 1);
+        .should("have.length", 4);
     });
 
     it("logs out", function() {
