@@ -2,10 +2,10 @@ import React from "react";
 import Typography from "@material-ui/core/Typography";
 import TransactionItem from "./TransactionItem";
 import List from "@material-ui/core/List";
-import { Transaction } from "../models";
+import { TransactionResponseItem } from "../models";
 
 export interface TransactionListProps {
-  transactions: Transaction[];
+  transactions: TransactionResponseItem[];
 }
 
 const TransactionList: React.FC<TransactionListProps> = ({ transactions }) => (

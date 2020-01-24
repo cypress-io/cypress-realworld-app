@@ -4,10 +4,10 @@ import {
   TRANSACTIONS_PUBLIC_ERROR
 } from "../actions/transactions";
 import { TAuthActions, SIGNOUT_SUCCESS, SIGNOUT_ERROR } from "../actions/auth";
-import { Transaction } from "../models";
+import { TransactionResponseItem } from "../models";
 
 export interface TransactionsState {
-  public: Transaction[];
+  public: TransactionResponseItem[];
 }
 
 const initialState = {
