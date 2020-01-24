@@ -5,7 +5,13 @@ import validator from "validator";
 import _ from "lodash";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
-import { getAllUsers, createUser, getUserBy, updateUserById } from "./database";
+import {
+  getAllUsers,
+  createUser,
+  getUserBy,
+  updateUserById,
+  getUserById
+} from "./database";
 import { User } from "../models/user";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import {
