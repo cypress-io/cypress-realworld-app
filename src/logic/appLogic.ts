@@ -2,6 +2,7 @@ import { createLogic } from "redux-logic";
 import { APP_BOOTSTRAP } from "../actions/app";
 import { appBootstrapSuccess, appBootstrapError } from "../actions/app";
 import { transactionsPublicPending } from "../actions/transactions";
+import { signOutPending } from "../actions/auth";
 
 const appBootstrapLogic = createLogic({
   type: APP_BOOTSTRAP,
@@ -23,6 +24,7 @@ const appBootstrapLogic = createLogic({
     } catch (error) {
       // @ts-ignore
       dispatch(appBootstrapError({ error: "Unauthorized" }));
+      dispatch(signOutPending());
     }
 
     done();
