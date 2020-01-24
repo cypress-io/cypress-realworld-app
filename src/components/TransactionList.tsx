@@ -14,9 +14,10 @@ const TransactionList: React.FC<TransactionListProps> = ({ transactions }) => (
       Recent Transactions
     </Typography>
     <List data-test="transaction-list">
-      {transactions.map((i: any) => (
-        <TransactionItem transaction={i} />
-      ))}
+      {transactions &&
+        transactions.map((i: any) => (
+          <TransactionItem key={i.id} transaction={i} />
+        ))}
     </List>
   </>
 );

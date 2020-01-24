@@ -8,7 +8,7 @@ type TransactionProps = {
 
 const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => (
   <ListItem>
-    <ListItemText primary={transaction.id} />
+    <ListItemText primary={transaction.description} />
   </ListItem>
 );
 

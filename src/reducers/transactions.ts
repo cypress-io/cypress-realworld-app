@@ -22,7 +22,7 @@ export default function reducer(
     case TRANSACTIONS_PUBLIC_SUCCESS:
       return {
         ...state,
-        public: action.payload.transactions
+        public: action.payload
       };
     case TRANSACTIONS_PUBLIC_ERROR:
     case SIGNOUT_SUCCESS:
