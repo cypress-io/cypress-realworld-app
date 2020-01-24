@@ -24,7 +24,10 @@ const appBootstrapLogic = createLogic({
     } catch (error) {
       // @ts-ignore
       dispatch(appBootstrapError({ error: "Unauthorized" }));
-      dispatch(signOutPending());
+      const { pathname } = window.location;
+      if (!pathname.match("signin|signup")) {
+        dispatch(signOutPending());
+      }
     }
 
     done();
