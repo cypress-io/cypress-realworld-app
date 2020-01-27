@@ -6,16 +6,16 @@ import { User, Comment } from "../src/models";
 import { users, getRandomTransactions } from "./utils";
 
 export const createFakeComment = (
-  user_id: string,
-  transaction_id: string
+  userId: string,
+  transactionId: string
 ): Comment => ({
   id: shortid(),
   uuid: faker.random.uuid(),
   content: faker.lorem.words(),
-  user_id,
-  transaction_id,
-  created_at: faker.date.past(),
-  modified_at: faker.date.recent()
+  userId,
+  transactionId,
+  createdAt: faker.date.past(),
+  modifiedAt: faker.date.recent()
 });
 
 const comments = users.flatMap((user: User): Comment[] => {

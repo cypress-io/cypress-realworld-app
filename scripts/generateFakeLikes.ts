@@ -6,15 +6,15 @@ import { User, Like } from "../src/models";
 import { users, getRandomTransactions } from "./utils";
 
 export const createFakeLike = (
-  user_id: string,
-  transaction_id: string
+  userId: string,
+  transactionId: string
 ): Like => ({
   id: shortid(),
   uuid: faker.random.uuid(),
-  user_id,
-  transaction_id,
-  created_at: faker.date.past(),
-  modified_at: faker.date.recent()
+  userId,
+  transactionId,
+  createdAt: faker.date.past(),
+  modifiedAt: faker.date.recent()
 });
 
 const likes = users.flatMap((user: User): Like[] => {

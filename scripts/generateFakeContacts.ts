@@ -11,10 +11,10 @@ const contactRecords = users.map((user: User) => {
     .map(() => ({
       id: shortid(),
       uuid: faker.random.uuid(),
-      user_id: user.id,
-      contact_user_id: getOtherRandomUser(user.id).id,
-      created_at: faker.date.past(),
-      modified_at: faker.date.recent()
+      userId: user.id,
+      contactUserId: getOtherRandomUser(user.id).id,
+      createdAt: faker.date.past(),
+      modifiedAt: faker.date.recent()
     }));
 });
 

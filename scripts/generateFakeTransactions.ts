@@ -17,8 +17,8 @@ const isPayment = (type: string) => type === "payment";
 
 export const createTransaction = (
   account: BankAccount,
-  sender_id: string,
-  receiver_id: string,
+  senderId: string,
+  receiverId: string,
   type: "payment" | "request"
 ): Transaction => ({
   id: shortid(),
@@ -26,22 +26,22 @@ export const createTransaction = (
   source: account.id,
   amount: faker.finance.amount(),
   description: isPayment
-    ? `Payment: ${sender_id} to ${receiver_id}`
-    : `Request: ${receiver_id} to ${sender_id}`,
-  privacy_level: faker.helpers.randomize([
+    ? `Payment: ${senderId} to ${receiverId}`
+    : `Request: ${receiverId} to ${senderId}`,
+  privacyLevel: faker.helpers.randomize([
     DefaultPrivacyLevel.public,
     DefaultPrivacyLevel.private,
     DefaultPrivacyLevel.contacts
   ]),
-  receiver_id,
-  sender_id,
-  balance_at_completion: faker.finance.amount(),
+  receiverId,
+  senderId,
+  balanceAtCompletion: faker.finance.amount(),
   status: faker.helpers.randomize([
     TransactionStatus.pending,
     TransactionStatus.incomplete,
     TransactionStatus.complete
   ]),
-  request_status:
+  requestStatus:
     type === "request"
       ? RequestStatus.pending
       : faker.helpers.randomize([
@@ -49,9 +49,9 @@ export const createTransaction = (
           RequestStatus.accepted,
           RequestStatus.rejected
         ]),
-  request_resolved_at: faker.date.future(),
-  created_at: faker.date.past(),
-  modified_at: faker.date.recent()
+  requestResolvedAt: faker.date.future(),
+  createdAt: faker.date.past(),
+  modifiedAt: faker.date.recent()
 });
 
 export const createPayment = (account: BankAccount, user: User) =>
