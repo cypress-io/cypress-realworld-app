@@ -1916,10 +1916,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@types/yup@0.26.27":
-  version "0.26.27"
-  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.26.27.tgz#b928b1d644ffe98766e1440131222aefd3ca8f89"
-  integrity sha512-Rlsq3DExOHfWur75nQUAa5I0fXA2vSrw0u0qK3SI4PAkyOWjNzZsTaK+U9/sofWm3ttwWYn+C92pSq0s4rob4w==
+"@types/yup@0.26.28":
+  version "0.26.28"
+  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.26.28.tgz#6b8a98fb56ddb5c8a3a7f60996165221671c1ca1"
+  integrity sha512-DiT584YBKBENDzgk50LwiJLLOh+XgHpiy9p8PwSoOY696LpfrJRIeJ2AoBCG9KyjE8gWL4J64xDZgw15itecag==
 
 "@typescript-eslint/eslint-plugin@^2.8.0":
   version "2.17.0"
