@@ -3,7 +3,8 @@ import { APP_BOOTSTRAP } from "../actions/app";
 import { appBootstrapSuccess, appBootstrapError } from "../actions/app";
 import {
   transactionsPublicPending,
-  transactionsContactsPending
+  transactionsContactsPending,
+  transactionsPersonalPending
 } from "../actions/transactions";
 import { signOutPending } from "../actions/auth";
 
@@ -25,6 +26,7 @@ const appBootstrapLogic = createLogic({
       dispatch(appBootstrapSuccess({ user }));
       dispatch(transactionsPublicPending());
       dispatch(transactionsContactsPending());
+      dispatch(transactionsPersonalPending());
     } catch (error) {
       // @ts-ignore
       dispatch(appBootstrapError({ error: "Unauthorized" }));

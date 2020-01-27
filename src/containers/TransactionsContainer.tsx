@@ -13,11 +13,13 @@ export interface Props {
     public: TransactionResponseItem[];
   };
   contactsTransactions: TransactionResponseItem[];
+  personalTransactions: TransactionResponseItem[];
 }
 
 const TransactionsContainer: React.FC<Props> = ({
   publicTransactions,
-  contactsTransactions
+  contactsTransactions,
+  personalTransactions
 }) => {
   const match = useRouteMatch();
 
@@ -33,7 +35,14 @@ const TransactionsContainer: React.FC<Props> = ({
   }
 
   if (match.url === "/personal") {
-    return <MainContainer></MainContainer>;
+    return (
+      <MainContainer>
+        <TransactionList
+          header="Personal"
+          transactions={personalTransactions}
+        />
+      </MainContainer>
+    );
   }
 
   // match.url "/" or "/public"
@@ -46,7 +55,8 @@ const TransactionsContainer: React.FC<Props> = ({
 
 const mapStateToProps = (state: IRootReducerState) => ({
   publicTransactions: state.transactions.public,
-  contactsTransactions: state.transactions.contacts
+  contactsTransactions: state.transactions.contacts,
+  personalTransactions: state.transactions.personal
 });
 
 export default connect(mapStateToProps)(TransactionsContainer);

@@ -1,7 +1,8 @@
 import {
   TTransactionActions,
   TRANSACTIONS_PUBLIC_SUCCESS,
-  TRANSACTIONS_CONTACTS_SUCCESS
+  TRANSACTIONS_CONTACTS_SUCCESS,
+  TRANSACTIONS_PERSONAL_SUCCESS
 } from "../actions/transactions";
 import { TAuthActions, SIGNOUT_SUCCESS, SIGNOUT_ERROR } from "../actions/auth";
 import { TransactionResponseItem } from "../models";
@@ -12,6 +13,7 @@ export interface TransactionsState {
     public: TransactionResponseItem[];
   };
   contacts: TransactionResponseItem[];
+  personal: TransactionResponseItem[];
 }
 
 const initialState = {
@@ -19,7 +21,8 @@ const initialState = {
     contacts: [],
     public: []
   },
-  contacts: []
+  contacts: [],
+  personal: []
 };
 
 export default function reducer(
@@ -36,6 +39,11 @@ export default function reducer(
       return {
         ...state,
         contacts: action.payload
+      };
+    case TRANSACTIONS_PERSONAL_SUCCESS:
+      return {
+        ...state,
+        personal: action.payload
       };
     case SIGNOUT_SUCCESS:
     case SIGNOUT_ERROR:

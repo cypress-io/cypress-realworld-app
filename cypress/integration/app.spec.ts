@@ -71,6 +71,13 @@ describe("App", function() {
         .should("have.length", 7);
     });
 
+    it("renders personal transaction list", function() {
+      cy.getTest("nav-personal-tab").click();
+      cy.getTest("transaction-list")
+        .children()
+        .should("have.length", 3);
+    });
+
     it("logs out", function() {
       cy.getTest("sidenav-signout").click();
       cy.location("pathname").should("eq", "/signin");

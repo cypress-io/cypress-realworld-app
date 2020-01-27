@@ -35,7 +35,7 @@ export default function NavTabs() {
           data-test="nav-public-tab"
         />
         <Tab
-          label="Friends"
+          label="Contacts"
           component={Link}
           to="/contacts"
           data-test="nav-contacts-tab"

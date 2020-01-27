@@ -5,8 +5,27 @@ import {
   TRANSACTIONS_PUBLIC_ERROR,
   TRANSACTIONS_CONTACTS_PENDING,
   TRANSACTIONS_CONTACTS_SUCCESS,
-  TRANSACTIONS_CONTACTS_ERROR
+  TRANSACTIONS_CONTACTS_ERROR,
+  TRANSACTIONS_PERSONAL_PENDING,
+  TRANSACTIONS_PERSONAL_SUCCESS,
+  TRANSACTIONS_PERSONAL_ERROR
 } from "../actions/transactions";
+
+const transactionsPersonalLogic = createLogic({
+  type: TRANSACTIONS_PERSONAL_PENDING,
+  processOptions: {
+    dispatchReturn: true,
+    successType: TRANSACTIONS_PERSONAL_SUCCESS,
+    failType: TRANSACTIONS_PERSONAL_ERROR
+  },
+
+  // @ts-ignore
+  process({ httpClient }) {
+    return httpClient
+      .get(`http://localhost:3001/transactions`)
+      .then((resp: any) => resp.data.transactions);
+  }
+});
 
 const transactionsPublicLogic = createLogic({
   type: TRANSACTIONS_PUBLIC_PENDING,
@@ -40,4 +59,8 @@ const transactionsContactsLogic = createLogic({
   }
 });
 
-export default [transactionsPublicLogic, transactionsContactsLogic];
+export default [
+  transactionsPersonalLogic,
+  transactionsPublicLogic,
+  transactionsContactsLogic
+];
