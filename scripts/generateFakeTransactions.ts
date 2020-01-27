@@ -25,7 +25,7 @@ export const createTransaction = (
   uuid: faker.random.uuid(),
   source: account.id,
   amount: faker.finance.amount(),
-  description: isPayment
+  description: isPayment(type)
     ? `Payment: ${senderId} to ${receiverId}`
     : `Request: ${receiverId} to ${senderId}`,
   privacyLevel: faker.helpers.randomize([

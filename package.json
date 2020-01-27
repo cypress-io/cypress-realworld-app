@@ -76,6 +76,7 @@
     "db:seed:dev": "cp src/data/dev-seed.json src/data/database.json",
     "db:seed:test": "cp src/data/test-seed.json src/data/database.test.json",
     "db:updatedevseed": "cp src/data/test-seed.json src/data/dev-seed.json",
+    "predb:updatedevseed": "yarn db:seed:test",
     "postdb:updatedevseed": "yarn db:seed:dev",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
