@@ -33,11 +33,11 @@ describe("Transactions", () => {
   });
 
   it("should retrieve a list of all transactions", () => {
-    expect(getAllTransactions().length).toBe(20);
+    expect(getAllTransactions().length).toBe(30);
   });
 
   it("should retrieve a list of all public transactions", () => {
-    expect(getAllPublicTransactions().length).toBe(7);
+    expect(getAllPublicTransactions().length).toBe(10);
   });
 
   it("should retrieve a list of transactions for a user", () => {
@@ -54,7 +54,7 @@ describe("Transactions", () => {
     const result: Transaction[] = getTransactionsForUserContacts(
       userToLookup.id
     );
-    expect(result.length).toBe(9);
+    expect(result.length).toBe(11);
   });
 
   it("should retrieve a list of transactions for a users contacts - status 'incomplete'", () => {
@@ -71,12 +71,12 @@ describe("Transactions", () => {
     const contactsTransactions: Transaction[] = getTransactionsForUserContacts(
       user.id
     );
-    expect(contactsTransactions.length).toBe(9);
+    expect(contactsTransactions.length).toBe(11);
 
     const response = getPublicTransactionsDefaultSort(user.id);
 
-    expect(response.contacts.length).toBe(9);
-    expect(response.public.length).toBe(4);
+    expect(response.contacts.length).toBe(11);
+    expect(response.public.length).toBe(5);
     expect(response.contacts[8].id).toBe(contactsTransactions[8].id);
   });
 
@@ -124,7 +124,7 @@ describe("Transactions", () => {
     const user: User = getAllUsers()[0];
 
     const transactions = getTransactionsByUserId(user.id);
-    expect(transactions.length).toBe(4);
+    expect(transactions.length).toBe(6);
 
     const transaction = transactions[0];
     expect(transaction.requestStatus).not.toEqual("rejected");
