@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { Link } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
@@ -12,8 +12,19 @@ const useStyles = makeStyles({
 });
 
 export default function NavTabs() {
+  const match = useRouteMatch();
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+
+  // Route Lookup for tabs
+  const navUrls: any = {
+    "/": 0,
+    "/public": 0,
+    "/contacts": 1,
+    "/personal": 2
+  };
+
+  // Set selected route based on url
+  const [value, setValue] = React.useState(navUrls[match.url]);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
