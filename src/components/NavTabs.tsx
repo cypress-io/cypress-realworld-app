@@ -28,9 +28,24 @@ export default function NavTabs() {
         textColor="primary"
         centered
       >
-        <Tab label="Public" component={Link} to="/" />
-        <Tab label="Friends" component={Link} to="/friends" />
-        <Tab label="Personal" component={Link} to="/personal" />
+        <Tab
+          label="Public"
+          component={Link}
+          to="/"
+          data-test="nav-public-tab"
+        />
+        <Tab
+          label="Friends"
+          component={Link}
+          to="/contacts"
+          data-test="nav-contacts-tab"
+        />
+        <Tab
+          label="Personal"
+          component={Link}
+          to="/personal"
+          data-test="nav-personal-tab"
+        />
       </Tabs>
     </Paper>
   );

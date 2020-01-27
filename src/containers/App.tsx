@@ -29,7 +29,7 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
 
   return (
     <Switch>
-      <PrivateRoute exact path={"/(public|friends|personal)?"}>
+      <PrivateRoute exact path={"/(public|contacts|personal)?"}>
         <TransactionsContainer />
       </PrivateRoute>
       <Route path="/signin">

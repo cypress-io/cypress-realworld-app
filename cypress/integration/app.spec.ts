@@ -64,6 +64,13 @@ describe("App", function() {
         .should("have.length", 5);
     });
 
+    it("renders contacts transaction list", function() {
+      cy.getTest("nav-contacts-tab").click();
+      cy.getTest("transaction-list")
+        .children()
+        .should("have.length", 7);
+    });
+
     it("logs out", function() {
       cy.getTest("sidenav-signout").click();
       cy.location("pathname").should("eq", "/signin");

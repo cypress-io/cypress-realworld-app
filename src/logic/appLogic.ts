@@ -1,7 +1,10 @@
 import { createLogic } from "redux-logic";
 import { APP_BOOTSTRAP } from "../actions/app";
 import { appBootstrapSuccess, appBootstrapError } from "../actions/app";
-import { transactionsPublicPending } from "../actions/transactions";
+import {
+  transactionsPublicPending,
+  transactionsContactsPending
+} from "../actions/transactions";
 import { signOutPending } from "../actions/auth";
 
 const appBootstrapLogic = createLogic({
@@ -21,6 +24,7 @@ const appBootstrapLogic = createLogic({
 
       dispatch(appBootstrapSuccess({ user }));
       dispatch(transactionsPublicPending());
+      dispatch(transactionsContactsPending());
     } catch (error) {
       // @ts-ignore
       dispatch(appBootstrapError({ error: "Unauthorized" }));

@@ -5,19 +5,31 @@ import { IRootReducerState } from "../reducers";
 import { TransactionResponseItem } from "../models";
 import { useRouteMatch } from "react-router";
 import PublicTransactions from "../components/PublicTransactions";
+import TransactionList from "../components/TransactionList";
 
 export interface Props {
   publicTransactions: {
     contacts: TransactionResponseItem[];
     public: TransactionResponseItem[];
   };
+  contactsTransactions: TransactionResponseItem[];
 }
 
-const TransactionsContainer: React.FC<Props> = ({ publicTransactions }) => {
+const TransactionsContainer: React.FC<Props> = ({
+  publicTransactions,
+  contactsTransactions
+}) => {
   const match = useRouteMatch();
 
-  if (match.url === "/friends") {
-    return <MainContainer></MainContainer>;
+  if (match.url === "/contacts") {
+    return (
+      <MainContainer>
+        <TransactionList
+          header="Contacts"
+          transactions={contactsTransactions}
+        />
+      </MainContainer>
+    );
   }
 
   if (match.url === "/personal") {
@@ -33,7 +45,8 @@ const TransactionsContainer: React.FC<Props> = ({ publicTransactions }) => {
 };
 
 const mapStateToProps = (state: IRootReducerState) => ({
-  publicTransactions: state.transactions.public
+  publicTransactions: state.transactions.public,
+  contactsTransactions: state.transactions.contacts
 });
 
 export default connect(mapStateToProps)(TransactionsContainer);
