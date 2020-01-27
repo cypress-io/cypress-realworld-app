@@ -33,9 +33,6 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column"
-  },
-  fixedHeight: {
-    height: 240
   }
 }));
 
@@ -55,7 +52,6 @@ const MainLayout: React.FC<Props> = ({ signOutPending, children }) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -71,7 +67,7 @@ const MainLayout: React.FC<Props> = ({ signOutPending, children }) => {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <Paper className={fixedHeightPaper}>{children}</Paper>
+              <Paper>{children}</Paper>
             </Grid>
           </Grid>
           <Box pt={4}>
