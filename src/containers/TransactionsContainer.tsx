@@ -1,32 +1,33 @@
 import React from "react";
 import { connect } from "react-redux";
 import MainContainer from "./MainContainer";
-import TransactionList from "../components/TransactionList";
 import { IRootReducerState } from "../reducers";
 import { TransactionResponseItem } from "../models";
 import { useRouteMatch } from "react-router";
+import PublicTransactions from "../components/PublicTransactions";
 
 export interface Props {
-  publicTransactions: TransactionResponseItem[];
+  publicTransactions: {
+    contacts: TransactionResponseItem[];
+    public: TransactionResponseItem[];
+  };
 }
 
 const TransactionsContainer: React.FC<Props> = ({ publicTransactions }) => {
   const match = useRouteMatch();
 
-  let transactions = publicTransactions;
+  if (match.url === "/friends") {
+    return <MainContainer></MainContainer>;
+  }
 
-  const transactionUrls: any = {
-    "/": publicTransactions,
-    "/public": publicTransactions
-    // '/friends': contactTransactions,
-    // '/personal': personalTransactions,
-  };
+  if (match.url === "/personal") {
+    return <MainContainer></MainContainer>;
+  }
 
-  transactions = transactionUrls[match.url];
-
+  // match.url "/" or "/public"
   return (
     <MainContainer>
-      <TransactionList transactions={transactions} />
+      <PublicTransactions transactions={publicTransactions} />
     </MainContainer>
   );
 };

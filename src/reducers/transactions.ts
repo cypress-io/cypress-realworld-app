@@ -7,11 +7,17 @@ import { TAuthActions, SIGNOUT_SUCCESS, SIGNOUT_ERROR } from "../actions/auth";
 import { TransactionResponseItem } from "../models";
 
 export interface TransactionsState {
-  public: TransactionResponseItem[];
+  public: {
+    contacts: TransactionResponseItem[];
+    public: TransactionResponseItem[];
+  };
 }
 
 const initialState = {
-  public: []
+  public: {
+    contacts: [],
+    public: []
+  }
 };
 
 export default function reducer(
@@ -29,7 +35,10 @@ export default function reducer(
     case SIGNOUT_ERROR:
       return {
         ...state,
-        public: []
+        public: {
+          contacts: [],
+          public: []
+        }
       };
     default:
       return state;

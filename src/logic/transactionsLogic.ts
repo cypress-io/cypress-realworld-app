@@ -16,7 +16,7 @@ const transactionsPublicLogic = createLogic({
         `http://localhost:3001/transactions/public`
       );
 
-      const transactions = result.data.transactions.public;
+      const transactions = result.data.transactions;
 
       dispatch(transactionsPublicSuccess(transactions));
     } catch (error) {

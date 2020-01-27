@@ -50,8 +50,16 @@ describe("App", function() {
       cy.getTest("drawer-icon").should("not.be.visible");
     });
 
-    it("renders transaction list", function() {
+    it("renders public transaction lists (contacts, public)", function() {
+      cy.getTest("transaction-list").should("have.length", 2);
+
       cy.getTest("transaction-list")
+        .first()
+        .children()
+        .should("have.length", 11);
+
+      cy.getTest("transaction-list")
+        .last()
         .children()
         .should("have.length", 5);
     });
