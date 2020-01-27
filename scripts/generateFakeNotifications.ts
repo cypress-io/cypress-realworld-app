@@ -20,51 +20,51 @@ import {
 import { users, getRandomTransactions } from "./utils";
 
 export const createFakePaymentNotification = (
-  user_id: string,
-  transaction_id: string
+  userId: string,
+  transactionId: string
 ): PaymentNotification => ({
   id: shortid(),
   uuid: faker.random.uuid(),
-  user_id,
-  transaction_id,
+  userId,
+  transactionId,
   status: faker.helpers.randomize([
     PaymentNotificationStatus.received,
     PaymentNotificationStatus.requested,
     PaymentNotificationStatus.incomplete
   ]),
-  is_read: faker.helpers.randomize([true, false]),
-  created_at: faker.date.past(),
-  modified_at: faker.date.recent()
+  isRead: faker.helpers.randomize([true, false]),
+  createdAt: faker.date.past(),
+  modifiedAt: faker.date.recent()
 });
 
 export const createFakeLikeNotification = (
-  user_id: string,
-  transaction_id: string,
-  like_id: string
+  userId: string,
+  transactionId: string,
+  likeId: string
 ): LikeNotification => ({
   id: shortid(),
   uuid: faker.random.uuid(),
-  user_id,
-  like_id,
-  transaction_id,
-  is_read: faker.helpers.randomize([true, false]),
-  created_at: faker.date.past(),
-  modified_at: faker.date.recent()
+  userId,
+  likeId,
+  transactionId,
+  isRead: faker.helpers.randomize([true, false]),
+  createdAt: faker.date.past(),
+  modifiedAt: faker.date.recent()
 });
 
 export const createFakeCommentNotification = (
-  user_id: string,
-  transaction_id: string,
-  comment_id: string
+  userId: string,
+  transactionId: string,
+  commentId: string
 ): CommentNotification => ({
   id: shortid(),
   uuid: faker.random.uuid(),
-  user_id,
-  comment_id,
-  transaction_id,
-  is_read: faker.helpers.randomize([true, false]),
-  created_at: faker.date.past(),
-  modified_at: faker.date.recent()
+  userId,
+  commentId,
+  transactionId,
+  isRead: faker.helpers.randomize([true, false]),
+  createdAt: faker.date.past(),
+  modifiedAt: faker.date.recent()
 });
 
 const notifications = users.flatMap((user: User): NotificationType[] => {

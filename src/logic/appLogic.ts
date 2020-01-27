@@ -1,6 +1,12 @@
 import { createLogic } from "redux-logic";
 import { APP_BOOTSTRAP } from "../actions/app";
 import { appBootstrapSuccess, appBootstrapError } from "../actions/app";
+import {
+  transactionsPublicPending,
+  transactionsContactsPending,
+  transactionsPersonalPending
+} from "../actions/transactions";
+import { signOutPending } from "../actions/auth";
 
 const appBootstrapLogic = createLogic({
   type: APP_BOOTSTRAP,
@@ -18,9 +24,16 @@ const appBootstrapLogic = createLogic({
       const { user } = checkAuth.data;
 
       dispatch(appBootstrapSuccess({ user }));
+      dispatch(transactionsPublicPending());
+      dispatch(transactionsContactsPending());
+      dispatch(transactionsPersonalPending());
     } catch (error) {
       // @ts-ignore
       dispatch(appBootstrapError({ error: "Unauthorized" }));
+      const { pathname } = window.location;
+      if (!pathname.match("signin|signup")) {
+        dispatch(signOutPending());
+      }
     }
 
     done();

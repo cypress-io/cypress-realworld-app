@@ -1,40 +1,44 @@
 import React from "react";
-import { connect } from "react-redux";
 import Typography from "@material-ui/core/Typography";
-import { IRootReducerState } from "../reducers";
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
+
 import TransactionItem from "./TransactionItem";
 import List from "@material-ui/core/List";
+import { TransactionResponseItem } from "../models";
 
-export interface OwnProps {
-  history?: object;
+export interface TransactionListProps {
+  header: string;
+  transactions: TransactionResponseItem[];
 }
 
-interface StateProps {}
+const useStyles = makeStyles(theme => ({
+  paper: {
+    padding: theme.spacing(2),
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column"
+  }
+}));
 
-interface DispatchProps {}
+const TransactionList: React.FC<TransactionListProps> = ({
+  header,
+  transactions
+}) => {
+  const classes = useStyles();
+  return (
+    <Paper className={classes.paper}>
+      <Typography component="h2" variant="h6" color="primary" gutterBottom>
+        {header}
+      </Typography>
+      <List data-test="transaction-list">
+        {transactions &&
+          transactions.map((i: any) => (
+            <TransactionItem key={i.id} transaction={i} />
+          ))}
+      </List>
+    </Paper>
+  );
+};
 
-type Props = StateProps & DispatchProps & OwnProps;
-
-const TransactionList: React.FC<Props> = () => (
-  <>
-    <Typography component="h2" variant="h6" color="primary" gutterBottom>
-      Recent Transactions
-    </Typography>
-    <List data-test="transaction-list">
-      <TransactionItem
-        transaction={{ id: 1, to: "Kevin", from: "Amir", amount: 50 }}
-      />
-      {/*transactions.map((i: any) => (
-        <TransactionItem transaction={i} />
-      ))*/}
-    </List>
-  </>
-);
-
-const mapStateToProps = (state: IRootReducerState, ownProps: OwnProps) => ({
-  //data: state.app.sampleData
-});
-
-const dispatchProps = {};
-
-export default connect(mapStateToProps, dispatchProps)(TransactionList);
+export default TransactionList;

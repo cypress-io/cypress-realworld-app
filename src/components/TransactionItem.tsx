@@ -1,21 +1,28 @@
 import React from "react";
 import { ListItemText, ListItem } from "@material-ui/core";
-
-interface Transaction {
-  id: number;
-  to: string;
-  from: string;
-  amount: number;
-}
+import { TransactionResponseItem } from "../models";
 
 type TransactionProps = {
-  transaction: Transaction;
+  transaction: TransactionResponseItem;
 };
 
-const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => (
-  <ListItem>
-    <ListItemText primary="Test Item" />
-  </ListItem>
-);
+const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
+  // Payment
+  /*if (transaction.) {
+
+  }
+
+  // Request
+  if (transaction.requestStatus === "pending") {
+
+  }*/
+
+  return (
+    <ListItem>
+      <ListItemText primary={transaction.description} />
+      <ListItemText primary={transaction.amount} />
+    </ListItem>
+  );
+};
 
 export default TransactionItem;

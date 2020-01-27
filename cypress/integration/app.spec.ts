@@ -50,10 +50,38 @@ describe("App", function() {
       cy.getTest("drawer-icon").should("not.be.visible");
     });
 
-    it("renders transaction list", function() {
+    it("renders public transaction lists (contacts, public)", function() {
+      cy.getTest("transaction-list").should("have.length", 2);
+
+      cy.getTest("nav-public-tab").should("have.class", "Mui-selected");
+
+      cy.getTest("transaction-list")
+        .first()
+        .children()
+        .should("have.length", 11);
+
+      cy.getTest("transaction-list")
+        .last()
+        .children()
+        .should("have.length", 5);
+    });
+
+    it("renders contacts transaction list", function() {
+      cy.getTest("nav-contacts-tab")
+        .click()
+        .should("have.class", "Mui-selected");
       cy.getTest("transaction-list")
         .children()
-        .should("have.length", 1);
+        .should("have.length", 7);
+    });
+
+    it("renders personal transaction list", function() {
+      cy.getTest("nav-personal-tab")
+        .click()
+        .should("have.class", "Mui-selected");
+      cy.getTest("transaction-list")
+        .children()
+        .should("have.length", 3);
     });
 
     it("logs out", function() {

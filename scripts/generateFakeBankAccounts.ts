@@ -10,13 +10,13 @@ const bankAccounts = users.map(
     return {
       id: shortid(),
       uuid: faker.random.uuid(),
-      user_id: x.id,
-      bank_name: `${faker.company.companyName()} Bank`,
-      account_number: faker.finance.account(10),
-      routing_number: faker.finance.account(9),
-      is_deleted: faker.helpers.randomize([true, false]),
-      created_at: faker.date.past(),
-      modified_at: faker.date.recent()
+      userId: x.id,
+      bankName: `${faker.company.companyName()} Bank`,
+      accountNumber: faker.finance.account(10),
+      routingNumber: faker.finance.account(9),
+      isDeleted: faker.helpers.randomize([true, false]),
+      createdAt: faker.date.past(),
+      modifiedAt: faker.date.recent()
     };
   }
 );
