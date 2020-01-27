@@ -88,7 +88,7 @@ describe("Transactions API", function() {
       cy.request("GET", `${apiTransactions}/public`).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.transactions.contacts.length).to.eq(11);
-        expect(response.body.transactions.public.length).to.eq(4);
+        expect(response.body.transactions.public.length).to.eq(5);
       });
     });
   });
