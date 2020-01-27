@@ -53,6 +53,8 @@ describe("App", function() {
     it("renders public transaction lists (contacts, public)", function() {
       cy.getTest("transaction-list").should("have.length", 2);
 
+      cy.getTest("nav-public-tab").should("have.class", "Mui-selected");
+
       cy.getTest("transaction-list")
         .first()
         .children()
@@ -65,14 +67,18 @@ describe("App", function() {
     });
 
     it("renders contacts transaction list", function() {
-      cy.getTest("nav-contacts-tab").click();
+      cy.getTest("nav-contacts-tab")
+        .click()
+        .should("have.class", "Mui-selected");
       cy.getTest("transaction-list")
         .children()
         .should("have.length", 7);
     });
 
     it("renders personal transaction list", function() {
-      cy.getTest("nav-personal-tab").click();
+      cy.getTest("nav-personal-tab")
+        .click()
+        .should("have.class", "Mui-selected");
       cy.getTest("transaction-list")
         .children()
         .should("have.length", 3);

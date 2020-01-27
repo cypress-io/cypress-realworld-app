@@ -23,7 +23,7 @@ export default function NavTabs() {
     "/personal": 2
   };
 
-  // Set selected route based on url
+  // Set selected tab based on url
   const [value, setValue] = React.useState(navUrls[match.url]);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
