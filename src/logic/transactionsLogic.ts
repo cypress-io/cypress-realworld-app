@@ -8,7 +8,12 @@ import {
   TRANSACTIONS_CONTACTS_ERROR,
   TRANSACTIONS_PERSONAL_PENDING,
   TRANSACTIONS_PERSONAL_SUCCESS,
-  TRANSACTIONS_PERSONAL_ERROR
+  TRANSACTIONS_PERSONAL_ERROR,
+  TRANSACTIONS_LIKE_PENDING,
+  TRANSACTIONS_LIKE_SUCCESS,
+  TRANSACTIONS_LIKE_ERROR,
+  transactionsPublicPending,
+  transactionsContactsPending
 } from "../actions/transactions";
 
 const transactionsPersonalLogic = createLogic({
@@ -59,8 +64,52 @@ const transactionsContactsLogic = createLogic({
   }
 });
 
+const transactionsLikeLogic = createLogic({
+  type: TRANSACTIONS_LIKE_PENDING,
+  processOptions: {
+    dispatchReturn: true,
+    successType: TRANSACTIONS_LIKE_SUCCESS,
+    failType: TRANSACTIONS_LIKE_ERROR
+  },
+
+  // @ts-ignore
+  process({ httpClient, action }) {
+    return (
+      httpClient
+        // @ts-ignore
+        .post(`http://localhost:3001/likes/${action.payload.transactionId}`)
+        .then((resp: any) => resp.data)
+    );
+  }
+});
+
+const transactionsLikeSuccessLogic = createLogic({
+  type: TRANSACTIONS_LIKE_SUCCESS,
+
+  // @ts-ignore
+  // eslint-disable-next-line no-empty-pattern
+  process({}, dispatch) {
+    const { pathname } = window.location;
+
+    // Refresh transactions based on url
+    if (pathname.match("/|public")) {
+      dispatch(transactionsPublicPending());
+    }
+
+    if (pathname.match("contacts")) {
+      dispatch(transactionsContactsPending());
+    }
+
+    if (pathname.match("personal")) {
+      dispatch(transactionsContactsPending());
+    }
+  }
+});
+
 export default [
   transactionsPersonalLogic,
   transactionsPublicLogic,
-  transactionsContactsLogic
+  transactionsContactsLogic,
+  transactionsLikeLogic,
+  transactionsLikeSuccessLogic
 ];

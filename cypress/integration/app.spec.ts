@@ -7,9 +7,7 @@
 describe("App", function() {
   beforeEach(function() {
     cy.task("db:seed");
-  });
-  beforeEach(function() {
-    cy.task("db:seed");
+    Cypress.Cookies.preserveOnce("connect.sid");
   });
   context("Public Routes", function() {
     it("renders the signin page", function() {
@@ -64,6 +62,18 @@ describe("App", function() {
         .last()
         .children()
         .should("have.length", 5);
+    });
+
+    it("likes a transaction", function() {
+      cy.getTest(`transaction-like`)
+        .last()
+        .scrollIntoView()
+        .click();
+
+      cy.getTest(`transaction-like-count`)
+        .last()
+        .scrollIntoView()
+        .should("contain", 1);
     });
 
     it("renders contacts transaction list", function() {

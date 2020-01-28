@@ -291,10 +291,12 @@ export const formatTransactionsForApiResponse = (
   transactions.map(transaction => {
     const receiver = getUserById(transaction.receiverId);
     const sender = getUserById(transaction.senderId);
+    const likes = getLikesByTransactionId(transaction.id);
 
     return {
       receiverName: `${receiver.firstName} ${receiver.lastName}`,
       senderName: `${sender.firstName} ${sender.lastName}`,
+      likes,
       ...transaction
     };
   });
