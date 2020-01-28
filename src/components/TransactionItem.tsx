@@ -9,7 +9,6 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { TransactionResponseItem } from "../models";
-import CommentForm from "./CommentForm";
 import { useHistory } from "react-router";
 
 const useStyles = makeStyles({
@@ -23,15 +22,9 @@ const useStyles = makeStyles({
 
 type TransactionProps = {
   transaction: TransactionResponseItem;
-  transactionLike: Function;
-  transactionComment: Function;
 };
 
-const TransactionItem: React.FC<TransactionProps> = ({
-  transaction,
-  transactionLike,
-  transactionComment
-}) => {
+const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
   const classes = useStyles();
   const history = useHistory();
   // Payment
@@ -81,15 +74,11 @@ const TransactionItem: React.FC<TransactionProps> = ({
           <Button
             color="primary"
             size="small"
-            onClick={() => transactionLike({ transactionId: transaction.id })}
-            data-test={`transaction-like-${transaction.id}`}
+            onClick={() => showTransactionDetail(transaction.id)}
+            data-test={`transaction-view-${transaction.id}`}
           >
-            Like
+            View Transaction
           </Button>
-          <CommentForm
-            transactionId={transaction.id}
-            transactionComment={payload => transactionComment(payload)}
-          />
         </CardActions>
       </Card>
     </ListItem>
