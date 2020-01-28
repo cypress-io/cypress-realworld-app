@@ -19,7 +19,8 @@ import {
   transactionsContactsPending,
   TRANSACTION_DETAIL_PENDING,
   TRANSACTION_DETAIL_SUCCESS,
-  TRANSACTION_DETAIL_ERROR
+  TRANSACTION_DETAIL_ERROR,
+  transactionDetailPending
 } from "../actions/transactions";
 import { history } from "../index";
 
@@ -94,22 +95,22 @@ const transactionsLikeSuccessLogic = createLogic({
   type: TRANSACTIONS_LIKE_SUCCESS,
 
   // @ts-ignore
-  // eslint-disable-next-line no-empty-pattern
-  process({}, dispatch) {
+  process({ action }, dispatch, done) {
     const { pathname } = window.location;
+    // @ts-ignore
+    const { like } = action.payload;
 
-    // Refresh transactions based on url
-    if (pathname.match("/|public")) {
+    if (pathname.match("transaction")) {
+      dispatch(
+        transactionDetailPending({
+          transactionId: like.transactionId
+        })
+      );
       dispatch(transactionsPublicPending());
-    }
-
-    if (pathname.match("contacts")) {
+      dispatch(transactionsContactsPending());
       dispatch(transactionsContactsPending());
     }
-
-    if (pathname.match("personal")) {
-      dispatch(transactionsContactsPending());
-    }
+    done();
   }
 });
 
@@ -138,22 +139,22 @@ const transactionsCommentSuccessLogic = createLogic({
   type: TRANSACTIONS_COMMENT_SUCCESS,
 
   // @ts-ignore
-  // eslint-disable-next-line no-empty-pattern
-  process({}, dispatch) {
+  process({ action }, dispatch, done) {
     const { pathname } = window.location;
+    // @ts-ignore
+    const { comment } = action.payload;
 
-    // Refresh transactions based on url
-    if (pathname.match("/|public")) {
+    if (pathname.match("transaction")) {
+      dispatch(
+        transactionDetailPending({
+          transactionId: comment.transactionId
+        })
+      );
       dispatch(transactionsPublicPending());
-    }
-
-    if (pathname.match("contacts")) {
+      dispatch(transactionsContactsPending());
       dispatch(transactionsContactsPending());
     }
-
-    if (pathname.match("personal")) {
-      dispatch(transactionsContactsPending());
-    }
+    done();
   }
 });
 
