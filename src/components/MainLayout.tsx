@@ -56,7 +56,7 @@ const MainLayout: React.FC<Props> = ({ signOutPending, children }) => {
       />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
+        <Container maxWidth="md" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               {children}
