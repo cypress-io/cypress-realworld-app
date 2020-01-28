@@ -31,7 +31,8 @@ Cypress.Commands.add("apiLogin", (username, password = "s3cret") => {
   });
 });
 
-Cypress.Commands.add("getTest", s => cy.get(`[data-test*=${s}]`));
+Cypress.Commands.add("getTest", s => cy.get(`[data-test=${s}]`));
+Cypress.Commands.add("getTestLike", s => cy.get(`[data-test*=${s}]`));
 
 Cypress.Commands.add("login", (username, password = "s3cret") => {
   cy.visit("/signin");

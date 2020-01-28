@@ -292,11 +292,13 @@ export const formatTransactionsForApiResponse = (
     const receiver = getUserById(transaction.receiverId);
     const sender = getUserById(transaction.senderId);
     const likes = getLikesByTransactionId(transaction.id);
+    const comments = getCommentsByTransactionId(transaction.id);
 
     return {
       receiverName: `${receiver.firstName} ${receiver.lastName}`,
       senderName: `${sender.firstName} ${sender.lastName}`,
       likes,
+      comments,
       ...transaction
     };
   });

@@ -10,6 +10,9 @@ export const TRANSACTIONS_PERSONAL_ERROR = "TRANSACTIONS_PERSONAL_ERROR";
 export const TRANSACTIONS_LIKE_PENDING = "TRANSACTIONS_LIKE_PENDING";
 export const TRANSACTIONS_LIKE_SUCCESS = "TRANSACTIONS_LIKE_SUCCESS";
 export const TRANSACTIONS_LIKE_ERROR = "TRANSACTIONS_LIKE_ERROR";
+export const TRANSACTIONS_COMMENT_PENDING = "TRANSACTIONS_COMMENT_PENDING";
+export const TRANSACTIONS_COMMENT_SUCCESS = "TRANSACTIONS_COMMENT_SUCCESS";
+export const TRANSACTIONS_COMMENT_ERROR = "TRANSACTIONS_COMMENT_ERROR";
 
 export const transactionsPublicPending = () =>
   ({
@@ -83,6 +86,26 @@ export const transactionsLikeError = (payload: any) =>
     payload,
     error: true
   } as const);
+
+export const transactionsCommentPending = (payload: object) =>
+  ({
+    type: TRANSACTIONS_COMMENT_PENDING,
+    payload
+  } as const);
+
+export const transactionsCommentSuccess = (payload: any) =>
+  ({
+    type: TRANSACTIONS_COMMENT_SUCCESS,
+    payload
+  } as const);
+
+export const transactionsCommentError = (payload: any) =>
+  ({
+    type: TRANSACTIONS_COMMENT_ERROR,
+    payload,
+    error: true
+  } as const);
+
 export type TTransactionActions =
   | ReturnType<typeof transactionsPublicPending>
   | ReturnType<typeof transactionsPublicSuccess>
@@ -95,6 +118,9 @@ export type TTransactionActions =
   | ReturnType<typeof transactionsPersonalError>
   | ReturnType<typeof transactionsLikePending>
   | ReturnType<typeof transactionsLikeSuccess>
-  | ReturnType<typeof transactionsLikeError>;
+  | ReturnType<typeof transactionsLikeError>
+  | ReturnType<typeof transactionsCommentPending>
+  | ReturnType<typeof transactionsCommentSuccess>
+  | ReturnType<typeof transactionsCommentError>;
 
 export type TransactionActionDataTypes = TTransactionActions["type"];

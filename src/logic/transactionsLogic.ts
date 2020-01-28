@@ -12,6 +12,9 @@ import {
   TRANSACTIONS_LIKE_PENDING,
   TRANSACTIONS_LIKE_SUCCESS,
   TRANSACTIONS_LIKE_ERROR,
+  TRANSACTIONS_COMMENT_PENDING,
+  TRANSACTIONS_COMMENT_SUCCESS,
+  TRANSACTIONS_COMMENT_ERROR,
   transactionsPublicPending,
   transactionsContactsPending
 } from "../actions/transactions";
@@ -106,10 +109,56 @@ const transactionsLikeSuccessLogic = createLogic({
   }
 });
 
+const transactionsCommentLogic = createLogic({
+  type: TRANSACTIONS_COMMENT_PENDING,
+  processOptions: {
+    dispatchReturn: true,
+    successType: TRANSACTIONS_COMMENT_SUCCESS,
+    failType: TRANSACTIONS_COMMENT_ERROR
+  },
+
+  // @ts-ignore
+  process({ httpClient, action }) {
+    // @ts-ignore
+    const { payload } = action;
+
+    return httpClient
+      .post(`http://localhost:3001/comments/${payload.transactionId}`, {
+        content: payload.content
+      })
+      .then((resp: any) => resp.data);
+  }
+});
+
+const transactionsCommentSuccessLogic = createLogic({
+  type: TRANSACTIONS_COMMENT_SUCCESS,
+
+  // @ts-ignore
+  // eslint-disable-next-line no-empty-pattern
+  process({}, dispatch) {
+    const { pathname } = window.location;
+
+    // Refresh transactions based on url
+    if (pathname.match("/|public")) {
+      dispatch(transactionsPublicPending());
+    }
+
+    if (pathname.match("contacts")) {
+      dispatch(transactionsContactsPending());
+    }
+
+    if (pathname.match("personal")) {
+      dispatch(transactionsContactsPending());
+    }
+  }
+});
+
 export default [
   transactionsPersonalLogic,
   transactionsPublicLogic,
   transactionsContactsLogic,
   transactionsLikeLogic,
-  transactionsLikeSuccessLogic
+  transactionsLikeSuccessLogic,
+  transactionsCommentLogic,
+  transactionsCommentSuccessLogic
 ];
