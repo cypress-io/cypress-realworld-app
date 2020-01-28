@@ -60,6 +60,7 @@ const TransactionItem: React.FC<TransactionProps> = ({
         </CardContent>
         <CardActions>
           <Button
+            color="primary"
             size="small"
             onClick={() => transactionLike({ transactionId: transaction.id })}
             data-test={`transaction-like-${transaction.id}`}
