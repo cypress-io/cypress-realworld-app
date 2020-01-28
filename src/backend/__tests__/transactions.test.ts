@@ -138,7 +138,7 @@ describe("Transactions", () => {
     expect(updatedTransaction.requestStatus).toEqual("rejected");
   });
 
-  it("should add retreiverName and senderName to a list of transactions for a user for API response", () => {
+  it("should add additional fields (e.g. retreiverName, senderName, etc) to a list of transactions for a user for API response", () => {
     const userToLookup: User = getAllUsers()[0];
 
     const result = getPublicTransactionsDefaultSort(userToLookup.id);
@@ -150,5 +150,7 @@ describe("Transactions", () => {
 
     expect(receiverName).toBe(`${receiver.firstName} ${receiver.lastName}`);
     expect(senderName).toBe(`${sender.firstName} ${sender.lastName}`);
+    expect(transaction.likes).toBeDefined();
+    expect(transaction.comments).toBeDefined();
   });
 });

@@ -1,5 +1,5 @@
 import { DefaultPrivacyLevel } from "./user";
-import { Like } from ".";
+import { Like, Comment } from ".";
 
 export enum TransactionStatus {
   pending = "pending",
@@ -32,6 +32,7 @@ export interface Transaction {
 
 export interface TransactionResponseItem extends Transaction {
   likes: Like[];
+  comments: Comment[];
   receiverName: string;
   senderName: string;
 }
