@@ -10,7 +10,6 @@ import {
   transactionsCommentPending,
   transactionDetailPending
 } from "../actions/transactions";
-import { Button } from "@material-ui/core";
 
 export interface StateProps {
   transaction?: TransactionResponseItem;
@@ -31,7 +30,6 @@ const TransactionDetailsContainer: React.FC<TransactionDetailsContainerProps> = 
   transactionDetail
 }) => {
   const { transactionId } = useParams();
-  console.log({ transactionId });
 
   useEffect(() => {
     if (
@@ -42,18 +40,15 @@ const TransactionDetailsContainer: React.FC<TransactionDetailsContainerProps> = 
     }
   });
 
-  if (!transaction) {
+  if (
+    !transaction ||
+    (!transaction && transactionId) ||
+    (transaction && transaction.id !== transactionId)
+  ) {
     return (
       <MainContainer>
         Loading...
         <br />
-        <Button
-          color="primary"
-          size="small"
-          onClick={() => transactionDetail({ transactionId })}
-        >
-          Load
-        </Button>
       </MainContainer>
     );
   }
