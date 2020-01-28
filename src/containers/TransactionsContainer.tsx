@@ -6,8 +6,9 @@ import { TransactionResponseItem } from "../models";
 import { useRouteMatch } from "react-router";
 import PublicTransactions from "../components/PublicTransactions";
 import TransactionList from "../components/TransactionList";
+import { transactionsLikePending } from "../actions/transactions";
 
-export interface Props {
+export interface StateProps {
   publicTransactions: {
     contacts: TransactionResponseItem[];
     public: TransactionResponseItem[];
@@ -16,10 +17,17 @@ export interface Props {
   personalTransactions: TransactionResponseItem[];
 }
 
-const TransactionsContainer: React.FC<Props> = ({
+export interface DispatchProps {
+  transactionLike: Function;
+}
+
+export type TransactionsContainerProps = StateProps & DispatchProps;
+
+const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   publicTransactions,
   contactsTransactions,
-  personalTransactions
+  personalTransactions,
+  transactionLike
 }) => {
   const match = useRouteMatch();
 
@@ -29,6 +37,7 @@ const TransactionsContainer: React.FC<Props> = ({
         <TransactionList
           header="Contacts"
           transactions={contactsTransactions}
+          transactionLike={transactionLike}
         />
       </MainContainer>
     );
@@ -40,6 +49,7 @@ const TransactionsContainer: React.FC<Props> = ({
         <TransactionList
           header="Personal"
           transactions={personalTransactions}
+          transactionLike={transactionLike}
         />
       </MainContainer>
     );
@@ -48,7 +58,10 @@ const TransactionsContainer: React.FC<Props> = ({
   // match.url "/" or "/public"
   return (
     <MainContainer>
-      <PublicTransactions transactions={publicTransactions} />
+      <PublicTransactions
+        transactions={publicTransactions}
+        transactionLike={transactionLike}
+      />
     </MainContainer>
   );
 };
@@ -59,4 +72,11 @@ const mapStateToProps = (state: IRootReducerState) => ({
   personalTransactions: state.transactions.personal
 });
 
-export default connect(mapStateToProps)(TransactionsContainer);
+const mapDispatchToProps = {
+  transactionLike: transactionsLikePending
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TransactionsContainer);
