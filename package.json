@@ -68,7 +68,7 @@
   },
   "devDependencies": {
     "cypress": "3.8.3",
-    "start-server-and-test": "1.10.7"
+    "start-server-and-test": "1.10.8"
   },
   "scripts": {
     "tsnode": "ts-node -O '{\"isolatedModules\": false, \"module\": \"commonjs\" }'",
