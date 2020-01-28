@@ -16,8 +16,12 @@ import {
   TRANSACTIONS_COMMENT_SUCCESS,
   TRANSACTIONS_COMMENT_ERROR,
   transactionsPublicPending,
-  transactionsContactsPending
+  transactionsContactsPending,
+  TRANSACTION_DETAIL_PENDING,
+  TRANSACTION_DETAIL_SUCCESS,
+  TRANSACTION_DETAIL_ERROR
 } from "../actions/transactions";
+import { history } from "../index";
 
 const transactionsPersonalLogic = createLogic({
   type: TRANSACTIONS_PERSONAL_PENDING,
@@ -153,6 +157,27 @@ const transactionsCommentSuccessLogic = createLogic({
   }
 });
 
+const transactionDetailLogic = createLogic({
+  type: TRANSACTION_DETAIL_PENDING,
+  processOptions: {
+    dispatchReturn: true,
+    successType: TRANSACTION_DETAIL_SUCCESS,
+    failType: TRANSACTION_DETAIL_ERROR
+  },
+
+  // @ts-ignore
+  process({ httpClient, action }) {
+    // @ts-ignore
+    const { payload } = action;
+
+    history.push(`/transaction/${payload.transactionId}`);
+
+    return httpClient
+      .get(`http://localhost:3001/transactions/${payload.transactionId}`)
+      .then((resp: any) => resp.data.transaction);
+  }
+});
+
 export default [
   transactionsPersonalLogic,
   transactionsPublicLogic,
@@ -160,5 +185,6 @@ export default [
   transactionsLikeLogic,
   transactionsLikeSuccessLogic,
   transactionsCommentLogic,
-  transactionsCommentSuccessLogic
+  transactionsCommentSuccessLogic,
+  transactionDetailLogic
 ];

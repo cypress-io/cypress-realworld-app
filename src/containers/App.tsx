@@ -6,6 +6,7 @@ import { bootstrap } from "../actions/app";
 import { IRootReducerState } from "../reducers";
 import PrivateRoute from "./PrivateRoute";
 import TransactionsContainer from "../containers/TransactionsContainer";
+import TransactionDetailContainer from "./TransactionDetailContainer";
 import SignIn from "../containers/SignIn";
 import SignUp from "../containers/SignUp";
 
@@ -31,6 +32,9 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
     <Switch>
       <PrivateRoute exact path={"/(public|contacts|personal)?"}>
         <TransactionsContainer />
+      </PrivateRoute>
+      <PrivateRoute exact path="/transaction/:transactionId">
+        <TransactionDetailContainer />
       </PrivateRoute>
       <Route path="/signin">
         <SignIn />
