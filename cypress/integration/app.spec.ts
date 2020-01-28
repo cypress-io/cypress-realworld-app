@@ -65,15 +65,26 @@ describe("App", function() {
     });
 
     it("likes a transaction", function() {
-      cy.getTest(`transaction-like`)
+      cy.getTestLike(`transaction-like`)
         .last()
         .scrollIntoView()
         .click();
 
-      cy.getTest(`transaction-like-count`)
+      cy.getTestLike(`transaction-like-count`)
         .last()
         .scrollIntoView()
         .should("contain", 1);
+    });
+
+    it("makes a comment on a transaction", function() {
+      cy.getTestLike(`transaction-item`)
+        .last()
+        .scrollIntoView()
+        .within($form => {
+          cy.getTestLike("transaction-comment-input").type(
+            "This is my comment{enter}"
+          );
+        });
     });
 
     it("renders contacts transaction list", function() {
