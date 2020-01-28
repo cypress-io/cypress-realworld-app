@@ -119,12 +119,14 @@ const transactionsCommentLogic = createLogic({
 
   // @ts-ignore
   process({ httpClient, action }) {
-    return (
-      httpClient
-        // @ts-ignore
-        .post(`http://localhost:3001/comments/${action.payload.transactionId}`)
-        .then((resp: any) => resp.data)
-    );
+    // @ts-ignore
+    const { payload } = action;
+
+    return httpClient
+      .post(`http://localhost:3001/comments/${payload.transactionId}`, {
+        content: payload.content
+      })
+      .then((resp: any) => resp.data);
   }
 });
 

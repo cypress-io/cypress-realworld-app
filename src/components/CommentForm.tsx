@@ -5,7 +5,7 @@ import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 
 const validationSchema = object({
-  comment: string()
+  content: string()
 });
 
 const useStyles = makeStyles(theme => ({
@@ -31,7 +31,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
   transactionComment
 }) => {
   const classes = useStyles();
-  const initialValues = { comment: "" };
+  const initialValues = { content: "" };
 
   return (
     <div>
@@ -43,13 +43,13 @@ const CommentForm: React.FC<CommentFormProps> = ({
 
           transactionComment({ transactionId, ...values });
 
-          setFieldValue("comment", "");
+          setFieldValue("content", "");
           setSubmitting(false);
         }}
       >
         {() => (
           <Form className={classes.form}>
-            <Field name="comment">
+            <Field name="content">
               {({ field, meta }: FieldProps) => (
                 <TextField
                   variant="outlined"
