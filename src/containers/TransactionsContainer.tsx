@@ -6,7 +6,10 @@ import { TransactionResponseItem } from "../models";
 import { useRouteMatch } from "react-router";
 import PublicTransactions from "../components/PublicTransactions";
 import TransactionList from "../components/TransactionList";
-import { transactionsLikePending } from "../actions/transactions";
+import {
+  transactionsLikePending,
+  transactionsCommentPending
+} from "../actions/transactions";
 
 export interface StateProps {
   publicTransactions: {
@@ -19,6 +22,7 @@ export interface StateProps {
 
 export interface DispatchProps {
   transactionLike: Function;
+  transactionComment: Function;
 }
 
 export type TransactionsContainerProps = StateProps & DispatchProps;
@@ -27,7 +31,8 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   publicTransactions,
   contactsTransactions,
   personalTransactions,
-  transactionLike
+  transactionLike,
+  transactionComment
 }) => {
   const match = useRouteMatch();
 
@@ -38,6 +43,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
           header="Contacts"
           transactions={contactsTransactions}
           transactionLike={transactionLike}
+          transactionComment={transactionComment}
         />
       </MainContainer>
     );
@@ -50,6 +56,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
           header="Personal"
           transactions={personalTransactions}
           transactionLike={transactionLike}
+          transactionComment={transactionComment}
         />
       </MainContainer>
     );
@@ -61,6 +68,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
       <PublicTransactions
         transactions={publicTransactions}
         transactionLike={transactionLike}
+        transactionComment={transactionComment}
       />
     </MainContainer>
   );
@@ -73,7 +81,8 @@ const mapStateToProps = (state: IRootReducerState) => ({
 });
 
 const mapDispatchToProps = {
-  transactionLike: transactionsLikePending
+  transactionLike: transactionsLikePending,
+  transactionComment: transactionsCommentPending
 };
 
 export default connect(

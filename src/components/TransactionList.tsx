@@ -11,6 +11,7 @@ export interface TransactionListProps {
   header: string;
   transactions: TransactionResponseItem[];
   transactionLike: Function;
+  transactionComment: Function;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -25,7 +26,8 @@ const useStyles = makeStyles(theme => ({
 const TransactionList: React.FC<TransactionListProps> = ({
   header,
   transactions,
-  transactionLike
+  transactionLike,
+  transactionComment
 }) => {
   const classes = useStyles();
   return (
@@ -40,6 +42,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
               key={i.id}
               transaction={i}
               transactionLike={transactionLike}
+              transactionComment={transactionComment}
             />
           ))}
       </List>

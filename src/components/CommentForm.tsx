@@ -23,12 +23,12 @@ const useStyles = makeStyles(theme => ({
 
 export interface CommentFormProps {
   transactionId: string;
-  transactionCommentPending: (payload: object) => void;
+  transactionComment: (payload: object) => void;
 }
 
 const CommentForm: React.FC<CommentFormProps> = ({
   transactionId,
-  transactionCommentPending
+  transactionComment
 }) => {
   const classes = useStyles();
   const initialValues = { comment: "" };
@@ -41,7 +41,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
         onSubmit={(values, { setSubmitting, setFieldValue }) => {
           setSubmitting(true);
 
-          transactionCommentPending({ transactionId, ...values });
+          transactionComment({ transactionId, ...values });
 
           setFieldValue("comment", "");
           setSubmitting(false);

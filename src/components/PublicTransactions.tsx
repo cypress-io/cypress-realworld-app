@@ -8,11 +8,13 @@ type PublicTransactionsProps = {
     public: TransactionResponseItem[];
   };
   transactionLike: Function;
+  transactionComment: Function;
 };
 
 const PublicTransactions: React.FC<PublicTransactionsProps> = ({
   transactions,
-  transactionLike
+  transactionLike,
+  transactionComment
 }) => {
   return (
     <>
@@ -20,12 +22,14 @@ const PublicTransactions: React.FC<PublicTransactionsProps> = ({
         header="Contacts"
         transactions={transactions.contacts}
         transactionLike={transactionLike}
+        transactionComment={transactionComment}
       />
       <br />
       <TransactionList
         header="Public"
         transactions={transactions.public}
         transactionLike={transactionLike}
+        transactionComment={transactionComment}
       />
     </>
   );

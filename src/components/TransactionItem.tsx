@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { TransactionResponseItem } from "../models";
+import CommentForm from "./CommentForm";
 
 const useStyles = makeStyles({
   card: {
@@ -22,11 +23,13 @@ const useStyles = makeStyles({
 type TransactionProps = {
   transaction: TransactionResponseItem;
   transactionLike: Function;
+  transactionComment: Function;
 };
 
 const TransactionItem: React.FC<TransactionProps> = ({
   transaction,
-  transactionLike
+  transactionLike,
+  transactionComment
 }) => {
   const classes = useStyles();
   // Payment
@@ -67,6 +70,10 @@ const TransactionItem: React.FC<TransactionProps> = ({
           >
             Like
           </Button>
+          <CommentForm
+            transactionId={transaction.id}
+            transactionComment={payload => transactionComment(payload)}
+          />
         </CardActions>
       </Card>
     </ListItem>
