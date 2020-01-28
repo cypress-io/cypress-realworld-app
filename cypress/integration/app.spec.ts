@@ -77,14 +77,10 @@ describe("App", function() {
     });
 
     it("makes a comment on a transaction", function() {
-      cy.getTestLike(`transaction-item`)
+      cy.getTestLike(`transaction-comment-input`)
         .last()
         .scrollIntoView()
-        .within($form => {
-          cy.getTestLike("transaction-comment-input").type(
-            "This is my comment{enter}"
-          );
-        });
+        .type("This is my comment{enter}");
     });
 
     it("renders contacts transaction list", function() {

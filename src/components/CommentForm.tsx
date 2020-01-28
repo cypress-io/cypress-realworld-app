@@ -55,10 +55,10 @@ const CommentForm: React.FC<CommentFormProps> = ({
                   variant="outlined"
                   margin="dense"
                   fullWidth
-                  id={`transaction-comment-${transactionId}`}
+                  id={`transaction-comment-input-${transactionId}`}
                   type="text"
                   placeholder="Write a comment..."
-                  data-test={`transaction-comment-${transactionId}`}
+                  data-test={`transaction-comment-input-${transactionId}`}
                   error={meta.touched && Boolean(meta.error)}
                   helperText={meta.touched ? meta.error : ""}
                   {...field}
