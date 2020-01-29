@@ -5,7 +5,8 @@ import {
   CardContent,
   ListItem,
   Button,
-  Typography
+  Typography,
+  Grid
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { TransactionResponseItem } from "../models";
@@ -78,18 +79,31 @@ const TransactionItem: React.FC<TransactionProps> = ({
           </Typography>
         </CardContent>
         <CardActions>
-          <Button
-            color="primary"
-            size="small"
-            onClick={() => transactionLike({ transactionId: transaction.id })}
-            data-test={`transaction-like-button-${transaction.id}`}
+          <Grid
+            container
+            direction="column"
+            justify="flex-start"
+            alignItems="flex-start"
           >
-            Like
-          </Button>
-          <CommentForm
-            transactionId={transaction.id}
-            transactionComment={payload => transactionComment(payload)}
-          />
+            <Grid item>
+              <Button
+                color="primary"
+                size="large"
+                onClick={() =>
+                  transactionLike({ transactionId: transaction.id })
+                }
+                data-test={`transaction-like-button-${transaction.id}`}
+              >
+                Like
+              </Button>
+            </Grid>
+            <Grid item>
+              <CommentForm
+                transactionId={transaction.id}
+                transactionComment={payload => transactionComment(payload)}
+              />
+            </Grid>
+          </Grid>
         </CardActions>
       </Card>
     </ListItem>
