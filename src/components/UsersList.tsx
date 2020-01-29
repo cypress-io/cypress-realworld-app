@@ -6,13 +6,16 @@ import { User } from "../models";
 
 export interface UsersListProps {
   users: User[];
+  setReceiver: Function;
 }
 
-const UsersList: React.FC<UsersListProps> = ({ users }) => {
+const UsersList: React.FC<UsersListProps> = ({ users, setReceiver }) => {
   return (
-    <List data-test="user-list">
+    <List data-test="users-list">
       {users &&
-        users.map((user: User) => <UserListItem key={user.id} user={user} />)}
+        users.map((user: User) => (
+          <UserListItem key={user.id} user={user} setReceiver={setReceiver} />
+        ))}
     </List>
   );
 };

@@ -10,12 +10,12 @@ import { User } from "../models";
 
 export interface UserState {
   isLoggedIn: boolean;
-  profile?: User;
+  profile: User;
 }
 
 const initialState = {
   isLoggedIn: false,
-  profile: undefined
+  profile: {} as User
 };
 
 export default function reducer(
@@ -39,7 +39,7 @@ export default function reducer(
       return {
         ...state,
         isLoggedIn: false,
-        profile: undefined
+        profile: {} as User
       };
     default:
       return state;

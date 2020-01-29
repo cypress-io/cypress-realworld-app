@@ -24,4 +24,11 @@ describe("Create Transaction", function() {
 
     cy.getTest("users-list").should("be.visible");
   });
+
+  it("selects a user, proceeds to transaction payment/request", function() {
+    cy.getTestLike("user-list-item")
+      .first()
+      .click();
+    cy.getTest("transaction-create-form").should("be.visible");
+  });
 });
