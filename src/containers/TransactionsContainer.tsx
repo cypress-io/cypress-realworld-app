@@ -6,6 +6,7 @@ import { TransactionResponseItem } from "../models";
 import { useRouteMatch } from "react-router";
 import PublicTransactions from "../components/PublicTransactions";
 import TransactionList from "../components/TransactionList";
+import TransactionNavTabs from "../components/TransactionNavTabs";
 
 export interface StateProps {
   publicTransactions: {
@@ -28,6 +29,8 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   if (match.url === "/contacts") {
     return (
       <MainContainer>
+        <TransactionNavTabs />
+        <br />
         <TransactionList
           header="Contacts"
           transactions={contactsTransactions}
@@ -39,6 +42,8 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   if (match.url === "/personal") {
     return (
       <MainContainer>
+        <TransactionNavTabs />
+        <br />
         <TransactionList
           header="Personal"
           transactions={personalTransactions}
@@ -50,6 +55,8 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   // match.url "/" or "/public"
   return (
     <MainContainer>
+      <TransactionNavTabs />
+      <br />
       <PublicTransactions transactions={publicTransactions} />
     </MainContainer>
   );

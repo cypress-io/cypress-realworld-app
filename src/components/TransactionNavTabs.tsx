@@ -11,7 +11,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function NavTabs() {
+export default function TransactionNavTabs() {
   const match = useRouteMatch();
   const classes = useStyles();
 
