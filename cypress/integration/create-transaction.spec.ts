@@ -26,6 +26,9 @@ describe("Create Transaction", function() {
   });
 
   it("selects a user and submits a transaction payment", function() {
+    cy.server();
+    cy.route("/transactions").as("createTransaction");
+
     cy.getTestLike("user-list-item")
       .first()
       .click();
@@ -34,6 +37,10 @@ describe("Create Transaction", function() {
     cy.getTest("transaction-create-amount-input").type("25");
     cy.getTest("transaction-create-description-input").type("Food");
     cy.getTest("transaction-create-submit-payment").click();
+
+    cy.wait("@createTransaction").then(resp => {
+      cy.log(this.resp);
+    });
   });
 
   it("selects a user and submits a transaction request", function() {

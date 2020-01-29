@@ -33,12 +33,13 @@ const useStyles = makeStyles(theme => ({
 export interface TransactionCreateStepTwoProps {
   receiver: User;
   sender: User;
-  //transactionCreate: (payload: object) => void;
+  transactionCreate: (payload: object) => void;
 }
 
 const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
   receiver,
-  sender
+  sender,
+  transactionCreate
 }) => {
   const classes = useStyles();
   const [transactionType, setTransactionType] = useState();
@@ -64,8 +65,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
             onSubmit={(values, { setSubmitting }) => {
               setSubmitting(true);
 
-              console.log("VALUES:", { type: transactionType, ...values });
-              //transactionCreate({ type: transactionType, ...values});
+              transactionCreate({ type: transactionType, ...values });
 
               // reset transactionType
               setTransactionType(undefined);
@@ -74,7 +74,10 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
             }}
           >
             {({ isValid, isSubmitting }) => (
-              <Form className={classes.form}>
+              <Form
+                className={classes.form}
+                data-test="transaction-create-form"
+              >
                 <Field name="amount">
                   {({ field, meta }: FieldProps) => (
                     <TextField
