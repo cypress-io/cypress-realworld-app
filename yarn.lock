@@ -1891,10 +1891,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@types/yup@0.26.28":
-  version "0.26.28"
-  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.26.28.tgz#6b8a98fb56ddb5c8a3a7f60996165221671c1ca1"
-  integrity sha512-DiT584YBKBENDzgk50LwiJLLOh+XgHpiy9p8PwSoOY696LpfrJRIeJ2AoBCG9KyjE8gWL4J64xDZgw15itecag==
+"@types/yup@0.26.29":
+  version "0.26.29"
+  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.26.29.tgz#5a533ad6f74e442436698e20b1441c68a7a1c931"
+  integrity sha512-M81oZOgLap0b0I/BySnpLwHjOj1BFxUKV1ytG2Kqj3jmkh8F3H11PEnk658UniftpjTXdueloOL+KZYn+SMQ9w==
 
 "@typescript-eslint/eslint-plugin@^2.8.0":
   version "2.17.0"
