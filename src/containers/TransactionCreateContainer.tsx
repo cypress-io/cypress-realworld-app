@@ -9,9 +9,9 @@ export interface StateProps {
   allUsers: User[];
 }
 
-export type CreateTransactionContainerProps = StateProps;
+export type TransactionCreateContainerProps = StateProps;
 
-const CreateTransactionContainer: React.FC<CreateTransactionContainerProps> = ({
+const TransactionCreateContainer: React.FC<TransactionCreateContainerProps> = ({
   searchUsers,
   allUsers
 }) => {
@@ -23,4 +23,4 @@ const mapStateToProps = (state: IRootReducerState) => ({
   allUsers: state.users.all
 });
 
-export default connect(mapStateToProps)(CreateTransactionContainer);
+export default connect(mapStateToProps)(TransactionCreateContainer);
