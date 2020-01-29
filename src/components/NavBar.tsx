@@ -10,6 +10,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import Link from "@material-ui/core/Link";
 import { Link as RouterLink } from "react-router-dom";
+import { Button } from "@material-ui/core";
 
 const drawerWidth = 240;
 
@@ -85,6 +86,14 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, handleDrawerOpen }) => {
             Pay App
           </Link>
         </Typography>
+        <Button
+          color="inherit"
+          component={RouterLink}
+          to="/transaction/new"
+          data-test="nav-top-new-transaction"
+        >
+          New Transaction
+        </Button>
         <IconButton color="inherit">
           <Badge badgeContent={4} color="secondary">
             <NotificationsIcon />
