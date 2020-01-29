@@ -11,8 +11,7 @@ const validationSchema = object({
   amount: string().required("Amount is required"),
   description: string().required("Please type a note"),
   senderId: string(),
-  receiverId: string(),
-  type: string().oneOf(["payment", "request"])
+  receiverId: string()
 });
 
 const useStyles = makeStyles(theme => ({
@@ -47,8 +46,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
     amount: "",
     description: "",
     senderId: sender.id,
-    receiverId: receiver.id,
-    type: ""
+    receiverId: receiver.id
   };
 
   return (
@@ -62,12 +60,15 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={(values, { setSubmitting, setFieldValue }) => {
+            validateOnMount={true}
+            onSubmit={(values, { setSubmitting }) => {
               setSubmitting(true);
-              setFieldValue("type", transactionType);
 
-              console.log("VALUES:", values);
-              //transactionCreate(values);
+              console.log("VALUES:", { type: transactionType, ...values });
+              //transactionCreate({ type: transactionType, ...values});
+
+              // reset transactionType
+              setTransactionType(undefined);
 
               setSubmitting(false);
             }}
@@ -80,6 +81,8 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                       variant="outlined"
                       margin="dense"
                       fullWidth
+                      required
+                      autoFocus
                       id={"transaction-create-amount-input"}
                       type="text"
                       placeholder="Amount"
@@ -96,6 +99,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                       variant="outlined"
                       margin="dense"
                       fullWidth
+                      required
                       id={"transaction-create-description-input"}
                       type="text"
                       placeholder="Description"

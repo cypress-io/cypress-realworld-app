@@ -25,10 +25,25 @@ describe("Create Transaction", function() {
     cy.getTest("users-list").should("be.visible");
   });
 
-  it("selects a user, proceeds to transaction payment/request", function() {
+  it("selects a user and submits a transaction payment", function() {
     cy.getTestLike("user-list-item")
       .first()
       .click();
     cy.getTest("transaction-create-form").should("be.visible");
+
+    cy.getTest("transaction-create-amount-input").type("25");
+    cy.getTest("transaction-create-description-input").type("Food");
+    cy.getTest("transaction-create-submit-payment").click();
+  });
+
+  it("selects a user and submits a transaction request", function() {
+    cy.getTestLike("user-list-item")
+      .first()
+      .click();
+    cy.getTest("transaction-create-form").should("be.visible");
+
+    cy.getTest("transaction-create-amount-input").type("95");
+    cy.getTest("transaction-create-description-input").type("Hotel");
+    cy.getTest("transaction-create-submit-request").click();
   });
 });
