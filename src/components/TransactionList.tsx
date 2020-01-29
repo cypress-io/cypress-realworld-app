@@ -10,8 +10,6 @@ import { TransactionResponseItem } from "../models";
 export interface TransactionListProps {
   header: string;
   transactions: TransactionResponseItem[];
-  transactionLike: Function;
-  transactionComment: Function;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -25,9 +23,7 @@ const useStyles = makeStyles(theme => ({
 
 const TransactionList: React.FC<TransactionListProps> = ({
   header,
-  transactions,
-  transactionLike,
-  transactionComment
+  transactions
 }) => {
   const classes = useStyles();
   return (
@@ -38,12 +34,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
       <List data-test="transaction-list">
         {transactions &&
           transactions.map((i: any) => (
-            <TransactionItem
-              key={i.id}
-              transaction={i}
-              transactionLike={transactionLike}
-              transactionComment={transactionComment}
-            />
+            <TransactionItem key={i.id} transaction={i} />
           ))}
       </List>
     </Paper>

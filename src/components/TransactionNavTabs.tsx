@@ -11,7 +11,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function NavTabs() {
+export default function TransactionNavTabs() {
   const match = useRouteMatch();
   const classes = useStyles();
 
@@ -38,6 +38,7 @@ export default function NavTabs() {
         indicatorColor="primary"
         textColor="primary"
         centered
+        data-test="nav-transaction-tabs"
       >
         <Tab
           label="Public"

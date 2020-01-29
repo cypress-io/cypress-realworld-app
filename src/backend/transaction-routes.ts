@@ -5,10 +5,10 @@ import _ from "lodash";
 import {
   getTransactionsForUserByObj,
   getTransactionsForUserContacts,
-  getAllPublicTransactions,
   createTransaction,
   updateTransactionById,
-  getPublicTransactionsDefaultSort
+  getPublicTransactionsDefaultSort,
+  getTransactionByIdForApi
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import {
@@ -93,6 +93,21 @@ router.post(
       transactionType,
       transactionPayload
     );
+
+    res.status(200);
+    res.json({ transaction });
+  }
+);
+
+//GET /transactions/:transactionId - scoped-user
+router.get(
+  "/:transactionId",
+  ensureAuthenticated,
+  validateMiddleware([shortIdValidation("transactionId")]),
+  (req, res) => {
+    const { transactionId } = req.params;
+
+    const transaction = getTransactionByIdForApi(transactionId);
 
     res.status(200);
     res.json({ transaction });

@@ -8,8 +8,8 @@ import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-
-import NavTabs from "./NavTabs";
+import Link from "@material-ui/core/Link";
+import { Link as RouterLink } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -77,7 +77,13 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, handleDrawerOpen }) => {
           className={classes.title}
           data-test="app-name-logo"
         >
-          Pay App
+          <Link
+            to="/"
+            style={{ color: "#fff", textDecoration: "none" }}
+            component={RouterLink}
+          >
+            Pay App
+          </Link>
         </Typography>
         <IconButton color="inherit">
           <Badge badgeContent={4} color="secondary">
@@ -85,7 +91,6 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, handleDrawerOpen }) => {
           </Badge>
         </IconButton>
       </Toolbar>
-      <NavTabs />
     </AppBar>
   );
 };

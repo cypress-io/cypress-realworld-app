@@ -5,10 +5,12 @@ import {
   CardContent,
   ListItem,
   Button,
-  Typography
+  Typography,
+  Grid
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { TransactionResponseItem } from "../models";
+import CommentForm from "./CommentForm";
 import { useHistory } from "react-router";
 
 const useStyles = makeStyles({
@@ -22,9 +24,15 @@ const useStyles = makeStyles({
 
 type TransactionProps = {
   transaction: TransactionResponseItem;
+  transactionLike: Function;
+  transactionComment: Function;
 };
 
-const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
+const TransactionItem: React.FC<TransactionProps> = ({
+  transaction,
+  transactionLike,
+  transactionComment
+}) => {
   const classes = useStyles();
   const history = useHistory();
   // Payment
@@ -71,14 +79,31 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button
-            color="primary"
-            size="small"
-            onClick={() => showTransactionDetail(transaction.id)}
-            data-test={`transaction-view-${transaction.id}`}
+          <Grid
+            container
+            direction="column"
+            justify="flex-start"
+            alignItems="flex-start"
           >
-            View Transaction
-          </Button>
+            <Grid item>
+              <Button
+                color="primary"
+                size="large"
+                onClick={() =>
+                  transactionLike({ transactionId: transaction.id })
+                }
+                data-test={`transaction-like-button-${transaction.id}`}
+              >
+                Like
+              </Button>
+            </Grid>
+            <Grid item>
+              <CommentForm
+                transactionId={transaction.id}
+                transactionComment={payload => transactionComment(payload)}
+              />
+            </Grid>
+          </Grid>
         </CardActions>
       </Card>
     </ListItem>

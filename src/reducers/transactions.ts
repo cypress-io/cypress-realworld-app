@@ -2,12 +2,14 @@ import {
   TTransactionActions,
   TRANSACTIONS_PUBLIC_SUCCESS,
   TRANSACTIONS_CONTACTS_SUCCESS,
-  TRANSACTIONS_PERSONAL_SUCCESS
+  TRANSACTIONS_PERSONAL_SUCCESS,
+  TRANSACTION_DETAIL_SUCCESS
 } from "../actions/transactions";
 import { TAuthActions, SIGNOUT_SUCCESS, SIGNOUT_ERROR } from "../actions/auth";
 import { TransactionResponseItem } from "../models";
 
 export interface TransactionsState {
+  transactionDetails?: TransactionResponseItem;
   public: {
     contacts: TransactionResponseItem[];
     public: TransactionResponseItem[];
@@ -17,6 +19,7 @@ export interface TransactionsState {
 }
 
 const initialState = {
+  transactionDetails: undefined,
   public: {
     contacts: [],
     public: []
@@ -44,6 +47,11 @@ export default function reducer(
       return {
         ...state,
         personal: action.payload
+      };
+    case TRANSACTION_DETAIL_SUCCESS:
+      return {
+        ...state,
+        transactionDetails: action.payload
       };
     case SIGNOUT_SUCCESS:
     case SIGNOUT_ERROR:

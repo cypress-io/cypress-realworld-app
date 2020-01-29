@@ -285,23 +285,30 @@ export const getTransactionsBy = (key: string, value: string) =>
 export const getTransactionsByObj = (query: object) =>
   getAllByObj(TRANSACTION_TABLE, query);
 
+export const getTransactionByIdForApi = (id: string) =>
+  formatTransactionForApiResponse(getTransactionBy("id", id));
+
+export const formatTransactionForApiResponse = (
+  transaction: Transaction
+): TransactionResponseItem => {
+  const receiver = getUserById(transaction.receiverId);
+  const sender = getUserById(transaction.senderId);
+  const likes = getLikesByTransactionId(transaction.id);
+  const comments = getCommentsByTransactionId(transaction.id);
+
+  return {
+    receiverName: `${receiver.firstName} ${receiver.lastName}`,
+    senderName: `${sender.firstName} ${sender.lastName}`,
+    likes,
+    comments,
+    ...transaction
+  };
+};
+
 export const formatTransactionsForApiResponse = (
   transactions: Transaction[]
 ): TransactionResponseItem[] =>
-  transactions.map(transaction => {
-    const receiver = getUserById(transaction.receiverId);
-    const sender = getUserById(transaction.senderId);
-    const likes = getLikesByTransactionId(transaction.id);
-    const comments = getCommentsByTransactionId(transaction.id);
-
-    return {
-      receiverName: `${receiver.firstName} ${receiver.lastName}`,
-      senderName: `${sender.firstName} ${sender.lastName}`,
-      likes,
-      comments,
-      ...transaction
-    };
-  });
+  transactions.map(transaction => formatTransactionForApiResponse(transaction));
 
 export const getTransactionsForUserByObj = (userId: string, query?: object) => {
   const transactions: Transaction[] = getTransactionsByObj({

@@ -6,10 +6,7 @@ import { TransactionResponseItem } from "../models";
 import { useRouteMatch } from "react-router";
 import PublicTransactions from "../components/PublicTransactions";
 import TransactionList from "../components/TransactionList";
-import {
-  transactionsLikePending,
-  transactionsCommentPending
-} from "../actions/transactions";
+import TransactionNavTabs from "../components/TransactionNavTabs";
 
 export interface StateProps {
   publicTransactions: {
@@ -20,30 +17,23 @@ export interface StateProps {
   personalTransactions: TransactionResponseItem[];
 }
 
-export interface DispatchProps {
-  transactionLike: Function;
-  transactionComment: Function;
-}
-
-export type TransactionsContainerProps = StateProps & DispatchProps;
+export type TransactionsContainerProps = StateProps;
 
 const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   publicTransactions,
   contactsTransactions,
-  personalTransactions,
-  transactionLike,
-  transactionComment
+  personalTransactions
 }) => {
   const match = useRouteMatch();
 
   if (match.url === "/contacts") {
     return (
       <MainContainer>
+        <TransactionNavTabs />
+        <br />
         <TransactionList
           header="Contacts"
           transactions={contactsTransactions}
-          transactionLike={transactionLike}
-          transactionComment={transactionComment}
         />
       </MainContainer>
     );
@@ -52,11 +42,11 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   if (match.url === "/personal") {
     return (
       <MainContainer>
+        <TransactionNavTabs />
+        <br />
         <TransactionList
           header="Personal"
           transactions={personalTransactions}
-          transactionLike={transactionLike}
-          transactionComment={transactionComment}
         />
       </MainContainer>
     );
@@ -65,11 +55,9 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   // match.url "/" or "/public"
   return (
     <MainContainer>
-      <PublicTransactions
-        transactions={publicTransactions}
-        transactionLike={transactionLike}
-        transactionComment={transactionComment}
-      />
+      <TransactionNavTabs />
+      <br />
+      <PublicTransactions transactions={publicTransactions} />
     </MainContainer>
   );
 };
@@ -80,12 +68,4 @@ const mapStateToProps = (state: IRootReducerState) => ({
   personalTransactions: state.transactions.personal
 });
 
-const mapDispatchToProps = {
-  transactionLike: transactionsLikePending,
-  transactionComment: transactionsCommentPending
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TransactionsContainer);
+export default connect(mapStateToProps)(TransactionsContainer);
