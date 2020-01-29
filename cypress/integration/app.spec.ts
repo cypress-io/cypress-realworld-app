@@ -9,6 +9,9 @@ describe("App", function() {
     cy.task("db:seed");
     Cypress.Cookies.preserveOnce("connect.sid");
   });
+  after(function() {
+    cy.task("db:seed");
+  });
   context("Public Routes", function() {
     it("renders the signin page", function() {
       cy.visit("/signin")
@@ -33,7 +36,7 @@ describe("App", function() {
     });
   });
 
-  context("Private Routes", function() {
+  context("Transaction Lists", function() {
     before(function() {
       cy.fixture("users").as("users");
       cy.get("@users").then(users => {
@@ -64,28 +67,10 @@ describe("App", function() {
         .should("have.length", 5);
     });
 
-    it("likes a transaction", function() {
-      cy.getTestLike(`transaction-like`)
-        .last()
-        .scrollIntoView()
-        .click();
-
-      cy.getTestLike(`transaction-like-count`)
-        .last()
-        .scrollIntoView()
-        .should("contain", 1);
-    });
-
-    it("makes a comment on a transaction", function() {
-      cy.getTestLike(`transaction-comment-input`)
-        .last()
-        .scrollIntoView()
-        .type("This is my comment{enter}");
-    });
-
     it("renders contacts transaction list", function() {
+      cy.getTest("main").scrollTo("top");
       cy.getTest("nav-contacts-tab")
-        .click()
+        .click({ force: true })
         .should("have.class", "Mui-selected");
       cy.getTest("transaction-list")
         .children()
@@ -93,17 +78,51 @@ describe("App", function() {
     });
 
     it("renders personal transaction list", function() {
+      cy.getTest("main").scrollTo("top");
       cy.getTest("nav-personal-tab")
-        .click()
+        .click({ force: true })
         .should("have.class", "Mui-selected");
       cy.getTest("transaction-list")
         .children()
         .should("have.length", 3);
     });
-
     it("logs out", function() {
       cy.getTest("sidenav-signout").click();
       cy.location("pathname").should("eq", "/signin");
+    });
+  });
+
+  context("Transaction Detail", function() {
+    before(function() {
+      cy.fixture("users").as("users");
+      cy.get("@users").then(users => {
+        cy.login(this.users[0].username);
+      });
+      cy.server();
+      cy.route("/transactions/public").as("publicTransactions");
+    });
+    it("displays transaction detail page", function() {
+      cy.getTest("main").scrollTo("top");
+      cy.wait("@publicTransactions");
+      cy.getTestLike("transaction-item")
+        .first()
+        .scrollIntoView()
+        .click();
+      cy.getTest("nav-transaction-tabs").should("not.be.visible");
+      cy.location("pathname").should("include", "/transaction");
+    });
+
+    it("likes a transaction", function() {
+      cy.getTestLike(`transaction-like-button`).click();
+
+      cy.getTestLike(`transaction-like-count`).should("contain", 1);
+    });
+
+    it("makes a comment on a transaction", function() {
+      cy.getTestLike(`transaction-comment-input`).type(
+        "This is my comment{enter}"
+      );
+      cy.getTestLike(`transaction-comment-count`).should("contain", 4);
     });
   });
 });

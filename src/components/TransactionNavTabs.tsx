@@ -38,6 +38,7 @@ export default function TransactionNavTabs() {
         indicatorColor="primary"
         textColor="primary"
         centered
+        data-test="nav-transaction-tabs"
       >
         <Tab
           label="Public"

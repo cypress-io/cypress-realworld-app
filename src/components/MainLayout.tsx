@@ -54,7 +54,7 @@ const MainLayout: React.FC<Props> = ({ signOutPending, children }) => {
         drawerOpen={open}
         signOutPending={signOutPending}
       />
-      <main className={classes.content}>
+      <main className={classes.content} data-test="main">
         <div className={classes.appBarSpacer} />
         <Container maxWidth="md" className={classes.container}>
           <Grid container spacing={3}>

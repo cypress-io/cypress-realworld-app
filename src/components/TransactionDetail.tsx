@@ -82,7 +82,7 @@ const TransactionItem: React.FC<TransactionProps> = ({
             color="primary"
             size="small"
             onClick={() => transactionLike({ transactionId: transaction.id })}
-            data-test={`transaction-like-${transaction.id}`}
+            data-test={`transaction-like-button-${transaction.id}`}
           >
             Like
           </Button>
