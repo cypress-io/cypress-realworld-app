@@ -144,9 +144,11 @@ export const isTransactionPayloadValidator = [
     .isIn(["payment", "request"])
     .trim(),
   body("privacyLevel")
+    .optional()
     .isIn(DefaultPrivacyLevelValues)
     .trim(),
   body("source")
+    .optional()
     .isString()
     .trim(),
   body("receiverId")

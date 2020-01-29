@@ -14,6 +14,10 @@ describe("Create Transaction", function() {
   beforeEach(function() {
     cy.task("db:seed");
     Cypress.Cookies.preserveOnce("connect.sid");
+    cy.server();
+    cy.route("POST", "http://localhost:3001/transactions").as(
+      "createTransaction"
+    );
   });
   after(function() {
     cy.task("db:seed");
@@ -26,9 +30,6 @@ describe("Create Transaction", function() {
   });
 
   it("selects a user and submits a transaction payment", function() {
-    cy.server();
-    cy.route("/transactions").as("createTransaction");
-
     cy.getTestLike("user-list-item")
       .first()
       .click();
@@ -44,6 +45,7 @@ describe("Create Transaction", function() {
   });
 
   it("selects a user and submits a transaction request", function() {
+    cy.getTest("nav-top-new-transaction").click();
     cy.getTestLike("user-list-item")
       .first()
       .click();
@@ -52,5 +54,8 @@ describe("Create Transaction", function() {
     cy.getTest("transaction-create-amount-input").type("95");
     cy.getTest("transaction-create-description-input").type("Hotel");
     cy.getTest("transaction-create-submit-request").click();
+    cy.wait("@createTransaction").then(resp => {
+      cy.log(this.resp);
+    });
   });
 });
