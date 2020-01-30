@@ -1,6 +1,7 @@
 import path from "path";
 import v4 from "uuid";
 import _ from "lodash";
+import { uniqBy, unionBy } from "lodash/fp";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 import shortid from "shortid";
@@ -311,10 +312,23 @@ export const formatTransactionsForApiResponse = (
   transactions.map(transaction => formatTransactionForApiResponse(transaction));
 
 export const getTransactionsForUserByObj = (userId: string, query?: object) => {
-  const transactions: Transaction[] = getTransactionsByObj({
+  const receiverTransactions: Transaction[] = getTransactionsByObj({
     receiverId: userId,
     ...query
   });
+
+  const senderTransactions: Transaction[] = getTransactionsByObj({
+    senderId: userId,
+    ...query
+  });
+
+  const transactions = uniqBy(
+    "id",
+    unionBy("id", receiverTransactions, senderTransactions)
+  );
+
+  const transactionIds = _.map(transactions, "id");
+  console.log("GET TRANSACTION IDS:", transactionIds);
 
   return transactions;
 };
@@ -336,8 +350,12 @@ export const getTransactionsForUserContacts = (
 };
 
 export const getPublicTransactionsDefaultSort = (userId: string) => {
-  const contactsTransactions = getTransactionsForUserContacts(userId);
+  const contactsTransactions = uniqBy(
+    "id",
+    getTransactionsForUserContacts(userId)
+  );
   const contactsTransactionIds = _.map(contactsTransactions, "id");
+  console.log("CONTACTS TRANSACTION IDS:", contactsTransactionIds);
   const allPublicTransactions = getAllPublicTransactions();
 
   const nonContactPublicTransactions = _.reject(allPublicTransactions, t =>
@@ -353,16 +371,16 @@ export const getPublicTransactionsDefaultSort = (userId: string) => {
 export const createTransaction = (
   userId: User["id"],
   transactionType: "payment" | "request",
-  transactionDetails: Transaction
+  transactionDetails: Partial<Transaction>
 ): Transaction => {
   const senderDetails = getUserById(userId);
   const transaction: Transaction = {
     id: shortid(),
     uuid: v4(),
-    source: transactionDetails.source,
-    amount: transactionDetails.amount,
-    description: transactionDetails.description,
-    receiverId: transactionDetails.receiverId,
+    source: transactionDetails.source!,
+    amount: transactionDetails.amount!,
+    description: transactionDetails.description!,
+    receiverId: transactionDetails.receiverId!,
     senderId: userId,
     privacyLevel:
       transactionDetails.privacyLevel || senderDetails.defaultPrivacyLevel,
@@ -384,7 +402,10 @@ const saveTransaction = (transaction: Transaction): Transaction => {
     .write();
 
   // manual lookup after transaction created
-  return getTransactionBy("id", transaction.id);
+  const savedTransaction = getTransactionBy("id", transaction.id);
+  console.log("SAVED TRANSACTION:", savedTransaction);
+  return savedTransaction;
+  //return getTransactionBy("id", transaction.id);
 };
 
 export const updateTransactionById = (
