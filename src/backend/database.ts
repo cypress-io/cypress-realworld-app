@@ -353,17 +353,19 @@ export const getPublicTransactionsDefaultSort = (userId: string) => {
 export const createTransaction = (
   userId: User["id"],
   transactionType: "payment" | "request",
-  transactionDetails: Partial<Transaction>
+  transactionDetails: Transaction
 ): Transaction => {
+  const senderDetails = getUserById(userId);
   const transaction: Transaction = {
     id: shortid(),
     uuid: v4(),
-    source: transactionDetails.source!,
-    amount: transactionDetails.amount!,
-    description: transactionDetails.description!,
-    receiverId: transactionDetails.receiverId!,
+    source: transactionDetails.source,
+    amount: transactionDetails.amount,
+    description: transactionDetails.description,
+    receiverId: transactionDetails.receiverId,
     senderId: userId,
-    privacyLevel: transactionDetails.privacyLevel!,
+    privacyLevel:
+      transactionDetails.privacyLevel || senderDetails.defaultPrivacyLevel,
     status: TransactionStatus.pending,
     requestStatus:
       transactionType === "request" ? RequestStatus.pending : undefined,
