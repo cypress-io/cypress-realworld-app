@@ -16,7 +16,7 @@
     "@types/express-session": "1.15.16",
     "@types/express-validator": "3.0.0",
     "@types/faker": "4.1.9",
-    "@types/jest": "25.1.0",
+    "@types/jest": "25.1.1",
     "@types/json-server": "0.14.2",
     "@types/lodash": "4.14.149",
     "@types/lowdb": "1.0.9",
