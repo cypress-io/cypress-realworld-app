@@ -201,6 +201,18 @@ const transactionCreateLogic = createLogic({
   }
 });
 
+const transactionsRefreshLogic = createLogic({
+  type: TRANSACTION_CREATE_SUCCESS,
+
+  // @ts-ignore
+  process({}, dispatch, done) {
+    dispatch(transactionsPublicPending());
+    dispatch(transactionsContactsPending());
+    dispatch(transactionsContactsPending());
+    done();
+  }
+});
+
 export default [
   transactionsPersonalLogic,
   transactionsPublicLogic,
@@ -210,5 +222,6 @@ export default [
   transactionsCommentLogic,
   transactionsCommentSuccessLogic,
   transactionDetailLogic,
-  transactionCreateLogic
+  transactionCreateLogic,
+  transactionsRefreshLogic
 ];
