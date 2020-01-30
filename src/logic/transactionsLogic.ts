@@ -208,6 +208,12 @@ const transactionsRefreshLogic = createLogic({
   // @ts-ignore
   // eslint-disable-next-line no-empty-pattern
   process({}, dispatch, done) {
+    const { pathname } = window.location;
+
+    if (pathname.match("transaction/new")) {
+      history.push("/");
+    }
+
     dispatch(transactionsPublicPending());
     dispatch(transactionsContactsPending());
     dispatch(transactionsPersonalPending());

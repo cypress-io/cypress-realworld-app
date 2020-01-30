@@ -6,7 +6,6 @@ import { string, object } from "yup";
 import MainContainer from "../containers/MainContainer";
 import { Paper, Typography, Button, Grid, Container } from "@material-ui/core";
 import { User } from "../models";
-import { useHistory } from "react-router-dom";
 
 const validationSchema = object({
   amount: string().required("Amount is required"),
@@ -43,7 +42,6 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
   transactionCreate
 }) => {
   const classes = useStyles();
-  const history = useHistory();
   const [transactionType, setTransactionType] = useState();
   const initialValues = {
     amount: "",
@@ -71,14 +69,6 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
 
               // reset transactionType
               setTransactionType(undefined);
-
-              // Redirect to Personal transactions for Requests
-              // or to Public transactions
-              if (transactionType === "request") {
-                history.push("/personal");
-              } else {
-                history.push("/");
-              }
 
               setSubmitting(false);
             }}
