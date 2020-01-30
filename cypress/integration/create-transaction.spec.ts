@@ -36,12 +36,13 @@ describe("Create Transaction", function() {
     cy.getTest("transaction-create-form").should("be.visible");
 
     cy.getTest("transaction-create-amount-input").type("25");
-    cy.getTest("transaction-create-description-input").type("Food");
+    cy.getTest("transaction-create-description-input").type("Indian Food");
     cy.getTest("transaction-create-submit-payment").click();
 
-    cy.wait("@createTransaction").then(resp => {
-      cy.log(this.resp);
-    });
+    cy.wait("@createTransaction").should("have.property", "status", 200);
+    cy.getTest("nav-public-tab").should("have.class", "Mui-selected");
+
+    cy.getTest("transaction-list").should("contain", "Indian Food");
   });
 
   it("selects a user and submits a transaction request", function() {
@@ -52,10 +53,12 @@ describe("Create Transaction", function() {
     cy.getTest("transaction-create-form").should("be.visible");
 
     cy.getTest("transaction-create-amount-input").type("95");
-    cy.getTest("transaction-create-description-input").type("Hotel");
+    cy.getTest("transaction-create-description-input").type("Fancy Hotel");
     cy.getTest("transaction-create-submit-request").click();
-    cy.wait("@createTransaction").then(resp => {
-      cy.log(this.resp);
-    });
+
+    cy.wait("@createTransaction").should("have.property", "status", 200);
+    cy.getTest("nav-personal-tab").should("have.class", "Mui-selected");
+
+    cy.getTest("transaction-list").should("contain", "Fancy Hotel");
   });
 });
