@@ -205,6 +205,7 @@ const transactionsRefreshLogic = createLogic({
   type: TRANSACTION_CREATE_SUCCESS,
 
   // @ts-ignore
+  // eslint-disable-next-line no-empty-pattern
   process({}, dispatch, done) {
     dispatch(transactionsPublicPending());
     dispatch(transactionsContactsPending());
