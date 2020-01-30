@@ -69,7 +69,7 @@ describe("Transactions", () => {
       userToLookup.id,
       { status: "incomplete" }
     );
-    expect(result.length).toBe(1);
+    expect(result.length).toBe(3);
   });
 
   it("should retrieve a list of public transactions, default sort", () => {
@@ -77,12 +77,12 @@ describe("Transactions", () => {
     const contactsTransactions: Transaction[] = getTransactionsForUserContacts(
       user.id
     );
-    expect(contactsTransactions.length).toBe(11);
+    expect(contactsTransactions.length).toBe(20);
 
     const response = getPublicTransactionsDefaultSort(user.id);
 
-    expect(response.contacts.length).toBe(11);
-    expect(response.public.length).toBe(5);
+    expect(response.contacts.length).toBe(17);
+    expect(response.public.length).toBe(3);
     expect(response.contacts[8].id).toBe(contactsTransactions[8].id);
   });
 
@@ -137,7 +137,7 @@ describe("Transactions", () => {
       receiverId: receiver.id,
       description: `Payment: ${sender.id} to ${receiver.id}`,
       amount,
-      privacyLevel: DefaultPrivacyLevel.public
+      privacyLevel: DefaultPrivacyLevel.private
     };
 
     const payment = createTransaction(sender.id, "payment", paymentDetails);

@@ -1,7 +1,6 @@
 import path from "path";
 import v4 from "uuid";
-import _ from "lodash";
-import { uniqBy, unionBy, map } from "lodash/fp";
+import { uniqBy, unionBy, map, sample, reject, includes } from "lodash/fp";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 import shortid from "shortid";
@@ -23,7 +22,6 @@ import {
   NotificationsType,
   TransactionResponseItem
 } from "../models";
-import { Result } from "express-validator";
 
 const USER_TABLE = "users";
 const CONTACT_TABLE = "contacts";
@@ -102,8 +100,7 @@ export const getAllByObj = (entity: string, query: object) => {
     // @ts-ignore
     .filter(query)
     .value();
-  //console.log("GABO ENTITY, QUERY:", entity, " ", query);
-  //console.log("GABO result:", result);
+
   return result;
 };
 export const getByObj = (entity: string, query: object) =>
@@ -316,7 +313,6 @@ export const formatTransactionsForApiResponse = (
   transactions.map(transaction => formatTransactionForApiResponse(transaction));
 
 export const getTransactionsForUserByObj = (userId: string, query?: object) => {
-  console.log("USER ID:", userId);
   const receiverTransactions: Transaction[] = getTransactionsByObj({
     receiverId: userId,
     ...query
@@ -326,16 +322,11 @@ export const getTransactionsForUserByObj = (userId: string, query?: object) => {
     senderId: userId,
     ...query
   });
-  const senderTransactionIds = map("id", senderTransactions);
-  console.log("Sender TRANSACTION IDS:", senderTransactionIds);
 
   const transactions = uniqBy(
     "id",
     unionBy("id", receiverTransactions, senderTransactions)
   );
-
-  const transactionIds = map("id", transactions);
-  console.log("GET TRANSACTION IDS:", transactionIds);
 
   return transactions;
 };
@@ -350,7 +341,7 @@ export const getTransactionsForUserContacts = (
   query?: object
 ) => {
   const contacts = getContactsByUserId(userId);
-  const contactIds = _.map(contacts, "contactUserId");
+  const contactIds = map("contactUserId", contacts);
   return contactIds.flatMap((contactId): Transaction[] => {
     return getTransactionsForUserByObj(contactId, query);
   });
@@ -361,12 +352,12 @@ export const getPublicTransactionsDefaultSort = (userId: string) => {
     "id",
     getTransactionsForUserContacts(userId)
   );
-  const contactsTransactionIds = _.map(contactsTransactions, "id");
-  console.log("CONTACTS TRANSACTION IDS:", contactsTransactionIds);
+  const contactsTransactionIds = map("id", contactsTransactions);
   const allPublicTransactions = getAllPublicTransactions();
 
-  const nonContactPublicTransactions = _.reject(allPublicTransactions, t =>
-    _.includes(contactsTransactionIds, t.id)
+  const nonContactPublicTransactions = reject(
+    t => includes(t.id, contactsTransactionIds),
+    allPublicTransactions
   );
 
   return {
@@ -411,10 +402,7 @@ const saveTransaction = (transaction: Transaction): Transaction => {
     .write();
 
   // manual lookup after transaction created
-  const savedTransaction = getTransactionBy("id", transaction.id);
-  console.log("SAVED TRANSACTION:", savedTransaction);
-  return savedTransaction;
-  //return getTransactionBy("id", transaction.id);
+  return getTransactionBy("id", transaction.id);
 };
 
 export const updateTransactionById = (
@@ -642,7 +630,7 @@ export const updateNotificationById = (
 // dev/test private methods
 export const getRandomUser = () => {
   const users = getAllUsers();
-  return _.sample(users);
+  return sample(users);
 };
 
 export default db;

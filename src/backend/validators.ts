@@ -84,14 +84,13 @@ export const isUserValidator = [
     .isIn(["public", "private", "contacts"])
 ];
 
-// default status to "complete" if not provided
 export const sanitizeTransactionStatus = sanitizeQuery(
   "status"
 ).customSanitizer(value => {
   if (_.includes(TransactionStatusValues, value)) {
     return value;
   }
-  return TransactionStatus.complete;
+  return;
 });
 
 // default request status to undefined if not provided
@@ -106,8 +105,8 @@ export const sanitizeRequestStatus = sanitizeQuery(
 
 export const isTransactionQSValidator = [
   query("status")
-    .optional({ checkFalsy: true })
     .isIn(TransactionStatusValues)
+    .optional()
     .trim(),
   query("requestStatus")
     .optional({ checkFalsy: true })
