@@ -1,7 +1,6 @@
 ///<reference path="types.ts" />
 
 import express from "express";
-//import _ from "lodash";
 
 import {
   getContactsByUsername,

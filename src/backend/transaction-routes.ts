@@ -1,7 +1,7 @@
 ///<reference path="types.ts" />
 
 import express from "express";
-import _ from "lodash";
+import { remove } from "lodash/fp";
 import {
   getTransactionsForUserByObj,
   getTransactionsForUserContacts,
@@ -86,7 +86,7 @@ router.post(
     const transactionPayload = req.body;
     const transactionType = transactionPayload.type;
 
-    _.remove(transactionPayload, "type");
+    remove("type", transactionPayload);
 
     const transaction = createTransaction(
       req.user?.id!,

@@ -1,5 +1,5 @@
 import fs from "fs";
-import _ from "lodash";
+import { flattenDeep } from "lodash/fp";
 import shortid from "shortid";
 import faker from "faker";
 import { getBankAccountsByUserId } from "../src/backend/database";
@@ -78,7 +78,7 @@ const transactions = users.map((user: User): Transaction[][] => {
   });
 });
 
-const flatTransactions = _.flattenDeep(transactions);
+const flatTransactions = flattenDeep(transactions);
 
 fs.writeFile(
   __dirname + "/transactions.json",

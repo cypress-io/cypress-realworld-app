@@ -1,5 +1,5 @@
 import fs from "fs";
-import _ from "lodash";
+import { flattenDeep } from "lodash";
 import shortid from "shortid";
 import faker from "faker";
 import {
@@ -101,7 +101,7 @@ const notifications = users.flatMap((user: User): NotificationType[] => {
     return [allNotifications, likeNotifications, commentNotifications];
   });
 
-  return _.flattenDeep(transactionNotifications);
+  return flattenDeep(transactionNotifications);
 });
 
 fs.writeFile(

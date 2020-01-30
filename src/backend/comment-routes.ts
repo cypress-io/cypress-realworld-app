@@ -1,7 +1,6 @@
 ///<reference path="types.ts" />
 
 import express from "express";
-import _ from "lodash";
 import { getCommentsByTransactionId, createComment } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import { shortIdValidation, isCommentValidator } from "./validators";

@@ -2,7 +2,7 @@
 
 import express from "express";
 import validator from "validator";
-import _ from "lodash";
+import { isEqual, pick } from "lodash/fp";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 import {
@@ -88,7 +88,7 @@ router.get(
     const { userId } = req.params;
 
     // Permission: account owner
-    if (!_.isEqual(userId, req.user?.id)) {
+    if (!isEqual(userId, req.user?.id)) {
       return res.status(401).send({
         error: "Unauthorized"
       });
@@ -104,11 +104,10 @@ router.get(
 router.get("/profile/:username", (req, res) => {
   const { username } = req.params;
 
-  const user = _.pick(getUserBy("username", username), [
-    "firstName",
-    "lastName",
-    "avatar"
-  ]);
+  const user = pick(
+    ["firstName", "lastName", "avatar"],
+    getUserBy("username", username)
+  );
 
   res.status(200);
   res.json({ user });

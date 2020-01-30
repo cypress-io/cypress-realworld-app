@@ -7,7 +7,7 @@ import {
   NotificationsType
   //PaymentNotificationStatus
 } from "../models";
-import _ from "lodash";
+import { includes } from "lodash/fp";
 
 const TransactionStatusValues = Object.values(TransactionStatus);
 const RequestStatusValues = Object.values(RequestStatus);
@@ -87,7 +87,7 @@ export const isUserValidator = [
 export const sanitizeTransactionStatus = sanitizeQuery(
   "status"
 ).customSanitizer(value => {
-  if (_.includes(TransactionStatusValues, value)) {
+  if (includes(value, TransactionStatusValues)) {
     return value;
   }
   return;
@@ -97,7 +97,7 @@ export const sanitizeTransactionStatus = sanitizeQuery(
 export const sanitizeRequestStatus = sanitizeQuery(
   "requestStatus"
 ).customSanitizer(value => {
-  if (_.includes(RequestStatusValues, value)) {
+  if (includes(value, RequestStatusValues)) {
     return value;
   }
   return;
