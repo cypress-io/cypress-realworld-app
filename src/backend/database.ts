@@ -318,7 +318,13 @@ export const formatTransactionForApiResponse = (
 export const formatTransactionsForApiResponse = (
   transactions: Transaction[]
 ): TransactionResponseItem[] =>
-  transactions.map(transaction => formatTransactionForApiResponse(transaction));
+  orderBy(
+    [(transaction: Transaction) => new Date(transaction.modifiedAt)],
+    ["desc"],
+    transactions.map(transaction =>
+      formatTransactionForApiResponse(transaction)
+    )
+  );
 
 export const getTransactionsForUserByObj = (userId: string, query?: object) => {
   const receiverTransactions: Transaction[] = getTransactionsByObj({
@@ -331,10 +337,9 @@ export const getTransactionsForUserByObj = (userId: string, query?: object) => {
     ...query
   });
 
-  const transactions = orderBy(
-    [(transaction: Transaction) => new Date(transaction.modifiedAt)],
-    ["desc"],
-    uniqBy("id", unionBy("id", receiverTransactions, senderTransactions))
+  const transactions = uniqBy(
+    "id",
+    unionBy("id", receiverTransactions, senderTransactions)
   );
 
   return transactions;
