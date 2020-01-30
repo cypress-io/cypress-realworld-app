@@ -34,6 +34,7 @@ router.get(
     ...isTransactionQSValidator
   ]),
   (req, res) => {
+    console.log("/TRANSACTIONS User: ", req.user);
     const transactions = getTransactionsForUserByObj(req.user?.id!, req.query);
 
     res.status(200);

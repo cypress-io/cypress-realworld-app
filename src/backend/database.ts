@@ -1,7 +1,7 @@
 import path from "path";
 import v4 from "uuid";
 import _ from "lodash";
-import { uniqBy, unionBy } from "lodash/fp";
+import { uniqBy, unionBy, map } from "lodash/fp";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 import shortid from "shortid";
@@ -23,6 +23,7 @@ import {
   NotificationsType,
   TransactionResponseItem
 } from "../models";
+import { Result } from "express-validator";
 
 const USER_TABLE = "users";
 const CONTACT_TABLE = "contacts";
@@ -95,13 +96,16 @@ export const getBy = (entity: string, key: string, value: any) => {
   return result;
 };
 
-export const getAllByObj = (entity: string, query: object) =>
-  db()
+export const getAllByObj = (entity: string, query: object) => {
+  const result = db()
     .get(entity)
     // @ts-ignore
     .filter(query)
     .value();
-
+  //console.log("GABO ENTITY, QUERY:", entity, " ", query);
+  //console.log("GABO result:", result);
+  return result;
+};
 export const getByObj = (entity: string, query: object) =>
   db()
     .get(entity)
@@ -312,6 +316,7 @@ export const formatTransactionsForApiResponse = (
   transactions.map(transaction => formatTransactionForApiResponse(transaction));
 
 export const getTransactionsForUserByObj = (userId: string, query?: object) => {
+  console.log("USER ID:", userId);
   const receiverTransactions: Transaction[] = getTransactionsByObj({
     receiverId: userId,
     ...query
@@ -321,13 +326,15 @@ export const getTransactionsForUserByObj = (userId: string, query?: object) => {
     senderId: userId,
     ...query
   });
+  const senderTransactionIds = map("id", senderTransactions);
+  console.log("Sender TRANSACTION IDS:", senderTransactionIds);
 
   const transactions = uniqBy(
     "id",
     unionBy("id", receiverTransactions, senderTransactions)
   );
 
-  const transactionIds = _.map(transactions, "id");
+  const transactionIds = map("id", transactions);
   console.log("GET TRANSACTION IDS:", transactionIds);
 
   return transactions;
@@ -390,6 +397,8 @@ export const createTransaction = (
     createdAt: new Date(),
     modifiedAt: new Date()
   };
+  // TODO: if payment and if bankaccount createBankTransfer for withdrawal for the difference associated to the transaction
+  // if request the transaction will be updated when the request is accepted
 
   const savedTransaction = saveTransaction(transaction);
   return savedTransaction;
@@ -415,6 +424,7 @@ export const updateTransactionById = (
 ) => {
   const transaction = getTransactionBy("id", transactionId);
 
+  // TODO: if request accepted - createBankTransfer for withdrawal for the difference associated to the transaction
   if (userId === transaction.senderId || userId === transaction.receiverId) {
     db()
       .get(TRANSACTION_TABLE)

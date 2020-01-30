@@ -13,6 +13,7 @@ describe("Transaction Lists", function() {
   });
   beforeEach(function() {
     cy.task("db:seed");
+    // TODO: Highlight this use case
     Cypress.Cookies.preserveOnce("connect.sid");
   });
   after(function() {
@@ -45,8 +46,9 @@ describe("Transaction Lists", function() {
 
   it("renders contacts transaction list", function() {
     cy.getTest("main").scrollTo("top");
-    cy.getTest("nav-contacts-tab")
-      .click({ force: true })
+    cy.getTest("nav-contacts-tab") // On get Navigation tabs are hidden under the AppBar in the UI
+      .scrollIntoView() // TODO: Bug? Does not work as expected to scroll the tab into view
+      .click({ force: true }) // Current solution is to force the click
       .should("have.class", "Mui-selected");
     cy.getTest("transaction-list")
       .children()
