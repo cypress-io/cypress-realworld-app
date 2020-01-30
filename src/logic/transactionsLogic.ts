@@ -23,7 +23,8 @@ import {
   transactionDetailPending,
   TRANSACTION_CREATE_PENDING,
   TRANSACTION_CREATE_SUCCESS,
-  TRANSACTION_CREATE_ERROR
+  TRANSACTION_CREATE_ERROR,
+  transactionsPersonalPending
 } from "../actions/transactions";
 import { history } from "../index";
 
@@ -111,7 +112,7 @@ const transactionsLikeSuccessLogic = createLogic({
       );
       dispatch(transactionsPublicPending());
       dispatch(transactionsContactsPending());
-      dispatch(transactionsContactsPending());
+      dispatch(transactionsPersonalPending());
     }
     done();
   }
@@ -155,7 +156,7 @@ const transactionsCommentSuccessLogic = createLogic({
       );
       dispatch(transactionsPublicPending());
       dispatch(transactionsContactsPending());
-      dispatch(transactionsContactsPending());
+      dispatch(transactionsPersonalPending());
     }
     done();
   }
@@ -209,7 +210,7 @@ const transactionsRefreshLogic = createLogic({
   process({}, dispatch, done) {
     dispatch(transactionsPublicPending());
     dispatch(transactionsContactsPending());
-    dispatch(transactionsContactsPending());
+    dispatch(transactionsPersonalPending());
     done();
   }
 });
