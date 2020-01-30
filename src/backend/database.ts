@@ -1,6 +1,14 @@
 import path from "path";
 import v4 from "uuid";
-import { uniqBy, unionBy, map, sample, reject, includes } from "lodash/fp";
+import {
+  uniqBy,
+  unionBy,
+  map,
+  sample,
+  reject,
+  includes,
+  orderBy
+} from "lodash/fp";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 import shortid from "shortid";
@@ -323,9 +331,10 @@ export const getTransactionsForUserByObj = (userId: string, query?: object) => {
     ...query
   });
 
-  const transactions = uniqBy(
-    "id",
-    unionBy("id", receiverTransactions, senderTransactions)
+  const transactions = orderBy(
+    [(transaction: Transaction) => new Date(transaction.modifiedAt)],
+    ["desc"],
+    uniqBy("id", unionBy("id", receiverTransactions, senderTransactions))
   );
 
   return transactions;
