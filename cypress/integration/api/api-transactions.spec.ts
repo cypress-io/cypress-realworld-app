@@ -65,7 +65,7 @@ describe("Transactions API", function() {
     it("gets a list of transactions for users list of contacts", function() {
       cy.request("GET", `${apiTransactions}/contacts`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions.length).to.eq(7);
+        expect(response.body.transactions.length).to.eq(20);
       });
     });
 
@@ -78,7 +78,7 @@ describe("Transactions API", function() {
         }
       }).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions.length).to.eq(1);
+        expect(response.body.transactions.length).to.eq(3);
       });
     });
   });
@@ -87,8 +87,8 @@ describe("Transactions API", function() {
     it("gets a list of public transactions", function() {
       cy.request("GET", `${apiTransactions}/public`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions.contacts.length).to.eq(11);
-        expect(response.body.transactions.public.length).to.eq(5);
+        expect(response.body.transactions.contacts.length).to.eq(17);
+        expect(response.body.transactions.public.length).to.eq(3);
       });
     });
   });

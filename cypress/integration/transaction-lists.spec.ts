@@ -36,12 +36,12 @@ describe("Transaction Lists", function() {
     cy.getTest("transaction-list")
       .first()
       .children()
-      .should("have.length", 11);
+      .should("have.length", 17);
 
     cy.getTest("transaction-list")
       .last()
       .children()
-      .should("have.length", 5);
+      .should("have.length", 3);
   });
 
   it("renders contacts transaction list", function() {
@@ -52,7 +52,7 @@ describe("Transaction Lists", function() {
       .should("have.class", "Mui-selected");
     cy.getTest("transaction-list")
       .children()
-      .should("have.length", 7);
+      .should("have.length", 20);
   });
 
   it("renders personal transaction list", function() {
@@ -62,6 +62,6 @@ describe("Transaction Lists", function() {
       .should("have.class", "Mui-selected");
     cy.getTest("transaction-list")
       .children()
-      .should("have.length", 3);
+      .should("have.length", 12);
   });
 });
