@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router-dom";
 import MainContainer from "./MainContainer";
@@ -38,7 +38,7 @@ const TransactionDetailsContainer: React.FC<TransactionDetailsContainerProps> = 
     ) {
       transactionDetail({ transactionId });
     }
-  });
+  }, [transaction, transactionId, transactionDetail]);
 
   if (
     !transaction ||
