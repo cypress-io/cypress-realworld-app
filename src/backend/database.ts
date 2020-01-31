@@ -124,7 +124,10 @@ export const getByObj = (entity: string, query: object) =>
 // User
 export const getUserBy = (key: string, value: any) =>
   getBy(USER_TABLE, key, value);
+export const getUserId = (user: User): string => user.id;
 export const getUserById = (id: string) => getUserBy("id", id);
+export const getUserByUsername = (username: string) =>
+  getUserBy("username", username);
 export const getUsersBy = (key: string, value: any) => {
   getAllBy(USER_TABLE, key, value);
 };
@@ -174,14 +177,12 @@ export const updateUserById = (userId: string, edits: Partial<User>) => {
 // Contact
 export const getContactBy = (key: string, value: any) =>
   getBy(CONTACT_TABLE, key, value);
+
 export const getContactsBy = (key: string, value: any) =>
   getAllBy(CONTACT_TABLE, key, value);
 
-export const getContactsByUsername = (username: string) => {
-  const user: User = getUserBy("username", username);
-  const userContacts: Contact[] = getContactsBy("userId", user.id);
-  return userContacts;
-};
+export const getContactsByUsername = (username: string) =>
+  flow(getUserByUsername, getUserId, getContactsByUserId)(username);
 
 export const getContactsByUserId = (userId: string): Contact[] =>
   getContactsBy("userId", userId);
