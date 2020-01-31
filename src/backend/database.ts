@@ -2,14 +2,13 @@ import path from "path";
 import v4 from "uuid";
 import {
   uniqBy,
-  unionBy,
   map,
   sample,
   reject,
   includes,
   orderBy,
   flow,
-  curry
+  flatMap
 } from "lodash/fp";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
@@ -334,26 +333,23 @@ export const formatTransactionsForApiResponse = (
     )
   );
 
-export const getTransactionsForUserByObj = curry(
-  (userId: string, query?: object) => {
-    const receiverTransactions: Transaction[] = getTransactionsByObj({
+export const getAllTransactionsForUserByObj = (
+  userId: string,
+  query?: object
+) =>
+  flatMap(getTransactionsByObj)([
+    {
       receiverId: userId,
       ...query
-    });
-
-    const senderTransactions: Transaction[] = getTransactionsByObj({
+    },
+    {
       senderId: userId,
       ...query
-    });
+    }
+  ]);
 
-    const transactions = uniqBy(
-      "id",
-      unionBy("id", receiverTransactions, senderTransactions)
-    );
-
-    return transactions;
-  }
-);
+export const getTransactionsForUserByObj = (userId: string, query?: object) =>
+  flow(getAllTransactionsForUserByObj, uniqBy("id"))(userId, query);
 
 export const getTransactionsByUserId = (userId: string) => {
   const transactions: Transaction[] = getTransactionsBy("receiverId", userId);
