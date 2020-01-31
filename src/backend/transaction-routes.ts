@@ -34,7 +34,6 @@ router.get(
     ...isTransactionQSValidator
   ]),
   (req, res) => {
-    //const transactions = getTransactionsForUserForApi({ userId: req.user?.id!, query: req.query});
     const transactions = getTransactionsForUserForApi(req.user?.id!, req.query);
 
     res.status(200);
