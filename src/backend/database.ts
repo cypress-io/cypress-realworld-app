@@ -7,7 +7,9 @@ import {
   sample,
   reject,
   includes,
-  orderBy
+  orderBy,
+  flow,
+  curry
 } from "lodash/fp";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
@@ -298,6 +300,12 @@ export const getTransactionsByObj = (query: object) =>
 export const getTransactionByIdForApi = (id: string) =>
   formatTransactionForApiResponse(getTransactionBy("id", id));
 
+export const getTransactionsForUserForApi = (userId: string, query?: object) =>
+  flow(getTransactionsForUserByObj, formatTransactionsForApiResponse)(
+    userId,
+    query
+  );
+
 export const formatTransactionForApiResponse = (
   transaction: Transaction
 ): TransactionResponseItem => {
@@ -326,24 +334,26 @@ export const formatTransactionsForApiResponse = (
     )
   );
 
-export const getTransactionsForUserByObj = (userId: string, query?: object) => {
-  const receiverTransactions: Transaction[] = getTransactionsByObj({
-    receiverId: userId,
-    ...query
-  });
+export const getTransactionsForUserByObj = curry(
+  (userId: string, query?: object) => {
+    const receiverTransactions: Transaction[] = getTransactionsByObj({
+      receiverId: userId,
+      ...query
+    });
 
-  const senderTransactions: Transaction[] = getTransactionsByObj({
-    senderId: userId,
-    ...query
-  });
+    const senderTransactions: Transaction[] = getTransactionsByObj({
+      senderId: userId,
+      ...query
+    });
 
-  const transactions = uniqBy(
-    "id",
-    unionBy("id", receiverTransactions, senderTransactions)
-  );
+    const transactions = uniqBy(
+      "id",
+      unionBy("id", receiverTransactions, senderTransactions)
+    );
 
-  return transactions;
-};
+    return transactions;
+  }
+);
 
 export const getTransactionsByUserId = (userId: string) => {
   const transactions: Transaction[] = getTransactionsBy("receiverId", userId);
@@ -357,7 +367,9 @@ export const getTransactionsForUserContacts = (
   const contacts = getContactsByUserId(userId);
   const contactIds = map("contactUserId", contacts);
   return contactIds.flatMap((contactId): Transaction[] => {
-    return getTransactionsForUserByObj(contactId, query);
+    return formatTransactionsForApiResponse(
+      getTransactionsForUserByObj(contactId, query)
+    );
   });
 };
 
