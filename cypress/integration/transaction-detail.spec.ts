@@ -42,6 +42,6 @@ describe("Transaction Detail", function() {
     cy.getTestLike(`transaction-comment-input`).type(
       "This is my comment{enter}"
     );
-    cy.getTestLike(`transaction-comment-count`).should("contain", 4);
+    cy.getTestLike(`transaction-comment-count`).should("contain", 1);
   });
 });
