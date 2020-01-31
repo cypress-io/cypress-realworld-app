@@ -232,10 +232,10 @@ export const getBankAccountBy = (key: string, value: any) =>
   getBy(BANK_ACCOUNT_TABLE, key, value);
 
 export const getBankAccountById = (id: string) => getBankAccountBy("id", id);
-export const getBankAccountsBy = (key: string, value: any) => {
-  const accounts = getBy(BANK_ACCOUNT_TABLE, key, value);
-  return accounts ? Array.of(accounts) : [];
-};
+
+export const getBankAccountsBy = (key: string, value: any) =>
+  getAllBy(BANK_ACCOUNT_TABLE, key, value);
+
 export const getBankAccountsByUserId = (userId: string) => {
   const accounts: BankAccount[] = getBankAccountsBy("userId", userId);
   return accounts;
@@ -292,8 +292,10 @@ export const getTransactionBy = (key: string, value: any) =>
   getBy(TRANSACTION_TABLE, key, value);
 
 export const getTransactionById = (id: string) => getTransactionBy("id", id);
+
 export const getTransactionsBy = (key: string, value: string) =>
   getAllBy(TRANSACTION_TABLE, key, value);
+
 export const getTransactionsByObj = (query: object) =>
   getAllByObj(TRANSACTION_TABLE, query);
 
@@ -352,10 +354,8 @@ export const getAllTransactionsForUserByObj = (
 export const getTransactionsForUserByObj = (userId: string, query?: object) =>
   flow(getAllTransactionsForUserByObj, uniqBy("id"))(userId, query);
 
-export const getTransactionsByUserId = (userId: string) => {
-  const transactions: Transaction[] = getTransactionsBy("receiverId", userId);
-  return transactions;
-};
+export const getTransactionsByUserId = (userId: string) =>
+  getTransactionsBy("receiverId", userId);
 
 export const getTransactionsForUserContacts = (
   userId: string,
