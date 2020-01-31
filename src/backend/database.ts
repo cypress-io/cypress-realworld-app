@@ -364,29 +364,39 @@ export const getTransactionsForUserContacts = (
   userId: string,
   query?: object
 ) =>
-  flatMap(
-    contactId => getTransactionsForUserForApi(contactId, query),
-    getContactIdsForUser(userId)
-  );
-
-export const getPublicTransactionsDefaultSort = (userId: string) => {
-  const contactsTransactions = uniqBy(
+  uniqBy(
     "id",
-    getTransactionsForUserContacts(userId)
-  );
-  const contactsTransactionIds = map("id", contactsTransactions);
-  const allPublicTransactions = getAllPublicTransactions();
-
-  const nonContactPublicTransactions = reject(
-    t => includes(t.id, contactsTransactionIds),
-    allPublicTransactions
+    flatMap(
+      contactId => getTransactionsForUserForApi(contactId, query),
+      getContactIdsForUser(userId)
+    )
   );
 
-  return {
-    contacts: formatTransactionsForApiResponse(contactsTransactions),
-    public: formatTransactionsForApiResponse(nonContactPublicTransactions)
-  };
+export const getTransactionIds = (transactions: Transaction[]) =>
+  map("id", transactions);
+
+export const getContactsTransactionIds = (
+  userId: string
+): Transaction["id"][] =>
+  flow(getTransactionsForUserContacts, getTransactionIds)(userId);
+
+export const nonContactPublicTransactions = (userId: string): Transaction[] => {
+  const contactsTransactionIds = getContactsTransactionIds(userId);
+  return flow(
+    getAllPublicTransactions,
+    reject((transaction: Transaction) =>
+      includes(transaction.id, contactsTransactionIds)
+    )
+  )(userId);
 };
+
+export const getNonContactPublicTransactionsForApi = (userId: string) =>
+  flow(nonContactPublicTransactions, formatTransactionsForApiResponse)(userId);
+
+export const getPublicTransactionsDefaultSort = (userId: string) => ({
+  contacts: getTransactionsForUserContacts(userId),
+  public: getNonContactPublicTransactionsForApi(userId)
+});
 
 export const createTransaction = (
   userId: User["id"],

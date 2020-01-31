@@ -52,7 +52,7 @@ describe("Transaction Lists", function() {
       .should("have.class", "Mui-selected");
     cy.getTest("transaction-list")
       .children()
-      .should("have.length", 20);
+      .should("have.length", 17);
   });
 
   it("renders personal transaction list", function() {
@@ -62,6 +62,6 @@ describe("Transaction Lists", function() {
       .should("have.class", "Mui-selected");
     cy.getTest("transaction-list")
       .children()
-      .should("have.length", 12);
+      .should("have.length", 9);
   });
 });

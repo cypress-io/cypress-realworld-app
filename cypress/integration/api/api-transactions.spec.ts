@@ -65,7 +65,7 @@ describe("Transactions API", function() {
     it("gets a list of transactions for users list of contacts", function() {
       cy.request("GET", `${apiTransactions}/contacts`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions.length).to.eq(20);
+        expect(response.body.transactions.length).to.eq(17);
       });
     });
 

@@ -60,7 +60,7 @@ describe("Transactions", () => {
     const result: Transaction[] = getTransactionsForUserContacts(
       userToLookup.id
     );
-    expect(result.length).toBe(20);
+    expect(result.length).toBe(17);
   });
 
   it("should retrieve a list of transactions for a users contacts - status 'incomplete'", () => {
@@ -77,7 +77,7 @@ describe("Transactions", () => {
     const contactsTransactions: Transaction[] = getTransactionsForUserContacts(
       user.id
     );
-    expect(contactsTransactions.length).toBe(20);
+    expect(contactsTransactions.length).toBe(17);
 
     const response = getPublicTransactionsDefaultSort(user.id);
 
