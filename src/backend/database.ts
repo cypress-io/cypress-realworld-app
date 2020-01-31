@@ -357,18 +357,17 @@ export const getTransactionsForUserByObj = (userId: string, query?: object) =>
 export const getTransactionsByUserId = (userId: string) =>
   getTransactionsBy("receiverId", userId);
 
+export const getContactIdsForUser = (userId: string): Contact["id"][] =>
+  flow(getContactsByUserId, map("contactUserId"))(userId);
+
 export const getTransactionsForUserContacts = (
   userId: string,
   query?: object
-) => {
-  const contacts = getContactsByUserId(userId);
-  const contactIds = map("contactUserId", contacts);
-  return contactIds.flatMap((contactId): Transaction[] => {
-    return formatTransactionsForApiResponse(
-      getTransactionsForUserByObj(contactId, query)
-    );
-  });
-};
+) =>
+  flatMap(
+    contactId => getTransactionsForUserForApi(contactId, query),
+    getContactIdsForUser(userId)
+  );
 
 export const getPublicTransactionsDefaultSort = (userId: string) => {
   const contactsTransactions = uniqBy(
