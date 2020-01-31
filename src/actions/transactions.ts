@@ -1,3 +1,5 @@
+import { Transaction } from "../models";
+
 export const TRANSACTIONS_PUBLIC_PENDING = "TRANSACTIONS_PUBLIC_PENDING";
 export const TRANSACTIONS_PUBLIC_SUCCESS = "TRANSACTIONS_PUBLIC_SUCCESS";
 export const TRANSACTIONS_PUBLIC_ERROR = "TRANSACTIONS_PUBLIC_ERROR";
@@ -137,7 +139,9 @@ export const transactionCreatePending = (payload: object) =>
     payload
   } as const);
 
-export const transactionCreateSuccess = (payload: any) =>
+export const transactionCreateSuccess = (payload: {
+  transaction: Transaction;
+}) =>
   ({
     type: TRANSACTION_CREATE_SUCCESS,
     payload

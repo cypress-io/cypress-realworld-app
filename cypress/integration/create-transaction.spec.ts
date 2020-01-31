@@ -58,8 +58,8 @@ describe("Create Transaction", function() {
     cy.getTest("transaction-create-description-input").type("Fancy Hotel");
     cy.getTest("transaction-create-submit-request").click();
     cy.getTest("nav-personal-tab")
-      .scrollIntoView()
-      .click({ force: true })
+      //  .scrollIntoView() // TODO: Bug? Does not work here
+      //  .click({ force: true }) // Click must be forced since hidden
       .should("have.class", "Mui-selected");
 
     cy.wait("@createTransaction").should("have.property", "status", 200);

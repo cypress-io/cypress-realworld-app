@@ -27,6 +27,7 @@ import {
   transactionsPersonalPending
 } from "../actions/transactions";
 import { history } from "../index";
+import { isRequestTransaction } from "../utils/transactionUtils";
 
 const transactionsPersonalLogic = createLogic({
   type: TRANSACTIONS_PERSONAL_PENDING,
@@ -207,10 +208,15 @@ const transactionsRefreshLogic = createLogic({
 
   // @ts-ignore
   // eslint-disable-next-line no-empty-pattern
-  process({}, dispatch, done) {
+  process({ action }, dispatch, done) {
     const { pathname } = window.location;
+    // @ts-ignore
+    const { payload } = action;
 
     if (pathname.match("transaction/new")) {
+      if (isRequestTransaction(payload.transaction)) {
+        history.push("/personal");
+      }
       history.push("/");
     }
 
