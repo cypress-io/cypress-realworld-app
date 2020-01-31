@@ -83,7 +83,9 @@ describe("Transactions", () => {
 
     expect(response.contacts.length).toBe(17);
     expect(response.public.length).toBe(3);
-    expect(response.contacts[8].id).toBe(contactsTransactions[8].id);
+
+    const ids = map("id", contactsTransactions);
+    expect(ids).toContain(response.contacts[9].id);
   });
 
   it("should create a payment", () => {
