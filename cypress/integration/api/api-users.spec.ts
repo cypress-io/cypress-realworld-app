@@ -89,7 +89,7 @@ describe("Users API", function() {
         qs: { q: email }
       }).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.users).to.contain({
+        expect(response.body.users[0]).to.contain({
           firstName
         });
       });
@@ -105,7 +105,7 @@ describe("Users API", function() {
         qs: { q: "+12133734253" }
       }).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.users).to.contain({
+        expect(response.body.users[0]).to.contain({
           firstName
         });
       });

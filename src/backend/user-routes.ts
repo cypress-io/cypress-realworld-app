@@ -8,10 +8,10 @@ import { parsePhoneNumberFromString } from "libphonenumber-js";
 import {
   getAllUsers,
   createUser,
-  getUserBy,
   updateUserById,
   getUserById,
-  getUsersBy
+  getUsersBy,
+  getUserByUsername
 } from "./database";
 import { User } from "../models/user";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
@@ -51,13 +51,13 @@ router.get(
     // https://github.com/typicode/json-server/blob/dfea2b34007e731770ca2f4e576b1f1908952b68/src/server/router/plural.js#L86
 
     if (validator.isEmail(q)) {
-      users = getUserBy("email", q);
+      users = getUsersBy("email", q);
       return res.status(200).json({ users });
     }
 
     const phoneNumber = parsePhoneNumberFromString(q);
     if (phoneNumber) {
-      users = getUserBy("phoneNumber", phoneNumber.number);
+      users = getUsersBy("phoneNumber", phoneNumber.number);
       return res.status(200).json({ users });
     }
 
@@ -107,7 +107,7 @@ router.get("/profile/:username", (req, res) => {
 
   const user = pick(
     ["firstName", "lastName", "avatar"],
-    getUserBy("username", username)
+    getUserByUsername(username)
   );
 
   res.status(200);
