@@ -69,7 +69,7 @@ describe("Create Transaction", function() {
     cy.getTest("transaction-list").should("contain", "Fancy Hotel");
   });
 
-  it("searches for a user by username and submits a transaction request", function() {
+  it("searches for a user by username", function() {
     cy.getTest("nav-top-new-transaction").click();
 
     cy.get("@users").then(users => {
@@ -85,23 +85,7 @@ describe("Create Transaction", function() {
     cy.wait("@usersSearch").should("have.property", "status", 200);
     cy.getTestLike("user-list-item")
       .first()
-      .contains("Kaden")
-      .click();
-    cy.getTest("transaction-create-form").should("be.visible");
-
-    cy.getTest("transaction-create-amount-input").type("950");
-    cy.getTest("transaction-create-description-input").type(
-      "Another Fancy Hotel"
-    );
-    cy.getTest("transaction-create-submit-request").click();
-    cy.getTest("nav-personal-tab")
-      //  .scrollIntoView() // TODO: Bug? Does not work here
-      //  .click({ force: true }) // Click must be forced since hidden
-      .should("have.class", "Mui-selected");
-
-    cy.wait("@createTransaction").should("have.property", "status", 200);
-
-    cy.getTest("transaction-list").should("contain", "Another Fancy Hotel");
+      .contains("Kaden");
   });
 
   it("searches for a user by email and submits a transaction request", function() {
@@ -120,20 +104,6 @@ describe("Create Transaction", function() {
     cy.wait("@usersSearch").should("have.property", "status", 200);
     cy.getTestLike("user-list-item")
       .first()
-      .contains("Kaden")
-      .click();
-    cy.getTest("transaction-create-form").should("be.visible");
-
-    cy.getTest("transaction-create-amount-input").type("15");
-    cy.getTest("transaction-create-description-input").type("Fancy Taco");
-    cy.getTest("transaction-create-submit-request").click();
-    cy.getTest("nav-personal-tab")
-      //  .scrollIntoView() // TODO: Bug? Does not work here
-      //  .click({ force: true }) // Click must be forced since hidden
-      .should("have.class", "Mui-selected");
-
-    cy.wait("@createTransaction").should("have.property", "status", 200);
-
-    cy.getTest("transaction-list").should("contain", "Fancy Taco");
+      .contains("Kaden");
   });
 });
