@@ -13,6 +13,7 @@ describe("Transaction Lists", function() {
   });
   beforeEach(function() {
     cy.task("db:seed");
+    // TODO: Highlight this use case
     Cypress.Cookies.preserveOnce("connect.sid");
   });
   after(function() {
@@ -35,22 +36,23 @@ describe("Transaction Lists", function() {
     cy.getTest("transaction-list")
       .first()
       .children()
-      .should("have.length", 11);
+      .should("have.length", 17);
 
     cy.getTest("transaction-list")
       .last()
       .children()
-      .should("have.length", 5);
+      .should("have.length", 3);
   });
 
   it("renders contacts transaction list", function() {
     cy.getTest("main").scrollTo("top");
-    cy.getTest("nav-contacts-tab")
-      .click({ force: true })
+    cy.getTest("nav-contacts-tab") // On get Navigation tabs are hidden under the AppBar in the UI
+      .scrollIntoView() // TODO: Bug? Does not work as expected to scroll the tab into view
+      .click({ force: true }) // Current solution is to force the click
       .should("have.class", "Mui-selected");
     cy.getTest("transaction-list")
       .children()
-      .should("have.length", 7);
+      .should("have.length", 17);
   });
 
   it("renders personal transaction list", function() {
@@ -60,6 +62,6 @@ describe("Transaction Lists", function() {
       .should("have.class", "Mui-selected");
     cy.getTest("transaction-list")
       .children()
-      .should("have.length", 3);
+      .should("have.length", 9);
   });
 });

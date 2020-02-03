@@ -1,14 +1,14 @@
 ///<reference path="types.ts" />
 
 import express from "express";
-import _ from "lodash";
+import { remove } from "lodash/fp";
 import {
-  getTransactionsForUserByObj,
   getTransactionsForUserContacts,
   createTransaction,
   updateTransactionById,
   getPublicTransactionsDefaultSort,
-  getTransactionByIdForApi
+  getTransactionByIdForApi,
+  getTransactionsForUserForApi
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import {
@@ -34,7 +34,7 @@ router.get(
     ...isTransactionQSValidator
   ]),
   (req, res) => {
-    const transactions = getTransactionsForUserByObj(req.user?.id!, req.query);
+    const transactions = getTransactionsForUserForApi(req.user?.id!, req.query);
 
     res.status(200);
     res.json({ transactions });
@@ -86,7 +86,7 @@ router.post(
     const transactionPayload = req.body;
     const transactionType = transactionPayload.type;
 
-    _.remove(transactionPayload, "type");
+    remove("type", transactionPayload);
 
     const transaction = createTransaction(
       req.user?.id!,

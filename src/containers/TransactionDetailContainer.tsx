@@ -38,7 +38,7 @@ const TransactionDetailsContainer: React.FC<TransactionDetailsContainerProps> = 
     ) {
       transactionDetail({ transactionId });
     }
-  });
+  }, [transaction, transactionId, transactionDetail]);
 
   if (
     !transaction ||

@@ -7,7 +7,7 @@ import {
   NotificationsType
   //PaymentNotificationStatus
 } from "../models";
-import _ from "lodash";
+import { includes } from "lodash/fp";
 
 const TransactionStatusValues = Object.values(TransactionStatus);
 const RequestStatusValues = Object.values(RequestStatus);
@@ -84,21 +84,20 @@ export const isUserValidator = [
     .isIn(["public", "private", "contacts"])
 ];
 
-// default status to "complete" if not provided
 export const sanitizeTransactionStatus = sanitizeQuery(
   "status"
 ).customSanitizer(value => {
-  if (_.includes(TransactionStatusValues, value)) {
+  if (includes(value, TransactionStatusValues)) {
     return value;
   }
-  return TransactionStatus.complete;
+  return;
 });
 
 // default request status to undefined if not provided
 export const sanitizeRequestStatus = sanitizeQuery(
   "requestStatus"
 ).customSanitizer(value => {
-  if (_.includes(RequestStatusValues, value)) {
+  if (includes(value, RequestStatusValues)) {
     return value;
   }
   return;
@@ -106,8 +105,8 @@ export const sanitizeRequestStatus = sanitizeQuery(
 
 export const isTransactionQSValidator = [
   query("status")
-    .optional({ checkFalsy: true })
     .isIn(TransactionStatusValues)
+    .optional()
     .trim(),
   query("requestStatus")
     .optional({ checkFalsy: true })
@@ -144,9 +143,11 @@ export const isTransactionPayloadValidator = [
     .isIn(["payment", "request"])
     .trim(),
   body("privacyLevel")
+    .optional()
     .isIn(DefaultPrivacyLevelValues)
     .trim(),
   body("source")
+    .optional()
     .isString()
     .trim(),
   body("receiverId")

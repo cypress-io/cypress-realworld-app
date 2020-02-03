@@ -16,7 +16,7 @@ export enum RequestStatus {
 export interface Transaction {
   id: string;
   uuid: string;
-  source: string;
+  source: string; // Empty if Payment or Request; Populated with BankAccount ID
   amount: string;
   description: string;
   privacyLevel: DefaultPrivacyLevel;

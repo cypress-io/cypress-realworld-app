@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { sample, reject, uniq } from "lodash";
 import { Transaction } from "../src/models";
 
 const testSeed = require("../src/data/test-seed.json");
@@ -8,14 +8,14 @@ export const transactions = testSeed.transactions;
 
 // returns a random user other than the one passed in
 export const getOtherRandomUser = (userId: string) =>
-  _.sample(_.reject(users, ["id", userId]));
+  sample(reject(["id", userId], users));
 
 export const getRandomTransactions = (
   baseCount: number,
   baseTransactions: Transaction[]
 ) =>
-  _.uniq(
+  uniq(
     Array(baseCount)
       .fill(null)
-      .map(() => _.sample(baseTransactions))
+      .map(() => sample(baseTransactions))
   );

@@ -1,16 +1,15 @@
 ///<reference path="types.ts" />
 
 import express from "express";
-import validator from "validator";
-import _ from "lodash";
-import { parsePhoneNumberFromString } from "libphonenumber-js";
+import { isEqual, pick } from "lodash/fp";
 
 import {
   getAllUsers,
   createUser,
-  getUserBy,
   updateUserById,
-  getUserById
+  getUserById,
+  getUserByUsername,
+  searchUsers
 } from "./database";
 import { User } from "../models/user";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
@@ -43,24 +42,7 @@ router.get(
   (req, res) => {
     const { q } = req.query;
 
-    let users;
-
-    // Reference:
-    // lowdb full-text search in json-server
-    // https://github.com/typicode/json-server/blob/dfea2b34007e731770ca2f4e576b1f1908952b68/src/server/router/plural.js#L86
-
-    if (validator.isEmail(q)) {
-      users = getUserBy("email", q);
-      return res.status(200).json({ users });
-    }
-
-    const phoneNumber = parsePhoneNumberFromString(q);
-    if (phoneNumber) {
-      users = getUserBy("phoneNumber", phoneNumber.number);
-      return res.status(200).json({ users });
-    }
-
-    users = getUserBy("username", q);
+    const users = searchUsers(q);
 
     res.status(200).json({ users });
   }
@@ -88,7 +70,7 @@ router.get(
     const { userId } = req.params;
 
     // Permission: account owner
-    if (!_.isEqual(userId, req.user?.id)) {
+    if (!isEqual(userId, req.user?.id)) {
       return res.status(401).send({
         error: "Unauthorized"
       });
@@ -104,11 +86,10 @@ router.get(
 router.get("/profile/:username", (req, res) => {
   const { username } = req.params;
 
-  const user = _.pick(getUserBy("username", username), [
-    "firstName",
-    "lastName",
-    "avatar"
-  ]);
+  const user = pick(
+    ["firstName", "lastName", "avatar"],
+    getUserByUsername(username)
+  );
 
   res.status(200);
   res.json({ user });

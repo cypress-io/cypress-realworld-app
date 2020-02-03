@@ -10,13 +10,18 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { TransactionResponseItem } from "../models";
 import { useHistory } from "react-router";
+import { isRequestTransaction } from "../utils/transactionUtils";
 
 const useStyles = makeStyles({
   card: {
     minWidth: "100%"
   },
   title: {
-    fontSize: 14
+    fontSize: 18
+  },
+  titleName: {
+    fontSize: 18,
+    color: "#1A202C"
   }
 });
 
@@ -27,15 +32,30 @@ type TransactionProps = {
 const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
   const classes = useStyles();
   const history = useHistory();
-  // Payment
-  /*if (transaction.) {
 
-  }
+  const TitleName: React.FC<{ name: string }> = ({ name }) => (
+    <Typography className={classes.titleName} display="inline">
+      {name}
+    </Typography>
+  );
 
-  // Request
-  if (transaction.requestStatus === "pending") {
+  const Title: React.FC<{ children: any }> = ({ children }) => (
+    <Typography color="textSecondary" className={classes.title} gutterBottom>
+      {children}
+    </Typography>
+  );
 
-  }*/
+  const headline = isRequestTransaction(transaction) ? (
+    <Title>
+      <TitleName name={transaction.senderName} /> charged{" "}
+      <TitleName name={transaction.receiverName} />
+    </Title>
+  ) : (
+    <Title>
+      <TitleName name={transaction.senderName} /> paid{" "}
+      <TitleName name={transaction.receiverName} />
+    </Title>
+  );
 
   const showTransactionDetail = (transactionId: string) => {
     history.push(`/transaction/${transactionId}`);
@@ -48,15 +68,13 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
     >
       <Card className={classes.card}>
         <CardContent>
-          <Typography
-            className={classes.title}
-            color="textSecondary"
-            gutterBottom
-          >
+          {headline}
+          <Typography variant="body2" color="textSecondary" component="p">
             {transaction.description}
           </Typography>
           <Typography
             variant="body2"
+            color="textSecondary"
             component="p"
             data-test={`transaction-like-count-${transaction.id}`}
           >
@@ -64,6 +82,7 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
           </Typography>
           <Typography
             variant="body2"
+            color="textSecondary"
             component="p"
             data-test={`transaction-comment-count-${transaction.id}`}
           >

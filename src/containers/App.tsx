@@ -9,6 +9,7 @@ import TransactionsContainer from "../containers/TransactionsContainer";
 import TransactionDetailContainer from "./TransactionDetailContainer";
 import SignIn from "../containers/SignIn";
 import SignUp from "../containers/SignUp";
+import TransactionCreateContainer from "./TransactionCreateContainer";
 
 interface StateProps {
   isBootstrapped: boolean;
@@ -32,6 +33,9 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
     <Switch>
       <PrivateRoute exact path={"/(public|contacts|personal)?"}>
         <TransactionsContainer />
+      </PrivateRoute>
+      <PrivateRoute exact path="/transaction/new">
+        <TransactionCreateContainer />
       </PrivateRoute>
       <PrivateRoute exact path="/transaction/:transactionId">
         <TransactionDetailContainer />

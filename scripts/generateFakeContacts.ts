@@ -1,5 +1,5 @@
 import fs from "fs";
-import _ from "lodash";
+import { flattenDeep } from "lodash";
 import shortid from "shortid";
 import faker from "faker";
 import { User } from "../src/models/user";
@@ -18,7 +18,7 @@ const contactRecords = users.map((user: User) => {
     }));
 });
 
-const flatContactRecords = _.flattenDeep(contactRecords);
+const flatContactRecords = flattenDeep(contactRecords);
 
 fs.writeFile(
   __dirname + "/contacts.json",

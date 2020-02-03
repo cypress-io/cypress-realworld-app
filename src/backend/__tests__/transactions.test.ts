@@ -12,7 +12,6 @@ import {
   updateTransactionById,
   getTransactionById,
   getPublicTransactionsDefaultSort,
-  getUserBy,
   getUserById
 } from "../database";
 
@@ -20,9 +19,9 @@ import {
   User,
   Transaction,
   RequestStatus,
-  DefaultPrivacyLevel,
-  TransactionResponseItem
+  DefaultPrivacyLevel
 } from "../../models";
+import { map } from "lodash/fp";
 
 describe("Transactions", () => {
   afterEach(() => {
@@ -40,7 +39,7 @@ describe("Transactions", () => {
     expect(getAllPublicTransactions().length).toBe(10);
   });
 
-  it("should retrieve a list of transactions for a user", () => {
+  it("should retrieve a list of transactions for a user (user is receiver)", () => {
     const userToLookup: User = getAllUsers()[0];
 
     const result: Transaction[] = getTransactionsForUserByObj(userToLookup.id, {
@@ -49,12 +48,19 @@ describe("Transactions", () => {
     expect(result[0].receiverId).toBe(userToLookup.id);
   });
 
+  it("should retrieve a list of transactions for a user (user is sender)", () => {
+    const userToLookup: User = getAllUsers()[0];
+
+    const result: Transaction[] = getTransactionsForUserByObj(userToLookup.id);
+    expect(result.pop()!.senderId).toBe(userToLookup.id);
+  });
+
   it("should retrieve a list of transactions for a users contacts", () => {
     const userToLookup: User = getAllUsers()[0];
     const result: Transaction[] = getTransactionsForUserContacts(
       userToLookup.id
     );
-    expect(result.length).toBe(11);
+    expect(result.length).toBe(17);
   });
 
   it("should retrieve a list of transactions for a users contacts - status 'incomplete'", () => {
@@ -63,7 +69,7 @@ describe("Transactions", () => {
       userToLookup.id,
       { status: "incomplete" }
     );
-    expect(result.length).toBe(1);
+    expect(result.length).toBe(3);
   });
 
   it("should retrieve a list of public transactions, default sort", () => {
@@ -71,13 +77,15 @@ describe("Transactions", () => {
     const contactsTransactions: Transaction[] = getTransactionsForUserContacts(
       user.id
     );
-    expect(contactsTransactions.length).toBe(11);
+    expect(contactsTransactions.length).toBe(17);
 
     const response = getPublicTransactionsDefaultSort(user.id);
 
-    expect(response.contacts.length).toBe(11);
-    expect(response.public.length).toBe(5);
-    expect(response.contacts[8].id).toBe(contactsTransactions[8].id);
+    expect(response.contacts.length).toBe(17);
+    expect(response.public.length).toBe(3);
+
+    const ids = map("id", contactsTransactions);
+    expect(ids).toContain(response.contacts[9].id);
   });
 
   it("should create a payment", () => {
@@ -118,6 +126,30 @@ describe("Transactions", () => {
     expect(result.id).toBeDefined();
     expect(result.status).toEqual("pending");
     expect(result.requestStatus).toEqual("pending");
+  });
+
+  it("should create a payment and find it in the personal transactions", () => {
+    const sender: User = getAllUsers()[0];
+    const receiver: User = getAllUsers()[1];
+    const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
+    const amount = faker.finance.amount();
+
+    const paymentDetails: Partial<Transaction> = {
+      source: senderBankAccount.id!,
+      receiverId: receiver.id,
+      description: `Payment: ${sender.id} to ${receiver.id}`,
+      amount,
+      privacyLevel: DefaultPrivacyLevel.private
+    };
+
+    const payment = createTransaction(sender.id, "payment", paymentDetails);
+    expect(payment.id).toBeDefined();
+
+    const personalTransactions: Transaction[] = getTransactionsForUserByObj(
+      sender.id
+    );
+    const ids = map("id", personalTransactions);
+    expect(ids).toContain(payment.id);
   });
 
   it("should update a transaction", () => {
