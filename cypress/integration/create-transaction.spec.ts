@@ -88,7 +88,7 @@ describe("Create Transaction", function() {
       .contains("Kaden");
   });
 
-  it("searches for a user by email and submits a transaction request", function() {
+  it("searches for a user by email", function() {
     cy.getTest("nav-top-new-transaction").click();
 
     cy.get("@users").then(users => {
@@ -97,6 +97,28 @@ describe("Create Transaction", function() {
           //  .scrollIntoView() // TODO: Bug? Does not work here
           //  .type({ force: true }) // type must be forced since hidden
           .type(this.users[6].email, { force: true })
+          .blur();
+      });
+    });
+
+    cy.wait("@usersSearch").should("have.property", "status", 200);
+    cy.getTestLike("user-list-item")
+      .first()
+      .contains("Kaden");
+  });
+
+  it("searches for a user by phone", function() {
+    cy.getTest("nav-top-new-transaction").click();
+
+    cy.get("@users").then(users => {
+      const phone = this.users[6].phoneNumber.replace(/[^0-9]/g, "");
+      const partialPhone = phone;
+
+      cy.getTest("user-list-search-input").within($elem => {
+        cy.get("input")
+          //  .scrollIntoView() // TODO: Bug? Does not work here
+          //  .type({ force: true }) // type must be forced since hidden
+          .type(partialPhone, { force: true })
           .blur();
       });
     });

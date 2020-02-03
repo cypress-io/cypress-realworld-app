@@ -8,7 +8,8 @@ import {
   includes,
   orderBy,
   flow,
-  flatMap
+  flatMap,
+  curry
 } from "lodash/fp";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
@@ -121,17 +122,26 @@ export const getByObj = (entity: string, query: object) =>
     .value();
 
 // Search
+export const cleanSearchQuery = (query: string) =>
+  query.replace(/[^a-zA-Z0-9]/g, "");
+
+export const setupSearch = curry((items: [], options: {}, query: string) => {
+  const fuse = new Fuse(items, options);
+  return fuse.search(query);
+});
+
+export const performSearch = (items: [], options: {}, query: string) =>
+  flow(cleanSearchQuery, setupSearch(items, options))(query);
 
 export const searchUsers = (query: string) => {
-  const users = getAllUsers();
-  const options = {
-    keys: ["username", "email", "phoneNumber"]
-  };
-
-  const cleanQuery = query.replace(/[^a-zA-Z0-9]/g, "");
-
-  const fuse = new Fuse(users, options);
-  return fuse.search(cleanQuery) as User[];
+  const items = getAllUsers();
+  return performSearch(
+    items,
+    {
+      keys: ["username", "email", "phoneNumber"]
+    },
+    query
+  ) as User[];
 };
 
 // convenience methods

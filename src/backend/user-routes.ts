@@ -1,17 +1,15 @@
 ///<reference path="types.ts" />
 
 import express from "express";
-import validator from "validator";
 import { isEqual, pick } from "lodash/fp";
-import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 import {
   getAllUsers,
   createUser,
   updateUserById,
   getUserById,
-  getUsersBy,
-  getUserByUsername
+  getUserByUsername,
+  searchUsers
 } from "./database";
 import { User } from "../models/user";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
@@ -44,24 +42,7 @@ router.get(
   (req, res) => {
     const { q } = req.query;
 
-    let users;
-
-    // Reference:
-    // lowdb full-text search in json-server
-    // https://github.com/typicode/json-server/blob/dfea2b34007e731770ca2f4e576b1f1908952b68/src/server/router/plural.js#L86
-
-    if (validator.isEmail(q)) {
-      users = getUsersBy("email", q);
-      return res.status(200).json({ users });
-    }
-
-    const phoneNumber = parsePhoneNumberFromString(q);
-    if (phoneNumber) {
-      users = getUsersBy("phoneNumber", phoneNumber.number);
-      return res.status(200).json({ users });
-    }
-
-    users = getUsersBy("username", q);
+    const users = searchUsers(q);
 
     res.status(200).json({ users });
   }
