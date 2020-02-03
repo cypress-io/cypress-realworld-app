@@ -31,6 +31,7 @@ import {
   NotificationsType,
   TransactionResponseItem
 } from "../models";
+import Fuse from "fuse.js";
 
 const USER_TABLE = "users";
 const CONTACT_TABLE = "contacts";
@@ -118,6 +119,20 @@ export const getByObj = (entity: string, query: object) =>
     // @ts-ignore
     .find(query)
     .value();
+
+// Search
+
+export const searchUsers = (query: string) => {
+  const users = getAllUsers();
+  const options = {
+    keys: ["username", "email", "phoneNumber"]
+  };
+
+  const cleanQuery = query.replace(/[^a-zA-Z0-9]/g, "");
+
+  const fuse = new Fuse(users, options);
+  return fuse.search(cleanQuery) as User[];
+};
 
 // convenience methods
 
