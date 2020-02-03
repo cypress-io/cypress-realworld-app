@@ -23,9 +23,10 @@ export const usersAllError = (payload: any) =>
     error: true
   } as const);
 
-export const usersSearchPending = () =>
+export const usersSearchPending = (payload: any) =>
   ({
-    type: USERS_SEARCH_PENDING
+    type: USERS_SEARCH_PENDING,
+    payload
   } as const);
 
 export const usersSearchSuccess = (payload: any) =>

@@ -121,7 +121,7 @@ describe("Users API", function() {
         qs: { q: username }
       }).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.users).to.contain({
+        expect(response.body.users[0]).to.contain({
           firstName
         });
       });

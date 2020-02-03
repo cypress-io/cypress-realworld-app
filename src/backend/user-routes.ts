@@ -10,7 +10,8 @@ import {
   createUser,
   getUserBy,
   updateUserById,
-  getUserById
+  getUserById,
+  getUsersBy
 } from "./database";
 import { User } from "../models/user";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
@@ -60,7 +61,7 @@ router.get(
       return res.status(200).json({ users });
     }
 
-    users = getUserBy("username", q);
+    users = getUsersBy("username", q);
 
     res.status(200).json({ users });
   }

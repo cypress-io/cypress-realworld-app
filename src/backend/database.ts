@@ -128,9 +128,8 @@ export const getUserId = (user: User): string => user.id;
 export const getUserById = (id: string) => getUserBy("id", id);
 export const getUserByUsername = (username: string) =>
   getUserBy("username", username);
-export const getUsersBy = (key: string, value: any) => {
+export const getUsersBy = (key: string, value: any) =>
   getAllBy(USER_TABLE, key, value);
-};
 
 export const createUser = (userDetails: Partial<User>): User => {
   const user: User = {

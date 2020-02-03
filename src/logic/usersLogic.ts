@@ -26,17 +26,36 @@ const usersAllLogic = createLogic({
 
 const usersSearchLogic = createLogic({
   type: USERS_SEARCH_PENDING,
+  debounce: 500, // ms
+  latest: true, // take latest only
   processOptions: {
     dispatchReturn: true,
     successType: USERS_SEARCH_SUCCESS,
     failType: USERS_SEARCH_ERROR
   },
 
+  validate({ action }, allow, reject) {
+    // @ts-ignore
+    if (action.payload) {
+      allow(action);
+    } else {
+      // empty request, silently reject
+      // @ts-ignore
+      reject();
+    }
+  },
+
   // @ts-ignore
-  process({ httpClient }) {
-    return httpClient
-      .get(`http://localhost:3001/users/search`)
-      .then((resp: any) => resp.data.users);
+  process({ httpClient, action }) {
+    // @ts-ignore
+    const { payload } = action;
+
+    return (
+      httpClient
+        // @ts-ignore
+        .get(`http://localhost:3001/users/search?q=${payload.q}`)
+        .then((resp: any) => resp.data.users)
+    );
   }
 });
 
