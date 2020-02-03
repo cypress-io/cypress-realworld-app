@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -23,6 +23,7 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
   userListSearch
 }) => {
   const classes = useStyles();
+  const inputEl = useRef<HTMLInputElement>(null);
 
   return (
     <div>
@@ -32,10 +33,17 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
           margin="dense"
           fullWidth
           name="q"
-          id="user-list-search-input"
-          data-test="user-list-search-input"
           type="text"
           placeholder="Search..."
+          id="user-list-search-input"
+          data-test="user-list-search-input"
+          inputRef={inputEl}
+          onFocus={() => {
+            if (null !== inputEl.current) {
+              inputEl.current.value = "";
+              inputEl.current.focus();
+            }
+          }}
           onChange={({ target: { value: q } }) => {
             userListSearch({ q });
           }}
