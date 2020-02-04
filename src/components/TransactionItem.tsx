@@ -22,6 +22,9 @@ const useStyles = makeStyles({
   titleName: {
     fontSize: 18,
     color: "#1A202C"
+  },
+  amount: {
+    paddingLeft: "7px"
   }
 });
 
@@ -34,8 +37,19 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
   const history = useHistory();
 
   const TitleName: React.FC<{ name: string }> = ({ name }) => (
-    <Typography className={classes.titleName} display="inline">
+    <Typography className={classes.titleName} display="inline" component="span">
       {name}
+    </Typography>
+  );
+
+  const Amount: React.FC<{ amount: string }> = ({ amount }) => (
+    <Typography
+      className={classes.amount}
+      display="inline"
+      component="span"
+      color="primary"
+    >
+      {amount}
     </Typography>
   );
 
@@ -47,13 +61,16 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
 
   const headline = isRequestTransaction(transaction) ? (
     <Title>
-      <TitleName name={transaction.senderName} /> charged{" "}
-      <TitleName name={transaction.receiverName} />
+      <TitleName name={transaction.senderName} />
+      {transaction.requestStatus === "accepted" ? " charged " : " requested "}
+      <TitleName name={transaction.receiverName} /> -
+      <Amount amount={transaction.amount} />
     </Title>
   ) : (
     <Title>
       <TitleName name={transaction.senderName} /> paid{" "}
       <TitleName name={transaction.receiverName} />
+      <Amount amount={transaction.amount} />
     </Title>
   );
 
@@ -69,7 +86,7 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
       <Card className={classes.card}>
         <CardContent>
           {headline}
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography variant="body2" color="textSecondary">
             {transaction.description}
           </Typography>
           <Typography
