@@ -10,8 +10,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { TransactionResponseItem } from "../models";
 import { useHistory } from "react-router";
-import { isRequestTransaction } from "../utils/transactionUtils";
-import Dinero from "dinero.js";
+import { isRequestTransaction, formatAmount } from "../utils/transactionUtils";
 
 const useStyles = makeStyles({
   card: {
@@ -50,7 +49,7 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
       component="span"
       color="primary"
     >
-      {amount && Dinero({ amount }).toFormat()}
+      {amount && formatAmount(amount)}
     </Typography>
   );
 
