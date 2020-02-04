@@ -159,6 +159,7 @@ export const isTransactionPayloadValidator = [
   body("amount")
     .isNumeric()
     .trim()
+    .toInt()
 ];
 
 export const isTransactionPatchValidator = [

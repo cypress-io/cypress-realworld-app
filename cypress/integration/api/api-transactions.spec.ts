@@ -5,6 +5,7 @@
 // @ts-check
 
 const faker = require("faker");
+const getFakeAmount = () => parseInt(faker.finance.amount(), 10);
 
 const apiUrl = "http://localhost:3001";
 const apiTransactions = `${apiUrl}/transactions`;
@@ -104,7 +105,7 @@ describe("Transactions API", function() {
         source: senderBankAccount.id,
         receiverId: receiver.id,
         description: `Payment: ${sender.id} to ${receiver.id}`,
-        amount: faker.finance.amount(),
+        amount: getFakeAmount(),
         privacyLevel: "public"
       }).then(response => {
         expect(response.status).to.eq(200);
@@ -124,7 +125,7 @@ describe("Transactions API", function() {
         source: senderBankAccount.id,
         receiverId: receiver.id,
         description: `Request: ${sender.id} from ${receiver.id}`,
-        amount: faker.finance.amount(),
+        amount: getFakeAmount(),
         privacyLevel: "public"
       }).then(response => {
         expect(response.status).to.eq(200);
