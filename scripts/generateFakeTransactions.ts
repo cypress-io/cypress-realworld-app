@@ -12,6 +12,7 @@ import {
   RequestStatus
 } from "../src/models";
 import { users, getOtherRandomUser } from "./utils";
+import { getFakeAmount } from "../src/utils/transactionUtils";
 
 const isPayment = (type: string) => type === "payment";
 
@@ -24,7 +25,7 @@ export const createTransaction = (
   id: shortid(),
   uuid: faker.random.uuid(),
   source: account.id,
-  amount: faker.finance.amount(),
+  amount: getFakeAmount(),
   description: isPayment(type)
     ? `Payment: ${senderId} to ${receiverId}`
     : `Request: ${receiverId} to ${senderId}`,
@@ -35,7 +36,7 @@ export const createTransaction = (
   ]),
   receiverId,
   senderId,
-  balanceAtCompletion: faker.finance.amount(),
+  balanceAtCompletion: getFakeAmount(),
   status: faker.helpers.randomize([
     TransactionStatus.pending,
     TransactionStatus.incomplete,

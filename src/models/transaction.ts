@@ -22,7 +22,7 @@ export interface Transaction {
   privacyLevel: DefaultPrivacyLevel;
   receiverId: string;
   senderId: string;
-  balanceAtCompletion?: string;
+  balanceAtCompletion?: number;
   status: TransactionStatus;
   requestStatus?: RequestStatus;
   requestResolvedAt?: Date;

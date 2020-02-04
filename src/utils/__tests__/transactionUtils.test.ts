@@ -1,4 +1,4 @@
-import { isRequestTransaction } from "../transactionUtils";
+import { isRequestTransaction, getFakeAmount } from "../transactionUtils";
 import faker from "faker";
 import {
   Transaction,
@@ -12,12 +12,12 @@ const fakeTransaction = (requestStatus?: RequestStatus): Transaction => ({
   id: shortid(),
   uuid: faker.random.uuid(),
   source: shortid(),
-  amount: faker.finance.amount(),
+  amount: getFakeAmount(),
   description: "food",
   privacyLevel: DefaultPrivacyLevel.public,
   receiverId: shortid(),
   senderId: shortid(),
-  balanceAtCompletion: faker.finance.amount(),
+  balanceAtCompletion: getFakeAmount(),
   status: TransactionStatus.pending,
   requestStatus,
   requestResolvedAt: faker.date.future(),
