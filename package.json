@@ -37,6 +37,7 @@
     "axios": "0.19.2",
     "bcrypt": "3.0.7",
     "cors": "2.8.5",
+    "dinero": "^1.0.1",
     "dotenv": "8.2.0",
     "express-session": "1.17.0",
     "express-validator": "6.3.1",
