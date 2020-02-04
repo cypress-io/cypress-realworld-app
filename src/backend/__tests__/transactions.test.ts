@@ -1,4 +1,4 @@
-import faker from "faker";
+import { map } from "lodash/fp";
 import {
   seedDatabase,
   getTransactionsForUserByObj,
@@ -21,7 +21,7 @@ import {
   RequestStatus,
   DefaultPrivacyLevel
 } from "../../models";
-import { map } from "lodash/fp";
+import { getFakeAmount } from "../../utils/transactionUtils";
 
 describe("Transactions", () => {
   afterEach(() => {
@@ -92,13 +92,12 @@ describe("Transactions", () => {
     const sender: User = getAllUsers()[0];
     const receiver: User = getAllUsers()[1];
     const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
-    const amount = faker.finance.amount();
 
     const paymentDetails: Partial<Transaction> = {
       source: senderBankAccount.id!,
       receiverId: receiver.id,
       description: `Payment: ${sender.id} to ${receiver.id}`,
-      amount,
+      amount: getFakeAmount(),
       privacyLevel: DefaultPrivacyLevel.public
     };
 
@@ -112,13 +111,12 @@ describe("Transactions", () => {
     const sender: User = getAllUsers()[0];
     const receiver: User = getAllUsers()[1];
     const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
-    const amount = faker.finance.amount();
 
     const requestDetails: Partial<Transaction> = {
       source: senderBankAccount.id!,
       receiverId: receiver.id,
       description: `Request: ${sender.id} to ${receiver.id}`,
-      amount,
+      amount: getFakeAmount(),
       privacyLevel: DefaultPrivacyLevel.public
     };
 
@@ -132,13 +130,12 @@ describe("Transactions", () => {
     const sender: User = getAllUsers()[0];
     const receiver: User = getAllUsers()[1];
     const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
-    const amount = faker.finance.amount();
 
     const paymentDetails: Partial<Transaction> = {
       source: senderBankAccount.id!,
       receiverId: receiver.id,
       description: `Payment: ${sender.id} to ${receiver.id}`,
-      amount,
+      amount: getFakeAmount(),
       privacyLevel: DefaultPrivacyLevel.private
     };
 

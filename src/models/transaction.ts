@@ -17,7 +17,7 @@ export interface Transaction {
   id: string;
   uuid: string;
   source: string; // Empty if Payment or Request; Populated with BankAccount ID
-  amount: string;
+  amount: number;
   description: string;
   privacyLevel: DefaultPrivacyLevel;
   receiverId: string;
