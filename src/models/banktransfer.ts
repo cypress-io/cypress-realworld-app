@@ -1,4 +1,4 @@
-export enum TransferType {
+export enum BankTransferType {
   withdrawal = "withdrawal",
   deposit = "deposit"
 }
@@ -8,7 +8,7 @@ export interface BankTransfer {
   userId: string;
   source: string;
   amount: string;
-  type: TransferType;
+  type: BankTransferType;
   transactionId: string;
   createdAt: Date;
   modifiedAt: Date;
