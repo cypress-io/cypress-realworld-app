@@ -507,10 +507,9 @@ export const createTransaction = (
 
   const savedTransaction = saveTransaction(transaction);
 
-  // TODO: generate notification for transaction
-
   // if payment, debit sender's balance for payment amount
   if (isPayment(transaction)) {
+    // TODO: generate notification for transaction - createPaymentNotification(...)
     // if hasSufficientFunds, get updated pay app balance, update sender balance
     if (hasSufficientFunds(senderDetails.balance, transaction.amount)) {
       //updatePayAppBalance(senderDetails.balance, transaction.amount);
