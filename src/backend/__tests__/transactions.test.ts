@@ -12,14 +12,18 @@ import {
   updateTransactionById,
   getTransactionById,
   getPublicTransactionsDefaultSort,
-  getUserById
+  getUserById,
+  getBankTransferByTransactionId
 } from "../database";
 
 import {
   User,
   Transaction,
   RequestStatus,
-  DefaultPrivacyLevel
+  DefaultPrivacyLevel,
+  BankTransferType,
+  TransactionPayload,
+  TransactionStatus
 } from "../../models";
 import { getFakeAmount } from "../../utils/transactionUtils";
 
@@ -181,5 +185,32 @@ describe("Transactions", () => {
     expect(senderName).toBe(`${sender.firstName} ${sender.lastName}`);
     expect(transaction.likes).toBeDefined();
     expect(transaction.comments).toBeDefined();
+  });
+
+  it("should create a payment and withdrawal (bank transfer) for remaining balance", () => {
+    const sender: User = getAllUsers()[0];
+    const receiver: User = getAllUsers()[1];
+    const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
+
+    const paymentDetails: TransactionPayload = {
+      source: senderBankAccount.id!,
+      senderId: sender.id,
+      receiverId: receiver.id,
+      description: `Payment: ${sender.id} to ${receiver.id}`,
+      amount: 100000,
+      privacyLevel: DefaultPrivacyLevel.public,
+      status: TransactionStatus.pending
+    };
+
+    const transaction = createTransaction(sender.id, "payment", paymentDetails);
+    expect(transaction.id).toBeDefined();
+    expect(transaction.status).toEqual("pending");
+    expect(transaction.requestStatus).not.toBeDefined();
+
+    expect(sender.balance).toBe(0);
+
+    const withdrawal = getBankTransferByTransactionId(transaction.id);
+    expect(withdrawal.type).toBe(BankTransferType.withdrawal);
+    expect(withdrawal.amount).toBe(45000);
   });
 });
