@@ -97,12 +97,14 @@ describe("Transactions", () => {
     const receiver: User = getAllUsers()[1];
     const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
 
-    const paymentDetails: Partial<Transaction> = {
+    const paymentDetails: TransactionPayload = {
       source: senderBankAccount.id!,
+      senderId: sender.id,
       receiverId: receiver.id,
       description: `Payment: ${sender.id} to ${receiver.id}`,
       amount: getFakeAmount(),
-      privacyLevel: DefaultPrivacyLevel.public
+      privacyLevel: DefaultPrivacyLevel.public,
+      status: TransactionStatus.pending
     };
 
     const result = createTransaction(sender.id, "payment", paymentDetails);
@@ -116,12 +118,14 @@ describe("Transactions", () => {
     const receiver: User = getAllUsers()[1];
     const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
 
-    const requestDetails: Partial<Transaction> = {
+    const requestDetails: TransactionPayload = {
       source: senderBankAccount.id!,
+      senderId: sender.id,
       receiverId: receiver.id,
       description: `Request: ${sender.id} to ${receiver.id}`,
       amount: getFakeAmount(),
-      privacyLevel: DefaultPrivacyLevel.public
+      privacyLevel: DefaultPrivacyLevel.public,
+      status: TransactionStatus.pending
     };
 
     const result = createTransaction(sender.id, "request", requestDetails);
@@ -135,12 +139,14 @@ describe("Transactions", () => {
     const receiver: User = getAllUsers()[1];
     const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
 
-    const paymentDetails: Partial<Transaction> = {
+    const paymentDetails: TransactionPayload = {
       source: senderBankAccount.id!,
+      senderId: sender.id,
       receiverId: receiver.id,
       description: `Payment: ${sender.id} to ${receiver.id}`,
       amount: getFakeAmount(),
-      privacyLevel: DefaultPrivacyLevel.private
+      privacyLevel: DefaultPrivacyLevel.private,
+      status: TransactionStatus.pending
     };
 
     const payment = createTransaction(sender.id, "payment", paymentDetails);
