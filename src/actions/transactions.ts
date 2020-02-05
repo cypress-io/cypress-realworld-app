@@ -21,6 +21,9 @@ export const TRANSACTION_DETAIL_ERROR = "TRANSACTIONS_DETAIL_ERROR";
 export const TRANSACTION_CREATE_PENDING = "TRANSACTION_CREATE_PENDING";
 export const TRANSACTION_CREATE_SUCCESS = "TRANSACTION_CREATE_SUCCESS";
 export const TRANSACTION_CREATE_ERROR = "TRANSACTION_CREATE_ERROR";
+export const TRANSACTION_REQUEST_PENDING = "TRANSACTION_REQUEST_PENDING";
+export const TRANSACTION_REQUEST_SUCCESS = "TRANSACTION_REQUEST_SUCCESS";
+export const TRANSACTION_REQUEST_ERROR = "TRANSACTION_REQUEST_ERROR";
 
 export const transactionsPublicPending = () =>
   ({
@@ -154,6 +157,27 @@ export const transactionCreateError = (payload: any) =>
     error: true
   } as const);
 
+export const transactionRequestPending = (payload: object) =>
+  ({
+    type: TRANSACTION_REQUEST_PENDING,
+    payload
+  } as const);
+
+export const transactionRequestSuccess = (payload: {
+  transaction: Transaction;
+}) =>
+  ({
+    type: TRANSACTION_REQUEST_SUCCESS,
+    payload
+  } as const);
+
+export const transactionRequestError = (payload: any) =>
+  ({
+    type: TRANSACTION_REQUEST_ERROR,
+    payload,
+    error: true
+  } as const);
+
 export type TTransactionActions =
   | ReturnType<typeof transactionsPublicPending>
   | ReturnType<typeof transactionsPublicSuccess>
@@ -175,6 +199,9 @@ export type TTransactionActions =
   | ReturnType<typeof transactionDetailError>
   | ReturnType<typeof transactionCreatePending>
   | ReturnType<typeof transactionCreateSuccess>
-  | ReturnType<typeof transactionCreateError>;
+  | ReturnType<typeof transactionCreateError>
+  | ReturnType<typeof transactionRequestPending>
+  | ReturnType<typeof transactionRequestSuccess>
+  | ReturnType<typeof transactionRequestError>;
 
 export type TransactionActionDataTypes = TTransactionActions["type"];
