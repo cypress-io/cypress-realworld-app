@@ -6,8 +6,7 @@ import { flow, get, isEmpty, negate } from "lodash/fp";
 export const isRequestTransaction = (transaction: Transaction) =>
   flow(get("requestStatus"), negate(isEmpty))(transaction);
 
-export const isPayment = (transaction: Transaction) =>
-  !isRequestTransaction(transaction);
+export const isPayment = negate(isRequestTransaction);
 
 export const getFakeAmount = () => parseInt(faker.finance.amount(), 10);
 
