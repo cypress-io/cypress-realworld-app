@@ -504,27 +504,29 @@ export const createTransaction = (
     createdAt: new Date(),
     modifiedAt: new Date()
   };
-  // TODO: if payment and if bankaccount createBankTransfer for withdrawal for the difference associated to the transaction
-  // if request the transaction will be updated when the request is accepted
 
   const savedTransaction = saveTransaction(transaction);
+
+  // TODO: generate notification for transaction
 
   // if payment, debit sender's balance for payment amount
   if (isPayment(transaction)) {
     // if hasSufficientFunds, get updated pay app balance, update sender balance
     if (hasSufficientFunds(senderDetails.balance, transaction.amount)) {
-      //debitPayAppBalance(senderDetails.balance, transactionDetails.amount);
+      //updatePayAppBalance(senderDetails.balance, transaction.amount);
       const updatedPayAppBalance = payAppDifference(
         senderDetails.balance,
         transaction.amount
       );
 
+      // TODO: update "status"
       updateUserById(senderDetails.id, {
         balance: updatedPayAppBalance.getAmount()
       });
     } else {
       // update sender balance to be 0
       // resetPayAppBalance
+      // TODO: update "status"
       updateUserById(senderDetails.id, {
         balance: 0
       });
@@ -535,6 +537,7 @@ export const createTransaction = (
         transaction.amount
       );
 
+      // TODO: generate notification for withdrawal
       createBankTransferWithdrawal({
         userId,
         source: transaction.source,
@@ -574,6 +577,7 @@ export const updateTransactionById = (
   const transaction = getTransactionBy("id", transactionId);
 
   // TODO: if request accepted - createBankTransfer for withdrawal for the difference associated to the transaction
+  // TODO: generate notification for update (request)
   if (userId === transaction.senderId || userId === transaction.receiverId) {
     db()
       .get(TRANSACTION_TABLE)
