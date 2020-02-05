@@ -3,7 +3,7 @@ import faker from "faker";
 import Dinero from "dinero.js";
 
 export function isRequestTransaction(transaction: Transaction) {
-  return transaction.requestStatus || false;
+  return transaction.requestStatus ? true : false;
 }
 
 export function isPayment(transaction: Transaction) {
@@ -22,7 +22,7 @@ export const payAppDifference = (
 export const getTransferAmount = (
   balance: User["balance"],
   transactionAmount: Transaction["amount"]
-) => payAppDifference(balance, transactionAmount).toFormat();
+) => Math.abs(payAppDifference(balance, transactionAmount).getAmount());
 
 export const hasInsufficientFunds = (
   balance: User["balance"],

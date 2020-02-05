@@ -510,37 +510,38 @@ export const createTransaction = (
   const savedTransaction = saveTransaction(transaction);
 
   // if payment, debit sender's balance for payment amount
-  if (
-    isPayment(transaction) &&
-    hasSufficientFunds(senderDetails.balance, transaction.amount)
-  ) {
-    //debitPayAppBalance(senderDetails.balance, transactionDetails.amount);
-    const updatedPayAppBalance = payAppDifference(
-      senderDetails.balance,
-      transaction.amount
-    );
+  if (isPayment(transaction)) {
+    // if hasSufficientFunds, get updated pay app balance, update sender balance
+    if (hasSufficientFunds(senderDetails.balance, transaction.amount)) {
+      //debitPayAppBalance(senderDetails.balance, transactionDetails.amount);
+      const updatedPayAppBalance = payAppDifference(
+        senderDetails.balance,
+        transaction.amount
+      );
 
-    updateUserById(senderDetails.id, {
-      balance: updatedPayAppBalance.getAmount()
-    });
-  }
+      updateUserById(senderDetails.id, {
+        balance: updatedPayAppBalance.getAmount()
+      });
+    } else {
+      // update sender balance to be 0
+      // resetPayAppBalance
+      updateUserById(senderDetails.id, {
+        balance: 0
+      });
 
-  // if payment and insufficient pay app balance isn't sufficient to fufill transaction
-  if (
-    isPayment(transaction) &&
-    hasInsufficientFunds(senderDetails.balance, transaction.amount)
-  ) {
-    const transferAmount = getTransferAmount(
-      senderDetails.balance,
-      transaction.amount
-    );
+      // createBankTransferWithdrawal
+      const transferAmount = getTransferAmount(
+        senderDetails.balance,
+        transaction.amount
+      );
 
-    createBankTransferWithdrawal({
-      userId,
-      source: transaction.source,
-      amount: transferAmount,
-      transactionId: savedTransaction.id
-    });
+      createBankTransferWithdrawal({
+        userId,
+        source: transaction.source,
+        amount: transferAmount,
+        transactionId: savedTransaction.id
+      });
+    }
   }
 
   return savedTransaction;

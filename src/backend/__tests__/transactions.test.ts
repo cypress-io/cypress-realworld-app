@@ -207,7 +207,8 @@ describe("Transactions", () => {
     expect(transaction.status).toEqual("pending");
     expect(transaction.requestStatus).not.toBeDefined();
 
-    expect(sender.balance).toBe(0);
+    const updatedSender: User = getAllUsers()[0];
+    expect(updatedSender.balance).toBe(0);
 
     const withdrawal = getBankTransferByTransactionId(transaction.id);
     expect(withdrawal.type).toBe(BankTransferType.withdrawal);

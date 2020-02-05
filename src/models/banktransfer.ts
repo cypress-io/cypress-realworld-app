@@ -7,7 +7,7 @@ export interface BankTransfer {
   uuid: string;
   userId: string;
   source: string;
-  amount: string;
+  amount: number;
   type: BankTransferType;
   transactionId: string;
   createdAt: Date;
