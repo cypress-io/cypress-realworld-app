@@ -213,5 +213,33 @@ describe("Transactions", () => {
     const withdrawal = getBankTransferByTransactionId(transaction.id);
     expect(withdrawal.type).toBe(BankTransferType.withdrawal);
     expect(withdrawal.amount).toBe(45000);
+
+    // second transaction - $500
+    const secondPaymentDetails: TransactionPayload = {
+      source: senderBankAccount.id!,
+      senderId: sender.id,
+      receiverId: receiver.id,
+      description: `Payment: ${sender.id} to ${receiver.id}`,
+      amount: 50000,
+      privacyLevel: DefaultPrivacyLevel.public,
+      status: TransactionStatus.pending
+    };
+    const secondTransaction = createTransaction(
+      sender.id,
+      "payment",
+      secondPaymentDetails
+    );
+    expect(secondTransaction.id).toBeDefined();
+    expect(secondTransaction.status).toEqual("pending");
+    expect(secondTransaction.requestStatus).not.toBeDefined();
+
+    const secondUpdatedSender: User = getAllUsers()[0];
+    expect(secondUpdatedSender.balance).toBe(0);
+
+    const secondWithdrawal = getBankTransferByTransactionId(
+      secondTransaction.id
+    );
+    expect(secondWithdrawal.type).toBe(BankTransferType.withdrawal);
+    expect(secondWithdrawal.amount).toBe(50000);
   });
 });
