@@ -31,7 +31,8 @@ import {
   NotificationPayloadType,
   NotificationsType,
   TransactionResponseItem,
-  TransactionPayload
+  TransactionPayload,
+  BankTransfer
 } from "../models";
 import Fuse from "fuse.js";
 
@@ -42,6 +43,7 @@ const TRANSACTION_TABLE = "transactions";
 const LIKE_TABLE = "likes";
 const COMMENT_TABLE = "comments";
 const NOTIFICATION_TABLE = "notifications";
+const BANK_TRANSFER_TABLE = "banktransfers";
 
 const testSeed = require(path.join(__dirname, "../data/", "test-seed.json"));
 let databaseFileName;
@@ -261,10 +263,8 @@ export const getBankAccountById = (id: string) => getBankAccountBy("id", id);
 export const getBankAccountsBy = (key: string, value: any) =>
   getAllBy(BANK_ACCOUNT_TABLE, key, value);
 
-export const getBankAccountsByUserId = (userId: string) => {
-  const accounts: BankAccount[] = getBankAccountsBy("userId", userId);
-  return accounts;
-};
+export const getBankAccountsByUserId = (userId: string) =>
+  getBankAccountsBy("userId", userId);
 
 export const createBankAccount = (bankaccount: BankAccount) => {
   db()
@@ -309,6 +309,33 @@ export const removeBankAccountById = (bankAccountId: string) => {
     .find({ id: bankAccountId })
     .assign({ isDeleted: true }) // soft delete
     .write();
+};
+
+// Bank Transfer
+
+export const getBankTransferBy = (key: string, value: any) =>
+  getBy(BANK_TRANSFER_TABLE, key, value);
+
+export const getBankTransferById = (id: string) => getBankTransferBy("id", id);
+
+export const getBankTransfersBy = (key: string, value: any) =>
+  getAllBy(BANK_TRANSFER_TABLE, key, value);
+
+export const getBankTransfersByUserId = (userId: string) =>
+  getBankTransfersBy("userId", userId);
+
+export const getBankTransferByTransactionId = (transactionId: string) =>
+  getBankTransferBy("transactionId", transactionId);
+
+export const createBankTransfer = (banktransfer: BankTransfer) => {
+  db()
+    .get(BANK_TRANSFER_TABLE)
+    // @ts-ignore
+    .push(banktransfer)
+    .write();
+
+  // manual lookup after create
+  return getBankTransferBy("id", banktransfer.id);
 };
 
 // Transaction
