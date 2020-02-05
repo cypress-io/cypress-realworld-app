@@ -2113,5 +2113,28 @@
       "modifiedAt": "2020-01-16T07:24:51.441Z"
     }
   ],
-  "banktransfers": []
+  "banktransfers": [
+    {
+      "id": "1GrkUowNi",
+      "uuid": "056d6cd8-46c8-4f05-9293-037bf1a25f59",
+      "userId": "9IUK0xpw",
+      "source": "2bMLhUI",
+      "amount": 45000,
+      "transactionId": "ErB1DIbT",
+      "type": "withdrawal",
+      "createdAt": "2020-02-05T22:24:08.419Z",
+      "modifiedAt": "2020-02-05T22:24:08.419Z"
+    },
+    {
+      "id": "pb2XYeeN0",
+      "uuid": "1d330dbc-9a08-48f5-97e2-b45bf146dd20",
+      "userId": "9IUK0xpw",
+      "source": "2bMLhUI",
+      "amount": 50000,
+      "transactionId": "kle9Tf0xY",
+      "type": "withdrawal",
+      "createdAt": "2020-02-05T22:24:08.455Z",
+      "modifiedAt": "2020-02-05T22:24:08.455Z"
+    }
+  ]
 }
