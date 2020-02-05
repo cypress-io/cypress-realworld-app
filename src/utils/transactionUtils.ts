@@ -1,14 +1,13 @@
 import { Transaction, User } from "../models";
 import faker from "faker";
 import Dinero from "dinero.js";
+import { flow, get, isEmpty, negate } from "lodash/fp";
 
-export function isRequestTransaction(transaction: Transaction) {
-  return transaction.requestStatus ? true : false;
-}
+export const isRequestTransaction = (transaction: Transaction) =>
+  flow(get("requestStatus"), negate(isEmpty))(transaction);
 
-export function isPayment(transaction: Transaction) {
-  return !isRequestTransaction(transaction);
-}
+export const isPayment = (transaction: Transaction) =>
+  !isRequestTransaction(transaction);
 
 export const getFakeAmount = () => parseInt(faker.finance.amount(), 10);
 
