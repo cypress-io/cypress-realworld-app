@@ -440,6 +440,14 @@ export const nonContactPublicTransactions = (userId: string): Transaction[] => {
       includes(transaction.id, contactsTransactionIds)
     )
   )(userId);
+  /*
+  TODO: investigate xorBy implementation
+  return xorBy(
+    getAllPublicTransactions,
+    getTransactionsForUserContacts(userId),
+    "id"
+  );
+  */
 };
 
 export const getNonContactPublicTransactionsForApi = (userId: string) =>
@@ -476,6 +484,7 @@ export const createTransaction = (
   // if request the transaction will be updated when the request is accepted
 
   const savedTransaction = saveTransaction(transaction);
+
   return savedTransaction;
 };
 const saveTransaction = (transaction: Transaction): Transaction => {
