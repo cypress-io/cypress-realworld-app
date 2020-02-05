@@ -43,7 +43,7 @@ describe("Transactions API", function() {
       const { id } = this.currentUser;
       cy.request("GET", `${apiTransactions}`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions[0].receiverId).to.eq(id);
+        expect(response.body.transactions[0].senderId).to.eq(id);
       });
     });
 
