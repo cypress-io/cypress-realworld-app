@@ -30,7 +30,8 @@ import {
   NotificationType,
   NotificationPayloadType,
   NotificationsType,
-  TransactionResponseItem
+  TransactionResponseItem,
+  TransactionPayload
 } from "../models";
 import Fuse from "fuse.js";
 
@@ -425,10 +426,7 @@ export const getPublicTransactionsDefaultSort = (userId: string) => ({
 export const createTransaction = (
   userId: User["id"],
   transactionType: "payment" | "request",
-  transactionDetails: Omit<
-    Transaction,
-    "id" | "uuid" | "createdAt" | "modifiedAt"
-  >
+  transactionDetails: TransactionPayload
 ): Transaction => {
   const senderDetails = getUserById(userId);
   const transaction: Transaction = {

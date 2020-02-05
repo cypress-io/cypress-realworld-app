@@ -36,3 +36,8 @@ export interface TransactionResponseItem extends Transaction {
   receiverName: string;
   senderName: string;
 }
+
+export type TransactionPayload = Omit<
+  Transaction,
+  "id" | "uuid" | "createdAt" | "modifiedAt"
+>;
