@@ -42,9 +42,7 @@ import Fuse from "fuse.js";
 import {
   isPayment,
   getTransferAmount,
-  payAppDifference,
   hasSufficientFunds,
-  getAmount,
   getChargeAmount
 } from "../utils/transactionUtils";
 
