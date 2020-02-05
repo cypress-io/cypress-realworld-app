@@ -7,7 +7,7 @@ export function isRequestTransaction(transaction: Transaction) {
 }
 
 export function isPayment(transaction: Transaction) {
-  return !isRequestTransaction;
+  return !isRequestTransaction(transaction);
 }
 
 export const getFakeAmount = () => parseInt(faker.finance.amount(), 10);
