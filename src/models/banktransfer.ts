@@ -13,3 +13,7 @@ export interface BankTransfer {
   createdAt: Date;
   modifiedAt: Date;
 }
+export type BankTransferPayload = Omit<
+  BankTransfer,
+  "id" | "uuid" | "createdAt" | "modifiedAt"
+>;

@@ -32,9 +32,18 @@ import {
   NotificationsType,
   TransactionResponseItem,
   TransactionPayload,
-  BankTransfer
+  BankTransfer,
+  BankTransferPayload,
+  BankTransferType
 } from "../models";
 import Fuse from "fuse.js";
+import {
+  isPayment,
+  getTransferAmount,
+  hasInsufficientFunds,
+  payAppDifference,
+  hasSufficientFunds
+} from "../utils/transactionUtils";
 
 const USER_TABLE = "users";
 const CONTACT_TABLE = "contacts";
@@ -327,15 +336,30 @@ export const getBankTransfersByUserId = (userId: string) =>
 export const getBankTransferByTransactionId = (transactionId: string) =>
   getBankTransferBy("transactionId", transactionId);
 
-export const createBankTransfer = (banktransfer: BankTransfer) => {
+export const createBankTransfer = (
+  bankTransferDetails: BankTransferPayload
+) => {
+  const bankTransfer: BankTransfer = {
+    id: shortid(),
+    uuid: v4(),
+    ...bankTransferDetails,
+    createdAt: new Date(),
+    modifiedAt: new Date()
+  };
+
+  const savedBankTransfer = saveBankTransfer(bankTransfer);
+  return savedBankTransfer;
+};
+
+const saveBankTransfer = (bankTransfer: BankTransfer): BankTransfer => {
   db()
     .get(BANK_TRANSFER_TABLE)
     // @ts-ignore
-    .push(banktransfer)
+    .push(bankTransfer)
     .write();
 
-  // manual lookup after create
-  return getBankTransferBy("id", banktransfer.id);
+  // manual lookup after banktransfer created
+  return getBankTransferBy("id", bankTransfer.id);
 };
 
 // Transaction
@@ -485,8 +509,51 @@ export const createTransaction = (
 
   const savedTransaction = saveTransaction(transaction);
 
+  // if payment, debit sender's balance for payment amount
+  if (
+    isPayment(transaction) &&
+    hasSufficientFunds(senderDetails.balance, transaction.amount)
+  ) {
+    //debitPayAppBalance(senderDetails.balance, transactionDetails.amount);
+    const updatedPayAppBalance = payAppDifference(
+      senderDetails.balance,
+      transaction.amount
+    );
+
+    updateUserById(senderDetails.id, {
+      balance: updatedPayAppBalance.getAmount()
+    });
+  }
+
+  // if payment and insufficient pay app balance isn't sufficient to fufill transaction
+  if (
+    isPayment(transaction) &&
+    hasInsufficientFunds(senderDetails.balance, transaction.amount)
+  ) {
+    const transferAmount = getTransferAmount(
+      senderDetails.balance,
+      transaction.amount
+    );
+
+    createBankTransferWithdrawal({
+      userId,
+      source: transaction.source,
+      amount: transferAmount,
+      transactionId: savedTransaction.id
+    });
+  }
+
   return savedTransaction;
 };
+
+export const createBankTransferWithdrawal = (
+  bankTransferDetails: Omit<BankTransferPayload, "type">
+) =>
+  createBankTransfer({
+    ...bankTransferDetails,
+    type: BankTransferType.withdrawal
+  });
+
 const saveTransaction = (transaction: Transaction): Transaction => {
   db()
     .get(TRANSACTION_TABLE)
