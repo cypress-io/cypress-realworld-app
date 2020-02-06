@@ -8,7 +8,8 @@ import { TransactionResponseItem } from "../models";
 import {
   transactionsLikePending,
   transactionsCommentPending,
-  transactionDetailPending
+  transactionDetailPending,
+  transactionUpdatePending
 } from "../actions/transactions";
 
 export interface StateProps {
@@ -19,6 +20,7 @@ export interface DispatchProps {
   transactionLike: Function;
   transactionComment: Function;
   transactionDetail: Function;
+  transactionUpdate: Function;
 }
 
 export type TransactionDetailsContainerProps = StateProps & DispatchProps;
@@ -27,7 +29,8 @@ const TransactionDetailsContainer: React.FC<TransactionDetailsContainerProps> = 
   transaction,
   transactionLike,
   transactionComment,
-  transactionDetail
+  transactionDetail,
+  transactionUpdate
 }) => {
   const { transactionId } = useParams();
 
@@ -59,6 +62,7 @@ const TransactionDetailsContainer: React.FC<TransactionDetailsContainerProps> = 
         transaction={transaction}
         transactionLike={transactionLike}
         transactionComment={transactionComment}
+        transactionUpdate={transactionUpdate}
       />
     </MainContainer>
   );
@@ -71,7 +75,8 @@ const mapStateToProps = (state: IRootReducerState) => ({
 const mapDispatchToProps = {
   transactionLike: transactionsLikePending,
   transactionComment: transactionsCommentPending,
-  transactionDetail: transactionDetailPending
+  transactionDetail: transactionDetailPending,
+  transactionUpdate: transactionUpdatePending
 };
 
 export default connect(

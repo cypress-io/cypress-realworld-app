@@ -9,9 +9,10 @@ import {
   Grid
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { TransactionResponseItem } from "../models";
+import { TransactionResponseItem, TransactionRequestStatus } from "../models";
 import CommentForm from "./CommentForm";
 import { useHistory } from "react-router";
+import { isPendingRequestTransaction } from "../utils/transactionUtils";
 
 const useStyles = makeStyles({
   card: {
@@ -26,12 +27,14 @@ type TransactionProps = {
   transaction: TransactionResponseItem;
   transactionLike: Function;
   transactionComment: Function;
+  transactionUpdate: Function;
 };
 
 const TransactionItem: React.FC<TransactionProps> = ({
   transaction,
   transactionLike,
-  transactionComment
+  transactionComment,
+  transactionUpdate
 }) => {
   const classes = useStyles();
   const history = useHistory();
@@ -103,6 +106,36 @@ const TransactionItem: React.FC<TransactionProps> = ({
                 transactionComment={payload => transactionComment(payload)}
               />
             </Grid>
+            {isPendingRequestTransaction && (
+              <Grid item>
+                <Button
+                  color="primary"
+                  size="small"
+                  onClick={() =>
+                    transactionUpdate({
+                      id: transaction.id,
+                      requestStatus: TransactionRequestStatus.accepted
+                    })
+                  }
+                  data-test={`transaction-accept-request-${transaction.id}`}
+                >
+                  Accept Request
+                </Button>
+                <Button
+                  color="primary"
+                  size="small"
+                  onClick={() =>
+                    transactionUpdate({
+                      id: transaction.id,
+                      requestStatus: TransactionRequestStatus.rejected
+                    })
+                  }
+                  data-test={`transaction-reject-request-${transaction.id}`}
+                >
+                  Reject Request
+                </Button>
+              </Grid>
+            )}
           </Grid>
         </CardActions>
       </Card>
