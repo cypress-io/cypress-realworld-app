@@ -1,7 +1,7 @@
 import { Transaction, User, TransactionRequestStatus } from "../models";
 import faker from "faker";
 import Dinero from "dinero.js";
-import { flow, get, isEmpty, negate, curry, isEqual, method } from "lodash/fp";
+import { flow, get, isEmpty, negate, curry, isEqual } from "lodash/fp";
 
 export const isRequestTransaction = (transaction: Transaction) =>
   flow(get("requestStatus"), negate(isEmpty))(transaction);
