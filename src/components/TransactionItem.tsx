@@ -10,7 +10,11 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { TransactionResponseItem } from "../models";
 import { useHistory } from "react-router";
-import { isRequestTransaction, formatAmount } from "../utils/transactionUtils";
+import {
+  isRequestTransaction,
+  formatAmount,
+  isAcceptedRequestTransaction
+} from "../utils/transactionUtils";
 
 const useStyles = makeStyles({
   card: {
@@ -62,7 +66,7 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
   const headline = isRequestTransaction(transaction) ? (
     <Title>
       <TitleName name={transaction.senderName} />
-      {transaction.requestStatus === "accepted" ? " charged " : " requested "}
+      {isAcceptedRequestTransaction(transaction) ? " charged " : " requested "}
       <TitleName name={transaction.receiverName} /> -
       <Amount amount={transaction.amount} />
     </Title>
@@ -79,10 +83,7 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
   };
 
   return (
-    <ListItem
-      data-test={`transaction-item-${transaction.id}`}
-      onClick={() => showTransactionDetail(transaction.id)}
-    >
+    <ListItem data-test={`transaction-item-${transaction.id}`}>
       <Card className={classes.card}>
         <CardContent>
           {headline}
@@ -107,14 +108,6 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button
-            color="primary"
-            size="small"
-            onClick={() => showTransactionDetail(transaction.id)}
-            data-test={`transaction-view-${transaction.id}`}
-          >
-            View Transaction
-          </Button>
           <Button
             color="primary"
             size="small"
