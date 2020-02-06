@@ -32,7 +32,8 @@ import {
 import { history } from "../index";
 import {
   isRequestTransaction,
-  pathTransactionId
+  pathTransactionId,
+  isNewTransactionPath
 } from "../utils/transactionUtils";
 
 const transactionsPersonalLogic = createLogic({
@@ -102,29 +103,6 @@ const transactionsLikeLogic = createLogic({
   }
 });
 
-const transactionsLikeSuccessLogic = createLogic({
-  type: TRANSACTIONS_LIKE_SUCCESS,
-
-  // @ts-ignore
-  process({ action }, dispatch, done) {
-    const { pathname } = window.location;
-    // @ts-ignore
-    const { like } = action.payload;
-
-    if (pathname.match("transaction")) {
-      dispatch(
-        transactionDetailPending({
-          transactionId: like.transactionId
-        })
-      );
-      dispatch(transactionsPublicPending());
-      dispatch(transactionsContactsPending());
-      dispatch(transactionsPersonalPending());
-    }
-    done();
-  }
-});
-
 const transactionsCommentLogic = createLogic({
   type: TRANSACTIONS_COMMENT_PENDING,
   processOptions: {
@@ -143,29 +121,6 @@ const transactionsCommentLogic = createLogic({
         content: payload.content
       })
       .then((resp: any) => resp.data);
-  }
-});
-
-const transactionsCommentSuccessLogic = createLogic({
-  type: TRANSACTIONS_COMMENT_SUCCESS,
-
-  // @ts-ignore
-  process({ action }, dispatch, done) {
-    const { pathname } = window.location;
-    // @ts-ignore
-    const { comment } = action.payload;
-
-    if (pathname.match("transaction")) {
-      dispatch(
-        transactionDetailPending({
-          transactionId: comment.transactionId
-        })
-      );
-      dispatch(transactionsPublicPending());
-      dispatch(transactionsContactsPending());
-      dispatch(transactionsPersonalPending());
-    }
-    done();
   }
 });
 
@@ -210,7 +165,12 @@ const transactionCreateLogic = createLogic({
 });
 
 const transactionsRefreshLogic = createLogic({
-  type: [TRANSACTION_CREATE_SUCCESS, TRANSACTION_UPDATE_SUCCESS],
+  type: [
+    TRANSACTION_CREATE_SUCCESS,
+    TRANSACTION_UPDATE_SUCCESS,
+    TRANSACTIONS_LIKE_SUCCESS,
+    TRANSACTIONS_COMMENT_SUCCESS
+  ],
 
   // @ts-ignore
   // eslint-disable-next-line no-empty-pattern
@@ -219,7 +179,7 @@ const transactionsRefreshLogic = createLogic({
     // @ts-ignore
     const { payload } = action;
 
-    if (pathname.match("transaction/new")) {
+    if (isNewTransactionPath(pathname)) {
       if (isRequestTransaction(payload.transaction)) {
         history.push("/personal");
       }
@@ -263,37 +223,13 @@ const transactionUpdateLogic = createLogic({
     );
   }
 });
-const transactionsLikeSuccessLogic = createLogic({
-  type: TRANSACTIONS_LIKE_SUCCESS,
-
-  // @ts-ignore
-  process({ action }, dispatch, done) {
-    const { pathname } = window.location;
-    // @ts-ignore
-    const { like } = action.payload;
-
-    if (pathname.match("transaction")) {
-      dispatch(
-        transactionDetailPending({
-          transactionId: like.transactionId
-        })
-      );
-      dispatch(transactionsPublicPending());
-      dispatch(transactionsContactsPending());
-      dispatch(transactionsPersonalPending());
-    }
-    done();
-  }
-});
 
 export default [
   transactionsPersonalLogic,
   transactionsPublicLogic,
   transactionsContactsLogic,
   transactionsLikeLogic,
-  transactionsLikeSuccessLogic,
   transactionsCommentLogic,
-  transactionsCommentSuccessLogic,
   transactionDetailLogic,
   transactionCreateLogic,
   transactionsRefreshLogic,

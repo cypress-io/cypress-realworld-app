@@ -49,6 +49,9 @@ export const hasInsufficientFunds = (sender: User, transaction: Transaction) =>
 export const hasSufficientFunds = (sender: User, transaction: Transaction) =>
   payAppDifference(sender, transaction).isPositive();
 
+export const isNewTransactionPath = (pathname: string) =>
+  pathname.match(/transaction\/new/);
+
 export const hasPathTransactionId = (pathname: string) =>
   pathname.match(/transaction\/(?!new)(\w+)/);
 
