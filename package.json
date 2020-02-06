@@ -68,7 +68,7 @@
     "yup": "0.28.1"
   },
   "devDependencies": {
-    "cypress": "3.8.3",
+    "cypress": "4.0.0",
     "start-server-and-test": "1.10.8"
   },
   "scripts": {
