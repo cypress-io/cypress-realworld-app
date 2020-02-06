@@ -15,20 +15,28 @@ describe("Transaction Detail", function() {
     cy.task("db:seed");
     Cypress.Cookies.preserveOnce("connect.sid");
     cy.server();
-    cy.route("/transactions/public").as("publicTransactions");
+    cy.route("GET", "/transactions").as("personalTransactions");
     cy.route("PATCH", "http://localhost:3001/transactions/*").as(
       "updateTransaction"
     );
   });
+
+  afterEach(function() {
+    cy.getTest("app-name-logo")
+      .find("a")
+      .click();
+    cy.getTest("nav-personal-tab")
+      .click({ force: true })
+      .should("have.class", "Mui-selected");
+  });
+
   after(function() {
     cy.task("db:seed");
   });
 
   it("displays transaction detail page", function() {
-    cy.getTest("main").scrollTo("top");
-    cy.wait("@publicTransactions");
     cy.getTestLike("transaction-view")
-      .first()
+      .eq(3)
       .scrollIntoView()
       .click({ force: true });
     cy.getTest("nav-transaction-tabs").should("not.be.visible");
@@ -36,12 +44,22 @@ describe("Transaction Detail", function() {
   });
 
   it("likes a transaction", function() {
+    cy.getTestLike("transaction-view")
+      .first()
+      .scrollIntoView()
+      .click({ force: true });
+
     cy.getTestLike(`transaction-like-button`).click();
 
     cy.getTestLike(`transaction-like-count`).should("contain", 1);
   });
 
   it("makes a comment on a transaction", function() {
+    cy.getTestLike("transaction-view")
+      .eq(2)
+      .scrollIntoView()
+      .click({ force: true });
+
     cy.getTestLike(`transaction-comment-input`).type(
       "This is my comment{enter}"
     );
@@ -49,12 +67,34 @@ describe("Transaction Detail", function() {
   });
 
   it("accepts a transaction request", function() {
+    cy.getTestLike("transaction-view")
+      .eq(3)
+      .scrollIntoView()
+      .click({ force: true });
+
     cy.getTestLike(`transaction-accept-request`).click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
   });
 
   it("rejects a transaction request", function() {
+    cy.getTestLike("transaction-view")
+      .eq(3)
+      .scrollIntoView()
+      .click({ force: true });
+
     cy.getTestLike(`transaction-reject-request`).click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
+  });
+
+  it("does not display accept/reject buttons on completed request", function() {
+    cy.getTestLike("transaction-view")
+      .eq(1)
+      .scrollIntoView()
+      .click({ force: true });
+
+    cy.getTest("nav-transaction-tabs").should("not.be.visible");
+
+    cy.getTest("transaction-accept-request").should("not.be.visible");
+    cy.getTest("transaction-reject-request").should("not.be.visible");
   });
 });

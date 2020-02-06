@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import MainContainer from "./MainContainer";
 import TransactionDetail from "../components/TransactionDetail";
 import { IRootReducerState } from "../reducers";
-import { TransactionResponseItem } from "../models";
+import { TransactionResponseItem, User } from "../models";
 import {
   transactionsLikePending,
   transactionsCommentPending,
@@ -14,6 +14,7 @@ import {
 
 export interface StateProps {
   transaction?: TransactionResponseItem;
+  currentUser: User;
 }
 
 export interface DispatchProps {
@@ -30,7 +31,8 @@ const TransactionDetailsContainer: React.FC<TransactionDetailsContainerProps> = 
   transactionLike,
   transactionComment,
   transactionDetail,
-  transactionUpdate
+  transactionUpdate,
+  currentUser
 }) => {
   const { transactionId } = useParams();
 
@@ -63,13 +65,15 @@ const TransactionDetailsContainer: React.FC<TransactionDetailsContainerProps> = 
         transactionLike={transactionLike}
         transactionComment={transactionComment}
         transactionUpdate={transactionUpdate}
+        currentUser={currentUser}
       />
     </MainContainer>
   );
 };
 
 const mapStateToProps = (state: IRootReducerState) => ({
-  transaction: state.transactions.transactionDetails
+  transaction: state.transactions.transactionDetails,
+  currentUser: state.user.profile
 });
 
 const mapDispatchToProps = {

@@ -57,3 +57,6 @@ export const hasPathTransactionId = (pathname: string) =>
 
 export const pathTransactionId = (pathname: string) =>
   flow(hasPathTransactionId, get(1))(pathname);
+
+export const senderIsCurrentUser = (sender: User, transaction: Transaction) =>
+  isEqual(get("id", sender), get("senderId", transaction));

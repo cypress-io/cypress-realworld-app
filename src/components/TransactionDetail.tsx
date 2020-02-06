@@ -9,10 +9,17 @@ import {
   Grid
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { TransactionResponseItem, TransactionRequestStatus } from "../models";
+import {
+  TransactionResponseItem,
+  TransactionRequestStatus,
+  User
+} from "../models";
 import CommentForm from "./CommentForm";
 import { useHistory } from "react-router";
-import { isPendingRequestTransaction } from "../utils/transactionUtils";
+import {
+  isPendingRequestTransaction,
+  senderIsCurrentUser
+} from "../utils/transactionUtils";
 
 const useStyles = makeStyles({
   card: {
@@ -28,13 +35,15 @@ type TransactionProps = {
   transactionLike: Function;
   transactionComment: Function;
   transactionUpdate: Function;
+  currentUser: User;
 };
 
-const TransactionItem: React.FC<TransactionProps> = ({
+const TransactionDetail: React.FC<TransactionProps> = ({
   transaction,
   transactionLike,
   transactionComment,
-  transactionUpdate
+  transactionUpdate,
+  currentUser
 }) => {
   const classes = useStyles();
   const history = useHistory();
@@ -106,36 +115,37 @@ const TransactionItem: React.FC<TransactionProps> = ({
                 transactionComment={payload => transactionComment(payload)}
               />
             </Grid>
-            {isPendingRequestTransaction && (
-              <Grid item>
-                <Button
-                  color="primary"
-                  size="small"
-                  onClick={() =>
-                    transactionUpdate({
-                      id: transaction.id,
-                      requestStatus: TransactionRequestStatus.accepted
-                    })
-                  }
-                  data-test={`transaction-accept-request-${transaction.id}`}
-                >
-                  Accept Request
-                </Button>
-                <Button
-                  color="primary"
-                  size="small"
-                  onClick={() =>
-                    transactionUpdate({
-                      id: transaction.id,
-                      requestStatus: TransactionRequestStatus.rejected
-                    })
-                  }
-                  data-test={`transaction-reject-request-${transaction.id}`}
-                >
-                  Reject Request
-                </Button>
-              </Grid>
-            )}
+            {senderIsCurrentUser(currentUser, transaction) &&
+              isPendingRequestTransaction(transaction) && (
+                <Grid item>
+                  <Button
+                    color="primary"
+                    size="small"
+                    onClick={() =>
+                      transactionUpdate({
+                        id: transaction.id,
+                        requestStatus: TransactionRequestStatus.accepted
+                      })
+                    }
+                    data-test={`transaction-accept-request-${transaction.id}`}
+                  >
+                    Accept Request
+                  </Button>
+                  <Button
+                    color="primary"
+                    size="small"
+                    onClick={() =>
+                      transactionUpdate({
+                        id: transaction.id,
+                        requestStatus: TransactionRequestStatus.rejected
+                      })
+                    }
+                    data-test={`transaction-reject-request-${transaction.id}`}
+                  >
+                    Reject Request
+                  </Button>
+                </Grid>
+              )}
           </Grid>
         </CardActions>
       </Card>
@@ -143,4 +153,4 @@ const TransactionItem: React.FC<TransactionProps> = ({
   );
 };
 
-export default TransactionItem;
+export default TransactionDetail;
