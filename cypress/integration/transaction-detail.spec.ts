@@ -24,7 +24,7 @@ describe("Transaction Detail", function() {
   it("displays transaction detail page", function() {
     cy.getTest("main").scrollTo("top");
     cy.wait("@publicTransactions");
-    cy.getTestLike("transaction-item")
+    cy.getTestLike("transaction-view")
       .first()
       .scrollIntoView()
       .click();
@@ -43,5 +43,13 @@ describe("Transaction Detail", function() {
       "This is my comment{enter}"
     );
     cy.getTestLike(`transaction-comment-count`).should("contain", 1);
+  });
+
+  it("accepts a transaction request", function() {
+    cy.getTestLike(`transaction-accept-request`).click();
+  });
+
+  it("rejects a transaction request", function() {
+    cy.getTestLike(`transaction-reject-request`).click();
   });
 });
