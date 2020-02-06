@@ -22,7 +22,7 @@ import {
   User,
   Contact,
   TransactionStatus,
-  RequestStatus,
+  TransactionRequestStatus,
   Like,
   Comment,
   PaymentNotification,
@@ -535,7 +535,9 @@ export const createTransaction = (
     privacyLevel: transactionDetails.privacyLevel || sender.defaultPrivacyLevel,
     status: TransactionStatus.pending,
     requestStatus:
-      transactionType === "request" ? RequestStatus.pending : undefined,
+      transactionType === "request"
+        ? TransactionRequestStatus.pending
+        : undefined,
     createdAt: new Date(),
     modifiedAt: new Date()
   };

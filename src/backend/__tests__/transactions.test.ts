@@ -19,7 +19,7 @@ import {
 import {
   User,
   Transaction,
-  RequestStatus,
+  TransactionRequestStatus,
   DefaultPrivacyLevel,
   BankTransferType,
   TransactionPayload,
@@ -169,7 +169,7 @@ describe("Transactions", () => {
     expect(transaction.requestStatus).not.toEqual("rejected");
 
     const edits: Partial<Transaction> = {
-      requestStatus: RequestStatus.rejected
+      requestStatus: TransactionRequestStatus.rejected
     };
     updateTransactionById(user.id, transaction.id, edits);
 

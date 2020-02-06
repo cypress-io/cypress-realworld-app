@@ -115,6 +115,14 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
           >
             View Transaction
           </Button>
+          <Button
+            color="primary"
+            size="small"
+            onClick={() => showTransactionDetail(transaction.id)}
+            data-test={`transaction-view-${transaction.id}`}
+          >
+            View Transaction
+          </Button>
         </CardActions>
       </Card>
     </ListItem>

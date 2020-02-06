@@ -7,7 +7,7 @@ export enum TransactionStatus {
   complete = "complete"
 }
 
-export enum RequestStatus {
+export enum TransactionRequestStatus {
   pending = "pending",
   accepted = "accepted",
   rejected = "rejected"
@@ -24,7 +24,7 @@ export interface Transaction {
   senderId: string;
   balanceAtCompletion?: number;
   status: TransactionStatus;
-  requestStatus?: RequestStatus;
+  requestStatus?: TransactionRequestStatus;
   requestResolvedAt?: Date;
   createdAt: Date;
   modifiedAt: Date;

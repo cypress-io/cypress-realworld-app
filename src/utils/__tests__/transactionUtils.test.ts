@@ -2,13 +2,15 @@ import { isRequestTransaction, getFakeAmount } from "../transactionUtils";
 import faker from "faker";
 import {
   Transaction,
-  RequestStatus,
+  TransactionRequestStatus,
   DefaultPrivacyLevel,
   TransactionStatus
 } from "../../models";
 import shortid from "shortid";
 
-const fakeTransaction = (requestStatus?: RequestStatus): Transaction => ({
+const fakeTransaction = (
+  requestStatus?: TransactionRequestStatus
+): Transaction => ({
   id: shortid(),
   uuid: faker.random.uuid(),
   source: shortid(),
@@ -29,8 +31,8 @@ describe("isRequestTransaction", () => {
   let transaction;
 
   test("validates that a transaction is a request", () => {
-    for (let s in RequestStatus) {
-      transaction = fakeTransaction(s as RequestStatus);
+    for (let s in TransactionRequestStatus) {
+      transaction = fakeTransaction(s as TransactionRequestStatus);
       expect(isRequestTransaction(transaction)).toBeTruthy();
     }
   });
