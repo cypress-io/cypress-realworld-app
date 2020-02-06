@@ -41,3 +41,8 @@ export type TransactionPayload = Omit<
   Transaction,
   "id" | "uuid" | "createdAt" | "modifiedAt"
 >;
+
+export type TransactionUpdateActionPayload = Pick<
+  Transaction,
+  "id" | "requestStatus"
+>;

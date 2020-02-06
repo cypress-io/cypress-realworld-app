@@ -24,7 +24,10 @@ import {
   TRANSACTION_CREATE_PENDING,
   TRANSACTION_CREATE_SUCCESS,
   TRANSACTION_CREATE_ERROR,
-  transactionsPersonalPending
+  transactionsPersonalPending,
+  TRANSACTION_UPDATE_PENDING,
+  TRANSACTION_UPDATE_SUCCESS,
+  TRANSACTION_UPDATE_ERROR
 } from "../actions/transactions";
 import { history } from "../index";
 import { isRequestTransaction } from "../utils/transactionUtils";
@@ -227,6 +230,28 @@ const transactionsRefreshLogic = createLogic({
   }
 });
 
+const transactionUpdateLogic = createLogic({
+  type: TRANSACTION_UPDATE_PENDING,
+  processOptions: {
+    dispatchReturn: true,
+    successType: TRANSACTION_UPDATE_SUCCESS,
+    failType: TRANSACTION_UPDATE_ERROR
+  },
+
+  // @ts-ignore
+  process({ httpClient, action }) {
+    // @ts-ignore
+    const { payload } = action;
+
+    return (
+      httpClient
+        // @ts-ignore
+        .patch(`http://localhost:3001/transactions/${payload.id}`, payload)
+        .then((resp: any) => resp.data)
+    );
+  }
+});
+
 export default [
   transactionsPersonalLogic,
   transactionsPublicLogic,
@@ -237,5 +262,6 @@ export default [
   transactionsCommentSuccessLogic,
   transactionDetailLogic,
   transactionCreateLogic,
-  transactionsRefreshLogic
+  transactionsRefreshLogic,
+  transactionUpdateLogic
 ];

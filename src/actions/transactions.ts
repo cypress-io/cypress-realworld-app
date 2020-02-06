@@ -1,4 +1,4 @@
-import { Transaction } from "../models";
+import { Transaction, TransactionUpdateActionPayload } from "../models";
 
 export const TRANSACTIONS_PUBLIC_PENDING = "TRANSACTIONS_PUBLIC_PENDING";
 export const TRANSACTIONS_PUBLIC_SUCCESS = "TRANSACTIONS_PUBLIC_SUCCESS";
@@ -21,9 +21,9 @@ export const TRANSACTION_DETAIL_ERROR = "TRANSACTIONS_DETAIL_ERROR";
 export const TRANSACTION_CREATE_PENDING = "TRANSACTION_CREATE_PENDING";
 export const TRANSACTION_CREATE_SUCCESS = "TRANSACTION_CREATE_SUCCESS";
 export const TRANSACTION_CREATE_ERROR = "TRANSACTION_CREATE_ERROR";
-export const TRANSACTION_REQUEST_PENDING = "TRANSACTION_REQUEST_PENDING";
-export const TRANSACTION_REQUEST_SUCCESS = "TRANSACTION_REQUEST_SUCCESS";
-export const TRANSACTION_REQUEST_ERROR = "TRANSACTION_REQUEST_ERROR";
+export const TRANSACTION_UPDATE_PENDING = "TRANSACTION_UPDATE_PENDING";
+export const TRANSACTION_UPDATE_SUCCESS = "TRANSACTION_UPDATE_SUCCESS";
+export const TRANSACTION_UPDATE_ERROR = "TRANSACTION_UPDATE_ERROR";
 
 export const transactionsPublicPending = () =>
   ({
@@ -157,23 +157,25 @@ export const transactionCreateError = (payload: any) =>
     error: true
   } as const);
 
-export const transactionRequestPending = (payload: object) =>
+export const transactionUpdatePending = (
+  payload: TransactionUpdateActionPayload
+) =>
   ({
-    type: TRANSACTION_REQUEST_PENDING,
+    type: TRANSACTION_UPDATE_PENDING,
     payload
   } as const);
 
-export const transactionRequestSuccess = (payload: {
+export const transactionUpdateSuccess = (payload: {
   transaction: Transaction;
 }) =>
   ({
-    type: TRANSACTION_REQUEST_SUCCESS,
+    type: TRANSACTION_UPDATE_SUCCESS,
     payload
   } as const);
 
-export const transactionRequestError = (payload: any) =>
+export const transactionUpdateError = (payload: any) =>
   ({
-    type: TRANSACTION_REQUEST_ERROR,
+    type: TRANSACTION_UPDATE_ERROR,
     payload,
     error: true
   } as const);
@@ -200,8 +202,8 @@ export type TTransactionActions =
   | ReturnType<typeof transactionCreatePending>
   | ReturnType<typeof transactionCreateSuccess>
   | ReturnType<typeof transactionCreateError>
-  | ReturnType<typeof transactionRequestPending>
-  | ReturnType<typeof transactionRequestSuccess>
-  | ReturnType<typeof transactionRequestError>;
+  | ReturnType<typeof transactionUpdatePending>
+  | ReturnType<typeof transactionUpdateSuccess>
+  | ReturnType<typeof transactionUpdateError>;
 
 export type TransactionActionDataTypes = TTransactionActions["type"];
