@@ -10,12 +10,15 @@ describe("Transaction Detail", function() {
     cy.get("@users").then(users => {
       cy.login(this.users[0].username);
     });
-    cy.server();
-    cy.route("/transactions/public").as("publicTransactions");
   });
   beforeEach(function() {
     cy.task("db:seed");
     Cypress.Cookies.preserveOnce("connect.sid");
+    cy.server();
+    cy.route("/transactions/public").as("publicTransactions");
+    cy.route("PATCH", "http://localhost:3001/transactions/*").as(
+      "updateTransaction"
+    );
   });
   after(function() {
     cy.task("db:seed");
@@ -27,7 +30,7 @@ describe("Transaction Detail", function() {
     cy.getTestLike("transaction-view")
       .first()
       .scrollIntoView()
-      .click();
+      .click({ force: true });
     cy.getTest("nav-transaction-tabs").should("not.be.visible");
     cy.location("pathname").should("include", "/transaction");
   });
@@ -47,9 +50,11 @@ describe("Transaction Detail", function() {
 
   it("accepts a transaction request", function() {
     cy.getTestLike(`transaction-accept-request`).click();
+    cy.wait("@updateTransaction").should("have.property", "status", 204);
   });
 
   it("rejects a transaction request", function() {
     cy.getTestLike(`transaction-reject-request`).click();
+    cy.wait("@updateTransaction").should("have.property", "status", 204);
   });
 });
