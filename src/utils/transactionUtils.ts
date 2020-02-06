@@ -1,10 +1,28 @@
-import { Transaction, User } from "../models";
+import { Transaction, User, TransactionRequestStatus } from "../models";
 import faker from "faker";
 import Dinero from "dinero.js";
-import { flow, get, isEmpty, negate, curry } from "lodash/fp";
+import { flow, get, isEmpty, negate, curry, isEqual, method } from "lodash/fp";
 
 export const isRequestTransaction = (transaction: Transaction) =>
   flow(get("requestStatus"), negate(isEmpty))(transaction);
+
+export const isPendingRequestTransaction = (transaction: Transaction) =>
+  flow(
+    get("requestStatus"),
+    isEqual(TransactionRequestStatus.pending)
+  )(transaction);
+
+export const isAcceptedRequestTransaction = (transaction: Transaction) =>
+  flow(
+    get("requestStatus"),
+    isEqual(TransactionRequestStatus.accepted)
+  )(transaction);
+
+export const isRejectedRequestTransaction = (transaction: Transaction) =>
+  flow(
+    get("requestStatus"),
+    isEqual(TransactionRequestStatus.rejected)
+  )(transaction);
 
 export const isPayment = negate(isRequestTransaction);
 
@@ -30,3 +48,9 @@ export const hasInsufficientFunds = (sender: User, transaction: Transaction) =>
 
 export const hasSufficientFunds = (sender: User, transaction: Transaction) =>
   payAppDifference(sender, transaction).isPositive();
+
+export const hasPathTransactionId = (pathname: string) =>
+  pathname.match(/transaction\/(?!new)(\w+)/);
+
+export const pathTransactionId = (pathname: string) =>
+  flow(hasPathTransactionId, get(1))(pathname);

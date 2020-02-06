@@ -30,7 +30,10 @@ import {
   TRANSACTION_UPDATE_ERROR
 } from "../actions/transactions";
 import { history } from "../index";
-import { isRequestTransaction } from "../utils/transactionUtils";
+import {
+  isRequestTransaction,
+  pathTransactionId
+} from "../utils/transactionUtils";
 
 const transactionsPersonalLogic = createLogic({
   type: TRANSACTIONS_PERSONAL_PENDING,
@@ -207,7 +210,7 @@ const transactionCreateLogic = createLogic({
 });
 
 const transactionsRefreshLogic = createLogic({
-  type: TRANSACTION_CREATE_SUCCESS,
+  type: [TRANSACTION_CREATE_SUCCESS, TRANSACTION_UPDATE_SUCCESS],
 
   // @ts-ignore
   // eslint-disable-next-line no-empty-pattern
@@ -221,6 +224,15 @@ const transactionsRefreshLogic = createLogic({
         history.push("/personal");
       }
       history.push("/");
+    }
+
+    const transactionId = pathTransactionId(pathname);
+    if (transactionId) {
+      dispatch(
+        transactionDetailPending({
+          transactionId
+        })
+      );
     }
 
     dispatch(transactionsPublicPending());
@@ -249,6 +261,28 @@ const transactionUpdateLogic = createLogic({
         .patch(`http://localhost:3001/transactions/${payload.id}`, payload)
         .then((resp: any) => resp.data)
     );
+  }
+});
+const transactionsLikeSuccessLogic = createLogic({
+  type: TRANSACTIONS_LIKE_SUCCESS,
+
+  // @ts-ignore
+  process({ action }, dispatch, done) {
+    const { pathname } = window.location;
+    // @ts-ignore
+    const { like } = action.payload;
+
+    if (pathname.match("transaction")) {
+      dispatch(
+        transactionDetailPending({
+          transactionId: like.transactionId
+        })
+      );
+      dispatch(transactionsPublicPending());
+      dispatch(transactionsContactsPending());
+      dispatch(transactionsPersonalPending());
+    }
+    done();
   }
 });
 
