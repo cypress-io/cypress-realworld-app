@@ -7,7 +7,7 @@
     "automerge": false
   },
   "minor": {
-    "automerge": false
+    "automerge": true
   },
   "prHourlyLimit": 1,
   "updateNotScheduled": false,
