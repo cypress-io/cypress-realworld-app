@@ -33,7 +33,7 @@
     "@types/supertest": "2.0.8",
     "@types/uuid": "3.4.7",
     "@types/validator": "12.0.1",
-    "@types/webpack-env": "1.15.0",
+    "@types/webpack-env": "1.15.1",
     "@types/yup": "0.26.29",
     "axios": "0.19.2",
     "bcrypt": "3.0.7",
