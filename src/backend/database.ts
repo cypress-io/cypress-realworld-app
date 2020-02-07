@@ -9,7 +9,9 @@ import {
   orderBy,
   flow,
   flatMap,
-  curry
+  curry,
+  get,
+  constant
 } from "lodash/fp";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
@@ -20,7 +22,7 @@ import {
   User,
   Contact,
   TransactionStatus,
-  RequestStatus,
+  TransactionRequestStatus,
   Like,
   Comment,
   PaymentNotification,
@@ -30,9 +32,19 @@ import {
   NotificationType,
   NotificationPayloadType,
   NotificationsType,
-  TransactionResponseItem
+  TransactionResponseItem,
+  TransactionPayload,
+  BankTransfer,
+  BankTransferPayload,
+  BankTransferType
 } from "../models";
 import Fuse from "fuse.js";
+import {
+  isPayment,
+  getTransferAmount,
+  hasSufficientFunds,
+  getChargeAmount
+} from "../utils/transactionUtils";
 
 const USER_TABLE = "users";
 const CONTACT_TABLE = "contacts";
@@ -41,6 +53,7 @@ const TRANSACTION_TABLE = "transactions";
 const LIKE_TABLE = "likes";
 const COMMENT_TABLE = "comments";
 const NOTIFICATION_TABLE = "notifications";
+const BANK_TRANSFER_TABLE = "banktransfers";
 
 const testSeed = require(path.join(__dirname, "../data/", "test-seed.json"));
 let databaseFileName;
@@ -260,10 +273,8 @@ export const getBankAccountById = (id: string) => getBankAccountBy("id", id);
 export const getBankAccountsBy = (key: string, value: any) =>
   getAllBy(BANK_ACCOUNT_TABLE, key, value);
 
-export const getBankAccountsByUserId = (userId: string) => {
-  const accounts: BankAccount[] = getBankAccountsBy("userId", userId);
-  return accounts;
-};
+export const getBankAccountsByUserId = (userId: string) =>
+  getBankAccountsBy("userId", userId);
 
 export const createBankAccount = (bankaccount: BankAccount) => {
   db()
@@ -308,6 +319,48 @@ export const removeBankAccountById = (bankAccountId: string) => {
     .find({ id: bankAccountId })
     .assign({ isDeleted: true }) // soft delete
     .write();
+};
+
+// Bank Transfer
+
+export const getBankTransferBy = (key: string, value: any) =>
+  getBy(BANK_TRANSFER_TABLE, key, value);
+
+export const getBankTransferById = (id: string) => getBankTransferBy("id", id);
+
+export const getBankTransfersBy = (key: string, value: any) =>
+  getAllBy(BANK_TRANSFER_TABLE, key, value);
+
+export const getBankTransfersByUserId = (userId: string) =>
+  getBankTransfersBy("userId", userId);
+
+export const getBankTransferByTransactionId = (transactionId: string) =>
+  getBankTransferBy("transactionId", transactionId);
+
+export const createBankTransfer = (
+  bankTransferDetails: BankTransferPayload
+) => {
+  const bankTransfer: BankTransfer = {
+    id: shortid(),
+    uuid: v4(),
+    ...bankTransferDetails,
+    createdAt: new Date(),
+    modifiedAt: new Date()
+  };
+
+  const savedBankTransfer = saveBankTransfer(bankTransfer);
+  return savedBankTransfer;
+};
+
+const saveBankTransfer = (bankTransfer: BankTransfer): BankTransfer => {
+  db()
+    .get(BANK_TRANSFER_TABLE)
+    // @ts-ignore
+    .push(bankTransfer)
+    .write();
+
+  // manual lookup after banktransfer created
+  return getBankTransferBy("id", bankTransfer.id);
 };
 
 // Transaction
@@ -412,6 +465,14 @@ export const nonContactPublicTransactions = (userId: string): Transaction[] => {
       includes(transaction.id, contactsTransactionIds)
     )
   )(userId);
+  /*
+  TODO: investigate xorBy implementation
+  return xorBy(
+    getAllPublicTransactions,
+    getTransactionsForUserContacts(userId),
+    "id"
+  );
+  */
 };
 
 export const getNonContactPublicTransactionsForApi = (userId: string) =>
@@ -422,34 +483,77 @@ export const getPublicTransactionsDefaultSort = (userId: string) => ({
   public: getNonContactPublicTransactionsForApi(userId)
 });
 
+export const resetPayAppBalance = constant(0);
+
+export const updatePayAppBalance = (sender: User, transaction: Transaction) => {
+  if (hasSufficientFunds(sender, transaction)) {
+    flow(
+      getChargeAmount,
+      savePayAppBalance(sender)
+      // TODO: generate notification?
+    )(sender, transaction);
+  } else {
+    flow(
+      getTransferAmount,
+      createBankTransferWithdrawal(sender, transaction),
+      // TODO: generate notification for withdrawal
+      resetPayAppBalance,
+      savePayAppBalance(sender)
+    )(sender, transaction);
+  }
+};
+
+export const createBankTransferWithdrawal = curry(
+  (sender: User, transaction: Transaction, transferAmount: number) =>
+    createBankTransfer({
+      userId: sender.id,
+      source: transaction.source,
+      amount: transferAmount,
+      transactionId: transaction.id,
+      type: BankTransferType.withdrawal
+    })
+);
+
+export const savePayAppBalance = curry((sender: User, balance: number) =>
+  updateUserById(get("id", sender), { balance })
+);
+
 export const createTransaction = (
   userId: User["id"],
   transactionType: "payment" | "request",
-  transactionDetails: Partial<Transaction>
+  transactionDetails: TransactionPayload
 ): Transaction => {
-  const senderDetails = getUserById(userId);
+  const sender = getUserById(userId);
   const transaction: Transaction = {
     id: shortid(),
     uuid: v4(),
-    source: transactionDetails.source!,
-    amount: transactionDetails.amount!,
-    description: transactionDetails.description!,
-    receiverId: transactionDetails.receiverId!,
+    source: transactionDetails.source,
+    amount: transactionDetails.amount,
+    description: transactionDetails.description,
+    receiverId: transactionDetails.receiverId,
     senderId: userId,
-    privacyLevel:
-      transactionDetails.privacyLevel || senderDetails.defaultPrivacyLevel,
+    privacyLevel: transactionDetails.privacyLevel || sender.defaultPrivacyLevel,
     status: TransactionStatus.pending,
     requestStatus:
-      transactionType === "request" ? RequestStatus.pending : undefined,
+      transactionType === "request"
+        ? TransactionRequestStatus.pending
+        : undefined,
     createdAt: new Date(),
     modifiedAt: new Date()
   };
-  // TODO: if payment and if bankaccount createBankTransfer for withdrawal for the difference associated to the transaction
-  // if request the transaction will be updated when the request is accepted
 
   const savedTransaction = saveTransaction(transaction);
+
+  // if payment, debit sender's balance for payment amount
+  if (isPayment(transaction)) {
+    updatePayAppBalance(sender, transaction);
+    // TODO: update transaction "status"
+    // TODO: generate notification for transaction - createPaymentNotification(...)
+  }
+
   return savedTransaction;
 };
+
 const saveTransaction = (transaction: Transaction): Transaction => {
   db()
     .get(TRANSACTION_TABLE)
@@ -469,6 +573,7 @@ export const updateTransactionById = (
   const transaction = getTransactionBy("id", transactionId);
 
   // TODO: if request accepted - createBankTransfer for withdrawal for the difference associated to the transaction
+  // TODO: generate notification for update (request)
   if (userId === transaction.senderId || userId === transaction.receiverId) {
     db()
       .get(TRANSACTION_TABLE)

@@ -1,4 +1,4 @@
-import faker from "faker";
+import { map } from "lodash/fp";
 import {
   seedDatabase,
   getTransactionsForUserByObj,
@@ -12,16 +12,20 @@ import {
   updateTransactionById,
   getTransactionById,
   getPublicTransactionsDefaultSort,
-  getUserById
+  getUserById,
+  getBankTransferByTransactionId
 } from "../database";
 
 import {
   User,
   Transaction,
-  RequestStatus,
-  DefaultPrivacyLevel
+  TransactionRequestStatus,
+  DefaultPrivacyLevel,
+  BankTransferType,
+  TransactionPayload,
+  TransactionStatus
 } from "../../models";
-import { map } from "lodash/fp";
+import { getFakeAmount } from "../../utils/transactionUtils";
 
 describe("Transactions", () => {
   afterEach(() => {
@@ -92,14 +96,15 @@ describe("Transactions", () => {
     const sender: User = getAllUsers()[0];
     const receiver: User = getAllUsers()[1];
     const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
-    const amount = faker.finance.amount();
 
-    const paymentDetails: Partial<Transaction> = {
+    const paymentDetails: TransactionPayload = {
       source: senderBankAccount.id!,
+      senderId: sender.id,
       receiverId: receiver.id,
       description: `Payment: ${sender.id} to ${receiver.id}`,
-      amount,
-      privacyLevel: DefaultPrivacyLevel.public
+      amount: getFakeAmount(),
+      privacyLevel: DefaultPrivacyLevel.public,
+      status: TransactionStatus.pending
     };
 
     const result = createTransaction(sender.id, "payment", paymentDetails);
@@ -112,14 +117,15 @@ describe("Transactions", () => {
     const sender: User = getAllUsers()[0];
     const receiver: User = getAllUsers()[1];
     const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
-    const amount = faker.finance.amount();
 
-    const requestDetails: Partial<Transaction> = {
+    const requestDetails: TransactionPayload = {
       source: senderBankAccount.id!,
+      senderId: sender.id,
       receiverId: receiver.id,
       description: `Request: ${sender.id} to ${receiver.id}`,
-      amount,
-      privacyLevel: DefaultPrivacyLevel.public
+      amount: getFakeAmount(),
+      privacyLevel: DefaultPrivacyLevel.public,
+      status: TransactionStatus.pending
     };
 
     const result = createTransaction(sender.id, "request", requestDetails);
@@ -132,14 +138,15 @@ describe("Transactions", () => {
     const sender: User = getAllUsers()[0];
     const receiver: User = getAllUsers()[1];
     const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
-    const amount = faker.finance.amount();
 
-    const paymentDetails: Partial<Transaction> = {
+    const paymentDetails: TransactionPayload = {
       source: senderBankAccount.id!,
+      senderId: sender.id,
       receiverId: receiver.id,
       description: `Payment: ${sender.id} to ${receiver.id}`,
-      amount,
-      privacyLevel: DefaultPrivacyLevel.private
+      amount: getFakeAmount(),
+      privacyLevel: DefaultPrivacyLevel.private,
+      status: TransactionStatus.pending
     };
 
     const payment = createTransaction(sender.id, "payment", paymentDetails);
@@ -162,7 +169,7 @@ describe("Transactions", () => {
     expect(transaction.requestStatus).not.toEqual("rejected");
 
     const edits: Partial<Transaction> = {
-      requestStatus: RequestStatus.rejected
+      requestStatus: TransactionRequestStatus.rejected
     };
     updateTransactionById(user.id, transaction.id, edits);
 
@@ -184,5 +191,61 @@ describe("Transactions", () => {
     expect(senderName).toBe(`${sender.firstName} ${sender.lastName}`);
     expect(transaction.likes).toBeDefined();
     expect(transaction.comments).toBeDefined();
+  });
+
+  it("should create a payment and withdrawal (bank transfer) for remaining balance", () => {
+    const sender: User = getAllUsers()[0];
+    const receiver: User = getAllUsers()[1];
+    const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
+
+    const paymentDetails: TransactionPayload = {
+      source: senderBankAccount.id!,
+      senderId: sender.id,
+      receiverId: receiver.id,
+      description: `Payment: ${sender.id} to ${receiver.id}`,
+      amount: 100000,
+      privacyLevel: DefaultPrivacyLevel.public,
+      status: TransactionStatus.pending
+    };
+
+    const transaction = createTransaction(sender.id, "payment", paymentDetails);
+    expect(transaction.id).toBeDefined();
+    expect(transaction.status).toEqual("pending");
+    expect(transaction.requestStatus).not.toBeDefined();
+
+    const updatedSender: User = getAllUsers()[0];
+    expect(updatedSender.balance).toBe(0);
+
+    const withdrawal = getBankTransferByTransactionId(transaction.id);
+    expect(withdrawal.type).toBe(BankTransferType.withdrawal);
+    expect(withdrawal.amount).toBe(45000);
+
+    // second transaction - $500
+    const secondPaymentDetails: TransactionPayload = {
+      source: senderBankAccount.id!,
+      senderId: sender.id,
+      receiverId: receiver.id,
+      description: `Payment: ${sender.id} to ${receiver.id}`,
+      amount: 50000,
+      privacyLevel: DefaultPrivacyLevel.public,
+      status: TransactionStatus.pending
+    };
+    const secondTransaction = createTransaction(
+      sender.id,
+      "payment",
+      secondPaymentDetails
+    );
+    expect(secondTransaction.id).toBeDefined();
+    expect(secondTransaction.status).toEqual("pending");
+    expect(secondTransaction.requestStatus).not.toBeDefined();
+
+    const secondUpdatedSender: User = getAllUsers()[0];
+    expect(secondUpdatedSender.balance).toBe(0);
+
+    const secondWithdrawal = getBankTransferByTransactionId(
+      secondTransaction.id
+    );
+    expect(secondWithdrawal.type).toBe(BankTransferType.withdrawal);
+    expect(secondWithdrawal.amount).toBe(50000);
   });
 });

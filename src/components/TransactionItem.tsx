@@ -10,7 +10,11 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { TransactionResponseItem } from "../models";
 import { useHistory } from "react-router";
-import { isRequestTransaction } from "../utils/transactionUtils";
+import {
+  isRequestTransaction,
+  formatAmount,
+  isAcceptedRequestTransaction
+} from "../utils/transactionUtils";
 
 const useStyles = makeStyles({
   card: {
@@ -22,6 +26,9 @@ const useStyles = makeStyles({
   titleName: {
     fontSize: 18,
     color: "#1A202C"
+  },
+  amount: {
+    paddingLeft: "7px"
   }
 });
 
@@ -34,8 +41,19 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
   const history = useHistory();
 
   const TitleName: React.FC<{ name: string }> = ({ name }) => (
-    <Typography className={classes.titleName} display="inline">
+    <Typography className={classes.titleName} display="inline" component="span">
       {name}
+    </Typography>
+  );
+
+  const Amount: React.FC<{ amount: number }> = ({ amount }) => (
+    <Typography
+      className={classes.amount}
+      display="inline"
+      component="span"
+      color="primary"
+    >
+      {amount && formatAmount(amount)}
     </Typography>
   );
 
@@ -47,13 +65,16 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
 
   const headline = isRequestTransaction(transaction) ? (
     <Title>
-      <TitleName name={transaction.senderName} /> charged{" "}
-      <TitleName name={transaction.receiverName} />
+      <TitleName name={transaction.senderName} />
+      {isAcceptedRequestTransaction(transaction) ? " charged " : " requested "}
+      <TitleName name={transaction.receiverName} /> -
+      <Amount amount={transaction.amount} />
     </Title>
   ) : (
     <Title>
       <TitleName name={transaction.senderName} /> paid{" "}
       <TitleName name={transaction.receiverName} />
+      <Amount amount={transaction.amount} />
     </Title>
   );
 
@@ -62,14 +83,11 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
   };
 
   return (
-    <ListItem
-      data-test={`transaction-item-${transaction.id}`}
-      onClick={() => showTransactionDetail(transaction.id)}
-    >
+    <ListItem data-test={`transaction-item-${transaction.id}`}>
       <Card className={classes.card}>
         <CardContent>
           {headline}
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography variant="body2" color="textSecondary">
             {transaction.description}
           </Typography>
           <Typography

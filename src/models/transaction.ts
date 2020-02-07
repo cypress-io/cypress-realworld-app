@@ -7,7 +7,7 @@ export enum TransactionStatus {
   complete = "complete"
 }
 
-export enum RequestStatus {
+export enum TransactionRequestStatus {
   pending = "pending",
   accepted = "accepted",
   rejected = "rejected"
@@ -17,14 +17,14 @@ export interface Transaction {
   id: string;
   uuid: string;
   source: string; // Empty if Payment or Request; Populated with BankAccount ID
-  amount: string;
+  amount: number;
   description: string;
   privacyLevel: DefaultPrivacyLevel;
   receiverId: string;
   senderId: string;
-  balanceAtCompletion?: string;
+  balanceAtCompletion?: number;
   status: TransactionStatus;
-  requestStatus?: RequestStatus;
+  requestStatus?: TransactionRequestStatus;
   requestResolvedAt?: Date;
   createdAt: Date;
   modifiedAt: Date;
@@ -36,3 +36,13 @@ export interface TransactionResponseItem extends Transaction {
   receiverName: string;
   senderName: string;
 }
+
+export type TransactionPayload = Omit<
+  Transaction,
+  "id" | "uuid" | "createdAt" | "modifiedAt"
+>;
+
+export type TransactionUpdateActionPayload = Pick<
+  Transaction,
+  "id" | "requestStatus"
+>;

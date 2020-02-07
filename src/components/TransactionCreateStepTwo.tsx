@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik, Form, Field, FieldProps } from "formik";
-import { string, object } from "yup";
+import { string, object, number } from "yup";
 import MainContainer from "../containers/MainContainer";
 import { Paper, Typography, Button, Grid, Container } from "@material-ui/core";
 import { User } from "../models";
 
 const validationSchema = object({
-  amount: string().required("Amount is required"),
+  amount: number().required("Amount is required"),
   description: string().required("Please type a note"),
   senderId: string(),
   receiverId: string()
@@ -36,6 +36,13 @@ export interface TransactionCreateStepTwoProps {
   transactionCreate: (payload: object) => void;
 }
 
+interface FormValues {
+  amount: number | "";
+  description: string;
+  senderId: string;
+  receiverId: string;
+}
+
 const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
   receiver,
   sender,
@@ -43,7 +50,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
 }) => {
   const classes = useStyles();
   const [transactionType, setTransactionType] = useState();
-  const initialValues = {
+  const initialValues: FormValues = {
     amount: "",
     description: "",
     senderId: sender.id,

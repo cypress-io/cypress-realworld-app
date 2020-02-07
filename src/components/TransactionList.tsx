@@ -33,8 +33,8 @@ const TransactionList: React.FC<TransactionListProps> = ({
       </Typography>
       <List data-test="transaction-list">
         {transactions &&
-          transactions.map((i: any) => (
-            <TransactionItem key={i.id} transaction={i} />
+          transactions.map((transaction: TransactionResponseItem) => (
+            <TransactionItem key={transaction.id} transaction={transaction} />
           ))}
       </List>
     </Paper>

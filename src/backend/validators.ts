@@ -2,7 +2,7 @@ import { body, check, oneOf, query, sanitizeQuery } from "express-validator";
 import { isValid } from "shortid";
 import {
   TransactionStatus,
-  RequestStatus,
+  TransactionRequestStatus,
   DefaultPrivacyLevel,
   NotificationsType
   //PaymentNotificationStatus
@@ -10,7 +10,7 @@ import {
 import { includes } from "lodash/fp";
 
 const TransactionStatusValues = Object.values(TransactionStatus);
-const RequestStatusValues = Object.values(RequestStatus);
+const RequestStatusValues = Object.values(TransactionRequestStatus);
 const DefaultPrivacyLevelValues = Object.values(DefaultPrivacyLevel);
 const NotificationsTypeValues = Object.values(NotificationsType);
 /*const PaymentNotificationStatusValues = Object.values(
@@ -159,6 +159,7 @@ export const isTransactionPayloadValidator = [
   body("amount")
     .isNumeric()
     .trim()
+    .toInt()
 ];
 
 export const isTransactionPatchValidator = [
