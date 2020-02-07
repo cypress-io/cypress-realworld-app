@@ -20,14 +20,14 @@ describe("Create Transaction", function() {
     );
     cy.route("GET", "http://localhost:3001/users/search*").as("usersSearch");
     cy.fixture("users").as("users");
+
+    cy.getTest("nav-top-new-transaction").click();
   });
   after(function() {
     cy.task("db:seed");
   });
 
   it("navigates to the create transaction form and displays a list of users to select", function() {
-    cy.getTest("nav-top-new-transaction").click();
-
     cy.getTest("users-list").should("be.visible");
   });
 
