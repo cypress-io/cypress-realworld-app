@@ -8,6 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import Copyright from "../components/Copyright";
 import NavBar from "./NavBar";
 import NavDrawer from "./NavDrawer";
+import { NotificationType } from "../models";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,9 +32,14 @@ const useStyles = makeStyles(theme => ({
 interface Props {
   signOutPending: () => void;
   children: React.ReactNode;
+  allNotifications: NotificationType[];
 }
 
-const MainLayout: React.FC<Props> = ({ signOutPending, children }) => {
+const MainLayout: React.FC<Props> = ({
+  signOutPending,
+  children,
+  allNotifications
+}) => {
   const classes = useStyles();
 
   // TODO: Move drawer open/close state to MainContainer / Redux
@@ -48,7 +54,11 @@ const MainLayout: React.FC<Props> = ({ signOutPending, children }) => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <NavBar handleDrawerOpen={handleDrawerOpen} drawerOpen={open} />
+      <NavBar
+        handleDrawerOpen={handleDrawerOpen}
+        drawerOpen={open}
+        allNotifications={allNotifications}
+      />
       <NavDrawer
         handleDrawerClose={handleDrawerClose}
         drawerOpen={open}

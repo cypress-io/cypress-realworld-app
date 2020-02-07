@@ -11,6 +11,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import Link from "@material-ui/core/Link";
 import { Link as RouterLink } from "react-router-dom";
 import { Button } from "@material-ui/core";
+import { NotificationType } from "../models";
 
 const drawerWidth = 240;
 
@@ -47,9 +48,14 @@ const useStyles = makeStyles(theme => ({
 interface NavBarProps {
   drawerOpen: boolean;
   handleDrawerOpen: () => void;
+  allNotifications: NotificationType[];
 }
 
-const NavBar: React.FC<NavBarProps> = ({ drawerOpen, handleDrawerOpen }) => {
+const NavBar: React.FC<NavBarProps> = ({
+  drawerOpen,
+  handleDrawerOpen,
+  allNotifications
+}) => {
   const classes = useStyles();
 
   return (
@@ -95,7 +101,13 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, handleDrawerOpen }) => {
           New Transaction
         </Button>
         <IconButton color="inherit">
-          <Badge badgeContent={4} color="secondary">
+          <Badge
+            badgeContent={
+              allNotifications ? allNotifications.length : undefined
+            }
+            color="secondary"
+            data-test="nav-top-notifications-count"
+          >
             <NotificationsIcon />
           </Badge>
         </IconButton>
