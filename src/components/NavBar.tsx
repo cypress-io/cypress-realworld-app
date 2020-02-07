@@ -100,7 +100,12 @@ const NavBar: React.FC<NavBarProps> = ({
         >
           New Transaction
         </Button>
-        <IconButton color="inherit">
+        <IconButton
+          color="inherit"
+          component={RouterLink}
+          to="/notifications"
+          data-test="nav-top-notifications-link"
+        >
           <Badge
             badgeContent={
               allNotifications ? allNotifications.length : undefined

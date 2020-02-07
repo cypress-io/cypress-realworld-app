@@ -27,9 +27,8 @@ describe("Notifications", function() {
     cy.getTest("nav-top-notifications-count").should("contain", "7");
   });
 
-  it.skip("renders a notifications list", function() {
-    cy.wait("@notifications");
+  it("renders a notifications list", function() {
     cy.getTest("nav-top-notifications-count").click();
-    cy.getTest("notifications-list").should("have.length", 2);
+    cy.getTestLike("notification-list-item").should("have.length", 7);
   });
 });
