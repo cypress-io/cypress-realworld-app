@@ -4,7 +4,7 @@ jobs:
     runs-on: ubuntu-latest
     # Docker image with Cypress pre-installed
     # https://github.com/cypress-io/cypress-docker-images/tree/master/included
-    container: cypress/included:3.8.3
+    container: cypress/included:4.0.0
     steps:
       - name: Checkout
         uses: actions/checkout@v1
