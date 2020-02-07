@@ -1468,7 +1468,7 @@
   dependencies:
     "@types/express" "*"
 
-"@types/dinero.js@^1.6.2":
+"@types/dinero.js@1.6.2":
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/@types/dinero.js/-/dinero.js-1.6.2.tgz#d8c0958493d39bf1c4614860aae433bbca771503"
   integrity sha512-wSzUos19uWRJIoBWkFq1+p/ea8siR5jDrjh4biNUSVbLCZKjNw8PkAP6IlStupCZVZ81/9OPviyD3uS0nIONFw==
@@ -4192,7 +4192,7 @@ diffie-hellman@^5.0.0:
     miller-rabin "^4.0.0"
     randombytes "^2.0.0"
 
-dinero.js@^1.6.0:
+dinero.js@1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/dinero.js/-/dinero.js-1.6.0.tgz#d1e4fc4c1784cd8a853c2f1f1b1bb765736ec709"
   integrity sha512-cmmC6N2XzJvynnUgMJkvUmPeiRgjv0t7G81EhcwbOtcOnLhhzhHN4qvYBYcqx1zuF0GOcEPg75KxPnVar7zYdQ==
