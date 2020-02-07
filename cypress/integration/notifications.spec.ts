@@ -15,16 +15,20 @@ describe("Notifications", function() {
     cy.task("db:seed");
     // TODO: Highlight this use case
     Cypress.Cookies.preserveOnce("connect.sid");
+    cy.server();
+    cy.route("GET", "/notifications").as("notifications");
   });
   after(function() {
     cy.task("db:seed");
   });
 
   it("renders the notifications badge with count", function() {
+    cy.wait("@notifications");
     cy.getTest("nav-top-notifications-count").should("contain", "7");
   });
 
   it.skip("renders a notifications list", function() {
+    cy.wait("@notifications");
     cy.getTest("nav-top-notifications-count").click();
     cy.getTest("notifications-list").should("have.length", 2);
   });
