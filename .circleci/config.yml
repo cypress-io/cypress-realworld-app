@@ -11,5 +11,5 @@ workflows:
           command: yarn test:e2e
           record: true
           post-steps:
-            # run Jest tests
+            # run jest tests
             - run: yarn test
