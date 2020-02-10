@@ -1,4 +1,5 @@
 import path from "path";
+import fs from "fs";
 import v4 from "uuid";
 import {
   uniqBy,
@@ -70,7 +71,12 @@ const adapter = new FileSync(databaseFile);
 const db = () => low(adapter);
 
 export const seedDatabase = () => {
-  const testSeed = require(path.join(__dirname, "../data/", "test-seed.json"));
+  const testSeed = JSON.parse(
+    fs.readFileSync(
+      path.join(process.cwd(), "src/data", "test-seed.json"),
+      "utf-8"
+    )
+  );
   // seed database with test data
   // @ts-ignore
   db()
