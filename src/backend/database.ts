@@ -678,6 +678,9 @@ export const getNotificationsByObj = (query: object): Notification[] =>
 export const getNotificationById = (id: string): NotificationType =>
   getNotificationBy("id", id);
 
+export const getUnreadNotificationsByUserId = (userId: string) =>
+  getNotificationsByObj({ userId, isRead: false });
+
 export const getNotificationsByUserId = (userId: string) =>
   getNotificationsByObj({ userId });
 
