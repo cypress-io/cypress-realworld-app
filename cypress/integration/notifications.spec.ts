@@ -31,4 +31,24 @@ describe("Notifications", function() {
     cy.getTest("nav-top-notifications-count").click();
     cy.getTestLike("notification-list-item").should("have.length", 7);
   });
+
+  it("renders a like notification", function() {
+    cy.getTest("nav-top-notifications-count").click();
+    cy.getTestLike("notification-list-item").should("contain", "likes");
+  });
+
+  it("renders a comment notification", function() {
+    cy.getTest("nav-top-notifications-count").click();
+    cy.getTestLike("notification-list-item").should("contain", "commented");
+  });
+
+  it("renders an accepted payment request notification", function() {
+    cy.getTest("nav-top-notifications-count").click();
+    cy.getTestLike("notification-list-item").should("contain", "accepted");
+  });
+
+  it("renders a rejected payment request notification", function() {
+    cy.getTest("nav-top-notifications-count").click();
+    cy.getTestLike("notification-list-item").should("contain", "rejected");
+  });
 });
