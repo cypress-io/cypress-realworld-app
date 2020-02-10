@@ -1405,7 +1405,7 @@
       "userFullName": "Mock User Full Name",
       "commentId": "1KfuAIaOB",
       "transactionId": "8I5k-j97F",
-      "isRead": true,
+      "isRead": false,
       "createdAt": "2019-04-03T03:07:32.170Z",
       "modifiedAt": "2020-01-15T23:49:53.001Z"
     },
