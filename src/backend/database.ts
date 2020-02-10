@@ -56,7 +56,6 @@ const COMMENT_TABLE = "comments";
 const NOTIFICATION_TABLE = "notifications";
 const BANK_TRANSFER_TABLE = "banktransfers";
 
-const testSeed = require(path.join(__dirname, "../data/", "test-seed.json"));
 let databaseFileName;
 
 if (process.env.NODE_ENV === "test") {
@@ -71,6 +70,7 @@ const adapter = new FileSync(databaseFile);
 const db = () => low(adapter);
 
 export const seedDatabase = () => {
+  const testSeed = require(path.join(__dirname, "../data/", "test-seed.json"));
   // seed database with test data
   // @ts-ignore
   db()
