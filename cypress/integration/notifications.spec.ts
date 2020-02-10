@@ -34,7 +34,7 @@ describe("Notifications", function() {
 
   it("renders a like notification", function() {
     cy.getTest("nav-top-notifications-count").click();
-    cy.getTestLike("notification-list-item").should("contain", "likes");
+    cy.getTestLike("notification-list-item").should("contain", "liked");
   });
 
   it("renders a comment notification", function() {
@@ -42,13 +42,13 @@ describe("Notifications", function() {
     cy.getTestLike("notification-list-item").should("contain", "commented");
   });
 
-  it("renders an accepted payment request notification", function() {
+  it("renders an requested payment request notification", function() {
     cy.getTest("nav-top-notifications-count").click();
-    cy.getTestLike("notification-list-item").should("contain", "accepted");
+    cy.getTestLike("notification-list-item").should("contain", "requested");
   });
 
-  it("renders a rejected payment request notification", function() {
+  it("renders a received payment request notification", function() {
     cy.getTest("nav-top-notifications-count").click();
-    cy.getTestLike("notification-list-item").should("contain", "rejected");
+    cy.getTestLike("notification-list-item").should("contain", "received");
   });
 });
