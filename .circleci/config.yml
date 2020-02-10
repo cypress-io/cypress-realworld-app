@@ -8,7 +8,6 @@ workflows:
           yarn: true
           start: yarn test:e2e:ci
           wait-on: "http://localhost:3000"
-          command: yarn test:e2e
           record: true
           post-steps:
             # run jest tests
