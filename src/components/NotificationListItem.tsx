@@ -1,8 +1,15 @@
 import React from "react";
 
 import ListItem from "@material-ui/core/ListItem";
-import { NotificationType, PaymentNotification } from "../models";
-import { ListItemText } from "@material-ui/core";
+import { NotificationType } from "../models";
+import {
+  Card,
+  CardContent,
+  Typography,
+  CardActions,
+  Button,
+  makeStyles
+} from "@material-ui/core";
 import {
   isCommentNotification,
   isLikeNotification,
@@ -15,9 +22,19 @@ export interface NotificationListItemProps {
   notification: NotificationType;
 }
 
+const useStyles = makeStyles({
+  card: {
+    minWidth: "100%"
+  },
+  title: {
+    fontSize: 18
+  }
+});
+
 const NotificationListItem: React.FC<NotificationListItemProps> = ({
   notification
 }) => {
+  const classes = useStyles();
   let listItemText = undefined;
 
   if (isCommentNotification(notification)) {
@@ -41,7 +58,27 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
 
   return (
     <ListItem data-test={`notification-list-item-${notification.id}`}>
-      <ListItemText primary={listItemText} />
+      <Card className={classes.card}>
+        <CardContent>
+          <Typography
+            variant="body2"
+            className={classes.title}
+            color="textSecondary"
+          >
+            {listItemText}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button
+            color="primary"
+            size="small"
+            onClick={() => {}}
+            data-test={`notification-mark-read-${notification.id}`}
+          >
+            Mark as read
+          </Button>
+        </CardActions>
+      </Card>
     </ListItem>
   );
 };
