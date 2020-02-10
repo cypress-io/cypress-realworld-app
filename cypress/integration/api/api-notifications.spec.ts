@@ -42,7 +42,7 @@ describe("Notifications API", function() {
     it("gets a list of notifications for a user", function() {
       cy.request("GET", `${apiNotifications}`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.notifications.length).to.eq(7);
+        expect(response.body.notifications.length).to.eq(6);
       });
     });
   });
