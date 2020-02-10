@@ -20,6 +20,7 @@ import {
 
 export interface NotificationListItemProps {
   notification: NotificationType;
+  updateNotification: Function;
 }
 
 const useStyles = makeStyles({
@@ -32,7 +33,8 @@ const useStyles = makeStyles({
 });
 
 const NotificationListItem: React.FC<NotificationListItemProps> = ({
-  notification
+  notification,
+  updateNotification
 }) => {
   const classes = useStyles();
   let listItemText = undefined;
@@ -72,7 +74,9 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
           <Button
             color="primary"
             size="small"
-            onClick={() => {}}
+            onClick={() =>
+              updateNotification({ id: notification.id, isRead: true })
+            }
             data-test={`notification-mark-read-${notification.id}`}
           >
             Mark as read

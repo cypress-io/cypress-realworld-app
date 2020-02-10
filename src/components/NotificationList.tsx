@@ -6,10 +6,12 @@ import { NotificationType } from "../models";
 
 export interface NotificationsListProps {
   notifications: NotificationType[];
+  updateNotification: Function;
 }
 
 const NotificationsList: React.FC<NotificationsListProps> = ({
-  notifications
+  notifications,
+  updateNotification
 }) => {
   return (
     <List data-test="notifications-list">
@@ -18,6 +20,7 @@ const NotificationsList: React.FC<NotificationsListProps> = ({
           <NotificationListItem
             key={notification.id}
             notification={notification}
+            updateNotification={updateNotification}
           />
         ))}
     </List>

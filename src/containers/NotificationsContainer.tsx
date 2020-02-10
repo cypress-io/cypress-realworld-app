@@ -5,6 +5,7 @@ import MainContainer from "./MainContainer";
 import { IRootReducerState } from "../reducers";
 import { NotificationType } from "../models";
 import NotificationList from "../components/NotificationList";
+import { notificationUpdatePending } from "../actions/notifications";
 const useStyles = makeStyles(theme => ({
   paper: {
     padding: theme.spacing(2),
@@ -15,12 +16,14 @@ const useStyles = makeStyles(theme => ({
 }));
 export interface StateProps {
   allNotifications: NotificationType[];
+  updateNotification: Function;
 }
 
 export type NotificationsContainerProps = StateProps;
 
 const NotificationsContainer: React.FC<NotificationsContainerProps> = ({
-  allNotifications
+  allNotifications,
+  updateNotification
 }) => {
   const classes = useStyles();
   return (
@@ -29,7 +32,10 @@ const NotificationsContainer: React.FC<NotificationsContainerProps> = ({
         <Typography component="h2" variant="h6" color="primary" gutterBottom>
           Notifications
         </Typography>
-        <NotificationList notifications={allNotifications} />
+        <NotificationList
+          notifications={allNotifications}
+          updateNotification={updateNotification}
+        />
       </Paper>
     </MainContainer>
   );
@@ -39,4 +45,11 @@ const mapStateToProps = (state: IRootReducerState) => ({
   allNotifications: state.notifications.all
 });
 
-export default connect(mapStateToProps)(NotificationsContainer);
+const mapDispatchToProps = {
+  updateNotification: notificationUpdatePending
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NotificationsContainer);

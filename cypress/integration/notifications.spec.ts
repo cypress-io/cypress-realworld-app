@@ -24,12 +24,12 @@ describe("Notifications", function() {
 
   it("renders the notifications badge with count", function() {
     cy.wait("@notifications");
-    cy.getTest("nav-top-notifications-count").should("contain", "7");
+    cy.getTest("nav-top-notifications-count").should("contain", 6);
   });
 
   it("renders a notifications list", function() {
     cy.getTest("nav-top-notifications-count").click();
-    cy.getTestLike("notification-list-item").should("have.length", 7);
+    cy.getTestLike("notification-list-item").should("have.length", 6);
   });
 
   it("renders a like notification", function() {
@@ -50,5 +50,16 @@ describe("Notifications", function() {
   it("renders a received payment request notification", function() {
     cy.getTest("nav-top-notifications-count").click();
     cy.getTestLike("notification-list-item").should("contain", "received");
+  });
+
+  it("marks a notification as read", function() {
+    cy.getTest("nav-top-notifications-count").click();
+    cy.getTestLike("notification-mark-read")
+      .eq(3)
+      .click();
+
+    cy.wait("@notifications");
+
+    cy.getTestLike("notification-list-item").should("have.length", 5);
   });
 });
