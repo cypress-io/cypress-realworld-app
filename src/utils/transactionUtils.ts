@@ -1,7 +1,18 @@
 import { Transaction, User, TransactionRequestStatus } from "../models";
 import faker from "faker";
 import Dinero from "dinero.js";
-import { flow, get, isEmpty, negate, curry, isEqual } from "lodash/fp";
+import {
+  flow,
+  get,
+  isEmpty,
+  negate,
+  curry,
+  isEqual,
+  join,
+  pick,
+  values
+} from "lodash/fp";
+import { getUserById } from "../backend/database";
 
 export const isRequestTransaction = (transaction: Transaction) =>
   flow(get("requestStatus"), negate(isEmpty))(transaction);
@@ -60,3 +71,9 @@ export const pathTransactionId = (pathname: string) =>
 
 export const senderIsCurrentUser = (sender: User, transaction: Transaction) =>
   isEqual(get("id", sender), get("senderId", transaction));
+
+export const formatFullName = (user: User) =>
+  flow(pick(["firstName", "lastName"]), values, join(" "))(user);
+
+export const getFullNameForUser = (userId: User["id"]) =>
+  flow(getUserById, formatFullName)(userId);

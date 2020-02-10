@@ -81,11 +81,13 @@ describe("Notifications", () => {
     it("should create a like notification for a transaction", () => {
       expect(likeNotification.transactionId).toBe(transaction.id);
       expect(likeNotification.likeId).toBe(like.id);
+      expect(likeNotification.userFullName).toBeDefined();
     });
 
     it("should create a comment notification for a transaction", () => {
       expect(commentNotification.transactionId).toBe(transaction.id);
       expect(commentNotification.commentId).toBe(comment.id);
+      expect(commentNotification.userFullName).toBeDefined();
     });
 
     it("should create notifications for a transaction", () => {

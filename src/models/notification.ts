@@ -10,25 +10,26 @@ export enum NotificationsType {
   comment = "comment"
 }
 
-export interface PaymentNotificationBase {
+export interface NotificationBase {
   id: string;
   uuid: string;
   userId: string;
+  userFullName: string;
   transactionId: string;
   isRead: boolean;
   createdAt: Date;
   modifiedAt: Date;
 }
 
-export interface PaymentNotification extends PaymentNotificationBase {
+export interface PaymentNotification extends NotificationBase {
   status: PaymentNotificationStatus;
 }
 
-export interface LikeNotification extends PaymentNotificationBase {
+export interface LikeNotification extends NotificationBase {
   likeId: string;
 }
 
-export interface CommentNotification extends PaymentNotificationBase {
+export interface CommentNotification extends NotificationBase {
   commentId: string;
 }
 

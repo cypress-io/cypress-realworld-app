@@ -43,7 +43,8 @@ import {
   isPayment,
   getTransferAmount,
   hasSufficientFunds,
-  getChargeAmount
+  getChargeAmount,
+  getFullNameForUser
 } from "../utils/transactionUtils";
 
 const USER_TABLE = "users";
@@ -388,14 +389,14 @@ export const getTransactionsForUserForApi = (userId: string, query?: object) =>
 export const formatTransactionForApiResponse = (
   transaction: Transaction
 ): TransactionResponseItem => {
-  const receiver = getUserById(transaction.receiverId);
-  const sender = getUserById(transaction.senderId);
+  const receiverName = getFullNameForUser(transaction.receiverId);
+  const senderName = getFullNameForUser(transaction.senderId);
   const likes = getLikesByTransactionId(transaction.id);
   const comments = getCommentsByTransactionId(transaction.id);
 
   return {
-    receiverName: `${receiver.firstName} ${receiver.lastName}`,
-    senderName: `${sender.firstName} ${sender.lastName}`,
+    receiverName,
+    senderName,
     likes,
     comments,
     ...transaction
@@ -692,6 +693,7 @@ export const createPaymentNotification = (
     id: shortid(),
     uuid: v4(),
     userId: userId,
+    userFullName: getFullNameForUser(userId),
     transactionId: transactionId,
     status,
     isRead: false,
@@ -712,6 +714,7 @@ export const createLikeNotification = (
     id: shortid(),
     uuid: v4(),
     userId: userId,
+    userFullName: getFullNameForUser(userId),
     transactionId: transactionId,
     likeId: likeId,
     isRead: false,
@@ -732,6 +735,7 @@ export const createCommentNotification = (
     id: shortid(),
     uuid: v4(),
     userId: userId,
+    userFullName: getFullNameForUser(userId),
     transactionId: transactionId,
     commentId: commentId,
     isRead: false,
