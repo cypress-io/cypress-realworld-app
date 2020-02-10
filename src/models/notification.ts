@@ -14,7 +14,6 @@ export interface NotificationBase {
   id: string;
   uuid: string;
   userId: string;
-  userFullName: string;
   transactionId: string;
   isRead: boolean;
   createdAt: Date;
@@ -31,6 +30,18 @@ export interface LikeNotification extends NotificationBase {
 
 export interface CommentNotification extends NotificationBase {
   commentId: string;
+}
+
+export interface PaymentNotificationResponseItem extends PaymentNotification {
+  userFullName: string;
+}
+
+export interface CommentNotificationResponseItem extends CommentNotification {
+  userFullName: string;
+}
+
+export interface LikeNotificationResponseItem extends LikeNotification {
+  userFullName: string;
 }
 
 export interface NotificationPayloadBase {
@@ -59,3 +70,8 @@ export type NotificationPayloadType =
   | PaymentNotificationPayload
   | LikeNotificationPayload
   | CommentNotificationPayload;
+
+export type NotificationResponseItem =
+  | PaymentNotificationResponseItem
+  | LikeNotificationResponseItem
+  | CommentNotificationResponseItem;

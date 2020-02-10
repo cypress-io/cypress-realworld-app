@@ -3,10 +3,10 @@ import {
   NOTIFICATIONS_ALL_SUCCESS
 } from "../actions/notifications";
 import { TAuthActions, SIGNOUT_SUCCESS, SIGNOUT_ERROR } from "../actions/auth";
-import { NotificationType } from "../models";
+import { NotificationResponseItem } from "../models";
 
 export interface NotificationsState {
-  all: NotificationType[];
+  all: NotificationResponseItem[];
 }
 
 const initialState = {

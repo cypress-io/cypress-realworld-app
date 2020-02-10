@@ -3,9 +3,10 @@ import { connect } from "react-redux";
 import { makeStyles, Paper, Typography } from "@material-ui/core";
 import MainContainer from "./MainContainer";
 import { IRootReducerState } from "../reducers";
-import { NotificationType } from "../models";
+import { NotificationResponseItem } from "../models";
 import NotificationList from "../components/NotificationList";
 import { notificationUpdatePending } from "../actions/notifications";
+
 const useStyles = makeStyles(theme => ({
   paper: {
     padding: theme.spacing(2),
@@ -14,12 +15,16 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column"
   }
 }));
+
 export interface StateProps {
-  allNotifications: NotificationType[];
+  allNotifications: NotificationResponseItem[];
+}
+
+export interface DispatchProps {
   updateNotification: Function;
 }
 
-export type NotificationsContainerProps = StateProps;
+export type NotificationsContainerProps = StateProps & DispatchProps;
 
 const NotificationsContainer: React.FC<NotificationsContainerProps> = ({
   allNotifications,

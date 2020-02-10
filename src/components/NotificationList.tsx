@@ -2,10 +2,10 @@ import React from "react";
 
 import NotificationListItem from "./NotificationListItem";
 import List from "@material-ui/core/List";
-import { NotificationType } from "../models";
+import { NotificationResponseItem } from "../models";
 
 export interface NotificationsListProps {
-  notifications: NotificationType[];
+  notifications: NotificationResponseItem[];
   updateNotification: Function;
 }
 
@@ -16,7 +16,7 @@ const NotificationsList: React.FC<NotificationsListProps> = ({
   return (
     <List data-test="notifications-list">
       {notifications &&
-        notifications.map((notification: NotificationType) => (
+        notifications.map((notification: NotificationResponseItem) => (
           <NotificationListItem
             key={notification.id}
             notification={notification}

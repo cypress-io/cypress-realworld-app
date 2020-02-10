@@ -1,7 +1,7 @@
 import React from "react";
 
 import ListItem from "@material-ui/core/ListItem";
-import { NotificationType } from "../models";
+import { NotificationResponseItem } from "../models";
 import {
   Card,
   CardContent,
@@ -19,7 +19,7 @@ import {
 } from "../utils/transactionUtils";
 
 export interface NotificationListItemProps {
-  notification: NotificationType;
+  notification: NotificationResponseItem;
   updateNotification: Function;
 }
 
