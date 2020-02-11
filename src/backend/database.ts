@@ -37,7 +37,8 @@ import {
   TransactionPayload,
   BankTransfer,
   BankTransferPayload,
-  BankTransferType
+  BankTransferType,
+  NotificationResponseItem
 } from "../models";
 import Fuse from "fuse.js";
 import {
@@ -679,7 +680,10 @@ export const getNotificationById = (id: string): NotificationType =>
   getNotificationBy("id", id);
 
 export const getUnreadNotificationsByUserId = (userId: string) =>
-  getNotificationsByObj({ userId, isRead: false });
+  flow(
+    getNotificationsByObj,
+    formatNotificationsForApiResponse
+  )({ userId, isRead: false });
 
 export const getNotificationsByUserId = (userId: string) =>
   getNotificationsByObj({ userId });
@@ -702,7 +706,6 @@ export const createPaymentNotification = (
     id: shortid(),
     uuid: v4(),
     userId: userId,
-    userFullName: getFullNameForUser(userId),
     transactionId: transactionId,
     status,
     isRead: false,
@@ -723,7 +726,6 @@ export const createLikeNotification = (
     id: shortid(),
     uuid: v4(),
     userId: userId,
-    userFullName: getFullNameForUser(userId),
     transactionId: transactionId,
     likeId: likeId,
     isRead: false,
@@ -744,7 +746,6 @@ export const createCommentNotification = (
     id: shortid(),
     uuid: v4(),
     userId: userId,
-    userFullName: getFullNameForUser(userId),
     transactionId: transactionId,
     commentId: commentId,
     isRead: false,
@@ -800,6 +801,31 @@ export const updateNotificationById = (
       .write();
   }
 };
+
+export const formatNotificationForApiResponse = (
+  notification: NotificationResponseItem
+): NotificationResponseItem => {
+  const userFullName = getFullNameForUser(notification.userId);
+
+  return {
+    userFullName,
+    ...notification
+  };
+};
+
+export const formatNotificationsForApiResponse = (
+  notifications: NotificationResponseItem[]
+): NotificationResponseItem[] =>
+  orderBy(
+    [
+      (notification: NotificationResponseItem) =>
+        new Date(notification.modifiedAt)
+    ],
+    ["desc"],
+    notifications.map(notification =>
+      formatNotificationForApiResponse(notification)
+    )
+  );
 
 // dev/test private methods
 export const getRandomUser = () => {
