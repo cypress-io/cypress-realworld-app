@@ -6,6 +6,7 @@ import {
   SIGNOUT_SUCCESS,
   SIGNOUT_ERROR
 } from "../actions/auth";
+import { USER_UPDATE_SUCCESS, TUsersActions } from "../actions/users";
 import { User } from "../models";
 
 export interface UserState {
@@ -20,13 +21,20 @@ const initialState = {
 
 export default function reducer(
   state: UserState = initialState,
-  action: TAuthActions | TAppReducerActions
+  action: TAuthActions | TAppReducerActions | TUsersActions
 ): UserState {
   switch (action.type) {
     case APP_BOOTSTRAP_SUCCESS:
       return {
         ...state,
         profile: action.payload.user
+      };
+    case USER_UPDATE_SUCCESS:
+      return {
+        ...state,
+        profile: {
+          ...action.payload
+        }
       };
     case SIGNIN_SUCCESS:
       return {

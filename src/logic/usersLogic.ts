@@ -5,7 +5,10 @@ import {
   USERS_ALL_ERROR,
   USERS_SEARCH_PENDING,
   USERS_SEARCH_SUCCESS,
-  USERS_SEARCH_ERROR
+  USERS_SEARCH_ERROR,
+  USER_UPDATE_PENDING,
+  USER_UPDATE_SUCCESS,
+  USER_UPDATE_ERROR
 } from "../actions/users";
 
 const usersAllLogic = createLogic({
@@ -59,4 +62,37 @@ const usersSearchLogic = createLogic({
   }
 });
 
-export default [usersAllLogic, usersSearchLogic];
+const userUpdateLogic = createLogic({
+  type: USER_UPDATE_PENDING,
+  processOptions: {
+    dispatchReturn: true,
+    successType: USER_UPDATE_SUCCESS,
+    failType: USER_UPDATE_ERROR
+  },
+
+  validate({ action }, allow, reject) {
+    // @ts-ignore
+    if (action.payload) {
+      allow(action);
+    } else {
+      // empty request, silently reject
+      // @ts-ignore
+      reject();
+    }
+  },
+
+  // @ts-ignore
+  process({ httpClient, action }) {
+    // @ts-ignore
+    const { payload } = action;
+
+    return (
+      httpClient
+        // @ts-ignore
+        .patch(`http://localhost:3001/users/${payload.id}`, payload)
+        .then((resp: any) => resp.data)
+    );
+  }
+});
+
+export default [usersAllLogic, usersSearchLogic, userUpdateLogic];
