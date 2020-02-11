@@ -36,7 +36,12 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Edit Profile" />
     </ListItem>
-    <ListItem button>
+    <ListItem
+      button
+      component={RouterLink}
+      to="/bankaccounts"
+      data-test="sidenav-bankaccounts"
+    >
       <ListItemIcon>
         <SettingsIcon />
       </ListItemIcon>
