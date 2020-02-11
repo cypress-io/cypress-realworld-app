@@ -32,7 +32,7 @@ const BankAccountListItem: React.FC<BankAccountListItemProps> = ({
             <Button
               color="primary"
               size="large"
-              data-test="bankaccount-list-item-delete"
+              data-test="bankaccount-delete"
               onClick={() => {
                 deleteBankAccount({ id: bankAccount.id });
               }}

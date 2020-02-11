@@ -40,7 +40,7 @@ describe("Bank Accounts", function() {
   it("deletes a bank account", function() {
     cy.getTest("bankaccount-list").should("be.visible");
 
-    cy.getTestLike("bankaccount-list-item-delete")
+    cy.getTestLike("bankaccount-delete")
       .first()
       .click();
 
