@@ -19,3 +19,8 @@ export interface User {
   createdAt: Date;
   modifiedAt: Date;
 }
+
+export type UserSettingsPayload = Pick<
+  User,
+  "firstName" | "lastName" | "email" | "phoneNumber" | "defaultPrivacyLevel"
+>;

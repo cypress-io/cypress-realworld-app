@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import { Link as RouterLink } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
@@ -18,23 +19,28 @@ const drawerWidth = 240;
 
 export const mainListItems = (
   <div>
-    <ListItem button>
+    <ListItem button component={RouterLink} to="/" data-test="sidenav-home">
       <ListItemIcon>
         <HomeIcon />
       </ListItemIcon>
       <ListItemText primary="Home" />
     </ListItem>
-    <ListItem button>
+    <ListItem
+      button
+      component={RouterLink}
+      to="/user/settings"
+      data-test="sidenav-user-settings"
+    >
       <ListItemIcon>
         <PersonIcon />
       </ListItemIcon>
-      <ListItemText primary="Profile" />
+      <ListItemText primary="Edit Profile" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
         <SettingsIcon />
       </ListItemIcon>
-      <ListItemText primary="Settings" />
+      <ListItemText primary="Bank Accounts" />
     </ListItem>
   </div>
 );
