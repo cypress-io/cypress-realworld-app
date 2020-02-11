@@ -2,20 +2,15 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik, Form, Field, FieldProps } from "formik";
-import { string, object, mixed } from "yup";
+import { string, object } from "yup";
 import { Button, Grid } from "@material-ui/core";
-import { User, DefaultPrivacyLevel, UserSettingsPayload } from "../models";
-
-const DefaultPrivacyLevelValues = Object.values(DefaultPrivacyLevel);
+import { BankAccountPayload, User } from "../models";
+import { useHistory } from "react-router";
 
 const validationSchema = object({
-  firstName: string(),
-  lastName: string(),
-  email: string().email(),
-  phoneNumber: string(),
-  defaultPrivacyLevel: mixed<DefaultPrivacyLevel>().oneOf(
-    DefaultPrivacyLevelValues
-  )
+  bankName: string(),
+  accountNumber: string(),
+  routingNumber: string()
 });
 
 const useStyles = makeStyles(theme => ({
@@ -34,22 +29,22 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export interface UserSettingsProps {
-  userProfile: User;
-  updateUser: Function;
+export interface BankAccountFormProps {
+  userId: User["id"];
+  createBankAccount: Function;
 }
 
-const UserSettingsForm: React.FC<UserSettingsProps> = ({
-  userProfile,
-  updateUser
+const BankAccountForm: React.FC<BankAccountFormProps> = ({
+  userId,
+  createBankAccount
 }) => {
+  const history = useHistory();
   const classes = useStyles();
-  const initialValues: UserSettingsPayload = {
-    firstName: userProfile.firstName,
-    lastName: userProfile.lastName,
-    email: userProfile.email,
-    phoneNumber: userProfile.phoneNumber,
-    defaultPrivacyLevel: userProfile.defaultPrivacyLevel
+  const initialValues: BankAccountPayload = {
+    userId,
+    bankName: "",
+    accountNumber: "",
+    routingNumber: ""
   };
 
   return (
@@ -59,75 +54,60 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({
       onSubmit={(values, { setSubmitting }) => {
         setSubmitting(true);
 
-        updateUser({ id: userProfile.id, ...values });
+        createBankAccount({ userId, ...values });
+
+        history.push("/bankaccounts");
 
         setSubmitting(false);
       }}
     >
       {({ isValid, isSubmitting }) => (
-        <Form className={classes.form} data-test="user-settings-form">
-          <Field name="firstName">
+        <Form className={classes.form} data-test="bankaccount-form">
+          <Field name="bankName">
             {({ field, meta }: FieldProps) => (
               <TextField
                 variant="outlined"
                 margin="dense"
                 fullWidth
                 required
-                id={"user-settings-firstName-input"}
+                id={"bankaccount-bankName-input"}
                 type="text"
-                placeholder="First Name"
-                data-test={"user-settings-firstName-input"}
+                placeholder="Bank Name"
+                data-test={"bankaccount-bankName-input"}
                 error={meta.touched && Boolean(meta.error)}
                 helperText={meta.touched ? meta.error : ""}
                 {...field}
               />
             )}
           </Field>
-          <Field name="lastName">
+          <Field name="accountNumber">
             {({ field, meta }: FieldProps) => (
               <TextField
                 variant="outlined"
                 margin="dense"
                 fullWidth
                 required
-                id={"user-settings-lastName-input"}
+                id={"bankaccount-accountNumber-input"}
                 type="text"
-                placeholder="Last Name"
-                data-test={"user-settings-lastName-input"}
+                placeholder="Account Number"
+                data-test={"bankaccount-accountNumber-input"}
                 error={meta.touched && Boolean(meta.error)}
                 helperText={meta.touched ? meta.error : ""}
                 {...field}
               />
             )}
           </Field>
-          <Field name="email">
+          <Field name="routingNumber">
             {({ field, meta }: FieldProps) => (
               <TextField
                 variant="outlined"
                 margin="dense"
                 fullWidth
                 required
-                id={"user-settings-email-input"}
+                id={"bankaccount-routingNumber-input"}
                 type="text"
-                placeholder="Email"
-                data-test={"user-settings-email-input"}
-                error={meta.touched && Boolean(meta.error)}
-                helperText={meta.touched ? meta.error : ""}
-                {...field}
-              />
-            )}
-          </Field>
-          <Field name="phonenumber">
-            {({ field, meta }: FieldProps) => (
-              <TextField
-                variant="outlined"
-                margin="dense"
-                fullWidth
-                required
-                id={"user-settings-phoneNumber-input"}
-                type="text"
-                placeholder="Phone Number"
-                data-test={"user-settings-phoneNumber-input"}
+                placeholder="Routing Number"
+                data-test={"bankaccount-routingNumber-input"}
                 error={meta.touched && Boolean(meta.error)}
                 helperText={meta.touched ? meta.error : ""}
                 {...field}
@@ -148,7 +128,7 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({
                 variant="contained"
                 color="primary"
                 className={classes.submit}
-                data-test="user-settings-submit"
+                data-test="bankaccount-submit"
                 disabled={!isValid || isSubmitting}
               >
                 Save
@@ -161,4 +141,4 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({
   );
 };
 
-export default UserSettingsForm;
+export default BankAccountForm;

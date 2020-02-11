@@ -107,3 +107,12 @@ export const isPaymentReceivedNotification = (notification: NotificationType) =>
     get("status"),
     isEqual(PaymentNotificationStatus.received)
   )(notification);
+
+export const isNewBankAccountPath = (pathname: string) =>
+  pathname.match(/bankaccounts\/new/);
+
+export const hasPathBankAccountId = (pathname: string) =>
+  pathname.match(/bankaccounts\/(?!new)(\w+)/);
+
+export const pathBankAccountId = (pathname: string) =>
+  flow(hasPathBankAccountId, get(1))(pathname);

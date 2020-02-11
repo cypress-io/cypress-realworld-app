@@ -284,6 +284,9 @@ export const getBankAccountsBy = (key: string, value: any) =>
 export const getBankAccountsByUserId = (userId: string) =>
   getBankAccountsBy("userId", userId);
 
+export const getActiveBankAccountsByUserId = (userId: string) =>
+  getAllByObj(BANK_ACCOUNT_TABLE, { userId, isDeleted: false });
+
 export const createBankAccount = (bankaccount: BankAccount) => {
   db()
     .get(BANK_ACCOUNT_TABLE)

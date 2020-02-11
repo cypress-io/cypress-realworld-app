@@ -9,3 +9,8 @@ export interface BankAccount {
   createdAt: Date;
   modifiedAt: Date;
 }
+
+export type BankAccountPayload = Pick<
+  BankAccount,
+  "userId" | "bankName" | "accountNumber" | "routingNumber"
+>;

@@ -5,6 +5,7 @@ import signOutLogic from "./signOutLogic";
 import transactionsLogic from "./transactionsLogic";
 import usersLogic from "./usersLogic";
 import notificationsLogic from "./notificationsLogic";
+import bankAccountsLogic from "./bankAccountsLogic";
 
 export default [
   appLogic,
@@ -13,5 +14,6 @@ export default [
   signOutLogic,
   ...transactionsLogic,
   ...usersLogic,
-  ...notificationsLogic
+  ...notificationsLogic,
+  ...bankAccountsLogic
 ];
