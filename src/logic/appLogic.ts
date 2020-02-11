@@ -12,6 +12,7 @@ import { notificationsAllPending } from "../actions/notifications";
 
 const appBootstrapLogic = createLogic({
   type: APP_BOOTSTRAP,
+  latest: true,
 
   // @ts-ignore
   async process({ httpClient }, dispatch, done) {

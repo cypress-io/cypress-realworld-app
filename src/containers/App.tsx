@@ -11,6 +11,7 @@ import SignIn from "../containers/SignIn";
 import SignUp from "../containers/SignUp";
 import TransactionCreateContainer from "./TransactionCreateContainer";
 import NotificationsContainer from "./NotificationsContainer";
+import UserSettingsContainer from "./UserSettingsContainer";
 
 interface StateProps {
   isBootstrapped: boolean;
@@ -34,6 +35,9 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
     <Switch>
       <PrivateRoute exact path={"/(public|contacts|personal)?"}>
         <TransactionsContainer />
+      </PrivateRoute>
+      <PrivateRoute exact path="/user/settings">
+        <UserSettingsContainer />
       </PrivateRoute>
       <PrivateRoute exact path="/notifications">
         <NotificationsContainer />

@@ -19,7 +19,7 @@ const drawerWidth = 240;
 
 export const mainListItems = (
   <div>
-    <ListItem button>
+    <ListItem button component={RouterLink} to="/" data-test="sidenav-home">
       <ListItemIcon>
         <HomeIcon />
       </ListItemIcon>

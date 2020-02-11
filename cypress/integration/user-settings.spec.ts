@@ -15,7 +15,7 @@ describe("User Settings", function() {
     cy.task("db:seed");
     Cypress.Cookies.preserveOnce("connect.sid");
     cy.server();
-    cy.route("PATCH", "http://localhost:3001/users").as("updateUser");
+    cy.route("PATCH", "http://localhost:3001/users/*").as("updateUser");
     cy.fixture("users").as("users");
 
     cy.getTest("sidenav-user-settings").click();
@@ -30,8 +30,22 @@ describe("User Settings", function() {
   });
 
   it("updates first name, last name, email and phone number", function() {
-    cy.getTest("user-settings-firstName-input").type("New First Name");
-    cy.getTest("user-settings-lastName-input").type("New Last Name");
+    cy.getTest("user-settings-firstName-input")
+      .find("input")
+      .clear()
+      .type("New First Name");
+    cy.getTest("user-settings-lastName-input")
+      .find("input")
+      .clear()
+      .type("New Last Name");
+    cy.getTest("user-settings-email-input")
+      .find("input")
+      .clear()
+      .type("email@email.com");
+    cy.getTest("user-settings-phoneNumber-input")
+      .find("input")
+      .clear()
+      .type("6155551212");
     cy.getTest("user-settings-submit").click();
 
     cy.wait("@updateUser").should("have.property", "status", 204);
