@@ -803,7 +803,7 @@ export const updateNotificationById = (
 };
 
 export const formatNotificationForApiResponse = (
-  notification: NotificationResponseItem
+  notification: NotificationType
 ): NotificationResponseItem => {
   const userFullName = getFullNameForUser(notification.userId);
 
