@@ -1,7 +1,7 @@
 import {
   TBankAccountActions,
   BANKACCOUNTS_ALL_SUCCESS
-} from "../actions/bankAccounts";
+} from "../actions/bankaccounts";
 import { TAuthActions, SIGNOUT_SUCCESS, SIGNOUT_ERROR } from "../actions/auth";
 import { BankAccount } from "../models";
 

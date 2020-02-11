@@ -9,7 +9,7 @@ import {
 import { signOutPending } from "../actions/auth";
 import { usersAllPending } from "../actions/users";
 import { notificationsAllPending } from "../actions/notifications";
-import { bankAccountsAllPending } from "../actions/bankAccounts";
+import { bankAccountsAllPending } from "../actions/bankaccounts";
 
 const appBootstrapLogic = createLogic({
   type: APP_BOOTSTRAP,

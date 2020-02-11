@@ -14,7 +14,7 @@ import {
   BANKACCOUNT_UPDATE_PENDING,
   BANKACCOUNT_UPDATE_SUCCESS,
   BANKACCOUNT_UPDATE_ERROR
-} from "../actions/bankAccounts";
+} from "../actions/bankaccounts";
 import { history } from "../index";
 import {
   isNewBankAccountPath,

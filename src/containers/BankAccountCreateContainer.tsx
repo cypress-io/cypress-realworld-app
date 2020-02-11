@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { bankAccountCreatePending } from "../actions/bankAccounts";
+import { bankAccountCreatePending } from "../actions/bankaccounts";
 import { User } from "../models";
 import BankAccountForm from "../components/BankAccountForm";
 import { IRootReducerState } from "../reducers";
