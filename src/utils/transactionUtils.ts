@@ -1,7 +1,25 @@
-import { Transaction, User, TransactionRequestStatus } from "../models";
+import {
+  Transaction,
+  User,
+  TransactionRequestStatus,
+  NotificationType,
+  PaymentNotificationStatus
+} from "../models";
 import faker from "faker";
 import Dinero from "dinero.js";
-import { flow, get, isEmpty, negate, curry, isEqual } from "lodash/fp";
+import {
+  flow,
+  get,
+  isEmpty,
+  negate,
+  curry,
+  isEqual,
+  join,
+  pick,
+  values,
+  has
+} from "lodash/fp";
+import { getUserById } from "../backend/database";
 
 export const isRequestTransaction = (transaction: Transaction) =>
   flow(get("requestStatus"), negate(isEmpty))(transaction);
@@ -60,3 +78,32 @@ export const pathTransactionId = (pathname: string) =>
 
 export const senderIsCurrentUser = (sender: User, transaction: Transaction) =>
   isEqual(get("id", sender), get("senderId", transaction));
+
+export const formatFullName = (user: User) =>
+  flow(pick(["firstName", "lastName"]), values, join(" "))(user);
+
+export const getFullNameForUser = (userId: User["id"]) =>
+  flow(getUserById, formatFullName)(userId);
+
+export const isCommentNotification = (notification: NotificationType) =>
+  has("commentId")(notification);
+
+export const isLikeNotification = (notification: NotificationType) =>
+  has("likeId")(notification);
+
+export const isPaymentNotification = (notification: NotificationType) =>
+  has("status")(notification);
+
+export const isPaymentRequestedNotification = (
+  notification: NotificationType
+) =>
+  flow(
+    get("status"),
+    isEqual(PaymentNotificationStatus.requested)
+  )(notification);
+
+export const isPaymentReceivedNotification = (notification: NotificationType) =>
+  flow(
+    get("status"),
+    isEqual(PaymentNotificationStatus.received)
+  )(notification);

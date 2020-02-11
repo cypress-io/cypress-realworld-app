@@ -10,54 +10,54 @@ export enum NotificationsType {
   comment = "comment"
 }
 
-export interface PaymentNotification {
+export interface NotificationBase {
   id: string;
   uuid: string;
   userId: string;
+  transactionId: string;
+  isRead: boolean;
+  createdAt: Date;
+  modifiedAt: Date;
+}
+
+export interface PaymentNotification extends NotificationBase {
   status: PaymentNotificationStatus;
-  transactionId: string;
-  isRead: boolean;
-  createdAt: Date;
-  modifiedAt: Date;
 }
 
-export interface LikeNotification {
-  id: string;
-  uuid: string;
-  userId: string;
+export interface LikeNotification extends NotificationBase {
   likeId: string;
-  transactionId: string;
-  isRead: boolean;
-  createdAt: Date;
-  modifiedAt: Date;
 }
 
-export interface CommentNotification {
-  id: string;
-  uuid: string;
-  userId: string;
+export interface CommentNotification extends NotificationBase {
   commentId: string;
-  transactionId: string;
-  isRead: boolean;
-  createdAt: Date;
-  modifiedAt: Date;
 }
 
-export interface PaymentNotificationPayload {
+export interface PaymentNotificationResponseItem extends PaymentNotification {
+  userFullName: string;
+}
+
+export interface CommentNotificationResponseItem extends CommentNotification {
+  userFullName: string;
+}
+
+export interface LikeNotificationResponseItem extends LikeNotification {
+  userFullName: string;
+}
+
+export interface NotificationPayloadBase {
   type: NotificationsType;
   transactionId: string;
+}
+
+export interface PaymentNotificationPayload extends NotificationPayloadBase {
   status: PaymentNotificationStatus;
 }
 
-export interface LikeNotificationPayload {
-  type: NotificationsType;
-  transactionId: string;
+export interface LikeNotificationPayload extends NotificationPayloadBase {
   likeId: string;
 }
 
-export interface CommentNotificationPayload {
-  type: NotificationsType;
-  transactionId: string;
+export interface CommentNotificationPayload extends NotificationPayloadBase {
   commentId: string;
 }
 
@@ -70,3 +70,8 @@ export type NotificationPayloadType =
   | PaymentNotificationPayload
   | LikeNotificationPayload
   | CommentNotificationPayload;
+
+export type NotificationResponseItem =
+  | PaymentNotificationResponseItem
+  | LikeNotificationResponseItem
+  | CommentNotificationResponseItem;

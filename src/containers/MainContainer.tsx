@@ -2,17 +2,38 @@ import React from "react";
 import { connect } from "react-redux";
 import { signOutPending } from "../actions/auth";
 import MainLayout from "../components/MainLayout";
+import { IRootReducerState } from "../reducers";
+import { NotificationType } from "../models";
 
-export interface Props {
+export interface StateProps {
+  allNotifications: NotificationType[];
+}
+
+export interface DispatchProps {
   signOutPending: () => void;
 }
 
-const MainContainer: React.FC<Props> = ({ signOutPending, children }) => {
-  return <MainLayout signOutPending={signOutPending}>{children}</MainLayout>;
-};
+type Props = StateProps & DispatchProps;
 
+const MainContainer: React.FC<Props> = ({
+  signOutPending,
+  children,
+  allNotifications
+}) => {
+  return (
+    <MainLayout
+      signOutPending={signOutPending}
+      allNotifications={allNotifications}
+    >
+      {children}
+    </MainLayout>
+  );
+};
+const mapStateToProps = (state: IRootReducerState) => ({
+  allNotifications: state.notifications.all
+});
 const dispatchProps = {
   signOutPending
 };
 
-export default connect(undefined, dispatchProps)(MainContainer);
+export default connect(mapStateToProps, dispatchProps)(MainContainer);

@@ -8,6 +8,7 @@ import {
 } from "../actions/transactions";
 import { signOutPending } from "../actions/auth";
 import { usersAllPending } from "../actions/users";
+import { notificationsAllPending } from "../actions/notifications";
 
 const appBootstrapLogic = createLogic({
   type: APP_BOOTSTRAP,
@@ -29,6 +30,7 @@ const appBootstrapLogic = createLogic({
       dispatch(transactionsContactsPending());
       dispatch(transactionsPersonalPending());
       dispatch(usersAllPending());
+      dispatch(notificationsAllPending());
     } catch (error) {
       // @ts-ignore
       dispatch(appBootstrapError({ error: "Unauthorized" }));

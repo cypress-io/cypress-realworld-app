@@ -2,9 +2,9 @@
 
 import express from "express";
 import {
-  getNotificationsByUserId,
   createNotifications,
-  updateNotificationById
+  updateNotificationById,
+  getUnreadNotificationsByUserId
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import {
@@ -18,7 +18,7 @@ const router = express.Router();
 
 //GET /notifications/
 router.get("/", ensureAuthenticated, (req, res) => {
-  const notifications = getNotificationsByUserId(req.user?.id!);
+  const notifications = getUnreadNotificationsByUserId(req.user?.id!);
 
   res.status(200);
   res.json({ notifications });

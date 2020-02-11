@@ -1,4 +1,5 @@
 import path from "path";
+import fs from "fs";
 import v4 from "uuid";
 import {
   uniqBy,
@@ -36,14 +37,16 @@ import {
   TransactionPayload,
   BankTransfer,
   BankTransferPayload,
-  BankTransferType
+  BankTransferType,
+  NotificationResponseItem
 } from "../models";
 import Fuse from "fuse.js";
 import {
   isPayment,
   getTransferAmount,
   hasSufficientFunds,
-  getChargeAmount
+  getChargeAmount,
+  getFullNameForUser
 } from "../utils/transactionUtils";
 
 const USER_TABLE = "users";
@@ -55,7 +58,6 @@ const COMMENT_TABLE = "comments";
 const NOTIFICATION_TABLE = "notifications";
 const BANK_TRANSFER_TABLE = "banktransfers";
 
-const testSeed = require(path.join(__dirname, "../data/", "test-seed.json"));
 let databaseFileName;
 
 if (process.env.NODE_ENV === "test") {
@@ -70,6 +72,12 @@ const adapter = new FileSync(databaseFile);
 const db = () => low(adapter);
 
 export const seedDatabase = () => {
+  const testSeed = JSON.parse(
+    fs.readFileSync(
+      path.join(process.cwd(), "src/data", "test-seed.json"),
+      "utf-8"
+    )
+  );
   // seed database with test data
   // @ts-ignore
   db()
@@ -388,14 +396,14 @@ export const getTransactionsForUserForApi = (userId: string, query?: object) =>
 export const formatTransactionForApiResponse = (
   transaction: Transaction
 ): TransactionResponseItem => {
-  const receiver = getUserById(transaction.receiverId);
-  const sender = getUserById(transaction.senderId);
+  const receiverName = getFullNameForUser(transaction.receiverId);
+  const senderName = getFullNameForUser(transaction.senderId);
   const likes = getLikesByTransactionId(transaction.id);
   const comments = getCommentsByTransactionId(transaction.id);
 
   return {
-    receiverName: `${receiver.firstName} ${receiver.lastName}`,
-    senderName: `${sender.firstName} ${sender.lastName}`,
+    receiverName,
+    senderName,
     likes,
     comments,
     ...transaction
@@ -671,6 +679,12 @@ export const getNotificationsByObj = (query: object): Notification[] =>
 export const getNotificationById = (id: string): NotificationType =>
   getNotificationBy("id", id);
 
+export const getUnreadNotificationsByUserId = (userId: string) =>
+  flow(
+    getNotificationsByObj,
+    formatNotificationsForApiResponse
+  )({ userId, isRead: false });
+
 export const getNotificationsByUserId = (userId: string) =>
   getNotificationsByObj({ userId });
 
@@ -787,6 +801,31 @@ export const updateNotificationById = (
       .write();
   }
 };
+
+export const formatNotificationForApiResponse = (
+  notification: NotificationType
+): NotificationResponseItem => {
+  const userFullName = getFullNameForUser(notification.userId);
+
+  return {
+    userFullName,
+    ...notification
+  };
+};
+
+export const formatNotificationsForApiResponse = (
+  notifications: NotificationResponseItem[]
+): NotificationResponseItem[] =>
+  orderBy(
+    [
+      (notification: NotificationResponseItem) =>
+        new Date(notification.modifiedAt)
+    ],
+    ["desc"],
+    notifications.map(notification =>
+      formatNotificationForApiResponse(notification)
+    )
+  );
 
 // dev/test private methods
 export const getRandomUser = () => {

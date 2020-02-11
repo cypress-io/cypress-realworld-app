@@ -1,0 +1,15 @@
+version: 2.1
+orbs:
+  cypress: cypress-io/cypress@1
+workflows:
+  build:
+    jobs:
+      - cypress/run:
+          executor: cypress/base-12-14-0
+          yarn: true
+          start: yarn test:e2e:ci
+          wait-on: "http://localhost:3000"
+          record: true
+          post-steps:
+            # run jest tests
+            - run: yarn test
