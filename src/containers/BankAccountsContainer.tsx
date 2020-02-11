@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Link as RouterLink } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
@@ -47,7 +48,13 @@ const BankAccountsContainer: React.FC<BankAccountsContainerProps> = ({
             </Typography>
           </Grid>
           <Grid item>
-            <Button color="primary" size="large" data-test={"bankaccount-new"}>
+            <Button
+              color="primary"
+              size="large"
+              component={RouterLink}
+              to="/bankaccount/new"
+              data-test="bankaccount-new"
+            >
               Create
             </Button>
           </Grid>

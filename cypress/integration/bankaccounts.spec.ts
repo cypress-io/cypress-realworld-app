@@ -34,19 +34,20 @@ describe("Bank Accounts", function() {
     cy.getTestLike("bankaccount-list-item").should("have.length", 1);
   });
 
-  it.skip("navigates to the create bank account form", function() {
+  it("navigates to the create bank account form", function() {
     cy.getTest("bankaccount-list").should("be.visible");
     cy.getTest("bankaccount-new").click();
-    cy.location("pathname").should("include", "/bankaccounts/new");
+    cy.location("pathname").should("include", "/bankaccount/new");
   });
 
-  it.skip("selects a user and submits a transaction payment", function() {
-    cy.getTest("bankaccount-create-form").should("be.visible");
+  it("selects a user and submits a transaction payment", function() {
+    cy.getTest("bankaccount-new").click();
+    cy.getTest("bankaccount-form").should("be.visible");
 
-    cy.getTest("bankaccount-create-bankName-input").type("The Best Bank");
-    cy.getTest("bankaccount-create-accountNumber-input").type("123456789");
-    cy.getTest("bankaccount-create-routingNumber-input").type("987654321");
-    cy.getTest("bankaccount-create-submit").click();
+    cy.getTest("bankaccount-bankName-input").type("The Best Bank");
+    cy.getTest("bankaccount-accountNumber-input").type("123456789");
+    cy.getTest("bankaccount-routingNumber-input").type("987654321");
+    cy.getTest("bankaccount-submit").click();
 
     cy.wait("@createBankAccount").should("have.property", "status", 200);
 
