@@ -3,8 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object, mixed } from "yup";
-import MainContainer from "../containers/MainContainer";
-import { Paper, Typography, Button, Grid, Container } from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 import { User, DefaultPrivacyLevel, UserSettingsPayload } from "../models";
 
 const DefaultPrivacyLevelValues = Object.values(DefaultPrivacyLevel);
