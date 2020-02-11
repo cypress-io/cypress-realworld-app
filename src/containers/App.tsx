@@ -12,6 +12,7 @@ import SignUp from "../containers/SignUp";
 import TransactionCreateContainer from "./TransactionCreateContainer";
 import NotificationsContainer from "./NotificationsContainer";
 import UserSettingsContainer from "./UserSettingsContainer";
+import BankAccountsContainer from "./BankAccountsContainer";
 
 interface StateProps {
   isBootstrapped: boolean;
@@ -41,6 +42,9 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
       </PrivateRoute>
       <PrivateRoute exact path="/notifications">
         <NotificationsContainer />
+      </PrivateRoute>
+      <PrivateRoute exact path="/bankaccounts">
+        <BankAccountsContainer />
       </PrivateRoute>
       <PrivateRoute exact path="/transaction/new">
         <TransactionCreateContainer />

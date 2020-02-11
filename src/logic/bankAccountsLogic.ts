@@ -32,8 +32,8 @@ const bankAccountsAllLogic = createLogic({
   // @ts-ignore
   process({ httpClient }) {
     return httpClient
-      .get(`http://localhost:3001/bankAccounts/all`)
-      .then((resp: any) => resp.data.bankAccounts);
+      .get(`http://localhost:3001/bankAccounts`)
+      .then((resp: any) => resp.data.accounts);
   }
 });
 
