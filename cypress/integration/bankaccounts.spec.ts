@@ -18,6 +18,7 @@ describe("Bank Accounts", function() {
     cy.route("POST", "http://localhost:3001/bankAccounts").as(
       "createBankAccount"
     );
+    cy.route("http://localhost:3001/bankAccounts").as("bankAccounts");
     cy.fixture("users").as("users");
 
     cy.getTest("sidenav-bankaccounts").click();
@@ -27,27 +28,28 @@ describe("Bank Accounts", function() {
   });
 
   it("renders a list of bank accounts for the user", function() {
-    cy.getTest("bankaccounts-list").should("be.visible");
+    cy.getTest("bankaccount-list").should("be.visible");
 
-    cy.getTest("bankaccounts-list-item").should("have.length", 44);
+    cy.wait("@bankAccounts");
+    cy.getTestLike("bankaccount-list-item").should("have.length", 1);
   });
 
-  it("navigates to the create bank account form", function() {
-    cy.getTest("bankaccounts-list").should("be.visible");
-    cy.getTest("bankaccounts-create-form").click();
+  it.skip("navigates to the create bank account form", function() {
+    cy.getTest("bankaccount-list").should("be.visible");
+    cy.getTest("bankaccount-new").click();
     cy.location("pathname").should("include", "/bankaccounts/new");
   });
 
-  it("selects a user and submits a transaction payment", function() {
-    cy.getTest("bankaccounts-create-form").should("be.visible");
+  it.skip("selects a user and submits a transaction payment", function() {
+    cy.getTest("bankaccount-create-form").should("be.visible");
 
-    cy.getTest("bankaccounts-create-bankName-input").type("The Best Bank");
-    cy.getTest("bankaccounts-create-accountNumber-input").type("123456789");
-    cy.getTest("bankaccounts-create-routingNumber-input").type("987654321");
-    cy.getTest("bankaccounts-create-submit").click();
+    cy.getTest("bankaccount-create-bankName-input").type("The Best Bank");
+    cy.getTest("bankaccount-create-accountNumber-input").type("123456789");
+    cy.getTest("bankaccount-create-routingNumber-input").type("987654321");
+    cy.getTest("bankaccount-create-submit").click();
 
     cy.wait("@createBankAccount").should("have.property", "status", 200);
 
-    cy.getTestLike("bankaccounts-list-item").should("contain", "The Best Bank");
+    cy.getTestLike("bankaccount-list-item").should("contain", "The Best Bank");
   });
 });
