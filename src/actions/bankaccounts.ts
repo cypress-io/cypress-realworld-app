@@ -9,9 +9,9 @@ export const BANKACCOUNT_DETAIL_ERROR = "BANKACCOUNTS_DETAIL_ERROR";
 export const BANKACCOUNT_CREATE_PENDING = "BANKACCOUNT_CREATE_PENDING";
 export const BANKACCOUNT_CREATE_SUCCESS = "BANKACCOUNT_CREATE_SUCCESS";
 export const BANKACCOUNT_CREATE_ERROR = "BANKACCOUNT_CREATE_ERROR";
-export const BANKACCOUNT_UPDATE_PENDING = "BANKACCOUNT_UPDATE_PENDING";
-export const BANKACCOUNT_UPDATE_SUCCESS = "BANKACCOUNT_UPDATE_SUCCESS";
-export const BANKACCOUNT_UPDATE_ERROR = "BANKACCOUNT_UPDATE_ERROR";
+export const BANKACCOUNT_DELETE_PENDING = "BANKACCOUNT_DELETE_PENDING";
+export const BANKACCOUNT_DELETE_SUCCESS = "BANKACCOUNT_DELETE_SUCCESS";
+export const BANKACCOUNT_DELETE_ERROR = "BANKACCOUNT_DELETE_ERROR";
 
 export const bankAccountsAllPending = () =>
   ({
@@ -71,23 +71,23 @@ export const bankAccountCreateError = (payload: any) =>
     error: true
   } as const);
 
-export const bankAccountUpdatePending = (payload: BankAccountPayload) =>
+export const bankAccountDeletePending = (payload: BankAccountPayload) =>
   ({
-    type: BANKACCOUNT_UPDATE_PENDING,
+    type: BANKACCOUNT_DELETE_PENDING,
     payload
   } as const);
 
-export const bankAccountUpdateSuccess = (payload: {
+export const bankAccountDeleteSuccess = (payload: {
   bankAccount: BankAccount;
 }) =>
   ({
-    type: BANKACCOUNT_UPDATE_SUCCESS,
+    type: BANKACCOUNT_DELETE_SUCCESS,
     payload
   } as const);
 
-export const bankAccountUpdateError = (payload: any) =>
+export const bankAccountDeleteError = (payload: any) =>
   ({
-    type: BANKACCOUNT_UPDATE_ERROR,
+    type: BANKACCOUNT_DELETE_ERROR,
     payload,
     error: true
   } as const);
@@ -102,8 +102,8 @@ export type TBankAccountActions =
   | ReturnType<typeof bankAccountCreatePending>
   | ReturnType<typeof bankAccountCreateSuccess>
   | ReturnType<typeof bankAccountCreateError>
-  | ReturnType<typeof bankAccountUpdatePending>
-  | ReturnType<typeof bankAccountUpdateSuccess>
-  | ReturnType<typeof bankAccountUpdateError>;
+  | ReturnType<typeof bankAccountDeletePending>
+  | ReturnType<typeof bankAccountDeleteSuccess>
+  | ReturnType<typeof bankAccountDeleteError>;
 
 export type BankAccountActionDataTypes = TBankAccountActions["type"];

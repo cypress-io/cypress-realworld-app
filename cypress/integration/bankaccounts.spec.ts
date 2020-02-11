@@ -18,6 +18,9 @@ describe("Bank Accounts", function() {
     cy.route("POST", "http://localhost:3001/bankAccounts").as(
       "createBankAccount"
     );
+    cy.route("DELETE", "http://localhost:3001/bankAccounts/*").as(
+      "deleteBankAccount"
+    );
     cy.route("http://localhost:3001/bankAccounts").as("bankAccounts");
     cy.fixture("users").as("users");
 
@@ -32,6 +35,21 @@ describe("Bank Accounts", function() {
 
     cy.wait("@bankAccounts");
     cy.getTestLike("bankaccount-list-item").should("have.length", 1);
+  });
+
+  it("deletes a bank account", function() {
+    cy.getTest("bankaccount-list").should("be.visible");
+
+    cy.getTestLike("bankaccount-list-item-delete")
+      .first()
+      .click();
+
+    cy.wait("@deleteBankAccount").should("have.property", "status", 200);
+    cy.wait("@bankAccounts");
+
+    cy.getTestLike("bankaccount-list-item")
+      .children()
+      .contains("Deleted");
   });
 
   it("navigates to the create bank account form", function() {

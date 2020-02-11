@@ -11,9 +11,9 @@ import {
   BANKACCOUNT_CREATE_PENDING,
   BANKACCOUNT_CREATE_SUCCESS,
   BANKACCOUNT_CREATE_ERROR,
-  BANKACCOUNT_UPDATE_PENDING,
-  BANKACCOUNT_UPDATE_SUCCESS,
-  BANKACCOUNT_UPDATE_ERROR
+  BANKACCOUNT_DELETE_PENDING,
+  BANKACCOUNT_DELETE_SUCCESS,
+  BANKACCOUNT_DELETE_ERROR
 } from "../actions/bankaccounts";
 import { history } from "../index";
 import {
@@ -78,7 +78,7 @@ const bankAccountCreateLogic = createLogic({
 });
 
 const bankAccountsRefreshLogic = createLogic({
-  type: [BANKACCOUNT_CREATE_SUCCESS, BANKACCOUNT_UPDATE_SUCCESS],
+  type: [BANKACCOUNT_CREATE_SUCCESS, BANKACCOUNT_DELETE_SUCCESS],
 
   // @ts-ignore
   // eslint-disable-next-line no-empty-pattern
@@ -103,12 +103,12 @@ const bankAccountsRefreshLogic = createLogic({
   }
 });
 
-const bankAccountUpdateLogic = createLogic({
-  type: BANKACCOUNT_UPDATE_PENDING,
+const bankAccountDeleteLogic = createLogic({
+  type: BANKACCOUNT_DELETE_PENDING,
   processOptions: {
     dispatchReturn: true,
-    successType: BANKACCOUNT_UPDATE_SUCCESS,
-    failType: BANKACCOUNT_UPDATE_ERROR
+    successType: BANKACCOUNT_DELETE_SUCCESS,
+    failType: BANKACCOUNT_DELETE_ERROR
   },
 
   // @ts-ignore
@@ -119,7 +119,7 @@ const bankAccountUpdateLogic = createLogic({
     return (
       httpClient
         // @ts-ignore
-        .patch(`http://localhost:3001/bankAccounts/${payload.id}`, payload)
+        .delete(`http://localhost:3001/bankAccounts/${payload.id}`, payload)
         .then((resp: any) => resp.data)
     );
   }
@@ -130,5 +130,5 @@ export default [
   bankAccountDetailLogic,
   bankAccountCreateLogic,
   bankAccountsRefreshLogic,
-  bankAccountUpdateLogic
+  bankAccountDeleteLogic
 ];

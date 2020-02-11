@@ -9,12 +9,17 @@ import { IRootReducerState } from "../reducers";
 import { BankAccount } from "../models";
 import BankAccountList from "../components/BankAccountList";
 import { Grid, Button } from "@material-ui/core";
+import { bankAccountDeletePending } from "../actions/bankaccounts";
+
+export interface DispatchProps {
+  deleteBankAccount: Function;
+}
 
 export interface StateProps {
   bankAccounts: BankAccount[];
 }
 
-export type BankAccountsContainerProps = StateProps;
+export type BankAccountsContainerProps = DispatchProps & StateProps;
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -25,7 +30,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 const BankAccountsContainer: React.FC<BankAccountsContainerProps> = ({
-  bankAccounts
+  bankAccounts,
+  deleteBankAccount
 }) => {
   const classes = useStyles();
   return (
@@ -59,7 +65,10 @@ const BankAccountsContainer: React.FC<BankAccountsContainerProps> = ({
             </Button>
           </Grid>
         </Grid>
-        <BankAccountList bankAccounts={bankAccounts} />
+        <BankAccountList
+          bankAccounts={bankAccounts}
+          deleteBankAccount={deleteBankAccount}
+        />
       </Paper>
     </MainContainer>
   );
@@ -69,4 +78,11 @@ const mapStateToProps = (state: IRootReducerState) => ({
   bankAccounts: state.bankaccounts.all
 });
 
-export default connect(mapStateToProps)(BankAccountsContainer);
+const mapDispatchToProps = {
+  deleteBankAccount: bankAccountDeletePending
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BankAccountsContainer);

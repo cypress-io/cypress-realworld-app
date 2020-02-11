@@ -6,14 +6,22 @@ import { BankAccount } from "../models";
 
 export interface BankAccountListProps {
   bankAccounts: BankAccount[];
+  deleteBankAccount: Function;
 }
 
-const BankAccountList: React.FC<BankAccountListProps> = ({ bankAccounts }) => {
+const BankAccountList: React.FC<BankAccountListProps> = ({
+  bankAccounts,
+  deleteBankAccount
+}) => {
   return (
     <List data-test="bankaccount-list">
       {bankAccounts &&
         bankAccounts.map((bankAccount: BankAccount) => (
-          <BankAccountItem key={bankAccount.id} bankAccount={bankAccount} />
+          <BankAccountItem
+            key={bankAccount.id}
+            bankAccount={bankAccount}
+            deleteBankAccount={deleteBankAccount}
+          />
         ))}
     </List>
   );
