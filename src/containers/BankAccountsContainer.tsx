@@ -30,13 +30,27 @@ const BankAccountsContainer: React.FC<BankAccountsContainerProps> = ({
   return (
     <MainContainer>
       <Paper className={classes.paper}>
-        <Typography component="h2" variant="h6" color="primary" gutterBottom>
-          Bank Accounts
-        </Typography>
-        <Grid item>
-          <Button color="primary" size="large" data-test={"bankaccount-new"}>
-            Create
-          </Button>
+        <Grid
+          container
+          direction="row"
+          justify="space-between"
+          alignItems="center"
+        >
+          <Grid item>
+            <Typography
+              component="h2"
+              variant="h6"
+              color="primary"
+              gutterBottom
+            >
+              Bank Accounts
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Button color="primary" size="large" data-test={"bankaccount-new"}>
+              Create
+            </Button>
+          </Grid>
         </Grid>
         <BankAccountList bankAccounts={bankAccounts} />
       </Paper>
