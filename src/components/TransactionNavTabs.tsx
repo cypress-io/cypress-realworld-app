@@ -41,19 +41,19 @@ export default function TransactionNavTabs() {
         data-test="nav-transaction-tabs"
       >
         <Tab
-          label="Public"
+          label="Everyone"
           component={Link}
           to="/"
           data-test="nav-public-tab"
         />
         <Tab
-          label="Contacts"
+          label="Friends"
           component={Link}
           to="/contacts"
           data-test="nav-contacts-tab"
         />
         <Tab
-          label="Personal"
+          label="Mine"
           component={Link}
           to="/personal"
           data-test="nav-personal-tab"
