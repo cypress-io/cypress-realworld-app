@@ -7,7 +7,10 @@ import {
   Button,
   Typography,
   Grid,
-  Avatar
+  Avatar,
+  ListItemAvatar,
+  ListItemText,
+  ListItemSecondaryAction
 } from "@material-ui/core";
 import LikeIcon from "@material-ui/icons/ThumbUpAltOutlined";
 import CommentIcon from "@material-ui/icons/CommentRounded";
@@ -31,12 +34,19 @@ const useStyles = makeStyles(theme => ({
     fontSize: 18,
     color: "#1A202C"
   },
-  amount: {
+  amountPositive: {
     fontSize: 24,
     color: "#4CAF50"
   },
+  amountNegative: {
+    fontSize: 24,
+    color: "red"
+  },
   avatar: {
     width: theme.spacing(2)
+  },
+  headline: {
+    padding: "0"
   }
 }));
 
@@ -58,14 +68,21 @@ const TransactionItem: React.FC<TransactionProps> = ({
     </Typography>
   );
 
-  const Amount: React.FC<{ amount: number }> = ({ amount }) => (
+  const Amount: React.FC<{ transaction: TransactionResponseItem }> = ({
+    transaction
+  }) => (
     <Typography
-      className={classes.amount}
+      className={
+        isRequestTransaction(transaction)
+          ? classes.amountPositive
+          : classes.amountNegative
+      }
       display="inline"
       component="span"
       color="primary"
     >
-      {amount && formatAmount(amount)}
+      {isRequestTransaction(transaction) ? "+" : "-"}
+      {transaction.amount && formatAmount(transaction.amount)}
     </Typography>
   );
 
@@ -93,116 +110,135 @@ const TransactionItem: React.FC<TransactionProps> = ({
   };
 
   return (
-    <Grid
-      container
-      direction="row"
-      justify="space-between"
-      alignItems="flex-start"
-      data-test={`transaction-item-${transaction.id}`}
-    >
-      <Grid item>
+    <ListItem data-test={`transaction-item-${transaction.id}`}>
+      <ListItemAvatar>
+        <Avatar src={`https://i.pravatar.cc/100?img=${transactionIndex}`} />
+      </ListItemAvatar>
+      <ListItemText className={classes.headline}>
         <Grid
           container
-          direction="row"
+          direction="column"
           justify="flex-start"
-          alignItems="center"
-          spacing={10}
+          alignItems="flex-start"
         >
-          <Grid item className={classes.avatar}>
-            <Avatar src={`https://i.pravatar.cc/100?img=${transactionIndex}`} />
-          </Grid>
-          <Grid item>
-            <Grid
-              container
-              direction="column"
-              justify="flex-start"
-              alignItems="center"
-            >
-              <Grid item>{headline}</Grid>
+          <Grid item>{headline}</Grid>
+          <Grid
+            container
+            direction="row"
+            justify="flex-start"
+            alignItems="center"
+            spacing={2}
+          >
+            <Grid item>
               <Grid
                 container
                 direction="row"
                 justify="flex-start"
-                alignItems="center"
-                spacing={2}
+                alignItems="flex-start"
+                spacing={1}
               >
                 <Grid item>
-                  <Grid
-                    container
-                    direction="row"
-                    justify="flex-start"
-                    alignItems="center"
-                    spacing={1}
-                  >
-                    <Grid item>
-                      {transaction.likes ? transaction.likes.length : 0}{" "}
-                    </Grid>
-                    <Grid item>
-                      <LikeIcon />
-                    </Grid>
-                    <Grid item>
-                      {transaction.comments ? transaction.comments.length : 0}{" "}
-                    </Grid>
-                    <Grid item>
-                      <CommentIcon />
-                    </Grid>
-                  </Grid>
+                  {transaction.likes ? transaction.likes.length : 0}{" "}
                 </Grid>
                 <Grid item>
-                  <Button
-                    color="primary"
-                    size="small"
-                    onClick={() => showTransactionDetail(transaction.id)}
-                    data-test={`transaction-view-${transaction.id}`}
-                  >
-                    View Transaction
-                  </Button>
+                  <LikeIcon />
+                </Grid>
+                <Grid item>
+                  {transaction.comments ? transaction.comments.length : 0}{" "}
+                </Grid>
+                <Grid item>
+                  <CommentIcon />
                 </Grid>
               </Grid>
             </Grid>
+            <Grid item>
+              <Button
+                color="primary"
+                size="small"
+                onClick={() => showTransactionDetail(transaction.id)}
+                data-test={`transaction-view-${transaction.id}`}
+              >
+                View Transaction
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
+      </ListItemText>
+      <ListItemSecondaryAction>
+        <Amount transaction={transaction} />
+      </ListItemSecondaryAction>
+      {/*<Grid
+        container
+        direction="row"
+        justify="space-between"
+        alignItems="flex-start"
+      >
+        <Grid item>
+          <Grid
+            container
+            direction="row"
+            justify="flex-start"
+            alignItems="center"
+            spacing={10}
+          >
+            <ListItemText className={classes.headline}>
+              <Grid
+                container
+                direction="column"
+                justify="flex-start"
+                alignItems="center"
+              >
+                <Grid item>{headline}</Grid>
+                <Grid
+                  container
+                  direction="row"
+                  justify="flex-start"
+                  alignItems="center"
+                  spacing={2}
+                >
+                  <Grid item>
+                    <Grid
+                      container
+                      direction="row"
+                      justify="flex-start"
+                      alignItems="center"
+                      spacing={1}
+                    >
+                      <Grid item>
+                        {transaction.likes ? transaction.likes.length : 0}{" "}
+                      </Grid>
+                      <Grid item>
+                        <LikeIcon />
+                      </Grid>
+                      <Grid item>
+                        {transaction.comments ? transaction.comments.length : 0}{" "}
+                      </Grid>
+                      <Grid item>
+                        <CommentIcon />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      color="primary"
+                      size="small"
+                      onClick={() => showTransactionDetail(transaction.id)}
+                      data-test={`transaction-view-${transaction.id}`}
+                    >
+                      View Transaction
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </ListItemText>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Amount transaction={transaction} />
+        </Grid>
       </Grid>
-      <Grid item>
-        <Amount amount={transaction.amount} />
-      </Grid>
-      {/* 
-      <Card className={classes.card} elevation={0}>
-        <CardContent>
-          {headline}
-          <Typography variant="body2" color="textSecondary">
-            {transaction.description}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            component="p"
-            data-test={`transaction-like-count-${transaction.id}`}
-          >
-            Likes: {transaction.likes ? transaction.likes.length : 0}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            component="p"
-            data-test={`transaction-comment-count-${transaction.id}`}
-          >
-            Comments: {transaction.comments ? transaction.comments.length : 0}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button
-            color="primary"
-            size="small"
-            onClick={() => showTransactionDetail(transaction.id)}
-            data-test={`transaction-view-${transaction.id}`}
-          >
-            View Transaction
-          </Button>
-        </CardActions>
-      </Card>
       */}
-    </Grid>
+    </ListItem>
   );
 };
 
