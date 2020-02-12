@@ -45,7 +45,7 @@
     "faker": "4.1.0",
     "formik": "2.1.4",
     "fuse.js": "3.4.6",
-    "json-server": "0.15.1",
+    "json-server": "0.16.0",
     "libphonenumber-js": "1.7.38",
     "nodemon": "2.0.2",
     "passport": "0.4.1",
