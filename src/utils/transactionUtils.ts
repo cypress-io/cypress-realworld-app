@@ -79,6 +79,11 @@ export const pathTransactionId = (pathname: string) =>
 export const senderIsCurrentUser = (sender: User, transaction: Transaction) =>
   isEqual(get("id", sender), get("senderId", transaction));
 
+export const receiverIsCurrentUser = (
+  currentUser: User,
+  transaction: Transaction
+) => isEqual(get("id", currentUser), get("receiverId", transaction));
+
 export const formatFullName = (user: User) =>
   flow(pick(["firstName", "lastName"]), values, join(" "))(user);
 

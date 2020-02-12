@@ -18,7 +18,7 @@ import CommentForm from "./CommentForm";
 import { useHistory } from "react-router";
 import {
   isPendingRequestTransaction,
-  senderIsCurrentUser
+  receiverIsCurrentUser
 } from "../utils/transactionUtils";
 
 const useStyles = makeStyles({
@@ -115,7 +115,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
                 transactionComment={payload => transactionComment(payload)}
               />
             </Grid>
-            {senderIsCurrentUser(currentUser, transaction) &&
+            {receiverIsCurrentUser(currentUser, transaction) &&
               isPendingRequestTransaction(transaction) && (
                 <Grid item>
                   <Button
