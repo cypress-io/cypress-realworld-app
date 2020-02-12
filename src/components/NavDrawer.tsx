@@ -13,7 +13,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import HomeIcon from "@material-ui/icons/Home";
 import PersonIcon from "@material-ui/icons/Person";
 import LogoutIcon from "@material-ui/icons/ExitToApp";
-import SettingsIcon from "@material-ui/icons/Settings";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 
 const drawerWidth = 240;
 
@@ -43,9 +44,20 @@ export const mainListItems = (
       data-test="sidenav-bankaccounts"
     >
       <ListItemIcon>
-        <SettingsIcon />
+        <AccountBalanceIcon />
       </ListItemIcon>
       <ListItemText primary="Bank Accounts" />
+    </ListItem>
+    <ListItem
+      button
+      component={RouterLink}
+      to="/notifications"
+      data-test="sidenav-notifications"
+    >
+      <ListItemIcon>
+        <NotificationsIcon />
+      </ListItemIcon>
+      <ListItemText primary="Notifications" />
     </ListItem>
   </div>
 );
