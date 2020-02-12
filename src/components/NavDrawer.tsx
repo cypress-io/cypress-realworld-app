@@ -202,7 +202,7 @@ const NavDrawer: React.FC<Props> = ({
             color="textPrimary"
             className={classes.amount}
           >
-            {formatAmount(currentUser.balance)}
+            {currentUser.balance && formatAmount(currentUser.balance)}
           </Typography>
           <Typography variant="subtitle2" color="inherit" gutterBottom>
             Account Balance
