@@ -1,8 +1,5 @@
 import React from "react";
 import {
-  Card,
-  CardActions,
-  CardContent,
   ListItem,
   Button,
   Typography,
@@ -172,77 +169,6 @@ const TransactionItem: React.FC<TransactionProps> = ({
       <ListItemSecondaryAction>
         <Amount transaction={transaction} />
       </ListItemSecondaryAction>
-      {/*<Grid
-        container
-        direction="row"
-        justify="space-between"
-        alignItems="flex-start"
-      >
-        <Grid item>
-          <Grid
-            container
-            direction="row"
-            justify="flex-start"
-            alignItems="center"
-            spacing={10}
-          >
-            <ListItemText className={classes.headline}>
-              <Grid
-                container
-                direction="column"
-                justify="flex-start"
-                alignItems="center"
-              >
-                <Grid item>{headline}</Grid>
-                <Grid
-                  container
-                  direction="row"
-                  justify="flex-start"
-                  alignItems="center"
-                  spacing={2}
-                >
-                  <Grid item>
-                    <Grid
-                      container
-                      direction="row"
-                      justify="flex-start"
-                      alignItems="center"
-                      spacing={1}
-                    >
-                      <Grid item>
-                        {transaction.likes ? transaction.likes.length : 0}{" "}
-                      </Grid>
-                      <Grid item>
-                        <LikeIcon />
-                      </Grid>
-                      <Grid item>
-                        {transaction.comments ? transaction.comments.length : 0}{" "}
-                      </Grid>
-                      <Grid item>
-                        <CommentIcon />
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      color="primary"
-                      size="small"
-                      onClick={() => showTransactionDetail(transaction.id)}
-                      data-test={`transaction-view-${transaction.id}`}
-                    >
-                      View Transaction
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </ListItemText>
-          </Grid>
-        </Grid>
-        <Grid item>
-          <Amount transaction={transaction} />
-        </Grid>
-      </Grid>
-      */}
     </ListItem>
   );
 };

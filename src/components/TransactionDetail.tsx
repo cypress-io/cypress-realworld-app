@@ -1,13 +1,18 @@
 import React from "react";
 import {
-  Card,
-  CardActions,
-  CardContent,
   ListItem,
   Button,
   Typography,
-  Grid
+  Grid,
+  ListItemAvatar,
+  Avatar,
+  ListItemText,
+  ListItemSecondaryAction,
+  Card,
+  List
 } from "@material-ui/core";
+import LikeIcon from "@material-ui/icons/ThumbUpAltOutlined";
+import CommentIcon from "@material-ui/icons/CommentRounded";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   TransactionResponseItem,
@@ -15,20 +20,49 @@ import {
   User
 } from "../models";
 import CommentForm from "./CommentForm";
-import { useHistory } from "react-router";
 import {
   isPendingRequestTransaction,
-  receiverIsCurrentUser
+  receiverIsCurrentUser,
+  isRequestTransaction,
+  formatAmount,
+  isAcceptedRequestTransaction
 } from "../utils/transactionUtils";
+import { random } from "lodash/fp";
 
-const useStyles = makeStyles({
+const imgNumber = random(3, 50);
+const useStyles = makeStyles(theme => ({
   card: {
     minWidth: "100%"
   },
   title: {
-    fontSize: 14
+    fontSize: 18
+  },
+  titleName: {
+    fontSize: 18,
+    color: "#1A202C"
+  },
+  amountPositive: {
+    fontSize: 24,
+    color: "#4CAF50"
+  },
+  amountNegative: {
+    fontSize: 24,
+    color: "red"
+  },
+  avatar: {
+    width: theme.spacing(2)
+  },
+  headline: {
+    padding: "0"
+  },
+  listitem: {
+    listStyleType: "none"
+  },
+  avatarLarge: {
+    width: theme.spacing(7),
+    height: theme.spacing(7)
   }
-});
+}));
 
 type TransactionProps = {
   transaction: TransactionResponseItem;
@@ -46,110 +80,171 @@ const TransactionDetail: React.FC<TransactionProps> = ({
   currentUser
 }) => {
   const classes = useStyles();
-  const history = useHistory();
-  // Payment
-  /*if (transaction.) {
+  const TitleName: React.FC<{ name: string }> = ({ name }) => (
+    <Typography className={classes.titleName} display="inline" component="span">
+      {name}
+    </Typography>
+  );
 
-  }
+  const Amount: React.FC<{ transaction: TransactionResponseItem }> = ({
+    transaction
+  }) => (
+    <Typography
+      className={
+        isRequestTransaction(transaction)
+          ? classes.amountPositive
+          : classes.amountNegative
+      }
+      display="inline"
+      component="span"
+      color="primary"
+    >
+      {isRequestTransaction(transaction) ? "+" : "-"}
+      {transaction.amount && formatAmount(transaction.amount)}
+    </Typography>
+  );
 
-  // Request
-  if (transaction.requestStatus === "pending") {
+  const Title: React.FC<{ children: any }> = ({ children }) => (
+    <Typography color="textSecondary" className={classes.title} gutterBottom>
+      {children}
+    </Typography>
+  );
 
-  }*/
-
-  const showTransactionDetail = (transactionId: string) => {
-    history.push(`/transaction/${transactionId}`);
-  };
+  const headline = isRequestTransaction(transaction) ? (
+    <Title>
+      <TitleName name={transaction.senderName} />
+      {isAcceptedRequestTransaction(transaction) ? " charged " : " requested "}
+      <TitleName name={transaction.receiverName} />
+    </Title>
+  ) : (
+    <Title>
+      <TitleName name={transaction.senderName} /> paid{" "}
+      <TitleName name={transaction.receiverName} />
+    </Title>
+  );
 
   return (
-    <ListItem
-      data-test={`transaction-item-${transaction.id}`}
-      onClick={() => showTransactionDetail(transaction.id)}
-    >
-      <Card className={classes.card}>
-        <CardContent>
-          <Typography
-            className={classes.title}
-            color="textSecondary"
-            gutterBottom
-          >
-            {transaction.description}
-          </Typography>
-          <Typography
-            variant="body2"
-            component="p"
-            data-test={`transaction-like-count-${transaction.id}`}
-          >
-            Likes: {transaction.likes ? transaction.likes.length : 0}
-          </Typography>
-          <Typography
-            variant="body2"
-            component="p"
-            data-test={`transaction-comment-count-${transaction.id}`}
-          >
-            Comments: {transaction.comments ? transaction.comments.length : 0}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Grid
-            container
-            direction="column"
-            justify="flex-start"
-            alignItems="flex-start"
-          >
-            <Grid item>
-              <Button
-                color="primary"
-                size="large"
-                onClick={() =>
-                  transactionLike({ transactionId: transaction.id })
-                }
-                data-test={`transaction-like-button-${transaction.id}`}
+    <Card data-test={`transaction-item-${transaction.id}`}>
+      <List>
+        <ListItem className={classes.listitem}>
+          <ListItemAvatar>
+            <Avatar
+              className={classes.avatarLarge}
+              src={`https://i.pravatar.cc/300?img=${imgNumber}`}
+            />
+          </ListItemAvatar>
+
+          <ListItemText className={classes.headline}>
+            <Grid
+              container
+              direction="column"
+              justify="flex-start"
+              alignItems="flex-start"
+            >
+              <Grid item>{headline}</Grid>
+              <Grid item>
+                <Typography variant="body2" color="textSecondary" gutterBottom>
+                  {transaction.description}
+                </Typography>
+              </Grid>
+              <Grid
+                container
+                direction="row"
+                justify="flex-start"
+                alignItems="center"
+                spacing={2}
               >
-                Like
-              </Button>
-            </Grid>
-            <Grid item>
-              <CommentForm
-                transactionId={transaction.id}
-                transactionComment={payload => transactionComment(payload)}
-              />
-            </Grid>
-            {receiverIsCurrentUser(currentUser, transaction) &&
-              isPendingRequestTransaction(transaction) && (
                 <Grid item>
-                  <Button
-                    color="primary"
-                    size="small"
-                    onClick={() =>
-                      transactionUpdate({
-                        id: transaction.id,
-                        requestStatus: TransactionRequestStatus.accepted
-                      })
-                    }
-                    data-test={`transaction-accept-request-${transaction.id}`}
+                  <Grid
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="flex-start"
+                    spacing={1}
                   >
-                    Accept Request
-                  </Button>
-                  <Button
-                    color="primary"
-                    size="small"
-                    onClick={() =>
-                      transactionUpdate({
-                        id: transaction.id,
-                        requestStatus: TransactionRequestStatus.rejected
-                      })
-                    }
-                    data-test={`transaction-reject-request-${transaction.id}`}
-                  >
-                    Reject Request
-                  </Button>
+                    <Grid item>
+                      {transaction.likes ? transaction.likes.length : 0}{" "}
+                    </Grid>
+                    <Grid item>
+                      <LikeIcon />
+                    </Grid>
+                    <Grid item>
+                      {transaction.comments ? transaction.comments.length : 0}{" "}
+                    </Grid>
+                    <Grid item>
+                      <CommentIcon />
+                    </Grid>
+                  </Grid>
                 </Grid>
-              )}
-          </Grid>
-        </CardActions>
-      </Card>
-    </ListItem>
+                <Grid item>
+                  <Grid
+                    container
+                    direction="column"
+                    justify="flex-start"
+                    alignItems="flex-start"
+                  >
+                    <Grid item>
+                      <Button
+                        color="primary"
+                        size="large"
+                        onClick={() =>
+                          transactionLike({ transactionId: transaction.id })
+                        }
+                        data-test={`transaction-like-button-${transaction.id}`}
+                      >
+                        Like
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <CommentForm
+                        transactionId={transaction.id}
+                        transactionComment={payload =>
+                          transactionComment(payload)
+                        }
+                      />
+                    </Grid>
+                    {receiverIsCurrentUser(currentUser, transaction) &&
+                      isPendingRequestTransaction(transaction) && (
+                        <Grid item>
+                          <Button
+                            color="primary"
+                            size="small"
+                            onClick={() =>
+                              transactionUpdate({
+                                id: transaction.id,
+                                requestStatus: TransactionRequestStatus.accepted
+                              })
+                            }
+                            data-test={`transaction-accept-request-${transaction.id}`}
+                          >
+                            Accept Request
+                          </Button>
+                          <Button
+                            color="primary"
+                            size="small"
+                            onClick={() =>
+                              transactionUpdate({
+                                id: transaction.id,
+                                requestStatus: TransactionRequestStatus.rejected
+                              })
+                            }
+                            data-test={`transaction-reject-request-${transaction.id}`}
+                          >
+                            Reject Request
+                          </Button>
+                        </Grid>
+                      )}
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </ListItemText>
+          <ListItemSecondaryAction>
+            <Amount transaction={transaction} />
+          </ListItemSecondaryAction>
+        </ListItem>
+      </List>
+    </Card>
   );
 };
 
