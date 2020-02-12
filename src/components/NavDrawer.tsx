@@ -17,6 +17,8 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import { User } from "../models";
 import { Grid, Avatar, Typography } from "@material-ui/core";
+import { formatAmount } from "../utils/transactionUtils";
+import { head } from "lodash/fp";
 
 const drawerWidth = 240;
 
@@ -37,7 +39,7 @@ export const mainListItems = (
       <ListItemIcon>
         <PersonIcon />
       </ListItemIcon>
-      <ListItemText primary="Edit Profile" />
+      <ListItemText primary="My Account" />
     </ListItem>
     <ListItem
       button
@@ -100,6 +102,7 @@ const useStyles = makeStyles(theme => ({
     })
   },
   drawerPaperClose: {
+    marginTop: 50,
     overflowX: "hidden",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -113,8 +116,20 @@ const useStyles = makeStyles(theme => ({
   userProfile: {
     padding: theme.spacing(2)
   },
+  userProfileHidden: {
+    display: "none"
+  },
   avatar: {
     marginRight: theme.spacing(2)
+  },
+  accountBalance: {
+    marginLeft: theme.spacing(2)
+  },
+  amount: {
+    fontWeight: "bold"
+  },
+  accountBalanceHidden: {
+    display: "none"
   }
 }));
 
@@ -147,9 +162,9 @@ const NavDrawer: React.FC<Props> = ({
       <Grid
         container
         direction="row"
-        justify="flex-start"
+        justify="space-between"
         alignItems="center"
-        className={classes.userProfile}
+        className={drawerOpen ? classes.userProfile : classes.userProfileHidden}
       >
         <Grid item>
           <Avatar
@@ -160,18 +175,40 @@ const NavDrawer: React.FC<Props> = ({
         </Grid>
         <Grid item>
           <Typography variant="subtitle1" color="textPrimary">
-            {currentUser.firstName} {currentUser.lastName}
+            {currentUser.firstName} {head(currentUser.lastName)}
           </Typography>
           <Typography variant="subtitle2" color="inherit" gutterBottom>
             @{currentUser.username}
           </Typography>
         </Grid>
+        <Grid item>
+          <div className={classes.toolbarIcon}>
+            <IconButton onClick={handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </div>
+        </Grid>
       </Grid>
-      <div className={classes.toolbarIcon}>
-        <IconButton onClick={handleDrawerClose}>
-          <ChevronLeftIcon />
-        </IconButton>
-      </div>
+      <Grid
+        container
+        direction="row"
+        justify="space-between"
+        alignItems="center"
+        className={drawerOpen ? classes.userProfile : classes.userProfileHidden}
+      >
+        <Grid item>
+          <Typography
+            variant="h6"
+            color="textPrimary"
+            className={classes.amount}
+          >
+            {formatAmount(currentUser.balance)}
+          </Typography>
+          <Typography variant="subtitle2" color="inherit" gutterBottom>
+            Account Balance
+          </Typography>
+        </Grid>
+      </Grid>
       <Divider />
       <List>{mainListItems}</List>
       <Divider />
