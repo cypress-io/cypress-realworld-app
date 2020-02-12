@@ -122,6 +122,11 @@ const TransactionItem: React.FC<TransactionProps> = ({
           alignItems="flex-start"
         >
           <Grid item>{headline}</Grid>
+          <Grid item>
+            <Typography variant="body2" color="textSecondary" gutterBottom>
+              {transaction.description}
+            </Typography>
+          </Grid>
           <Grid
             container
             direction="row"
