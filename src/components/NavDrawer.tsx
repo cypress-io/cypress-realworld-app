@@ -15,6 +15,8 @@ import PersonIcon from "@material-ui/icons/Person";
 import LogoutIcon from "@material-ui/icons/ExitToApp";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
+import { User } from "../models";
+import { Grid, Avatar, Typography } from "@material-ui/core";
 
 const drawerWidth = 240;
 
@@ -107,6 +109,12 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up("sm")]: {
       width: theme.spacing(9)
     }
+  },
+  userProfile: {
+    padding: theme.spacing(2)
+  },
+  avatar: {
+    marginRight: theme.spacing(2)
   }
 }));
 
@@ -114,12 +122,14 @@ interface Props {
   signOutPending: () => void;
   handleDrawerClose: () => void;
   drawerOpen: boolean;
+  currentUser: User;
 }
 
 const NavDrawer: React.FC<Props> = ({
   signOutPending,
   handleDrawerClose,
-  drawerOpen
+  drawerOpen,
+  currentUser
 }) => {
   const classes = useStyles();
 
@@ -134,6 +144,29 @@ const NavDrawer: React.FC<Props> = ({
       }}
       open={drawerOpen}
     >
+      <Grid
+        container
+        direction="row"
+        justify="flex-start"
+        alignItems="center"
+        className={classes.userProfile}
+      >
+        <Grid item>
+          <Avatar
+            className={classes.avatar}
+            alt={`${currentUser.firstName} ${currentUser.lastName}`}
+            src={currentUser.avatar}
+          />
+        </Grid>
+        <Grid item>
+          <Typography variant="subtitle1" color="textPrimary">
+            {currentUser.firstName} {currentUser.lastName}
+          </Typography>
+          <Typography variant="subtitle2" color="inherit" gutterBottom>
+            @{currentUser.username}
+          </Typography>
+        </Grid>
+      </Grid>
       <div className={classes.toolbarIcon}>
         <IconButton onClick={handleDrawerClose}>
           <ChevronLeftIcon />

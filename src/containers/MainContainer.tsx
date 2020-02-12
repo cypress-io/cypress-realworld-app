@@ -3,10 +3,11 @@ import { connect } from "react-redux";
 import { signOutPending } from "../actions/auth";
 import MainLayout from "../components/MainLayout";
 import { IRootReducerState } from "../reducers";
-import { NotificationType } from "../models";
+import { NotificationType, User } from "../models";
 
 export interface StateProps {
   allNotifications: NotificationType[];
+  currentUser: User;
 }
 
 export interface DispatchProps {
@@ -18,20 +19,25 @@ type Props = StateProps & DispatchProps;
 const MainContainer: React.FC<Props> = ({
   signOutPending,
   children,
-  allNotifications
+  allNotifications,
+  currentUser
 }) => {
   return (
     <MainLayout
       signOutPending={signOutPending}
       allNotifications={allNotifications}
+      currentUser={currentUser}
     >
       {children}
     </MainLayout>
   );
 };
+
 const mapStateToProps = (state: IRootReducerState) => ({
-  allNotifications: state.notifications.all
+  allNotifications: state.notifications.all,
+  currentUser: state.user.profile
 });
+
 const dispatchProps = {
   signOutPending
 };

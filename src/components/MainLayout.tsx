@@ -8,7 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import Copyright from "../components/Copyright";
 import NavBar from "./NavBar";
 import NavDrawer from "./NavDrawer";
-import { NotificationType } from "../models";
+import { NotificationType, User } from "../models";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -33,12 +33,14 @@ interface Props {
   signOutPending: () => void;
   children: React.ReactNode;
   allNotifications: NotificationType[];
+  currentUser: User;
 }
 
 const MainLayout: React.FC<Props> = ({
   signOutPending,
   children,
-  allNotifications
+  allNotifications,
+  currentUser
 }) => {
   const classes = useStyles();
 
@@ -60,6 +62,7 @@ const MainLayout: React.FC<Props> = ({
         allNotifications={allNotifications}
       />
       <NavDrawer
+        currentUser={currentUser}
         handleDrawerClose={handleDrawerClose}
         drawerOpen={open}
         signOutPending={signOutPending}
