@@ -71,6 +71,7 @@
   },
   "devDependencies": {
     "cypress": "4.0.1",
+    "eslint-plugin-cypress": "^2.9.0",
     "start-server-and-test": "1.10.8"
   },
   "scripts": {
@@ -102,7 +103,17 @@
     "test:e2e:api": "NODE_ENV=test start-test start:server-and-api:watch 3000 cypress:open"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "env": {
+      "cypress/globals": true
+    },
+    "extends": [
+      "react-app",
+      "plugin:prettier/recommended",
+      "plugin:cypress/recommended"
+    ],
+    "plugins": [
+      "cypress"
+    ]
   },
   "jest": {
     "watchPathIgnorePatterns": [
