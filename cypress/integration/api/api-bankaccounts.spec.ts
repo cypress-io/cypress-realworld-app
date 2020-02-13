@@ -1,6 +1,3 @@
-// type definitions for Cypress object "cy"
-/// <reference types="cypress" />
-
 // check this file using TypeScript if available
 // @ts-check
 
