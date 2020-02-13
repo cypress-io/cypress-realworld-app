@@ -19,9 +19,6 @@ describe("Transaction Detail", function() {
     cy.route("PATCH", "http://localhost:3001/transactions/*").as(
       "updateTransaction"
     );
-  });
-
-  afterEach(function() {
     cy.getTest("app-name-logo")
       .find("a")
       .click();
@@ -29,6 +26,8 @@ describe("Transaction Detail", function() {
       .click({ force: true })
       .should("have.class", "Mui-selected");
   });
+
+  afterEach(function() {});
 
   after(function() {
     cy.task("db:seed");
@@ -45,7 +44,7 @@ describe("Transaction Detail", function() {
 
   it("likes a transaction", function() {
     cy.getTestLike("transaction-view")
-      .first()
+      .eq(2)
       .scrollIntoView()
       .click({ force: true });
 

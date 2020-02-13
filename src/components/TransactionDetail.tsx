@@ -25,6 +25,7 @@ import {
   currentUserLikesTransaction
 } from "../utils/transactionUtils";
 import { random } from "lodash/fp";
+import CommentsList from "./CommentList";
 
 const imgNumber = random(3, 50);
 const useStyles = makeStyles(theme => ({
@@ -71,6 +72,34 @@ const useStyles = makeStyles(theme => ({
   avatarLarge: {
     width: theme.spacing(7),
     height: theme.spacing(7)
+  },
+  redButton: {
+    backgrounColor: "red",
+    color: "#ffffff",
+    backgroundColor: "red",
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingRight: 20,
+    fontWeight: "bold",
+    "&:hover": {
+      backgroundColor: "red",
+      borderColor: "red",
+      boxShadow: "none"
+    }
+  },
+  greenButton: {
+    marginRight: theme.spacing(2),
+    color: "#ffffff",
+    backgroundColor: "#00C853",
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingRight: 20,
+    fontWeight: "bold",
+    "&:hover": {
+      backgroundColor: "#4CAF50",
+      borderColor: "#00C853",
+      boxShadow: "none"
+    }
   }
 }));
 
@@ -182,9 +211,9 @@ const TransactionDetail: React.FC<TransactionProps> = ({
             direction="row"
             justify="flex-start"
             alignItems="center"
-            spacing={1}
+            spacing={2}
           >
-            <Grid item>
+            <Grid item data-test={`transaction-like-count-${transaction.id}`}>
               {transaction.likes ? transaction.likes.length : 0}{" "}
             </Grid>
             <Grid item>
@@ -199,6 +228,41 @@ const TransactionDetail: React.FC<TransactionProps> = ({
                 <LikeIcon />
               </IconButton>
             </Grid>
+            <Grid item>
+              {receiverIsCurrentUser(currentUser, transaction) &&
+                isPendingRequestTransaction(transaction) && (
+                  <Grid item>
+                    <Button
+                      className={classes.greenButton}
+                      variant="contained"
+                      size="small"
+                      onClick={() =>
+                        transactionUpdate({
+                          id: transaction.id,
+                          requestStatus: TransactionRequestStatus.accepted
+                        })
+                      }
+                      data-test={`transaction-accept-request-${transaction.id}`}
+                    >
+                      Accept Request
+                    </Button>
+                    <Button
+                      variant="contained"
+                      className={classes.redButton}
+                      size="small"
+                      onClick={() =>
+                        transactionUpdate({
+                          id: transaction.id,
+                          requestStatus: TransactionRequestStatus.rejected
+                        })
+                      }
+                      data-test={`transaction-reject-request-${transaction.id}`}
+                    >
+                      Reject Request
+                    </Button>
+                  </Grid>
+                )}
+            </Grid>
           </Grid>
           <Grid item>
             <CommentForm
@@ -206,44 +270,14 @@ const TransactionDetail: React.FC<TransactionProps> = ({
               transactionComment={payload => transactionComment(payload)}
             />
           </Grid>
-          {receiverIsCurrentUser(currentUser, transaction) &&
-            isPendingRequestTransaction(transaction) && (
-              <Grid item>
-                <Button
-                  color="primary"
-                  size="small"
-                  onClick={() =>
-                    transactionUpdate({
-                      id: transaction.id,
-                      requestStatus: TransactionRequestStatus.accepted
-                    })
-                  }
-                  data-test={`transaction-accept-request-${transaction.id}`}
-                >
-                  Accept Request
-                </Button>
-                <Button
-                  color="primary"
-                  size="small"
-                  onClick={() =>
-                    transactionUpdate({
-                      id: transaction.id,
-                      requestStatus: TransactionRequestStatus.rejected
-                    })
-                  }
-                  data-test={`transaction-reject-request-${transaction.id}`}
-                >
-                  Reject Request
-                </Button>
-              </Grid>
-            )}
         </Grid>
       </Grid>
-      {transaction.comments && (
+      {transaction.comments.length > 0 && (
         <Paper className={classes.paperComments}>
           <Typography component="h2" variant="h6" color="primary" gutterBottom>
             <CommentIcon /> Comments
           </Typography>
+          <CommentsList comments={transaction.comments} />
         </Paper>
       )}
     </Paper>
