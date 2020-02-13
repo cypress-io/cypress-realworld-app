@@ -2,7 +2,7 @@
 // @ts-check
 
 describe("Bank Accounts", function() {
-  before(function() {
+  beforeEach(function() {
     cy.fixture("users").as("users");
     cy.get("@users").then(users => {
       cy.login(this.users[0].username);

@@ -49,4 +49,6 @@ module.exports = (on, config) => {
       return null;
     }
   });
+
+  on('task', require('@cypress/code-coverage/task'))
 };
