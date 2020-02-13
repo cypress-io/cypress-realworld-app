@@ -9,7 +9,8 @@ import {
   ListItemText,
   ListItemSecondaryAction,
   Card,
-  List
+  List,
+  Paper
 } from "@material-ui/core";
 import LikeIcon from "@material-ui/icons/ThumbUpAltOutlined";
 import CommentIcon from "@material-ui/icons/CommentRounded";
@@ -31,6 +32,12 @@ import { random } from "lodash/fp";
 
 const imgNumber = random(3, 50);
 const useStyles = makeStyles(theme => ({
+  paper: {
+    padding: theme.spacing(2),
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column"
+  },
   card: {
     minWidth: "100%"
   },
@@ -53,7 +60,7 @@ const useStyles = makeStyles(theme => ({
     width: theme.spacing(2)
   },
   headline: {
-    padding: "0"
+    marginTop: theme.spacing(4)
   },
   listitem: {
     listStyleType: "none"
@@ -123,6 +130,46 @@ const TransactionDetail: React.FC<TransactionProps> = ({
     </Title>
   );
 
+  return (
+    <Paper className={classes.paper}>
+      <Typography component="h2" variant="h6" color="primary" gutterBottom>
+        Transaction Detail
+      </Typography>
+      <Grid
+        container
+        direction="row"
+        justify="space-between"
+        alignItems="center"
+        data-test={`transaction-item-${transaction.id}`}
+      >
+        <Grid item className={classes.headline}>
+          <Avatar
+            className={classes.avatarLarge}
+            src={`https://i.pravatar.cc/300?img=${imgNumber}`}
+          />
+          <Grid
+            container
+            direction="column"
+            justify="flex-start"
+            alignItems="flex-start"
+          >
+            <Grid item></Grid>
+            <Grid item>{headline}</Grid>
+            <Grid item>
+              <Typography variant="body2" color="textSecondary" gutterBottom>
+                {transaction.description}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Amount transaction={transaction} />
+        </Grid>
+      </Grid>
+    </Paper>
+  );
+
+  /* 
   return (
     <Card data-test={`transaction-item-${transaction.id}`}>
       <List>
@@ -246,6 +293,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
       </List>
     </Card>
   );
+  */
 };
 
 export default TransactionDetail;
