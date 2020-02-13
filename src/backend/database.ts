@@ -559,7 +559,15 @@ export const createTransaction = (
   if (isPayment(transaction)) {
     updatePayAppBalance(sender, transaction);
     // TODO: update transaction "status"
+    updateTransactionById(sender.id, transaction.id, {
+      status: TransactionStatus.complete
+    });
     // TODO: generate notification for transaction - createPaymentNotification(...)
+    createPaymentNotification(
+      transaction.receiverId,
+      transaction.id,
+      PaymentNotificationStatus.received
+    );
   }
 
   return savedTransaction;
