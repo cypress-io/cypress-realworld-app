@@ -3,7 +3,8 @@ import {
   User,
   TransactionRequestStatus,
   NotificationType,
-  PaymentNotificationStatus
+  PaymentNotificationStatus,
+  TransactionResponseItem
 } from "../models";
 import faker from "faker";
 import Dinero from "dinero.js";
@@ -17,7 +18,8 @@ import {
   join,
   pick,
   values,
-  has
+  has,
+  find
 } from "lodash/fp";
 import { getUserById } from "../backend/database";
 
@@ -71,7 +73,7 @@ export const isNewTransactionPath = (pathname: string) =>
   pathname.match(/transaction\/new/);
 
 export const hasPathTransactionId = (pathname: string) =>
-  pathname.match(/transaction\/(?!new)(\w+)/);
+  pathname.match(/transaction\/(?!new)([a-zA-Z0-9._-]+)/);
 
 export const pathTransactionId = (pathname: string) =>
   flow(hasPathTransactionId, get(1))(pathname);
@@ -117,7 +119,16 @@ export const isNewBankAccountPath = (pathname: string) =>
   pathname.match(/bankaccounts\/new/);
 
 export const hasPathBankAccountId = (pathname: string) =>
-  pathname.match(/bankaccounts\/(?!new)(\w+)/);
+  pathname.match(/bankaccounts\/(?!new)([a-zA-Z0-9._-]+)/);
 
 export const pathBankAccountId = (pathname: string) =>
   flow(hasPathBankAccountId, get(1))(pathname);
+
+export const currentUserLikesTransaction = (
+  currentUser: User,
+  transaction: TransactionResponseItem
+) =>
+  flow(
+    find(like => flow(get("userId"), isEqual(get("id", currentUser)))(like)),
+    negate(isEmpty)
+  )(transaction.likes);
