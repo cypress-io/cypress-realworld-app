@@ -4,6 +4,8 @@ orbs:
 workflows:
   build:
     jobs:
+      - check_types:
+          - run: yarn types
       - cypress/run:
           executor: cypress/base-12-14-0
           yarn: true
