@@ -35,6 +35,7 @@ import {
   pathTransactionId,
   isNewTransactionPath
 } from "../utils/transactionUtils";
+import { appBootstrapPending } from "../actions/app";
 
 const transactionsPersonalLogic = createLogic({
   type: TRANSACTIONS_PERSONAL_PENDING,
@@ -198,6 +199,9 @@ const transactionsRefreshLogic = createLogic({
     dispatch(transactionsPublicPending());
     dispatch(transactionsContactsPending());
     dispatch(transactionsPersonalPending());
+    if (action.type === TRANSACTION_CREATE_SUCCESS) {
+      dispatch(appBootstrapPending({}));
+    }
     done();
   }
 });

@@ -19,15 +19,16 @@ describe("Transaction Detail", function() {
     cy.route("PATCH", "http://localhost:3001/transactions/*").as(
       "updateTransaction"
     );
-  });
-
-  afterEach(function() {
     cy.getTest("app-name-logo")
       .find("a")
       .click();
     cy.getTest("nav-personal-tab")
       .click({ force: true })
       .should("have.class", "Mui-selected");
+  });
+
+  afterEach(function() {
+    cy.task("db:seed");
   });
 
   after(function() {
@@ -45,7 +46,7 @@ describe("Transaction Detail", function() {
 
   it("likes a transaction", function() {
     cy.getTestLike("transaction-view")
-      .first()
+      .eq(2)
       .scrollIntoView()
       .click({ force: true });
 
@@ -63,12 +64,14 @@ describe("Transaction Detail", function() {
     cy.getTestLike(`transaction-comment-input`).type(
       "This is my comment{enter}"
     );
-    cy.getTestLike(`transaction-comment-count`).should("contain", 1);
+    cy.getTestLike(`comments-list`)
+      .children()
+      .should("have.length", 1);
   });
 
   it("accepts a transaction request", function() {
     cy.getTestLike("transaction-view")
-      .eq(3)
+      .eq(0)
       .scrollIntoView()
       .click({ force: true });
 
@@ -78,7 +81,7 @@ describe("Transaction Detail", function() {
 
   it("rejects a transaction request", function() {
     cy.getTestLike("transaction-view")
-      .eq(3)
+      .eq(4)
       .scrollIntoView()
       .click({ force: true });
 
@@ -88,7 +91,7 @@ describe("Transaction Detail", function() {
 
   it("does not display accept/reject buttons on completed request", function() {
     cy.getTestLike("transaction-view")
-      .eq(1)
+      .eq(3)
       .scrollIntoView()
       .click({ force: true });
 

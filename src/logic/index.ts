@@ -8,7 +8,7 @@ import notificationsLogic from "./notificationsLogic";
 import bankAccountsLogic from "./bankAccountsLogic";
 
 export default [
-  appLogic,
+  ...appLogic,
   signInLogic,
   signUpLogic,
   signOutLogic,

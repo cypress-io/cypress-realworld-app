@@ -13,7 +13,12 @@ import ListItemText from "@material-ui/core/ListItemText";
 import HomeIcon from "@material-ui/icons/Home";
 import PersonIcon from "@material-ui/icons/Person";
 import LogoutIcon from "@material-ui/icons/ExitToApp";
-import SettingsIcon from "@material-ui/icons/Settings";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
+import { User } from "../models";
+import { Grid, Avatar, Typography } from "@material-ui/core";
+import { formatAmount } from "../utils/transactionUtils";
+import { head } from "lodash/fp";
 
 const drawerWidth = 240;
 
@@ -34,7 +39,7 @@ export const mainListItems = (
       <ListItemIcon>
         <PersonIcon />
       </ListItemIcon>
-      <ListItemText primary="Edit Profile" />
+      <ListItemText primary="My Account" />
     </ListItem>
     <ListItem
       button
@@ -43,9 +48,20 @@ export const mainListItems = (
       data-test="sidenav-bankaccounts"
     >
       <ListItemIcon>
-        <SettingsIcon />
+        <AccountBalanceIcon />
       </ListItemIcon>
       <ListItemText primary="Bank Accounts" />
+    </ListItem>
+    <ListItem
+      button
+      component={RouterLink}
+      to="/notifications"
+      data-test="sidenav-notifications"
+    >
+      <ListItemIcon>
+        <NotificationsIcon />
+      </ListItemIcon>
+      <ListItemText primary="Notifications" />
     </ListItem>
   </div>
 );
@@ -86,6 +102,7 @@ const useStyles = makeStyles(theme => ({
     })
   },
   drawerPaperClose: {
+    marginTop: 50,
     overflowX: "hidden",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -95,6 +112,24 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up("sm")]: {
       width: theme.spacing(9)
     }
+  },
+  userProfile: {
+    padding: theme.spacing(2)
+  },
+  userProfileHidden: {
+    display: "none"
+  },
+  avatar: {
+    marginRight: theme.spacing(2)
+  },
+  accountBalance: {
+    marginLeft: theme.spacing(2)
+  },
+  amount: {
+    fontWeight: "bold"
+  },
+  accountBalanceHidden: {
+    display: "none"
   }
 }));
 
@@ -102,12 +137,14 @@ interface Props {
   signOutPending: () => void;
   handleDrawerClose: () => void;
   drawerOpen: boolean;
+  currentUser: User;
 }
 
 const NavDrawer: React.FC<Props> = ({
   signOutPending,
   handleDrawerClose,
-  drawerOpen
+  drawerOpen,
+  currentUser
 }) => {
   const classes = useStyles();
 
@@ -122,11 +159,57 @@ const NavDrawer: React.FC<Props> = ({
       }}
       open={drawerOpen}
     >
-      <div className={classes.toolbarIcon}>
-        <IconButton onClick={handleDrawerClose}>
-          <ChevronLeftIcon />
-        </IconButton>
-      </div>
+      <Grid
+        container
+        direction="row"
+        justify="space-between"
+        alignItems="center"
+        className={drawerOpen ? classes.userProfile : classes.userProfileHidden}
+      >
+        <Grid item>
+          <Avatar
+            className={classes.avatar}
+            alt={`${currentUser.firstName} ${currentUser.lastName}`}
+            src={currentUser.avatar}
+          />
+        </Grid>
+        <Grid item>
+          <Typography variant="subtitle1" color="textPrimary">
+            {currentUser.firstName} {head(currentUser.lastName)}
+          </Typography>
+          <Typography variant="subtitle2" color="inherit" gutterBottom>
+            @{currentUser.username}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <div className={classes.toolbarIcon}>
+            <IconButton onClick={handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </div>
+        </Grid>
+      </Grid>
+      <Grid
+        container
+        direction="row"
+        justify="space-between"
+        alignItems="center"
+        className={drawerOpen ? classes.userProfile : classes.userProfileHidden}
+      >
+        <Grid item>
+          <Typography
+            variant="h6"
+            color="textPrimary"
+            className={classes.amount}
+            data-test="sidenav-user-balance"
+          >
+            {currentUser.balance && formatAmount(currentUser.balance)}
+          </Typography>
+          <Typography variant="subtitle2" color="inherit" gutterBottom>
+            Account Balance
+          </Typography>
+        </Grid>
+      </Grid>
       <Divider />
       <List>{mainListItems}</List>
       <Divider />

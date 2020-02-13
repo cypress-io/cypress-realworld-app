@@ -8,6 +8,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
+import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import Link from "@material-ui/core/Link";
 import { Link as RouterLink } from "react-router-dom";
 import { Button } from "@material-ui/core";
@@ -42,6 +43,19 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1
+  },
+  newTransactionButton: {
+    fontSize: 16,
+    backgroundColor: "#00C853",
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingRight: 20,
+    fontWeight: "bold",
+    "&:hover": {
+      backgroundColor: "#4CAF50",
+      borderColor: "#00C853",
+      boxShadow: "none"
+    }
   }
 }));
 
@@ -93,12 +107,14 @@ const NavBar: React.FC<NavBarProps> = ({
           </Link>
         </Typography>
         <Button
+          className={classes.newTransactionButton}
+          variant="contained"
           color="inherit"
           component={RouterLink}
           to="/transaction/new"
           data-test="nav-top-new-transaction"
         >
-          New Transaction
+          <AttachMoneyIcon /> New
         </Button>
         <IconButton
           color="inherit"

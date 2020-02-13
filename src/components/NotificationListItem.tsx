@@ -1,6 +1,10 @@
 import React from "react";
 
 import ListItem from "@material-ui/core/ListItem";
+import LikeIcon from "@material-ui/icons/ThumbUpAltOutlined";
+import PaymentIcon from "@material-ui/icons/Payment";
+import CommentIcon from "@material-ui/icons/CommentRounded";
+import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import { NotificationResponseItem } from "../models";
 import {
   Card,
@@ -29,6 +33,12 @@ const useStyles = makeStyles({
   },
   title: {
     fontSize: 18
+  },
+  green: {
+    color: "#4CAF50"
+  },
+  red: {
+    color: "red"
   }
 });
 
@@ -38,23 +48,28 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
 }) => {
   const classes = useStyles();
   let listItemText = undefined;
+  let listItemIcon = undefined;
 
   if (isCommentNotification(notification)) {
-    listItemText = `${notification.id} ${notification.userFullName} commented on a transaction.`;
+    listItemIcon = <CommentIcon />;
+    listItemText = `${notification.userFullName} commented on a transaction.`;
   }
 
   if (isLikeNotification(notification)) {
-    listItemText = `${notification.id} ${notification.userFullName} liked a transaction.`;
+    listItemIcon = <LikeIcon />;
+    listItemText = `${notification.userFullName} liked a transaction.`;
   }
 
   if (isPaymentNotification(notification)) {
     if (isPaymentRequestedNotification(notification)) {
-      listItemText = `${notification.id} ${notification.userFullName} requested payment.`;
+      listItemIcon = <PaymentIcon className={classes.red} />;
+      listItemText = `${notification.userFullName} requested payment.`;
     } else if (isPaymentReceivedNotification(notification)) {
-      listItemText = `${notification.id} ${notification.userFullName} received payment.`;
+      listItemIcon = <MonetizationOnIcon className={classes.green} />;
+      listItemText = `${notification.userFullName} received payment.`;
     } else {
       // otherwise, incomplete payment notification
-      listItemText = `${notification.id} An error occurred with payment to ${notification.userFullName}.`;
+      listItemText = `An error occurred with payment to ${notification.userFullName}.`;
     }
   }
 
@@ -67,6 +82,8 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
             className={classes.title}
             color="textSecondary"
           >
+            {listItemIcon}
+            {"     "}
             {listItemText}
           </Typography>
         </CardContent>
