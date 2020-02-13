@@ -27,7 +27,9 @@ describe("Transaction Detail", function() {
       .should("have.class", "Mui-selected");
   });
 
-  afterEach(function() {});
+  afterEach(function() {
+    cy.task("db:seed");
+  });
 
   after(function() {
     cy.task("db:seed");
@@ -62,12 +64,14 @@ describe("Transaction Detail", function() {
     cy.getTestLike(`transaction-comment-input`).type(
       "This is my comment{enter}"
     );
-    cy.getTestLike(`transaction-comment-count`).should("contain", 1);
+    cy.getTestLike(`comments-list`)
+      .children()
+      .should("have.length", 1);
   });
 
   it("accepts a transaction request", function() {
     cy.getTestLike("transaction-view")
-      .eq(3)
+      .eq(1)
       .scrollIntoView()
       .click({ force: true });
 
@@ -77,7 +81,7 @@ describe("Transaction Detail", function() {
 
   it("rejects a transaction request", function() {
     cy.getTestLike("transaction-view")
-      .eq(3)
+      .eq(5)
       .scrollIntoView()
       .click({ force: true });
 
@@ -87,7 +91,7 @@ describe("Transaction Detail", function() {
 
   it("does not display accept/reject buttons on completed request", function() {
     cy.getTestLike("transaction-view")
-      .eq(1)
+      .eq(3)
       .scrollIntoView()
       .click({ force: true });
 
