@@ -1,10 +1,7 @@
 // check this file using TypeScript if available
 // @ts-check
 
-const faker = require("faker");
-
-const apiUrl = "http://localhost:3001";
-const apiLikes = `${apiUrl}/likes`;
+const apiLikes = `${Cypress.env("apiUrl")}/likes`;
 
 describe("Likes API", function() {
   before(function() {

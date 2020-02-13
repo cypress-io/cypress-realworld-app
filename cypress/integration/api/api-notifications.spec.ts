@@ -1,8 +1,7 @@
 // check this file using TypeScript if available
 // @ts-check
 
-const apiUrl = "http://localhost:3001";
-const apiNotifications = `${apiUrl}/notifications`;
+const apiNotifications = `${Cypress.env("apiUrl")}/notifications`;
 
 describe("Notifications API", function() {
   before(function() {

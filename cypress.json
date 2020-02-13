@@ -2,5 +2,8 @@
   "baseUrl": "http://localhost:3000",
   "projectId": "7s5okt",
   "viewportHeight": 660,
-  "viewportWidth": 1800
+  "viewportWidth": 1800,
+  "env": {
+    "apiUrl": "http://localhost:3001"
+  }
 }

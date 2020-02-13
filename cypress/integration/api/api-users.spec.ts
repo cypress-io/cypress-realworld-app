@@ -1,10 +1,9 @@
 // check this file using TypeScript if available
 // @ts-check
 
-const faker = require("faker");
+import faker from "faker";
 
-const apiUrl = "http://localhost:3001";
-const apiUsers = `${apiUrl}/users`;
+const apiUsers = `${Cypress.env("apiUrl")}/users`;
 
 describe("Users API", function() {
   before(function() {

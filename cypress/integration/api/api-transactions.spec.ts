@@ -1,11 +1,10 @@
 // check this file using TypeScript if available
 // @ts-check
 
-const faker = require("faker");
+import faker from "faker";
 const getFakeAmount = () => parseInt(faker.finance.amount(), 10);
 
-const apiUrl = "http://localhost:3001";
-const apiTransactions = `${apiUrl}/transactions`;
+const apiTransactions = `${Cypress.env("apiUrl")}/transactions`;
 
 describe("Transactions API", function() {
   before(function() {
