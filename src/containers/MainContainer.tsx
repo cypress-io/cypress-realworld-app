@@ -8,6 +8,7 @@ import { NotificationType, User } from "../models";
 export interface StateProps {
   allNotifications: NotificationType[];
   currentUser: User;
+  snackbar: object;
 }
 
 export interface DispatchProps {
@@ -20,13 +21,15 @@ const MainContainer: React.FC<Props> = ({
   signOutPending,
   children,
   allNotifications,
-  currentUser
+  currentUser,
+  snackbar
 }) => {
   return (
     <MainLayout
       signOutPending={signOutPending}
       allNotifications={allNotifications}
       currentUser={currentUser}
+      snackbar={snackbar}
     >
       {children}
     </MainLayout>
@@ -34,6 +37,7 @@ const MainContainer: React.FC<Props> = ({
 };
 
 const mapStateToProps = (state: IRootReducerState) => ({
+  snackbar: state.app.snackbar,
   allNotifications: state.notifications.all,
   currentUser: state.user.profile
 });

@@ -1,5 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
@@ -9,6 +11,10 @@ import Copyright from "../components/Copyright";
 import NavBar from "./NavBar";
 import NavDrawer from "./NavDrawer";
 import { NotificationType, User } from "../models";
+
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,15 +40,19 @@ interface Props {
   children: React.ReactNode;
   allNotifications: NotificationType[];
   currentUser: User;
+  snackbar: object;
 }
 
 const MainLayout: React.FC<Props> = ({
   signOutPending,
   children,
   allNotifications,
-  currentUser
+  currentUser,
+  snackbar
 }) => {
   const classes = useStyles();
+  // @ts-ignore
+  const { severity, message } = snackbar;
 
   // TODO: Move drawer open/close state to MainContainer / Redux
   const [open, setOpen] = React.useState(true);
@@ -56,6 +66,15 @@ const MainLayout: React.FC<Props> = ({
   return (
     <div className={classes.root}>
       <CssBaseline />
+      {message && (
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          open={true}
+          autoHideDuration={6000}
+        >
+          <Alert severity={severity}>{message}</Alert>
+        </Snackbar>
+      )}
       <NavBar
         handleDrawerOpen={handleDrawerOpen}
         drawerOpen={open}
