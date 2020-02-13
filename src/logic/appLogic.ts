@@ -59,7 +59,9 @@ const appSnackBarResetLogic = createLogic({
   type: APP_SNACKBAR_RESET,
   throttle: 4000,
   validate({ action }, allow) {
-    allow(action);
+    setTimeout(() => {
+      allow(action);
+    }, 4000);
   }
 });
 
