@@ -1,13 +1,9 @@
-// type definitions for Cypress object "cy"
-/// <reference types="cypress" />
-
 // check this file using TypeScript if available
 // @ts-check
 
-const faker = require("faker");
+import faker from "faker";
 
-const apiUrl = "http://localhost:3001";
-const apiBankAccounts = `${apiUrl}/bankAccounts`;
+const apiBankAccounts = `${Cypress.env("apiUrl")}/bankAccounts`;
 
 describe("Bank Accounts API", function() {
   before(function() {

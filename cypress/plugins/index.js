@@ -8,6 +8,8 @@
 // https://on.cypress.io/plugins-guide
 // ***********************************************************
 
+const cypressTypeScriptPreprocessor = require("./cy-ts-preprocessor");
+
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 const { readFile } = require("fs").promises;
@@ -25,6 +27,7 @@ const defaultStructure = {
 };
 
 module.exports = (on, config) => {
+  on("file:preprocessor", cypressTypeScriptPreprocessor);
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
   on("task", {

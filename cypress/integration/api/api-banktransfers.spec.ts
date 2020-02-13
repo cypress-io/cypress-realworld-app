@@ -1,11 +1,7 @@
-// type definitions for Cypress object "cy"
-/// <reference types="cypress" />
-
 // check this file using TypeScript if available
 // @ts-check
 
-const apiUrl = "http://localhost:3001";
-const apiBankTransfer = `${apiUrl}/bankTransfers`;
+const apiBankTransfer = `${Cypress.env("apiUrl")}/bankTransfers`;
 
 describe("Bank Transfer API", function() {
   before(function() {
