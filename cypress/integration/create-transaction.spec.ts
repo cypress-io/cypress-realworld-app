@@ -37,11 +37,14 @@ describe("Create Transaction", function() {
       .click();
     cy.getTest("transaction-create-form").should("be.visible");
 
-    cy.getTest("transaction-create-amount-input").type("25");
+    cy.getTest("transaction-create-amount-input").type("2500");
     cy.getTest("transaction-create-description-input").type("Indian Food");
     cy.getTest("transaction-create-submit-payment").click();
 
     cy.wait("@createTransaction").should("have.property", "status", 200);
+
+    cy.getTest("sidenav-user-balance").should("contain", "$525.00");
+
     cy.getTest("nav-public-tab").should("have.class", "Mui-selected");
 
     cy.getTest("transaction-list")
@@ -56,7 +59,7 @@ describe("Create Transaction", function() {
       .click();
     cy.getTest("transaction-create-form").should("be.visible");
 
-    cy.getTest("transaction-create-amount-input").type("95");
+    cy.getTest("transaction-create-amount-input").type("9500");
     cy.getTest("transaction-create-description-input").type("Fancy Hotel");
     cy.getTest("transaction-create-submit-request").click();
     cy.getTest("nav-personal-tab")
@@ -65,6 +68,8 @@ describe("Create Transaction", function() {
       .should("have.class", "Mui-selected");
 
     cy.wait("@createTransaction").should("have.property", "status", 200);
+
+    cy.getTest("sidenav-user-balance").should("contain", "$550.00");
 
     cy.getTest("transaction-list").should("contain", "Fancy Hotel");
   });
