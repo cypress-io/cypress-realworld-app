@@ -24,7 +24,7 @@ const appBootstrapLogic = createLogic({
   latest: true,
 
   // @ts-ignore
-  async process({ httpClient }, dispatch) {
+  async process({ httpClient }, dispatch, done) {
     let checkAuth;
 
     try {
@@ -50,6 +50,8 @@ const appBootstrapLogic = createLogic({
         dispatch(signOutPending());
       }
     }
+
+    done();
   }
 });
 
