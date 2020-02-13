@@ -71,7 +71,7 @@ describe("Transaction Detail", function() {
 
   it("accepts a transaction request", function() {
     cy.getTestLike("transaction-view")
-      .eq(1)
+      .eq(0)
       .scrollIntoView()
       .click({ force: true });
 
@@ -81,7 +81,7 @@ describe("Transaction Detail", function() {
 
   it("rejects a transaction request", function() {
     cy.getTestLike("transaction-view")
-      .eq(5)
+      .eq(4)
       .scrollIntoView()
       .click({ force: true });
 
