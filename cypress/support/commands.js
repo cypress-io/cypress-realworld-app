@@ -28,7 +28,7 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 Cypress.Commands.add("apiLogin", (username, password = "s3cret") => {
-  return cy.request("POST", Cypress.env("apiUrl"), {
+  return cy.request("POST", `${Cypress.env("apiUrl")}/login`, {
     username,
     password
   });
