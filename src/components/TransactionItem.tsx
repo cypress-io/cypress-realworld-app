@@ -19,6 +19,7 @@ import {
   formatAmount,
   isAcceptedRequestTransaction
 } from "../utils/transactionUtils";
+import TransactionTitle from "./TransactionTitle";
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -83,23 +84,17 @@ const TransactionItem: React.FC<TransactionProps> = ({
     </Typography>
   );
 
-  const Title: React.FC<{ children: any }> = ({ children }) => (
-    <Typography color="textSecondary" className={classes.title} gutterBottom>
-      {children}
-    </Typography>
-  );
-
   const headline = isRequestTransaction(transaction) ? (
-    <Title>
+    <TransactionTitle>
       <TitleName name={transaction.senderName} />
       {isAcceptedRequestTransaction(transaction) ? " charged " : " requested "}
       <TitleName name={transaction.receiverName} />
-    </Title>
+    </TransactionTitle>
   ) : (
-    <Title>
+    <TransactionTitle>
       <TitleName name={transaction.senderName} /> paid{" "}
       <TitleName name={transaction.receiverName} />
-    </Title>
+    </TransactionTitle>
   );
 
   const showTransactionDetail = (transactionId: string) => {
