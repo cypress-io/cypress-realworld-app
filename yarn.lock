@@ -1651,6 +1651,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-infinite-calendar@^2.3.3":
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/@types/react-infinite-calendar/-/react-infinite-calendar-2.3.3.tgz#3cddac42f009d2a63e9d1b53180e7f1fc5252f13"
+  integrity sha512-OP9UWK4XpGNEyfLX9112whvQOT55NNQXjfreBU39TqbAoxUwQIQ1NXoA+86n3mz4aUlPdx1jj1S3a3IQDQdB4A==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-redux@7.1.7":
   version "7.1.7"
   resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-7.1.7.tgz#12a0c529aba660696947384a059c5c6e08185c7a"
