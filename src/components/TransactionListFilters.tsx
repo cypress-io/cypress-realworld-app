@@ -41,12 +41,11 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({}) => {
     null
   );
   const [selectedDates, setSelectedDates] = useState(selectedDatesDefault);
-  const [endDateSelected, setEndDateSelected] = useState(false);
 
   const onCalendarSelect = (e: { eventType: number; start: any; end: any }) => {
     if (e.eventType === 3) {
       setSelectedDates({ start: e.start, end: e.end });
-      setEndDateSelected(true);
+      setAnchorEl(null);
     }
   };
 
