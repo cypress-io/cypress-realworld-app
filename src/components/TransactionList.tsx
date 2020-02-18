@@ -7,7 +7,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import TransactionItem from "./TransactionItem";
 import List from "@material-ui/core/List";
 import { TransactionResponseItem } from "../models";
-import TransactionListFilters from "./TransactionListFilters";
 
 export interface TransactionListProps {
   header: string;
@@ -70,7 +69,6 @@ const TransactionList: React.FC<TransactionListProps> = ({
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
         {header}
       </Typography>
-      <TransactionListFilters />
       {transactions.length > 0 ? (
         <List data-test="transaction-list">
           {transactions.map(

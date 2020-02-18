@@ -7,6 +7,7 @@ import { useRouteMatch } from "react-router";
 import PublicTransactions from "../components/PublicTransactions";
 import TransactionList from "../components/TransactionList";
 import TransactionNavTabs from "../components/TransactionNavTabs";
+import TransactionListFilters from "../components/TransactionListFilters";
 
 export interface StateProps {
   publicTransactions: {
@@ -30,6 +31,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
     return (
       <MainContainer>
         <TransactionNavTabs />
+        <TransactionListFilters />
         <br />
         <TransactionList
           header="Contacts"
@@ -43,6 +45,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
     return (
       <MainContainer>
         <TransactionNavTabs />
+        <TransactionListFilters />
         <br />
         <TransactionList
           header="Personal"
@@ -56,6 +59,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   return (
     <MainContainer>
       <TransactionNavTabs />
+      <TransactionListFilters />
       <br />
       <PublicTransactions transactions={publicTransactions} />
     </MainContainer>
