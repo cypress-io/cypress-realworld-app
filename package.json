@@ -48,7 +48,7 @@
     "formik": "2.1.4",
     "fuse.js": "3.4.6",
     "json-server": "0.16.0",
-    "libphonenumber-js": "1.7.41",
+    "libphonenumber-js": "1.7.43",
     "nodemon": "2.0.2",
     "passport": "0.4.1",
     "passport-local": "1.0.0",
