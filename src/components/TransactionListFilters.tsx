@@ -16,6 +16,16 @@ const useStyles = makeStyles(theme => ({
   calendar: {
     width: theme.spacing(2),
     height: theme.spacing(4)
+  },
+  dateRangeLabel: {
+    marginRight: theme.spacing(2)
+  },
+  dateRangeButton: {
+    backgroundColor: "#F7FAFC",
+    color: theme.palette.primary.main,
+    "&:hover": {
+      backgroundColor: "#EDF2F7"
+    }
   }
 }));
 
@@ -65,7 +75,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({}) => {
   };
 
   return (
-    <Paper className={classes.paper}>
+    <Paper className={classes.paper} elevation={0}>
       <Grid
         container
         direction="row"
@@ -77,14 +87,16 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({}) => {
           <Button
             aria-describedby={id}
             variant="contained"
-            color="primary"
+            className={classes.dateRangeButton}
             onClick={handleClick}
           >
-            Time Range{" "}
-            {selectedDates.start && selectedDates.end
-              ? `${formatButtonDate(selectedDates.start)} - 
-              ${formatButtonDate(selectedDates.end)} `
-              : "All"}
+            <span className={classes.dateRangeLabel}>Date Range:</span>
+            <b>
+              {selectedDates.start && selectedDates.end
+                ? `${formatButtonDate(selectedDates.start)} -
+              ${formatButtonDate(selectedDates.end)}`
+                : "ALL"}
+            </b>
           </Button>
           <Popover
             id={id}
