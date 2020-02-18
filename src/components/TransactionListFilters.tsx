@@ -41,10 +41,12 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({}) => {
     null
   );
   const [selectedDates, setSelectedDates] = useState(selectedDatesDefault);
+  const [endDateSelected, setEndDateSelected] = useState(false);
 
   const onCalendarSelect = (e: { eventType: number; start: any; end: any }) => {
     if (e.eventType === 3) {
       setSelectedDates({ start: e.start, end: e.end });
+      setEndDateSelected(true);
     }
   };
 
@@ -60,9 +62,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({}) => {
   const id = open ? "simple-popover" : undefined;
 
   const formatButtonDate = (date: string) => {
-    const dateObj = new Date(date);
-
-    return format(dateObj, "LLL, d yyyy");
+    return format(new Date(date), "MMM, D YYYY");
   };
 
   return (
