@@ -81,11 +81,11 @@ describe("Transactions", () => {
     const result: Transaction[] = getTransactionsForUserContacts(
       userToLookup.id,
       {
-        dateRangeStart: new Date(2019, 12, 1),
-        dateRangeEnd: new Date(2019, 12, 10)
+        dateRangeStart: new Date("Dec 01 2019"),
+        dateRangeEnd: new Date("Dec 05 2019")
       }
     );
-    expect(result.length).toBe(3);
+    expect(result.length).toBe(2);
   });
 
   it("should retrieve a list of public transactions, default sort", () => {
