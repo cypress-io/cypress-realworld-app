@@ -29,11 +29,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export interface StateProps {}
-
-export interface DispatchProps {}
-
-export type TransactionListFiltersProps = StateProps & DispatchProps;
+export type TransactionListFiltersProps = {
+  filterTransactions: Function;
+};
 
 type SelectedDates = {
   start?: string;
@@ -45,7 +43,9 @@ const selectedDatesDefault: SelectedDates = {
   end: undefined
 };
 
-const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({}) => {
+const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
+  filterTransactions
+}) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -55,6 +55,10 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({}) => {
   const onCalendarSelect = (e: { eventType: number; start: any; end: any }) => {
     if (e.eventType === 3) {
       setSelectedDates({ start: e.start, end: e.end });
+      filterTransactions({
+        dateRangeStart: e.start.toString(),
+        dateRangeEnd: e.end.toString()
+      });
       setAnchorEl(null);
     }
   };

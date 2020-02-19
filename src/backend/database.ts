@@ -442,6 +442,7 @@ export const getAllTransactionsForUserByObj = (
   userId: string,
   query?: object
 ) => {
+  console.log("QUERY: ", query);
   const queryWithoutDateFields =
     query && hasDateQueryFields(query) ? omitDateQueryFields(query) : undefined;
 
@@ -473,6 +474,7 @@ export const getAllTransactionsForUserByObj = (
         ),
       userTransactions
     );
+    console.log("Filtered: ", filteredTransactions);
 
     return filteredTransactions;
   } else {

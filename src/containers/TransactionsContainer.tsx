@@ -8,6 +8,17 @@ import PublicTransactions from "../components/PublicTransactions";
 import TransactionList from "../components/TransactionList";
 import TransactionNavTabs from "../components/TransactionNavTabs";
 import TransactionListFilters from "../components/TransactionListFilters";
+import {
+  transactionsPublicPending,
+  transactionsPersonalPending,
+  transactionsContactsPending
+} from "../actions/transactions";
+
+export interface DispatchProps {
+  filterPublicTransactions: Function;
+  filterPersonalTransactions: Function;
+  filterContactTransactions: Function;
+}
 
 export interface StateProps {
   publicTransactions: {
@@ -18,12 +29,15 @@ export interface StateProps {
   personalTransactions: TransactionResponseItem[];
 }
 
-export type TransactionsContainerProps = StateProps;
+export type TransactionsContainerProps = StateProps & DispatchProps;
 
 const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   publicTransactions,
   contactsTransactions,
-  personalTransactions
+  personalTransactions,
+  filterPublicTransactions,
+  filterPersonalTransactions,
+  filterContactTransactions
 }) => {
   const match = useRouteMatch();
 
@@ -31,7 +45,9 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
     return (
       <MainContainer>
         <TransactionNavTabs />
-        <TransactionListFilters />
+        <TransactionListFilters
+          filterTransactions={filterContactTransactions}
+        />
         <br />
         <TransactionList
           header="Contacts"
@@ -45,7 +61,9 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
     return (
       <MainContainer>
         <TransactionNavTabs />
-        <TransactionListFilters />
+        <TransactionListFilters
+          filterTransactions={filterPersonalTransactions}
+        />
         <br />
         <TransactionList
           header="Personal"
@@ -59,7 +77,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   return (
     <MainContainer>
       <TransactionNavTabs />
-      <TransactionListFilters />
+      <TransactionListFilters filterTransactions={filterPublicTransactions} />
       <br />
       <PublicTransactions transactions={publicTransactions} />
     </MainContainer>
@@ -72,4 +90,13 @@ const mapStateToProps = (state: IRootReducerState) => ({
   personalTransactions: state.transactions.personal
 });
 
-export default connect(mapStateToProps)(TransactionsContainer);
+const mapDispatchToProps = {
+  filterPublicTransactions: transactionsPublicPending,
+  filterPersonalTransactions: transactionsPersonalPending,
+  filterContactTransactions: transactionsContactsPending
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TransactionsContainer);

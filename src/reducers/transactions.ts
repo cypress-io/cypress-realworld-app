@@ -3,12 +3,16 @@ import {
   TRANSACTIONS_PUBLIC_SUCCESS,
   TRANSACTIONS_CONTACTS_SUCCESS,
   TRANSACTIONS_PERSONAL_SUCCESS,
-  TRANSACTION_DETAIL_SUCCESS
+  TRANSACTION_DETAIL_SUCCESS,
+  TRANSACTIONS_PERSONAL_PENDING,
+  TRANSACTIONS_CONTACTS_PENDING,
+  TRANSACTIONS_PUBLIC_PENDING
 } from "../actions/transactions";
 import { TAuthActions, SIGNOUT_SUCCESS, SIGNOUT_ERROR } from "../actions/auth";
 import { TransactionResponseItem } from "../models";
 
 export interface TransactionsState {
+  filters: object;
   transactionDetails?: TransactionResponseItem;
   public: {
     contacts: TransactionResponseItem[];
@@ -19,6 +23,7 @@ export interface TransactionsState {
 }
 
 const initialState = {
+  filters: {},
   transactionDetails: undefined,
   public: {
     contacts: [],
@@ -33,6 +38,13 @@ export default function reducer(
   action: TTransactionActions | TAuthActions
 ): TransactionsState {
   switch (action.type) {
+    case TRANSACTIONS_PERSONAL_PENDING:
+    case TRANSACTIONS_CONTACTS_PENDING:
+    case TRANSACTIONS_PUBLIC_PENDING:
+      return {
+        ...state,
+        filters: action.payload ? action.payload : {}
+      };
     case TRANSACTIONS_PUBLIC_SUCCESS:
       return {
         ...state,

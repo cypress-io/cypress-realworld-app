@@ -46,9 +46,12 @@ const transactionsPersonalLogic = createLogic({
   },
 
   // @ts-ignore
-  process({ httpClient }) {
+  process({ httpClient, action }) {
     return httpClient
-      .get(`http://localhost:3001/transactions`)
+      .get(`http://localhost:3001/transactions`, {
+        // @ts-ignore
+        params: action.payload
+      })
       .then((resp: any) => resp.data.transactions);
   }
 });
@@ -62,9 +65,16 @@ const transactionsPublicLogic = createLogic({
   },
 
   // @ts-ignore
-  process({ httpClient }) {
+  process({ httpClient, action }) {
     return httpClient
-      .get(`http://localhost:3001/transactions/public`)
+      .get(
+        `http://localhost:3001/transactions/public`,
+
+        {
+          // @ts-ignore
+          params: action.payload
+        }
+      )
       .then((resp: any) => resp.data.transactions);
   }
 });
@@ -78,9 +88,12 @@ const transactionsContactsLogic = createLogic({
   },
 
   // @ts-ignore
-  process({ httpClient }) {
+  process({ httpClient, action }) {
     return httpClient
-      .get(`http://localhost:3001/transactions/contacts`)
+      .get(`http://localhost:3001/transactions/contacts`, {
+        // @ts-ignore
+        params: action.payload
+      })
       .then((resp: any) => resp.data.transactions);
   }
 });
