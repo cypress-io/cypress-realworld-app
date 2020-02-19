@@ -19,8 +19,7 @@ import {
   pick,
   values,
   has,
-  find,
-  inRange
+  find
 } from "lodash/fp";
 import { getUserById } from "../backend/database";
 
