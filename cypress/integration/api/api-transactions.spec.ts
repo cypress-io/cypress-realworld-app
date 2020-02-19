@@ -57,7 +57,7 @@ describe("Transactions API", function() {
       });
     });
 
-    it.only("gets a list of pending request transactions for user between a time range", function() {
+    it("gets a list of pending request transactions for user between a time range", function() {
       const { id } = this.currentUser;
       cy.request({
         method: "GET",
@@ -69,7 +69,7 @@ describe("Transactions API", function() {
         }
       }).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions.length).to.eq(55);
+        expect(response.body.transactions.length).to.eq(1);
       });
     });
   });
