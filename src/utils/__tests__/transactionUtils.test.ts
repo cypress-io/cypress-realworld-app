@@ -1,8 +1,7 @@
 import {
   isRequestTransaction,
   getFakeAmount,
-  currentUserLikesTransaction,
-  isBetweenDates
+  currentUserLikesTransaction
 } from "../transactionUtils";
 import faker from "faker";
 import {

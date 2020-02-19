@@ -69,7 +69,7 @@ describe("Transactions API", function() {
         }
       }).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions.length).to.eq(1);
+        expect(response.body.transactions.length).to.eq(0);
       });
     });
   });
