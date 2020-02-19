@@ -76,6 +76,18 @@ describe("Transactions", () => {
     expect(result.length).toBe(3);
   });
 
+  it("should retrieve a list of transactions for a users contacts - between date range", () => {
+    const userToLookup: User = getAllUsers()[0];
+    const result: Transaction[] = getTransactionsForUserContacts(
+      userToLookup.id,
+      {
+        dateRangeStart: new Date(2019, 12, 1),
+        dateRangeEnd: new Date(2019, 12, 10)
+      }
+    );
+    expect(result.length).toBe(3);
+  });
+
   it("should retrieve a list of public transactions, default sort", () => {
     const user: User = getAllUsers()[0];
     const contactsTransactions: Transaction[] = getTransactionsForUserContacts(

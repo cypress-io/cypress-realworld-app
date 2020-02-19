@@ -19,7 +19,8 @@ import {
   pick,
   values,
   has,
-  find
+  find,
+  inRange
 } from "lodash/fp";
 import { getUserById } from "../backend/database";
 
@@ -132,3 +133,15 @@ export const currentUserLikesTransaction = (
     find(like => flow(get("userId"), isEqual(get("id", currentUser)))(like)),
     negate(isEmpty)
   )(transaction.likes);
+
+export const isBetweenDates = (
+  start: string,
+  end: string,
+  dateToCompare: Date
+  // @ts-ignore
+) =>
+  inRange(
+    new Date(start).valueOf(),
+    new Date(end).valueOf(),
+    dateToCompare.valueOf()
+  );

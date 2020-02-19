@@ -12,7 +12,13 @@ import {
   flatMap,
   curry,
   get,
-  constant
+  constant,
+  has,
+  pick,
+  omit,
+  filter,
+  hasIn,
+  some
 } from "lodash/fp";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
@@ -46,7 +52,8 @@ import {
   getTransferAmount,
   hasSufficientFunds,
   getChargeAmount,
-  getFullNameForUser
+  getFullNameForUser,
+  isBetweenDates
 } from "../utils/transactionUtils";
 
 const USER_TABLE = "users";
@@ -424,20 +431,66 @@ export const formatTransactionsForApiResponse = (
     )
   );
 
+export const hasDateQueryFields = (query: object) =>
+  has("dateRangeStart", query) && has("dateRangeEnd", query);
+
+export const getDateQueryFields = (query: object) =>
+  pick(["dateRangeStart", "dateRangeEnd"], query);
+
+export const omitDateQueryFields = (query: object) =>
+  omit(["dateRangeStart", "dateRangeEnd"], query);
+
 export const getAllTransactionsForUserByObj = (
   userId: string,
   query?: object
-) =>
-  flatMap(getTransactionsByObj)([
+) => {
+  console.log("QUERY: ", query);
+
+  // @ts-ignore
+  console.log("QUERY HAS DF: ", hasDateQueryFields(query));
+  const queryWithoutDateFields =
+    query && hasDateQueryFields(query) ? omitDateQueryFields(query) : undefined;
+
+  console.log("QUERY WITHOUT DATE: ", queryWithoutDateFields);
+
+  const queryFields = queryWithoutDateFields || query;
+  const userTransactions = flatMap(getTransactionsByObj)([
     {
       receiverId: userId,
-      ...query
+      ...queryFields
     },
     {
       senderId: userId,
-      ...query
+      ...queryFields
     }
   ]);
+
+  if (query && hasDateQueryFields(query)) {
+    // @ts-ignore
+    const dateFields: {
+      dateRangeStart: string;
+      dateRangeEnd: string;
+    } = getDateQueryFields(query);
+
+    const filteredTransactions = filter((transaction: Transaction) => {
+      console.log("TRAN, ", transaction.createdAt);
+
+      const isBetween = isBetweenDates(
+        dateFields.dateRangeStart,
+        dateFields.dateRangeEnd,
+        transaction.createdAt
+      );
+      console.log("isBetween: ", isBetween);
+      return isBetween;
+    }, userTransactions);
+
+    console.log("FILTERED: ", filteredTransactions);
+
+    return filteredTransactions;
+  } else {
+    return userTransactions;
+  }
+};
 
 export const getTransactionsForUserByObj = (userId: string, query?: object) =>
   flow(getAllTransactionsForUserByObj, uniqBy("id"))(userId, query);

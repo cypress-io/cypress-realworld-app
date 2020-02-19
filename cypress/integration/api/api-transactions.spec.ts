@@ -56,6 +56,22 @@ describe("Transactions API", function() {
         expect(response.body.transactions[0].receiverId).to.eq(id);
       });
     });
+
+    it.only("gets a list of pending request transactions for user between a time range", function() {
+      const { id } = this.currentUser;
+      cy.request({
+        method: "GET",
+        url: `${apiTransactions}`,
+        qs: {
+          requestStatus: "pending",
+          dateRangeStart: new Date("Dec 01 2019"),
+          dateRangeEnd: new Date("Dec 05 2019")
+        }
+      }).then(response => {
+        expect(response.status).to.eq(200);
+        expect(response.body.transactions.length).to.eq(55);
+      });
+    });
   });
 
   context("GET /transactions/contacts", function() {
