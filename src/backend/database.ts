@@ -51,8 +51,7 @@ import {
   getTransferAmount,
   hasSufficientFunds,
   getChargeAmount,
-  getFullNameForUser,
-  isBetweenDates
+  getFullNameForUser
 } from "../utils/transactionUtils";
 
 const USER_TABLE = "users";
