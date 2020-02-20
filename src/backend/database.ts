@@ -465,22 +465,32 @@ export const getAllTransactionsForUserByObj = (
       dateRangeEnd: string;
     } = getDateQueryFields(query);
 
-    const filteredTransactions = filter(
-      (transaction: Transaction) =>
-        isWithinRange(
-          transaction.createdAt,
-          new Date(dateFields.dateRangeStart),
-          new Date(dateFields.dateRangeEnd)
-        ),
+    const filteredTransactions = transactionsWithinDateRange(
+      dateFields.dateRangeStart,
+      dateFields.dateRangeEnd,
       userTransactions
     );
-    console.log("Filtered: ", filteredTransactions);
 
     return filteredTransactions;
   } else {
     return userTransactions;
   }
 };
+
+export const transactionsWithinDateRange = (
+  dateRangeStart: string,
+  dateRangeEnd: string,
+  transactions: Transaction[]
+) =>
+  filter(
+    (transaction: Transaction) =>
+      isWithinRange(
+        transaction.createdAt,
+        new Date(dateRangeStart),
+        new Date(dateRangeEnd)
+      ),
+    transactions
+  );
 
 export const getTransactionsForUserByObj = (userId: string, query?: object) =>
   flow(getAllTransactionsForUserByObj, uniqBy("id"))(userId, query);

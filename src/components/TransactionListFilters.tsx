@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { format } from "date-fns";
 import { makeStyles, Paper, Grid, Button, Popover } from "@material-ui/core";
 import indigo from "@material-ui/core/colors/indigo";
@@ -47,11 +47,6 @@ export type TransactionListFiltersProps = {
 type SelectedDates = {
   start?: string;
   end?: string;
-};
-
-const selectedDatesDefault: SelectedDates = {
-  start: undefined,
-  end: undefined
 };
 
 const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
