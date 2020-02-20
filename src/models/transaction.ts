@@ -46,3 +46,14 @@ export type TransactionUpdateActionPayload = Pick<
   Transaction,
   "id" | "requestStatus"
 >;
+
+type TransactionQueryBase = {
+  dateRangeStart?: string;
+  dateRangeEnd?: string;
+};
+
+export type TransactionQueryPayload = Partial<TransactionQueryBase>;
+
+export type TransactionDateRangePayload = Partial<
+  Pick<TransactionQueryPayload, "dateRangeStart" | "dateRangeEnd">
+>;

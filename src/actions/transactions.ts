@@ -1,4 +1,8 @@
-import { Transaction, TransactionUpdateActionPayload } from "../models";
+import {
+  Transaction,
+  TransactionUpdateActionPayload,
+  TransactionQueryPayload
+} from "../models";
 
 export const TRANSACTIONS_PUBLIC_PENDING = "TRANSACTIONS_PUBLIC_PENDING";
 export const TRANSACTIONS_PUBLIC_SUCCESS = "TRANSACTIONS_PUBLIC_SUCCESS";
@@ -25,9 +29,17 @@ export const TRANSACTION_UPDATE_PENDING = "TRANSACTION_UPDATE_PENDING";
 export const TRANSACTION_UPDATE_SUCCESS = "TRANSACTION_UPDATE_SUCCESS";
 export const TRANSACTION_UPDATE_ERROR = "TRANSACTION_UPDATE_ERROR";
 
-export const transactionsPublicPending = () =>
+export const TRANSACTIONS_CLEAR_FILTERS = "TRANSACTIONS_CLEAR_FILTERS";
+
+export const transactionsClearFilters = () =>
   ({
-    type: TRANSACTIONS_PUBLIC_PENDING
+    type: TRANSACTIONS_CLEAR_FILTERS
+  } as const);
+
+export const transactionsPublicPending = (payload?: TransactionQueryPayload) =>
+  ({
+    type: TRANSACTIONS_PUBLIC_PENDING,
+    payload
   } as const);
 
 export const transactionsPublicSuccess = (payload: any) =>
@@ -43,9 +55,12 @@ export const transactionsPublicError = (payload: any) =>
     error: true
   } as const);
 
-export const transactionsContactsPending = () =>
+export const transactionsContactsPending = (
+  payload?: TransactionQueryPayload
+) =>
   ({
-    type: TRANSACTIONS_CONTACTS_PENDING
+    type: TRANSACTIONS_CONTACTS_PENDING,
+    payload
   } as const);
 
 export const transactionsContactsSuccess = (payload: any) =>
@@ -61,9 +76,12 @@ export const transactionsContactsError = (payload: any) =>
     error: true
   } as const);
 
-export const transactionsPersonalPending = () =>
+export const transactionsPersonalPending = (
+  payload?: TransactionQueryPayload
+) =>
   ({
-    type: TRANSACTIONS_PERSONAL_PENDING
+    type: TRANSACTIONS_PERSONAL_PENDING,
+    payload
   } as const);
 
 export const transactionsPersonalSuccess = (payload: any) =>
@@ -204,6 +222,7 @@ export type TTransactionActions =
   | ReturnType<typeof transactionCreateError>
   | ReturnType<typeof transactionUpdatePending>
   | ReturnType<typeof transactionUpdateSuccess>
-  | ReturnType<typeof transactionUpdateError>;
+  | ReturnType<typeof transactionUpdateError>
+  | ReturnType<typeof transactionsClearFilters>;
 
 export type TransactionActionDataTypes = TTransactionActions["type"];

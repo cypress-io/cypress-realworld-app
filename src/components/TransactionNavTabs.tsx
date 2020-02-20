@@ -31,7 +31,12 @@ export default function TransactionNavTabs() {
   };
 
   return (
-    <Paper className={classes.root}>
+    <Paper
+      className={classes.root}
+      square={true}
+      variant={undefined}
+      elevation={0}
+    >
       <Tabs
         value={value}
         onChange={handleChange}

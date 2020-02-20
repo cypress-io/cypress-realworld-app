@@ -1,14 +1,15 @@
 ///<reference path="types.ts" />
 
 import express from "express";
-import { remove } from "lodash/fp";
+import { remove, isEmpty } from "lodash/fp";
 import {
   getTransactionsForUserContacts,
   createTransaction,
   updateTransactionById,
   getPublicTransactionsDefaultSort,
   getTransactionByIdForApi,
-  getTransactionsForUserForApi
+  getTransactionsForUserForApi,
+  getPublicTransactionsByQuery
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import {
@@ -51,7 +52,6 @@ router.get(
     ...isTransactionQSValidator
   ]),
   (req, res) => {
-    console.log(req.query);
     const transactions = getTransactionsForUserContacts(
       req.user?.id!,
       req.query
@@ -68,9 +68,9 @@ router.get(
   ensureAuthenticated,
   validateMiddleware(isTransactionPublicQSValidator),
   (req, res) => {
-    // TODO: expand order outside of "default"
-    // const { order } = req.query;
-    const transactions = getPublicTransactionsDefaultSort(req.user?.id!);
+    let transactions = !isEmpty(req.query)
+      ? getPublicTransactionsByQuery(req.user?.id!, req.query)
+      : getPublicTransactionsDefaultSort(req.user?.id!);
 
     res.status(200);
     res.json({ transactions });

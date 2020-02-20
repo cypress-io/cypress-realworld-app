@@ -27,7 +27,8 @@ import {
   transactionsPersonalPending,
   TRANSACTION_UPDATE_PENDING,
   TRANSACTION_UPDATE_SUCCESS,
-  TRANSACTION_UPDATE_ERROR
+  TRANSACTION_UPDATE_ERROR,
+  TRANSACTIONS_CLEAR_FILTERS
 } from "../actions/transactions";
 import { history } from "../index";
 import {
@@ -36,6 +37,7 @@ import {
   isNewTransactionPath
 } from "../utils/transactionUtils";
 import { appBootstrapPending } from "../actions/app";
+import { isEmpty } from "lodash/fp";
 
 const transactionsPersonalLogic = createLogic({
   type: TRANSACTIONS_PERSONAL_PENDING,
@@ -46,9 +48,20 @@ const transactionsPersonalLogic = createLogic({
   },
 
   // @ts-ignore
-  process({ httpClient }) {
+  process({ httpClient, action, getState }) {
+    const state = getState();
+
+    // @ts-ignore
+    const { transactions } = state;
+    const { filters } = transactions;
+    // @ts-ignore
+    const { payload } = action;
+
+    console.log("FILTERS: ", filters);
     return httpClient
-      .get(`http://localhost:3001/transactions`)
+      .get(`http://localhost:3001/transactions`, {
+        params: !isEmpty(filters) ? filters : payload
+      })
       .then((resp: any) => resp.data.transactions);
   }
 });
@@ -62,9 +75,23 @@ const transactionsPublicLogic = createLogic({
   },
 
   // @ts-ignore
-  process({ httpClient }) {
+  process({ httpClient, action, getState }) {
+    const state = getState();
+
+    // @ts-ignore
+    const { transactions } = state;
+    const { filters } = transactions;
+    // @ts-ignore
+    const { payload } = action;
+
     return httpClient
-      .get(`http://localhost:3001/transactions/public`)
+      .get(
+        `http://localhost:3001/transactions/public`,
+
+        {
+          params: !isEmpty(filters) ? filters : payload
+        }
+      )
       .then((resp: any) => resp.data.transactions);
   }
 });
@@ -78,9 +105,19 @@ const transactionsContactsLogic = createLogic({
   },
 
   // @ts-ignore
-  process({ httpClient }) {
+  process({ httpClient, action, getState }) {
+    const state = getState();
+
+    // @ts-ignore
+    const { transactions } = state;
+    const { filters } = transactions;
+    // @ts-ignore
+    const { payload } = action;
+
     return httpClient
-      .get(`http://localhost:3001/transactions/contacts`)
+      .get(`http://localhost:3001/transactions/contacts`, {
+        params: !isEmpty(filters) ? filters : payload
+      })
       .then((resp: any) => resp.data.transactions);
   }
 });
@@ -170,7 +207,8 @@ const transactionsRefreshLogic = createLogic({
     TRANSACTION_CREATE_SUCCESS,
     TRANSACTION_UPDATE_SUCCESS,
     TRANSACTIONS_LIKE_SUCCESS,
-    TRANSACTIONS_COMMENT_SUCCESS
+    TRANSACTIONS_COMMENT_SUCCESS,
+    TRANSACTIONS_CLEAR_FILTERS
   ],
 
   // @ts-ignore

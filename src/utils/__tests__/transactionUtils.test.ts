@@ -14,7 +14,8 @@ import {
 import shortid from "shortid";
 
 const fakeTransaction = (
-  requestStatus?: TransactionRequestStatus
+  requestStatus?: TransactionRequestStatus,
+  createdAt?: Date
 ): Transaction => ({
   id: shortid(),
   uuid: faker.random.uuid(),
@@ -29,7 +30,7 @@ const fakeTransaction = (
   requestStatus,
   requestResolvedAt: faker.date.future(),
   createdAt: faker.date.past(),
-  modifiedAt: faker.date.recent()
+  modifiedAt: createdAt || faker.date.recent()
 });
 
 describe("isRequestTransaction", () => {

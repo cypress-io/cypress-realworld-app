@@ -12,8 +12,13 @@ import {
   flatMap,
   curry,
   get,
-  constant
+  constant,
+  has,
+  pick,
+  omit,
+  filter
 } from "lodash/fp";
+import { isWithinRange } from "date-fns";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 import shortid from "shortid";
@@ -38,7 +43,9 @@ import {
   BankTransfer,
   BankTransferPayload,
   BankTransferType,
-  NotificationResponseItem
+  NotificationResponseItem,
+  TransactionQueryPayload,
+  TransactionDateRangePayload
 } from "../models";
 import Fuse from "fuse.js";
 import {
@@ -424,20 +431,66 @@ export const formatTransactionsForApiResponse = (
     )
   );
 
+export const hasDateQueryFields = (query: TransactionQueryPayload) =>
+  has("dateRangeStart", query) && has("dateRangeEnd", query);
+
+export const getDateQueryFields = (query: TransactionDateRangePayload) =>
+  pick(["dateRangeStart", "dateRangeEnd"], query);
+
+export const omitDateQueryFields = (query: TransactionQueryPayload) =>
+  omit(["dateRangeStart", "dateRangeEnd"], query);
+
+export const getQueryWithoutDateFields = (query: TransactionQueryPayload) =>
+  query && hasDateQueryFields(query) ? omitDateQueryFields(query) : undefined;
+
 export const getAllTransactionsForUserByObj = (
   userId: string,
   query?: object
-) =>
-  flatMap(getTransactionsByObj)([
+) => {
+  console.log("QUERY: ", query);
+  const queryWithoutDateFields = query && getQueryWithoutDateFields(query);
+
+  const queryFields = queryWithoutDateFields || query;
+  const userTransactions = flatMap(getTransactionsByObj)([
     {
       receiverId: userId,
-      ...query
+      ...queryFields
     },
     {
       senderId: userId,
-      ...query
+      ...queryFields
     }
   ]);
+
+  if (query && hasDateQueryFields(query)) {
+    const { dateRangeStart, dateRangeEnd } = getDateQueryFields(query);
+
+    const filteredTransactions = transactionsWithinDateRange(
+      dateRangeStart!,
+      dateRangeEnd!,
+      userTransactions
+    );
+
+    return filteredTransactions;
+  } else {
+    return userTransactions;
+  }
+};
+
+export const transactionsWithinDateRange = (
+  dateRangeStart: string,
+  dateRangeEnd: string,
+  transactions: Transaction[]
+) =>
+  filter(
+    (transaction: Transaction) =>
+      isWithinRange(
+        transaction.createdAt,
+        new Date(dateRangeStart),
+        new Date(dateRangeEnd)
+      ),
+    transactions
+  );
 
 export const getTransactionsForUserByObj = (userId: string, query?: object) =>
   flow(getAllTransactionsForUserByObj, uniqBy("id"))(userId, query);
@@ -493,6 +546,29 @@ export const getPublicTransactionsDefaultSort = (userId: string) => ({
   contacts: getTransactionsForUserContacts(userId),
   public: getNonContactPublicTransactionsForApi(userId)
 });
+
+export const getPublicTransactionsByQuery = (
+  userId: string,
+  query: TransactionQueryPayload
+) => {
+  if (query && hasDateQueryFields(query)) {
+    const { dateRangeStart, dateRangeEnd } = getDateQueryFields(query);
+
+    return {
+      contacts: getTransactionsForUserContacts(userId, query),
+      public: transactionsWithinDateRange(
+        dateRangeStart!,
+        dateRangeEnd!,
+        getNonContactPublicTransactionsForApi(userId)
+      )
+    };
+  } else {
+    return {
+      contacts: getTransactionsForUserContacts(userId),
+      public: getNonContactPublicTransactionsForApi(userId)
+    };
+  }
+};
 
 export const resetPayAppBalance = constant(0);
 
