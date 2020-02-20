@@ -4,7 +4,7 @@ import { makeStyles, Paper, Grid, Button, Popover } from "@material-ui/core";
 import indigo from "@material-ui/core/colors/indigo";
 import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
 import "react-infinite-calendar/styles.css";
-import { TransactionQueryPayload } from "../models";
+import { TransactionDateRangePayload } from "../models";
 
 const CalendarWithRange = withRange(Calendar);
 
@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
 
 export type TransactionListFiltersProps = {
   filterTransactions: Function;
-  transactionFilters: TransactionQueryPayload;
+  transactionFilters: TransactionDateRangePayload;
   clearTransactionFilters: Function;
 };
 
@@ -54,7 +54,6 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
   transactionFilters,
   clearTransactionFilters
 }) => {
-  const { dateRangeStart, dateRangeEnd } = transactionFilters;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -104,9 +103,11 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
           >
             <span className={classes.dateRangeLabel}>Date Range:</span>
             <b>
-              {dateRangeStart && dateRangeEnd
-                ? `${formatButtonDate(dateRangeStart)} -
-              ${formatButtonDate(dateRangeEnd)}`
+              {transactionFilters &&
+              transactionFilters.dateRangeStart &&
+              transactionFilters.dateRangeEnd
+                ? `${formatButtonDate(transactionFilters.dateRangeStart)} -
+              ${formatButtonDate(transactionFilters.dateRangeEnd)}`
                 : "ALL"}
             </b>
           </Button>
@@ -149,18 +150,20 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
           </Popover>
         </Grid>
         <Grid item>
-          {dateRangeStart && dateRangeEnd && (
-            <Button
-              data-test="transaction-filters-clear-filters-button"
-              variant="contained"
-              className={classes.clearFiltersButton}
-              onClick={() => {
-                clearTransactionFilters();
-              }}
-            >
-              Clear Filters
-            </Button>
-          )}
+          {transactionFilters &&
+            transactionFilters.dateRangeStart &&
+            transactionFilters.dateRangeEnd && (
+              <Button
+                data-test="transaction-filters-clear-filters-button"
+                variant="contained"
+                className={classes.clearFiltersButton}
+                onClick={() => {
+                  clearTransactionFilters();
+                }}
+              >
+                Clear Filters
+              </Button>
+            )}
         </Grid>
       </Grid>
     </Paper>
