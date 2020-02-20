@@ -43,7 +43,9 @@ import {
   BankTransfer,
   BankTransferPayload,
   BankTransferType,
-  NotificationResponseItem
+  NotificationResponseItem,
+  TransactionQueryPayload,
+  TransactionDateRangePayload
 } from "../models";
 import Fuse from "fuse.js";
 import {
@@ -429,13 +431,13 @@ export const formatTransactionsForApiResponse = (
     )
   );
 
-export const hasDateQueryFields = (query: object) =>
+export const hasDateQueryFields = (query: TransactionQueryPayload) =>
   has("dateRangeStart", query) && has("dateRangeEnd", query);
 
-export const getDateQueryFields = (query: object) =>
+export const getDateQueryFields = (query: TransactionDateRangePayload) =>
   pick(["dateRangeStart", "dateRangeEnd"], query);
 
-export const omitDateQueryFields = (query: object) =>
+export const omitDateQueryFields = (query: TransactionQueryPayload) =>
   omit(["dateRangeStart", "dateRangeEnd"], query);
 
 export const getAllTransactionsForUserByObj = (
@@ -459,15 +461,11 @@ export const getAllTransactionsForUserByObj = (
   ]);
 
   if (query && hasDateQueryFields(query)) {
-    // @ts-ignore
-    const dateFields: {
-      dateRangeStart: string;
-      dateRangeEnd: string;
-    } = getDateQueryFields(query);
+    const { dateRangeStart, dateRangeEnd } = getDateQueryFields(query);
 
     const filteredTransactions = transactionsWithinDateRange(
-      dateFields.dateRangeStart,
-      dateFields.dateRangeEnd,
+      dateRangeStart!,
+      dateRangeEnd!,
       userTransactions
     );
 
