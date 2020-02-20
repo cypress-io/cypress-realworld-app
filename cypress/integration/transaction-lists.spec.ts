@@ -68,7 +68,7 @@ describe("Transaction Lists", function() {
     // Set clock to date and time for when tests are run on CI
     cy.clock(
       new Date(
-        "Thu Feb 20 2020 11:49:33 GMT-0600 (Central Standard Time)"
+        "Thu Feb 20 2020 00:00:00 GMT-0600 (Central Standard Time)"
       ).valueOf(),
       ["Date"]
     );
@@ -99,10 +99,10 @@ describe("Transaction Lists", function() {
 
     cy.getTest("transaction-list")
       .children()
-      // TODO: Fix flaky test on CI for exact length
-      // (differs when run local vs on CI) (4 vs 5)
-      //.should("have.length", 4)
-      .should("have.length.greaterThan", 3)
-      .should("have.length.lessThan", 6);
+      .should("have.length", 4);
+    // TODO: Fix flaky test on CI for exact length
+    // (differs when run local vs on CI) (4 vs 5)
+    //.should("have.length.greaterThan", 3)
+    //.should("have.length.lessThan", 6);
   });
 });
