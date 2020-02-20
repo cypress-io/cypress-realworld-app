@@ -440,13 +440,15 @@ export const getDateQueryFields = (query: TransactionDateRangePayload) =>
 export const omitDateQueryFields = (query: TransactionQueryPayload) =>
   omit(["dateRangeStart", "dateRangeEnd"], query);
 
+export const getQueryWithoutDateFields = (query: TransactionQueryPayload) =>
+  query && hasDateQueryFields(query) ? omitDateQueryFields(query) : undefined;
+
 export const getAllTransactionsForUserByObj = (
   userId: string,
   query?: object
 ) => {
   console.log("QUERY: ", query);
-  const queryWithoutDateFields =
-    query && hasDateQueryFields(query) ? omitDateQueryFields(query) : undefined;
+  const queryWithoutDateFields = query && getQueryWithoutDateFields(query);
 
   const queryFields = queryWithoutDateFields || query;
   const userTransactions = flatMap(getTransactionsByObj)([
@@ -544,6 +546,29 @@ export const getPublicTransactionsDefaultSort = (userId: string) => ({
   contacts: getTransactionsForUserContacts(userId),
   public: getNonContactPublicTransactionsForApi(userId)
 });
+
+export const getPublicTransactionsByQuery = (
+  userId: string,
+  query: TransactionQueryPayload
+) => {
+  if (query && hasDateQueryFields(query)) {
+    const { dateRangeStart, dateRangeEnd } = getDateQueryFields(query);
+
+    return {
+      contacts: getTransactionsForUserContacts(userId, query),
+      public: transactionsWithinDateRange(
+        dateRangeStart!,
+        dateRangeEnd!,
+        getNonContactPublicTransactionsForApi(userId)
+      )
+    };
+  } else {
+    return {
+      contacts: getTransactionsForUserContacts(userId),
+      public: getNonContactPublicTransactionsForApi(userId)
+    };
+  }
+};
 
 export const resetPayAppBalance = constant(0);
 
