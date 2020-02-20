@@ -65,6 +65,13 @@ describe("Transaction Lists", function() {
   });
 
   it("renders personal transaction list, filters by date range", function() {
+    // Set clock to date and time for when tests are run on CI
+    cy.clock(
+      new Date(
+        "Thu Feb 20 2020 11:49:33 GMT-0600 (Central Standard Time)"
+      ).valueOf(),
+      ["Date"]
+    );
     cy.getTest("main").scrollTo("top");
     cy.getTest("nav-personal-tab")
       .click({ force: true })
