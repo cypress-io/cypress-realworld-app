@@ -28,12 +28,20 @@ const useStyles = makeStyles(theme => ({
     "&:hover": {
       backgroundColor: "#EDF2F7"
     }
+  },
+  clearFiltersButton: {
+    backgroundColor: "#F7FAFC",
+    color: theme.palette.primary.main,
+    "&:hover": {
+      backgroundColor: "#EDF2F7"
+    }
   }
 }));
 
 export type TransactionListFiltersProps = {
   filterTransactions: Function;
   transactionFilters: TransactionQueryPayload;
+  clearTransactionFilters: Function;
 };
 
 type SelectedDates = {
@@ -48,7 +56,8 @@ const selectedDatesDefault: SelectedDates = {
 
 const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
   filterTransactions,
-  transactionFilters
+  transactionFilters,
+  clearTransactionFilters
 }) => {
   const { dateRangeStart, dateRangeEnd } = transactionFilters;
   const classes = useStyles();
@@ -86,7 +95,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
       <Grid
         container
         direction="row"
-        justify="flex-start"
+        justify="space-between"
         alignItems="flex-start"
         spacing={1}
       >
@@ -135,7 +144,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
                 weekdayColor: indigo["300"],
                 selectionColor: indigo["300"],
                 floatingNav: {
-                  background: "green",
+                  background: indigo["400"],
                   color: "#FFF",
                   chevron: "#FFA726"
                 }
@@ -143,7 +152,19 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
             />
           </Popover>
         </Grid>
-        <Grid item></Grid>
+        <Grid item>
+          {dateRangeStart && dateRangeEnd && (
+            <Button
+              variant="contained"
+              className={classes.clearFiltersButton}
+              onClick={() => {
+                clearTransactionFilters();
+              }}
+            >
+              Clear Filters
+            </Button>
+          )}
+        </Grid>
       </Grid>
     </Paper>
   );

@@ -11,13 +11,15 @@ import TransactionListFilters from "../components/TransactionListFilters";
 import {
   transactionsPublicPending,
   transactionsPersonalPending,
-  transactionsContactsPending
+  transactionsContactsPending,
+  transactionsClearFilters
 } from "../actions/transactions";
 
 export interface DispatchProps {
   filterPublicTransactions: Function;
   filterPersonalTransactions: Function;
   filterContactTransactions: Function;
+  clearTransactionFilters: Function;
 }
 
 export interface StateProps {
@@ -39,7 +41,8 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   filterPublicTransactions,
   filterPersonalTransactions,
   filterContactTransactions,
-  transactionFilters
+  transactionFilters,
+  clearTransactionFilters
 }) => {
   const match = useRouteMatch();
 
@@ -50,6 +53,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
         <TransactionListFilters
           transactionFilters={transactionFilters}
           filterTransactions={filterContactTransactions}
+          clearTransactionFilters={clearTransactionFilters}
         />
         <br />
         <TransactionList
@@ -67,6 +71,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
         <TransactionListFilters
           transactionFilters={transactionFilters}
           filterTransactions={filterPersonalTransactions}
+          clearTransactionFilters={clearTransactionFilters}
         />
         <br />
         <TransactionList
@@ -84,6 +89,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
       <TransactionListFilters
         transactionFilters={transactionFilters}
         filterTransactions={filterPublicTransactions}
+        clearTransactionFilters={clearTransactionFilters}
       />
       <br />
       <PublicTransactions transactions={publicTransactions} />
@@ -101,7 +107,8 @@ const mapStateToProps = (state: IRootReducerState) => ({
 const mapDispatchToProps = {
   filterPublicTransactions: transactionsPublicPending,
   filterPersonalTransactions: transactionsPersonalPending,
-  filterContactTransactions: transactionsContactsPending
+  filterContactTransactions: transactionsContactsPending,
+  clearTransactionFilters: transactionsClearFilters
 };
 
 export default connect(
