@@ -105,6 +105,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
             variant="contained"
             className={classes.dateRangeButton}
             onClick={handleClick}
+            data-test="transaction-list-filter-date-range-button"
           >
             <span className={classes.dateRangeLabel}>Date Range:</span>
             <b>
@@ -155,6 +156,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
         <Grid item>
           {dateRangeStart && dateRangeEnd && (
             <Button
+              data-test="transaction-filters-clear-filters-button"
               variant="contained"
               className={classes.clearFiltersButton}
               onClick={() => {

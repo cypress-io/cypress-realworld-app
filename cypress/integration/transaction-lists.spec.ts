@@ -61,4 +61,33 @@ describe("Transaction Lists", function() {
       .children()
       .should("have.length", 9);
   });
+
+  it("renders personal transaction list, filters by date range", function() {
+    cy.getTest("main").scrollTo("top");
+    cy.getTest("nav-personal-tab")
+      .click({ force: true })
+      .should("have.class", "Mui-selected");
+
+    // TODO: Another example of scrollIntoView not working; resort to force clicks
+    cy.getTest("transaction-list-filter-date-range-button")
+      .scrollIntoView()
+      .click({ force: true });
+
+    // Idea?
+    //cy.get("[data-date='2019-11-17']").scrollIntoView();
+
+    cy.get("[data-date='2019-12-01']").click({ force: true });
+    cy.get("[data-date='2019-12-05']").click({ force: true });
+
+    /*
+    cy.getTest("main").scrollTo("top"); // TODO: does not work to scroll button into view either
+    cy.getTest("transaction-list-filter-date-range-button")
+      .scrollIntoView() // TODO: Does not work
+      .should("contain", "2019-12-01")
+      .should("contain", "2019-12-05");*/
+
+    cy.getTest("transaction-list")
+      .children()
+      .should("have.length", 4);
+  });
 });
