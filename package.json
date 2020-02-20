@@ -71,7 +71,7 @@
   },
   "devDependencies": {
     "cypress": "4.0.2",
-    "eslint-plugin-cypress": "2.10.1",
+    "eslint-plugin-cypress": "2.10.3",
     "start-server-and-test": "1.10.8"
   },
   "scripts": {
