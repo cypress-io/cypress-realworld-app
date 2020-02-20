@@ -65,13 +65,6 @@ describe("Transaction Lists", function() {
   });
 
   it("renders personal transaction list, filters by date range", function() {
-    // Set clock to date and time for when tests are run on CI
-    cy.clock(
-      new Date(
-        "Thu Feb 20 2020 00:00:00 GMT-0600 (Central Standard Time)"
-      ).valueOf(),
-      ["Date"]
-    );
     cy.getTest("main").scrollTo("top");
     cy.getTest("nav-personal-tab")
       .click({ force: true })
@@ -86,23 +79,19 @@ describe("Transaction Lists", function() {
     //cy.get("[data-date='2019-11-17']").scrollIntoView();
 
     cy.get("[data-date='2019-12-01']").click({ force: true });
-    cy.get("[data-date='2019-12-05']").click({ force: true });
+    cy.get("[data-date='2019-12-03']").click({ force: true });
 
     /*
     cy.getTest("main").scrollTo("top"); // TODO: does not work to scroll button into view either
     cy.getTest("transaction-list-filter-date-range-button")
       .scrollIntoView() // TODO: Does not work
       .should("contain", "2019-12-01")
-      .should("contain", "2019-12-05");*/
+      .should("contain", "2019-12-03");*/
 
     cy.wait("@personalTransactions");
 
     cy.getTest("transaction-list")
       .children()
-      // TODO: Fix flaky test on CI for exact length
-      // (differs when run local vs on CI) (4 vs 5)
-      //.should("have.length", 4);
-      .should("have.length.greaterThan", 3)
-      .should("have.length.lessThan", 6);
+      .should("have.length", 3);
   });
 });

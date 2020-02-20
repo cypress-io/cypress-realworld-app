@@ -485,7 +485,7 @@ export const transactionsWithinDateRange = (
   filter(
     (transaction: Transaction) =>
       isWithinRange(
-        transaction.createdAt,
+        new Date(transaction.createdAt),
         new Date(dateRangeStart),
         new Date(dateRangeEnd)
       ),

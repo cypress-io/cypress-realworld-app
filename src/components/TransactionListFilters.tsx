@@ -1,5 +1,5 @@
 import React from "react";
-import { format } from "date-fns";
+import { format as formatDate } from "date-fns";
 import { makeStyles, Paper, Grid, Button, Popover } from "@material-ui/core";
 import indigo from "@material-ui/core/colors/indigo";
 import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
@@ -62,8 +62,8 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
   const onCalendarSelect = (e: { eventType: number; start: any; end: any }) => {
     if (e.eventType === 3) {
       filterTransactions({
-        dateRangeStart: e.start.toString(),
-        dateRangeEnd: e.end.toString()
+        dateRangeStart: new Date(e.start.setUTCHours(0, 0, 0, 0)).toISOString(),
+        dateRangeEnd: new Date(e.end.setUTCHours(23, 59, 59, 999)).toISOString()
       });
       setAnchorEl(null);
     }
@@ -81,7 +81,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
   const id = open ? "simple-popover" : undefined;
 
   const formatButtonDate = (date: string) => {
-    return format(new Date(date), "MMM, D YYYY");
+    return formatDate(new Date(date), "MMM, D YYYY");
   };
 
   return (
