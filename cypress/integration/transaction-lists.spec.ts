@@ -102,7 +102,7 @@ describe("Transaction Lists", function() {
       // TODO: Fix flaky test on CI for exact length
       // (differs when run local vs on CI) (4 vs 5)
       //.should("have.length", 4)
-      .should("have.length.greaterThan", 4)
+      .should("have.length.greaterThan", 3)
       .should("have.length.lessThan", 6);
   });
 });
