@@ -13,7 +13,7 @@ describe("Transaction Lists", function() {
     // TODO: Highlight this use case
     Cypress.Cookies.preserveOnce("connect.sid");
     cy.server();
-    cy.route("GET", "/transactions").as("personalTransactions");
+    cy.route("GET", "/transactions*").as("personalTransactions");
   });
   after(function() {
     cy.task("db:seed");
