@@ -29,6 +29,13 @@ export const TRANSACTION_UPDATE_PENDING = "TRANSACTION_UPDATE_PENDING";
 export const TRANSACTION_UPDATE_SUCCESS = "TRANSACTION_UPDATE_SUCCESS";
 export const TRANSACTION_UPDATE_ERROR = "TRANSACTION_UPDATE_ERROR";
 
+export const TRANSACTIONS_CLEAR_FILTERS = "TRANSACTIONS_CLEAR_FILTERS";
+
+export const transactionsClearFilters = () =>
+  ({
+    type: TRANSACTIONS_CLEAR_FILTERS
+  } as const);
+
 export const transactionsPublicPending = (payload?: TransactionQueryPayload) =>
   ({
     type: TRANSACTIONS_PUBLIC_PENDING,
@@ -215,6 +222,7 @@ export type TTransactionActions =
   | ReturnType<typeof transactionCreateError>
   | ReturnType<typeof transactionUpdatePending>
   | ReturnType<typeof transactionUpdateSuccess>
-  | ReturnType<typeof transactionUpdateError>;
+  | ReturnType<typeof transactionUpdateError>
+  | ReturnType<typeof transactionsClearFilters>;
 
 export type TransactionActionDataTypes = TTransactionActions["type"];

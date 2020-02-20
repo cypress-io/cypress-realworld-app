@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { makeStyles, Paper, Grid, Button, Popover } from "@material-ui/core";
 import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
 import "react-infinite-calendar/styles.css";
+import { TransactionQueryPayload } from "../models";
 
 const CalendarWithRange = withRange(Calendar);
 
@@ -31,6 +32,7 @@ const useStyles = makeStyles(theme => ({
 
 export type TransactionListFiltersProps = {
   filterTransactions: Function;
+  transactionFilters: TransactionQueryPayload;
 };
 
 type SelectedDates = {
@@ -44,17 +46,17 @@ const selectedDatesDefault: SelectedDates = {
 };
 
 const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
-  filterTransactions
+  filterTransactions,
+  transactionFilters
 }) => {
+  const { dateRangeStart, dateRangeEnd } = transactionFilters;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
-  const [selectedDates, setSelectedDates] = useState(selectedDatesDefault);
 
   const onCalendarSelect = (e: { eventType: number; start: any; end: any }) => {
     if (e.eventType === 3) {
-      setSelectedDates({ start: e.start, end: e.end });
       filterTransactions({
         dateRangeStart: e.start.toString(),
         dateRangeEnd: e.end.toString()
@@ -96,9 +98,9 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
           >
             <span className={classes.dateRangeLabel}>Date Range:</span>
             <b>
-              {selectedDates.start && selectedDates.end
-                ? `${formatButtonDate(selectedDates.start)} -
-              ${formatButtonDate(selectedDates.end)}`
+              {dateRangeStart && dateRangeEnd
+                ? `${formatButtonDate(dateRangeStart)} -
+              ${formatButtonDate(dateRangeEnd)}`
                 : "ALL"}
             </b>
           </Button>

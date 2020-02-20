@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import MainContainer from "./MainContainer";
 import { IRootReducerState } from "../reducers";
-import { TransactionResponseItem } from "../models";
+import { TransactionResponseItem, TransactionQueryPayload } from "../models";
 import { useRouteMatch } from "react-router";
 import PublicTransactions from "../components/PublicTransactions";
 import TransactionList from "../components/TransactionList";
@@ -27,6 +27,7 @@ export interface StateProps {
   };
   contactsTransactions: TransactionResponseItem[];
   personalTransactions: TransactionResponseItem[];
+  transactionFilters: TransactionQueryPayload;
 }
 
 export type TransactionsContainerProps = StateProps & DispatchProps;
@@ -37,7 +38,8 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   personalTransactions,
   filterPublicTransactions,
   filterPersonalTransactions,
-  filterContactTransactions
+  filterContactTransactions,
+  transactionFilters
 }) => {
   const match = useRouteMatch();
 
@@ -46,6 +48,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
       <MainContainer>
         <TransactionNavTabs />
         <TransactionListFilters
+          transactionFilters={transactionFilters}
           filterTransactions={filterContactTransactions}
         />
         <br />
@@ -62,6 +65,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
       <MainContainer>
         <TransactionNavTabs />
         <TransactionListFilters
+          transactionFilters={transactionFilters}
           filterTransactions={filterPersonalTransactions}
         />
         <br />
@@ -77,7 +81,10 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   return (
     <MainContainer>
       <TransactionNavTabs />
-      <TransactionListFilters filterTransactions={filterPublicTransactions} />
+      <TransactionListFilters
+        transactionFilters={transactionFilters}
+        filterTransactions={filterPublicTransactions}
+      />
       <br />
       <PublicTransactions transactions={publicTransactions} />
     </MainContainer>
@@ -87,7 +94,8 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
 const mapStateToProps = (state: IRootReducerState) => ({
   publicTransactions: state.transactions.public,
   contactsTransactions: state.transactions.contacts,
-  personalTransactions: state.transactions.personal
+  personalTransactions: state.transactions.personal,
+  transactionFilters: state.transactions.filters
 });
 
 const mapDispatchToProps = {
