@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { format } from "date-fns";
 import { makeStyles, Paper, Grid, Button, Popover } from "@material-ui/core";
+import indigo from "@material-ui/core/colors/indigo";
 import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
 import "react-infinite-calendar/styles.css";
 import { TransactionQueryPayload } from "../models";
@@ -119,13 +120,25 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
             }}
           >
             <InfiniteCalendar
-              width={400}
+              width={window.innerWidth <= 350 ? window.innerWidth : 350}
               height={300}
+              rowHeight={50}
               Component={CalendarWithRange}
               selected={false}
               onSelect={onCalendarSelect}
               locale={{
                 headerFormat: "MMM Do"
+              }}
+              theme={{
+                accentColor: indigo["400"],
+                headerColor: indigo["500"],
+                weekdayColor: indigo["300"],
+                selectionColor: indigo["300"],
+                floatingNav: {
+                  background: "green",
+                  color: "#FFF",
+                  chevron: "#FFA726"
+                }
               }}
             />
           </Popover>
