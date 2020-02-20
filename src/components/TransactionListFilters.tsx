@@ -1,14 +1,26 @@
 import React from "react";
 import { format as formatDate } from "date-fns";
-import { makeStyles, Paper, Grid, Button, Popover } from "@material-ui/core";
+import {
+  makeStyles,
+  Paper,
+  Grid,
+  Button,
+  Popover,
+  Typography,
+  Slider
+} from "@material-ui/core";
 import indigo from "@material-ui/core/colors/indigo";
 import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
 import "react-infinite-calendar/styles.css";
 import { TransactionDateRangePayload } from "../models";
+import { formatAmount } from "../utils/transactionUtils";
 
 const CalendarWithRange = withRange(Calendar);
 
 const useStyles = makeStyles(theme => ({
+  amountRangeRoot: {
+    width: 200
+  },
   paper: {
     padding: theme.spacing(2),
     display: "flex",
@@ -55,6 +67,10 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
   clearTransactionFilters
 }) => {
   const classes = useStyles();
+  const [amountRangeValue, setAmountRangeValue] = React.useState<number[]>([
+    0,
+    1000
+  ]);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
@@ -77,6 +93,13 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
     setAnchorEl(null);
   };
 
+  function amountRangeValueText(value: number) {
+    return formatAmount(value);
+  }
+
+  const handleAmountRangeChange = (event: any, newValue: number | number[]) => {
+    setAmountRangeValue(newValue as number[]);
+  };
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
@@ -149,6 +172,21 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
             />
           </Popover>
         </Grid>
+        <Grid item>
+          <div className={classes.amountRangeRoot}>
+            <Typography id="range-slider" gutterBottom>
+              Amount Range
+            </Typography>
+            <Slider
+              value={amountRangeValue}
+              onChange={handleAmountRangeChange}
+              valueLabelDisplay="auto"
+              aria-labelledby="range-slider"
+              getAriaValueText={amountRangeValueText}
+            />
+          </div>
+        </Grid>
+
         <Grid item>
           {transactionFilters &&
             transactionFilters.dateRangeStart &&
