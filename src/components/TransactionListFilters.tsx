@@ -11,6 +11,7 @@ import {
   Chip
 } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import CancelIcon from "@material-ui/icons/Cancel";
 import indigo from "@material-ui/core/colors/indigo";
 import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
 import "react-infinite-calendar/styles.css";
@@ -152,8 +153,10 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
               color="primary"
               variant="outlined"
               onClick={handleDateRangeClick}
-              data-test="transaction-list-filter-date-range-button"
               label={`${dateRangeLabel(transactionFilters)}`}
+              deleteIcon={
+                <CancelIcon data-test="transaction-list-filter-date-clear-button" />
+              }
               onDelete={() => {
                 clearTransactionFilters({ filterType: "date" });
               }}

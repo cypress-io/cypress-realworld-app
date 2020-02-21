@@ -64,7 +64,7 @@ describe("Transaction Lists", function() {
       .should("have.length", 9);
   });
 
-  it("renders personal transaction list, filters by date range", function() {
+  it("renders personal transaction list, filters by date range, then clears the date range filter", function() {
     cy.getTest("main").scrollTo("top");
     cy.getTest("nav-personal-tab")
       .click({ force: true })
@@ -93,5 +93,13 @@ describe("Transaction Lists", function() {
     cy.getTest("transaction-list")
       .children()
       .should("have.length", 3);
+
+    cy.getTest("transaction-list-filter-date-clear-button")
+      .scrollIntoView()
+      .click({ force: true });
+
+    cy.getTest("transaction-list")
+      .children()
+      .should("have.length.greaterThan", 3);
   });
 });
