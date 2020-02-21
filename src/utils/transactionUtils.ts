@@ -22,7 +22,8 @@ import {
   values,
   has,
   find,
-  omit
+  omit,
+  map
 } from "lodash/fp";
 import { getUserById } from "../backend/database";
 
@@ -52,6 +53,9 @@ export const isPayment = negate(isRequestTransaction);
 export const getFakeAmount = () => parseInt(faker.finance.amount(), 10);
 
 export const formatAmount = (amount: number) => Dinero({ amount }).toFormat();
+
+export const formatAmountSlider = (amount: number) =>
+  Dinero({ amount }).toFormat("$0");
 
 export const payAppDifference = curry(
   (sender: User, transaction: Transaction) =>
@@ -148,3 +152,18 @@ export const omitDateQueryFields = (query: TransactionQueryPayload) =>
 
 export const getQueryWithoutDateFields = (query: TransactionQueryPayload) =>
   query && hasDateQueryFields(query) ? omitDateQueryFields(query) : undefined;
+
+export const padAmountWithZeros = (number: number) => Math.ceil(number * 1000);
+
+export const amountRangeValueText = (value: number) =>
+  flow(padAmountWithZeros, formatAmount)(value);
+
+export const amountRangeValueTextLabel = (value: number) =>
+  flow(padAmountWithZeros, formatAmountSlider)(value);
+
+export const formatAmountRangeValues = (amountRangeValues: number[]) =>
+  flow(
+    map(padAmountWithZeros),
+    map(formatAmountSlider),
+    join(" - ")
+  )(amountRangeValues);

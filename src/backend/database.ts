@@ -13,9 +13,6 @@ import {
   curry,
   get,
   constant,
-  has,
-  pick,
-  omit,
   filter
 } from "lodash/fp";
 import { isWithinRange } from "date-fns";
@@ -44,8 +41,7 @@ import {
   BankTransferPayload,
   BankTransferType,
   NotificationResponseItem,
-  TransactionQueryPayload,
-  TransactionDateRangePayload
+  TransactionQueryPayload
 } from "../models";
 import Fuse from "fuse.js";
 import {

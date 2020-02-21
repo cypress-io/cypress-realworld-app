@@ -17,9 +17,11 @@ import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
 import "react-infinite-calendar/styles.css";
 import { TransactionDateRangePayload } from "../models";
 import {
-  formatAmount,
   hasDateQueryFields,
-  getDateQueryFields
+  getDateQueryFields,
+  formatAmountRangeValues,
+  amountRangeValueText,
+  amountRangeValueTextLabel
 } from "../utils/transactionUtils";
 
 const CalendarWithRange = withRange(Calendar);
@@ -106,12 +108,11 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
     setAmountRangeAnchorEl(null);
   };
 
-  function amountRangeValueText(value: number) {
-    return formatAmount(value);
-  }
-
-  const handleAmountRangeChange = (event: any, newValue: number | number[]) => {
-    setAmountRangeValue(newValue as number[]);
+  const handleAmountRangeChange = (
+    _event: any,
+    amountRange: number | number[]
+  ) => {
+    setAmountRangeValue(amountRange as number[]);
   };
 
   const dateRangeOpen = Boolean(dateRangeAnchorEl);
@@ -252,7 +253,9 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
                   className={classes.amountRangeTitleRow}
                 >
                   <Grid item className={classes.amountRangeTitle}>
-                    <Typography color="textSecondary">Amount Range</Typography>
+                    <Typography color="textSecondary">
+                      Amount Range: {formatAmountRangeValues(amountRangeValue)}
+                    </Typography>
                   </Grid>
                   <Grid item>
                     <Button>Clear</Button>
@@ -267,6 +270,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
                   valueLabelDisplay="auto"
                   aria-labelledby="range-slider"
                   getAriaValueText={amountRangeValueText}
+                  valueLabelFormat={amountRangeValueTextLabel}
                 />
               </Grid>
             </Grid>
