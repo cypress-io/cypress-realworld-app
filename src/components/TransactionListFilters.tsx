@@ -4,11 +4,11 @@ import {
   makeStyles,
   Paper,
   Grid,
-  Button,
   Popover,
   Typography,
   Slider,
-  Chip
+  Chip,
+  Button
 } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -26,6 +26,16 @@ const CalendarWithRange = withRange(Calendar);
 
 const useStyles = makeStyles(theme => ({
   amountRangeRoot: {
+    width: 300,
+    margin: 30
+  },
+  amountRangeTitleRow: {
+    width: "100%"
+  },
+  amountRangeTitle: {
+    width: 225
+  },
+  amountRangeSlider: {
     width: 200
   },
   paper: {
@@ -37,23 +47,6 @@ const useStyles = makeStyles(theme => ({
   calendar: {
     width: theme.spacing(2),
     height: theme.spacing(4)
-  },
-  dateRangeLabel: {
-    marginRight: theme.spacing(2)
-  },
-  dateRangeButton: {
-    backgroundColor: "#F7FAFC",
-    color: theme.palette.primary.main,
-    "&:hover": {
-      backgroundColor: "#EDF2F7"
-    }
-  },
-  clearFiltersButton: {
-    backgroundColor: "#F7FAFC",
-    color: theme.palette.primary.main,
-    "&:hover": {
-      backgroundColor: "#EDF2F7"
-    }
   }
 }));
 
@@ -78,7 +71,14 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
     0,
     1000
   ]);
-  const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
+  const [
+    dateRangeAnchorEl,
+    setDateRangeAnchorEl
+  ] = React.useState<HTMLDivElement | null>(null);
+  const [
+    amountRangeAnchorEl,
+    setAmountRangeAnchorEl
+  ] = React.useState<HTMLDivElement | null>(null);
 
   const onCalendarSelect = (e: { eventType: number; start: any; end: any }) => {
     if (e.eventType === 3) {
@@ -86,16 +86,24 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
         dateRangeStart: new Date(e.start.setUTCHours(0, 0, 0, 0)).toISOString(),
         dateRangeEnd: new Date(e.end.setUTCHours(23, 59, 59, 999)).toISOString()
       });
-      setAnchorEl(null);
+      setDateRangeAnchorEl(null);
     }
   };
 
   const handleDateRangeClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    setAnchorEl(event.currentTarget);
+    setDateRangeAnchorEl(event.currentTarget);
   };
 
   const handleDateRangeClose = () => {
-    setAnchorEl(null);
+    setDateRangeAnchorEl(null);
+  };
+
+  const handleAmountRangeClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    setAmountRangeAnchorEl(event.currentTarget);
+  };
+
+  const handleAmountRangeClose = () => {
+    setAmountRangeAnchorEl(null);
   };
 
   function amountRangeValueText(value: number) {
@@ -105,8 +113,11 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
   const handleAmountRangeChange = (event: any, newValue: number | number[]) => {
     setAmountRangeValue(newValue as number[]);
   };
-  const dateRangeOpen = Boolean(anchorEl);
-  const dateRangeId = dateRangeOpen ? "simple-popover" : undefined;
+
+  const dateRangeOpen = Boolean(dateRangeAnchorEl);
+  const dateRangeId = dateRangeOpen ? "date-range-popover" : undefined;
+  const amountRangeOpen = Boolean(amountRangeAnchorEl);
+  const amountRangeId = amountRangeOpen ? "amount-range-popover" : undefined;
 
   const formatButtonDate = (date: string) => {
     return formatDate(new Date(date), "MMM, D YYYY");
@@ -132,7 +143,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
       <Grid
         container
         direction="row"
-        justify="space-between"
+        justify="flex-start"
         alignItems="flex-start"
         spacing={1}
       >
@@ -153,7 +164,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
               color="primary"
               variant="outlined"
               onClick={handleDateRangeClick}
-              label={`${dateRangeLabel(transactionFilters)}`}
+              label={`Date Range: ${dateRangeLabel(transactionFilters)}`}
               deleteIcon={
                 <CancelIcon data-test="transaction-list-filter-date-clear-button" />
               }
@@ -165,7 +176,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
           <Popover
             id={dateRangeId}
             open={dateRangeOpen}
-            anchorEl={anchorEl}
+            anchorEl={dateRangeAnchorEl}
             onClose={handleDateRangeClose}
             anchorOrigin={{
               vertical: "bottom",
@@ -201,18 +212,65 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
           </Popover>
         </Grid>
         <Grid item>
-          <div className={classes.amountRangeRoot}>
-            <Typography id="range-slider" gutterBottom>
-              Amount Range
-            </Typography>
-            <Slider
-              value={amountRangeValue}
-              onChange={handleAmountRangeChange}
-              valueLabelDisplay="auto"
-              aria-labelledby="range-slider"
-              getAriaValueText={amountRangeValueText}
-            />
-          </div>
+          <Chip
+            color="primary"
+            variant="outlined"
+            onClick={handleAmountRangeClick}
+            data-test="transaction-list-filter-amount-range-button"
+            label={"Amount Range: ALL"}
+            deleteIcon={<ArrowDropDownIcon />}
+            onDelete={handleAmountRangeClick}
+          />
+          <Popover
+            id={amountRangeId}
+            open={amountRangeOpen}
+            anchorEl={amountRangeAnchorEl}
+            onClose={handleAmountRangeClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left"
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "left"
+            }}
+          >
+            <Grid
+              container
+              direction="column"
+              justify="flex-start"
+              alignItems="flex-start"
+              spacing={1}
+              className={classes.amountRangeRoot}
+            >
+              <Grid item>
+                <Grid
+                  container
+                  direction="row"
+                  justify="space-between"
+                  alignItems="center"
+                  className={classes.amountRangeTitleRow}
+                >
+                  <Grid item className={classes.amountRangeTitle}>
+                    <Typography color="textSecondary">Amount Range</Typography>
+                  </Grid>
+                  <Grid item>
+                    <Button>Clear</Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item>
+                <Slider
+                  className={classes.amountRangeSlider}
+                  value={amountRangeValue}
+                  onChange={handleAmountRangeChange}
+                  valueLabelDisplay="auto"
+                  aria-labelledby="range-slider"
+                  getAriaValueText={amountRangeValueText}
+                />
+              </Grid>
+            </Grid>
+          </Popover>
         </Grid>
         <Grid item></Grid>
       </Grid>
