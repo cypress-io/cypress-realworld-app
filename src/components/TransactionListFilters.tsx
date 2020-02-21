@@ -58,11 +58,6 @@ export type TransactionListFiltersProps = {
   clearTransactionFilters: Function;
 };
 
-type SelectedDates = {
-  start?: string;
-  end?: string;
-};
-
 const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
   filterTransactions,
   transactionFilters,
