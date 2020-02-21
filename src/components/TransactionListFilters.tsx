@@ -7,13 +7,19 @@ import {
   Button,
   Popover,
   Typography,
-  Slider
+  Slider,
+  Chip
 } from "@material-ui/core";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import indigo from "@material-ui/core/colors/indigo";
 import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
 import "react-infinite-calendar/styles.css";
 import { TransactionDateRangePayload } from "../models";
-import { formatAmount } from "../utils/transactionUtils";
+import {
+  formatAmount,
+  hasDateQueryFields,
+  getDateQueryFields
+} from "../utils/transactionUtils";
 
 const CalendarWithRange = withRange(Calendar);
 
@@ -71,9 +77,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
     0,
     1000
   ]);
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
-    null
-  );
+  const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
 
   const onCalendarSelect = (e: { eventType: number; start: any; end: any }) => {
     if (e.eventType === 3) {
@@ -85,11 +89,11 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
     }
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleDateRangeClick = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleDateRangeClose = () => {
     setAnchorEl(null);
   };
 
@@ -100,11 +104,26 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
   const handleAmountRangeChange = (event: any, newValue: number | number[]) => {
     setAmountRangeValue(newValue as number[]);
   };
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  const dateRangeOpen = Boolean(anchorEl);
+  const dateRangeId = dateRangeOpen ? "simple-popover" : undefined;
 
   const formatButtonDate = (date: string) => {
     return formatDate(new Date(date), "MMM, D YYYY");
+  };
+
+  const queryHasDateFields =
+    transactionFilters && hasDateQueryFields(transactionFilters);
+
+  const dateRangeLabel = (transactionFilters: TransactionDateRangePayload) => {
+    if (queryHasDateFields) {
+      const { dateRangeStart, dateRangeEnd } = getDateQueryFields(
+        transactionFilters
+      );
+      return `${formatButtonDate(dateRangeStart!)} - ${formatButtonDate(
+        dateRangeEnd!
+      )}`;
+    }
+    return "";
   };
 
   return (
@@ -117,28 +136,34 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
         spacing={1}
       >
         <Grid item>
-          <Button
-            aria-describedby={id}
-            variant="contained"
-            className={classes.dateRangeButton}
-            onClick={handleClick}
-            data-test="transaction-list-filter-date-range-button"
-          >
-            <span className={classes.dateRangeLabel}>Date Range:</span>
-            <b>
-              {transactionFilters &&
-              transactionFilters.dateRangeStart &&
-              transactionFilters.dateRangeEnd
-                ? `${formatButtonDate(transactionFilters.dateRangeStart)} -
-              ${formatButtonDate(transactionFilters.dateRangeEnd)}`
-                : "ALL"}
-            </b>
-          </Button>
+          {!queryHasDateFields && (
+            <Chip
+              color="primary"
+              variant="outlined"
+              onClick={handleDateRangeClick}
+              data-test="transaction-list-filter-date-range-button"
+              label={"Date Range: ALL"}
+              deleteIcon={<ArrowDropDownIcon />}
+              onDelete={handleDateRangeClick}
+            />
+          )}
+          {queryHasDateFields && (
+            <Chip
+              color="primary"
+              variant="outlined"
+              onClick={handleDateRangeClick}
+              data-test="transaction-list-filter-date-range-button"
+              label={`${dateRangeLabel(transactionFilters)}`}
+              onDelete={() => {
+                clearTransactionFilters();
+              }}
+            />
+          )}
           <Popover
-            id={id}
-            open={open}
+            id={dateRangeId}
+            open={dateRangeOpen}
             anchorEl={anchorEl}
-            onClose={handleClose}
+            onClose={handleDateRangeClose}
             anchorOrigin={{
               vertical: "bottom",
               horizontal: "left"
@@ -186,23 +211,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
             />
           </div>
         </Grid>
-
-        <Grid item>
-          {transactionFilters &&
-            transactionFilters.dateRangeStart &&
-            transactionFilters.dateRangeEnd && (
-              <Button
-                data-test="transaction-filters-clear-filters-button"
-                variant="contained"
-                className={classes.clearFiltersButton}
-                onClick={() => {
-                  clearTransactionFilters();
-                }}
-              >
-                Clear Filters
-              </Button>
-            )}
-        </Grid>
+        <Grid item></Grid>
       </Grid>
     </Paper>
   );

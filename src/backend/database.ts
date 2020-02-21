@@ -53,7 +53,10 @@ import {
   getTransferAmount,
   hasSufficientFunds,
   getChargeAmount,
-  getFullNameForUser
+  getFullNameForUser,
+  getQueryWithoutDateFields,
+  hasDateQueryFields,
+  getDateQueryFields
 } from "../utils/transactionUtils";
 
 const USER_TABLE = "users";
@@ -430,18 +433,6 @@ export const formatTransactionsForApiResponse = (
       formatTransactionForApiResponse(transaction)
     )
   );
-
-export const hasDateQueryFields = (query: TransactionQueryPayload) =>
-  has("dateRangeStart", query) && has("dateRangeEnd", query);
-
-export const getDateQueryFields = (query: TransactionDateRangePayload) =>
-  pick(["dateRangeStart", "dateRangeEnd"], query);
-
-export const omitDateQueryFields = (query: TransactionQueryPayload) =>
-  omit(["dateRangeStart", "dateRangeEnd"], query);
-
-export const getQueryWithoutDateFields = (query: TransactionQueryPayload) =>
-  query && hasDateQueryFields(query) ? omitDateQueryFields(query) : undefined;
 
 export const getAllTransactionsForUserByObj = (
   userId: string,

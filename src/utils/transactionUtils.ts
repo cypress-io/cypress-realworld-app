@@ -4,7 +4,9 @@ import {
   TransactionRequestStatus,
   NotificationType,
   PaymentNotificationStatus,
-  TransactionResponseItem
+  TransactionResponseItem,
+  TransactionQueryPayload,
+  TransactionDateRangePayload
 } from "../models";
 import faker from "faker";
 import Dinero from "dinero.js";
@@ -19,7 +21,8 @@ import {
   pick,
   values,
   has,
-  find
+  find,
+  omit
 } from "lodash/fp";
 import { getUserById } from "../backend/database";
 
@@ -132,3 +135,16 @@ export const currentUserLikesTransaction = (
     find(like => flow(get("userId"), isEqual(get("id", currentUser)))(like)),
     negate(isEmpty)
   )(transaction.likes);
+
+export const hasDateQueryFields = (
+  query: TransactionQueryPayload | TransactionDateRangePayload
+) => has("dateRangeStart", query) && has("dateRangeEnd", query);
+
+export const getDateQueryFields = (query: TransactionDateRangePayload) =>
+  pick(["dateRangeStart", "dateRangeEnd"], query);
+
+export const omitDateQueryFields = (query: TransactionQueryPayload) =>
+  omit(["dateRangeStart", "dateRangeEnd"], query);
+
+export const getQueryWithoutDateFields = (query: TransactionQueryPayload) =>
+  query && hasDateQueryFields(query) ? omitDateQueryFields(query) : undefined;
