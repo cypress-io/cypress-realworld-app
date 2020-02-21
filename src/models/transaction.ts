@@ -57,3 +57,7 @@ export type TransactionQueryPayload = Partial<TransactionQueryBase>;
 export type TransactionDateRangePayload = Partial<
   Pick<TransactionQueryPayload, "dateRangeStart" | "dateRangeEnd">
 >;
+
+export type TransactionClearFiltersPayload = {
+  filterType: "date" | "amount";
+};

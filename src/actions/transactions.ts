@@ -1,7 +1,8 @@
 import {
   Transaction,
   TransactionUpdateActionPayload,
-  TransactionQueryPayload
+  TransactionQueryPayload,
+  TransactionClearFiltersPayload
 } from "../models";
 
 export const TRANSACTIONS_PUBLIC_PENDING = "TRANSACTIONS_PUBLIC_PENDING";
@@ -31,9 +32,12 @@ export const TRANSACTION_UPDATE_ERROR = "TRANSACTION_UPDATE_ERROR";
 
 export const TRANSACTIONS_CLEAR_FILTERS = "TRANSACTIONS_CLEAR_FILTERS";
 
-export const transactionsClearFilters = () =>
+export const transactionsClearFilters = (
+  payload: TransactionClearFiltersPayload
+) =>
   ({
-    type: TRANSACTIONS_CLEAR_FILTERS
+    type: TRANSACTIONS_CLEAR_FILTERS,
+    payload
   } as const);
 
 export const transactionsPublicPending = (payload?: TransactionQueryPayload) =>

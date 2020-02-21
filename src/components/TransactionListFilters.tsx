@@ -155,7 +155,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
               data-test="transaction-list-filter-date-range-button"
               label={`${dateRangeLabel(transactionFilters)}`}
               onDelete={() => {
-                clearTransactionFilters();
+                clearTransactionFilters({ filterType: "date" });
               }}
             />
           )}
