@@ -21,8 +21,10 @@ import {
   getDateQueryFields,
   formatAmountRangeValues,
   amountRangeValueText,
-  amountRangeValueTextLabel
+  amountRangeValueTextLabel,
+  padAmountWithZeros
 } from "../utils/transactionUtils";
+import { first, last, flow } from "lodash/fp";
 
 const CalendarWithRange = withRange(Calendar);
 
@@ -107,6 +109,10 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
     _event: any,
     amountRange: number | number[]
   ) => {
+    filterTransactions({
+      amountMin: padAmountWithZeros(first(amountRange as number[]) as number),
+      amountMax: padAmountWithZeros(last(amountRange as number[]) as number)
+    });
     setAmountRangeValue(amountRange as number[]);
   };
 

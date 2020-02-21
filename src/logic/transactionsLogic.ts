@@ -41,6 +41,8 @@ import { isEmpty } from "lodash/fp";
 
 const transactionsPersonalLogic = createLogic({
   type: TRANSACTIONS_PERSONAL_PENDING,
+  debounce: 500, // ms
+  latest: true, // take latest only
   processOptions: {
     dispatchReturn: true,
     successType: TRANSACTIONS_PERSONAL_SUCCESS,
@@ -68,6 +70,8 @@ const transactionsPersonalLogic = createLogic({
 
 const transactionsPublicLogic = createLogic({
   type: TRANSACTIONS_PUBLIC_PENDING,
+  debounce: 500, // ms
+  latest: true, // take latest only
   processOptions: {
     dispatchReturn: true,
     successType: TRANSACTIONS_PUBLIC_SUCCESS,
@@ -98,6 +102,8 @@ const transactionsPublicLogic = createLogic({
 
 const transactionsContactsLogic = createLogic({
   type: TRANSACTIONS_CONTACTS_PENDING,
+  debounce: 500, // ms
+  latest: true, // take latest only
   processOptions: {
     dispatchReturn: true,
     successType: TRANSACTIONS_CONTACTS_SUCCESS,
