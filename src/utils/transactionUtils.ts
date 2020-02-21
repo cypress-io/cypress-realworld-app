@@ -56,7 +56,7 @@ export const getFakeAmount = () => parseInt(faker.finance.amount(), 10);
 export const formatAmount = (amount: number) => Dinero({ amount }).toFormat();
 
 export const formatAmountSlider = (amount: number) =>
-  Dinero({ amount }).toFormat("$0");
+  Dinero({ amount }).toFormat("$0,0");
 
 export const payAppDifference = curry(
   (sender: User, transaction: Transaction) =>

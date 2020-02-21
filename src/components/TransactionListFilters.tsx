@@ -15,14 +15,20 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import indigo from "@material-ui/core/colors/indigo";
 import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
 import "react-infinite-calendar/styles.css";
-import { TransactionDateRangePayload } from "../models";
+import {
+  TransactionDateRangePayload,
+  TransactionQueryPayload,
+  TransactionAmountRangePayload
+} from "../models";
 import {
   hasDateQueryFields,
   getDateQueryFields,
   formatAmountRangeValues,
   amountRangeValueText,
   amountRangeValueTextLabel,
-  padAmountWithZeros
+  padAmountWithZeros,
+  hasAmountQueryFields,
+  getAmountQueryFields
 } from "../utils/transactionUtils";
 import { first, last } from "lodash/fp";
 
@@ -66,10 +72,29 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
   clearTransactionFilters
 }) => {
   const classes = useStyles();
+  const queryHasDateFields =
+    transactionFilters && hasDateQueryFields(transactionFilters);
+  const queryHasAmountFields =
+    transactionFilters && hasAmountQueryFields(transactionFilters);
+
+  /*
+    //WIP
+  const amountRangeValues = (
+    transactionFilters: TransactionAmountRangePayload
+  ) => {
+    if (queryHasAmountFields) {
+      const { amountMin, amountMax } = getAmountQueryFields(transactionFilters);
+      return [amountMin, amountMax] as number[];
+    }
+    return [0, 100] as number[];
+  };
+ */
+
   const [amountRangeValue, setAmountRangeValue] = React.useState<number[]>([
     0,
-    1000
+    100
   ]);
+
   const [
     dateRangeAnchorEl,
     setDateRangeAnchorEl
@@ -124,9 +149,6 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
   const formatButtonDate = (date: string) => {
     return formatDate(new Date(date), "MMM, D YYYY");
   };
-
-  const queryHasDateFields =
-    transactionFilters && hasDateQueryFields(transactionFilters);
 
   const dateRangeLabel = (transactionFilters: TransactionDateRangePayload) => {
     if (queryHasDateFields) {
@@ -219,7 +241,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
             variant="outlined"
             onClick={handleAmountRangeClick}
             data-test="transaction-list-filter-amount-range-button"
-            label={"Amount Range: ALL"}
+            label={`Amount Range: ${formatAmountRangeValues(amountRangeValue)}`}
             deleteIcon={<ArrowDropDownIcon />}
             onDelete={handleAmountRangeClick}
           />
@@ -259,7 +281,13 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Button>Clear</Button>
+                    <Button
+                      onClick={() => {
+                        clearTransactionFilters({ filterType: "amount" });
+                      }}
+                    >
+                      Clear
+                    </Button>
                   </Grid>
                 </Grid>
               </Grid>
