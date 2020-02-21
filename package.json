@@ -26,7 +26,7 @@
     "@types/morgan": "1.7.37",
     "@types/node": "12.12.26",
     "@types/passport": "1.0.2",
-    "@types/react": "16.9.19",
+    "@types/react": "16.9.21",
     "@types/react-dom": "16.9.5",
     "@types/react-infinite-calendar": "2.3.3",
     "@types/react-redux": "7.1.7",
