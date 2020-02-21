@@ -6,7 +6,8 @@ import {
   PaymentNotificationStatus,
   TransactionResponseItem,
   TransactionQueryPayload,
-  TransactionDateRangePayload
+  TransactionDateRangePayload,
+  TransactionAmountRangePayload
 } from "../models";
 import faker from "faker";
 import Dinero from "dinero.js";
@@ -150,8 +151,23 @@ export const getDateQueryFields = (query: TransactionDateRangePayload) =>
 export const omitDateQueryFields = (query: TransactionQueryPayload) =>
   omit(["dateRangeStart", "dateRangeEnd"], query);
 
+export const hasAmountQueryFields = (
+  query: TransactionQueryPayload | TransactionAmountRangePayload
+) => has("amountMin", query) && has("amountMax", query);
+
+export const getAmountQueryFields = (query: TransactionAmountRangePayload) =>
+  pick(["amountMin", "amountMax"], query);
+
+export const omitAmountQueryFields = (query: TransactionQueryPayload) =>
+  omit(["amountMin", "amountMax"], query);
+
 export const getQueryWithoutDateFields = (query: TransactionQueryPayload) =>
   query && hasDateQueryFields(query) ? omitDateQueryFields(query) : undefined;
+
+export const getQueryWithoutAmountFields = (query: TransactionQueryPayload) =>
+  query && hasAmountQueryFields(query)
+    ? omitAmountQueryFields(query)
+    : undefined;
 
 export const padAmountWithZeros = (number: number) => Math.ceil(number * 1000);
 

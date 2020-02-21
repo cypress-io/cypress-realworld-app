@@ -24,7 +24,7 @@ import {
   amountRangeValueTextLabel,
   padAmountWithZeros
 } from "../utils/transactionUtils";
-import { first, last, flow } from "lodash/fp";
+import { first, last } from "lodash/fp";
 
 const CalendarWithRange = withRange(Calendar);
 
