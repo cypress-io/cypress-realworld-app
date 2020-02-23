@@ -7316,10 +7316,10 @@ json-schema@0.2.3:
   resolved "https://registry.yarnpkg.com/json-schema/-/json-schema-0.2.3.tgz#b480c892e59a2f05954ce727bd3f2a4e882f9e13"
   integrity sha1-tIDIkuWaLwWVTOcnvT8qTogvnhM=
 
-json-server@0.16.0:
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/json-server/-/json-server-0.16.0.tgz#e9c9d752ca7cd1538d7339328e3e655cc1ab0b51"
-  integrity sha512-vdqfkMAiHUCHMkTRgxNJsd0c+lnczxFCxM8bewyalEiunDD8XWXsvgsezAt4iycqWV5aVoR//irtyUX50ZpSdA==
+json-server@0.16.1:
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/json-server/-/json-server-0.16.1.tgz#1d3cb19087f5cb5040d94a49d99472102b2859d9"
+  integrity sha512-aVUTdpt+X27iIuWuxBChJywykPSP4opEiFrH044pG+34Gde3eHZRTzeMyx8ts5/kY2gK1Ru2YBmF2k/vI0lQug==
   dependencies:
     body-parser "^1.19.0"
     chalk "^3.0.0"
