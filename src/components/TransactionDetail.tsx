@@ -26,6 +26,7 @@ import {
 import { random } from "lodash/fp";
 import CommentsList from "./CommentList";
 import TransactionTitle from "./TransactionTitle";
+import TransactionAmount from "./TransactionAmount";
 
 const imgNumber = random(3, 50);
 const useStyles = makeStyles(theme => ({
@@ -44,14 +45,6 @@ const useStyles = makeStyles(theme => ({
   },
   card: {
     minWidth: "100%"
-  },
-  amountPositive: {
-    fontSize: 24,
-    color: "#4CAF50"
-  },
-  amountNegative: {
-    fontSize: 24,
-    color: "red"
   },
   avatar: {
     width: theme.spacing(2)
@@ -113,24 +106,6 @@ const TransactionDetail: React.FC<TransactionProps> = ({
 }) => {
   const classes = useStyles();
 
-  const Amount: React.FC<{ transaction: TransactionResponseItem }> = ({
-    transaction
-  }) => (
-    <Typography
-      className={
-        isRequestTransaction(transaction)
-          ? classes.amountPositive
-          : classes.amountNegative
-      }
-      display="inline"
-      component="span"
-      color="primary"
-    >
-      {isRequestTransaction(transaction) ? "+" : "-"}
-      {transaction.amount && formatAmount(transaction.amount)}
-    </Typography>
-  );
-
   return (
     <Paper className={classes.paper}>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
@@ -166,7 +141,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
           </Grid>
         </Grid>
         <Grid item>
-          <Amount transaction={transaction} />
+          <TransactionAmount transaction={transaction} />
         </Grid>
       </Grid>
       <Grid
