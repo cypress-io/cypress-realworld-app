@@ -61,10 +61,10 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
   };
   */
 
-  const [amountRangeValue, setAmountRangeValue] = React.useState<number[]>([
-    0,
-    100
-  ]);
+  const initialAmountRange = [0, 100];
+  const [amountRangeValue, setAmountRangeValue] = React.useState<number[]>(
+    initialAmountRange
+  );
 
   const [
     amountRangeAnchorEl,
@@ -146,6 +146,7 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
                 <Button
                   data-test="transaction-list-filter-amount-clear-button"
                   onClick={() => {
+                    setAmountRangeValue(initialAmountRange);
                     clearTransactionFilters({ filterType: "amount" });
                   }}
                 >
