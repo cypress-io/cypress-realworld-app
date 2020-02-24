@@ -51,10 +51,8 @@ import {
   hasSufficientFunds,
   getChargeAmount,
   getFullNameForUser,
-  getQueryWithoutDateFields,
   hasDateQueryFields,
   getDateQueryFields,
-  getQueryWithoutAmountFields,
   hasAmountQueryFields,
   getAmountQueryFields,
   getQueryWithoutAmountAndDateFields
