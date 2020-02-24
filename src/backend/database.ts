@@ -683,8 +683,13 @@ export const updateTransactionById = (
   const transaction = getTransactionBy("id", transactionId);
 
   // TODO: if request accepted - createBankTransfer for withdrawal for the difference associated to the transaction
-  // TODO: generate notification for update (request)
   if (userId === transaction.senderId || userId === transaction.receiverId) {
+    createPaymentNotification(
+      transaction.receiverId,
+      transaction.id,
+      PaymentNotificationStatus.requested
+    );
+
     db()
       .get(TRANSACTION_TABLE)
       // @ts-ignore
