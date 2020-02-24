@@ -103,7 +103,7 @@ describe("Transaction Lists", function() {
       .should("have.length.greaterThan", 3);
   });
 
-  it("renders personal transaction list, filters by amount range, then clears the amount range filter", function() {
+  it.skip("renders personal transaction list, filters by amount range, then clears the amount range filter", function() {
     cy.getTest("main").scrollTo("top");
     cy.getTest("nav-personal-tab")
       .click({ force: true })
