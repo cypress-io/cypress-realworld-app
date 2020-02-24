@@ -25,13 +25,6 @@ const useStyles = makeStyles(theme => ({
   card: {
     minWidth: "100%"
   },
-  title: {
-    fontSize: 18
-  },
-  titleName: {
-    fontSize: 18,
-    color: "#1A202C"
-  },
   amountPositive: {
     fontSize: 24,
     color: "#4CAF50"
@@ -60,12 +53,6 @@ const TransactionItem: React.FC<TransactionProps> = ({
   const classes = useStyles();
   const history = useHistory();
 
-  const TitleName: React.FC<{ name: string }> = ({ name }) => (
-    <Typography className={classes.titleName} display="inline" component="span">
-      {name}
-    </Typography>
-  );
-
   const Amount: React.FC<{ transaction: TransactionResponseItem }> = ({
     transaction
   }) => (
@@ -85,16 +72,19 @@ const TransactionItem: React.FC<TransactionProps> = ({
   );
 
   const headline = isRequestTransaction(transaction) ? (
-    <TransactionTitle>
-      <TitleName name={transaction.senderName} />
-      {isAcceptedRequestTransaction(transaction) ? " charged " : " requested "}
-      <TitleName name={transaction.receiverName} />
-    </TransactionTitle>
+    <TransactionTitle
+      senderName={transaction.senderName}
+      receiverName={transaction.receiverName}
+      status={
+        isAcceptedRequestTransaction(transaction) ? " charged " : " requested "
+      }
+    />
   ) : (
-    <TransactionTitle>
-      <TitleName name={transaction.senderName} /> paid{" "}
-      <TitleName name={transaction.receiverName} />
-    </TransactionTitle>
+    <TransactionTitle
+      senderName={transaction.senderName}
+      receiverName={transaction.receiverName}
+      status="paid"
+    />
   );
 
   const showTransactionDetail = (transactionId: string) => {
