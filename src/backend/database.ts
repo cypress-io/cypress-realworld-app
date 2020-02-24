@@ -14,9 +14,7 @@ import {
   get,
   constant,
   filter,
-  inRange,
-  merge,
-  isEmpty
+  inRange
 } from "lodash/fp";
 import { isWithinRange } from "date-fns";
 import low from "lowdb";
@@ -53,10 +51,8 @@ import {
   hasSufficientFunds,
   getChargeAmount,
   getFullNameForUser,
-  getQueryWithoutDateFields,
   hasDateQueryFields,
   getDateQueryFields,
-  getQueryWithoutAmountFields,
   hasAmountQueryFields,
   getAmountQueryFields,
   getQueryWithoutAmountAndDateFields
@@ -439,10 +435,6 @@ export const formatTransactionsForApiResponse = (
 
 export const getAllTransactionsForUserByObj = curry(
   (userId: string, query?: object) => {
-    const queryWithoutAmountFields =
-      query && getQueryWithoutAmountFields(query);
-    const queryWithoutDateFields = query && getQueryWithoutDateFields(query);
-
     const queryWithoutAmountAndDateFields =
       query && getQueryWithoutAmountAndDateFields(query);
 

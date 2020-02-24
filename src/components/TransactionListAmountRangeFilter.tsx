@@ -14,8 +14,8 @@ import {
   formatAmountRangeValues,
   amountRangeValueText,
   amountRangeValueTextLabel,
-  padAmountWithZeros,
-  hasAmountQueryFields
+  padAmountWithZeros
+  //hasAmountQueryFields
 } from "../utils/transactionUtils";
 import { first, last } from "lodash/fp";
 
@@ -47,11 +47,11 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
   clearTransactionFilters
 }) => {
   const classes = useStyles();
+  // TODO use in place of state
+  /*
   const queryHasAmountFields =
     transactionFilters && hasAmountQueryFields(transactionFilters);
 
-  // TODO use in place of state
-  /*
   const amountRangeValues = (transactionFilters: TransactionQueryPayload) => {
     if (queryHasAmountFields) {
       const { amountMin, amountMax } = getAmountQueryFields(transactionFilters);
