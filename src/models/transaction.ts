@@ -52,6 +52,7 @@ type TransactionQueryBase = {
   dateRangeEnd?: string;
   amountMin?: number;
   amountMax?: number;
+  status?: TransactionStatus;
 };
 
 export type TransactionQueryPayload = Partial<TransactionQueryBase>;

@@ -162,12 +162,14 @@ export const omitAmountQueryFields = (query: TransactionQueryPayload) =>
   omit(["amountMin", "amountMax"], query);
 
 export const getQueryWithoutDateFields = (query: TransactionQueryPayload) =>
-  query && hasDateQueryFields(query) ? omitDateQueryFields(query) : undefined;
+  query && hasDateQueryFields(query) ? omitDateQueryFields(query) : query;
 
 export const getQueryWithoutAmountFields = (query: TransactionQueryPayload) =>
-  query && hasAmountQueryFields(query)
-    ? omitAmountQueryFields(query)
-    : undefined;
+  query && hasAmountQueryFields(query) ? omitAmountQueryFields(query) : query;
+
+export const getQueryWithoutAmountAndDateFields = (
+  query: TransactionQueryPayload
+) => flow(omitAmountQueryFields, omitDateQueryFields)(query);
 
 export const padAmountWithZeros = (number: number) => Math.ceil(number * 1000);
 

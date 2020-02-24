@@ -58,7 +58,8 @@ import {
   getDateQueryFields,
   getQueryWithoutAmountFields,
   hasAmountQueryFields,
-  getAmountQueryFields
+  getAmountQueryFields,
+  getQueryWithoutAmountAndDateFields
 } from "../utils/transactionUtils";
 
 const USER_TABLE = "users";
@@ -442,14 +443,10 @@ export const getAllTransactionsForUserByObj = curry(
       query && getQueryWithoutAmountFields(query);
     const queryWithoutDateFields = query && getQueryWithoutDateFields(query);
 
-    const queryWithoutAmountAndDateFields = merge(
-      queryWithoutAmountFields,
-      queryWithoutDateFields
-    );
+    const queryWithoutAmountAndDateFields =
+      query && getQueryWithoutAmountAndDateFields(query);
 
-    const queryFields = isEmpty(queryWithoutAmountAndDateFields)
-      ? query
-      : queryWithoutAmountAndDateFields;
+    const queryFields = queryWithoutAmountAndDateFields || query;
 
     const userTransactions = flatMap(getTransactionsByObj)([
       {
