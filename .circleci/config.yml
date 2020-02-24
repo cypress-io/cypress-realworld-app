@@ -13,4 +13,4 @@ workflows:
           record: true
           post-steps:
             # run jest tests
-            - run: yarn test
+            - run: yarn test:unit
