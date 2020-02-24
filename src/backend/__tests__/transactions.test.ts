@@ -55,7 +55,10 @@ describe("Transactions", () => {
   it("should retrieve a list of transactions for a user (user is sender)", () => {
     const userToLookup: User = getAllUsers()[0];
 
-    const result: Transaction[] = getTransactionsForUserByObj(userToLookup.id);
+    const result: Transaction[] = getTransactionsForUserByObj(
+      userToLookup.id,
+      {}
+    );
     expect(result.pop()!.senderId).toBe(userToLookup.id);
   });
 
@@ -165,7 +168,8 @@ describe("Transactions", () => {
     expect(payment.id).toBeDefined();
 
     const personalTransactions: Transaction[] = getTransactionsForUserByObj(
-      sender.id
+      sender.id,
+      {}
     );
     const ids = map("id", personalTransactions);
     expect(ids).toContain(payment.id);
