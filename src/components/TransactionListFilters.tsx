@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
 
 export type TransactionListFiltersProps = {
   filterTransactions: Function;
-  transactionFilters: TransactionDateRangePayload;
+  transactionFilters: TransactionQueryPayload;
   clearTransactionFilters: Function;
 };
 
@@ -77,18 +77,13 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
   const queryHasAmountFields =
     transactionFilters && hasAmountQueryFields(transactionFilters);
 
-  /*
-    //WIP
-  const amountRangeValues = (
-    transactionFilters: TransactionAmountRangePayload
-  ) => {
+  const amountRangeValues = (transactionFilters: TransactionQueryPayload) => {
     if (queryHasAmountFields) {
       const { amountMin, amountMax } = getAmountQueryFields(transactionFilters);
       return [amountMin, amountMax] as number[];
     }
     return [0, 100] as number[];
   };
- */
 
   const [amountRangeValue, setAmountRangeValue] = React.useState<number[]>([
     0,
@@ -276,12 +271,16 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
                   className={classes.amountRangeTitleRow}
                 >
                   <Grid item className={classes.amountRangeTitle}>
-                    <Typography color="textSecondary">
+                    <Typography
+                      color="textSecondary"
+                      data-test="transaction-list-filter-amount-range-text"
+                    >
                       Amount Range: {formatAmountRangeValues(amountRangeValue)}
                     </Typography>
                   </Grid>
                   <Grid item>
                     <Button
+                      data-test="transaction-list-filter-amount-clear-button"
                       onClick={() => {
                         clearTransactionFilters({ filterType: "amount" });
                       }}
@@ -293,8 +292,11 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
               </Grid>
               <Grid item>
                 <Slider
+                  data-test="transaction-list-filter-amount-range-slider"
                   className={classes.amountRangeSlider}
                   value={amountRangeValue}
+                  min={0}
+                  max={100}
                   onChange={handleAmountRangeChange}
                   valueLabelDisplay="auto"
                   aria-labelledby="range-slider"

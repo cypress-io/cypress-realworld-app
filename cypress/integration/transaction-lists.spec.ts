@@ -102,4 +102,30 @@ describe("Transaction Lists", function() {
       .children()
       .should("have.length.greaterThan", 3);
   });
+
+  it("renders personal transaction list, filters by amount range, then clears the amount range filter", function() {
+    cy.getTest("main").scrollTo("top");
+    cy.getTest("nav-personal-tab")
+      .click({ force: true })
+      .should("have.class", "Mui-selected");
+
+    cy.getTest("transaction-list-filter-amount-range-button")
+      .scrollIntoView()
+      .click({ force: true });
+
+    cy.getTest("transaction-list-filter-amount-range-slider")
+      .find('input[type="hidden"]')
+      .invoke("val", "3,10")
+      .trigger("input", { force: true });
+
+    cy.getTest("transaction-list-filter-amount-range-text")
+      .should("contain", "$30")
+      .and("contain", "$100");
+
+    cy.wait("@personalTransactions");
+
+    cy.getTest("transaction-list")
+      .children()
+      .should("have.length", 3);
+  });
 });
