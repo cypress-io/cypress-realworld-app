@@ -19,8 +19,6 @@ import CommentForm from "./CommentForm";
 import {
   isPendingRequestTransaction,
   receiverIsCurrentUser,
-  isRequestTransaction,
-  formatAmount,
   currentUserLikesTransaction
 } from "../utils/transactionUtils";
 import { random } from "lodash/fp";
@@ -43,17 +41,11 @@ const useStyles = makeStyles(theme => ({
     overflow: "auto",
     flexDirection: "column"
   },
-  card: {
-    minWidth: "100%"
-  },
   avatar: {
     width: theme.spacing(2)
   },
   headline: {
     marginTop: theme.spacing(4)
-  },
-  listitem: {
-    listStyleType: "none"
   },
   avatarLarge: {
     width: theme.spacing(7),
