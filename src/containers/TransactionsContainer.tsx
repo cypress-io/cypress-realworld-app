@@ -46,13 +46,19 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
 }) => {
   const match = useRouteMatch();
 
+  const filterTransactions = (payload: object) => {
+    filterPublicTransactions(payload);
+    filterPersonalTransactions(payload);
+    filterContactTransactions(payload);
+  };
+
   if (match.url === "/contacts") {
     return (
       <MainContainer>
         <TransactionNavTabs />
         <TransactionListFilters
           transactionFilters={transactionFilters}
-          filterTransactions={filterContactTransactions}
+          filterTransactions={filterTransactions}
           clearTransactionFilters={clearTransactionFilters}
         />
         <br />
@@ -70,7 +76,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
         <TransactionNavTabs />
         <TransactionListFilters
           transactionFilters={transactionFilters}
-          filterTransactions={filterPersonalTransactions}
+          filterTransactions={filterTransactions}
           clearTransactionFilters={clearTransactionFilters}
         />
         <br />
@@ -88,7 +94,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
       <TransactionNavTabs />
       <TransactionListFilters
         transactionFilters={transactionFilters}
-        filterTransactions={filterPublicTransactions}
+        filterTransactions={filterTransactions}
         clearTransactionFilters={clearTransactionFilters}
       />
       <br />

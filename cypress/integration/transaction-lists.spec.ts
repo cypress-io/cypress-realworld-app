@@ -64,7 +64,7 @@ describe("Transaction Lists", function() {
       .should("have.length", 9);
   });
 
-  it("renders personal transaction list, filters by date range", function() {
+  it("renders personal transaction list, filters by date range, then clears the date range filter", function() {
     cy.getTest("main").scrollTo("top");
     cy.getTest("nav-personal-tab")
       .click({ force: true })
@@ -87,6 +87,40 @@ describe("Transaction Lists", function() {
       .scrollIntoView() // TODO: Does not work
       .should("contain", "2019-12-01")
       .should("contain", "2019-12-03");*/
+
+    cy.wait("@personalTransactions");
+
+    cy.getTest("transaction-list")
+      .children()
+      .should("have.length", 3);
+
+    cy.getTest("transaction-list-filter-date-clear-button")
+      .scrollIntoView()
+      .click({ force: true });
+
+    cy.getTest("transaction-list")
+      .children()
+      .should("have.length.greaterThan", 3);
+  });
+
+  it.skip("renders personal transaction list, filters by amount range, then clears the amount range filter", function() {
+    cy.getTest("main").scrollTo("top");
+    cy.getTest("nav-personal-tab")
+      .click({ force: true })
+      .should("have.class", "Mui-selected");
+
+    cy.getTest("transaction-list-filter-amount-range-button")
+      .scrollIntoView()
+      .click({ force: true });
+
+    cy.getTest("transaction-list-filter-amount-range-slider")
+      .find('input[type="hidden"]')
+      .invoke("val", "3,10")
+      .trigger("input", { force: true });
+
+    cy.getTest("transaction-list-filter-amount-range-text")
+      .should("contain", "$30")
+      .and("contain", "$100");
 
     cy.wait("@personalTransactions");
 

@@ -11,7 +11,11 @@ import {
 } from "../actions/transactions";
 import { TAuthActions, SIGNOUT_SUCCESS, SIGNOUT_ERROR } from "../actions/auth";
 import { TransactionResponseItem } from "../models";
-import { isEmpty } from "lodash/fp";
+import { isEmpty, isEqual } from "lodash/fp";
+import {
+  omitDateQueryFields,
+  omitAmountQueryFields
+} from "../utils/transactionUtils";
 
 export interface TransactionsState {
   filters: object;
@@ -50,11 +54,26 @@ export default function reducer(
             ? action.payload
             : state.filters
       };
-    case TRANSACTIONS_CLEAR_FILTERS:
+    case TRANSACTIONS_CLEAR_FILTERS: {
+      if (isEqual("date", action.payload.filterType)) {
+        return {
+          ...state,
+          filters: omitDateQueryFields(state.filters)
+        };
+      }
+
+      if (isEqual("amount", action.payload.filterType)) {
+        return {
+          ...state,
+          filters: omitAmountQueryFields(state.filters)
+        };
+      }
+
       return {
         ...state,
-        filters: {}
+        filters: state.filters
       };
+    }
     case TRANSACTIONS_PUBLIC_SUCCESS:
       return {
         ...state,

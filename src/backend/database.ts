@@ -13,10 +13,10 @@ import {
   curry,
   get,
   constant,
-  has,
-  pick,
-  omit,
-  filter
+  filter,
+  inRange,
+  merge,
+  isEmpty
 } from "lodash/fp";
 import { isWithinRange } from "date-fns";
 import low from "lowdb";
@@ -44,8 +44,7 @@ import {
   BankTransferPayload,
   BankTransferType,
   NotificationResponseItem,
-  TransactionQueryPayload,
-  TransactionDateRangePayload
+  TransactionQueryPayload
 } from "../models";
 import Fuse from "fuse.js";
 import {
@@ -53,7 +52,14 @@ import {
   getTransferAmount,
   hasSufficientFunds,
   getChargeAmount,
-  getFullNameForUser
+  getFullNameForUser,
+  getQueryWithoutDateFields,
+  hasDateQueryFields,
+  getDateQueryFields,
+  getQueryWithoutAmountFields,
+  hasAmountQueryFields,
+  getAmountQueryFields,
+  getQueryWithoutAmountAndDateFields
 } from "../utils/transactionUtils";
 
 const USER_TABLE = "users";
@@ -398,10 +404,10 @@ export const getTransactionByIdForApi = (id: string) =>
   formatTransactionForApiResponse(getTransactionBy("id", id));
 
 export const getTransactionsForUserForApi = (userId: string, query?: object) =>
-  flow(getTransactionsForUserByObj, formatTransactionsForApiResponse)(
-    userId,
-    query
-  );
+  flow(
+    getTransactionsForUserByObj(userId),
+    formatTransactionsForApiResponse
+  )(query);
 
 export const formatTransactionForApiResponse = (
   transaction: Transaction
@@ -431,69 +437,81 @@ export const formatTransactionsForApiResponse = (
     )
   );
 
-export const hasDateQueryFields = (query: TransactionQueryPayload) =>
-  has("dateRangeStart", query) && has("dateRangeEnd", query);
+export const getAllTransactionsForUserByObj = curry(
+  (userId: string, query?: object) => {
+    const queryWithoutAmountFields =
+      query && getQueryWithoutAmountFields(query);
+    const queryWithoutDateFields = query && getQueryWithoutDateFields(query);
 
-export const getDateQueryFields = (query: TransactionDateRangePayload) =>
-  pick(["dateRangeStart", "dateRangeEnd"], query);
+    const queryWithoutAmountAndDateFields =
+      query && getQueryWithoutAmountAndDateFields(query);
 
-export const omitDateQueryFields = (query: TransactionQueryPayload) =>
-  omit(["dateRangeStart", "dateRangeEnd"], query);
+    const queryFields = queryWithoutAmountAndDateFields || query;
 
-export const getQueryWithoutDateFields = (query: TransactionQueryPayload) =>
-  query && hasDateQueryFields(query) ? omitDateQueryFields(query) : undefined;
+    const userTransactions = flatMap(getTransactionsByObj)([
+      {
+        receiverId: userId,
+        ...queryFields
+      },
+      {
+        senderId: userId,
+        ...queryFields
+      }
+    ]);
 
-export const getAllTransactionsForUserByObj = (
-  userId: string,
-  query?: object
-) => {
-  console.log("QUERY: ", query);
-  const queryWithoutDateFields = query && getQueryWithoutDateFields(query);
+    if (query && (hasDateQueryFields(query) || hasAmountQueryFields(query))) {
+      const { dateRangeStart, dateRangeEnd } = getDateQueryFields(query);
+      const { amountMin, amountMax } = getAmountQueryFields(query);
 
-  const queryFields = queryWithoutDateFields || query;
-  const userTransactions = flatMap(getTransactionsByObj)([
-    {
-      receiverId: userId,
-      ...queryFields
-    },
-    {
-      senderId: userId,
-      ...queryFields
+      return flow(
+        transactionsWithinDateRange(dateRangeStart!, dateRangeEnd!),
+        transactionsWithinAmountRange(amountMin!, amountMax!)
+      )(userTransactions);
     }
-  ]);
-
-  if (query && hasDateQueryFields(query)) {
-    const { dateRangeStart, dateRangeEnd } = getDateQueryFields(query);
-
-    const filteredTransactions = transactionsWithinDateRange(
-      dateRangeStart!,
-      dateRangeEnd!,
-      userTransactions
-    );
-
-    return filteredTransactions;
-  } else {
     return userTransactions;
   }
-};
+);
 
-export const transactionsWithinDateRange = (
-  dateRangeStart: string,
-  dateRangeEnd: string,
-  transactions: Transaction[]
-) =>
-  filter(
-    (transaction: Transaction) =>
-      isWithinRange(
-        new Date(transaction.createdAt),
-        new Date(dateRangeStart),
-        new Date(dateRangeEnd)
-      ),
-    transactions
-  );
+export const transactionsWithinAmountRange = curry(
+  (amountMin: number, amountMax: number, transactions: Transaction[]) => {
+    if (!amountMin || !amountMax) {
+      return transactions;
+    }
 
-export const getTransactionsForUserByObj = (userId: string, query?: object) =>
-  flow(getAllTransactionsForUserByObj, uniqBy("id"))(userId, query);
+    return filter(
+      (transaction: Transaction) =>
+        inRange(amountMin, amountMax, transaction.amount),
+      transactions
+    );
+  }
+);
+
+export const transactionsWithinDateRange = curry(
+  (
+    dateRangeStart: string,
+    dateRangeEnd: string,
+    transactions: Transaction[]
+  ) => {
+    if (!dateRangeStart || !dateRangeEnd) {
+      return transactions;
+    }
+
+    return filter(
+      (transaction: Transaction) =>
+        isWithinRange(
+          new Date(transaction.createdAt),
+          new Date(dateRangeStart),
+          new Date(dateRangeEnd)
+        ),
+      transactions
+    );
+  }
+);
+
+export const getTransactionsForUserByObj = curry(
+  (userId: string, query?: object) =>
+    flow(getAllTransactionsForUserByObj(userId), uniqBy("id"))(query)
+);
 
 export const getTransactionsByUserId = (userId: string) =>
   getTransactionsBy("receiverId", userId);
@@ -551,16 +569,16 @@ export const getPublicTransactionsByQuery = (
   userId: string,
   query: TransactionQueryPayload
 ) => {
-  if (query && hasDateQueryFields(query)) {
+  if (query && (hasDateQueryFields(query) || hasAmountQueryFields(query))) {
     const { dateRangeStart, dateRangeEnd } = getDateQueryFields(query);
+    const { amountMin, amountMax } = getAmountQueryFields(query);
 
     return {
       contacts: getTransactionsForUserContacts(userId, query),
-      public: transactionsWithinDateRange(
-        dateRangeStart!,
-        dateRangeEnd!,
-        getNonContactPublicTransactionsForApi(userId)
-      )
+      public: flow(
+        transactionsWithinDateRange(dateRangeStart!, dateRangeEnd!),
+        transactionsWithinAmountRange(amountMin!, amountMax!)
+      )(getNonContactPublicTransactionsForApi(userId))
     };
   } else {
     return {

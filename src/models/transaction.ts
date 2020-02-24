@@ -50,6 +50,9 @@ export type TransactionUpdateActionPayload = Pick<
 type TransactionQueryBase = {
   dateRangeStart?: string;
   dateRangeEnd?: string;
+  amountMin?: number;
+  amountMax?: number;
+  status?: TransactionStatus;
 };
 
 export type TransactionQueryPayload = Partial<TransactionQueryBase>;
@@ -57,3 +60,11 @@ export type TransactionQueryPayload = Partial<TransactionQueryBase>;
 export type TransactionDateRangePayload = Partial<
   Pick<TransactionQueryPayload, "dateRangeStart" | "dateRangeEnd">
 >;
+
+export type TransactionAmountRangePayload = Partial<
+  Pick<TransactionQueryPayload, "amountMin" | "amountMax">
+>;
+
+export type TransactionClearFiltersPayload = {
+  filterType: "date" | "amount";
+};

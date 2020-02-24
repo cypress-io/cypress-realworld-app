@@ -1,12 +1,8 @@
 import React from "react";
-import { format as formatDate } from "date-fns";
-import { makeStyles, Paper, Grid, Button, Popover } from "@material-ui/core";
-import indigo from "@material-ui/core/colors/indigo";
-import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
-import "react-infinite-calendar/styles.css";
-import { TransactionDateRangePayload } from "../models";
-
-const CalendarWithRange = withRange(Calendar);
+import { makeStyles, Paper, Grid } from "@material-ui/core";
+import { TransactionQueryPayload } from "../models";
+import TransactionListDateRangeFilter from "./TransactionDateRangeFilter";
+import TransactionListAmountRangeFilter from "./TransactionListAmountRangeFilter";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -14,39 +10,13 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column"
-  },
-  calendar: {
-    width: theme.spacing(2),
-    height: theme.spacing(4)
-  },
-  dateRangeLabel: {
-    marginRight: theme.spacing(2)
-  },
-  dateRangeButton: {
-    backgroundColor: "#F7FAFC",
-    color: theme.palette.primary.main,
-    "&:hover": {
-      backgroundColor: "#EDF2F7"
-    }
-  },
-  clearFiltersButton: {
-    backgroundColor: "#F7FAFC",
-    color: theme.palette.primary.main,
-    "&:hover": {
-      backgroundColor: "#EDF2F7"
-    }
   }
 }));
 
 export type TransactionListFiltersProps = {
   filterTransactions: Function;
-  transactionFilters: TransactionDateRangePayload;
+  transactionFilters: TransactionQueryPayload;
   clearTransactionFilters: Function;
-};
-
-type SelectedDates = {
-  start?: string;
-  end?: string;
 };
 
 const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
@@ -55,115 +25,29 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
   clearTransactionFilters
 }) => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
-    null
-  );
-
-  const onCalendarSelect = (e: { eventType: number; start: any; end: any }) => {
-    if (e.eventType === 3) {
-      filterTransactions({
-        dateRangeStart: new Date(e.start.setUTCHours(0, 0, 0, 0)).toISOString(),
-        dateRangeEnd: new Date(e.end.setUTCHours(23, 59, 59, 999)).toISOString()
-      });
-      setAnchorEl(null);
-    }
-  };
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
-
-  const formatButtonDate = (date: string) => {
-    return formatDate(new Date(date), "MMM, D YYYY");
-  };
 
   return (
     <Paper className={classes.paper} elevation={0}>
       <Grid
         container
         direction="row"
-        justify="space-between"
+        justify="flex-start"
         alignItems="flex-start"
         spacing={1}
       >
         <Grid item>
-          <Button
-            aria-describedby={id}
-            variant="contained"
-            className={classes.dateRangeButton}
-            onClick={handleClick}
-            data-test="transaction-list-filter-date-range-button"
-          >
-            <span className={classes.dateRangeLabel}>Date Range:</span>
-            <b>
-              {transactionFilters &&
-              transactionFilters.dateRangeStart &&
-              transactionFilters.dateRangeEnd
-                ? `${formatButtonDate(transactionFilters.dateRangeStart)} -
-              ${formatButtonDate(transactionFilters.dateRangeEnd)}`
-                : "ALL"}
-            </b>
-          </Button>
-          <Popover
-            id={id}
-            open={open}
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "left"
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "left"
-            }}
-          >
-            <InfiniteCalendar
-              width={window.innerWidth <= 350 ? window.innerWidth : 350}
-              height={300}
-              rowHeight={50}
-              Component={CalendarWithRange}
-              selected={false}
-              onSelect={onCalendarSelect}
-              locale={{
-                headerFormat: "MMM Do"
-              }}
-              theme={{
-                accentColor: indigo["400"],
-                headerColor: indigo["500"],
-                weekdayColor: indigo["300"],
-                selectionColor: indigo["300"],
-                floatingNav: {
-                  background: indigo["400"],
-                  color: "#FFF",
-                  chevron: "#FFA726"
-                }
-              }}
-            />
-          </Popover>
+          <TransactionListDateRangeFilter
+            filterTransactions={filterTransactions}
+            transactionFilters={transactionFilters}
+            clearTransactionFilters={clearTransactionFilters}
+          />
         </Grid>
         <Grid item>
-          {transactionFilters &&
-            transactionFilters.dateRangeStart &&
-            transactionFilters.dateRangeEnd && (
-              <Button
-                data-test="transaction-filters-clear-filters-button"
-                variant="contained"
-                className={classes.clearFiltersButton}
-                onClick={() => {
-                  clearTransactionFilters();
-                }}
-              >
-                Clear Filters
-              </Button>
-            )}
+          <TransactionListAmountRangeFilter
+            filterTransactions={filterTransactions}
+            transactionFilters={transactionFilters}
+            clearTransactionFilters={clearTransactionFilters}
+          />
         </Grid>
       </Grid>
     </Paper>

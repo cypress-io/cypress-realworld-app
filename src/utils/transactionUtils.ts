@@ -4,7 +4,10 @@ import {
   TransactionRequestStatus,
   NotificationType,
   PaymentNotificationStatus,
-  TransactionResponseItem
+  TransactionResponseItem,
+  TransactionQueryPayload,
+  TransactionDateRangePayload,
+  TransactionAmountRangePayload
 } from "../models";
 import faker from "faker";
 import Dinero from "dinero.js";
@@ -19,7 +22,9 @@ import {
   pick,
   values,
   has,
-  find
+  find,
+  omit,
+  map
 } from "lodash/fp";
 import { getUserById } from "../backend/database";
 
@@ -49,6 +54,9 @@ export const isPayment = negate(isRequestTransaction);
 export const getFakeAmount = () => parseInt(faker.finance.amount(), 10);
 
 export const formatAmount = (amount: number) => Dinero({ amount }).toFormat();
+
+export const formatAmountSlider = (amount: number) =>
+  Dinero({ amount }).toFormat("$0,0");
 
 export const payAppDifference = curry(
   (sender: User, transaction: Transaction) =>
@@ -132,3 +140,48 @@ export const currentUserLikesTransaction = (
     find(like => flow(get("userId"), isEqual(get("id", currentUser)))(like)),
     negate(isEmpty)
   )(transaction.likes);
+
+export const hasDateQueryFields = (
+  query: TransactionQueryPayload | TransactionDateRangePayload
+) => has("dateRangeStart", query) && has("dateRangeEnd", query);
+
+export const getDateQueryFields = (query: TransactionDateRangePayload) =>
+  pick(["dateRangeStart", "dateRangeEnd"], query);
+
+export const omitDateQueryFields = (query: TransactionQueryPayload) =>
+  omit(["dateRangeStart", "dateRangeEnd"], query);
+
+export const hasAmountQueryFields = (
+  query: TransactionQueryPayload | TransactionAmountRangePayload
+) => has("amountMin", query) && has("amountMax", query);
+
+export const getAmountQueryFields = (query: TransactionAmountRangePayload) =>
+  pick(["amountMin", "amountMax"], query);
+
+export const omitAmountQueryFields = (query: TransactionQueryPayload) =>
+  omit(["amountMin", "amountMax"], query);
+
+export const getQueryWithoutDateFields = (query: TransactionQueryPayload) =>
+  query && hasDateQueryFields(query) ? omitDateQueryFields(query) : query;
+
+export const getQueryWithoutAmountFields = (query: TransactionQueryPayload) =>
+  query && hasAmountQueryFields(query) ? omitAmountQueryFields(query) : query;
+
+export const getQueryWithoutAmountAndDateFields = (
+  query: TransactionQueryPayload
+) => flow(omitAmountQueryFields, omitDateQueryFields)(query);
+
+export const padAmountWithZeros = (number: number) => Math.ceil(number * 1000);
+
+export const amountRangeValueText = (value: number) =>
+  flow(padAmountWithZeros, formatAmount)(value);
+
+export const amountRangeValueTextLabel = (value: number) =>
+  flow(padAmountWithZeros, formatAmountSlider)(value);
+
+export const formatAmountRangeValues = (amountRangeValues: number[]) =>
+  flow(
+    map(padAmountWithZeros),
+    map(formatAmountSlider),
+    join(" - ")
+  )(amountRangeValues);
