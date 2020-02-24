@@ -17,6 +17,7 @@ import likeRoutes from "./backend/like-routes";
 import commentRoutes from "./backend/comment-routes";
 import notificationRoutes from "./backend/notification-routes";
 import bankTransferRoutes from "./backend/banktransfer-routes";
+import testDataRoutes from "./backend/testdata-routes";
 
 const corsOption = {
   origin: "http://localhost:3000",
@@ -45,6 +46,7 @@ app.use("/likes", likeRoutes);
 app.use("/comments", commentRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/bankTransfers", bankTransferRoutes);
+app.use("/testData", testDataRoutes);
 
 app.use(express.static(path.join(__dirname, "../public")));
 

@@ -192,3 +192,18 @@ export const isNotificationsBodyValidator = [
 ];
 
 export const isNotificationPatchValidator = [body("isRead").isBoolean()];
+
+export const isValidEntityValidator = [
+  check("entity")
+    .isIn([
+      "users",
+      "contacts",
+      "bankaccounts",
+      "notifications",
+      "transactions",
+      "likes",
+      "comments",
+      "banktransfers"
+    ])
+    .trim()
+];

@@ -115,6 +115,11 @@ export const getAllPublicTransactions = () =>
     .filter({ privacyLevel: "public" })
     .value();
 
+export const getAllForEntity = (entity: string) =>
+  db()
+    .get(entity)
+    .value();
+
 export const getAllBy = (entity: string, key: string, value: any) => {
   const result = db()
     .get(entity)
