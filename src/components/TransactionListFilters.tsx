@@ -1,5 +1,4 @@
 import React from "react";
-import { format as formatDate } from "date-fns";
 import {
   makeStyles,
   Paper,
@@ -11,18 +10,8 @@ import {
   Button
 } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import CancelIcon from "@material-ui/icons/Cancel";
-import indigo from "@material-ui/core/colors/indigo";
-import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
-import "react-infinite-calendar/styles.css";
+import { TransactionQueryPayload } from "../models";
 import {
-  TransactionDateRangePayload,
-  TransactionQueryPayload,
-  TransactionAmountRangePayload
-} from "../models";
-import {
-  hasDateQueryFields,
-  getDateQueryFields,
   formatAmountRangeValues,
   amountRangeValueText,
   amountRangeValueTextLabel,
@@ -31,8 +20,7 @@ import {
   getAmountQueryFields
 } from "../utils/transactionUtils";
 import { first, last } from "lodash/fp";
-
-const CalendarWithRange = withRange(Calendar);
+import TransactionListDateRangeFilter from "./TransactionDateRangeFilter";
 
 const useStyles = makeStyles(theme => ({
   amountRangeRoot: {
@@ -53,10 +41,6 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column"
-  },
-  calendar: {
-    width: theme.spacing(2),
-    height: theme.spacing(4)
   }
 }));
 
@@ -72,8 +56,6 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
   clearTransactionFilters
 }) => {
   const classes = useStyles();
-  const queryHasDateFields =
-    transactionFilters && hasDateQueryFields(transactionFilters);
   const queryHasAmountFields =
     transactionFilters && hasAmountQueryFields(transactionFilters);
 
@@ -91,31 +73,9 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
   ]);
 
   const [
-    dateRangeAnchorEl,
-    setDateRangeAnchorEl
-  ] = React.useState<HTMLDivElement | null>(null);
-  const [
     amountRangeAnchorEl,
     setAmountRangeAnchorEl
   ] = React.useState<HTMLDivElement | null>(null);
-
-  const onCalendarSelect = (e: { eventType: number; start: any; end: any }) => {
-    if (e.eventType === 3) {
-      filterTransactions({
-        dateRangeStart: new Date(e.start.setUTCHours(0, 0, 0, 0)).toISOString(),
-        dateRangeEnd: new Date(e.end.setUTCHours(23, 59, 59, 999)).toISOString()
-      });
-      setDateRangeAnchorEl(null);
-    }
-  };
-
-  const handleDateRangeClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    setDateRangeAnchorEl(event.currentTarget);
-  };
-
-  const handleDateRangeClose = () => {
-    setDateRangeAnchorEl(null);
-  };
 
   const handleAmountRangeClick = (event: React.MouseEvent<HTMLDivElement>) => {
     setAmountRangeAnchorEl(event.currentTarget);
@@ -136,26 +96,8 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
     setAmountRangeValue(amountRange as number[]);
   };
 
-  const dateRangeOpen = Boolean(dateRangeAnchorEl);
-  const dateRangeId = dateRangeOpen ? "date-range-popover" : undefined;
   const amountRangeOpen = Boolean(amountRangeAnchorEl);
   const amountRangeId = amountRangeOpen ? "amount-range-popover" : undefined;
-
-  const formatButtonDate = (date: string) => {
-    return formatDate(new Date(date), "MMM, D YYYY");
-  };
-
-  const dateRangeLabel = (transactionFilters: TransactionDateRangePayload) => {
-    if (queryHasDateFields) {
-      const { dateRangeStart, dateRangeEnd } = getDateQueryFields(
-        transactionFilters
-      );
-      return `${formatButtonDate(dateRangeStart!)} - ${formatButtonDate(
-        dateRangeEnd!
-      )}`;
-    }
-    return "";
-  };
 
   return (
     <Paper className={classes.paper} elevation={0}>
@@ -167,68 +109,11 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
         spacing={1}
       >
         <Grid item>
-          {!queryHasDateFields && (
-            <Chip
-              color="primary"
-              variant="outlined"
-              onClick={handleDateRangeClick}
-              data-test="transaction-list-filter-date-range-button"
-              label={"Date Range: ALL"}
-              deleteIcon={<ArrowDropDownIcon />}
-              onDelete={handleDateRangeClick}
-            />
-          )}
-          {queryHasDateFields && (
-            <Chip
-              color="primary"
-              variant="outlined"
-              onClick={handleDateRangeClick}
-              label={`Date Range: ${dateRangeLabel(transactionFilters)}`}
-              deleteIcon={
-                <CancelIcon data-test="transaction-list-filter-date-clear-button" />
-              }
-              onDelete={() => {
-                clearTransactionFilters({ filterType: "date" });
-              }}
-            />
-          )}
-          <Popover
-            id={dateRangeId}
-            open={dateRangeOpen}
-            anchorEl={dateRangeAnchorEl}
-            onClose={handleDateRangeClose}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "left"
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "left"
-            }}
-          >
-            <InfiniteCalendar
-              width={window.innerWidth <= 350 ? window.innerWidth : 350}
-              height={300}
-              rowHeight={50}
-              Component={CalendarWithRange}
-              selected={false}
-              onSelect={onCalendarSelect}
-              locale={{
-                headerFormat: "MMM Do"
-              }}
-              theme={{
-                accentColor: indigo["400"],
-                headerColor: indigo["500"],
-                weekdayColor: indigo["300"],
-                selectionColor: indigo["300"],
-                floatingNav: {
-                  background: indigo["400"],
-                  color: "#FFF",
-                  chevron: "#FFA726"
-                }
-              }}
-            />
-          </Popover>
+          <TransactionListDateRangeFilter
+            filterTransactions={filterTransactions}
+            transactionFilters={transactionFilters}
+            clearTransactionFilters={clearTransactionFilters}
+          />
         </Grid>
         <Grid item>
           <Chip
