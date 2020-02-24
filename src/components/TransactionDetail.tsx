@@ -21,11 +21,11 @@ import {
   receiverIsCurrentUser,
   isRequestTransaction,
   formatAmount,
-  isAcceptedRequestTransaction,
   currentUserLikesTransaction
 } from "../utils/transactionUtils";
 import { random } from "lodash/fp";
 import CommentsList from "./CommentList";
+import TransactionTitle from "./TransactionTitle";
 
 const imgNumber = random(3, 50);
 const useStyles = makeStyles(theme => ({
@@ -44,13 +44,6 @@ const useStyles = makeStyles(theme => ({
   },
   card: {
     minWidth: "100%"
-  },
-  title: {
-    fontSize: 18
-  },
-  titleName: {
-    fontSize: 18,
-    color: "#1A202C"
   },
   amountPositive: {
     fontSize: 24,
@@ -119,11 +112,6 @@ const TransactionDetail: React.FC<TransactionProps> = ({
   currentUser
 }) => {
   const classes = useStyles();
-  const TitleName: React.FC<{ name: string }> = ({ name }) => (
-    <Typography className={classes.titleName} display="inline" component="span">
-      {name}
-    </Typography>
-  );
 
   const Amount: React.FC<{ transaction: TransactionResponseItem }> = ({
     transaction
@@ -141,25 +129,6 @@ const TransactionDetail: React.FC<TransactionProps> = ({
       {isRequestTransaction(transaction) ? "+" : "-"}
       {transaction.amount && formatAmount(transaction.amount)}
     </Typography>
-  );
-
-  const Title: React.FC<{ children: any }> = ({ children }) => (
-    <Typography color="textSecondary" className={classes.title} gutterBottom>
-      {children}
-    </Typography>
-  );
-
-  const headline = isRequestTransaction(transaction) ? (
-    <Title>
-      <TitleName name={transaction.senderName} />
-      {isAcceptedRequestTransaction(transaction) ? " charged " : " requested "}
-      <TitleName name={transaction.receiverName} />
-    </Title>
-  ) : (
-    <Title>
-      <TitleName name={transaction.senderName} /> paid{" "}
-      <TitleName name={transaction.receiverName} />
-    </Title>
   );
 
   return (
@@ -186,7 +155,9 @@ const TransactionDetail: React.FC<TransactionProps> = ({
             alignItems="flex-start"
           >
             <Grid item></Grid>
-            <Grid item>{headline}</Grid>
+            <Grid item>
+              <TransactionTitle transaction={transaction} />
+            </Grid>
             <Grid item>
               <Typography variant="body2" color="textSecondary" gutterBottom>
                 {transaction.description}

@@ -14,11 +14,7 @@ import CommentIcon from "@material-ui/icons/CommentRounded";
 import { makeStyles } from "@material-ui/core/styles";
 import { TransactionResponseItem } from "../models";
 import { useHistory } from "react-router";
-import {
-  isRequestTransaction,
-  formatAmount,
-  isAcceptedRequestTransaction
-} from "../utils/transactionUtils";
+import { isRequestTransaction, formatAmount } from "../utils/transactionUtils";
 import TransactionTitle from "./TransactionTitle";
 
 const useStyles = makeStyles(theme => ({
@@ -71,22 +67,6 @@ const TransactionItem: React.FC<TransactionProps> = ({
     </Typography>
   );
 
-  const headline = isRequestTransaction(transaction) ? (
-    <TransactionTitle
-      senderName={transaction.senderName}
-      receiverName={transaction.receiverName}
-      status={
-        isAcceptedRequestTransaction(transaction) ? " charged " : " requested "
-      }
-    />
-  ) : (
-    <TransactionTitle
-      senderName={transaction.senderName}
-      receiverName={transaction.receiverName}
-      status="paid"
-    />
-  );
-
   const showTransactionDetail = (transactionId: string) => {
     history.push(`/transaction/${transactionId}`);
   };
@@ -103,7 +83,9 @@ const TransactionItem: React.FC<TransactionProps> = ({
           justify="flex-start"
           alignItems="flex-start"
         >
-          <Grid item>{headline}</Grid>
+          <Grid item>
+            <TransactionTitle transaction={transaction} />
+          </Grid>
           <Grid item>
             <Typography variant="body2" color="textSecondary" gutterBottom>
               {transaction.description}

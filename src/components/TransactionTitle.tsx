@@ -1,6 +1,11 @@
 import React from "react";
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { TransactionResponseItem } from "../models";
+import {
+  isRequestTransaction,
+  isAcceptedRequestTransaction
+} from "../utils/transactionUtils";
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -13,10 +18,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const TransactionTitle: React.FC<{
-  senderName: string;
-  receiverName: string;
-  status: string;
-}> = ({ senderName, receiverName }) => {
+  transaction: TransactionResponseItem;
+}> = ({ transaction }) => {
   const classes = useStyles();
 
   return (
@@ -26,15 +29,21 @@ const TransactionTitle: React.FC<{
         display="inline"
         component="span"
       >
-        {senderName}
+        {transaction.senderName}
       </Typography>
-      {status}
+      <Typography display="inline" component="span">
+        {isRequestTransaction(transaction)
+          ? isAcceptedRequestTransaction(transaction)
+            ? " charged "
+            : " requested "
+          : " paid "}
+      </Typography>
       <Typography
         className={classes.titleName}
         display="inline"
         component="span"
       >
-        {receiverName}
+        {transaction.receiverName}
       </Typography>
     </Typography>
   );
