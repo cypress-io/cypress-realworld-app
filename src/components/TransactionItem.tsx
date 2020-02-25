@@ -14,31 +14,12 @@ import CommentIcon from "@material-ui/icons/CommentRounded";
 import { makeStyles } from "@material-ui/core/styles";
 import { TransactionResponseItem } from "../models";
 import { useHistory } from "react-router";
-import {
-  isRequestTransaction,
-  formatAmount,
-  isAcceptedRequestTransaction
-} from "../utils/transactionUtils";
 import TransactionTitle from "./TransactionTitle";
+import TransactionAmount from "./TransactionAmount";
 
 const useStyles = makeStyles(theme => ({
   card: {
     minWidth: "100%"
-  },
-  title: {
-    fontSize: 18
-  },
-  titleName: {
-    fontSize: 18,
-    color: "#1A202C"
-  },
-  amountPositive: {
-    fontSize: 24,
-    color: "#4CAF50"
-  },
-  amountNegative: {
-    fontSize: 24,
-    color: "red"
   },
   avatar: {
     width: theme.spacing(2)
@@ -60,43 +41,6 @@ const TransactionItem: React.FC<TransactionProps> = ({
   const classes = useStyles();
   const history = useHistory();
 
-  const TitleName: React.FC<{ name: string }> = ({ name }) => (
-    <Typography className={classes.titleName} display="inline" component="span">
-      {name}
-    </Typography>
-  );
-
-  const Amount: React.FC<{ transaction: TransactionResponseItem }> = ({
-    transaction
-  }) => (
-    <Typography
-      className={
-        isRequestTransaction(transaction)
-          ? classes.amountPositive
-          : classes.amountNegative
-      }
-      display="inline"
-      component="span"
-      color="primary"
-    >
-      {isRequestTransaction(transaction) ? "+" : "-"}
-      {transaction.amount && formatAmount(transaction.amount)}
-    </Typography>
-  );
-
-  const headline = isRequestTransaction(transaction) ? (
-    <TransactionTitle>
-      <TitleName name={transaction.senderName} />
-      {isAcceptedRequestTransaction(transaction) ? " charged " : " requested "}
-      <TitleName name={transaction.receiverName} />
-    </TransactionTitle>
-  ) : (
-    <TransactionTitle>
-      <TitleName name={transaction.senderName} /> paid{" "}
-      <TitleName name={transaction.receiverName} />
-    </TransactionTitle>
-  );
-
   const showTransactionDetail = (transactionId: string) => {
     history.push(`/transaction/${transactionId}`);
   };
@@ -113,7 +57,9 @@ const TransactionItem: React.FC<TransactionProps> = ({
           justify="flex-start"
           alignItems="flex-start"
         >
-          <Grid item>{headline}</Grid>
+          <Grid item>
+            <TransactionTitle transaction={transaction} />
+          </Grid>
           <Grid item>
             <Typography variant="body2" color="textSecondary" gutterBottom>
               {transaction.description}
@@ -162,7 +108,7 @@ const TransactionItem: React.FC<TransactionProps> = ({
         </Grid>
       </ListItemText>
       <ListItemSecondaryAction>
-        <Amount transaction={transaction} />
+        <TransactionAmount transaction={transaction} />
       </ListItemSecondaryAction>
     </ListItem>
   );
