@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import NumberFormat from "react-number-format";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik, Form, Field, FieldProps } from "formik";
@@ -29,6 +30,33 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3, 0, 2)
   }
 }));
+
+interface NumberFormatCustomProps {
+  inputRef: (instance: NumberFormat | null) => void;
+  onChange: (event: { target: { value: string } }) => void;
+}
+
+function NumberFormatCustom(props: NumberFormatCustomProps) {
+  const { inputRef, onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={values => {
+        onChange({
+          target: {
+            ...other,
+            value: values.value
+          }
+        });
+      }}
+      thousandSeparator
+      isNumericString
+      prefix="$"
+    />
+  );
+}
 
 export interface TransactionCreateStepTwoProps {
   receiver: User;
@@ -105,6 +133,10 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                       data-test={"transaction-create-amount-input"}
                       error={meta.touched && Boolean(meta.error)}
                       helperText={meta.touched ? meta.error : ""}
+                      InputProps={{
+                        inputComponent: NumberFormatCustom as any,
+                        inputProps: { id: "amount" }
+                      }}
                       {...field}
                     />
                   )}
