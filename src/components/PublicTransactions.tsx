@@ -3,6 +3,7 @@ import TransactionList from "./TransactionList";
 import { TransactionResponseItem } from "../models";
 
 type PublicTransactionsProps = {
+  isLoading: Boolean;
   transactions: {
     contacts: TransactionResponseItem[];
     public: TransactionResponseItem[];
@@ -10,13 +11,22 @@ type PublicTransactionsProps = {
 };
 
 const PublicTransactions: React.FC<PublicTransactionsProps> = ({
-  transactions
+  transactions,
+  isLoading
 }) => {
   return (
     <>
-      <TransactionList header="Contacts" transactions={transactions.contacts} />
+      <TransactionList
+        header="Contacts"
+        transactions={transactions.contacts}
+        isLoading={isLoading}
+      />
       <br />
-      <TransactionList header="Public" transactions={transactions.public} />
+      <TransactionList
+        header="Public"
+        transactions={transactions.public}
+        isLoading={isLoading}
+      />
     </>
   );
 };

@@ -11,6 +11,7 @@ import { TransactionResponseItem } from "../models";
 export interface TransactionListProps {
   header: string;
   transactions: TransactionResponseItem[];
+  isLoading: Boolean;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -61,7 +62,8 @@ const Animations = () => {
 
 const TransactionList: React.FC<TransactionListProps> = ({
   header,
-  transactions
+  transactions,
+  isLoading
 }) => {
   const classes = useStyles();
   return (
@@ -69,6 +71,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
         {header}
       </Typography>
+      {isLoading && <Animations />}
       {transactions.length > 0 ? (
         <List data-test="transaction-list">
           {transactions.map(
@@ -82,7 +85,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
           )}
         </List>
       ) : (
-        <Animations />
+        <div>Empty State</div>
       )}
     </Paper>
   );
