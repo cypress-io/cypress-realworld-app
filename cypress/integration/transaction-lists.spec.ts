@@ -103,6 +103,32 @@ describe("Transaction Lists", function() {
       .should("have.length.greaterThan", 3);
   });
 
+  it("renders personal transaction list, filters by date range, then shows empty state", function() {
+    cy.getTest("main").scrollTo("top");
+    cy.getTest("nav-personal-tab")
+      .click({ force: true })
+      .should("have.class", "Mui-selected");
+
+    cy.getTest("transaction-list-filter-date-range-button")
+      .scrollIntoView()
+      .click({ force: true });
+
+    cy.get("[data-date='2020-02-01']").click({ force: true });
+    cy.get("[data-date='2020-02-03']").click({ force: true });
+
+    cy.wait("@personalTransactions");
+
+    cy.getTestLike("transaction-list-item").should("not.be.visible");
+
+    cy.getTest("empty-list-header").should("be.visible");
+
+    cy.getTest("transaction-list-empty-create-transaction-button")
+      .scrollIntoView()
+      .click({ force: true });
+
+    cy.location("pathname").should("eq", "/transaction/new");
+  });
+
   it.skip("renders personal transaction list, filters by amount range, then clears the amount range filter", function() {
     cy.getTest("main").scrollTo("top");
     cy.getTest("nav-personal-tab")

@@ -1,24 +1,24 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import Skeleton from "@material-ui/lab/Skeleton";
 import { makeStyles } from "@material-ui/core/styles";
-
-import TransactionItem from "./TransactionItem";
+import { Link as RouterLink } from "react-router-dom";
+import { Button } from "@material-ui/core";
 import List from "@material-ui/core/List";
+
+import SkeletonList from "./SkeletonList";
+import TransactionItem from "./TransactionItem";
 import { TransactionResponseItem } from "../models";
+import EmptyList from "./EmptyList";
 
 export interface TransactionListProps {
   header: string;
   transactions: TransactionResponseItem[];
+  isLoading: Boolean;
+  showCreateButton?: Boolean;
 }
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
-    width: "95%"
-  },
   paper: {
     padding: theme.spacing(2),
     display: "flex",
@@ -27,41 +27,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Animations = () => {
-  const classes = useStyles();
-  return (
-    <div className={classes.root}>
-      <br />
-      <Skeleton />
-      <Skeleton animation={false} />
-      <Skeleton animation="wave" />
-      <br />
-      <br />
-      <Skeleton />
-      <Skeleton animation={false} />
-      <Skeleton animation="wave" />
-      <br />
-      <br />
-      <Skeleton />
-      <Skeleton animation={false} />
-      <Skeleton animation="wave" />
-      <br />
-      <br />
-      <Skeleton />
-      <Skeleton animation={false} />
-      <Skeleton animation="wave" />
-      <br />
-      <br />
-      <Skeleton />
-      <Skeleton animation={false} />
-      <Skeleton animation="wave" />
-    </div>
-  );
-};
-
 const TransactionList: React.FC<TransactionListProps> = ({
   header,
-  transactions
+  transactions,
+  isLoading,
+  showCreateButton
 }) => {
   const classes = useStyles();
   return (
@@ -69,6 +39,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
         {header}
       </Typography>
+      {isLoading && <SkeletonList />}
       {transactions.length > 0 ? (
         <List data-test="transaction-list">
           {transactions.map(
@@ -82,7 +53,19 @@ const TransactionList: React.FC<TransactionListProps> = ({
           )}
         </List>
       ) : (
-        <Animations />
+        <EmptyList entity="Transactions">
+          {showCreateButton && (
+            <Button
+              data-test="transaction-list-empty-create-transaction-button"
+              variant="contained"
+              color="primary"
+              component={RouterLink}
+              to="/transaction/new"
+            >
+              Create A Transaction
+            </Button>
+          )}
+        </EmptyList>
       )}
     </Paper>
   );

@@ -18,6 +18,9 @@ import {
 } from "../utils/transactionUtils";
 
 export interface TransactionsState {
+  meta: {
+    isLoading: boolean;
+  };
   filters: object;
   transactionDetails?: TransactionResponseItem;
   public: {
@@ -29,6 +32,9 @@ export interface TransactionsState {
 }
 
 const initialState = {
+  meta: {
+    isLoading: false
+  },
   filters: {},
   transactionDetails: undefined,
   public: {
@@ -49,6 +55,9 @@ export default function reducer(
     case TRANSACTIONS_PUBLIC_PENDING:
       return {
         ...state,
+        meta: {
+          isLoading: true
+        },
         filters:
           action.payload && !isEmpty(action.payload)
             ? action.payload
@@ -77,31 +86,39 @@ export default function reducer(
     case TRANSACTIONS_PUBLIC_SUCCESS:
       return {
         ...state,
+        meta: {
+          isLoading: false
+        },
         public: action.payload
       };
     case TRANSACTIONS_CONTACTS_SUCCESS:
       return {
         ...state,
+        meta: {
+          isLoading: false
+        },
         contacts: action.payload
       };
     case TRANSACTIONS_PERSONAL_SUCCESS:
       return {
         ...state,
+        meta: {
+          isLoading: false
+        },
         personal: action.payload
       };
     case TRANSACTION_DETAIL_SUCCESS:
       return {
         ...state,
+        meta: {
+          isLoading: false
+        },
         transactionDetails: action.payload
       };
     case SIGNOUT_SUCCESS:
     case SIGNOUT_ERROR:
       return {
-        ...state,
-        public: {
-          contacts: [],
-          public: []
-        }
+        ...initialState
       };
     default:
       return state;

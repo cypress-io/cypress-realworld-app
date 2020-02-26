@@ -23,6 +23,7 @@ export interface DispatchProps {
 }
 
 export interface StateProps {
+  isLoadingTransactions: Boolean;
   publicTransactions: {
     contacts: TransactionResponseItem[];
     public: TransactionResponseItem[];
@@ -35,6 +36,7 @@ export interface StateProps {
 export type TransactionsContainerProps = StateProps & DispatchProps;
 
 const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
+  isLoadingTransactions,
   publicTransactions,
   contactsTransactions,
   personalTransactions,
@@ -65,6 +67,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
         <TransactionList
           header="Contacts"
           transactions={contactsTransactions}
+          isLoading={isLoadingTransactions}
         />
       </MainContainer>
     );
@@ -83,6 +86,8 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
         <TransactionList
           header="Personal"
           transactions={personalTransactions}
+          isLoading={isLoadingTransactions}
+          showCreateButton={true}
         />
       </MainContainer>
     );
@@ -98,12 +103,16 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
         clearTransactionFilters={clearTransactionFilters}
       />
       <br />
-      <PublicTransactions transactions={publicTransactions} />
+      <PublicTransactions
+        transactions={publicTransactions}
+        isLoading={isLoadingTransactions}
+      />
     </MainContainer>
   );
 };
 
 const mapStateToProps = (state: IRootReducerState) => ({
+  isLoadingTransactions: state.transactions.meta.isLoading,
   publicTransactions: state.transactions.public,
   contactsTransactions: state.transactions.contacts,
   personalTransactions: state.transactions.personal,

@@ -68,4 +68,13 @@ describe("Bank Accounts", function() {
 
     cy.getTestLike("bankaccount-list-item").should("contain", "The Best Bank");
   });
+
+  it.skip("renders an empty bank account list state", function() {
+    // TODO: does not work per https://github.com/cypress-io/cypress/issues/3890
+    // Overwrite default bank account response
+    // cy.route("http://localhost:3001/bankAccounts", []).as("bankAccounts");
+    cy.getTest("nav-top-notifications-count").click();
+    cy.getTest("bankaccount-list").should("not.be.visible");
+    cy.getTest("empty-list-header").should("contain", "No Bank Accounts");
+  });
 });
