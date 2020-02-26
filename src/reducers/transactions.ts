@@ -118,11 +118,7 @@ export default function reducer(
     case SIGNOUT_SUCCESS:
     case SIGNOUT_ERROR:
       return {
-        ...state,
-        public: {
-          contacts: [],
-          public: []
-        }
+        ...initialState
       };
     default:
       return state;
