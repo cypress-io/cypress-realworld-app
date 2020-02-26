@@ -59,4 +59,13 @@ describe("Notifications", function() {
 
     cy.getTestLike("notification-list-item").should("have.length", 5);
   });
+
+  it.skip("renders an empty notifications state", function() {
+    // TODO: does not work per https://github.com/cypress-io/cypress/issues/3890
+    // Overwrite default notifications response
+    // cy.route("GET", "/notifications", []).as("notifications");
+    cy.getTest("nav-top-notifications-count").click();
+    cy.getTest("notification-list").should("not.be.visible");
+    cy.getTest("empty-list-header").should("contain", "No Notifications");
+  });
 });

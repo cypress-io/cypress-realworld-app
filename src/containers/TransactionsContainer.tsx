@@ -87,6 +87,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
           header="Personal"
           transactions={personalTransactions}
           isLoading={isLoadingTransactions}
+          showCreateButton={true}
         />
       </MainContainer>
     );
