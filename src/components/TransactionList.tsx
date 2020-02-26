@@ -3,7 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 
-import ListSkeleton from "./ListSkeleton";
+import SkeletonList from "./SkeletonList";
 import TransactionItem from "./TransactionItem";
 import List from "@material-ui/core/List";
 import { TransactionResponseItem } from "../models";
@@ -34,7 +34,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
         {header}
       </Typography>
-      {isLoading && <ListSkeleton />}
+      {isLoading && <SkeletonList />}
       {transactions.length > 0 ? (
         <List data-test="transaction-list">
           {transactions.map(
