@@ -150,7 +150,7 @@ const NavDrawer: React.FC<Props> = ({
 
   return (
     <Drawer
-      variant="permanent"
+      variant="temporary"
       classes={{
         paper: clsx(
           classes.drawerPaper,
