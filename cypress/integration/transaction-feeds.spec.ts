@@ -1,7 +1,7 @@
 // check this file using TypeScript if available
 // @ts-check
 
-describe("Transaction Lists", function() {
+describe("Transaction Feed", function() {
   before(function() {
     cy.fixture("users").as("users");
     cy.get("@users").then(users => {
@@ -27,7 +27,7 @@ describe("Transaction Lists", function() {
     cy.getTest("drawer-icon").should("not.be.visible");
   });
 
-  it("renders public transaction lists (contacts, public)", function() {
+  it("renders everyone (public) transaction feeds (friends, public)", function() {
     cy.getTest("transaction-list").should("have.length", 2);
 
     cy.getTest("nav-public-tab").should("have.class", "Mui-selected");
@@ -43,7 +43,7 @@ describe("Transaction Lists", function() {
       .should("have.length", 3);
   });
 
-  it("renders contacts transaction list", function() {
+  it("renders friends (contacts) transaction feed", function() {
     cy.getTest("main").scrollTo("top");
     cy.getTest("nav-contacts-tab") // On get Navigation tabs are hidden under the AppBar in the UI
       .scrollIntoView() // TODO: Bug? Does not work as expected to scroll the tab into view
@@ -54,7 +54,7 @@ describe("Transaction Lists", function() {
       .should("have.length", 17);
   });
 
-  it("renders personal transaction list", function() {
+  it("renders mine (personal) transaction feed", function() {
     cy.getTest("main").scrollTo("top");
     cy.getTest("nav-personal-tab")
       .click({ force: true })
@@ -64,7 +64,7 @@ describe("Transaction Lists", function() {
       .should("have.length", 9);
   });
 
-  it("renders personal transaction list, filters by date range, then clears the date range filter", function() {
+  it("renders mine (personal) transaction feed, filters by date range, then clears the date range filter", function() {
     cy.getTest("main").scrollTo("top");
     cy.getTest("nav-personal-tab")
       .click({ force: true })
@@ -103,7 +103,7 @@ describe("Transaction Lists", function() {
       .should("have.length.greaterThan", 3);
   });
 
-  it("renders personal transaction list, filters by date range, then shows empty state", function() {
+  it("renders mine (personal) transaction feed, filters by date range, then shows empty state", function() {
     cy.getTest("main").scrollTo("top");
     cy.getTest("nav-personal-tab")
       .click({ force: true })
@@ -129,7 +129,7 @@ describe("Transaction Lists", function() {
     cy.location("pathname").should("eq", "/transaction/new");
   });
 
-  it.skip("renders personal transaction list, filters by amount range, then clears the amount range filter", function() {
+  it.skip("renders mine (personal) transaction feed, filters by amount range, then clears the amount range filter", function() {
     cy.getTest("main").scrollTo("top");
     cy.getTest("nav-personal-tab")
       .click({ force: true })
