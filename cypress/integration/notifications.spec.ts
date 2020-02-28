@@ -49,7 +49,7 @@ describe("Notifications", function() {
     cy.getTestLike("notification-list-item").should("contain", "received");
   });
 
-  it("marks a notification as read", function() {
+  it("marks a notification as read; updates notification counter badge", function() {
     cy.getTest("nav-top-notifications-count").click();
     cy.getTestLike("notification-mark-read")
       .eq(3)

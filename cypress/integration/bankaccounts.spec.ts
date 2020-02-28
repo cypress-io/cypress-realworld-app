@@ -34,7 +34,7 @@ describe("Bank Accounts", function() {
     cy.getTestLike("bankaccount-list-item").should("have.length", 1);
   });
 
-  it("deletes a bank account", function() {
+  it("soft deletes a bank account", function() {
     cy.getTest("bankaccount-list").should("be.visible");
 
     cy.getTestLike("bankaccount-delete")
