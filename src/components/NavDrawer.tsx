@@ -183,7 +183,7 @@ const NavDrawer: React.FC<Props> = ({
         </Grid>
         <Grid item>
           <div className={classes.toolbarIcon}>
-            <IconButton onClick={handleDrawerClose}>
+            <IconButton onClick={handleDrawerClose} data-test="sidenav-close">
               <ChevronLeftIcon />
             </IconButton>
           </div>

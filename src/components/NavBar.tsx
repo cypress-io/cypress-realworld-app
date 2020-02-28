@@ -79,6 +79,7 @@ const NavBar: React.FC<NavBarProps> = ({
     >
       <Toolbar className={classes.toolbar}>
         <IconButton
+          data-test="sidenav-open"
           edge="start"
           color="inherit"
           aria-label="open drawer"
