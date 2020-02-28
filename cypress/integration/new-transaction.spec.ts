@@ -40,7 +40,9 @@ describe("New Transaction", function() {
 
     cy.wait("@createTransaction").should("have.property", "status", 200);
 
+    cy.getTest("sidenav-open").click();
     cy.getTest("sidenav-user-balance").should("contain", "$525.00");
+    cy.getTest("sidenav-close").click();
 
     cy.getTest("nav-public-tab").should("have.class", "Mui-selected");
 
@@ -66,7 +68,9 @@ describe("New Transaction", function() {
 
     cy.wait("@createTransaction").should("have.property", "status", 200);
 
+    cy.getTest("sidenav-open").click();
     cy.getTest("sidenav-user-balance").should("contain", "$550.00");
+    cy.getTest("sidenav-close").click();
 
     cy.getTest("transaction-list").should("contain", "Fancy Hotel");
   });

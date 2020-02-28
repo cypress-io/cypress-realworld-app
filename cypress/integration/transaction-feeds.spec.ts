@@ -23,8 +23,8 @@ describe("Transaction Feed", function() {
     cy.getTest("app-name-logo").should("contain", "Pay App");
   });
 
-  it("defaults side navigation to open", function() {
-    cy.getTest("drawer-icon").should("not.be.visible");
+  it("defaults side navigation to closed", function() {
+    cy.getTest("drawer-icon").should("be.visible");
   });
 
   it("renders everyone (public) transaction feeds (friends, public)", function() {

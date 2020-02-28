@@ -21,6 +21,7 @@ describe("Bank Accounts", function() {
     cy.route("http://localhost:3001/bankAccounts").as("bankAccounts");
     cy.fixture("users").as("users");
 
+    cy.getTest("sidenav-open").click();
     cy.getTest("sidenav-bankaccounts").click();
   });
   after(function() {

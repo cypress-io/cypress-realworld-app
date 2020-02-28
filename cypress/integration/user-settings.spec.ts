@@ -15,15 +15,17 @@ describe("User Settings", function() {
     cy.route("PATCH", "http://localhost:3001/users/*").as("updateUser");
     cy.fixture("users").as("users");
 
+    cy.getTest("sidenav-open").click();
     cy.getTest("sidenav-user-settings").click();
   });
   after(function() {
     cy.task("db:seed");
   });
 
-  it("navigates to the user settings form", function() {
+  it("renders the user settings form", function() {
     cy.getTest("user-settings-form").should("be.visible");
     cy.location("pathname").should("include", "/user/settings");
+    cy.visit("/");
   });
 
   it("updates first name, last name, email and phone number", function() {
