@@ -1,7 +1,7 @@
 // check this file using TypeScript if available
 // @ts-check
 
-describe("Create Transaction", function() {
+describe("New Transaction", function() {
   before(function() {
     cy.fixture("users").as("users");
     cy.get("@users").then(users => {
@@ -24,7 +24,7 @@ describe("Create Transaction", function() {
     cy.task("db:seed");
   });
 
-  it("navigates to the create transaction form and displays a list of users to select", function() {
+  it("navigates to the new transaction form and displays a list of users to select", function() {
     cy.getTest("users-list").should("be.visible");
   });
 

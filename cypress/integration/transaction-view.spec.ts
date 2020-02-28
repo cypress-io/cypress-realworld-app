@@ -1,7 +1,7 @@
 // check this file using TypeScript if available
 // @ts-check
 
-describe("Transaction Detail", function() {
+describe("Transaction View", function() {
   before(function() {
     cy.fixture("users").as("users");
     cy.get("@users").then(users => {
@@ -32,7 +32,7 @@ describe("Transaction Detail", function() {
     cy.task("db:seed");
   });
 
-  it("displays transaction detail page", function() {
+  it("displays transaction view page", function() {
     cy.getTestLike("transaction-view")
       .eq(3)
       .scrollIntoView()
