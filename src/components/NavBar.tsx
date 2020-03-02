@@ -35,9 +35,6 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.enteringScreen
     })
   },
-  menuButton: {
-    marginRight: 36
-  },
   menuButtonHidden: {
     display: "none"
   },
@@ -84,10 +81,7 @@ const NavBar: React.FC<NavBarProps> = ({
           color="inherit"
           aria-label="open drawer"
           onClick={handleDrawerOpen}
-          className={clsx(
-            classes.menuButton,
-            drawerOpen && classes.menuButtonHidden
-          )}
+          className={clsx(drawerOpen && classes.menuButtonHidden)}
         >
           <MenuIcon data-test="drawer-icon" />
         </IconButton>
