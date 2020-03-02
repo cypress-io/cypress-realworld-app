@@ -19,10 +19,10 @@ const BankAccountListItem: React.FC<BankAccountListItemProps> = ({
         container
         direction="row"
         justify="space-between"
-        alignItems="center"
+        alignItems="flex-start"
       >
         <Grid item>
-          <Typography component="h2" variant="h6" color="primary" gutterBottom>
+          <Typography variant="body1" color="primary" gutterBottom>
             {bankAccount.bankName}{" "}
             {bankAccount.isDeleted ? "(Deleted)" : undefined}
           </Typography>
@@ -30,7 +30,8 @@ const BankAccountListItem: React.FC<BankAccountListItemProps> = ({
         {!bankAccount.isDeleted && (
           <Grid item>
             <Button
-              color="primary"
+              variant="contained"
+              color="secondary"
               size="large"
               data-test="bankaccount-delete"
               onClick={() => {
