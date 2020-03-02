@@ -46,7 +46,10 @@ const TransactionItem: React.FC<TransactionProps> = ({
   };
 
   return (
-    <ListItem data-test={`transaction-item-${transaction.id}`}>
+    <ListItem
+      data-test={`transaction-item-${transaction.id}`}
+      alignItems="flex-start"
+    >
       <ListItemAvatar>
         <Avatar src={`https://i.pravatar.cc/100?img=${transactionIndex}`} />
       </ListItemAvatar>
