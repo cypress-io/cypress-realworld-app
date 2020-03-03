@@ -64,6 +64,20 @@ describe("Transaction Feed", function() {
       .should("have.length", 9);
   });
 
+  it("shows date range calendar full screen on mobile", function() {
+    cy.viewport("iphone-6");
+    cy.getTest("main").scrollTo("top");
+    cy.getTest("nav-personal-tab")
+      .click({ force: true })
+      .should("have.class", "Mui-selected");
+
+    cy.getTest("transaction-list-filter-date-range-button")
+      .scrollIntoView()
+      .click({ force: true });
+
+    cy.getTest("nav-personal-tab").should("not.be.visible");
+  });
+
   it("renders mine (personal) transaction feed, filters by date range, then clears the date range filter", function() {
     cy.getTest("main").scrollTo("top");
     cy.getTest("nav-personal-tab")
