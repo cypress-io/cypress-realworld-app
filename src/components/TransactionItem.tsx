@@ -7,8 +7,10 @@ import {
   Avatar,
   ListItemAvatar,
   ListItemText,
-  ListItemSecondaryAction
+  ListItemSecondaryAction,
+  useTheme
 } from "@material-ui/core";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import LikeIcon from "@material-ui/icons/ThumbUpAltOutlined";
 import CommentIcon from "@material-ui/icons/CommentRounded";
 import { makeStyles } from "@material-ui/core/styles";
@@ -26,6 +28,31 @@ const useStyles = makeStyles(theme => ({
   },
   headline: {
     padding: "0"
+  },
+  actionsRow: {
+    marginTop: 2,
+    [theme.breakpoints.up("sm")]: {
+      marginTop: 5
+    }
+  },
+  socialStats: {
+    [theme.breakpoints.up("sm")]: {
+      marginTop: 2
+    }
+  },
+  countIcons: {
+    color: theme.palette.grey[400]
+  },
+  countText: {
+    color: theme.palette.grey[400],
+    marginTop: 2,
+    height: theme.spacing(2),
+    width: theme.spacing(2)
+  },
+  viewTransactionButton: {
+    [theme.breakpoints.down("sm")]: {
+      width: theme.spacing(1)
+    }
   }
 }));
 
@@ -38,6 +65,8 @@ const TransactionItem: React.FC<TransactionProps> = ({
   transaction,
   transactionIndex
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const classes = useStyles();
   const history = useHistory();
 
@@ -74,37 +103,44 @@ const TransactionItem: React.FC<TransactionProps> = ({
             justify="flex-start"
             alignItems="center"
             spacing={2}
+            className={classes.actionsRow}
           >
             <Grid item>
               <Grid
                 container
                 direction="row"
-                justify="flex-start"
+                justify="center"
                 alignItems="flex-start"
                 spacing={1}
+                className={classes.socialStats}
               >
                 <Grid item>
-                  {transaction.likes ? transaction.likes.length : 0}{" "}
+                  <LikeIcon className={classes.countIcons} />
                 </Grid>
                 <Grid item>
-                  <LikeIcon />
+                  <Typography className={classes.countText}>
+                    {transaction.likes ? transaction.likes.length : 0}{" "}
+                  </Typography>
                 </Grid>
                 <Grid item>
-                  {transaction.comments ? transaction.comments.length : 0}{" "}
+                  <CommentIcon className={classes.countIcons} />
                 </Grid>
                 <Grid item>
-                  <CommentIcon />
+                  <Typography className={classes.countText}>
+                    {transaction.comments ? transaction.comments.length : 0}{" "}
+                  </Typography>
                 </Grid>
               </Grid>
             </Grid>
             <Grid item>
               <Button
+                className={classes.viewTransactionButton}
                 color="primary"
                 size="small"
                 onClick={() => showTransactionDetail(transaction.id)}
                 data-test={`transaction-view-${transaction.id}`}
               >
-                View Transaction
+                Details
               </Button>
             </Grid>
           </Grid>
