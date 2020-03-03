@@ -6,10 +6,8 @@ import {
   Grid,
   Avatar,
   ListItemAvatar,
-  useTheme,
   Paper
 } from "@material-ui/core";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import LikeIcon from "@material-ui/icons/ThumbUpAltOutlined";
 import CommentIcon from "@material-ui/icons/CommentRounded";
 import { makeStyles } from "@material-ui/core/styles";
@@ -32,15 +30,6 @@ const useStyles = makeStyles(theme => ({
   },
   avatar: {
     width: theme.spacing(2)
-  },
-  headline: {
-    padding: "0"
-  },
-  actionsRow: {
-    marginTop: 2,
-    [theme.breakpoints.up("sm")]: {
-      marginTop: 5
-    }
   },
   socialStats: {
     [theme.breakpoints.down("sm")]: {
@@ -72,7 +61,6 @@ const TransactionItem: React.FC<TransactionProps> = ({
   transaction,
   transactionIndex
 }) => {
-  const theme = useTheme();
   const classes = useStyles();
   const history = useHistory();
 
