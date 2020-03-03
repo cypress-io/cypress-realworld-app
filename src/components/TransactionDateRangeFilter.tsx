@@ -1,10 +1,11 @@
 import React from "react";
 import { format as formatDate } from "date-fns";
-import { Popover, Chip } from "@material-ui/core";
+import { Popover, Chip, useTheme, makeStyles } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import CancelIcon from "@material-ui/icons/Cancel";
 import indigo from "@material-ui/core/colors/indigo";
 import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import "react-infinite-calendar/styles.css";
 import {
   TransactionDateRangePayload,
@@ -23,11 +24,25 @@ export type TransactionListDateRangeFilterProps = {
   clearTransactionFilters: Function;
 };
 
+const useStyles = makeStyles(theme => ({
+  popover: {
+    [theme.breakpoints.down("sm")]: {
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0
+    }
+  }
+}));
+
 const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterProps> = ({
   filterTransactions,
   transactionFilters,
   clearTransactionFilters
 }) => {
+  const classes = useStyles();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const queryHasDateFields =
     transactionFilters && hasDateQueryFields(transactionFilters);
 
@@ -113,10 +128,11 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
           vertical: "top",
           horizontal: "left"
         }}
+        className={classes.popover}
       >
         <InfiniteCalendar
-          width={window.innerWidth <= 350 ? window.innerWidth : 350}
-          height={300}
+          width={isMobile ? window.innerWidth : 350}
+          height={isMobile ? window.innerHeight : 300}
           rowHeight={50}
           Component={CalendarWithRange}
           selected={false}

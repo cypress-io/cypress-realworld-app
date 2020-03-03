@@ -23,8 +23,18 @@ import { head } from "lodash/fp";
 const drawerWidth = 240;
 
 export const mainListItems = (
+  handleDrawerClose:
+    | ((event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void)
+    | undefined
+) => (
   <div>
-    <ListItem button component={RouterLink} to="/" data-test="sidenav-home">
+    <ListItem
+      button
+      onClick={handleDrawerClose}
+      component={RouterLink}
+      to="/"
+      data-test="sidenav-home"
+    >
       <ListItemIcon>
         <HomeIcon />
       </ListItemIcon>
@@ -32,6 +42,7 @@ export const mainListItems = (
     </ListItem>
     <ListItem
       button
+      onClick={handleDrawerClose}
       component={RouterLink}
       to="/user/settings"
       data-test="sidenav-user-settings"
@@ -43,6 +54,7 @@ export const mainListItems = (
     </ListItem>
     <ListItem
       button
+      onClick={handleDrawerClose}
       component={RouterLink}
       to="/bankaccounts"
       data-test="sidenav-bankaccounts"
@@ -54,6 +66,7 @@ export const mainListItems = (
     </ListItem>
     <ListItem
       button
+      onClick={handleDrawerClose}
       component={RouterLink}
       to="/notifications"
       data-test="sidenav-notifications"
@@ -150,7 +163,7 @@ const NavDrawer: React.FC<Props> = ({
 
   return (
     <Drawer
-      variant="permanent"
+      variant="temporary"
       classes={{
         paper: clsx(
           classes.drawerPaper,
@@ -183,7 +196,7 @@ const NavDrawer: React.FC<Props> = ({
         </Grid>
         <Grid item>
           <div className={classes.toolbarIcon}>
-            <IconButton onClick={handleDrawerClose}>
+            <IconButton onClick={handleDrawerClose} data-test="sidenav-close">
               <ChevronLeftIcon />
             </IconButton>
           </div>
@@ -211,7 +224,7 @@ const NavDrawer: React.FC<Props> = ({
         </Grid>
       </Grid>
       <Divider />
-      <List>{mainListItems}</List>
+      <List>{mainListItems(handleDrawerClose)}</List>
       <Divider />
       <List>{secondaryListItems(signOutPending)}</List>
     </Drawer>

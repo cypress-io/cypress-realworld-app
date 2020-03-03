@@ -23,8 +23,8 @@ describe("Transaction Feed", function() {
     cy.getTest("app-name-logo").should("contain", "Pay App");
   });
 
-  it("defaults side navigation to open", function() {
-    cy.getTest("drawer-icon").should("not.be.visible");
+  it("defaults side navigation to closed", function() {
+    cy.getTest("drawer-icon").should("be.visible");
   });
 
   it("renders everyone (public) transaction feeds (friends, public)", function() {
@@ -62,6 +62,20 @@ describe("Transaction Feed", function() {
     cy.getTest("transaction-list")
       .children()
       .should("have.length", 9);
+  });
+
+  it("shows date range calendar full screen on mobile", function() {
+    cy.viewport("iphone-6");
+    cy.getTest("main").scrollTo("top");
+    cy.getTest("nav-personal-tab")
+      .click({ force: true })
+      .should("have.class", "Mui-selected");
+
+    cy.getTest("transaction-list-filter-date-range-button")
+      .scrollIntoView()
+      .click({ force: true });
+
+    cy.getTest("nav-personal-tab").should("not.be.visible");
   });
 
   it("renders mine (personal) transaction feed, filters by date range, then clears the date range filter", function() {

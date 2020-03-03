@@ -55,7 +55,7 @@ const MainLayout: React.FC<Props> = ({
   const { severity, message } = snackbar;
 
   // TODO: Move drawer open/close state to MainContainer / Redux
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
   };

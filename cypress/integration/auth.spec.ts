@@ -41,6 +41,7 @@ describe("App", function() {
       });
     });
     it("logs out", function() {
+      cy.getTest("sidenav-open").click();
       cy.getTest("sidenav-signout").click();
       cy.location("pathname").should("eq", "/signin");
     });

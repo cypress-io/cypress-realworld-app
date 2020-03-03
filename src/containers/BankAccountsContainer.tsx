@@ -55,6 +55,7 @@ const BankAccountsContainer: React.FC<BankAccountsContainerProps> = ({
           </Grid>
           <Grid item>
             <Button
+              variant="contained"
               color="primary"
               size="large"
               component={RouterLink}

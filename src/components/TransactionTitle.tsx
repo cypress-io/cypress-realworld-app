@@ -9,10 +9,22 @@ import {
 
 const useStyles = makeStyles(theme => ({
   title: {
-    fontSize: 18
+    fontSize: 18,
+    [theme.breakpoints.down("sm")]: {
+      fontSize: theme.typography.fontSize
+    }
+  },
+  titleAction: {
+    fontSize: 18,
+    [theme.breakpoints.down("sm")]: {
+      fontSize: theme.typography.fontSize
+    }
   },
   titleName: {
     fontSize: 18,
+    [theme.breakpoints.down("sm")]: {
+      fontSize: theme.typography.fontSize
+    },
     color: "#1A202C"
   }
 }));
@@ -31,7 +43,11 @@ const TransactionTitle: React.FC<{
       >
         {transaction.senderName}
       </Typography>
-      <Typography display="inline" component="span">
+      <Typography
+        display="inline"
+        className={classes.titleAction}
+        component="span"
+      >
         {isRequestTransaction(transaction)
           ? isAcceptedRequestTransaction(transaction)
             ? " charged "
