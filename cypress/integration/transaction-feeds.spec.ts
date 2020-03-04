@@ -43,7 +43,7 @@ describe("Transaction Feed", function() {
       .should("have.length", 3);
   });
 
-  it("renders friends (contacts) transaction feed", function() {
+  it("renders friends (contacts) transaction feed, page one", function() {
     cy.getTest("main").scrollTo("top");
     cy.getTest("nav-contacts-tab") // On get Navigation tabs are hidden under the AppBar in the UI
       .scrollIntoView() // TODO: Bug? Does not work as expected to scroll the tab into view
@@ -51,7 +51,7 @@ describe("Transaction Feed", function() {
       .should("have.class", "Mui-selected");
     cy.getTest("transaction-list")
       .children()
-      .should("have.length", 17);
+      .should("have.length", 10);
   });
 
   it("renders mine (personal) transaction feed", function() {

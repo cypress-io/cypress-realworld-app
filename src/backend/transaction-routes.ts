@@ -21,6 +21,7 @@ import {
   isTransactionPatchValidator,
   isTransactionPublicQSValidator
 } from "./validators";
+import { getPaginatedItems } from "../utils/transactionUtils";
 const router = express.Router();
 
 // Routes
@@ -37,8 +38,19 @@ router.get(
   (req, res) => {
     const transactions = getTransactionsForUserForApi(req.user?.id!, req.query);
 
+    const { totalPages, data: paginatedItems } = getPaginatedItems(
+      req.query.page,
+      req.query.limit,
+      transactions
+    );
+
     res.status(200);
-    res.json({ transactions });
+    res.json({
+      transactions: paginatedItems,
+      page: res.locals.paginate.page,
+      limit: res.locals.paginate.limit,
+      totalPages
+    });
   }
 );
 
@@ -57,8 +69,19 @@ router.get(
       req.query
     );
 
+    const { totalPages, data: paginatedItems } = getPaginatedItems(
+      req.query.page,
+      req.query.limit,
+      transactions
+    );
+
     res.status(200);
-    res.json({ transactions });
+    res.json({
+      transactions: paginatedItems,
+      page: res.locals.paginate.page,
+      limit: res.locals.paginate.limit,
+      totalPages
+    });
   }
 );
 

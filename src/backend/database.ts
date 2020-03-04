@@ -55,7 +55,7 @@ import {
   getDateQueryFields,
   hasAmountQueryFields,
   getAmountQueryFields,
-  getQueryWithoutAmountAndDateFields
+  getQueryWithoutFilterFields
 } from "../utils/transactionUtils";
 
 const USER_TABLE = "users";
@@ -440,10 +440,10 @@ export const formatTransactionsForApiResponse = (
 
 export const getAllTransactionsForUserByObj = curry(
   (userId: string, query?: object) => {
-    const queryWithoutAmountAndDateFields =
-      query && getQueryWithoutAmountAndDateFields(query);
+    const queryWithoutFilterFields =
+      query && getQueryWithoutFilterFields(query);
 
-    const queryFields = queryWithoutAmountAndDateFields || query;
+    const queryFields = queryWithoutFilterFields || query;
 
     const userTransactions = flatMap(getTransactionsByObj)([
       {

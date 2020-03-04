@@ -53,6 +53,8 @@ type TransactionQueryBase = {
   amountMin?: number;
   amountMax?: number;
   status?: TransactionStatus;
+  limit?: number;
+  page?: number;
 };
 
 export type TransactionQueryPayload = Partial<TransactionQueryBase>;
@@ -63,6 +65,10 @@ export type TransactionDateRangePayload = Partial<
 
 export type TransactionAmountRangePayload = Partial<
   Pick<TransactionQueryPayload, "amountMin" | "amountMax">
+>;
+
+export type TransactionPaginationPayload = Partial<
+  Pick<TransactionQueryPayload, "page" | "limit">
 >;
 
 export type TransactionClearFiltersPayload = {
