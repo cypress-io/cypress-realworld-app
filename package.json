@@ -39,7 +39,7 @@
     "@types/webpack-env": "1.15.1",
     "@types/yup": "0.26.32",
     "axios": "0.19.2",
-    "bcrypt": "3.0.8",
+    "bcrypt": "4.0.1",
     "cors": "2.8.5",
     "dinero.js": "1.7.0",
     "dotenv": "8.2.0",
