@@ -7,6 +7,7 @@ import passport from "passport";
 import session from "express-session";
 import bodyParser from "body-parser";
 import cors from "cors";
+import paginate from "express-paginate";
 
 import auth from "./backend/auth";
 import userRoutes from "./backend/user-routes";
@@ -36,6 +37,8 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(paginate.middleware(10, 50));
 
 app.use(auth);
 app.use("/users", userRoutes);
