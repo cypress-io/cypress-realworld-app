@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import InfiniteLoader from "react-window-infinite-loader";
-import { VariableSizeList } from "react-window";
+import { FixedSizeList } from "react-window";
 
 import TransactionItem from "./TransactionItem";
 import { TransactionResponseItem } from "../models";
@@ -37,6 +37,9 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
   // Every row is loaded except for our loading indicator row.
   //const isItemLoaded = ({ index }: { index: number }) => !hasNextPage || index < transactions.length;
   const isItemLoaded = (index: number) => {
+    /*console.log("ItemLoaded hasNextPage: ", hasNextPage);
+    console.log("ItemLoaded Index: ", index);
+    console.log("ItemLoaded transactions.length : ", transactions.length);*/
     return !hasNextPage || index < transactions.length;
   };
 
@@ -47,7 +50,9 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
     } else {
       const transaction = get(index, transactions);
       return (
-        <TransactionItem transaction={transaction} transactionIndex={index} />
+        <div style={style}>
+          <TransactionItem transaction={transaction} transactionIndex={index} />
+        </div>
       );
     }
   };
@@ -61,17 +66,17 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
       threshold={5}
     >
       {({ onItemsRendered, ref }) => (
-        <VariableSizeList
+        <FixedSizeList
           data-test="transaction-list"
           itemCount={transactions.length}
           ref={ref}
           onItemsRendered={onItemsRendered}
           height={500}
-          itemSize={() => 166}
-          width={900}
+          itemSize={198}
+          width={850}
         >
           {Item}
-        </VariableSizeList>
+        </FixedSizeList>
       )}
     </InfiniteLoader>
   );
