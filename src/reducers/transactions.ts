@@ -11,7 +11,7 @@ import {
 } from "../actions/transactions";
 import { TAuthActions, SIGNOUT_SUCCESS, SIGNOUT_ERROR } from "../actions/auth";
 import { TransactionResponseItem } from "../models";
-import { isEmpty, isEqual } from "lodash/fp";
+import { isEmpty, isEqual, concat } from "lodash/fp";
 import {
   omitDateQueryFields,
   omitAmountQueryFields
@@ -97,7 +97,10 @@ export default function reducer(
         meta: {
           isLoading: false
         },
-        contacts: action.payload
+        contacts:
+          action.payload.page > 1 && !isEmpty(state.contacts)
+            ? concat(state.contacts, action.payload.transactions)
+            : action.payload.transactions
       };
     case TRANSACTIONS_PERSONAL_SUCCESS:
       return {

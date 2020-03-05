@@ -68,6 +68,8 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
           header="Contacts"
           transactions={contactsTransactions}
           isLoading={isLoadingTransactions}
+          loadNextPage={filterContactTransactions}
+          infinite={true}
         />
       </MainContainer>
     );

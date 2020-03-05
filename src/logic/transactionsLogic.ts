@@ -124,7 +124,7 @@ const transactionsContactsLogic = createLogic({
       .get(`http://localhost:3001/transactions/contacts`, {
         params: !isEmpty(filters) ? filters : payload
       })
-      .then((resp: any) => resp.data.transactions);
+      .then((resp: any) => resp.data);
   }
 });
 
