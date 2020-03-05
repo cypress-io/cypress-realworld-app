@@ -45,7 +45,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
         {header}
       </Typography>
-      {isLoading && <SkeletonList />}
+      {isLoading && !infinite && <SkeletonList />}
       {transactions.length > 0 ? (
         infinite && loadNextPage ? (
           <TransactionInfiniteList

@@ -72,8 +72,8 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
           ref={ref}
           onItemsRendered={onItemsRendered}
           height={500}
-          itemSize={198}
           width={850}
+          itemSize={198}
         >
           {Item}
         </FixedSizeList>
