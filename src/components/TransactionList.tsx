@@ -8,7 +8,7 @@ import List from "@material-ui/core/List";
 
 import SkeletonList from "./SkeletonList";
 import TransactionItem from "./TransactionItem";
-import { TransactionResponseItem } from "../models";
+import { TransactionResponseItem, TransactionPagination } from "../models";
 import EmptyList from "./EmptyList";
 import TransactionInfiniteList from "./TransactionInfiniteList";
 
@@ -19,6 +19,7 @@ export interface TransactionListProps {
   showCreateButton?: Boolean;
   infinite?: Boolean;
   loadNextPage?: Function;
+  pagination?: TransactionPagination;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -36,7 +37,8 @@ const TransactionList: React.FC<TransactionListProps> = ({
   isLoading,
   showCreateButton,
   infinite,
-  loadNextPage
+  loadNextPage,
+  pagination
 }) => {
   const classes = useStyles();
 
@@ -47,10 +49,11 @@ const TransactionList: React.FC<TransactionListProps> = ({
       </Typography>
       {isLoading && !infinite && <SkeletonList />}
       {transactions.length > 0 ? (
-        infinite && loadNextPage ? (
+        infinite && loadNextPage && pagination ? (
           <TransactionInfiniteList
             transactions={transactions}
             loadNextPage={loadNextPage}
+            pagination={pagination}
           />
         ) : (
           <List data-test="transaction-list">

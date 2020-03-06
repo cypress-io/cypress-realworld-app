@@ -2,7 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import MainContainer from "./MainContainer";
 import { IRootReducerState } from "../reducers";
-import { TransactionResponseItem, TransactionQueryPayload } from "../models";
+import {
+  TransactionResponseItem,
+  TransactionQueryPayload,
+  TransactionPagination
+} from "../models";
 import { useRouteMatch } from "react-router";
 import PublicTransactions from "../components/PublicTransactions";
 import TransactionList from "../components/TransactionList";
@@ -28,6 +32,7 @@ export interface StateProps {
     contacts: TransactionResponseItem[];
     public: TransactionResponseItem[];
   };
+  contactsPagination: TransactionPagination;
   contactsTransactions: TransactionResponseItem[];
   personalTransactions: TransactionResponseItem[];
   transactionFilters: TransactionQueryPayload;
@@ -39,6 +44,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   isLoadingTransactions,
   publicTransactions,
   contactsTransactions,
+  contactsPagination,
   personalTransactions,
   filterPublicTransactions,
   filterPersonalTransactions,
@@ -70,6 +76,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
           isLoading={isLoadingTransactions}
           loadNextPage={filterContactTransactions}
           infinite={true}
+          pagination={contactsPagination}
         />
       </MainContainer>
     );
@@ -116,7 +123,8 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
 const mapStateToProps = (state: IRootReducerState) => ({
   isLoadingTransactions: state.transactions.meta.isLoading,
   publicTransactions: state.transactions.public,
-  contactsTransactions: state.transactions.contacts,
+  contactsPagination: state.transactions.contacts.pagination,
+  contactsTransactions: state.transactions.contacts.data,
   personalTransactions: state.transactions.personal,
   transactionFilters: state.transactions.filters
 });

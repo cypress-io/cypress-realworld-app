@@ -74,3 +74,10 @@ export type TransactionPaginationPayload = Partial<
 export type TransactionClearFiltersPayload = {
   filterType: "date" | "amount";
 };
+
+export type TransactionPagination = {
+  page: number;
+  limit: number;
+  hasNextPages: boolean;
+  totalPages: number;
+};

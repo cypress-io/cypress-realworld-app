@@ -3,33 +3,35 @@ import InfiniteLoader from "react-window-infinite-loader";
 import { FixedSizeList } from "react-window";
 
 import TransactionItem from "./TransactionItem";
-import { TransactionResponseItem } from "../models";
+import { TransactionResponseItem, TransactionPagination } from "../models";
 import { get } from "lodash/fp";
 
 export interface TransactionListProps {
   transactions: TransactionResponseItem[];
   loadNextPage: Function;
+  pagination: TransactionPagination;
 }
 
 const TransactionInfiniteList: React.FC<TransactionListProps> = ({
   transactions,
-  loadNextPage
+  loadNextPage,
+  pagination
 }) => {
   const [isNextPageLoading, setIsNextPageLoading] = useState(false);
-  const [hasNextPage, setHasNextPage] = useState(true);
 
-  const itemCount = hasNextPage ? transactions.length + 1 : transactions.length;
+  const itemCount = pagination.hasNextPages
+    ? transactions.length + 1
+    : transactions.length;
 
   const loadMoreItems = (startIndex: number, stopIndex: number) => {
     console.log({ startIndex });
     console.log({ stopIndex });
-    if (startIndex === 10) {
+    if (pagination.hasNextPages) {
       return Promise.resolve("TEST").then(() => {
         console.log("load next page");
 
         setIsNextPageLoading(true);
-        setHasNextPage(false);
-        loadNextPage({ page: 2 });
+        loadNextPage({ page: pagination.page + 1 });
       });
     }
   };
@@ -40,7 +42,7 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
     /*console.log("ItemLoaded hasNextPage: ", hasNextPage);
     console.log("ItemLoaded Index: ", index);
     console.log("ItemLoaded transactions.length : ", transactions.length);*/
-    return !hasNextPage || index < transactions.length;
+    return !pagination.hasNextPages || index < transactions.length;
   };
 
   // Render a list item or a loading indicator.
@@ -63,7 +65,7 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
       // @ts-ignore
       loadMoreItems={loadMoreItems}
       itemCount={itemCount}
-      threshold={5}
+      threshold={pagination.limit}
     >
       {({ onItemsRendered, ref }) => (
         <FixedSizeList

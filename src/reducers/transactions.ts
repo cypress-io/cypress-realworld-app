@@ -10,8 +10,8 @@ import {
   TRANSACTIONS_CLEAR_FILTERS
 } from "../actions/transactions";
 import { TAuthActions, SIGNOUT_SUCCESS, SIGNOUT_ERROR } from "../actions/auth";
-import { TransactionResponseItem } from "../models";
-import { isEmpty, isEqual, concat } from "lodash/fp";
+import { TransactionResponseItem, TransactionPagination } from "../models";
+import { isEmpty, isEqual, concat, omit } from "lodash/fp";
 import {
   omitDateQueryFields,
   omitAmountQueryFields
@@ -27,9 +27,19 @@ export interface TransactionsState {
     contacts: TransactionResponseItem[];
     public: TransactionResponseItem[];
   };
-  contacts: TransactionResponseItem[];
+  contacts: {
+    pagination: TransactionPagination;
+    data: TransactionResponseItem[];
+  };
   personal: TransactionResponseItem[];
 }
+
+const paginationDefaults: TransactionPagination = {
+  page: 1,
+  limit: 10,
+  hasNextPages: false,
+  totalPages: 1
+};
 
 const initialState = {
   meta: {
@@ -41,7 +51,12 @@ const initialState = {
     contacts: [],
     public: []
   },
-  contacts: [],
+  contacts: {
+    pagination: {
+      ...paginationDefaults
+    },
+    data: []
+  },
   personal: []
 };
 
@@ -91,17 +106,24 @@ export default function reducer(
         },
         public: action.payload
       };
-    case TRANSACTIONS_CONTACTS_SUCCESS:
+    case TRANSACTIONS_CONTACTS_SUCCESS: {
       return {
         ...state,
         meta: {
           isLoading: false
         },
-        contacts:
-          action.payload.page > 1 && !isEmpty(state.contacts)
-            ? concat(state.contacts, action.payload.transactions)
-            : action.payload.transactions
+        contacts: {
+          pagination: omit(
+            "transactions",
+            action.payload
+          ) as TransactionPagination,
+          data:
+            action.payload.page > 1 && !isEmpty(state.contacts)
+              ? concat(state.contacts, action.payload.transactions)
+              : action.payload.transactions
+        }
       };
+    }
     case TRANSACTIONS_PERSONAL_SUCCESS:
       return {
         ...state,
