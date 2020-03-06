@@ -70,7 +70,7 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
       {({ onItemsRendered, ref }) => (
         <FixedSizeList
           data-test="transaction-list"
-          itemCount={transactions.length}
+          itemCount={itemCount}
           ref={ref}
           onItemsRendered={onItemsRendered}
           height={500}

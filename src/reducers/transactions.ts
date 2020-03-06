@@ -106,7 +106,7 @@ export default function reducer(
         },
         public: action.payload
       };
-    case TRANSACTIONS_CONTACTS_SUCCESS: {
+    case TRANSACTIONS_CONTACTS_SUCCESS:
       return {
         ...state,
         meta: {
@@ -117,13 +117,9 @@ export default function reducer(
             "transactions",
             action.payload
           ) as TransactionPagination,
-          data:
-            action.payload.page > 1 && !isEmpty(state.contacts)
-              ? concat(state.contacts, action.payload.transactions)
-              : action.payload.transactions
+          data: concat(state.contacts.data, action.payload.transactions)
         }
       };
-    }
     case TRANSACTIONS_PERSONAL_SUCCESS:
       return {
         ...state,
