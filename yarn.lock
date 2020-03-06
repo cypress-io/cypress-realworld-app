@@ -1723,10 +1723,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-infinite-calendar@2.3.3":
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/@types/react-infinite-calendar/-/react-infinite-calendar-2.3.3.tgz#3cddac42f009d2a63e9d1b53180e7f1fc5252f13"
-  integrity sha512-OP9UWK4XpGNEyfLX9112whvQOT55NNQXjfreBU39TqbAoxUwQIQ1NXoA+86n3mz4aUlPdx1jj1S3a3IQDQdB4A==
+"@types/react-infinite-calendar@2.3.4":
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/@types/react-infinite-calendar/-/react-infinite-calendar-2.3.4.tgz#2ebbf65057321877f6267fac4c8fd557636d147a"
+  integrity sha512-QJoLwlxdSqwGyFeKIuCk3woVcJXOXXjkU2pvY68L0jtKcpWKASXePnBvX2eF2d39Avau7jIvE+UM6fpo5p+MGg==
   dependencies:
     "@types/react" "*"
 
