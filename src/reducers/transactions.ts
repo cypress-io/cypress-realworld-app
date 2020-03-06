@@ -67,17 +67,20 @@ export default function reducer(
   switch (action.type) {
     case TRANSACTIONS_PERSONAL_PENDING:
     case TRANSACTIONS_CONTACTS_PENDING:
-    case TRANSACTIONS_PUBLIC_PENDING:
+    case TRANSACTIONS_PUBLIC_PENDING: {
+      const sanitizedPayload = omit("page", action.payload);
+
       return {
         ...state,
         meta: {
           isLoading: true
         },
         filters:
-          action.payload && !isEmpty(action.payload)
-            ? action.payload
+          sanitizedPayload && !isEmpty(sanitizedPayload)
+            ? sanitizedPayload
             : state.filters
       };
+    }
     case TRANSACTIONS_CLEAR_FILTERS: {
       if (isEqual("date", action.payload.filterType)) {
         return {
