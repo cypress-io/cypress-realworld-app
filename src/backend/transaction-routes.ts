@@ -77,11 +77,13 @@ router.get(
 
     res.status(200);
     res.json({
-      transactions: paginatedItems,
-      page: res.locals.paginate.page,
-      limit: res.locals.paginate.limit,
-      hasNextPages: res.locals.paginate.hasNextPages(totalPages),
-      totalPages
+      pageData: {
+        page: res.locals.paginate.page,
+        limit: res.locals.paginate.limit,
+        hasNextPages: res.locals.paginate.hasNextPages(totalPages),
+        totalPages
+      },
+      results: paginatedItems
     });
   }
 );

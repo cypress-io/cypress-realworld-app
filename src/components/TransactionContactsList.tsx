@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useMachine } from "@xstate/react";
 import {
   TransactionPagination,
   TransactionResponseItem,
@@ -8,7 +9,7 @@ import MainContainer from "../containers/MainContainer";
 import TransactionNavTabs from "./TransactionNavTabs";
 import TransactionListFilters from "./TransactionListFilters";
 import TransactionList from "./TransactionList";
-import { isEmpty } from "lodash/fp";
+import { contactsTransactionsMachine } from "../machines/contactsTransactionsMachine";
 
 export interface TransactionContactListProps {
   filterContactTransactions: Function;
@@ -21,17 +22,16 @@ export interface TransactionContactListProps {
 
 const TransactionContactsList: React.FC<TransactionContactListProps> = ({
   isLoadingTransactions,
-  contactsTransactions,
-  contactsPagination,
   filterContactTransactions,
   transactionFilters,
   clearTransactionFilters
 }) => {
+  const [current, send] = useMachine(contactsTransactionsMachine);
+  const { pageData, results } = current.context;
+
   useEffect(() => {
-    if (isEmpty(contactsTransactions)) {
-      filterContactTransactions();
-    }
-  }, [contactsTransactions]);
+    send("FETCH");
+  }, []);
 
   return (
     <MainContainer>
@@ -44,11 +44,11 @@ const TransactionContactsList: React.FC<TransactionContactListProps> = ({
       <br />
       <TransactionList
         header="Contacts"
-        transactions={contactsTransactions}
-        isLoading={isLoadingTransactions}
+        transactions={results as TransactionResponseItem[]}
+        isLoading={current.matches("loading")}
         loadNextPage={filterContactTransactions}
         infinite={true}
-        pagination={contactsPagination}
+        pagination={pageData as TransactionPagination}
       />
     </MainContainer>
   );
