@@ -47,7 +47,7 @@
     "express-validator": "6.4.0",
     "faker": "4.1.0",
     "formik": "2.1.4",
-    "fuse.js": "3.4.6",
+    "fuse.js": "3.6.1",
     "lowdb": "1.0.0",
     "morgan": "1.9.1",
     "nodemon": "2.0.2",
