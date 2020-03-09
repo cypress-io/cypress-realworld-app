@@ -78,14 +78,14 @@ describe("Transactions API", function() {
     it("gets a list of transactions for users list of contacts, page one", function() {
       cy.request("GET", `${apiTransactions}/contacts`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions.length).to.eq(10);
+        expect(response.body.results.length).to.eq(10);
       });
     });
 
     it("gets a list of transactions for users list of contacts, page two", function() {
       cy.request("GET", `${apiTransactions}/contacts?page=2`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions.length).to.eq(7);
+        expect(response.body.results.length).to.eq(7);
       });
     });
 
@@ -98,7 +98,7 @@ describe("Transactions API", function() {
         }
       }).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions.length).to.eq(3);
+        expect(response.body.results.length).to.eq(3);
       });
     });
   });
