@@ -20,7 +20,7 @@ type SuccessEvent = { type: "SUCCESS"; results: any[]; pageData: object };
 type FailureEvent = { type: "FAILURE"; message: string };
 type DataEvents = { type: "FETCH" } | SuccessEvent | FailureEvent;
 
-interface DataContext {
+export interface DataContext {
   pageData?: object;
   results?: any[];
   message?: string;
