@@ -21,12 +21,18 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
     ? transactions.length + 1
     : transactions.length;
 
+  console.log("pagination", pagination);
   const loadMoreItems = (startIndex: number, stopIndex: number) => {
+    console.log("loadmore items");
     if (pagination.hasNextPages) {
+      console.log("hasnext pages");
       return Promise.resolve("").then(() => {
-        loadNextPage({ page: pagination.page + 1 });
+        console.log("loading next page");
+        loadNextPage("FETCH", { page: pagination.page + 1 });
       });
     }
+
+    return null;
   };
 
   const isItemLoaded = (index: number) => {
@@ -50,7 +56,6 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
   return (
     <InfiniteLoader
       isItemLoaded={isItemLoaded}
-      // @ts-ignore
       loadMoreItems={loadMoreItems}
       itemCount={itemCount}
       threshold={pagination.limit}
