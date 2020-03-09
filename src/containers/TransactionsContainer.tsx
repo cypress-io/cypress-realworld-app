@@ -18,6 +18,7 @@ import {
   transactionsContactsPending,
   transactionsClearFilters
 } from "../actions/transactions";
+import TransactionContactsList from "../components/TransactionContactsList";
 
 export interface DispatchProps {
   filterPublicTransactions: Function;
@@ -62,23 +63,14 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
 
   if (match.url === "/contacts") {
     return (
-      <MainContainer>
-        <TransactionNavTabs />
-        <TransactionListFilters
-          transactionFilters={transactionFilters}
-          filterTransactions={filterTransactions}
-          clearTransactionFilters={clearTransactionFilters}
-        />
-        <br />
-        <TransactionList
-          header="Contacts"
-          transactions={contactsTransactions}
-          isLoading={isLoadingTransactions}
-          loadNextPage={filterContactTransactions}
-          infinite={true}
-          pagination={contactsPagination}
-        />
-      </MainContainer>
+      <TransactionContactsList
+        transactionFilters={transactionFilters}
+        clearTransactionFilters={clearTransactionFilters}
+        contactsTransactions={contactsTransactions}
+        isLoadingTransactions={isLoadingTransactions}
+        filterContactTransactions={filterContactTransactions}
+        contactsPagination={contactsPagination}
+      />
     );
   }
 
