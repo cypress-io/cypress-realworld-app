@@ -14,6 +14,7 @@ describe("Transaction Feed", function() {
     Cypress.Cookies.preserveOnce("connect.sid");
     cy.server();
     cy.route("GET", "/transactions*").as("personalTransactions");
+    cy.getTest("main").scrollTo("top");
   });
   after(function() {
     cy.task("db:seed");
@@ -47,19 +48,19 @@ describe("Transaction Feed", function() {
     cy.getTest("main").scrollTo("top");
     cy.getTest("nav-contacts-tab") // On get Navigation tabs are hidden under the AppBar in the UI
       .scrollIntoView() // TODO: Bug? Does not work as expected to scroll the tab into view
-      .click({ force: true }) // Current solution is to force the click
-      .should("have.class", "Mui-selected");
-    cy.getTestLike("transaction-item").should("have.length", 10);
+      .click({ force: true }); // Current solution is to force the click
+    cy.getTestLike("transaction-item").should("have.length", 5);
+    cy.getTest("nav-contacts-tab").should("have.class", "Mui-selected");
+    // TODO: Test infinite scrolling
   });
 
   it("renders mine (personal) transaction feed", function() {
     cy.getTest("main").scrollTo("top");
-    cy.getTest("nav-personal-tab")
-      .click({ force: true })
-      .should("have.class", "Mui-selected");
+    cy.getTest("nav-personal-tab").click({ force: true });
     cy.getTest("transaction-list")
       .children()
       .should("have.length", 9);
+    cy.getTest("nav-personal-tab").should("have.class", "Mui-selected");
   });
 
   it("shows date range calendar full screen on mobile", function() {
