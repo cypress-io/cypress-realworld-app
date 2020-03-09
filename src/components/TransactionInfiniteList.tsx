@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import InfiniteLoader from "react-window-infinite-loader";
 import { FixedSizeList } from "react-window";
 
@@ -17,31 +17,19 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
   loadNextPage,
   pagination
 }) => {
-  const [isNextPageLoading, setIsNextPageLoading] = useState(false);
-
   const itemCount = pagination.hasNextPages
     ? transactions.length + 1
     : transactions.length;
 
   const loadMoreItems = (startIndex: number, stopIndex: number) => {
-    console.log({ startIndex });
-    console.log({ stopIndex });
     if (pagination.hasNextPages) {
-      return Promise.resolve("TEST").then(() => {
-        console.log("load next page");
-
-        setIsNextPageLoading(true);
+      return Promise.resolve("").then(() => {
         loadNextPage({ page: pagination.page + 1 });
       });
     }
   };
 
-  // Every row is loaded except for our loading indicator row.
-  //const isItemLoaded = ({ index }: { index: number }) => !hasNextPage || index < transactions.length;
   const isItemLoaded = (index: number) => {
-    /*console.log("ItemLoaded hasNextPage: ", hasNextPage);
-    console.log("ItemLoaded Index: ", index);
-    console.log("ItemLoaded transactions.length : ", transactions.length);*/
     return !pagination.hasNextPages || index < transactions.length;
   };
 

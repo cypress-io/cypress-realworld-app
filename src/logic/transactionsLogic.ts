@@ -37,7 +37,7 @@ import {
   isNewTransactionPath
 } from "../utils/transactionUtils";
 import { appBootstrapPending } from "../actions/app";
-import { isEmpty, omit } from "lodash/fp";
+import { isEmpty } from "lodash/fp";
 
 const transactionsPersonalLogic = createLogic({
   type: TRANSACTIONS_PERSONAL_PENDING,
