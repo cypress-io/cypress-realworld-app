@@ -49,9 +49,7 @@ describe("Transaction Feed", function() {
       .scrollIntoView() // TODO: Bug? Does not work as expected to scroll the tab into view
       .click({ force: true }) // Current solution is to force the click
       .should("have.class", "Mui-selected");
-    cy.getTest("transaction-list")
-      .children()
-      .should("have.length", 10);
+    cy.getTestLike("transaction-item").should("have.length", 10);
   });
 
   it("renders mine (personal) transaction feed", function() {
