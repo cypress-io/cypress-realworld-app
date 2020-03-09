@@ -14,24 +14,24 @@ import { contactsTransactionsMachine } from "../machines/contactsTransactionsMac
 export interface TransactionContactListProps {
   filterContactTransactions: Function;
   clearTransactionFilters: Function;
-  isLoadingTransactions: Boolean;
-  contactsPagination: TransactionPagination;
-  contactsTransactions: TransactionResponseItem[];
   transactionFilters: TransactionQueryPayload;
 }
 
 const TransactionContactsList: React.FC<TransactionContactListProps> = ({
-  isLoadingTransactions,
   filterContactTransactions,
   transactionFilters,
   clearTransactionFilters
 }) => {
-  const [current, send] = useMachine(contactsTransactionsMachine);
+  const [current, send] = useMachine(contactsTransactionsMachine, {
+    devTools: true
+  });
   const { pageData, results } = current.context;
 
   useEffect(() => {
     send("FETCH");
-  }, []);
+  }, [send]);
+
+  const loadNextPage = (page: number) => send("FETCH", { page });
 
   return (
     <MainContainer>
@@ -46,7 +46,7 @@ const TransactionContactsList: React.FC<TransactionContactListProps> = ({
         header="Contacts"
         transactions={results as TransactionResponseItem[]}
         isLoading={current.matches("loading")}
-        loadNextPage={send}
+        loadNextPage={loadNextPage}
         infinite={true}
         pagination={pageData as TransactionPagination}
       />

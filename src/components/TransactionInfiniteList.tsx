@@ -21,25 +21,14 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
     ? transactions.length + 1
     : transactions.length;
 
-  console.log("pagination", pagination);
-  const loadMoreItems = (startIndex: number, stopIndex: number) => {
-    console.log("loadmore items");
-    if (pagination.hasNextPages) {
-      console.log("hasnext pages");
-      return Promise.resolve("").then(() => {
-        console.log("loading next page");
-        loadNextPage("FETCH", { page: pagination.page + 1 });
-      });
-    }
+  const loadMoreItems = () =>
+    Promise.resolve("").then(
+      () => pagination.hasNextPages && loadNextPage(pagination.page + 1)
+    );
 
-    return null;
-  };
+  const isItemLoaded = (index: number) =>
+    !pagination.hasNextPages || index < transactions.length;
 
-  const isItemLoaded = (index: number) => {
-    return !pagination.hasNextPages || index < transactions.length;
-  };
-
-  // Render a list item or a loading indicator.
   const Item = ({ index, style }: { index: number; style: any }) => {
     if (!isItemLoaded(index)) {
       return <div style={style}>Loading...</div>;
@@ -58,7 +47,7 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
       isItemLoaded={isItemLoaded}
       loadMoreItems={loadMoreItems}
       itemCount={itemCount}
-      threshold={pagination.limit}
+      threshold={2}
     >
       {({ onItemsRendered, ref }) => (
         <FixedSizeList

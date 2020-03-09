@@ -2,11 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import MainContainer from "./MainContainer";
 import { IRootReducerState } from "../reducers";
-import {
-  TransactionResponseItem,
-  TransactionQueryPayload,
-  TransactionPagination
-} from "../models";
+import { TransactionResponseItem, TransactionQueryPayload } from "../models";
 import { useRouteMatch } from "react-router";
 import PublicTransactions from "../components/PublicTransactions";
 import TransactionList from "../components/TransactionList";
@@ -33,8 +29,6 @@ export interface StateProps {
     contacts: TransactionResponseItem[];
     public: TransactionResponseItem[];
   };
-  contactsPagination: TransactionPagination;
-  contactsTransactions: TransactionResponseItem[];
   personalTransactions: TransactionResponseItem[];
   transactionFilters: TransactionQueryPayload;
 }
@@ -44,8 +38,6 @@ export type TransactionsContainerProps = StateProps & DispatchProps;
 const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   isLoadingTransactions,
   publicTransactions,
-  contactsTransactions,
-  contactsPagination,
   personalTransactions,
   filterPublicTransactions,
   filterPersonalTransactions,
@@ -66,10 +58,7 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
       <TransactionContactsList
         transactionFilters={transactionFilters}
         clearTransactionFilters={clearTransactionFilters}
-        contactsTransactions={contactsTransactions}
-        isLoadingTransactions={isLoadingTransactions}
         filterContactTransactions={filterContactTransactions}
-        contactsPagination={contactsPagination}
       />
     );
   }
@@ -115,8 +104,6 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
 const mapStateToProps = (state: IRootReducerState) => ({
   isLoadingTransactions: state.transactions.meta.isLoading,
   publicTransactions: state.transactions.public,
-  contactsPagination: state.transactions.contacts.pagination,
-  contactsTransactions: state.transactions.contacts.data,
   personalTransactions: state.transactions.personal,
   transactionFilters: state.transactions.filters
 });
