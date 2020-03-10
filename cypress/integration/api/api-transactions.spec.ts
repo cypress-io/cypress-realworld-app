@@ -107,8 +107,7 @@ describe("Transactions API", function() {
     it("gets a list of public transactions", function() {
       cy.request("GET", `${apiTransactions}/public`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions.contacts.length).to.eq(17);
-        expect(response.body.transactions.public.length).to.eq(3);
+        expect(response.body.results.length).to.eq(8);
       });
     });
   });
