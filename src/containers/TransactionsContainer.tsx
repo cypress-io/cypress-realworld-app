@@ -1,5 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
+import { useMachine } from "@xstate/react";
+import { useRouteMatch } from "react-router";
 import MainContainer from "./MainContainer";
 import { IRootReducerState } from "../reducers";
 import {
@@ -8,29 +10,23 @@ import {
   TransactionDateRangePayload,
   TransactionAmountRangePayload
 } from "../models";
-import { useRouteMatch } from "react-router";
 import PublicTransactions from "../components/PublicTransactions";
-import TransactionList from "../components/TransactionList";
 import TransactionNavTabs from "../components/TransactionNavTabs";
 import TransactionListFilters from "../components/TransactionListFilters";
 import {
   transactionsPublicPending,
-  transactionsPersonalPending,
-  transactionsContactsPending,
   transactionsClearFilters
 } from "../actions/transactions";
 import TransactionContactsList from "../components/TransactionContactsList";
-import { useMachine } from "@xstate/react";
 import { transactionFiltersMachine } from "../machines/transactionFiltersMachine";
 import {
   getDateQueryFields,
   getAmountQueryFields
 } from "../utils/transactionUtils";
+import TransactionPersonalList from "../components/TransactionPersonalList";
 
 export interface DispatchProps {
   filterPublicTransactions: Function;
-  filterPersonalTransactions: Function;
-  filterContactTransactions: Function;
   clearTransactionFilters: Function;
 }
 
@@ -40,7 +36,6 @@ export interface StateProps {
     contacts: TransactionResponseItem[];
     public: TransactionResponseItem[];
   };
-  personalTransactions: TransactionResponseItem[];
   transactionFilters: TransactionQueryPayload;
 }
 
@@ -49,10 +44,7 @@ export type TransactionsContainerProps = StateProps & DispatchProps;
 const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   isLoadingTransactions,
   publicTransactions,
-  personalTransactions,
   filterPublicTransactions,
-  filterPersonalTransactions,
-  filterContactTransactions,
   transactionFilters,
   clearTransactionFilters
 }) => {
@@ -77,13 +69,11 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
     hasDateRangeFilter && getDateQueryFields(currentFilters.context);
   const amountRangeFilters =
     hasAmountRangeFilter && getAmountQueryFields(currentFilters.context);
-  console.log("DR filter: ", dateRangeFilters);
-  console.log("AR filter: ", amountRangeFilters);
+  //console.log("DR filter: ", dateRangeFilters);
+  //console.log("AR filter: ", amountRangeFilters);
 
   const filterTransactions = (payload: object) => {
     filterPublicTransactions(payload);
-    filterPersonalTransactions(payload);
-    filterContactTransactions(payload);
   };
 
   const Filters = (
@@ -94,34 +84,23 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
     />
   );
 
-  //if (match.url === "/contacts") {
-  return (
-    <TransactionContactsList
-      filterComponent={Filters}
-      dateRangeFilters={dateRangeFilters as TransactionDateRangePayload}
-      amountRangeFilters={amountRangeFilters as TransactionAmountRangePayload}
-    />
-  );
-  //}
+  if (match.url === "/contacts") {
+    return (
+      <TransactionContactsList
+        filterComponent={Filters}
+        dateRangeFilters={dateRangeFilters as TransactionDateRangePayload}
+        amountRangeFilters={amountRangeFilters as TransactionAmountRangePayload}
+      />
+    );
+  }
 
-  /*
   if (match.url === "/personal") {
     return (
-      <MainContainer>
-        <TransactionNavTabs />
-        <TransactionListFilters
-          transactionFilters={transactionFilters}
-          filterTransactions={filterTransactions}
-          clearTransactionFilters={clearTransactionFilters}
-        />
-        <br />
-        <TransactionList
-          header="Personal"
-          transactions={personalTransactions}
-          isLoading={isLoadingTransactions}
-          showCreateButton={true}
-        />
-      </MainContainer>
+      <TransactionPersonalList
+        filterComponent={Filters}
+        dateRangeFilters={dateRangeFilters as TransactionDateRangePayload}
+        amountRangeFilters={amountRangeFilters as TransactionAmountRangePayload}
+      />
     );
   }
 
@@ -129,11 +108,13 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
   return (
     <MainContainer>
       <TransactionNavTabs />
+      {/*
       <TransactionListFilters
         transactionFilters={transactionFilters}
         filterTransactions={filterPublicTransactions}
         clearTransactionFilters={clearTransactionFilters}
       />
+      */}
       <br />
       <PublicTransactions
         transactions={publicTransactions}
@@ -141,20 +122,16 @@ const TransactionsContainer: React.FC<TransactionsContainerProps> = ({
       />
     </MainContainer>
   );
-  */
 };
 
 const mapStateToProps = (state: IRootReducerState) => ({
   isLoadingTransactions: state.transactions.meta.isLoading,
   publicTransactions: state.transactions.public,
-  personalTransactions: state.transactions.personal,
   transactionFilters: state.transactions.filters
 });
 
 const mapDispatchToProps = {
   filterPublicTransactions: transactionsPublicPending,
-  filterPersonalTransactions: transactionsPersonalPending,
-  filterContactTransactions: transactionsContactsPending,
   clearTransactionFilters: transactionsClearFilters
 };
 

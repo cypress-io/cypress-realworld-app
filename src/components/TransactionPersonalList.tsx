@@ -9,20 +9,20 @@ import {
 import MainContainer from "../containers/MainContainer";
 import TransactionNavTabs from "./TransactionNavTabs";
 import TransactionList from "./TransactionList";
-import { contactsTransactionsMachine } from "../machines/contactsTransactionsMachine";
+import { personalTransactionsMachine } from "../machines/personalTransactionsMachine";
 
-export interface TransactionContactListProps {
+export interface TransactionPersonalListProps {
   filterComponent: ReactNode;
   dateRangeFilters: TransactionDateRangePayload;
   amountRangeFilters: TransactionAmountRangePayload;
 }
 
-const TransactionContactsList: React.FC<TransactionContactListProps> = ({
+const TransactionPersonalList: React.FC<TransactionPersonalListProps> = ({
   filterComponent,
   dateRangeFilters,
   amountRangeFilters
 }) => {
-  const [current, send] = useMachine(contactsTransactionsMachine, {
+  const [current, send] = useMachine(personalTransactionsMachine, {
     devTools: true
   });
   const { pageData, results } = current.context;
@@ -40,7 +40,7 @@ const TransactionContactsList: React.FC<TransactionContactListProps> = ({
       {filterComponent}
       <br />
       <TransactionList
-        header="Contacts"
+        header="Personal"
         transactions={results as TransactionResponseItem[]}
         isLoading={current.matches("loading")}
         loadNextPage={loadNextPage}
@@ -51,4 +51,4 @@ const TransactionContactsList: React.FC<TransactionContactListProps> = ({
   );
 };
 
-export default TransactionContactsList;
+export default TransactionPersonalList;
