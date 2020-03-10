@@ -44,7 +44,6 @@ const TransactionPersonalList: React.FC<TransactionPersonalListProps> = ({
         transactions={results as TransactionResponseItem[]}
         isLoading={current.matches("loading")}
         loadNextPage={loadNextPage}
-        infinite={true}
         pagination={pageData as TransactionPagination}
         showCreateButton={true}
       />

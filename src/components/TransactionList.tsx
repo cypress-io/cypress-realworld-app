@@ -4,10 +4,8 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link as RouterLink } from "react-router-dom";
 import { Button } from "@material-ui/core";
-import List from "@material-ui/core/List";
 
 import SkeletonList from "./SkeletonList";
-import TransactionItem from "./TransactionItem";
 import { TransactionResponseItem, TransactionPagination } from "../models";
 import EmptyList from "./EmptyList";
 import TransactionInfiniteList from "./TransactionInfiniteList";
@@ -17,9 +15,8 @@ export interface TransactionListProps {
   transactions: TransactionResponseItem[];
   isLoading: Boolean;
   showCreateButton?: Boolean;
-  infinite?: Boolean;
-  loadNextPage?: Function;
-  pagination?: TransactionPagination;
+  loadNextPage: Function;
+  pagination: TransactionPagination;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -36,7 +33,6 @@ const TransactionList: React.FC<TransactionListProps> = ({
   transactions,
   isLoading,
   showCreateButton,
-  infinite,
   loadNextPage,
   pagination
 }) => {
@@ -47,27 +43,13 @@ const TransactionList: React.FC<TransactionListProps> = ({
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
         {header}
       </Typography>
-      {isLoading && !infinite && <SkeletonList />}
+      {/* isLoading && pagination.page <= 1 && <SkeletonList /> */}
       {transactions.length > 0 ? (
-        infinite && loadNextPage && pagination ? (
-          <TransactionInfiniteList
-            transactions={transactions}
-            loadNextPage={loadNextPage}
-            pagination={pagination}
-          />
-        ) : (
-          <List data-test="transaction-list">
-            {transactions.map(
-              (transaction: TransactionResponseItem, index: number) => (
-                <TransactionItem
-                  key={transaction.id}
-                  transaction={transaction}
-                  transactionIndex={index}
-                />
-              )
-            )}
-          </List>
-        )
+        <TransactionInfiniteList
+          transactions={transactions}
+          loadNextPage={loadNextPage}
+          pagination={pagination}
+        />
       ) : (
         <EmptyList entity="Transactions">
           {showCreateButton && (

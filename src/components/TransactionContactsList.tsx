@@ -44,7 +44,6 @@ const TransactionContactsList: React.FC<TransactionContactListProps> = ({
         transactions={results as TransactionResponseItem[]}
         isLoading={current.matches("loading")}
         loadNextPage={loadNextPage}
-        infinite={true}
         pagination={pageData as TransactionPagination}
       />
     </MainContainer>
