@@ -3,12 +3,6 @@ import {
   TRANSACTIONS_PUBLIC_PENDING,
   TRANSACTIONS_PUBLIC_SUCCESS,
   TRANSACTIONS_PUBLIC_ERROR,
-  TRANSACTIONS_CONTACTS_PENDING,
-  TRANSACTIONS_CONTACTS_SUCCESS,
-  TRANSACTIONS_CONTACTS_ERROR,
-  TRANSACTIONS_PERSONAL_PENDING,
-  TRANSACTIONS_PERSONAL_SUCCESS,
-  TRANSACTIONS_PERSONAL_ERROR,
   TRANSACTIONS_LIKE_PENDING,
   TRANSACTIONS_LIKE_SUCCESS,
   TRANSACTIONS_LIKE_ERROR,
@@ -16,7 +10,6 @@ import {
   TRANSACTIONS_COMMENT_SUCCESS,
   TRANSACTIONS_COMMENT_ERROR,
   transactionsPublicPending,
-  transactionsContactsPending,
   TRANSACTION_DETAIL_PENDING,
   TRANSACTION_DETAIL_SUCCESS,
   TRANSACTION_DETAIL_ERROR,
@@ -24,7 +17,6 @@ import {
   TRANSACTION_CREATE_PENDING,
   TRANSACTION_CREATE_SUCCESS,
   TRANSACTION_CREATE_ERROR,
-  transactionsPersonalPending,
   TRANSACTION_UPDATE_PENDING,
   TRANSACTION_UPDATE_SUCCESS,
   TRANSACTION_UPDATE_ERROR,
@@ -38,35 +30,6 @@ import {
 } from "../utils/transactionUtils";
 import { appBootstrapPending } from "../actions/app";
 import { isEmpty } from "lodash/fp";
-
-const transactionsPersonalLogic = createLogic({
-  type: TRANSACTIONS_PERSONAL_PENDING,
-  debounce: 500, // ms
-  latest: true, // take latest only
-  processOptions: {
-    dispatchReturn: true,
-    successType: TRANSACTIONS_PERSONAL_SUCCESS,
-    failType: TRANSACTIONS_PERSONAL_ERROR
-  },
-
-  // @ts-ignore
-  process({ httpClient, action, getState }) {
-    const state = getState();
-
-    // @ts-ignore
-    const { transactions } = state;
-    const { filters } = transactions;
-    // @ts-ignore
-    const { payload } = action;
-
-    console.log("FILTERS: ", filters);
-    return httpClient
-      .get(`http://localhost:3001/transactions`, {
-        params: !isEmpty(filters) ? filters : payload
-      })
-      .then((resp: any) => resp.data.transactions);
-  }
-});
 
 const transactionsPublicLogic = createLogic({
   type: TRANSACTIONS_PUBLIC_PENDING,
@@ -97,34 +60,6 @@ const transactionsPublicLogic = createLogic({
         }
       )
       .then((resp: any) => resp.data.transactions);
-  }
-});
-
-const transactionsContactsLogic = createLogic({
-  type: TRANSACTIONS_CONTACTS_PENDING,
-  debounce: 500, // ms
-  latest: true, // take latest only
-  processOptions: {
-    dispatchReturn: true,
-    successType: TRANSACTIONS_CONTACTS_SUCCESS,
-    failType: TRANSACTIONS_CONTACTS_ERROR
-  },
-
-  // @ts-ignore
-  process({ httpClient, action, getState }) {
-    const state = getState();
-
-    // @ts-ignore
-    const { transactions } = state;
-    const { filters } = transactions;
-    // @ts-ignore
-    const { payload } = action;
-
-    return httpClient
-      .get(`http://localhost:3001/transactions/contacts`, {
-        params: !isEmpty(filters) ? filters : payload
-      })
-      .then((resp: any) => resp.data);
   }
 });
 
@@ -241,8 +176,6 @@ const transactionsRefreshLogic = createLogic({
     }
 
     dispatch(transactionsPublicPending());
-    dispatch(transactionsContactsPending());
-    dispatch(transactionsPersonalPending());
     if (action.type === TRANSACTION_CREATE_SUCCESS) {
       dispatch(appBootstrapPending({}));
     }
@@ -273,9 +206,7 @@ const transactionUpdateLogic = createLogic({
 });
 
 export default [
-  transactionsPersonalLogic,
   transactionsPublicLogic,
-  transactionsContactsLogic,
   transactionsLikeLogic,
   transactionsCommentLogic,
   transactionDetailLogic,

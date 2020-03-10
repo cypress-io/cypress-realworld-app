@@ -1,17 +1,13 @@
 import {
   TTransactionActions,
   TRANSACTIONS_PUBLIC_SUCCESS,
-  TRANSACTIONS_CONTACTS_SUCCESS,
-  TRANSACTIONS_PERSONAL_SUCCESS,
   TRANSACTION_DETAIL_SUCCESS,
-  TRANSACTIONS_PERSONAL_PENDING,
-  TRANSACTIONS_CONTACTS_PENDING,
   TRANSACTIONS_PUBLIC_PENDING,
   TRANSACTIONS_CLEAR_FILTERS
 } from "../actions/transactions";
 import { TAuthActions, SIGNOUT_SUCCESS, SIGNOUT_ERROR } from "../actions/auth";
-import { TransactionResponseItem, TransactionPagination } from "../models";
-import { isEmpty, isEqual, concat, omit } from "lodash/fp";
+import { TransactionResponseItem } from "../models";
+import { isEmpty, isEqual, omit } from "lodash/fp";
 import {
   omitDateQueryFields,
   omitAmountQueryFields
@@ -27,19 +23,7 @@ export interface TransactionsState {
     contacts: TransactionResponseItem[];
     public: TransactionResponseItem[];
   };
-  contacts: {
-    pagination: TransactionPagination;
-    data: TransactionResponseItem[];
-  };
-  personal: TransactionResponseItem[];
 }
-
-const paginationDefaults: TransactionPagination = {
-  page: 1,
-  limit: 10,
-  hasNextPages: false,
-  totalPages: 1
-};
 
 const initialState = {
   meta: {
@@ -50,14 +34,7 @@ const initialState = {
   public: {
     contacts: [],
     public: []
-  },
-  contacts: {
-    pagination: {
-      ...paginationDefaults
-    },
-    data: []
-  },
-  personal: []
+  }
 };
 
 export default function reducer(
@@ -65,8 +42,6 @@ export default function reducer(
   action: TTransactionActions | TAuthActions
 ): TransactionsState {
   switch (action.type) {
-    case TRANSACTIONS_PERSONAL_PENDING:
-    case TRANSACTIONS_CONTACTS_PENDING:
     case TRANSACTIONS_PUBLIC_PENDING: {
       const sanitizedPayload = omit("page", action.payload);
 
@@ -108,28 +83,6 @@ export default function reducer(
           isLoading: false
         },
         public: action.payload
-      };
-    case TRANSACTIONS_CONTACTS_SUCCESS:
-      return {
-        ...state,
-        meta: {
-          isLoading: false
-        },
-        contacts: {
-          pagination: omit(
-            "transactions",
-            action.payload
-          ) as TransactionPagination,
-          data: concat(state.contacts.data, action.payload.transactions)
-        }
-      };
-    case TRANSACTIONS_PERSONAL_SUCCESS:
-      return {
-        ...state,
-        meta: {
-          isLoading: false
-        },
-        personal: action.payload
       };
     case TRANSACTION_DETAIL_SUCCESS:
       return {

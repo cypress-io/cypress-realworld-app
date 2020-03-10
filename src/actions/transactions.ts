@@ -8,12 +8,6 @@ import {
 export const TRANSACTIONS_PUBLIC_PENDING = "TRANSACTIONS_PUBLIC_PENDING";
 export const TRANSACTIONS_PUBLIC_SUCCESS = "TRANSACTIONS_PUBLIC_SUCCESS";
 export const TRANSACTIONS_PUBLIC_ERROR = "TRANSACTIONS_PUBLIC_ERROR";
-export const TRANSACTIONS_CONTACTS_PENDING = "TRANSACTIONS_CONTACTS_PENDING";
-export const TRANSACTIONS_CONTACTS_SUCCESS = "TRANSACTIONS_CONTACTS_SUCCESS";
-export const TRANSACTIONS_CONTACTS_ERROR = "TRANSACTIONS_CONTACTS_ERROR";
-export const TRANSACTIONS_PERSONAL_PENDING = "TRANSACTIONS_PERSONAL_PENDING";
-export const TRANSACTIONS_PERSONAL_SUCCESS = "TRANSACTIONS_PERSONAL_SUCCESS";
-export const TRANSACTIONS_PERSONAL_ERROR = "TRANSACTIONS_PERSONAL_ERROR";
 export const TRANSACTIONS_LIKE_PENDING = "TRANSACTIONS_LIKE_PENDING";
 export const TRANSACTIONS_LIKE_SUCCESS = "TRANSACTIONS_LIKE_SUCCESS";
 export const TRANSACTIONS_LIKE_ERROR = "TRANSACTIONS_LIKE_ERROR";
@@ -55,48 +49,6 @@ export const transactionsPublicSuccess = (payload: any) =>
 export const transactionsPublicError = (payload: any) =>
   ({
     type: TRANSACTIONS_PUBLIC_ERROR,
-    payload,
-    error: true
-  } as const);
-
-export const transactionsContactsPending = (
-  payload?: TransactionQueryPayload
-) =>
-  ({
-    type: TRANSACTIONS_CONTACTS_PENDING,
-    payload
-  } as const);
-
-export const transactionsContactsSuccess = (payload: any) =>
-  ({
-    type: TRANSACTIONS_CONTACTS_SUCCESS,
-    payload
-  } as const);
-
-export const transactionsContactsError = (payload: any) =>
-  ({
-    type: TRANSACTIONS_CONTACTS_ERROR,
-    payload,
-    error: true
-  } as const);
-
-export const transactionsPersonalPending = (
-  payload?: TransactionQueryPayload
-) =>
-  ({
-    type: TRANSACTIONS_PERSONAL_PENDING,
-    payload
-  } as const);
-
-export const transactionsPersonalSuccess = (payload: any) =>
-  ({
-    type: TRANSACTIONS_PERSONAL_SUCCESS,
-    payload
-  } as const);
-
-export const transactionsPersonalError = (payload: any) =>
-  ({
-    type: TRANSACTIONS_PERSONAL_ERROR,
     payload,
     error: true
   } as const);
@@ -206,12 +158,6 @@ export type TTransactionActions =
   | ReturnType<typeof transactionsPublicPending>
   | ReturnType<typeof transactionsPublicSuccess>
   | ReturnType<typeof transactionsPublicError>
-  | ReturnType<typeof transactionsContactsPending>
-  | ReturnType<typeof transactionsContactsSuccess>
-  | ReturnType<typeof transactionsContactsError>
-  | ReturnType<typeof transactionsPersonalPending>
-  | ReturnType<typeof transactionsPersonalSuccess>
-  | ReturnType<typeof transactionsPersonalError>
   | ReturnType<typeof transactionsLikePending>
   | ReturnType<typeof transactionsLikeSuccess>
   | ReturnType<typeof transactionsLikeError>

@@ -9,11 +9,7 @@ import {
   appBootstrapError,
   appSnackBarReset
 } from "../actions/app";
-import {
-  transactionsPublicPending,
-  transactionsContactsPending,
-  transactionsPersonalPending
-} from "../actions/transactions";
+import { transactionsPublicPending } from "../actions/transactions";
 import { signOutPending } from "../actions/auth";
 import { usersAllPending } from "../actions/users";
 import { notificationsAllPending } from "../actions/notifications";
@@ -37,8 +33,6 @@ const appBootstrapLogic = createLogic({
 
       dispatch(appBootstrapSuccess({ user }));
       dispatch(transactionsPublicPending());
-      dispatch(transactionsContactsPending());
-      dispatch(transactionsPersonalPending());
       dispatch(usersAllPending());
       dispatch(notificationsAllPending());
       dispatch(bankAccountsAllPending());
