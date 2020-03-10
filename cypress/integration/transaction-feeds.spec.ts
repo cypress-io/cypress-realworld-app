@@ -13,7 +13,8 @@ describe("Transaction Feed", function() {
     // TODO: Highlight this use case
     Cypress.Cookies.preserveOnce("connect.sid");
     cy.server();
-    cy.route("GET", "/transactions*").as("personalTransactions");
+    cy.route("GET", "/transactions/*").as("personalTransactions");
+    cy.route("GET", "/transactions/contacts*").as("contactsTransactions");
     cy.getTest("main").scrollTo("top");
   });
   after(function() {
@@ -52,6 +53,14 @@ describe("Transaction Feed", function() {
     cy.getTestLike("transaction-item").should("have.length", 5);
     cy.getTest("nav-contacts-tab").should("have.class", "Mui-selected");
     // TODO: Test infinite scrolling
+    // DISCUSS: the most effective assertion for infinite scroll
+    cy.getTest("transaction-list")
+      .children()
+      .scrollTo("bottom");
+    cy.getTest("transaction-loading").should("be.visible");
+    cy.wait("@contactsTransactions");
+    cy.getTest("transaction-loading").should("not.be.visible");
+    cy.getTestLike("transaction-item").should("have.length.greaterThan", 5);
   });
 
   it("renders mine (personal) transaction feed", function() {

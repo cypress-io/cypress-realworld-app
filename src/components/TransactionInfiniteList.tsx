@@ -31,7 +31,11 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
 
   const Item = ({ index, style }: { index: number; style: any }) => {
     if (!isItemLoaded(index)) {
-      return <div style={style}>Loading...</div>;
+      return (
+        <div data-test="transaction-loading" style={style}>
+          Loading...
+        </div>
+      );
     } else {
       const transaction = get(index, transactions);
       return (
@@ -50,17 +54,18 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
       threshold={2}
     >
       {({ onItemsRendered, ref }) => (
-        <FixedSizeList
-          data-test="transaction-list"
-          itemCount={itemCount}
-          ref={ref}
-          onItemsRendered={onItemsRendered}
-          height={500}
-          width={850}
-          itemSize={198}
-        >
-          {Item}
-        </FixedSizeList>
+        <div data-test="transaction-list">
+          <FixedSizeList
+            itemCount={itemCount}
+            ref={ref}
+            onItemsRendered={onItemsRendered}
+            height={500}
+            width={850}
+            itemSize={198}
+          >
+            {Item}
+          </FixedSizeList>
+        </div>
       )}
     </InfiniteLoader>
   );
