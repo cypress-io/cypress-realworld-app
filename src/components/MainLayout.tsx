@@ -6,11 +6,13 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
+import { useMachine } from "@xstate/react";
 
 import Copyright from "../components/Copyright";
 import NavBar from "./NavBar";
 import NavDrawer from "./NavDrawer";
 import { NotificationType, User } from "../models";
+import { drawerMachine } from "../machines/drawerMachine";
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -50,17 +52,14 @@ const MainLayout: React.FC<Props> = ({
   currentUser,
   snackbar
 }) => {
+  const [drawerState, sendDrawer] = useMachine(drawerMachine);
+
   const classes = useStyles();
   // @ts-ignore
   const { severity, message } = snackbar;
 
-  // TODO: Move drawer open/close state to MainContainer / Redux
-  const [open, setOpen] = React.useState(false);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const toggleDrawer = () => {
+    sendDrawer("TOGGLE");
   };
 
   return (
@@ -76,14 +75,14 @@ const MainLayout: React.FC<Props> = ({
         </Snackbar>
       )}
       <NavBar
-        handleDrawerOpen={handleDrawerOpen}
-        drawerOpen={open}
+        handleDrawerOpen={toggleDrawer}
+        drawerOpen={drawerState.matches("open")}
         allNotifications={allNotifications}
       />
       <NavDrawer
         currentUser={currentUser}
-        handleDrawerClose={handleDrawerClose}
-        drawerOpen={open}
+        handleDrawerClose={toggleDrawer}
+        drawerOpen={drawerState.matches("open")}
         signOutPending={signOutPending}
       />
       <main className={classes.content} data-test="main">
