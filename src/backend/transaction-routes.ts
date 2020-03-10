@@ -1,7 +1,7 @@
 ///<reference path="types.ts" />
 
 import express from "express";
-import { remove, isEmpty } from "lodash/fp";
+import { remove, isEmpty, slice, concat } from "lodash/fp";
 import {
   getTransactionsForUserContacts,
   createTransaction,
@@ -21,6 +21,7 @@ import {
   isTransactionPatchValidator,
   isTransactionPublicQSValidator
 } from "./validators";
+import { getPaginatedItems } from "../utils/transactionUtils";
 const router = express.Router();
 
 // Routes
@@ -37,8 +38,22 @@ router.get(
   (req, res) => {
     const transactions = getTransactionsForUserForApi(req.user?.id!, req.query);
 
+    const { totalPages, data: paginatedItems } = getPaginatedItems(
+      req.query.page,
+      req.query.limit,
+      transactions
+    );
+
     res.status(200);
-    res.json({ transactions });
+    res.json({
+      pageData: {
+        page: res.locals.paginate.page,
+        limit: res.locals.paginate.limit,
+        hasNextPages: res.locals.paginate.hasNextPages(totalPages),
+        totalPages
+      },
+      results: paginatedItems
+    });
   }
 );
 
@@ -57,8 +72,22 @@ router.get(
       req.query
     );
 
+    const { totalPages, data: paginatedItems } = getPaginatedItems(
+      req.query.page,
+      req.query.limit,
+      transactions
+    );
+
     res.status(200);
-    res.json({ transactions });
+    res.json({
+      pageData: {
+        page: res.locals.paginate.page,
+        limit: res.locals.paginate.limit,
+        hasNextPages: res.locals.paginate.hasNextPages(totalPages),
+        totalPages
+      },
+      results: paginatedItems
+    });
   }
 );
 
@@ -68,12 +97,41 @@ router.get(
   ensureAuthenticated,
   validateMiddleware(isTransactionPublicQSValidator),
   (req, res) => {
+    const isFirstPage = req.query.page === 1;
+
     let transactions = !isEmpty(req.query)
       ? getPublicTransactionsByQuery(req.user?.id!, req.query)
       : getPublicTransactionsDefaultSort(req.user?.id!);
 
+    const { contactsTransactions, publicTransactions } = transactions;
+
+    let publicTransactionsWithContacts;
+
+    if (isFirstPage) {
+      const firstFiveContacts = slice(0, 5, contactsTransactions);
+
+      publicTransactionsWithContacts = concat(
+        firstFiveContacts,
+        publicTransactions
+      );
+    }
+
+    const { totalPages, data: paginatedItems } = getPaginatedItems(
+      req.query.page,
+      req.query.limit,
+      isFirstPage ? publicTransactionsWithContacts : publicTransactions
+    );
+
     res.status(200);
-    res.json({ transactions });
+    res.json({
+      pageData: {
+        page: res.locals.paginate.page,
+        limit: res.locals.paginate.limit,
+        hasNextPages: res.locals.paginate.hasNextPages(totalPages),
+        totalPages
+      },
+      results: paginatedItems
+    });
   }
 );
 

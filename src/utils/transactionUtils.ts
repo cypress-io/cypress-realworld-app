@@ -24,7 +24,8 @@ import {
   has,
   find,
   omit,
-  map
+  map,
+  drop
 } from "lodash/fp";
 import { getUserById } from "../backend/database";
 
@@ -161,15 +162,32 @@ export const getAmountQueryFields = (query: TransactionAmountRangePayload) =>
 export const omitAmountQueryFields = (query: TransactionQueryPayload) =>
   omit(["amountMin", "amountMax"], query);
 
+export const hasPaginationQueryFields = (
+  query: TransactionQueryPayload | TransactionAmountRangePayload
+) => has("page", query) && has("limit", query);
+
+export const omitPaginationQueryFields = (query: TransactionQueryPayload) =>
+  omit(["page", "limit"], query);
+
 export const getQueryWithoutDateFields = (query: TransactionQueryPayload) =>
   query && hasDateQueryFields(query) ? omitDateQueryFields(query) : query;
 
 export const getQueryWithoutAmountFields = (query: TransactionQueryPayload) =>
   query && hasAmountQueryFields(query) ? omitAmountQueryFields(query) : query;
 
-export const getQueryWithoutAmountAndDateFields = (
+export const getQueryWithoutPaginationFields = (
   query: TransactionQueryPayload
-) => flow(omitAmountQueryFields, omitDateQueryFields)(query);
+) =>
+  query && hasPaginationQueryFields(query)
+    ? omitPaginationQueryFields(query)
+    : query;
+
+export const getQueryWithoutFilterFields = (query: TransactionQueryPayload) =>
+  flow(
+    omitAmountQueryFields,
+    omitDateQueryFields,
+    omitPaginationQueryFields
+  )(query);
 
 export const padAmountWithZeros = (number: number) => Math.ceil(number * 1000);
 
@@ -185,3 +203,13 @@ export const formatAmountRangeValues = (amountRangeValues: number[]) =>
     map(formatAmountSlider),
     join(" - ")
   )(amountRangeValues);
+
+export const getPaginatedItems = (page: number, limit: number, items: any) => {
+  const offset = (page - 1) * limit;
+  const pagedItems = drop(offset, items).slice(0, limit);
+
+  return {
+    totalPages: Math.ceil(items.length / limit),
+    data: pagedItems
+  };
+};

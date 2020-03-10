@@ -39,7 +39,7 @@ describe("Transactions API", function() {
       const { id } = this.currentUser;
       cy.request("GET", `${apiTransactions}`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions[2].senderId).to.eq(id);
+        expect(response.body.results[2].senderId).to.eq(id);
       });
     });
 
@@ -53,7 +53,7 @@ describe("Transactions API", function() {
         }
       }).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions[0].receiverId).to.eq(id);
+        expect(response.body.results[0].receiverId).to.eq(id);
       });
     });
 
@@ -69,16 +69,23 @@ describe("Transactions API", function() {
         }
       }).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions.length).to.eq(1);
+        expect(response.body.results.length).to.eq(1);
       });
     });
   });
 
   context("GET /transactions/contacts", function() {
-    it("gets a list of transactions for users list of contacts", function() {
+    it("gets a list of transactions for users list of contacts, page one", function() {
       cy.request("GET", `${apiTransactions}/contacts`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions.length).to.eq(17);
+        expect(response.body.results.length).to.eq(10);
+      });
+    });
+
+    it("gets a list of transactions for users list of contacts, page two", function() {
+      cy.request("GET", `${apiTransactions}/contacts?page=2`).then(response => {
+        expect(response.status).to.eq(200);
+        expect(response.body.results.length).to.eq(7);
       });
     });
 
@@ -91,7 +98,7 @@ describe("Transactions API", function() {
         }
       }).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions.length).to.eq(3);
+        expect(response.body.results.length).to.eq(3);
       });
     });
   });
@@ -100,8 +107,7 @@ describe("Transactions API", function() {
     it("gets a list of public transactions", function() {
       cy.request("GET", `${apiTransactions}/public`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions.contacts.length).to.eq(17);
-        expect(response.body.transactions.public.length).to.eq(3);
+        expect(response.body.results.length).to.eq(8);
       });
     });
   });

@@ -55,7 +55,7 @@ import {
   getDateQueryFields,
   hasAmountQueryFields,
   getAmountQueryFields,
-  getQueryWithoutAmountAndDateFields
+  getQueryWithoutFilterFields
 } from "../utils/transactionUtils";
 
 const USER_TABLE = "users";
@@ -440,10 +440,10 @@ export const formatTransactionsForApiResponse = (
 
 export const getAllTransactionsForUserByObj = curry(
   (userId: string, query?: object) => {
-    const queryWithoutAmountAndDateFields =
-      query && getQueryWithoutAmountAndDateFields(query);
+    const queryWithoutFilterFields =
+      query && getQueryWithoutFilterFields(query);
 
-    const queryFields = queryWithoutAmountAndDateFields || query;
+    const queryFields = queryWithoutFilterFields || query;
 
     const userTransactions = flatMap(getTransactionsByObj)([
       {
@@ -558,8 +558,8 @@ export const getNonContactPublicTransactionsForApi = (userId: string) =>
   flow(nonContactPublicTransactions, formatTransactionsForApiResponse)(userId);
 
 export const getPublicTransactionsDefaultSort = (userId: string) => ({
-  contacts: getTransactionsForUserContacts(userId),
-  public: getNonContactPublicTransactionsForApi(userId)
+  contactsTransactions: getTransactionsForUserContacts(userId),
+  publicTransactions: getNonContactPublicTransactionsForApi(userId)
 });
 
 export const getPublicTransactionsByQuery = (
@@ -571,16 +571,16 @@ export const getPublicTransactionsByQuery = (
     const { amountMin, amountMax } = getAmountQueryFields(query);
 
     return {
-      contacts: getTransactionsForUserContacts(userId, query),
-      public: flow(
+      contactsTransactions: getTransactionsForUserContacts(userId, query),
+      publicTransactions: flow(
         transactionsWithinDateRange(dateRangeStart!, dateRangeEnd!),
         transactionsWithinAmountRange(amountMin!, amountMax!)
       )(getNonContactPublicTransactionsForApi(userId))
     };
   } else {
     return {
-      contacts: getTransactionsForUserContacts(userId),
-      public: getNonContactPublicTransactionsForApi(userId)
+      contactsTransactions: getTransactionsForUserContacts(userId),
+      publicTransactions: getNonContactPublicTransactionsForApi(userId)
     };
   }
 };

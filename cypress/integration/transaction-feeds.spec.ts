@@ -13,7 +13,9 @@ describe("Transaction Feed", function() {
     // TODO: Highlight this use case
     Cypress.Cookies.preserveOnce("connect.sid");
     cy.server();
-    cy.route("GET", "/transactions*").as("personalTransactions");
+    cy.route("GET", "/transactions?*").as("personalTransactions");
+    cy.route("GET", "/transactions/contacts*").as("contactsTransactions");
+    cy.getTest("main").scrollTo("top");
   });
   after(function() {
     cy.task("db:seed");
@@ -27,41 +29,51 @@ describe("Transaction Feed", function() {
     cy.getTest("drawer-icon").should("be.visible");
   });
 
-  it("renders everyone (public) transaction feeds (friends, public)", function() {
-    cy.getTest("transaction-list").should("have.length", 2);
-
+  it("renders everyone (public) (infinite list)", function() {
     cy.getTest("nav-public-tab").should("have.class", "Mui-selected");
 
-    cy.getTest("transaction-list")
-      .first()
+    cy.getTestLike("transaction-item")
       .children()
-      .should("have.length", 17);
-
-    cy.getTest("transaction-list")
-      .last()
-      .children()
-      .should("have.length", 3);
+      .should("have.length", 5);
   });
 
-  it("renders friends (contacts) transaction feed", function() {
+  it("renders friends (contacts) transaction feed  (infinite list)", function() {
     cy.getTest("main").scrollTo("top");
     cy.getTest("nav-contacts-tab") // On get Navigation tabs are hidden under the AppBar in the UI
       .scrollIntoView() // TODO: Bug? Does not work as expected to scroll the tab into view
-      .click({ force: true }) // Current solution is to force the click
-      .should("have.class", "Mui-selected");
+      .click({ force: true }); // Current solution is to force the click
+    cy.getTestLike("transaction-item").should("have.length", 5);
+    cy.getTest("nav-contacts-tab").should("have.class", "Mui-selected");
     cy.getTest("transaction-list")
       .children()
-      .should("have.length", 17);
+      .scrollTo("bottom");
+    cy.getTest("transaction-loading").should("be.visible");
+    cy.wait("@contactsTransactions");
+    cy.getTest("transaction-loading").should("not.be.visible");
+    // DISCUSS: the most effective assertion for infinite scroll
+    cy.getTestLike("transaction-item").should("have.length.greaterThan", 5);
   });
 
-  it("renders mine (personal) transaction feed", function() {
+  it("renders mine (personal) transaction feed (infinite list)", function() {
     cy.getTest("main").scrollTo("top");
-    cy.getTest("nav-personal-tab")
-      .click({ force: true })
-      .should("have.class", "Mui-selected");
+    cy.getTest("nav-personal-tab").click({ force: true });
+    cy.getTest("nav-personal-tab").should("have.class", "Mui-selected");
+
+    cy.getTestLike("transaction-item").should("have.length", 5);
+
+    // TODO: Test infinite scrolling by adding more personal transactions
+    /*
     cy.getTest("transaction-list")
       .children()
-      .should("have.length", 9);
+      .scrollTo("bottom");
+
+    cy.getTest("transaction-loading").should("be.visible");
+    cy.wait("@personalTransactions");
+    cy.getTest("transaction-loading").should("not.be.visible");
+
+    // DISCUSS: the most effective assertion for infinite scroll
+    cy.getTestLike("transaction-item").should("have.length.greaterThan", 5);
+    */
   });
 
   it("shows date range calendar full screen on mobile", function() {
@@ -104,17 +116,13 @@ describe("Transaction Feed", function() {
 
     cy.wait("@personalTransactions");
 
-    cy.getTest("transaction-list")
-      .children()
-      .should("have.length", 3);
+    cy.getTestLike("transaction-item").should("have.length", 3);
 
     cy.getTest("transaction-list-filter-date-clear-button")
       .scrollIntoView()
       .click({ force: true });
 
-    cy.getTest("transaction-list")
-      .children()
-      .should("have.length.greaterThan", 3);
+    cy.getTestLike("transaction-item").should("have.length.greaterThan", 3);
   });
 
   it("renders mine (personal) transaction feed, filters by date range, then shows empty state", function() {

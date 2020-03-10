@@ -4,7 +4,7 @@ import {
   currentUserLikesTransaction,
   getQueryWithoutDateFields,
   getQueryWithoutAmountFields,
-  getQueryWithoutAmountAndDateFields
+  getQueryWithoutFilterFields
 } from "../transactionUtils";
 import faker from "faker";
 import {
@@ -141,7 +141,7 @@ describe("Transaction Utils", () => {
       dateRangeStart: "2019-12-01T06:00:00.000Z",
       dateRangeEnd: "2019-12-05T06:00:00.000Z"
     };
-    expect(getQueryWithoutAmountAndDateFields(query)).toMatchObject({
+    expect(getQueryWithoutFilterFields(query)).toMatchObject({
       requestStatus: "pending"
     });
   });

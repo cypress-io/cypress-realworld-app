@@ -4,18 +4,19 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link as RouterLink } from "react-router-dom";
 import { Button } from "@material-ui/core";
-import List from "@material-ui/core/List";
 
 import SkeletonList from "./SkeletonList";
-import TransactionItem from "./TransactionItem";
-import { TransactionResponseItem } from "../models";
+import { TransactionResponseItem, TransactionPagination } from "../models";
 import EmptyList from "./EmptyList";
+import TransactionInfiniteList from "./TransactionInfiniteList";
 
 export interface TransactionListProps {
   header: string;
   transactions: TransactionResponseItem[];
   isLoading: Boolean;
   showCreateButton?: Boolean;
+  loadNextPage: Function;
+  pagination: TransactionPagination;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -31,27 +32,24 @@ const TransactionList: React.FC<TransactionListProps> = ({
   header,
   transactions,
   isLoading,
-  showCreateButton
+  showCreateButton,
+  loadNextPage,
+  pagination
 }) => {
   const classes = useStyles();
+
   return (
     <Paper className={classes.paper}>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
         {header}
       </Typography>
-      {isLoading && <SkeletonList />}
+      {/* isLoading && pagination.page <= 1 && <SkeletonList /> */}
       {transactions.length > 0 ? (
-        <List data-test="transaction-list">
-          {transactions.map(
-            (transaction: TransactionResponseItem, index: number) => (
-              <TransactionItem
-                key={transaction.id}
-                transaction={transaction}
-                transactionIndex={index}
-              />
-            )
-          )}
-        </List>
+        <TransactionInfiniteList
+          transactions={transactions}
+          loadNextPage={loadNextPage}
+          pagination={pagination}
+        />
       ) : (
         <EmptyList entity="Transactions">
           {showCreateButton && (

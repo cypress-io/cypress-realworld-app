@@ -9,7 +9,7 @@ import {
   Button
 } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import { TransactionQueryPayload } from "../models";
+import { TransactionAmountRangePayload } from "../models";
 import {
   formatAmountRangeValues,
   amountRangeValueText,
@@ -36,15 +36,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export type TransactionListAmountRangeFilterProps = {
-  filterTransactions: Function;
-  transactionFilters: TransactionQueryPayload;
-  clearTransactionFilters: Function;
+  filterAmountRange: Function;
+  amountRangeFilters: TransactionAmountRangePayload;
+  resetAmountRange: Function;
 };
 
 const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilterProps> = ({
-  filterTransactions,
-  transactionFilters,
-  clearTransactionFilters
+  filterAmountRange,
+  amountRangeFilters,
+  resetAmountRange
 }) => {
   const classes = useStyles();
   // TODO use in place of state
@@ -83,7 +83,7 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
     _event: any,
     amountRange: number | number[]
   ) => {
-    filterTransactions({
+    filterAmountRange({
       amountMin: padAmountWithZeros(first(amountRange as number[]) as number),
       amountMax: padAmountWithZeros(last(amountRange as number[]) as number)
     });
@@ -147,7 +147,7 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
                   data-test="transaction-list-filter-amount-clear-button"
                   onClick={() => {
                     setAmountRangeValue(initialAmountRange);
-                    clearTransactionFilters({ filterType: "amount" });
+                    resetAmountRange();
                   }}
                 >
                   Clear
