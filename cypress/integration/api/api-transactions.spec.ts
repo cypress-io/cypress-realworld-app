@@ -39,7 +39,7 @@ describe("Transactions API", function() {
       const { id } = this.currentUser;
       cy.request("GET", `${apiTransactions}`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions[2].senderId).to.eq(id);
+        expect(response.body.results[2].senderId).to.eq(id);
       });
     });
 
@@ -53,7 +53,7 @@ describe("Transactions API", function() {
         }
       }).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions[0].receiverId).to.eq(id);
+        expect(response.body.results[0].receiverId).to.eq(id);
       });
     });
 
@@ -69,7 +69,7 @@ describe("Transactions API", function() {
         }
       }).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.transactions.length).to.eq(1);
+        expect(response.body.results.length).to.eq(1);
       });
     });
   });

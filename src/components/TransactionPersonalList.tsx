@@ -46,6 +46,7 @@ const TransactionPersonalList: React.FC<TransactionPersonalListProps> = ({
         loadNextPage={loadNextPage}
         infinite={true}
         pagination={pageData as TransactionPagination}
+        showCreateButton={true}
       />
     </MainContainer>
   );
