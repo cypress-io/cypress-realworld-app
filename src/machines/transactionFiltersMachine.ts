@@ -77,7 +77,8 @@ export const transactionFiltersMachine = Machine<
           filter: {
             entry: "setAmountRange",
             on: {
-              AMOUNT_RESET: "none"
+              AMOUNT_RESET: "none",
+              AMOUNT_FILTER: "filter"
             }
           }
         }

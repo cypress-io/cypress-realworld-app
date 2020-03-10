@@ -6,6 +6,7 @@ import {
 } from "../models";
 import TransactionListDateRangeFilter from "./TransactionDateRangeFilter";
 import TransactionListAmountRangeFilter from "./TransactionListAmountRangeFilter";
+import { debounce } from "lodash/fp";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -33,8 +34,11 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
     sendFilterEvent("DATE_FILTER", payload);
   const resetDateRange = () => sendFilterEvent("DATE_RESET");
 
-  const filterAmountRange = (payload: TransactionAmountRangePayload) =>
-    sendFilterEvent("AMOUNT_FILTER", payload);
+  const filterAmountRange = debounce(
+    200,
+    (payload: TransactionAmountRangePayload) =>
+      sendFilterEvent("AMOUNT_FILTER", payload)
+  );
   const resetAmountRange = () => sendFilterEvent("AMOUNT_RESET");
 
   return (
