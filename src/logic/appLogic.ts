@@ -9,7 +9,6 @@ import {
   appBootstrapError,
   appSnackBarReset
 } from "../actions/app";
-import { transactionsPublicPending } from "../actions/transactions";
 import { signOutPending } from "../actions/auth";
 import { usersAllPending } from "../actions/users";
 import { notificationsAllPending } from "../actions/notifications";
@@ -32,7 +31,6 @@ const appBootstrapLogic = createLogic({
       const { user } = checkAuth.data;
 
       dispatch(appBootstrapSuccess({ user }));
-      dispatch(transactionsPublicPending());
       dispatch(usersAllPending());
       dispatch(notificationsAllPending());
       dispatch(bankAccountsAllPending());

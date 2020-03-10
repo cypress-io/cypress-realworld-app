@@ -1,15 +1,11 @@
 import { createLogic } from "redux-logic";
 import {
-  TRANSACTIONS_PUBLIC_PENDING,
-  TRANSACTIONS_PUBLIC_SUCCESS,
-  TRANSACTIONS_PUBLIC_ERROR,
   TRANSACTIONS_LIKE_PENDING,
   TRANSACTIONS_LIKE_SUCCESS,
   TRANSACTIONS_LIKE_ERROR,
   TRANSACTIONS_COMMENT_PENDING,
   TRANSACTIONS_COMMENT_SUCCESS,
   TRANSACTIONS_COMMENT_ERROR,
-  transactionsPublicPending,
   TRANSACTION_DETAIL_PENDING,
   TRANSACTION_DETAIL_SUCCESS,
   TRANSACTION_DETAIL_ERROR,
@@ -19,8 +15,7 @@ import {
   TRANSACTION_CREATE_ERROR,
   TRANSACTION_UPDATE_PENDING,
   TRANSACTION_UPDATE_SUCCESS,
-  TRANSACTION_UPDATE_ERROR,
-  TRANSACTIONS_CLEAR_FILTERS
+  TRANSACTION_UPDATE_ERROR
 } from "../actions/transactions";
 import { history } from "../index";
 import {
@@ -30,38 +25,6 @@ import {
 } from "../utils/transactionUtils";
 import { appBootstrapPending } from "../actions/app";
 import { isEmpty } from "lodash/fp";
-
-const transactionsPublicLogic = createLogic({
-  type: TRANSACTIONS_PUBLIC_PENDING,
-  debounce: 500, // ms
-  latest: true, // take latest only
-  processOptions: {
-    dispatchReturn: true,
-    successType: TRANSACTIONS_PUBLIC_SUCCESS,
-    failType: TRANSACTIONS_PUBLIC_ERROR
-  },
-
-  // @ts-ignore
-  process({ httpClient, action, getState }) {
-    const state = getState();
-
-    // @ts-ignore
-    const { transactions } = state;
-    const { filters } = transactions;
-    // @ts-ignore
-    const { payload } = action;
-
-    return httpClient
-      .get(
-        `http://localhost:3001/transactions/public`,
-
-        {
-          params: !isEmpty(filters) ? filters : payload
-        }
-      )
-      .then((resp: any) => resp.data.transactions);
-  }
-});
 
 const transactionsLikeLogic = createLogic({
   type: TRANSACTIONS_LIKE_PENDING,
@@ -148,8 +111,7 @@ const transactionsRefreshLogic = createLogic({
     TRANSACTION_CREATE_SUCCESS,
     TRANSACTION_UPDATE_SUCCESS,
     TRANSACTIONS_LIKE_SUCCESS,
-    TRANSACTIONS_COMMENT_SUCCESS,
-    TRANSACTIONS_CLEAR_FILTERS
+    TRANSACTIONS_COMMENT_SUCCESS
   ],
 
   // @ts-ignore
@@ -175,7 +137,6 @@ const transactionsRefreshLogic = createLogic({
       );
     }
 
-    dispatch(transactionsPublicPending());
     if (action.type === TRANSACTION_CREATE_SUCCESS) {
       dispatch(appBootstrapPending({}));
     }
@@ -206,7 +167,6 @@ const transactionUpdateLogic = createLogic({
 });
 
 export default [
-  transactionsPublicLogic,
   transactionsLikeLogic,
   transactionsCommentLogic,
   transactionDetailLogic,
