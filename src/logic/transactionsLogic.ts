@@ -24,7 +24,6 @@ import {
   isNewTransactionPath
 } from "../utils/transactionUtils";
 import { appBootstrapPending } from "../actions/app";
-import { isEmpty } from "lodash/fp";
 
 const transactionsLikeLogic = createLogic({
   type: TRANSACTIONS_LIKE_PENDING,
