@@ -29,23 +29,15 @@ describe("Transaction Feed", function() {
     cy.getTest("drawer-icon").should("be.visible");
   });
 
-  it("renders everyone (public) transaction feeds (friends, public)", function() {
-    cy.getTest("transaction-list").should("have.length", 2);
-
+  it("renders everyone (public) (infinite list)", function() {
     cy.getTest("nav-public-tab").should("have.class", "Mui-selected");
 
-    cy.getTest("transaction-list")
-      .first()
+    cy.getTestLike("transaction-item")
       .children()
-      .should("have.length", 17);
-
-    cy.getTest("transaction-list")
-      .last()
-      .children()
-      .should("have.length", 3);
+      .should("have.length", 5);
   });
 
-  it("renders friends (contacts) transaction feed infinite list ", function() {
+  it("renders friends (contacts) transaction feed  (infinite list)", function() {
     cy.getTest("main").scrollTo("top");
     cy.getTest("nav-contacts-tab") // On get Navigation tabs are hidden under the AppBar in the UI
       .scrollIntoView() // TODO: Bug? Does not work as expected to scroll the tab into view
@@ -62,7 +54,7 @@ describe("Transaction Feed", function() {
     cy.getTestLike("transaction-item").should("have.length.greaterThan", 5);
   });
 
-  it("renders mine (personal) transaction feed", function() {
+  it("renders mine (personal) transaction feed (infinite list)", function() {
     cy.getTest("main").scrollTo("top");
     cy.getTest("nav-personal-tab").click({ force: true });
     cy.getTest("nav-personal-tab").should("have.class", "Mui-selected");

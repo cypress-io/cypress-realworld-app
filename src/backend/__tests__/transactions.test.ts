@@ -100,11 +100,11 @@ describe("Transactions", () => {
 
     const response = getPublicTransactionsDefaultSort(user.id);
 
-    expect(response.contacts.length).toBe(17);
-    expect(response.public.length).toBe(3);
+    expect(response.contactsTransactions.length).toBe(17);
+    expect(response.publicTransactions.length).toBe(3);
 
     const ids = map("id", contactsTransactions);
-    expect(ids).toContain(response.contacts[9].id);
+    expect(ids).toContain(response.contactsTransactions[9].id);
   });
 
   it("should create a payment", () => {
@@ -198,7 +198,7 @@ describe("Transactions", () => {
 
     const result = getPublicTransactionsDefaultSort(userToLookup.id);
 
-    const transaction = result.public[0];
+    const transaction = result.publicTransactions[0];
     const { receiverId, senderId, receiverName, senderName } = transaction;
     const receiver = getUserById(receiverId);
     const sender = getUserById(senderId);
