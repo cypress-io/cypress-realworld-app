@@ -1,46 +1,46 @@
-import React, { useEffect } from "react";
+import React, { useEffect, ReactNode } from "react";
 import { useMachine } from "@xstate/react";
 import {
   TransactionPagination,
   TransactionResponseItem,
-  TransactionQueryPayload
+  TransactionDateRangePayload,
+  TransactionAmountRangePayload
 } from "../models";
 import MainContainer from "../containers/MainContainer";
 import TransactionNavTabs from "./TransactionNavTabs";
-import TransactionListFilters from "./TransactionListFilters";
 import TransactionList from "./TransactionList";
 import { contactsTransactionsMachine } from "../machines/contactsTransactionsMachine";
 
 export interface TransactionContactListProps {
-  filterContactTransactions: Function;
-  clearTransactionFilters: Function;
-  transactionFilters: TransactionQueryPayload;
+  filterComponent: ReactNode;
+  dateRangeFilters: TransactionDateRangePayload;
+  amountRangeFilters: TransactionAmountRangePayload;
 }
 
 const TransactionContactsList: React.FC<TransactionContactListProps> = ({
-  filterContactTransactions,
-  transactionFilters,
-  clearTransactionFilters
+  filterComponent,
+  dateRangeFilters,
+  amountRangeFilters
 }) => {
   const [current, send] = useMachine(contactsTransactionsMachine, {
     devTools: true
   });
   const { pageData, results } = current.context;
 
-  useEffect(() => {
-    send("FETCH");
-  }, [send]);
+  console.log("TCL DR filter: ", dateRangeFilters);
+  console.log("TCL AR filter: ", amountRangeFilters);
 
-  const loadNextPage = (page: number) => send("FETCH", { page });
+  useEffect(() => {
+    send("FETCH", { ...dateRangeFilters, ...amountRangeFilters });
+  }, [send, dateRangeFilters, amountRangeFilters]);
+
+  const loadNextPage = (page: number) =>
+    send("FETCH", { page, ...dateRangeFilters, ...amountRangeFilters });
 
   return (
     <MainContainer>
       <TransactionNavTabs />
-      <TransactionListFilters
-        transactionFilters={transactionFilters}
-        filterTransactions={filterContactTransactions}
-        clearTransactionFilters={clearTransactionFilters}
-      />
+      {filterComponent}
       <br />
       <TransactionList
         header="Contacts"

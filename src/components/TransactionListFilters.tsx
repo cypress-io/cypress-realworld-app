@@ -1,6 +1,9 @@
 import React from "react";
 import { makeStyles, Paper, Grid } from "@material-ui/core";
-import { TransactionQueryPayload } from "../models";
+import {
+  TransactionDateRangePayload,
+  TransactionAmountRangePayload
+} from "../models";
 import TransactionListDateRangeFilter from "./TransactionDateRangeFilter";
 import TransactionListAmountRangeFilter from "./TransactionListAmountRangeFilter";
 
@@ -14,17 +17,25 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export type TransactionListFiltersProps = {
-  filterTransactions: Function;
-  transactionFilters: TransactionQueryPayload;
-  clearTransactionFilters: Function;
+  sendFilterEvent: Function;
+  dateRangeFilters: TransactionDateRangePayload;
+  amountRangeFilters: TransactionAmountRangePayload;
 };
 
 const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
-  filterTransactions,
-  transactionFilters,
-  clearTransactionFilters
+  sendFilterEvent,
+  dateRangeFilters,
+  amountRangeFilters
 }) => {
   const classes = useStyles();
+
+  const filterDateRange = (payload: TransactionDateRangePayload) =>
+    sendFilterEvent("DATE_FILTER", payload);
+  const resetDateRange = () => sendFilterEvent("DATE_RESET");
+
+  const filterAmountRange = (payload: TransactionAmountRangePayload) =>
+    sendFilterEvent("AMOUNT_FILTER", payload);
+  const resetAmountRange = () => sendFilterEvent("AMOUNT_RESET");
 
   return (
     <Paper className={classes.paper} elevation={0}>
@@ -37,16 +48,16 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
       >
         <Grid item>
           <TransactionListDateRangeFilter
-            filterTransactions={filterTransactions}
-            transactionFilters={transactionFilters}
-            clearTransactionFilters={clearTransactionFilters}
+            filterDateRange={filterDateRange}
+            dateRangeFilters={dateRangeFilters}
+            resetDateRange={resetDateRange}
           />
         </Grid>
         <Grid item>
           <TransactionListAmountRangeFilter
-            filterTransactions={filterTransactions}
-            transactionFilters={transactionFilters}
-            clearTransactionFilters={clearTransactionFilters}
+            filterAmountRange={filterAmountRange}
+            amountRangeFilters={amountRangeFilters}
+            resetAmountRange={resetAmountRange}
           />
         </Grid>
       </Grid>

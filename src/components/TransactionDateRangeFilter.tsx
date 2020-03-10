@@ -7,21 +7,15 @@ import indigo from "@material-ui/core/colors/indigo";
 import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import "react-infinite-calendar/styles.css";
-import {
-  TransactionDateRangePayload,
-  TransactionQueryPayload
-} from "../models";
-import {
-  hasDateQueryFields,
-  getDateQueryFields
-} from "../utils/transactionUtils";
+import { TransactionDateRangePayload } from "../models";
+import { hasDateQueryFields } from "../utils/transactionUtils";
 
 const CalendarWithRange = withRange(Calendar);
 
 export type TransactionListDateRangeFilterProps = {
-  filterTransactions: Function;
-  transactionFilters: TransactionQueryPayload;
-  clearTransactionFilters: Function;
+  filterDateRange: Function;
+  dateRangeFilters: TransactionDateRangePayload;
+  resetDateRange: Function;
 };
 
 const useStyles = makeStyles(theme => ({
@@ -36,15 +30,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterProps> = ({
-  filterTransactions,
-  transactionFilters,
-  clearTransactionFilters
+  filterDateRange,
+  dateRangeFilters,
+  resetDateRange
 }) => {
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const queryHasDateFields =
-    transactionFilters && hasDateQueryFields(transactionFilters);
+    dateRangeFilters && hasDateQueryFields(dateRangeFilters);
 
   const [
     dateRangeAnchorEl,
@@ -53,7 +47,7 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
 
   const onCalendarSelect = (e: { eventType: number; start: any; end: any }) => {
     if (e.eventType === 3) {
-      filterTransactions({
+      filterDateRange({
         dateRangeStart: new Date(e.start.setUTCHours(0, 0, 0, 0)).toISOString(),
         dateRangeEnd: new Date(e.end.setUTCHours(23, 59, 59, 999)).toISOString()
       });
@@ -76,11 +70,9 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
     return formatDate(new Date(date), "MMM, D YYYY");
   };
 
-  const dateRangeLabel = (transactionFilters: TransactionDateRangePayload) => {
+  const dateRangeLabel = (dateRangeFields: TransactionDateRangePayload) => {
     if (queryHasDateFields) {
-      const { dateRangeStart, dateRangeEnd } = getDateQueryFields(
-        transactionFilters
-      );
+      const { dateRangeStart, dateRangeEnd } = dateRangeFields;
       return `${formatButtonDate(dateRangeStart!)} - ${formatButtonDate(
         dateRangeEnd!
       )}`;
@@ -106,12 +98,12 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
           color="primary"
           variant="outlined"
           onClick={handleDateRangeClick}
-          label={`Date Range: ${dateRangeLabel(transactionFilters)}`}
+          label={`Date Range: ${dateRangeLabel(dateRangeFilters)}`}
           deleteIcon={
             <CancelIcon data-test="transaction-list-filter-date-clear-button" />
           }
           onDelete={() => {
-            clearTransactionFilters({ filterType: "date" });
+            resetDateRange();
           }}
         />
       )}
