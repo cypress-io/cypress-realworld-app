@@ -24,3 +24,5 @@ export type UserSettingsPayload = Pick<
   User,
   "firstName" | "lastName" | "email" | "phoneNumber" | "defaultPrivacyLevel"
 >;
+
+export type SignInPayload = Pick<User, "username" | "password">;

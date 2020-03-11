@@ -8,7 +8,6 @@ import { IRootReducerState } from "../reducers";
 import PrivateRoute from "./PrivateRoute";
 import TransactionsContainer from "../containers/TransactionsContainer";
 import TransactionDetailContainer from "./TransactionDetailContainer";
-import SignIn from "../containers/SignIn";
 import SignUp from "../containers/SignUp";
 import TransactionCreateContainer from "./TransactionCreateContainer";
 import NotificationsContainer from "./NotificationsContainer";
@@ -17,12 +16,13 @@ import BankAccountsContainer from "./BankAccountsContainer";
 import BankAccountCreateContainer from "./BankAccountCreateContainer";
 
 import { notificationsMachine } from "../machines/notificationsMachine";
-import { NotificationUpdatePayload } from "../models";
+import { authMachine } from "../machines/authMachine";
+import { NotificationUpdatePayload, SignInPayload } from "../models";
+import SignInForm from "../components/SignInForm";
 //import MainLayout from "../components/MainLayout";
 
 interface StateProps {
   isBootstrapped: boolean;
-  isLoggedIn: boolean;
 }
 
 interface DispatchProps {
@@ -32,6 +32,9 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps;
 
 const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
+  const [authState, sendAuth] = useMachine(authMachine, {
+    devTools: true
+  });
   const [notificationsState, sendNotifications] = useMachine(
     notificationsMachine,
     {
@@ -40,6 +43,12 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
   );
   const updateNotification = (payload: NotificationUpdatePayload) =>
     sendNotifications("UPDATE", payload);
+  const signInPending = (payload: SignInPayload) => sendAuth("LOGIN", payload);
+  const signOutPending = () => sendAuth("LOGOUT");
+
+  const isLoggedIn = authState.matches("authorized");
+  const currentUser = authState.context.user;
+  console.log("CU: ", currentUser);
 
   useEffect(() => {
     sendNotifications({ type: "FETCH" });
@@ -81,13 +90,17 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
 
   return (
     <Switch>
-      <PrivateRoute exact path={"/(public|contacts|personal)?"}>
+      <PrivateRoute
+        isLoggedIn={isLoggedIn}
+        exact
+        path={"/(public|contacts|personal)?"}
+      >
         <TransactionsContainer />
       </PrivateRoute>
-      <PrivateRoute exact path="/user/settings">
+      <PrivateRoute isLoggedIn={isLoggedIn} exact path="/user/settings">
         <UserSettingsContainer />
       </PrivateRoute>
-      <PrivateRoute exact path="/notifications">
+      <PrivateRoute isLoggedIn={isLoggedIn} exact path="/notifications">
         <NotificationsContainer
           notifications={notificationsState.context.results!}
           updateNotification={updateNotification}
@@ -99,20 +112,24 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
           />
         </MainContainer>*/}
       </PrivateRoute>
-      <PrivateRoute exact path="/bankaccount/new">
+      <PrivateRoute isLoggedIn={isLoggedIn} exact path="/bankaccount/new">
         <BankAccountCreateContainer />
       </PrivateRoute>
-      <PrivateRoute exact path="/bankaccounts">
+      <PrivateRoute isLoggedIn={isLoggedIn} exact path="/bankaccounts">
         <BankAccountsContainer />
       </PrivateRoute>
-      <PrivateRoute exact path="/transaction/new">
+      <PrivateRoute isLoggedIn={isLoggedIn} exact path="/transaction/new">
         <TransactionCreateContainer />
       </PrivateRoute>
-      <PrivateRoute exact path="/transaction/:transactionId">
+      <PrivateRoute
+        isLoggedIn={isLoggedIn}
+        exact
+        path="/transaction/:transactionId"
+      >
         <TransactionDetailContainer />
       </PrivateRoute>
       <Route path="/signin">
-        <SignIn />
+        <SignInForm signInPending={signInPending} />
       </Route>
       <Route path="/signup">
         <SignUp />
@@ -122,8 +139,7 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
 };
 
 const mapStateToProps = (state: IRootReducerState) => ({
-  isBootstrapped: state.app.isBootstrapped,
-  isLoggedIn: state.user.isLoggedIn
+  isBootstrapped: state.app.isBootstrapped
 });
 
 const dispatchProps = {

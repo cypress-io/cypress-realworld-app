@@ -16,7 +16,7 @@ import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 
 import Copyright from "./Copyright";
-import { User } from "../models";
+import { SignInPayload } from "../models";
 
 const validationSchema = object({
   username: string().required("Username is required"),
@@ -46,12 +46,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface Props {
-  signInPending: (payload: Partial<User>) => void;
+  signInPending: Function;
 }
 
 const SignInForm: React.FC<Props> = ({ signInPending }) => {
   const classes = useStyles();
-  const initialValues: Partial<User> = { username: "", password: "" };
+  const initialValues: SignInPayload = { username: "", password: "" };
 
   return (
     <Container component="main" maxWidth="xs">

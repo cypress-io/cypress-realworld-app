@@ -1,6 +1,4 @@
 import React from "react";
-import { IRootReducerState } from "../reducers";
-import { connect } from "react-redux";
 import { Route, Redirect, RouteProps } from "react-router-dom";
 
 interface IPrivateRouteProps extends RouteProps {
@@ -27,10 +25,4 @@ function PrivateRoute({ isLoggedIn, children, ...rest }: IPrivateRouteProps) {
   );
 }
 
-const mapStateToProps = (state: IRootReducerState) => {
-  return {
-    isLoggedIn: state.user.isLoggedIn
-  };
-};
-
-export default connect(mapStateToProps)(PrivateRoute);
+export default PrivateRoute;

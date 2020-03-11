@@ -1,8 +1,6 @@
-import { dataMachine } from "./dataMachine";
-import axios from "axios";
 import { isEmpty, omit } from "lodash/fp";
-
-const httpClient = axios.create({ withCredentials: true });
+import { dataMachine } from "./dataMachine";
+import { httpClient } from "../utils/asyncUtils";
 
 export const notificationsMachine = dataMachine("notifications").withConfig({
   services: {
