@@ -5,6 +5,7 @@ interface DataSchema {
   states: {
     idle: {};
     loading: {};
+    updating: {};
     success: {
       states: {
         unknown: {};
@@ -18,7 +19,11 @@ interface DataSchema {
 
 type SuccessEvent = { type: "SUCCESS"; results: any[]; pageData: object };
 type FailureEvent = { type: "FAILURE"; message: string };
-type DataEvents = { type: "FETCH" } | SuccessEvent | FailureEvent;
+type DataEvents =
+  | { type: "FETCH" }
+  | { type: "UPDATE" }
+  | SuccessEvent
+  | FailureEvent;
 
 export interface DataContext {
   pageData?: object;
@@ -37,7 +42,9 @@ export const dataMachine = (machineId: string) =>
       },
       states: {
         idle: {
-          on: { FETCH: "loading" }
+          on: {
+            FETCH: "loading"
+          }
         },
         loading: {
           invoke: {
@@ -46,10 +53,18 @@ export const dataMachine = (machineId: string) =>
             onError: { target: "failure", actions: "setMessage" }
           }
         },
+        updating: {
+          invoke: {
+            src: "updateData",
+            onDone: { target: "loading" },
+            onError: { target: "failure", actions: "setMessage" }
+          }
+        },
         success: {
           entry: ["setResults", "setPageData"],
           on: {
-            FETCH: "loading"
+            FETCH: "loading",
+            UPDATE: "updating"
           },
           initial: "unknown",
           states: {
@@ -61,9 +76,7 @@ export const dataMachine = (machineId: string) =>
                 ]
               }
             },
-            withData: {
-              //entry: ["notifyHasData"]
-            },
+            withData: {},
             withoutData: {}
           }
         },

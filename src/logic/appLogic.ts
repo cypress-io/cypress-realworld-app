@@ -32,7 +32,7 @@ const appBootstrapLogic = createLogic({
 
       dispatch(appBootstrapSuccess({ user }));
       dispatch(usersAllPending());
-      dispatch(notificationsAllPending());
+      //dispatch(notificationsAllPending());
       dispatch(bankAccountsAllPending());
     } catch (error) {
       // @ts-ignore

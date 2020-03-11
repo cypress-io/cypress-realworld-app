@@ -1,11 +1,8 @@
 import React from "react";
-import { connect } from "react-redux";
 import { makeStyles, Paper, Typography } from "@material-ui/core";
 import MainContainer from "./MainContainer";
-import { IRootReducerState } from "../reducers";
 import { NotificationResponseItem } from "../models";
 import NotificationList from "../components/NotificationList";
-import { notificationUpdatePending } from "../actions/notifications";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -16,21 +13,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export interface StateProps {
-  allNotifications: NotificationResponseItem[];
-}
-
-export interface DispatchProps {
+export interface Props {
+  notifications: NotificationResponseItem[];
   updateNotification: Function;
 }
 
-export type NotificationsContainerProps = StateProps & DispatchProps;
-
-const NotificationsContainer: React.FC<NotificationsContainerProps> = ({
-  allNotifications,
+const NotificationsContainer: React.FC<Props> = ({
+  notifications,
   updateNotification
 }) => {
   const classes = useStyles();
+
   return (
     <MainContainer>
       <Paper className={classes.paper}>
@@ -38,7 +31,7 @@ const NotificationsContainer: React.FC<NotificationsContainerProps> = ({
           Notifications
         </Typography>
         <NotificationList
-          notifications={allNotifications}
+          notifications={notifications}
           updateNotification={updateNotification}
         />
       </Paper>
@@ -46,15 +39,4 @@ const NotificationsContainer: React.FC<NotificationsContainerProps> = ({
   );
 };
 
-const mapStateToProps = (state: IRootReducerState) => ({
-  allNotifications: state.notifications.all
-});
-
-const mapDispatchToProps = {
-  updateNotification: notificationUpdatePending
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(NotificationsContainer);
+export default NotificationsContainer;
