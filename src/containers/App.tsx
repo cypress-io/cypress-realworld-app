@@ -18,6 +18,7 @@ import BankAccountCreateContainer from "./BankAccountCreateContainer";
 
 import { notificationsMachine } from "../machines/notificationsMachine";
 import { NotificationUpdatePayload } from "../models";
+//import MainLayout from "../components/MainLayout";
 
 interface StateProps {
   isBootstrapped: boolean;
@@ -48,6 +49,36 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
     }
   }, [sendNotifications]);
 
+  /*
+  const MainContainer: React.FC<{ children: React.ReactNode }> = ({
+    children
+  }) => (
+    <MainLayout
+      signOutPending={() => {}}
+      allNotifications={notificationsState.context.results!}
+      currentUser={{
+        id: "9IUK0xpw",
+        uuid: "a6218702-3254-4d3e-af48-9ebb7ee73e76",
+        firstName: "Lizzie",
+        lastName: "Heathcote",
+        username: "Teresa34",
+        password:
+          "$2b$10$D12H6XSK7XF61yjhZgNn3urSCGQEGzbY6agMXZihTtyk1TIKXil0C",
+        email: "Zakary.Bashirian@yahoo.com",
+        phoneNumber: "+12133734253",
+        avatar: "https://i.pravatar.cc/150?img=32",
+        defaultPrivacyLevel: DefaultPrivacyLevel.private,
+        balance: 55000,
+        createdAt: new Date(),
+        modifiedAt: new Date()
+      }}
+      snackbar={{}}
+    >
+      {children}
+    </MainLayout>
+  );
+  */
+
   return (
     <Switch>
       <PrivateRoute exact path={"/(public|contacts|personal)?"}>
@@ -61,6 +92,12 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
           notifications={notificationsState.context.results!}
           updateNotification={updateNotification}
         />
+        {/*<MainContainer>
+          <NotificationsContainer
+            notifications={notificationsState.context.results!}
+            updateNotification={updateNotification}
+          />
+        </MainContainer>*/}
       </PrivateRoute>
       <PrivateRoute exact path="/bankaccount/new">
         <BankAccountCreateContainer />
