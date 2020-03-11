@@ -1557,7 +1557,7 @@
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
   integrity sha512-EaObqwIvayI5a8dCzhFrjKzVwKLxjoG9T6Ppd5CEo07LRKfQ8Yokw54r5+Wq7FaBQ+yXRvQAYPrHwya1/UFt9g==
 
-"@types/express-paginate@^1.0.0":
+"@types/express-paginate@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/express-paginate/-/express-paginate-1.0.0.tgz#84b8ba6345286fe7d3fd0d552884ec919d37a5e3"
   integrity sha512-SvZd4+/IJO/0fuCmMKmdZaI76UZFlRTaUc/BbrNCB4bdkU/xX6wsh4Cxwgo9I9ooUUIJfmwLmo6xUXLnETuUlQ==
@@ -1778,7 +1778,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-window-infinite-loader@^1.0.2":
+"@types/react-window-infinite-loader@1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@types/react-window-infinite-loader/-/react-window-infinite-loader-1.0.2.tgz#dbca3a93dbf8d781bd68003e120003571200fe90"
   integrity sha512-vBuiQiu6nuCy122qrSF1SBD4uu2zmvq6h4s89O2fakhQJriB6EADH8m7fM/S9x3uFw3dM3UBi/w+eboHvlLPiw==
@@ -1786,7 +1786,7 @@
     "@types/react" "*"
     "@types/react-window" "*"
 
-"@types/react-window@*", "@types/react-window@^1.8.1":
+"@types/react-window@*", "@types/react-window@1.8.1":
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/@types/react-window/-/react-window-1.8.1.tgz#6e1ceab2e6f2f78dbf1f774ee0e00f1bb0364bb3"
   integrity sha512-V3k1O5cbfZIRa0VVbQ81Ekq/7w42CK1SuiB9U1oPMTxv270D9qUn7rHb3sZoqMkIJFfB1NZxaH7NRDlk+ToDsg==
@@ -2067,7 +2067,7 @@
     "@webassemblyjs/wast-parser" "1.8.5"
     "@xtuc/long" "4.2.2"
 
-"@xstate/react@^0.8.1":
+"@xstate/react@0.8.1":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@xstate/react/-/react-0.8.1.tgz#df200547cca24c909572b7aef1ddab8bca3a0603"
   integrity sha512-8voZm4GX3x70lNQVvoGedoObPYapkQIbgMhE+xOQEsm8Ait4Zto6R01SZ6WJD4qvLl8JPV6uq96OcFRdEsVESg==
@@ -4945,7 +4945,7 @@ expect@^24.9.0:
     jest-message-util "^24.9.0"
     jest-regex-util "^24.9.0"
 
-express-paginate@^1.0.0:
+express-paginate@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/express-paginate/-/express-paginate-1.0.0.tgz#b9ebc6b6baec7273eac916cfa55a9b5e4977666b"
   integrity sha512-M4+ee9YdcRoBltBYBwMcZUH589KeoVy62dBTyaZXlrggnJFGvk3Rgw0XYdL2PXN0BQROrnYskw+QxtoPsdY+AQ==
@@ -10269,12 +10269,12 @@ react-transition-group@^4.3.0:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-window-infinite-loader@^1.0.5:
+react-window-infinite-loader@1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/react-window-infinite-loader/-/react-window-infinite-loader-1.0.5.tgz#6fe094d538a88978c2c9b623052bc50cb28c2abc"
   integrity sha512-IcPIq8lADK3zsAcqoLqQGyduicqR6jWkiK2VUX5sKSI9X/rou6OWlOEexnGyujdNTG7hSG8OVBFEhLSDs4qrxg==
 
-react-window@^1.8.5:
+react-window@1.8.5:
   version "1.8.5"
   resolved "https://registry.yarnpkg.com/react-window/-/react-window-1.8.5.tgz#a56b39307e79979721021f5d06a67742ecca52d1"
   integrity sha512-HeTwlNa37AFa8MDZFZOKcNEkuF2YflA0hpGPiTT9vR7OawEt+GZbfM6wqkBahD3D3pUjIabQYzsnY/BSJbgq6Q==
@@ -12796,7 +12796,7 @@ xmlchars@^2.1.1:
   resolved "https://registry.yarnpkg.com/xmlchars/-/xmlchars-2.2.0.tgz#060fe1bcb7f9c76fe2a17db86a9bc3ab894210cb"
   integrity sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==
 
-xstate@^4.8.0:
+xstate@4.8.0:
   version "4.8.0"
   resolved "https://registry.yarnpkg.com/xstate/-/xstate-4.8.0.tgz#1aefa1f7828f84f61c356785615ffc0824ebf5a2"
   integrity sha512-xHSYQtCHLkcrFRxa5lK4Lp1rnKt00a80jcKFMQiMBuE+6MvTYv7twwqYpzjsJoKFjGZB3GGEpZAuY1dmlPTh/g==
