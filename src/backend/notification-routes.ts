@@ -21,7 +21,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
   const notifications = getUnreadNotificationsByUserId(req.user?.id!);
 
   res.status(200);
-  res.json({ notifications });
+  res.json({ results: notifications });
 });
 
 //POST /notifications/bulk

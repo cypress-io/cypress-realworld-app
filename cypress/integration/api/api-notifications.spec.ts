@@ -38,7 +38,7 @@ describe("Notifications API", function() {
     it("gets a list of notifications for a user", function() {
       cy.request("GET", `${apiNotifications}`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.notifications.length).to.eq(6);
+        expect(response.body.results.length).to.eq(6);
       });
     });
   });
@@ -69,10 +69,8 @@ describe("Notifications API", function() {
         ]
       }).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.notifications.length).to.equal(3);
-        expect(response.body.notifications[0].transactionId).to.equal(
-          transaction.id
-        );
+        expect(response.body.results.length).to.equal(3);
+        expect(response.body.results[0].transactionId).to.equal(transaction.id);
       });
     });
   });
