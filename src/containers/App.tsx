@@ -6,7 +6,7 @@ import { useMachine } from "@xstate/react";
 
 import { bootstrap } from "../actions/app";
 import { IRootReducerState } from "../reducers";
-import PrivateRoute from "./PrivateRoute";
+import PrivateRoute from "../components/PrivateRoute";
 import TransactionsContainer from "../containers/TransactionsContainer";
 import TransactionDetailContainer from "./TransactionDetailContainer";
 import SignUp from "../containers/SignUp";
