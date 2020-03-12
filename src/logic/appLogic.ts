@@ -1,17 +1,8 @@
 import { createLogic } from "redux-logic";
-import {
-  APP_BOOTSTRAP,
-  APP_SNACKBAR_INIT,
-  APP_SNACKBAR_RESET
-} from "../actions/app";
-import {
-  appBootstrapSuccess,
-  appBootstrapError,
-  appSnackBarReset
-} from "../actions/app";
+import { APP_BOOTSTRAP } from "../actions/app";
+import { appBootstrapSuccess, appBootstrapError } from "../actions/app";
 import { signOutPending } from "../actions/auth";
 import { usersAllPending } from "../actions/users";
-import { notificationsAllPending } from "../actions/notifications";
 import { bankAccountsAllPending } from "../actions/bankaccounts";
 
 const appBootstrapLogic = createLogic({
@@ -47,25 +38,4 @@ const appBootstrapLogic = createLogic({
   }
 });
 
-const appSnackBarResetLogic = createLogic({
-  type: APP_SNACKBAR_RESET,
-  throttle: 4000,
-  validate({ action }, allow) {
-    setTimeout(() => {
-      allow(action);
-    }, 4000);
-  }
-});
-
-const appSnackBarInitLogic = createLogic({
-  type: APP_SNACKBAR_INIT,
-
-  // @ts-ignore
-  // eslint-disable-next-line no-empty-pattern
-  async process({}, dispatch, done) {
-    dispatch(appSnackBarReset());
-    done();
-  }
-});
-
-export default [appBootstrapLogic, appSnackBarResetLogic, appSnackBarInitLogic];
+export default [appBootstrapLogic];
