@@ -1,4 +1,5 @@
 import React from "react";
+import { State } from "xstate";
 import { makeStyles } from "@material-ui/core/styles";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
@@ -13,6 +14,7 @@ import NavBar from "./NavBar";
 import NavDrawer from "./NavDrawer";
 import { NotificationType, User } from "../models";
 import { drawerMachine } from "../machines/drawerMachine";
+import { SnackbarContext, SnackbarEvents } from "../machines/snackbarMachine";
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -41,8 +43,8 @@ interface Props {
   signOutPending: () => void;
   children: React.ReactNode;
   allNotifications: NotificationType[];
-  currentUser: User;
-  snackbar: object;
+  currentUser?: User;
+  snackbarState: State<SnackbarContext, SnackbarEvents, any, any>;
 }
 
 const MainLayout: React.FC<Props> = ({
@@ -50,13 +52,10 @@ const MainLayout: React.FC<Props> = ({
   children,
   allNotifications,
   currentUser,
-  snackbar
+  snackbarState
 }) => {
-  const [drawerState, sendDrawer] = useMachine(drawerMachine);
-
   const classes = useStyles();
-  // @ts-ignore
-  const { severity, message } = snackbar;
+  const [drawerState, sendDrawer] = useMachine(drawerMachine);
 
   const toggleDrawer = () => {
     sendDrawer("TOGGLE");
@@ -65,13 +64,15 @@ const MainLayout: React.FC<Props> = ({
   return (
     <div className={classes.root}>
       <CssBaseline />
-      {message && (
+      {snackbarState.matches("visible") && (
         <Snackbar
           anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
           open={true}
           autoHideDuration={6000}
         >
-          <Alert severity={severity}>{message}</Alert>
+          <Alert severity={snackbarState.context.severity}>
+            {snackbarState.context.message}
+          </Alert>
         </Snackbar>
       )}
       <NavBar

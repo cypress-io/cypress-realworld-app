@@ -6,12 +6,14 @@ import TransactionCreateStepOne from "../components/TransactionCreateStepOne";
 import TransactionCreateStepTwo from "../components/TransactionCreateStepTwo";
 import { transactionCreatePending } from "../actions/transactions";
 import { usersSearchPending } from "../actions/users";
-import { appSnackBarInit } from "../actions/app";
+
+export interface LocalProps {
+  showSnackbar: Function;
+}
 
 export interface DispatchProps {
   transactionCreate: (payload: object) => void;
   userListSearch: (payload: object) => void;
-  snackbarInit: Function;
 }
 export interface StateProps {
   searchUsers: User[];
@@ -19,7 +21,9 @@ export interface StateProps {
   sender: User;
 }
 
-export type TransactionCreateContainerProps = StateProps & DispatchProps;
+export type TransactionCreateContainerProps = LocalProps &
+  StateProps &
+  DispatchProps;
 
 const TransactionCreateContainer: React.FC<TransactionCreateContainerProps> = ({
   allUsers,
@@ -27,7 +31,7 @@ const TransactionCreateContainer: React.FC<TransactionCreateContainerProps> = ({
   sender,
   transactionCreate,
   userListSearch,
-  snackbarInit
+  showSnackbar
 }) => {
   const [receiver, setReceiver] = useState();
 
@@ -38,7 +42,7 @@ const TransactionCreateContainer: React.FC<TransactionCreateContainerProps> = ({
         receiver={receiver}
         sender={sender}
         transactionCreate={transactionCreate}
-        snackbarInit={snackbarInit}
+        showSnackbar={showSnackbar}
       />
     );
   }
@@ -62,8 +66,7 @@ const mapStateToProps = (state: IRootReducerState) => ({
 
 const mapDispatchToProps = {
   transactionCreate: transactionCreatePending,
-  userListSearch: usersSearchPending,
-  snackbarInit: appSnackBarInit
+  userListSearch: usersSearchPending
 };
 
 export default connect(

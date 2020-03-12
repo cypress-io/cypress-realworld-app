@@ -61,7 +61,7 @@ export interface TransactionCreateStepTwoProps {
   receiver: User;
   sender: User;
   transactionCreate: (payload: object) => void;
-  snackbarInit: Function;
+  showSnackbar: Function;
 }
 
 interface FormValues {
@@ -75,7 +75,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
   receiver,
   sender,
   transactionCreate,
-  snackbarInit
+  showSnackbar
 }) => {
   const classes = useStyles();
   const [transactionType, setTransactionType] = useState();
@@ -101,7 +101,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
             setSubmitting(true);
 
             transactionCreate({ type: transactionType, ...values });
-            snackbarInit({
+            showSnackbar({
               severity: "success",
               message: "Transaction Submitted!"
             });

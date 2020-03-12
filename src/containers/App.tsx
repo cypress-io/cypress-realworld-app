@@ -16,6 +16,7 @@ import UserSettingsContainer from "./UserSettingsContainer";
 import BankAccountsContainer from "./BankAccountsContainer";
 import BankAccountCreateContainer from "./BankAccountCreateContainer";
 
+import { snackbarMachine, SnackbarContext } from "../machines/snackbarMachine";
 import { notificationsMachine } from "../machines/notificationsMachine";
 import { authMachine } from "../machines/authMachine";
 import { NotificationUpdatePayload, SignInPayload } from "../models";
@@ -46,10 +47,16 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
       devTools: true
     }
   );
+  const [snackbarState, sendSnackbar] = useMachine(snackbarMachine, {
+    devTools: true
+  });
+
   const updateNotification = (payload: NotificationUpdatePayload) =>
     sendNotifications("UPDATE", payload);
   const signInPending = (payload: SignInPayload) => sendAuth("LOGIN", payload);
   const signOutPending = () => sendAuth("LOGOUT");
+  const showSnackbar = (payload: SnackbarContext) =>
+    sendSnackbar("SHOW", payload);
 
   const isLoggedIn = authState.matches("authorized");
   const currentUser = authState.context.user;
@@ -71,7 +78,7 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
         signOutPending={signOutPending}
         allNotifications={notificationsState.context.results!}
         currentUser={currentUser}
-        snackbar={{}}
+        snackbarState={snackbarState}
       >
         {children}
       </MainLayout>
@@ -99,7 +106,7 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
         <BankAccountsContainer />
       </PrivateRouteWithState>
       <PrivateRouteWithState exact path="/transaction/new">
-        <TransactionCreateContainer />
+        <TransactionCreateContainer showSnackbar={showSnackbar} />
       </PrivateRouteWithState>
       <PrivateRouteWithState exact path="/transaction/:transactionId">
         <TransactionDetailContainer />

@@ -150,7 +150,7 @@ interface Props {
   signOutPending: () => void;
   handleDrawerClose: () => void;
   drawerOpen: boolean;
-  currentUser: User;
+  currentUser?: User;
 }
 
 const NavDrawer: React.FC<Props> = ({
@@ -179,21 +179,25 @@ const NavDrawer: React.FC<Props> = ({
         alignItems="center"
         className={drawerOpen ? classes.userProfile : classes.userProfileHidden}
       >
-        <Grid item>
-          <Avatar
-            className={classes.avatar}
-            alt={`${currentUser.firstName} ${currentUser.lastName}`}
-            src={currentUser.avatar}
-          />
-        </Grid>
-        <Grid item>
-          <Typography variant="subtitle1" color="textPrimary">
-            {currentUser.firstName} {head(currentUser.lastName)}
-          </Typography>
-          <Typography variant="subtitle2" color="inherit" gutterBottom>
-            @{currentUser.username}
-          </Typography>
-        </Grid>
+        {currentUser && (
+          <>
+            <Grid item>
+              <Avatar
+                className={classes.avatar}
+                alt={`${currentUser.firstName} ${currentUser.lastName}`}
+                src={currentUser.avatar}
+              />
+            </Grid>
+            <Grid item>
+              <Typography variant="subtitle1" color="textPrimary">
+                {currentUser.firstName} {head(currentUser.lastName)}
+              </Typography>
+              <Typography variant="subtitle2" color="inherit" gutterBottom>
+                @{currentUser.username}
+              </Typography>
+            </Grid>
+          </>
+        )}
         <Grid item>
           <div className={classes.toolbarIcon}>
             <IconButton onClick={handleDrawerClose} data-test="sidenav-close">
@@ -202,27 +206,31 @@ const NavDrawer: React.FC<Props> = ({
           </div>
         </Grid>
       </Grid>
-      <Grid
-        container
-        direction="row"
-        justify="space-between"
-        alignItems="center"
-        className={drawerOpen ? classes.userProfile : classes.userProfileHidden}
-      >
-        <Grid item>
-          <Typography
-            variant="h6"
-            color="textPrimary"
-            className={classes.amount}
-            data-test="sidenav-user-balance"
-          >
-            {currentUser.balance && formatAmount(currentUser.balance)}
-          </Typography>
-          <Typography variant="subtitle2" color="inherit" gutterBottom>
-            Account Balance
-          </Typography>
+      {currentUser && (
+        <Grid
+          container
+          direction="row"
+          justify="space-between"
+          alignItems="center"
+          className={
+            drawerOpen ? classes.userProfile : classes.userProfileHidden
+          }
+        >
+          <Grid item>
+            <Typography
+              variant="h6"
+              color="textPrimary"
+              className={classes.amount}
+              data-test="sidenav-user-balance"
+            >
+              {currentUser.balance && formatAmount(currentUser.balance)}
+            </Typography>
+            <Typography variant="subtitle2" color="inherit" gutterBottom>
+              Account Balance
+            </Typography>
+          </Grid>
         </Grid>
-      </Grid>
+      )}
       <Divider />
       <List>{mainListItems(handleDrawerClose)}</List>
       <Divider />
