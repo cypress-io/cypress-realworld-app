@@ -10,9 +10,6 @@ import {
   TRANSACTION_DETAIL_SUCCESS,
   TRANSACTION_DETAIL_ERROR,
   transactionDetailPending,
-  TRANSACTION_CREATE_PENDING,
-  TRANSACTION_CREATE_SUCCESS,
-  TRANSACTION_CREATE_ERROR,
   TRANSACTION_UPDATE_PENDING,
   TRANSACTION_UPDATE_SUCCESS,
   TRANSACTION_UPDATE_ERROR
@@ -23,7 +20,6 @@ import {
   pathTransactionId,
   isNewTransactionPath
 } from "../utils/transactionUtils";
-import { appBootstrapPending } from "../actions/app";
 
 const transactionsLikeLogic = createLogic({
   type: TRANSACTIONS_LIKE_PENDING,
@@ -86,28 +82,8 @@ const transactionDetailLogic = createLogic({
   }
 });
 
-const transactionCreateLogic = createLogic({
-  type: TRANSACTION_CREATE_PENDING,
-  processOptions: {
-    dispatchReturn: true,
-    successType: TRANSACTION_CREATE_SUCCESS,
-    failType: TRANSACTION_CREATE_ERROR
-  },
-
-  // @ts-ignore
-  process({ httpClient, action }) {
-    return (
-      httpClient
-        // @ts-ignore
-        .post("http://localhost:3001/transactions", action.payload)
-        .then((resp: any) => resp.data)
-    );
-  }
-});
-
 const transactionsRefreshLogic = createLogic({
   type: [
-    TRANSACTION_CREATE_SUCCESS,
     TRANSACTION_UPDATE_SUCCESS,
     TRANSACTIONS_LIKE_SUCCESS,
     TRANSACTIONS_COMMENT_SUCCESS
@@ -122,9 +98,9 @@ const transactionsRefreshLogic = createLogic({
 
     if (isNewTransactionPath(pathname)) {
       if (isRequestTransaction(payload.transaction)) {
-        history.push("/personal");
+        //history.push("/personal");
       }
-      history.push("/");
+      //history.push("/");
     }
 
     const transactionId = pathTransactionId(pathname);
@@ -134,10 +110,6 @@ const transactionsRefreshLogic = createLogic({
           transactionId
         })
       );
-    }
-
-    if (action.type === TRANSACTION_CREATE_SUCCESS) {
-      dispatch(appBootstrapPending({}));
     }
     done();
   }
@@ -169,7 +141,6 @@ export default [
   transactionsLikeLogic,
   transactionsCommentLogic,
   transactionDetailLogic,
-  transactionCreateLogic,
   transactionsRefreshLogic,
   transactionUpdateLogic
 ];

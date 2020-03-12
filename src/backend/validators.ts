@@ -139,7 +139,7 @@ export const isTransactionQSValidator = [
 ];
 
 export const isTransactionPayloadValidator = [
-  body("type")
+  body("transactionType")
     .isIn(["payment", "request"])
     .trim(),
   body("privacyLevel")

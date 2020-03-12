@@ -106,7 +106,10 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
         <BankAccountsContainer />
       </PrivateRouteWithState>
       <PrivateRouteWithState exact path="/transaction/new">
-        <TransactionCreateContainer showSnackbar={showSnackbar} />
+        <TransactionCreateContainer
+          sender={currentUser}
+          showSnackbar={showSnackbar}
+        />
       </PrivateRouteWithState>
       <PrivateRouteWithState exact path="/transaction/:transactionId">
         <TransactionDetailContainer />

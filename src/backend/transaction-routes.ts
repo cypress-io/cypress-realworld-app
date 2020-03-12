@@ -142,9 +142,9 @@ router.post(
   validateMiddleware(isTransactionPayloadValidator),
   (req, res) => {
     const transactionPayload = req.body;
-    const transactionType = transactionPayload.type;
+    const transactionType = transactionPayload.transactionType;
 
-    remove("type", transactionPayload);
+    remove("transactionType", transactionPayload);
 
     const transaction = createTransaction(
       req.user?.id!,

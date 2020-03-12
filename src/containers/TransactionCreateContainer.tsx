@@ -1,24 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { IRootReducerState } from "../reducers";
-import { User } from "../models";
+import { User, TransactionPayload } from "../models";
 import TransactionCreateStepOne from "../components/TransactionCreateStepOne";
 import TransactionCreateStepTwo from "../components/TransactionCreateStepTwo";
-import { transactionCreatePending } from "../actions/transactions";
 import { usersSearchPending } from "../actions/users";
+import { useMachine } from "@xstate/react";
+import { createTransactionMachine } from "../machines/createTransactionMachine";
 
 export interface LocalProps {
   showSnackbar: Function;
+  sender: User;
 }
 
 export interface DispatchProps {
-  transactionCreate: (payload: object) => void;
   userListSearch: (payload: object) => void;
 }
 export interface StateProps {
   searchUsers: User[];
   allUsers: User[];
-  sender: User;
 }
 
 export type TransactionCreateContainerProps = LocalProps &
@@ -29,43 +29,62 @@ const TransactionCreateContainer: React.FC<TransactionCreateContainerProps> = ({
   allUsers,
   searchUsers,
   sender,
-  transactionCreate,
   userListSearch,
   showSnackbar
 }) => {
-  const [receiver, setReceiver] = useState();
+  const [
+    createTransactionState,
+    sendCreateTransaction,
+    createTransactionService
+  ] = useMachine(createTransactionMachine, {
+    devTools: true
+  });
 
-  // TransactionCreateStepTwo / TransactionCreateForm
-  if (receiver && sender) {
-    return (
-      <TransactionCreateStepTwo
-        receiver={receiver}
-        sender={sender}
-        transactionCreate={transactionCreate}
-        showSnackbar={showSnackbar}
-      />
-    );
-  }
+  useEffect(() => {
+    const subscription = createTransactionService.subscribe(state => {
+      // simple state logging
+      console.log(state);
+    });
 
-  // TransactionCreateStepOne / TransactionCreateSelectUser
+    return subscription.unsubscribe;
+  }, [createTransactionService]);
+
+  const setReceiver = (receiver: User) => {
+    sendCreateTransaction("SET_USERS", { sender, receiver });
+  };
+  const createTransaction = (payload: TransactionPayload) => {
+    sendCreateTransaction("COMPLETE");
+    //sendCreateTransaction("CREATE", payload);
+  };
+
   return (
-    <TransactionCreateStepOne
-      allUsers={allUsers}
-      searchUsers={searchUsers}
-      setReceiver={setReceiver}
-      userListSearch={userListSearch}
-    />
+    <>
+      {createTransactionState.matches("stepOne") && (
+        <TransactionCreateStepOne
+          allUsers={allUsers}
+          searchUsers={searchUsers}
+          setReceiver={setReceiver}
+          userListSearch={userListSearch}
+        />
+      )}
+      {createTransactionState.matches("stepTwo") && (
+        <TransactionCreateStepTwo
+          receiver={createTransactionState.context.receiver}
+          sender={sender}
+          createTransaction={createTransaction}
+          showSnackbar={showSnackbar}
+        />
+      )}
+    </>
   );
 };
 
 const mapStateToProps = (state: IRootReducerState) => ({
   searchUsers: state.users.search,
-  allUsers: state.users.all,
-  sender: state.user.profile
+  allUsers: state.users.all
 });
 
 const mapDispatchToProps = {
-  transactionCreate: transactionCreatePending,
   userListSearch: usersSearchPending
 };
 
