@@ -1,6 +1,5 @@
 import React from "react";
 import { makeStyles, Paper, Typography } from "@material-ui/core";
-import MainContainer from "../containers/MainContainer";
 import UsersList from "./UsersList";
 import { User } from "../models";
 import UserListSearchForm from "./UserListSearchForm";
@@ -31,15 +30,13 @@ const TransactionCreateStepOne: React.FC<TransactionCreateStepOneProps> = ({
   const classes = useStyles();
   const users = !isEmpty(searchUsers) ? searchUsers : allUsers;
   return (
-    <MainContainer>
-      <Paper className={classes.paper}>
-        <Typography component="h2" variant="h6" color="primary" gutterBottom>
-          Select User
-        </Typography>
-        <UserListSearchForm userListSearch={userListSearch} />
-        <UsersList users={users} setReceiver={setReceiver} />
-      </Paper>
-    </MainContainer>
+    <Paper className={classes.paper}>
+      <Typography component="h2" variant="h6" color="primary" gutterBottom>
+        Select User
+      </Typography>
+      <UserListSearchForm userListSearch={userListSearch} />
+      <UsersList users={users} setReceiver={setReceiver} />
+    </Paper>
   );
 };
 

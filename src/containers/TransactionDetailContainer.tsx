@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router-dom";
-import MainContainer from "./MainContainer";
 import TransactionDetail from "../components/TransactionDetail";
 import { IRootReducerState } from "../reducers";
 import { TransactionResponseItem, User } from "../models";
@@ -51,23 +50,21 @@ const TransactionDetailsContainer: React.FC<TransactionDetailsContainerProps> = 
     (transaction && transaction.id !== transactionId)
   ) {
     return (
-      <MainContainer>
+      <div>
         Loading...
         <br />
-      </MainContainer>
+      </div>
     );
   }
 
   return (
-    <MainContainer>
-      <TransactionDetail
-        transaction={transaction}
-        transactionLike={transactionLike}
-        transactionComment={transactionComment}
-        transactionUpdate={transactionUpdate}
-        currentUser={currentUser}
-      />
-    </MainContainer>
+    <TransactionDetail
+      transaction={transaction}
+      transactionLike={transactionLike}
+      transactionComment={transactionComment}
+      transactionUpdate={transactionUpdate}
+      currentUser={currentUser}
+    />
   );
 };
 

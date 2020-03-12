@@ -1,6 +1,5 @@
 import React from "react";
 import { makeStyles, Paper, Typography } from "@material-ui/core";
-import MainContainer from "./MainContainer";
 import { NotificationResponseItem } from "../models";
 import NotificationList from "../components/NotificationList";
 
@@ -25,17 +24,15 @@ const NotificationsContainer: React.FC<Props> = ({
   const classes = useStyles();
 
   return (
-    <MainContainer>
-      <Paper className={classes.paper}>
-        <Typography component="h2" variant="h6" color="primary" gutterBottom>
-          Notifications
-        </Typography>
-        <NotificationList
-          notifications={notifications}
-          updateNotification={updateNotification}
-        />
-      </Paper>
-    </MainContainer>
+    <Paper className={classes.paper}>
+      <Typography component="h2" variant="h6" color="primary" gutterBottom>
+        Notifications
+      </Typography>
+      <NotificationList
+        notifications={notifications}
+        updateNotification={updateNotification}
+      />
+    </Paper>
   );
 };
 

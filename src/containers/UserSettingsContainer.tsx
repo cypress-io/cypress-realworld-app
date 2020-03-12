@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { makeStyles, Paper, Typography } from "@material-ui/core";
-import MainContainer from "./MainContainer";
 import { IRootReducerState } from "../reducers";
 import { User } from "../models";
 import { userUpdatePending } from "../actions/users";
@@ -32,14 +31,12 @@ const UserSettingsContainer: React.FC<UserSettingsContainerProps> = ({
 }) => {
   const classes = useStyles();
   return (
-    <MainContainer>
-      <Paper className={classes.paper}>
-        <Typography component="h2" variant="h6" color="primary" gutterBottom>
-          User Settings
-        </Typography>
-        <UserSettingsForm userProfile={userProfile} updateUser={updateUser} />
-      </Paper>
-    </MainContainer>
+    <Paper className={classes.paper}>
+      <Typography component="h2" variant="h6" color="primary" gutterBottom>
+        User Settings
+      </Typography>
+      <UserSettingsForm userProfile={userProfile} updateUser={updateUser} />
+    </Paper>
   );
 };
 

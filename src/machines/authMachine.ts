@@ -7,7 +7,9 @@ export const authMachine = Machine(
   {
     id: "authentication",
     initial: "unauthorized",
-    context: {},
+    context: {
+      user: {}
+    },
     states: {
       unauthorized: {
         on: {

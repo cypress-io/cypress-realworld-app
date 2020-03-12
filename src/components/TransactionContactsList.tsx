@@ -6,7 +6,6 @@ import {
   TransactionDateRangePayload,
   TransactionAmountRangePayload
 } from "../models";
-import MainContainer from "../containers/MainContainer";
 import TransactionNavTabs from "./TransactionNavTabs";
 import TransactionList from "./TransactionList";
 import { contactsTransactionsMachine } from "../machines/contactsTransactionsMachine";
@@ -35,7 +34,7 @@ const TransactionContactsList: React.FC<TransactionContactListProps> = ({
     send("FETCH", { page, ...dateRangeFilters, ...amountRangeFilters });
 
   return (
-    <MainContainer>
+    <>
       <TransactionNavTabs />
       {filterComponent}
       <br />
@@ -46,7 +45,7 @@ const TransactionContactsList: React.FC<TransactionContactListProps> = ({
         loadNextPage={loadNextPage}
         pagination={pageData as TransactionPagination}
       />
-    </MainContainer>
+    </>
   );
 };
 

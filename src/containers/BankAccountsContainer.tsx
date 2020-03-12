@@ -4,7 +4,6 @@ import { Link as RouterLink } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
-import MainContainer from "./MainContainer";
 import { IRootReducerState } from "../reducers";
 import { BankAccount } from "../models";
 import BankAccountList from "../components/BankAccountList";
@@ -35,43 +34,36 @@ const BankAccountsContainer: React.FC<BankAccountsContainerProps> = ({
 }) => {
   const classes = useStyles();
   return (
-    <MainContainer>
-      <Paper className={classes.paper}>
-        <Grid
-          container
-          direction="row"
-          justify="space-between"
-          alignItems="center"
-        >
-          <Grid item>
-            <Typography
-              component="h2"
-              variant="h6"
-              color="primary"
-              gutterBottom
-            >
-              Bank Accounts
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              component={RouterLink}
-              to="/bankaccount/new"
-              data-test="bankaccount-new"
-            >
-              Create
-            </Button>
-          </Grid>
+    <Paper className={classes.paper}>
+      <Grid
+        container
+        direction="row"
+        justify="space-between"
+        alignItems="center"
+      >
+        <Grid item>
+          <Typography component="h2" variant="h6" color="primary" gutterBottom>
+            Bank Accounts
+          </Typography>
         </Grid>
-        <BankAccountList
-          bankAccounts={bankAccounts}
-          deleteBankAccount={deleteBankAccount}
-        />
-      </Paper>
-    </MainContainer>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            component={RouterLink}
+            to="/bankaccount/new"
+            data-test="bankaccount-new"
+          >
+            Create
+          </Button>
+        </Grid>
+      </Grid>
+      <BankAccountList
+        bankAccounts={bankAccounts}
+        deleteBankAccount={deleteBankAccount}
+      />
+    </Paper>
   );
 };
 
