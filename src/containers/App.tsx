@@ -1,14 +1,11 @@
 import React, { useEffect } from "react";
 import { Switch, Route } from "react-router";
 import { RouteProps } from "react-router-dom";
-import { connect } from "react-redux";
 import { useMachine } from "@xstate/react";
 import { makeStyles } from "@material-ui/core/styles";
 import { CssBaseline, Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 
-import { bootstrap } from "../actions/app";
-import { IRootReducerState } from "../reducers";
 import PrivateRoute from "../components/PrivateRoute";
 import TransactionsContainer from "../containers/TransactionsContainer";
 import TransactionDetailContainer from "./TransactionDetailContainer";
@@ -26,19 +23,9 @@ import { NotificationUpdatePayload, SignInPayload } from "../models";
 import SignInForm from "../components/SignInForm";
 import MainLayout from "../components/MainLayout";
 
-interface StateProps {
-  isBootstrapped: boolean;
-}
-
-interface DispatchProps {
-  bootstrapApp: () => void;
-}
-
 interface PrivateRouteWithStateProps extends RouteProps {
   children: React.ReactNode;
 }
-
-type Props = StateProps & DispatchProps;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -46,7 +33,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
+const App: React.FC = () => {
   const classes = useStyles();
   const [authState, sendAuth] = useMachine(authMachine, {
     devTools: true
@@ -72,12 +59,18 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
   const currentUser = authState.context.user;
 
   useEffect(() => {
-    sendNotifications({ type: "FETCH" });
-
-    if (!isBootstrapped) {
-      bootstrapApp();
+    if (authState.matches("authorized")) {
+      sendNotifications({ type: "FETCH" });
     }
-  }, [sendNotifications]);
+
+    /*
+    const subscription = service.subscribe((state: any) => {
+      // simple state logging
+      console.log(state);
+    });
+
+    return subscription.unsubscribe;*/
+  }, [authState, sendNotifications]);
 
   const PrivateRouteWithState: React.FC<PrivateRouteWithStateProps> = ({
     children,
@@ -149,12 +142,4 @@ const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
   );
 };
 
-const mapStateToProps = (state: IRootReducerState) => ({
-  isBootstrapped: state.app.isBootstrapped
-});
-
-const dispatchProps = {
-  bootstrapApp: bootstrap
-};
-
-export default connect(mapStateToProps, dispatchProps)(App);
+export default App;
