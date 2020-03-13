@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { IRootReducerState } from "../reducers";
 import { User, TransactionPayload } from "../models";
@@ -7,6 +7,7 @@ import TransactionCreateStepTwo from "../components/TransactionCreateStepTwo";
 import { usersSearchPending } from "../actions/users";
 import { useMachine } from "@xstate/react";
 import { createTransactionMachine } from "../machines/createTransactionMachine";
+import { useHistory } from "react-router";
 
 export interface LocalProps {
   showSnackbar: Function;
@@ -32,29 +33,21 @@ const TransactionCreateContainer: React.FC<TransactionCreateContainerProps> = ({
   userListSearch,
   showSnackbar
 }) => {
-  const [
-    createTransactionState,
-    sendCreateTransaction,
-    createTransactionService
-  ] = useMachine(createTransactionMachine, {
-    devTools: true
-  });
-
-  useEffect(() => {
-    const subscription = createTransactionService.subscribe(state => {
-      // simple state logging
-      console.log(state);
-    });
-
-    return subscription.unsubscribe;
-  }, [createTransactionService]);
+  const history = useHistory();
+  const [createTransactionState, sendCreateTransaction] = useMachine(
+    createTransactionMachine,
+    {
+      devTools: true
+    }
+  );
 
   const setReceiver = (receiver: User) => {
     sendCreateTransaction("SET_USERS", { sender, receiver });
   };
   const createTransaction = (payload: TransactionPayload) => {
-    sendCreateTransaction("COMPLETE");
     //sendCreateTransaction("CREATE", payload);
+    sendCreateTransaction("COMPLETE");
+    history.push("/");
   };
 
   return (

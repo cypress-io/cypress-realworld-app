@@ -28,12 +28,16 @@ export const snackbarMachine = Machine<
     },
     states: {
       invisible: {
-        entry: "setSnackbar",
+        entry: "resetSnackbar",
         on: { SHOW: "visible" }
       },
       visible: {
-        entry: "resetSnackbar",
-        on: { HIDE: "invisible" }
+        entry: "setSnackbar",
+        on: { HIDE: "invisible" },
+        after: {
+          // after 5 seconds, transition to invisible
+          5000: "invisible"
+        }
       }
     }
   },

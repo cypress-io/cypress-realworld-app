@@ -6,7 +6,6 @@ import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object, number } from "yup";
 import { Paper, Typography, Button, Grid, Container } from "@material-ui/core";
 import { User } from "../models";
-import { useHistory } from "react-router";
 
 const validationSchema = object({
   amount: number().required("Amount is required"),
@@ -79,7 +78,6 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
   showSnackbar
 }) => {
   const classes = useStyles();
-  const history = useHistory();
   const [transactionType, setTransactionType] = useState();
   const initialValues: FormValues = {
     amount: "",
@@ -102,18 +100,14 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
           onSubmit={(values, { setSubmitting }) => {
             setSubmitting(true);
 
+            // reset transactionType
+            setTransactionType(undefined);
+
             createTransaction({ transactionType, ...values });
             showSnackbar({
               severity: "success",
               message: "Transaction Submitted!"
             });
-
-            //history.push("/");
-
-            // reset transactionType
-            setTransactionType(undefined);
-
-            setSubmitting(false);
           }}
         >
           {({ isValid, isSubmitting }) => (
