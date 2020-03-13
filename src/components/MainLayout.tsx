@@ -1,9 +1,5 @@
 import React from "react";
-import { State } from "xstate";
 import { makeStyles } from "@material-ui/core/styles";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -14,11 +10,6 @@ import NavBar from "./NavBar";
 import NavDrawer from "./NavDrawer";
 import { NotificationType, User } from "../models";
 import { drawerMachine } from "../machines/drawerMachine";
-import { SnackbarContext, SnackbarEvents } from "../machines/snackbarMachine";
-
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,15 +35,13 @@ interface Props {
   children: React.ReactNode;
   allNotifications: NotificationType[];
   currentUser?: User;
-  snackbarState: State<SnackbarContext, SnackbarEvents, any, any>;
 }
 
 const MainLayout: React.FC<Props> = ({
   signOutPending,
   children,
   allNotifications,
-  currentUser,
-  snackbarState
+  currentUser
 }) => {
   const classes = useStyles();
   const [drawerState, sendDrawer] = useMachine(drawerMachine);
@@ -62,19 +51,7 @@ const MainLayout: React.FC<Props> = ({
   };
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      {snackbarState.matches("visible") && (
-        <Snackbar
-          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-          open={true}
-          autoHideDuration={6000}
-        >
-          <Alert severity={snackbarState.context.severity}>
-            {snackbarState.context.message}
-          </Alert>
-        </Snackbar>
-      )}
+    <>
       <NavBar
         handleDrawerOpen={toggleDrawer}
         drawerOpen={drawerState.matches("open")}
@@ -99,7 +76,7 @@ const MainLayout: React.FC<Props> = ({
           </Box>
         </Container>
       </main>
-    </div>
+    </>
   );
 };
 

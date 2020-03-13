@@ -36,7 +36,7 @@ export const snackbarMachine = Machine<
         on: { HIDE: "invisible" },
         after: {
           // after 5 seconds, transition to invisible
-          5000: "invisible"
+          3000: "invisible"
         }
       }
     }
