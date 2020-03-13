@@ -32,7 +32,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
   //   - "topFirst": contacts with most transactions first
 
   const users = getAllUsers();
-  res.status(200).json({ users });
+  res.status(200).json({ results: users });
 });
 
 router.get(
@@ -44,7 +44,7 @@ router.get(
 
     const users = searchUsers(q);
 
-    res.status(200).json({ users });
+    res.status(200).json({ results: users });
   }
 );
 

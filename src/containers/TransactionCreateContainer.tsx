@@ -1,36 +1,19 @@
-import React from "react";
-import { connect } from "react-redux";
-import { IRootReducerState } from "../reducers";
+import React, { useEffect } from "react";
+import { useHistory } from "react-router";
+import { useMachine } from "@xstate/react";
 import { User, TransactionPayload } from "../models";
 import TransactionCreateStepOne from "../components/TransactionCreateStepOne";
 import TransactionCreateStepTwo from "../components/TransactionCreateStepTwo";
-import { usersSearchPending } from "../actions/users";
-import { useMachine } from "@xstate/react";
 import { createTransactionMachine } from "../machines/createTransactionMachine";
-import { useHistory } from "react-router";
+import { usersMachine } from "../machines/usersMachine";
 
-export interface LocalProps {
+export interface Props {
   showSnackbar: Function;
   sender: User;
 }
 
-export interface DispatchProps {
-  userListSearch: (payload: object) => void;
-}
-export interface StateProps {
-  searchUsers: User[];
-  allUsers: User[];
-}
-
-export type TransactionCreateContainerProps = LocalProps &
-  StateProps &
-  DispatchProps;
-
-const TransactionCreateContainer: React.FC<TransactionCreateContainerProps> = ({
-  allUsers,
-  searchUsers,
+const TransactionCreateContainer: React.FC<Props> = ({
   sender,
-  userListSearch,
   showSnackbar
 }) => {
   const history = useHistory();
@@ -40,6 +23,11 @@ const TransactionCreateContainer: React.FC<TransactionCreateContainerProps> = ({
       devTools: true
     }
   );
+  const [usersState, sendUsers] = useMachine(usersMachine);
+
+  useEffect(() => {
+    sendUsers({ type: "FETCH" });
+  }, [sendUsers]);
 
   const setReceiver = (receiver: User) => {
     sendCreateTransaction("SET_USERS", { sender, receiver });
@@ -48,14 +36,14 @@ const TransactionCreateContainer: React.FC<TransactionCreateContainerProps> = ({
     sendCreateTransaction("CREATE", payload);
     history.push("/");
   };
+  const userListSearch = (payload: any) => sendUsers("FETCH", payload);
 
   return (
     <>
       {createTransactionState.matches("stepOne") && (
         <TransactionCreateStepOne
-          allUsers={allUsers}
-          searchUsers={searchUsers}
           setReceiver={setReceiver}
+          users={usersState.context.results!}
           userListSearch={userListSearch}
         />
       )}
@@ -71,16 +59,4 @@ const TransactionCreateContainer: React.FC<TransactionCreateContainerProps> = ({
   );
 };
 
-const mapStateToProps = (state: IRootReducerState) => ({
-  searchUsers: state.users.search,
-  allUsers: state.users.all
-});
-
-const mapDispatchToProps = {
-  userListSearch: usersSearchPending
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TransactionCreateContainer);
+export default TransactionCreateContainer;

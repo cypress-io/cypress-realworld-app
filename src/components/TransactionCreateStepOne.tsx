@@ -3,7 +3,6 @@ import { makeStyles, Paper, Typography } from "@material-ui/core";
 import UsersList from "./UsersList";
 import { User } from "../models";
 import UserListSearchForm from "./UserListSearchForm";
-import { isEmpty } from "lodash/fp";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -15,20 +14,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface TransactionCreateStepOneProps {
-  allUsers: User[];
-  searchUsers: User[];
   setReceiver: Function;
   userListSearch: Function;
+  users: User[];
 }
 
 const TransactionCreateStepOne: React.FC<TransactionCreateStepOneProps> = ({
-  allUsers,
-  searchUsers,
   setReceiver,
-  userListSearch
+  userListSearch,
+  users
 }) => {
   const classes = useStyles();
-  const users = !isEmpty(searchUsers) ? searchUsers : allUsers;
+
   return (
     <Paper className={classes.paper}>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>

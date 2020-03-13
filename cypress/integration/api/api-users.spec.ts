@@ -26,7 +26,7 @@ describe("Users API", function() {
 
       cy.request("GET", apiUsers).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.users.length).to.eq(10);
+        expect(response.body.results.length).to.eq(10);
       });
     });
   });
