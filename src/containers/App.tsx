@@ -9,7 +9,6 @@ import Alert from "@material-ui/lab/Alert";
 import PrivateRoute from "../components/PrivateRoute";
 import TransactionsContainer from "../containers/TransactionsContainer";
 import TransactionDetailContainer from "./TransactionDetailContainer";
-import SignUp from "../containers/SignUp";
 import TransactionCreateContainer from "./TransactionCreateContainer";
 import NotificationsContainer from "./NotificationsContainer";
 import UserSettingsContainer from "./UserSettingsContainer";
@@ -18,9 +17,14 @@ import BankAccountsContainer from "./BankAccountsContainer";
 import { snackbarMachine, SnackbarContext } from "../machines/snackbarMachine";
 import { notificationsMachine } from "../machines/notificationsMachine";
 import { authMachine } from "../machines/authMachine";
-import { NotificationUpdatePayload, SignInPayload } from "../models";
+import {
+  NotificationUpdatePayload,
+  SignInPayload,
+  SignUpPayload
+} from "../models";
 import SignInForm from "../components/SignInForm";
 import MainLayout from "../components/MainLayout";
+import SignUpForm from "../components/SignUpForm";
 
 interface PrivateRouteWithStateProps extends RouteProps {
   children: React.ReactNode;
@@ -50,6 +54,7 @@ const App: React.FC = () => {
   const updateNotification = (payload: NotificationUpdatePayload) =>
     sendNotifications("UPDATE", payload);
   const signInPending = (payload: SignInPayload) => sendAuth("LOGIN", payload);
+  const signUpPending = (payload: SignUpPayload) => sendAuth("SIGNUP", payload);
   const signOutPending = () => sendAuth("LOGOUT");
   const showSnackbar = (payload: SnackbarContext) =>
     sendSnackbar("SHOW", payload);
@@ -118,7 +123,7 @@ const App: React.FC = () => {
           <SignInForm signInPending={signInPending} />
         </Route>
         <Route path="/signup">
-          <SignUp />
+          <SignUpForm signUpPending={signUpPending} />
         </Route>
       </Switch>
       <Snackbar

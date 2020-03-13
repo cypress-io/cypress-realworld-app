@@ -26,3 +26,8 @@ export type UserSettingsPayload = Pick<
 >;
 
 export type SignInPayload = Pick<User, "username" | "password">;
+
+export type SignUpPayload = Pick<
+  User,
+  "username" | "password" | "firstName" | "lastName"
+>;

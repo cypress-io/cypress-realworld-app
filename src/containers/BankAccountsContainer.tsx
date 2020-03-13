@@ -11,7 +11,7 @@ import { User } from "../models";
 import BankAccountForm from "../components/BankAccountForm";
 
 export interface Props {
-  currentUserId: User["id"];
+  currentUserId?: User["id"];
 }
 
 const useStyles = makeStyles(theme => ({
@@ -43,7 +43,7 @@ const BankAccountsContainer: React.FC<Props> = ({ currentUserId }) => {
     sendBankAccounts("FETCH");
   }, [sendBankAccounts]);
 
-  if (match.url === "/bankaccounts/new") {
+  if (match.url === "/bankaccounts/new" && currentUserId) {
     return (
       <Paper className={classes.paper}>
         <Typography component="h2" variant="h6" color="primary" gutterBottom>

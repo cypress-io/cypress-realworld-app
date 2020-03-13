@@ -9,7 +9,7 @@ import { usersMachine } from "../machines/usersMachine";
 
 export interface Props {
   showSnackbar: Function;
-  sender: User;
+  sender?: User;
 }
 
 const TransactionCreateContainer: React.FC<Props> = ({
@@ -47,7 +47,7 @@ const TransactionCreateContainer: React.FC<Props> = ({
           userListSearch={userListSearch}
         />
       )}
-      {createTransactionState.matches("stepTwo") && (
+      {sender && createTransactionState.matches("stepTwo") && (
         <TransactionCreateStepTwo
           receiver={createTransactionState.context.receiver}
           sender={sender}
