@@ -36,7 +36,7 @@ router.post(
 
     res.status(200);
     // @ts-ignore
-    res.json({ notifications });
+    res.json({ results: notifications });
   }
 );
 
