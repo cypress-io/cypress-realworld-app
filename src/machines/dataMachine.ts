@@ -7,6 +7,7 @@ interface DataSchema {
     loading: {};
     updating: {};
     creating: {};
+    deleting: {};
     success: {
       states: {
         unknown: {};
@@ -24,6 +25,7 @@ type DataEvents =
   | { type: "FETCH" }
   | { type: "UPDATE" }
   | { type: "CREATE" }
+  | { type: "DELETE" }
   | SuccessEvent
   | FailureEvent;
 
@@ -46,7 +48,8 @@ export const dataMachine = (machineId: string) =>
         idle: {
           on: {
             FETCH: "loading",
-            CREATE: "creating"
+            CREATE: "creating",
+            DELETE: "deleting"
           }
         },
         loading: {
@@ -70,11 +73,19 @@ export const dataMachine = (machineId: string) =>
             onError: { target: "failure", actions: "setMessage" }
           }
         },
+        deleting: {
+          invoke: {
+            src: "deleteData",
+            onDone: { target: "loading" },
+            onError: { target: "failure", actions: "setMessage" }
+          }
+        },
         success: {
           entry: ["setResults", "setPageData"],
           on: {
             FETCH: "loading",
-            UPDATE: "updating"
+            UPDATE: "updating",
+            DELETE: "deleting"
           },
           initial: "unknown",
           states: {

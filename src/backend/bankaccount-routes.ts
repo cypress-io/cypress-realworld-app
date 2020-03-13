@@ -19,7 +19,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
   const accounts = getBankAccountsByUserId(req.user?.id!);
 
   res.status(200);
-  res.json({ accounts });
+  res.json({ results: accounts });
 });
 
 //GET /bankAccounts/:bankAccountId (scoped-user)

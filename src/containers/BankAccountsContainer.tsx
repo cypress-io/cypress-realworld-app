@@ -1,24 +1,12 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useEffect } from "react";
+import { useMachine } from "@xstate/react";
 import { Link as RouterLink } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
-import { IRootReducerState } from "../reducers";
-import { BankAccount } from "../models";
 import BankAccountList from "../components/BankAccountList";
 import { Grid, Button } from "@material-ui/core";
-import { bankAccountDeletePending } from "../actions/bankaccounts";
-
-export interface DispatchProps {
-  deleteBankAccount: Function;
-}
-
-export interface StateProps {
-  bankAccounts: BankAccount[];
-}
-
-export type BankAccountsContainerProps = DispatchProps & StateProps;
+import { bankAccountsMachine } from "../machines/bankAccountsMachine";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -28,11 +16,22 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column"
   }
 }));
-const BankAccountsContainer: React.FC<BankAccountsContainerProps> = ({
-  bankAccounts,
-  deleteBankAccount
-}) => {
+
+const BankAccountsContainer: React.FC = () => {
   const classes = useStyles();
+  const [bankAccountsState, sendBankAccounts] = useMachine(
+    bankAccountsMachine,
+    { devTools: true }
+  );
+
+  const deleteBankAccount = (payload: any) => {
+    sendBankAccounts("DELETE", payload);
+  };
+
+  useEffect(() => {
+    sendBankAccounts("FETCH");
+  }, [sendBankAccounts]);
+
   return (
     <Paper className={classes.paper}>
       <Grid
@@ -60,22 +59,10 @@ const BankAccountsContainer: React.FC<BankAccountsContainerProps> = ({
         </Grid>
       </Grid>
       <BankAccountList
-        bankAccounts={bankAccounts}
+        bankAccounts={bankAccountsState.context.results!}
         deleteBankAccount={deleteBankAccount}
       />
     </Paper>
   );
 };
-
-const mapStateToProps = (state: IRootReducerState) => ({
-  bankAccounts: state.bankaccounts.all
-});
-
-const mapDispatchToProps = {
-  deleteBankAccount: bankAccountDeletePending
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(BankAccountsContainer);
+export default BankAccountsContainer;

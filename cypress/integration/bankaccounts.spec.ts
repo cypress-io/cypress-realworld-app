@@ -18,7 +18,7 @@ describe("Bank Accounts", function() {
     cy.route("DELETE", "http://localhost:3001/bankAccounts/*").as(
       "deleteBankAccount"
     );
-    cy.route("http://localhost:3001/bankAccounts").as("bankAccounts");
+    cy.route("GET", "http://localhost:3001/bankAccounts").as("bankAccounts");
     cy.fixture("users").as("users");
 
     cy.getTest("sidenav-open").click();

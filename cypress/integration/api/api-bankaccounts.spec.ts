@@ -34,7 +34,7 @@ describe("Bank Accounts API", function() {
       const { id } = this.currentUser;
       cy.request("GET", `${apiBankAccounts}`).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.accounts[0].userId).to.eq(id);
+        expect(response.body.results[0].userId).to.eq(id);
       });
     });
   });
