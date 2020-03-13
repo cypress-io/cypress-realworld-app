@@ -119,7 +119,7 @@ describe("Transactions API", function() {
       const senderBankAccount = this.bankAccounts[0];
 
       cy.request("POST", `${apiTransactions}`, {
-        type: "payment",
+        transactionType: "payment",
         source: senderBankAccount.id,
         receiverId: receiver.id,
         description: `Payment: ${sender.id} to ${receiver.id}`,
@@ -139,7 +139,7 @@ describe("Transactions API", function() {
       const senderBankAccount = this.bankAccounts[0];
 
       cy.request("POST", `${apiTransactions}`, {
-        type: "request",
+        transactionType: "request",
         source: senderBankAccount.id,
         receiverId: receiver.id,
         description: `Request: ${sender.id} from ${receiver.id}`,
