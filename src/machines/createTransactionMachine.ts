@@ -27,6 +27,7 @@ const transactionDataMachine = dataMachine("transactionData").withConfig({
 
 export type CreateTransactionMachineEvents =
   | { type: "SET_USERS" }
+  | { type: "CREATE" }
   | { type: "COMPLETE" };
 
 export interface CreateTransactionMachineContext {
@@ -50,8 +51,13 @@ export const createTransactionMachine = Machine<
       },
       stepTwo: {
         entry: "setSenderAndReceiver",
+        invoke: {
+          id: "transactionDataMachine",
+          src: transactionDataMachine,
+          autoForward: true
+        },
         on: {
-          COMPLETE: "done"
+          CREATE: "done"
         }
       },
       done: {

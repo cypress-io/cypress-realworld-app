@@ -45,8 +45,7 @@ const TransactionCreateContainer: React.FC<TransactionCreateContainerProps> = ({
     sendCreateTransaction("SET_USERS", { sender, receiver });
   };
   const createTransaction = (payload: TransactionPayload) => {
-    //sendCreateTransaction("CREATE", payload);
-    sendCreateTransaction("COMPLETE");
+    sendCreateTransaction("CREATE", payload);
     history.push("/");
   };
 
