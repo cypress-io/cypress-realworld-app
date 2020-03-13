@@ -14,7 +14,6 @@ import TransactionCreateContainer from "./TransactionCreateContainer";
 import NotificationsContainer from "./NotificationsContainer";
 import UserSettingsContainer from "./UserSettingsContainer";
 import BankAccountsContainer from "./BankAccountsContainer";
-import BankAccountCreateContainer from "./BankAccountCreateContainer";
 
 import { snackbarMachine, SnackbarContext } from "../machines/snackbarMachine";
 import { notificationsMachine } from "../machines/notificationsMachine";
@@ -103,11 +102,8 @@ const App: React.FC = () => {
             updateNotification={updateNotification}
           />
         </PrivateRouteWithState>
-        <PrivateRouteWithState exact path="/bankaccount/new">
-          <BankAccountCreateContainer />
-        </PrivateRouteWithState>
-        <PrivateRouteWithState exact path="/bankaccounts">
-          <BankAccountsContainer />
+        <PrivateRouteWithState path="/bankaccounts*">
+          <BankAccountsContainer currentUserId={currentUser?.id} />
         </PrivateRouteWithState>
         <PrivateRouteWithState exact path="/transaction/new">
           <TransactionCreateContainer

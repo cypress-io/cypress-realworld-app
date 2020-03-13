@@ -69,7 +69,7 @@ export const dataMachine = (machineId: string) =>
         creating: {
           invoke: {
             src: "createData",
-            onDone: { target: "success" },
+            onDone: { target: "loading" },
             onError: { target: "failure", actions: "setMessage" }
           }
         },
@@ -84,6 +84,7 @@ export const dataMachine = (machineId: string) =>
           entry: ["setResults", "setPageData"],
           on: {
             FETCH: "loading",
+            CREATE: "creating",
             UPDATE: "updating",
             DELETE: "deleting"
           },

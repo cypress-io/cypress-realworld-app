@@ -50,14 +50,11 @@ describe("Bank Accounts", function() {
       .contains("Deleted");
   });
 
-  it("navigates to the create bank account form", function() {
+  it("creates a new bank account", function() {
     cy.getTest("bankaccount-list").should("be.visible");
     cy.getTest("bankaccount-new").click();
-    cy.location("pathname").should("include", "/bankaccount/new");
-  });
+    cy.location("pathname").should("be", "/bankaccounts/new");
 
-  it("selects a user and submits a transaction payment", function() {
-    cy.getTest("bankaccount-new").click();
     cy.getTest("bankaccount-form").should("be.visible");
 
     cy.getTest("bankaccount-bankName-input").type("The Best Bank");

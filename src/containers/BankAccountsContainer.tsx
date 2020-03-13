@@ -1,12 +1,18 @@
 import React, { useEffect } from "react";
 import { useMachine } from "@xstate/react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, Route, useRouteMatch } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import BankAccountList from "../components/BankAccountList";
 import { Grid, Button } from "@material-ui/core";
 import { bankAccountsMachine } from "../machines/bankAccountsMachine";
+import { User } from "../models";
+import BankAccountForm from "../components/BankAccountForm";
+
+export interface Props {
+  currentUserId: User["id"];
+}
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -17,12 +23,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const BankAccountsContainer: React.FC = () => {
+const BankAccountsContainer: React.FC<Props> = ({ currentUserId }) => {
+  const match = useRouteMatch();
   const classes = useStyles();
   const [bankAccountsState, sendBankAccounts] = useMachine(
     bankAccountsMachine,
     { devTools: true }
   );
+
+  const createBankAccount = (payload: any) => {
+    sendBankAccounts("CREATE", payload);
+  };
 
   const deleteBankAccount = (payload: any) => {
     sendBankAccounts("DELETE", payload);
@@ -31,6 +42,20 @@ const BankAccountsContainer: React.FC = () => {
   useEffect(() => {
     sendBankAccounts("FETCH");
   }, [sendBankAccounts]);
+
+  if (match.url === "/bankaccounts/new") {
+    return (
+      <Paper className={classes.paper}>
+        <Typography component="h2" variant="h6" color="primary" gutterBottom>
+          Create Bank Account
+        </Typography>
+        <BankAccountForm
+          userId={currentUserId}
+          createBankAccount={createBankAccount}
+        />
+      </Paper>
+    );
+  }
 
   return (
     <Paper className={classes.paper}>
@@ -51,7 +76,7 @@ const BankAccountsContainer: React.FC = () => {
             color="primary"
             size="large"
             component={RouterLink}
-            to="/bankaccount/new"
+            to="/bankaccounts/new"
             data-test="bankaccount-new"
           >
             Create

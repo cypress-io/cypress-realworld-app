@@ -19,6 +19,14 @@ export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
         payload
       );
       return resp.data;
+    },
+    createData: async (ctx, event: any) => {
+      const payload = omit("type", event);
+      const resp = await httpClient.post(
+        "http://localhost:3001/bankAccounts",
+        payload
+      );
+      return resp.data;
     }
   }
 });

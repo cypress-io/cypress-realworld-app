@@ -57,8 +57,6 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
         createBankAccount({ userId, ...values });
 
         history.push("/bankaccounts");
-
-        setSubmitting(false);
       }}
     >
       {({ isValid, isSubmitting }) => (
