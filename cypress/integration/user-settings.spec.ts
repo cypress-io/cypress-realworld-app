@@ -25,7 +25,6 @@ describe("User Settings", function() {
   it("renders the user settings form", function() {
     cy.getTest("user-settings-form").should("be.visible");
     cy.location("pathname").should("include", "/user/settings");
-    cy.visit("/");
   });
 
   it("updates first name, last name, email and phone number", function() {

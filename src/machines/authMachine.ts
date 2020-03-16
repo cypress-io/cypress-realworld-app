@@ -9,6 +9,7 @@ export interface AuthMachineSchema {
     unauthorized: {};
     signup: {};
     loading: {};
+    updating: {};
     authorized: {};
   };
 }
@@ -16,6 +17,7 @@ export interface AuthMachineSchema {
 export type AuthMachineEvents =
   | { type: "LOGIN" }
   | { type: "LOGOUT" }
+  | { type: "UPDATE" }
   | { type: "SIGNUP" };
 
 export interface AuthMachineContext {
@@ -52,6 +54,13 @@ export const authMachine = Machine<
           onError: { target: "unauthorized", actions: "onError" }
         }
       },
+      updating: {
+        invoke: {
+          src: "updateProfile",
+          onDone: { target: "authorized", actions: ["onSuccess"] },
+          onError: { target: "unauthorized", actions: "onError" }
+        }
+      },
       authorized: {
         invoke: {
           src: "getUserProfile",
@@ -59,6 +68,7 @@ export const authMachine = Machine<
           onError: { actions: "onError" }
         },
         on: {
+          UPDATE: "updating",
           LOGOUT: "unauthorized"
         }
       }
@@ -90,6 +100,14 @@ export const authMachine = Machine<
           payload
         );
         history.push("/");
+        return resp.data;
+      },
+      updateProfile: async (ctx, event: any) => {
+        const payload = omit("type", event);
+        const resp = await httpClient.patch(
+          `http://localhost:3001/users/${payload.id}`,
+          payload
+        );
         return resp.data;
       }
     },

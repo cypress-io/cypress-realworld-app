@@ -55,6 +55,7 @@ const App: React.FC = () => {
     sendNotifications("UPDATE", payload);
   const signInPending = (payload: SignInPayload) => sendAuth("LOGIN", payload);
   const signUpPending = (payload: SignUpPayload) => sendAuth("SIGNUP", payload);
+  const updateUser = (payload: any) => sendAuth("UPDATE", payload);
   const signOutPending = () => sendAuth("LOGOUT");
   const showSnackbar = (payload: SnackbarContext) =>
     sendSnackbar("SHOW", payload);
@@ -99,7 +100,10 @@ const App: React.FC = () => {
           <TransactionsContainer />
         </PrivateRouteWithState>
         <PrivateRouteWithState exact path="/user/settings">
-          <UserSettingsContainer />
+          <UserSettingsContainer
+            currentUser={currentUser}
+            updateUser={updateUser}
+          />
         </PrivateRouteWithState>
         <PrivateRouteWithState exact path="/notifications">
           <NotificationsContainer
