@@ -49,6 +49,7 @@ export const dataMachine = (machineId: string) =>
           on: {
             FETCH: "loading",
             CREATE: "creating",
+            UPDATE: "updating",
             DELETE: "deleting"
           }
         },

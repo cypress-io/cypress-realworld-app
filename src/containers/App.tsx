@@ -117,7 +117,7 @@ const App: React.FC = () => {
           />
         </PrivateRouteWithState>
         <PrivateRouteWithState exact path="/transaction/:transactionId">
-          <TransactionDetailContainer />
+          <TransactionDetailContainer currentUser={currentUser} />
         </PrivateRouteWithState>
         <Route path="/signin">
           <SignInForm signInPending={signInPending} />

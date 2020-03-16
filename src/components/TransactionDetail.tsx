@@ -158,9 +158,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
               <IconButton
                 color="primary"
                 disabled={currentUserLikesTransaction(currentUser, transaction)}
-                onClick={() =>
-                  transactionLike({ transactionId: transaction.id })
-                }
+                onClick={() => transactionLike(transaction.id)}
                 data-test={`transaction-like-button-${transaction.id}`}
               >
                 <LikeIcon />
