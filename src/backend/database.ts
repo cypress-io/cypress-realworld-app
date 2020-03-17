@@ -632,7 +632,7 @@ export const createTransaction = (
     id: shortid(),
     uuid: v4(),
     source: transactionDetails.source,
-    amount: transactionDetails.amount,
+    amount: transactionDetails.amount * 100,
     description: transactionDetails.description,
     receiverId: transactionDetails.receiverId,
     senderId: userId,
