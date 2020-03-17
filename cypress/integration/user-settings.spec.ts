@@ -23,6 +23,7 @@ describe("User Settings", function() {
   });
 
   it("renders the user settings form", function() {
+    // TODO: Investigate drawer state as solution for flakiness of this test
     cy.getTest("user-settings-form").should("be.visible");
     cy.location("pathname").should("include", "/user/settings");
   });
