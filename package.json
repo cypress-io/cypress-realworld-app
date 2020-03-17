@@ -81,7 +81,7 @@
     "yup": "0.28.3"
   },
   "devDependencies": {
-    "cypress": "4.1.0",
+    "cypress": "4.2.0",
     "eslint-plugin-cypress": "2.10.3",
     "start-server-and-test": "1.10.9"
   },
