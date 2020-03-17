@@ -10,11 +10,6 @@ describe("Authentication", function() {
     cy.task("db:seed");
   });
   context("User Sign-up", function() {
-    it("renders the signin page", function() {
-      cy.visit("/signin")
-        .get("#root")
-        .should("contain", "Sign In");
-    });
     it("signs up a user", function() {
       cy.visit("/signup")
         .get("#root")
