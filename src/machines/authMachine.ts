@@ -43,7 +43,7 @@ export const authMachine = Machine<
       signup: {
         invoke: {
           src: "performSignup",
-          onDone: { target: "authorized", actions: ["onSuccess"] },
+          onDone: { target: "unauthorized", actions: ["onSuccess"] },
           onError: { target: "unauthorized", actions: "onError" }
         }
       },
@@ -82,7 +82,7 @@ export const authMachine = Machine<
           `http://localhost:3001/users`,
           payload
         );
-        history.push("/");
+        history.push("/signin");
         return resp.data;
       },
       performLogin: async (ctx, event) => {

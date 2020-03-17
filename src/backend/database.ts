@@ -1,4 +1,5 @@
 import path from "path";
+import bcrypt from "bcryptjs";
 import fs from "fs";
 import v4 from "uuid";
 import {
@@ -192,13 +193,14 @@ export const getUsersBy = (key: string, value: any) =>
   getAllBy(USER_TABLE, key, value);
 
 export const createUser = (userDetails: Partial<User>): User => {
+  const password = bcrypt.hashSync(userDetails.password!, 10);
   const user: User = {
     id: shortid(),
     uuid: v4(),
     firstName: userDetails.firstName!,
     lastName: userDetails.lastName!,
     username: userDetails.username!,
-    password: userDetails.password!,
+    password,
     email: userDetails.email!,
     phoneNumber: userDetails.phoneNumber!,
     balance: userDetails.balance!,
