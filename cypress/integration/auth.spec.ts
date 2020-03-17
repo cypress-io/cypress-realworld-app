@@ -1,7 +1,7 @@
 // check this file using TypeScript if available
 // @ts-check
 
-describe("Authentication", function() {
+describe("User Sign-up and Login", function() {
   beforeEach(function() {
     cy.task("db:seed");
   });
@@ -21,9 +21,9 @@ describe("Authentication", function() {
     cy.getTest("signin-password").type("password");
     cy.getTest("signin-submit").click();
 
-    // // Logout User
-    // cy.getTest("sidenav-open").click();
-    // cy.getTest("sidenav-signout").click();
-    // cy.location("pathname").should("eq", "/signin");
+    // Logout User
+    cy.getTest("sidenav-open").click();
+    cy.getTest("sidenav-signout").click();
+    cy.location("pathname").should("eq", "/signin");
   });
 });
