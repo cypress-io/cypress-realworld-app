@@ -31,15 +31,14 @@ describe("New Transaction", function() {
       .click();
     cy.getTest("transaction-create-form").should("be.visible");
 
-    cy.getTest("transaction-create-amount-input").type("2500");
+    cy.getTest("transaction-create-amount-input").type("25");
     cy.getTest("transaction-create-description-input").type("Indian Food");
     cy.getTest("transaction-create-submit-payment").click();
 
     cy.wait("@createTransaction").should("have.property", "status", 200);
 
     cy.getTest("sidenav-open").click();
-    // TODO: Fix
-    //cy.getTest("sidenav-user-balance").should("contain", "$525.00");
+    cy.getTest("sidenav-user-balance").should("contain", "$525.00");
     cy.getTest("sidenav-close").click();
 
     cy.getTest("nav-public-tab").should("have.class", "Mui-selected");

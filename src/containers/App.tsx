@@ -59,13 +59,15 @@ const App: React.FC = () => {
   const signUpPending = (payload: SignUpPayload) => sendAuth("SIGNUP", payload);
   const updateUser = (payload: any) => sendAuth("UPDATE", payload);
   const signOutPending = () => sendAuth("LOGOUT");
+  const refreshUser = () => sendAuth("REFRESH");
   const showSnackbar = (payload: SnackbarContext) =>
     sendSnackbar("SHOW", payload);
   const toggleDrawer = () => {
     sendDrawer("TOGGLE");
   };
 
-  const isLoggedIn = authState.matches("authorized");
+  const isLoggedIn =
+    authState.matches("authorized") || authState.matches("refreshing");
   const currentUser = authState.context.user;
 
   useEffect(() => {
@@ -125,6 +127,7 @@ const App: React.FC = () => {
           <TransactionCreateContainer
             sender={currentUser}
             showSnackbar={showSnackbar}
+            refreshUser={refreshUser}
           />
         </PrivateRouteWithState>
         <PrivateRouteWithState exact path="/transaction/:transactionId">

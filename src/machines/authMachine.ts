@@ -10,6 +10,7 @@ export interface AuthMachineSchema {
     signup: {};
     loading: {};
     updating: {};
+    refreshing: {};
     authorized: {};
   };
 }
@@ -18,6 +19,7 @@ export type AuthMachineEvents =
   | { type: "LOGIN" }
   | { type: "LOGOUT" }
   | { type: "UPDATE" }
+  | { type: "REFRESH" }
   | { type: "SIGNUP" };
 
 export interface AuthMachineContext {
@@ -61,6 +63,13 @@ export const authMachine = Machine<
           onError: { target: "unauthorized", actions: "onError" }
         }
       },
+      refreshing: {
+        invoke: {
+          src: "getUserProfile",
+          onDone: { target: "authorized" },
+          onError: { target: "unauthorized", actions: "onError" }
+        }
+      },
       authorized: {
         invoke: {
           src: "getUserProfile",
@@ -69,6 +78,7 @@ export const authMachine = Machine<
         },
         on: {
           UPDATE: "updating",
+          REFRESH: "refreshing",
           LOGOUT: "unauthorized"
         }
       }

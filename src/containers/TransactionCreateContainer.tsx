@@ -11,11 +11,13 @@ import { debounce } from "lodash/fp";
 export interface Props {
   showSnackbar: Function;
   sender?: User;
+  refreshUser: Function;
 }
 
 const TransactionCreateContainer: React.FC<Props> = ({
   sender,
-  showSnackbar
+  showSnackbar,
+  refreshUser
 }) => {
   const history = useHistory();
   const [createTransactionState, sendCreateTransaction] = useMachine(
@@ -35,6 +37,7 @@ const TransactionCreateContainer: React.FC<Props> = ({
   };
   const createTransaction = (payload: TransactionPayload) => {
     sendCreateTransaction("CREATE", payload);
+    refreshUser();
     history.push("/");
   };
   const userListSearch = debounce(200, (payload: any) =>
