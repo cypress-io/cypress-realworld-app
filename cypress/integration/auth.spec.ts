@@ -1,7 +1,7 @@
 // check this file using TypeScript if available
 // @ts-check
 
-describe("App", function() {
+describe("Authentication", function() {
   beforeEach(function() {
     cy.task("db:seed");
     Cypress.Cookies.preserveOnce("connect.sid");
@@ -9,7 +9,7 @@ describe("App", function() {
   after(function() {
     cy.task("db:seed");
   });
-  context("Public Routes", function() {
+  context("User Sign-up", function() {
     it("renders the signin page", function() {
       cy.visit("/signin")
         .get("#root")
@@ -33,7 +33,7 @@ describe("App", function() {
     });
   });
 
-  context("Login / Logout", function() {
+  context("User Login", function() {
     before(function() {
       cy.fixture("users").as("users");
       cy.get("@users").then(users => {
