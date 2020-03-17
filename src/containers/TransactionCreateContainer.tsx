@@ -6,6 +6,7 @@ import TransactionCreateStepOne from "../components/TransactionCreateStepOne";
 import TransactionCreateStepTwo from "../components/TransactionCreateStepTwo";
 import { createTransactionMachine } from "../machines/createTransactionMachine";
 import { usersMachine } from "../machines/usersMachine";
+import { debounce } from "lodash/fp";
 
 export interface Props {
   showSnackbar: Function;
@@ -36,7 +37,9 @@ const TransactionCreateContainer: React.FC<Props> = ({
     sendCreateTransaction("CREATE", payload);
     history.push("/");
   };
-  const userListSearch = (payload: any) => sendUsers("FETCH", payload);
+  const userListSearch = debounce(200, (payload: any) =>
+    sendUsers("FETCH", payload)
+  );
 
   return (
     <>
