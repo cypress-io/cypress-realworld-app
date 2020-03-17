@@ -25,6 +25,7 @@ import {
 import SignInForm from "../components/SignInForm";
 import MainLayout from "../components/MainLayout";
 import SignUpForm from "../components/SignUpForm";
+import { drawerMachine } from "../machines/drawerMachine";
 
 interface PrivateRouteWithStateProps extends RouteProps {
   children: React.ReactNode;
@@ -38,6 +39,7 @@ const useStyles = makeStyles(theme => ({
 
 const App: React.FC = () => {
   const classes = useStyles();
+  const [drawerState, sendDrawer] = useMachine(drawerMachine);
   const [authState, sendAuth] = useMachine(authMachine, {
     devTools: true
   });
@@ -59,6 +61,9 @@ const App: React.FC = () => {
   const signOutPending = () => sendAuth("LOGOUT");
   const showSnackbar = (payload: SnackbarContext) =>
     sendSnackbar("SHOW", payload);
+  const toggleDrawer = () => {
+    sendDrawer("TOGGLE");
+  };
 
   const isLoggedIn = authState.matches("authorized");
   const currentUser = authState.context.user;
@@ -83,6 +88,8 @@ const App: React.FC = () => {
   }) => (
     <PrivateRoute isLoggedIn={isLoggedIn} {...rest}>
       <MainLayout
+        toggleDrawer={toggleDrawer}
+        drawerOpen={drawerState.matches("open")}
         signOutPending={signOutPending}
         allNotifications={notificationsState.context.results!}
         currentUser={currentUser}

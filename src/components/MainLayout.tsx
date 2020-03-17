@@ -3,13 +3,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import { useMachine } from "@xstate/react";
 
 import Copyright from "../components/Copyright";
 import NavBar from "./NavBar";
 import NavDrawer from "./NavDrawer";
 import { NotificationType, User } from "../models";
-import { drawerMachine } from "../machines/drawerMachine";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,32 +33,31 @@ interface Props {
   children: React.ReactNode;
   allNotifications: NotificationType[];
   currentUser?: User;
+  toggleDrawer: () => void;
+  drawerOpen: boolean;
 }
 
 const MainLayout: React.FC<Props> = ({
   signOutPending,
   children,
   allNotifications,
-  currentUser
+  currentUser,
+  toggleDrawer,
+  drawerOpen
 }) => {
   const classes = useStyles();
-  const [drawerState, sendDrawer] = useMachine(drawerMachine);
-
-  const toggleDrawer = () => {
-    sendDrawer("TOGGLE");
-  };
 
   return (
     <>
       <NavBar
         handleDrawerOpen={toggleDrawer}
-        drawerOpen={drawerState.matches("open")}
+        drawerOpen={drawerOpen}
         allNotifications={allNotifications}
       />
       <NavDrawer
         currentUser={currentUser}
         handleDrawerClose={toggleDrawer}
-        drawerOpen={drawerState.matches("open")}
+        drawerOpen={drawerOpen}
         signOutPending={signOutPending}
       />
       <main className={classes.content} data-test="main">
