@@ -21,7 +21,7 @@ interface DataSchema {
 
 type SuccessEvent = { type: "SUCCESS"; results: any[]; pageData: object };
 type FailureEvent = { type: "FAILURE"; message: string };
-type DataEvents =
+export type DataEvents =
   | { type: "FETCH" }
   | { type: "UPDATE" }
   | { type: "CREATE" }

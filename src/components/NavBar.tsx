@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -13,6 +13,9 @@ import Link from "@material-ui/core/Link";
 import { Link as RouterLink } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import { NotificationType } from "../models";
+import { Interpreter } from "xstate";
+import { DataContext, DataEvents } from "../machines/dataMachine";
+import { useService } from "@xstate/react";
 
 const drawerWidth = 240;
 
@@ -59,15 +62,31 @@ const useStyles = makeStyles(theme => ({
 interface NavBarProps {
   drawerOpen: boolean;
   handleDrawerOpen: () => void;
-  allNotifications: NotificationType[];
+  notificationsService: Interpreter<DataContext, any, DataEvents, any>;
 }
 
 const NavBar: React.FC<NavBarProps> = ({
   drawerOpen,
   handleDrawerOpen,
-  allNotifications
+  notificationsService
 }) => {
   const classes = useStyles();
+  const [notificationsState, sendNotifications] = useService(
+    notificationsService
+  );
+
+  const allNotifications = notificationsState.context.results;
+
+  useEffect(() => {
+    //sendNotifications({ type: "FETCH" });
+    const subscription = notificationsService.subscribe((state: any) => {
+      // simple state logging
+      console.log("NOTIFICATIONS STATE: ", state);
+    });
+
+    // @ts-ignore
+    return notificationsService.unsubscribe!;
+  }, [notificationsService, sendNotifications]);
 
   return (
     <AppBar

@@ -43,12 +43,13 @@ const App: React.FC = () => {
   const [authState, sendAuth] = useMachine(authMachine, {
     devTools: true
   });
-  const [notificationsState, sendNotifications] = useMachine(
-    notificationsMachine,
-    {
-      devTools: true
-    }
-  );
+  const [
+    notificationsState,
+    sendNotifications,
+    notificationsService
+  ] = useMachine(notificationsMachine, {
+    devTools: true
+  });
   const [snackbarState, sendSnackbar] = useMachine(snackbarMachine, {
     devTools: true
   });
@@ -82,7 +83,7 @@ const App: React.FC = () => {
     });
 
     return subscription.unsubscribe;*/
-  }, [authState, sendNotifications]);
+  }, [authState, sendNotifications, notificationsService]);
 
   const PrivateRouteWithState: React.FC<PrivateRouteWithStateProps> = ({
     children,
@@ -90,10 +91,10 @@ const App: React.FC = () => {
   }) => (
     <PrivateRoute isLoggedIn={isLoggedIn} {...rest}>
       <MainLayout
+        notificationsService={notificationsService}
         toggleDrawer={toggleDrawer}
         drawerOpen={drawerState.matches("open")}
         signOutPending={signOutPending}
-        allNotifications={notificationsState.context.results!}
         currentUser={currentUser}
       >
         {children}

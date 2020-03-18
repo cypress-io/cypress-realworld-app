@@ -8,6 +8,8 @@ import Copyright from "../components/Copyright";
 import NavBar from "./NavBar";
 import NavDrawer from "./NavDrawer";
 import { NotificationType, User } from "../models";
+import { Interpreter } from "xstate";
+import { DataContext, DataEvents } from "../machines/dataMachine";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,19 +33,19 @@ const useStyles = makeStyles(theme => ({
 interface Props {
   signOutPending: () => void;
   children: React.ReactNode;
-  allNotifications: NotificationType[];
   currentUser?: User;
   toggleDrawer: () => void;
   drawerOpen: boolean;
+  notificationsService: Interpreter<DataContext, any, DataEvents, any>;
 }
 
 const MainLayout: React.FC<Props> = ({
   signOutPending,
   children,
-  allNotifications,
   currentUser,
   toggleDrawer,
-  drawerOpen
+  drawerOpen,
+  notificationsService
 }) => {
   const classes = useStyles();
 
@@ -52,7 +54,7 @@ const MainLayout: React.FC<Props> = ({
       <NavBar
         handleDrawerOpen={toggleDrawer}
         drawerOpen={drawerOpen}
-        allNotifications={allNotifications}
+        notificationsService={notificationsService}
       />
       <NavDrawer
         currentUser={currentUser}
