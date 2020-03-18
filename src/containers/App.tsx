@@ -39,7 +39,8 @@ const useStyles = makeStyles(theme => ({
 
 const App: React.FC = () => {
   const classes = useStyles();
-  const [drawerState, sendDrawer] = useMachine(drawerMachine);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [drawerState, sendDrawer, drawerService] = useMachine(drawerMachine);
   const [authState, sendAuth] = useMachine(authMachine, {
     devTools: true
   });
@@ -63,9 +64,6 @@ const App: React.FC = () => {
   const refreshUser = () => sendAuth("REFRESH");
   const showSnackbar = (payload: SnackbarContext) =>
     sendSnackbar("SHOW", payload);
-  const toggleDrawer = () => {
-    sendDrawer("TOGGLE");
-  };
 
   const isLoggedIn =
     authState.matches("authorized") || authState.matches("refreshing");
@@ -83,7 +81,7 @@ const App: React.FC = () => {
     });
 
     return subscription.unsubscribe;*/
-  }, [authState, sendNotifications, notificationsService]);
+  }, [authState, sendNotifications, notificationsService, drawerService]);
 
   const PrivateRouteWithState: React.FC<PrivateRouteWithStateProps> = ({
     children,
@@ -92,8 +90,7 @@ const App: React.FC = () => {
     <PrivateRoute isLoggedIn={isLoggedIn} {...rest}>
       <MainLayout
         notificationsService={notificationsService}
-        toggleDrawer={toggleDrawer}
-        drawerOpen={drawerState.matches("open")}
+        drawerService={drawerService}
         signOutPending={signOutPending}
         currentUser={currentUser}
       >

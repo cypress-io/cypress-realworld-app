@@ -12,7 +12,6 @@ import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import Link from "@material-ui/core/Link";
 import { Link as RouterLink } from "react-router-dom";
 import { Button } from "@material-ui/core";
-import { NotificationType } from "../models";
 import { Interpreter } from "xstate";
 import { DataContext, DataEvents } from "../machines/dataMachine";
 import { useService } from "@xstate/react";
@@ -78,9 +77,7 @@ const NavBar: React.FC<NavBarProps> = ({
   const allNotifications = notificationsState.context.results;
 
   useEffect(() => {
-    //sendNotifications({ type: "FETCH" });
-    const subscription = notificationsService.subscribe((state: any) => {
-      // simple state logging
+    notificationsService.subscribe((state: any) => {
       console.log("NOTIFICATIONS STATE: ", state);
     });
 
