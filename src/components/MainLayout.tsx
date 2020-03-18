@@ -9,8 +9,8 @@ import Grid from "@material-ui/core/Grid";
 import Copyright from "../components/Copyright";
 import NavBar from "./NavBar";
 import NavDrawer from "./NavDrawer";
-import { User } from "../models";
 import { DataContext, DataEvents } from "../machines/dataMachine";
+import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,19 +32,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface Props {
-  signOutPending: () => void;
   children: React.ReactNode;
-  currentUser?: User;
+  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
   notificationsService: Interpreter<DataContext, any, DataEvents, any>;
   drawerService: Interpreter<any, any, AnyEventObject, any>;
 }
 
 const MainLayout: React.FC<Props> = ({
-  signOutPending,
   children,
-  currentUser,
   notificationsService,
-  drawerService
+  drawerService,
+  authService
 }) => {
   const classes = useStyles();
   const [drawerState, sendDrawer] = useService(drawerService);
@@ -71,10 +69,9 @@ const MainLayout: React.FC<Props> = ({
         notificationsService={notificationsService}
       />
       <NavDrawer
-        currentUser={currentUser}
         handleDrawerClose={toggleDrawer}
         drawerOpen={drawerOpen}
-        signOutPending={signOutPending}
+        authService={authService}
       />
       <main className={classes.content} data-test="main">
         <div className={classes.appBarSpacer} />

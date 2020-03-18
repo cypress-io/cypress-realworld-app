@@ -41,7 +41,7 @@ const App: React.FC = () => {
   const classes = useStyles();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [drawerState, sendDrawer, drawerService] = useMachine(drawerMachine);
-  const [authState, sendAuth] = useMachine(authMachine, {
+  const [authState, sendAuth, authService] = useMachine(authMachine, {
     devTools: true
   });
   const [
@@ -60,7 +60,6 @@ const App: React.FC = () => {
   const signInPending = (payload: SignInPayload) => sendAuth("LOGIN", payload);
   const signUpPending = (payload: SignUpPayload) => sendAuth("SIGNUP", payload);
   const updateUser = (payload: any) => sendAuth("UPDATE", payload);
-  const signOutPending = () => sendAuth("LOGOUT");
   const refreshUser = () => sendAuth("REFRESH");
   const showSnackbar = (payload: SnackbarContext) =>
     sendSnackbar("SHOW", payload);
@@ -81,7 +80,13 @@ const App: React.FC = () => {
     });
 
     return subscription.unsubscribe;*/
-  }, [authState, sendNotifications, notificationsService, drawerService]);
+  }, [
+    authState,
+    sendNotifications,
+    notificationsService,
+    drawerService,
+    authService
+  ]);
 
   const PrivateRouteWithState: React.FC<PrivateRouteWithStateProps> = ({
     children,
@@ -91,8 +96,7 @@ const App: React.FC = () => {
       <MainLayout
         notificationsService={notificationsService}
         drawerService={drawerService}
-        signOutPending={signOutPending}
-        currentUser={currentUser}
+        authService={authService}
       >
         {children}
       </MainLayout>

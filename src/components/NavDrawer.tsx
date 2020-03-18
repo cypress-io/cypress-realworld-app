@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useService } from "@xstate/react";
 import clsx from "clsx";
 import { Link as RouterLink } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -15,10 +16,11 @@ import PersonIcon from "@material-ui/icons/Person";
 import LogoutIcon from "@material-ui/icons/ExitToApp";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
-import { User } from "../models";
 import { Grid, Avatar, Typography } from "@material-ui/core";
 import { formatAmount } from "../utils/transactionUtils";
 import { head } from "lodash/fp";
+import { Interpreter } from "xstate";
+import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 
 const drawerWidth = 240;
 
@@ -68,13 +70,13 @@ export const mainListItems = (
       button
       onClick={handleDrawerClose}
       component={RouterLink}
-      to="/notifications"
-      data-test="sidenav-notifications"
+      to="/auth"
+      data-test="sidenav-auth"
     >
       <ListItemIcon>
         <NotificationsIcon />
       </ListItemIcon>
-      <ListItemText primary="Notifications" />
+      <ListItemText primary="Auth" />
     </ListItem>
   </div>
 );
@@ -147,19 +149,30 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface Props {
-  signOutPending: () => void;
   handleDrawerClose: () => void;
   drawerOpen: boolean;
-  currentUser?: User;
+  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
 }
 
 const NavDrawer: React.FC<Props> = ({
-  signOutPending,
   handleDrawerClose,
   drawerOpen,
-  currentUser
+  authService
 }) => {
   const classes = useStyles();
+  const [authState, sendAuth] = useService(authService);
+
+  useEffect(() => {
+    authService.subscribe((state: any) => {
+      console.log("AUTH STATE: ", state);
+    });
+
+    // @ts-ignore
+    return authService.unsubscribe!;
+  }, [authService, sendAuth]);
+
+  const currentUser = authState.context.user;
+  const signOutPending = () => sendAuth("LOGOUT");
 
   return (
     <Drawer
