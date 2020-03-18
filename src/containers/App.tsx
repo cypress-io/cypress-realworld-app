@@ -39,8 +39,6 @@ const useStyles = makeStyles(theme => ({
 
 const App: React.FC = () => {
   const classes = useStyles();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [drawerState, sendDrawer, drawerService] = useMachine(drawerMachine);
   const [authState, sendAuth, authService] = useMachine(authMachine, {
     devTools: true
   });
@@ -80,13 +78,7 @@ const App: React.FC = () => {
     });
 
     return subscription.unsubscribe;*/
-  }, [
-    authState,
-    sendNotifications,
-    notificationsService,
-    drawerService,
-    authService
-  ]);
+  }, [authState, sendNotifications, notificationsService, authService]);
 
   const PrivateRouteWithState: React.FC<PrivateRouteWithStateProps> = ({
     children,
@@ -95,7 +87,6 @@ const App: React.FC = () => {
     <PrivateRoute isLoggedIn={isLoggedIn} {...rest}>
       <MainLayout
         notificationsService={notificationsService}
-        drawerService={drawerService}
         authService={authService}
       >
         {children}

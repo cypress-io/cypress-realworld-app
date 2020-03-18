@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { useService } from "@xstate/react";
-import { Interpreter, AnyEventObject } from "xstate";
+import React from "react";
+import { useMachine } from "@xstate/react";
+import { Interpreter } from "xstate";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
@@ -11,6 +11,7 @@ import NavBar from "./NavBar";
 import NavDrawer from "./NavDrawer";
 import { DataContext, DataEvents } from "../machines/dataMachine";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import { drawerMachine } from "../machines/drawerMachine";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,26 +36,15 @@ interface Props {
   children: React.ReactNode;
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
   notificationsService: Interpreter<DataContext, any, DataEvents, any>;
-  drawerService: Interpreter<any, any, AnyEventObject, any>;
 }
 
 const MainLayout: React.FC<Props> = ({
   children,
   notificationsService,
-  drawerService,
   authService
 }) => {
   const classes = useStyles();
-  const [drawerState, sendDrawer] = useService(drawerService);
-
-  useEffect(() => {
-    drawerService.subscribe((state: any) => {
-      console.log("NOTIFICATIONS STATE: ", state);
-    });
-
-    // @ts-ignore
-    return drawerService.unsubscribe!;
-  }, [drawerService]);
+  const [drawerState, sendDrawer] = useMachine(drawerMachine);
 
   const drawerOpen = drawerState.matches("open");
   const toggleDrawer = () => {
