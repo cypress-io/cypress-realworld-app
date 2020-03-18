@@ -13,6 +13,7 @@ import {
   getAmountQueryFields
 } from "../utils/transactionUtils";
 import TransactionPersonalList from "../components/TransactionPersonalList";
+import TransactionPublicList from "../components/TransactionPublicList";
 
 const TransactionsContainer: React.FC = () => {
   const match = useRouteMatch();
@@ -43,6 +44,7 @@ const TransactionsContainer: React.FC = () => {
   );
 
   if (match.url === "/contacts") {
+    console.log("contacts");
     return (
       <TransactionContactsList
         filterComponent={Filters}
@@ -53,6 +55,7 @@ const TransactionsContainer: React.FC = () => {
   }
 
   if (match.url === "/personal") {
+    console.log("personal");
     return (
       <TransactionPersonalList
         filterComponent={Filters}
@@ -64,7 +67,7 @@ const TransactionsContainer: React.FC = () => {
 
   // match.url "/" or "/public"
   return (
-    <TransactionPersonalList
+    <TransactionPublicList
       filterComponent={Filters}
       dateRangeFilters={dateRangeFilters as TransactionDateRangePayload}
       amountRangeFilters={amountRangeFilters as TransactionAmountRangePayload}
