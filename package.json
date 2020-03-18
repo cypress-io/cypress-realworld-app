@@ -83,7 +83,7 @@
   "devDependencies": {
     "cypress": "4.1.0",
     "eslint-plugin-cypress": "2.10.3",
-    "start-server-and-test": "1.10.9"
+    "start-server-and-test": "1.10.11"
   },
   "scripts": {
     "tsnode": "ts-node -O '{\"isolatedModules\": false, \"module\": \"commonjs\" }'",
