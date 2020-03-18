@@ -25,7 +25,6 @@ import {
 import SignInForm from "../components/SignInForm";
 import MainLayout from "../components/MainLayout";
 import SignUpForm from "../components/SignUpForm";
-import { drawerMachine } from "../machines/drawerMachine";
 
 interface PrivateRouteWithStateProps extends RouteProps {
   children: React.ReactNode;
