@@ -1,4 +1,6 @@
 import React from "react";
+import { useService } from "@xstate/react";
+import { Interpreter } from "xstate";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,6 +15,7 @@ import { string, object, ref } from "yup";
 
 import Copyright from "./Copyright";
 import { SignUpPayload } from "../models";
+import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 
 const validationSchema = object({
   firstName: string().required("First Name is required"),
@@ -47,11 +50,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface Props {
-  signUpPending: Function;
+  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
 }
 
-const SignUpForm: React.FC<Props> = ({ signUpPending }) => {
+const SignUpForm: React.FC<Props> = ({ authService }) => {
   const classes = useStyles();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [authState, sendAuth] = useService(authService);
   const initialValues: SignUpPayload & { confirmPassword: string } = {
     firstName: "",
     lastName: "",
@@ -59,6 +64,8 @@ const SignUpForm: React.FC<Props> = ({ signUpPending }) => {
     password: "",
     confirmPassword: ""
   };
+
+  const signUpPending = (payload: SignUpPayload) => sendAuth("SIGNUP", payload);
 
   return (
     <Container component="main" maxWidth="xs">

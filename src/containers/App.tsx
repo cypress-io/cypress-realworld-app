@@ -16,7 +16,6 @@ import BankAccountsContainer from "./BankAccountsContainer";
 import { snackbarMachine } from "../machines/snackbarMachine";
 import { notificationsMachine } from "../machines/notificationsMachine";
 import { authMachine } from "../machines/authMachine";
-import { SignInPayload, SignUpPayload } from "../models";
 import SignInForm from "../components/SignInForm";
 import MainLayout from "../components/MainLayout";
 import SignUpForm from "../components/SignUpForm";
@@ -34,6 +33,7 @@ const useStyles = makeStyles(theme => ({
 
 const App: React.FC = () => {
   const classes = useStyles();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [authState, sendAuth, authService] = useMachine(authMachine, {
     devTools: true
   });
@@ -54,9 +54,6 @@ const App: React.FC = () => {
       devTools: true
     }
   );
-
-  const signInPending = (payload: SignInPayload) => sendAuth("LOGIN", payload);
-  const signUpPending = (payload: SignUpPayload) => sendAuth("SIGNUP", payload);
 
   const isLoggedIn =
     authState.matches("authorized") || authState.matches("refreshing");
@@ -104,10 +101,10 @@ const App: React.FC = () => {
           <TransactionDetailContainer authService={authService} />
         </PrivateRouteWithState>
         <Route path="/signin">
-          <SignInForm signInPending={signInPending} />
+          <SignInForm authService={authService} />
         </Route>
         <Route path="/signup">
-          <SignUpForm signUpPending={signUpPending} />
+          <SignUpForm authService={authService} />
         </Route>
       </Switch>
       <AlertBar snackbarService={snackbarService} />
