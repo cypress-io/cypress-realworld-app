@@ -15,7 +15,6 @@ describe("Transaction Feed", function() {
     cy.server();
     cy.route("GET", "/transactions?*").as("personalTransactions");
     cy.route("GET", "/transactions/contacts*").as("contactsTransactions");
-    cy.getTest("main").scrollTo("top");
   });
   after(function() {
     cy.task("db:seed");
@@ -38,7 +37,6 @@ describe("Transaction Feed", function() {
   });
 
   it("renders friends (contacts) transaction feed  (infinite list)", function() {
-    cy.getTest("main").scrollTo("top");
     cy.getTest("nav-contacts-tab") // On get Navigation tabs are hidden under the AppBar in the UI
       .scrollIntoView() // TODO: Bug? Does not work as expected to scroll the tab into view
       .click({ force: true }); // Current solution is to force the click
@@ -55,7 +53,6 @@ describe("Transaction Feed", function() {
   });
 
   it("renders mine (personal) transaction feed (infinite list)", function() {
-    cy.getTest("main").scrollTo("top");
     cy.getTest("nav-personal-tab").click({ force: true });
     cy.getTest("nav-personal-tab").should("have.class", "Mui-selected");
 
@@ -91,7 +88,6 @@ describe("Transaction Feed", function() {
   });
 
   it("renders mine (personal) transaction feed, filters by date range, then clears the date range filter", function() {
-    cy.getTest("main").scrollTo("top");
     cy.getTest("nav-personal-tab")
       .click({ force: true })
       .should("have.class", "Mui-selected");
@@ -126,7 +122,6 @@ describe("Transaction Feed", function() {
   });
 
   it("renders mine (personal) transaction feed, filters by date range, then shows empty state", function() {
-    cy.getTest("main").scrollTo("top");
     cy.getTest("nav-personal-tab")
       .click({ force: true })
       .should("have.class", "Mui-selected");
@@ -152,7 +147,6 @@ describe("Transaction Feed", function() {
   });
 
   it.skip("renders mine (personal) transaction feed, filters by amount range, then clears the amount range filter", function() {
-    cy.getTest("main").scrollTo("top");
     cy.getTest("nav-personal-tab")
       .click({ force: true })
       .should("have.class", "Mui-selected");
