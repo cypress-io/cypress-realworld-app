@@ -15,6 +15,10 @@ describe("New Transaction", function() {
     cy.route("POST", "http://localhost:3001/transactions").as(
       "createTransaction"
     );
+    cy.route("GET", "http://localhost:3001/users").as("allUsers");
+    cy.route("GET", "http://localhost:3001/transactions").as(
+      "personalTransactions"
+    );
     cy.route("GET", "http://localhost:3001/users/search*").as("usersSearch");
     cy.fixture("users").as("users");
 
@@ -25,6 +29,7 @@ describe("New Transaction", function() {
   });
 
   it("navigates to the new transaction form, selects a user and submits a transaction payment", function() {
+    cy.wait("@allUsers");
     cy.getTest("users-list").should("be.visible");
     cy.getTestLike("user-list-item")
       .contains("Kaden")
@@ -45,18 +50,21 @@ describe("New Transaction", function() {
       .click({ force: true })
       .should("have.class", "Mui-selected");
 
+    cy.wait("@personalTransactions");
+
     cy.getTest("transaction-list")
       .first()
       .should("contain", "Indian Food");
   });
 
   it("selects a user and submits a transaction request", function() {
+    cy.wait("@allUsers");
     cy.getTestLike("user-list-item")
       .contains("Kaden")
       .click();
     cy.getTest("transaction-create-form").should("be.visible");
 
-    cy.getTest("transaction-create-amount-input").type("9500");
+    cy.getTest("transaction-create-amount-input").type("95");
     cy.getTest("transaction-create-description-input").type("Fancy Hotel");
     cy.getTest("transaction-create-submit-request").click();
 
