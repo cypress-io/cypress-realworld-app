@@ -60,11 +60,11 @@ const App: React.FC = () => {
       )}
       {authState.matches("unauthorized") && (
         <Switch>
-          <Route path="/(signin)?">
-            <SignInForm authService={authService} />
-          </Route>
           <Route path="/signup">
             <SignUpForm authService={authService} />
+          </Route>
+          <Route path="/(signin)?">
+            <SignInForm authService={authService} />
           </Route>
         </Switch>
       )}

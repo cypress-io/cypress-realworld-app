@@ -44,7 +44,6 @@ const TransactionsContainer: React.FC = () => {
   );
 
   if (match.url === "/contacts") {
-    console.log("contacts");
     return (
       <TransactionContactsList
         filterComponent={Filters}
@@ -55,7 +54,6 @@ const TransactionsContainer: React.FC = () => {
   }
 
   if (match.url === "/personal") {
-    console.log("personal");
     return (
       <TransactionPersonalList
         filterComponent={Filters}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useService } from "@xstate/react";
 import clsx from "clsx";
 import { Link as RouterLink } from "react-router-dom";
@@ -161,15 +161,6 @@ const NavDrawer: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   const [authState, sendAuth] = useService(authService);
-
-  useEffect(() => {
-    authService.subscribe((state: any) => {
-      console.log("AUTH STATE: ", state);
-    });
-
-    // @ts-ignore
-    return authService.unsubscribe!;
-  }, [authService, sendAuth]);
 
   const currentUser = authState.context.user;
   const signOutPending = () => sendAuth("LOGOUT");

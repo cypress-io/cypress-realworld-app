@@ -25,10 +25,8 @@ const TransactionPublicList: React.FC<TransactionPublicListProps> = ({
     devTools: true
   });
   const { pageData, results } = current.context;
-  console.log("public results: ", results);
 
   useEffect(() => {
-    console.log("UE public fetch");
     send("FETCH", { ...dateRangeFilters, ...amountRangeFilters });
   }, [send, dateRangeFilters, amountRangeFilters]);
 
