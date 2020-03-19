@@ -16,16 +16,24 @@ describe("New Transaction", function() {
       "createTransaction"
     );
     cy.route("GET", "http://localhost:3001/users").as("allUsers");
+    cy.route("GET", "http://localhost:3001/notifications").as("notifications");
+    cy.route("GET", "http://localhost:3001/transactions/public").as(
+      "publicTransactions"
+    );
+    cy.route("GET", "http://localhost:3001/checkAuth").as("userProfile");
     cy.route("GET", "http://localhost:3001/transactions").as(
       "personalTransactions"
     );
     cy.route("GET", "http://localhost:3001/users/search*").as("usersSearch");
     cy.fixture("users").as("users");
-
-    cy.getTest("nav-top-new-transaction").click();
   });
 
   it("navigates to the new transaction form, selects a user and submits a transaction payment", function() {
+    cy.wait("@userProfile");
+    cy.wait("@notifications");
+    cy.wait("@publicTransactions");
+    cy.getTest("nav-top-new-transaction").click();
+
     cy.wait("@allUsers");
 
     cy.getTestLike("user-list-item")
@@ -58,7 +66,10 @@ describe("New Transaction", function() {
   });
 
   it("selects a user and submits a transaction request", function() {
+    cy.getTest("nav-top-new-transaction").click();
+
     cy.wait("@allUsers");
+
     cy.getTestLike("user-list-item")
       .contains("Kaden")
       .click();
@@ -85,6 +96,7 @@ describe("New Transaction", function() {
   });
 
   it("searches for a user by username", function() {
+    cy.getTest("nav-top-new-transaction").click();
     cy.get("@users").then(users => {
       cy.getTest("user-list-search-input").within($elem => {
         cy.get("input")
@@ -102,6 +114,7 @@ describe("New Transaction", function() {
   });
 
   it("searches for a user by email", function() {
+    cy.getTest("nav-top-new-transaction").click();
     cy.get("@users").then(users => {
       cy.getTest("user-list-search-input").within($elem => {
         cy.get("input")
@@ -119,6 +132,7 @@ describe("New Transaction", function() {
   });
 
   it("searches for a user by phone", function() {
+    cy.getTest("nav-top-new-transaction").click();
     cy.get("@users").then(users => {
       const phone = this.users[6].phoneNumber.replace(/[^0-9]/g, "");
       const partialPhone = phone;
