@@ -14,7 +14,7 @@ describe("Notifications", function() {
     Cypress.Cookies.preserveOnce("connect.sid");
     cy.server();
     cy.route("GET", "/notifications").as("notifications");
-    cy.route("PATCH", "/notifications/*").as("updateNotification");
+    cy.route("PATCH", "/notifications*").as("updateNotification");
   });
   after(function() {
     cy.task("db:seed");
