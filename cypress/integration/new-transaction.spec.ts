@@ -24,9 +24,6 @@ describe("New Transaction", function() {
 
     cy.getTest("nav-top-new-transaction").click();
   });
-  after(function() {
-    cy.task("db:seed");
-  });
 
   it("navigates to the new transaction form, selects a user and submits a transaction payment", function() {
     cy.wait("@allUsers");
@@ -46,8 +43,13 @@ describe("New Transaction", function() {
     cy.getTest("sidenav-user-balance").should("contain", "$525.00");
     cy.getTest("sidenav-close").click();
 
-    cy.getTest("nav-personal-tab")
-      .click({ force: true })
+    // Guide Tip: re-querying DOM for element
+    cy.getTest("nav-personal-tab").as('mine-tab')
+    cy.get('@mine-tab')
+      .click()
+
+    // Discussion point: Is it cy.get()
+    cy.get('@mine-tab')
       .should("have.class", "Mui-selected");
 
     cy.wait("@personalTransactions");
@@ -74,8 +76,13 @@ describe("New Transaction", function() {
     cy.getTest("sidenav-user-balance").should("contain", "$550.00");
     cy.getTest("sidenav-close").click();
 
-    cy.getTest("nav-personal-tab")
-      .click({ force: true })
+    // Guide Tip: re-querying DOM for element
+    cy.getTest("nav-personal-tab").as('mine-tab')
+    cy.get('@mine-tab')
+      .click()
+
+    // Discussion point: Is it cy.get()
+    cy.get('@mine-tab')
       .should("have.class", "Mui-selected");
 
     cy.getTestLike("transaction-item").should("contain", "Fancy Hotel");
