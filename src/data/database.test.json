@@ -11,7 +11,7 @@
       "phoneNumber": "+12133734253",
       "avatar": "https://i.pravatar.cc/150?img=32",
       "defaultPrivacyLevel": "private",
-      "balance": 55000,
+      "balance": 52500,
       "createdAt": "2020-01-02T04:17:12.289Z",
       "modifiedAt": "2020-01-06T20:43:57.569Z"
     },
@@ -985,6 +985,18 @@
       "requestResolvedAt": "2020-03-23T11:03:49.769Z",
       "createdAt": "2019-06-14T15:33:43.006Z",
       "modifiedAt": "2020-01-26T19:23:23.487Z"
+    },
+    {
+      "id": "3ko8alKFT",
+      "uuid": "415abd70-fa53-431c-8090-094e49811527",
+      "amount": 2500,
+      "description": "Indian Food",
+      "receiverId": "kNNEA6mLb",
+      "senderId": "9IUK0xpw",
+      "privacyLevel": "private",
+      "status": "complete",
+      "createdAt": "2020-03-19T14:42:00.587Z",
+      "modifiedAt": "2020-03-19T14:42:00.587Z"
     }
   ],
   "likes": [
@@ -2189,6 +2201,26 @@
       "isRead": false,
       "createdAt": "2020-01-13T04:41:42.732Z",
       "modifiedAt": "2020-01-16T07:24:51.441Z"
+    },
+    {
+      "id": "AQ69e7cUAu",
+      "uuid": "565a1836-23a5-4ead-b455-932e57d8c1cc",
+      "userId": "kNNEA6mLb",
+      "transactionId": "3ko8alKFT",
+      "status": "requested",
+      "isRead": false,
+      "createdAt": "2020-03-19T14:42:00.607Z",
+      "modifiedAt": "2020-03-19T14:42:00.607Z"
+    },
+    {
+      "id": "E_aXTozaVg",
+      "uuid": "7e77a85b-6e28-4f73-8eac-440d1a2806f9",
+      "userId": "kNNEA6mLb",
+      "transactionId": "3ko8alKFT",
+      "status": "received",
+      "isRead": false,
+      "createdAt": "2020-03-19T14:42:00.614Z",
+      "modifiedAt": "2020-03-19T14:42:00.614Z"
     }
   ],
   "banktransfers": [

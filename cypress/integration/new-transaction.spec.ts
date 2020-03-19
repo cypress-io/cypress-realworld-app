@@ -51,7 +51,6 @@ describe("New Transaction", function() {
   });
 
   it("selects a user and submits a transaction request", function() {
-    cy.getTest("nav-top-new-transaction").click();
     cy.getTestLike("user-list-item")
       .contains("Kaden")
       .click();
@@ -67,12 +66,14 @@ describe("New Transaction", function() {
     cy.getTest("sidenav-user-balance").should("contain", "$550.00");
     cy.getTest("sidenav-close").click();
 
-    cy.getTestLike("transaction-list-item").should("contain", "Fancy Hotel");
+    cy.getTest("nav-personal-tab")
+      .click({ force: true })
+      .should("have.class", "Mui-selected");
+
+    cy.getTestLike("transaction-item").should("contain", "Fancy Hotel");
   });
 
   it("searches for a user by username", function() {
-    cy.getTest("nav-top-new-transaction").click();
-
     cy.get("@users").then(users => {
       cy.getTest("user-list-search-input").within($elem => {
         cy.get("input")
@@ -90,8 +91,6 @@ describe("New Transaction", function() {
   });
 
   it("searches for a user by email", function() {
-    cy.getTest("nav-top-new-transaction").click();
-
     cy.get("@users").then(users => {
       cy.getTest("user-list-search-input").within($elem => {
         cy.get("input")
@@ -109,8 +108,6 @@ describe("New Transaction", function() {
   });
 
   it("searches for a user by phone", function() {
-    cy.getTest("nav-top-new-transaction").click();
-
     cy.get("@users").then(users => {
       const phone = this.users[6].phoneNumber.replace(/[^0-9]/g, "");
       const partialPhone = phone;
