@@ -1,6 +1,5 @@
 import React from "react";
 import { makeStyles, Paper, Typography } from "@material-ui/core";
-import { User } from "../models";
 import UserSettingsForm from "../components/UserSettingsForm";
 import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";

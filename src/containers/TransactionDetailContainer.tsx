@@ -2,14 +2,14 @@ import React, { useEffect } from "react";
 import { useMachine, useService } from "@xstate/react";
 import { useParams } from "react-router-dom";
 import TransactionDetail from "../components/TransactionDetail";
-import { User, Transaction } from "../models";
+import { Transaction } from "../models";
 import { transactionDetailMachine } from "../machines/transactionDetailMachine";
 import { first } from "lodash/fp";
 import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 
 export interface Props {
-  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;;
+  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
 }
 
 const TransactionDetailsContainer: React.FC<Props> = ({ authService }) => {

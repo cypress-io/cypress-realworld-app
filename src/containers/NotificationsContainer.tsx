@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { Interpreter } from "xstate";
+import { useService } from "@xstate/react";
 import { makeStyles, Paper, Typography } from "@material-ui/core";
-import { NotificationResponseItem } from "../models";
+import { NotificationUpdatePayload } from "../models";
 import NotificationList from "../components/NotificationList";
+import { DataContext, DataSchema, DataEvents } from "../machines/dataMachine";
+import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -13,15 +17,28 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface Props {
-  notifications: NotificationResponseItem[];
-  updateNotification: Function;
+  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
+  notificationsService: Interpreter<DataContext, DataSchema, DataEvents, any>;
 }
 
 const NotificationsContainer: React.FC<Props> = ({
-  notifications,
-  updateNotification
+  authService,
+  notificationsService
 }) => {
   const classes = useStyles();
+  const [authState] = useService(authService);
+  const [notificationsState, sendNotifications] = useService(
+    notificationsService
+  );
+
+  useEffect(() => {
+    if (authState.matches("authorized")) {
+      sendNotifications({ type: "FETCH" });
+    }
+  }, [authState, sendNotifications]);
+
+  const updateNotification = (payload: NotificationUpdatePayload) =>
+    sendNotifications("UPDATE", payload);
 
   return (
     <Paper className={classes.paper}>
@@ -29,7 +46,7 @@ const NotificationsContainer: React.FC<Props> = ({
         Notifications
       </Typography>
       <NotificationList
-        notifications={notifications}
+        notifications={notificationsState.context?.results!}
         updateNotification={updateNotification}
       />
     </Paper>

@@ -1,7 +1,7 @@
 import { Machine, assign } from "xstate";
 import { concat } from "lodash/fp";
 
-interface DataSchema {
+export interface DataSchema {
   states: {
     idle: {};
     loading: {};

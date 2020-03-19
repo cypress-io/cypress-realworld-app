@@ -7,7 +7,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import BankAccountList from "../components/BankAccountList";
 import { Grid, Button } from "@material-ui/core";
 import { bankAccountsMachine } from "../machines/bankAccountsMachine";
-import { User } from "../models";
 import BankAccountForm from "../components/BankAccountForm";
 import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";

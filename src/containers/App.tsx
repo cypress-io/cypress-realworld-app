@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Switch, Route } from "react-router";
 import { RouteProps } from "react-router-dom";
 import { useMachine } from "@xstate/react";
@@ -17,11 +17,7 @@ import BankAccountsContainer from "./BankAccountsContainer";
 import { snackbarMachine, SnackbarContext } from "../machines/snackbarMachine";
 import { notificationsMachine } from "../machines/notificationsMachine";
 import { authMachine } from "../machines/authMachine";
-import {
-  NotificationUpdatePayload,
-  SignInPayload,
-  SignUpPayload
-} from "../models";
+import { SignInPayload, SignUpPayload } from "../models";
 import SignInForm from "../components/SignInForm";
 import MainLayout from "../components/MainLayout";
 import SignUpForm from "../components/SignUpForm";
@@ -42,7 +38,9 @@ const App: React.FC = () => {
     devTools: true
   });
   const [
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     notificationsState,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     sendNotifications,
     notificationsService
   ] = useMachine(notificationsMachine, {
@@ -52,8 +50,6 @@ const App: React.FC = () => {
     devTools: true
   });
 
-  const updateNotification = (payload: NotificationUpdatePayload) =>
-    sendNotifications("UPDATE", payload);
   const signInPending = (payload: SignInPayload) => sendAuth("LOGIN", payload);
   const signUpPending = (payload: SignUpPayload) => sendAuth("SIGNUP", payload);
 
@@ -62,20 +58,6 @@ const App: React.FC = () => {
 
   const isLoggedIn =
     authState.matches("authorized") || authState.matches("refreshing");
-
-  useEffect(() => {
-    if (authState.matches("authorized")) {
-      sendNotifications({ type: "FETCH" });
-    }
-
-    /*
-    const subscription = service.subscribe((state: any) => {
-      // simple state logging
-      console.log(state);
-    });
-
-    return subscription.unsubscribe;*/
-  }, [authState, sendNotifications, notificationsService, authService]);
 
   const PrivateRouteWithState: React.FC<PrivateRouteWithStateProps> = ({
     children,
@@ -103,8 +85,8 @@ const App: React.FC = () => {
         </PrivateRouteWithState>
         <PrivateRouteWithState exact path="/notifications">
           <NotificationsContainer
-            notifications={notificationsState.context.results!}
-            updateNotification={updateNotification}
+            authService={authService}
+            notificationsService={notificationsService}
           />
         </PrivateRouteWithState>
         <PrivateRouteWithState path="/bankaccounts*">
