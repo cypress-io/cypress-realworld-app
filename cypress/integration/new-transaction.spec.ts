@@ -27,7 +27,7 @@ describe("New Transaction", function() {
 
   it("navigates to the new transaction form, selects a user and submits a transaction payment", function() {
     cy.wait("@allUsers");
-    cy.getTest("users-list").should("be.visible");
+
     cy.getTestLike("user-list-item")
       .contains("Kaden")
       .click();
@@ -44,13 +44,11 @@ describe("New Transaction", function() {
     cy.getTest("sidenav-close").click();
 
     // Guide Tip: re-querying DOM for element
-    cy.getTest("nav-personal-tab").as('mine-tab')
-    cy.get('@mine-tab')
-      .click()
+    cy.getTest("nav-personal-tab").as("mine-tab");
+    cy.get("@mine-tab").click();
 
     // Discussion point: Is it cy.get()
-    cy.get('@mine-tab')
-      .should("have.class", "Mui-selected");
+    cy.get("@mine-tab").should("have.class", "Mui-selected");
 
     cy.wait("@personalTransactions");
 
@@ -77,13 +75,11 @@ describe("New Transaction", function() {
     cy.getTest("sidenav-close").click();
 
     // Guide Tip: re-querying DOM for element
-    cy.getTest("nav-personal-tab").as('mine-tab')
-    cy.get('@mine-tab')
-      .click()
+    cy.getTest("nav-personal-tab").as("mine-tab");
+    cy.get("@mine-tab").click();
 
     // Discussion point: Is it cy.get()
-    cy.get('@mine-tab')
-      .should("have.class", "Mui-selected");
+    cy.get("@mine-tab").should("have.class", "Mui-selected");
 
     cy.getTestLike("transaction-item").should("contain", "Fancy Hotel");
   });
