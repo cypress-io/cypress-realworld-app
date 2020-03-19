@@ -76,7 +76,7 @@ export const mainListItems = (
       <ListItemIcon>
         <NotificationsIcon />
       </ListItemIcon>
-      <ListItemText primary="Auth" />
+      <ListItemText primary="Notifications" />
     </ListItem>
   </div>
 );
