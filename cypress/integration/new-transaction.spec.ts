@@ -41,7 +41,9 @@ describe("New Transaction", function() {
     cy.getTest("sidenav-user-balance").should("contain", "$525.00");
     cy.getTest("sidenav-close").click();
 
-    cy.getTest("nav-public-tab").should("have.class", "Mui-selected");
+    cy.getTest("nav-personal-tab")
+      .click({ force: true })
+      .should("have.class", "Mui-selected");
 
     cy.getTest("transaction-list")
       .first()
@@ -65,7 +67,7 @@ describe("New Transaction", function() {
     cy.getTest("sidenav-user-balance").should("contain", "$550.00");
     cy.getTest("sidenav-close").click();
 
-    cy.getTest("transaction-list").should("contain", "Fancy Hotel");
+    cy.getTestLike("transaction-list-item").should("contain", "Fancy Hotel");
   });
 
   it("searches for a user by username", function() {
