@@ -1,29 +1,16 @@
 import React from "react";
-import { Switch, Route } from "react-router";
-import { RouteProps } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import { useMachine } from "@xstate/react";
 import { makeStyles } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 
-import PrivateRoute from "../components/PrivateRoute";
-import TransactionsContainer from "../containers/TransactionsContainer";
-import TransactionDetailContainer from "./TransactionDetailContainer";
-import TransactionCreateContainer from "./TransactionCreateContainer";
-import NotificationsContainer from "./NotificationsContainer";
-import UserSettingsContainer from "./UserSettingsContainer";
-import BankAccountsContainer from "./BankAccountsContainer";
-
 import { snackbarMachine } from "../machines/snackbarMachine";
 import { notificationsMachine } from "../machines/notificationsMachine";
 import { authMachine } from "../machines/authMachine";
-import SignInForm from "../components/SignInForm";
-import MainLayout from "../components/MainLayout";
-import SignUpForm from "../components/SignUpForm";
 import AlertBar from "../components/AlertBar";
-
-interface PrivateRouteWithStateProps extends RouteProps {
-  children: React.ReactNode;
-}
+import PrivateRoutesContainer from "./PrivateRoutesContainer";
+import SignInForm from "../components/SignInForm";
+import SignUpForm from "../components/SignUpForm";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -56,57 +43,32 @@ const App: React.FC = () => {
   );
 
   const isLoggedIn =
-    authState.matches("authorized") || authState.matches("refreshing");
-
-  const PrivateRouteWithState: React.FC<PrivateRouteWithStateProps> = ({
-    children,
-    ...rest
-  }) => (
-    <PrivateRoute isLoggedIn={isLoggedIn} {...rest}>
-      <MainLayout
-        notificationsService={notificationsService}
-        authService={authService}
-      >
-        {children}
-      </MainLayout>
-    </PrivateRoute>
-  );
+    authState.matches("authorized") ||
+    authState.matches("refreshing") ||
+    authState.matches("updating");
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Switch>
-        <PrivateRouteWithState exact path={"/(public|contacts|personal)?"}>
-          <TransactionsContainer />
-        </PrivateRouteWithState>
-        <PrivateRouteWithState exact path="/user/settings">
-          <UserSettingsContainer authService={authService} />
-        </PrivateRouteWithState>
-        <PrivateRouteWithState exact path="/notifications">
-          <NotificationsContainer
-            authService={authService}
-            notificationsService={notificationsService}
-          />
-        </PrivateRouteWithState>
-        <PrivateRouteWithState path="/bankaccounts*">
-          <BankAccountsContainer authService={authService} />
-        </PrivateRouteWithState>
-        <PrivateRouteWithState exact path="/transaction/new">
-          <TransactionCreateContainer
-            authService={authService}
-            snackbarService={snackbarService}
-          />
-        </PrivateRouteWithState>
-        <PrivateRouteWithState exact path="/transaction/:transactionId">
-          <TransactionDetailContainer authService={authService} />
-        </PrivateRouteWithState>
-        <Route path="/signin">
-          <SignInForm authService={authService} />
-        </Route>
-        <Route path="/signup">
-          <SignUpForm authService={authService} />
-        </Route>
-      </Switch>
+
+      {isLoggedIn && (
+        <PrivateRoutesContainer
+          notificationsService={notificationsService}
+          authService={authService}
+          snackbarService={snackbarService}
+        />
+      )}
+      {authState.matches("unauthorized") && (
+        <Switch>
+          <Route path="/(signin)?">
+            <SignInForm authService={authService} />
+          </Route>
+          <Route path="/signup">
+            <SignUpForm authService={authService} />
+          </Route>
+        </Switch>
+      )}
+
       <AlertBar snackbarService={snackbarService} />
     </div>
   );

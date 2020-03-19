@@ -77,10 +77,6 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
             setSubmitting(true);
 
             signInPending(values);
-
-            setFieldValue("username", "");
-            setFieldValue("password", "");
-            setSubmitting(false);
           }}
         >
           {({ isValid, isSubmitting }) => (

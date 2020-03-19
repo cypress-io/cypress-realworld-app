@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -70,20 +70,9 @@ const NavBar: React.FC<NavBarProps> = ({
   notificationsService
 }) => {
   const classes = useStyles();
-  const [notificationsState, sendNotifications] = useService(
-    notificationsService
-  );
+  const [notificationsState] = useService(notificationsService);
 
   const allNotifications = notificationsState.context.results;
-
-  useEffect(() => {
-    notificationsService.subscribe((state: any) => {
-      console.log("NOTIFICATIONS STATE: ", state);
-    });
-
-    // @ts-ignore
-    return notificationsService.unsubscribe!;
-  }, [notificationsService, sendNotifications]);
 
   return (
     <AppBar
