@@ -14,6 +14,7 @@ describe("Notifications", function() {
     Cypress.Cookies.preserveOnce("connect.sid");
     cy.server();
     cy.route("GET", "/notifications").as("notifications");
+    cy.route("PATCH", "/notifications/*").as("updateNotification");
   });
   after(function() {
     cy.task("db:seed");
@@ -55,7 +56,9 @@ describe("Notifications", function() {
       .eq(3)
       .click();
 
+    cy.wait("@updateNotification");
     cy.wait("@notifications");
+
     cy.getTestLike("notification-list-item").should("have.length", 5);
   });
 
