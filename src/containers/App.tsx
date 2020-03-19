@@ -3,8 +3,7 @@ import { Switch, Route } from "react-router";
 import { RouteProps } from "react-router-dom";
 import { useMachine } from "@xstate/react";
 import { makeStyles } from "@material-ui/core/styles";
-import { CssBaseline, Snackbar } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
+import { CssBaseline } from "@material-ui/core";
 
 import PrivateRoute from "../components/PrivateRoute";
 import TransactionsContainer from "../containers/TransactionsContainer";
@@ -14,13 +13,14 @@ import NotificationsContainer from "./NotificationsContainer";
 import UserSettingsContainer from "./UserSettingsContainer";
 import BankAccountsContainer from "./BankAccountsContainer";
 
-import { snackbarMachine, SnackbarContext } from "../machines/snackbarMachine";
+import { snackbarMachine } from "../machines/snackbarMachine";
 import { notificationsMachine } from "../machines/notificationsMachine";
 import { authMachine } from "../machines/authMachine";
 import { SignInPayload, SignUpPayload } from "../models";
 import SignInForm from "../components/SignInForm";
 import MainLayout from "../components/MainLayout";
 import SignUpForm from "../components/SignUpForm";
+import AlertBar from "../components/AlertBar";
 
 interface PrivateRouteWithStateProps extends RouteProps {
   children: React.ReactNode;
@@ -46,15 +46,17 @@ const App: React.FC = () => {
   ] = useMachine(notificationsMachine, {
     devTools: true
   });
-  const [snackbarState, sendSnackbar] = useMachine(snackbarMachine, {
-    devTools: true
-  });
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [snackbarState, sendSnackbar, snackbarService] = useMachine(
+    snackbarMachine,
+    {
+      devTools: true
+    }
+  );
 
   const signInPending = (payload: SignInPayload) => sendAuth("LOGIN", payload);
   const signUpPending = (payload: SignUpPayload) => sendAuth("SIGNUP", payload);
-
-  const showSnackbar = (payload: SnackbarContext) =>
-    sendSnackbar("SHOW", payload);
 
   const isLoggedIn =
     authState.matches("authorized") || authState.matches("refreshing");
@@ -95,7 +97,7 @@ const App: React.FC = () => {
         <PrivateRouteWithState exact path="/transaction/new">
           <TransactionCreateContainer
             authService={authService}
-            showSnackbar={showSnackbar}
+            snackbarService={snackbarService}
           />
         </PrivateRouteWithState>
         <PrivateRouteWithState exact path="/transaction/:transactionId">
@@ -108,19 +110,7 @@ const App: React.FC = () => {
           <SignUpForm signUpPending={signUpPending} />
         </Route>
       </Switch>
-      <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-        open={snackbarState.matches("visible")}
-        autoHideDuration={3000}
-      >
-        <Alert
-          elevation={6}
-          variant="filled"
-          severity={snackbarState.context.severity}
-        >
-          {snackbarState.context.message}
-        </Alert>
-      </Snackbar>
+      <AlertBar snackbarService={snackbarService} />
     </div>
   );
 };
