@@ -2,6 +2,9 @@ import React from "react";
 import { makeStyles, Paper, Typography } from "@material-ui/core";
 import { User } from "../models";
 import UserSettingsForm from "../components/UserSettingsForm";
+import { Interpreter } from "xstate";
+import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import { useService } from "@xstate/react";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -13,15 +16,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface Props {
-  currentUser?: User;
-  updateUser: Function;
+  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
 }
 
-const UserSettingsContainer: React.FC<Props> = ({
-  currentUser,
-  updateUser
-}) => {
+const UserSettingsContainer: React.FC<Props> = ({ authService }) => {
   const classes = useStyles();
+  const [authState, sendAuth] = useService(authService);
+
+  const currentUser = authState.context.user;
+  const updateUser = (payload: any) => sendAuth("UPDATE", payload);
 
   return (
     <Paper className={classes.paper}>

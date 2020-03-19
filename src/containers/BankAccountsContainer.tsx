@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useMachine } from "@xstate/react";
+import { useMachine, useService } from "@xstate/react";
 import { Link as RouterLink, useRouteMatch } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
@@ -9,9 +9,11 @@ import { Grid, Button } from "@material-ui/core";
 import { bankAccountsMachine } from "../machines/bankAccountsMachine";
 import { User } from "../models";
 import BankAccountForm from "../components/BankAccountForm";
+import { Interpreter } from "xstate";
+import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 
 export interface Props {
-  currentUserId?: User["id"];
+  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -23,13 +25,16 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const BankAccountsContainer: React.FC<Props> = ({ currentUserId }) => {
+const BankAccountsContainer: React.FC<Props> = ({ authService }) => {
   const match = useRouteMatch();
   const classes = useStyles();
+  const [authState] = useService(authService);
   const [bankAccountsState, sendBankAccounts] = useMachine(
     bankAccountsMachine,
     { devTools: true }
   );
+
+  const currentUser = authState.context.user;
 
   const createBankAccount = (payload: any) => {
     sendBankAccounts("CREATE", payload);
@@ -43,14 +48,14 @@ const BankAccountsContainer: React.FC<Props> = ({ currentUserId }) => {
     sendBankAccounts("FETCH");
   }, [sendBankAccounts]);
 
-  if (match.url === "/bankaccounts/new" && currentUserId) {
+  if (match.url === "/bankaccounts/new" && currentUser?.id) {
     return (
       <Paper className={classes.paper}>
         <Typography component="h2" variant="h6" color="primary" gutterBottom>
           Create Bank Account
         </Typography>
         <BankAccountForm
-          userId={currentUserId}
+          userId={currentUser?.id}
           createBankAccount={createBankAccount}
         />
       </Paper>

@@ -56,14 +56,12 @@ const App: React.FC = () => {
     sendNotifications("UPDATE", payload);
   const signInPending = (payload: SignInPayload) => sendAuth("LOGIN", payload);
   const signUpPending = (payload: SignUpPayload) => sendAuth("SIGNUP", payload);
-  const updateUser = (payload: any) => sendAuth("UPDATE", payload);
-  const refreshUser = () => sendAuth("REFRESH");
+
   const showSnackbar = (payload: SnackbarContext) =>
     sendSnackbar("SHOW", payload);
 
   const isLoggedIn =
     authState.matches("authorized") || authState.matches("refreshing");
-  const currentUser = authState.context.user;
 
   useEffect(() => {
     if (authState.matches("authorized")) {
@@ -101,10 +99,7 @@ const App: React.FC = () => {
           <TransactionsContainer />
         </PrivateRouteWithState>
         <PrivateRouteWithState exact path="/user/settings">
-          <UserSettingsContainer
-            currentUser={currentUser}
-            updateUser={updateUser}
-          />
+          <UserSettingsContainer authService={authService} />
         </PrivateRouteWithState>
         <PrivateRouteWithState exact path="/notifications">
           <NotificationsContainer
@@ -113,17 +108,16 @@ const App: React.FC = () => {
           />
         </PrivateRouteWithState>
         <PrivateRouteWithState path="/bankaccounts*">
-          <BankAccountsContainer currentUserId={currentUser?.id} />
+          <BankAccountsContainer authService={authService} />
         </PrivateRouteWithState>
         <PrivateRouteWithState exact path="/transaction/new">
           <TransactionCreateContainer
-            sender={currentUser}
+            authService={authService}
             showSnackbar={showSnackbar}
-            refreshUser={refreshUser}
           />
         </PrivateRouteWithState>
         <PrivateRouteWithState exact path="/transaction/:transactionId">
-          <TransactionDetailContainer currentUser={currentUser} />
+          <TransactionDetailContainer authService={authService} />
         </PrivateRouteWithState>
         <Route path="/signin">
           <SignInForm signInPending={signInPending} />
