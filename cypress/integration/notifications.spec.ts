@@ -55,6 +55,7 @@ describe("Notifications", function() {
       .eq(3)
       .click();
 
+    cy.wait("@notifications");
     cy.getTestLike("notification-list-item").should("have.length", 5);
   });
 
