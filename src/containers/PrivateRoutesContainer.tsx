@@ -16,6 +16,7 @@ import {
   SnackbarEvents
 } from "../machines/snackbarMachine";
 import { useService } from "@xstate/react";
+import UserOnboardingContainer from "./UserOnboardingContainer";
 
 export interface Props {
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
@@ -47,6 +48,7 @@ const PrivateRoutesContainer: React.FC<Props> = ({
       notificationsService={notificationsService}
       authService={authService}
     >
+      <UserOnboardingContainer authService={authService} />
       <Switch>
         <Route exact path={"/(public|contacts|personal)?"}>
           <TransactionsContainer />
