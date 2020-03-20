@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -17,6 +17,8 @@ import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import { useService, useMachine } from "@xstate/react";
 import { userOnboardingMachine } from "../machines/userOnboardingMachine";
+import { bankAccountsMachine } from "../machines/bankAccountsMachine";
+import { isEmpty } from "lodash/fp";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -35,15 +37,33 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService }) => {
   const classes = useStyles();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const [bankAccountsState, sendBankAccounts] = useMachine(
+    bankAccountsMachine,
+    { devTools: true }
+  );
   const [authState, sendAuth] = useService(authService);
   const [
     userOnboardingState,
     sendUserOnboarding
   ] = useMachine(userOnboardingMachine, { devTools: true });
 
+  const currentUser = authState.context.user;
+
+  useEffect(() => {
+    sendBankAccounts("FETCH");
+  }, [sendBankAccounts]);
   /*
   const currentUser = authState.context.user;
   const updateUser = (payload: any) => sendAuth("UPDATE", payload);*/
+
+  console.log("BA: ", bankAccountsState);
+  const noBankAccounts =
+    bankAccountsState.matches("success.withData") &&
+    isEmpty(bankAccountsState?.context?.results);
+  console.log("NBA: ", noBankAccounts);
+
+  console.log("BA State: ", bankAccountsState.matches("success.withData"));
+  console.log("RESULTS 1: ", !isEmpty(bankAccountsState?.context?.results));
 
   return (
     <Dialog
