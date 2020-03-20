@@ -28,6 +28,10 @@ if (process.env.NODE_ENV === "development") {
   databaseFileName = "database.json";
 }
 
+if (process.env.EMPTY_SEED) {
+  seedFileName = "empty-seed.json";
+}
+
 const databaseFile = getDataFile(databaseFileName);
 const adapter = new FileSync(databaseFile);
 

@@ -105,7 +105,7 @@
     "start": "NODE_ENV=development yarn start:api & yarn start:react",
     "dev": "yarn start:dev",
     "start:dev": "NODE_ENV=development start-test start:server-and-api:watch 3000 cypress:open",
-    "start:empty": "NODE_ENV=development start-test start:server-and-api:watch 3000 cypress:open",
+    "start:empty": "NODE_ENV=development EMPTY_SEED=true start-test start:server-and-api:watch 3000 cypress:open",
     "start:test": "NODE_ENV=test start-test start:server-and-api:watch 3000 cypress:open",
     "start:react": "react-scripts start",
     "start:api": "yarn tsnode --files src/app.ts",
