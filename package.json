@@ -54,7 +54,7 @@
     "formik": "2.1.4",
     "fuse.js": "3.6.1",
     "lowdb": "1.0.0",
-    "morgan": "1.9.1",
+    "morgan": "1.10.0",
     "nodemon": "2.0.2",
     "passport": "0.4.1",
     "passport-local": "1.0.0",
