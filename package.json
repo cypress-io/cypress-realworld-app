@@ -45,7 +45,7 @@
     "axios": "0.19.2",
     "bcrypt": "3.0.8",
     "cors": "2.8.5",
-    "dinero.js": "1.7.0",
+    "dinero.js": "1.8.1",
     "dotenv": "8.2.0",
     "express-paginate": "1.0.0",
     "express-session": "1.17.0",
