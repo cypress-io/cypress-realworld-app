@@ -12,7 +12,7 @@ import { useService, useMachine } from "@xstate/react";
 import { userOnboardingMachine } from "../machines/userOnboardingMachine";
 import { bankAccountsMachine } from "../machines/bankAccountsMachine";
 import { isEmpty } from "lodash/fp";
-import BankAccountsContainer from "./BankAccountsContainer";
+import BankAccountForm from "../components/BankAccountForm";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -51,28 +51,35 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService }) => {
     bankAccountsState.matches("success.withoutData") &&
     isEmpty(bankAccountsState?.context?.results);
 
-  const dialogIsOpen = noBankAccounts && !userOnboardingState.matches("done");
+  const dialogIsOpen =
+    (userOnboardingState.matches("stepTwo") && !noBankAccounts) ||
+    (userOnboardingState.matches("stepThree") && !noBankAccounts) ||
+    (!userOnboardingState.matches("done") && noBankAccounts);
 
   const nextStep = () => sendUserOnboarding("NEXT");
 
+  const createBankAccountWithNextStep = (payload: any) => {
+    sendBankAccounts("CREATE", payload);
+    nextStep();
+  };
+
   return (
     <Dialog
+      data-test="user-onboarding-dialog"
       fullScreen={fullScreen}
       open={dialogIsOpen}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">
+      <DialogTitle data-test="user-onboarding-dialog-title">
         {userOnboardingState.matches("stepOne") && "Get Started with Pay App"}
-        {userOnboardingState.matches("stepTwo") && "Create a Bank Account"}
+        {userOnboardingState.matches("stepTwo") && "Create Bank Account"}
         {userOnboardingState.matches("stepThree") && "Finished"}
       </DialogTitle>
-      <DialogContent>
+      <DialogContent data-test="user-onboarding-dialog-content">
         <Box
           display="flex"
-          min-height={theme.spacing(24)}
+          min-height={theme.spacing(36)}
           width={theme.spacing(68)}
-          height={theme.spacing(24)}
+          height={theme.spacing(36)}
           alignItems="center"
           justifyContent="center"
         >
@@ -84,7 +91,11 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService }) => {
             </DialogContentText>
           )}
           {userOnboardingState.matches("stepTwo") && (
-            <BankAccountsContainer authService={authService} />
+            <BankAccountForm
+              userId={currentUser?.id!}
+              createBankAccount={createBankAccountWithNextStep}
+              onboarding
+            />
           )}
           {userOnboardingState.matches("stepThree") && (
             <DialogContentText>
@@ -94,11 +105,18 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService }) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => nextStep()} color="primary" autoFocus>
-          {userOnboardingState.matches("stepThree")
-            ? "Take me to Pay App"
-            : "Next"}
-        </Button>
+        {!userOnboardingState.matches("stepTwo") && (
+          <Button
+            onClick={() => nextStep()}
+            color="primary"
+            autoFocus
+            data-test="user-onboarding-next"
+          >
+            {userOnboardingState.matches("stepThree")
+              ? "Take me to Pay App"
+              : "Next"}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

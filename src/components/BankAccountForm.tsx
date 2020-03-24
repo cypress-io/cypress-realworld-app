@@ -32,11 +32,13 @@ const useStyles = makeStyles(theme => ({
 export interface BankAccountFormProps {
   userId: User["id"];
   createBankAccount: Function;
+  onboarding?: boolean;
 }
 
 const BankAccountForm: React.FC<BankAccountFormProps> = ({
   userId,
-  createBankAccount
+  createBankAccount,
+  onboarding
 }) => {
   const history = useHistory();
   const classes = useStyles();
@@ -56,7 +58,9 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
 
         createBankAccount({ userId, ...values });
 
-        history.push("/bankaccounts");
+        if (!onboarding) {
+          history.push("/bankaccounts");
+        }
       }}
     >
       {({ isValid, isSubmitting }) => (
