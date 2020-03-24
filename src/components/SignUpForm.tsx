@@ -81,8 +81,6 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
             setSubmitting(true);
 
             signUpPending(values);
-
-            setSubmitting(false);
           }}
         >
           {({ isValid, isSubmitting }) => (
@@ -184,7 +182,7 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
                 data-test="signup-submit"
                 disabled={!isValid || isSubmitting}
               >
-                Sign In
+                Sign Up
               </Button>
               <Grid container>
                 <Grid item>
