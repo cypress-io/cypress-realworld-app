@@ -5,14 +5,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import {
-  makeStyles,
-  Paper,
-  Typography,
-  Box,
-  useTheme,
-  useMediaQuery
-} from "@material-ui/core";
+import { makeStyles, Box, useTheme, useMediaQuery } from "@material-ui/core";
 import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import { useService, useMachine } from "@xstate/react";
@@ -52,23 +45,19 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService }) => {
   useEffect(() => {
     sendBankAccounts("FETCH");
   }, [sendBankAccounts]);
-  /*
-  const currentUser = authState.context.user;
-  const updateUser = (payload: any) => sendAuth("UPDATE", payload);*/
 
-  console.log("BA: ", bankAccountsState);
   const noBankAccounts =
-    bankAccountsState.matches("success.withData") &&
+    bankAccountsState.matches("success.withoutData") &&
     isEmpty(bankAccountsState?.context?.results);
-  console.log("NBA: ", noBankAccounts);
 
-  console.log("BA State: ", bankAccountsState.matches("success.withData"));
-  console.log("RESULTS 1: ", !isEmpty(bankAccountsState?.context?.results));
+  const dialogIsOpen = noBankAccounts && !userOnboardingState.matches("done");
+
+  const nextStep = () => sendUserOnboarding("NEXT");
 
   return (
     <Dialog
       fullScreen={fullScreen}
-      open={!userOnboardingState.matches("done")}
+      open={dialogIsOpen}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -102,11 +91,7 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService }) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={() => sendUserOnboarding("NEXT")}
-          color="primary"
-          autoFocus
-        >
+        <Button onClick={() => nextStep()} color="primary" autoFocus>
           {userOnboardingState.matches("stepThree")
             ? "Take me to Pay App"
             : "Next"}
