@@ -12,6 +12,7 @@ import { useService, useMachine } from "@xstate/react";
 import { userOnboardingMachine } from "../machines/userOnboardingMachine";
 import { bankAccountsMachine } from "../machines/bankAccountsMachine";
 import { isEmpty } from "lodash/fp";
+import BankAccountsContainer from "./BankAccountsContainer";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -62,7 +63,9 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService }) => {
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        {"Get Started with Pay App"}
+        {userOnboardingState.matches("stepOne") && "Get Started with Pay App"}
+        {userOnboardingState.matches("stepTwo") && "Create a Bank Account"}
+        {userOnboardingState.matches("stepThree") && "Finished"}
       </DialogTitle>
       <DialogContent>
         <Box
@@ -81,7 +84,7 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService }) => {
             </DialogContentText>
           )}
           {userOnboardingState.matches("stepTwo") && (
-            <DialogContentText>Create Bank Account</DialogContentText>
+            <BankAccountsContainer authService={authService} />
           )}
           {userOnboardingState.matches("stepThree") && (
             <DialogContentText>
