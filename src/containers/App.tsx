@@ -11,6 +11,7 @@ import AlertBar from "../components/AlertBar";
 import PrivateRoutesContainer from "./PrivateRoutesContainer";
 import SignInForm from "../components/SignInForm";
 import SignUpForm from "../components/SignUpForm";
+import { bankAccountsMachine } from "../machines/bankAccountsMachine";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,6 +43,14 @@ const App: React.FC = () => {
     }
   );
 
+  const [
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    bankAccountsState,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    sendBankAccounts,
+    bankAccountsService
+  ] = useMachine(bankAccountsMachine, { devTools: true });
+
   const isLoggedIn =
     authState.matches("authorized") ||
     authState.matches("refreshing") ||
@@ -56,6 +65,7 @@ const App: React.FC = () => {
           notificationsService={notificationsService}
           authService={authService}
           snackbarService={snackbarService}
+          bankAccountsService={bankAccountsService}
         />
       )}
       {authState.matches("unauthorized") && (

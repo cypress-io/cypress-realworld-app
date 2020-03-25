@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useMachine, useService } from "@xstate/react";
+import { useService } from "@xstate/react";
 import { Link as RouterLink, useRouteMatch } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";

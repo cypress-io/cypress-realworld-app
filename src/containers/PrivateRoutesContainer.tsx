@@ -15,9 +15,8 @@ import {
   SnackbarSchema,
   SnackbarEvents
 } from "../machines/snackbarMachine";
-import { useService, useMachine } from "@xstate/react";
+import { useService } from "@xstate/react";
 import UserOnboardingContainer from "./UserOnboardingContainer";
-import { bankAccountsMachine } from "../machines/bankAccountsMachine";
 
 export interface Props {
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
@@ -28,23 +27,19 @@ export interface Props {
     SnackbarEvents,
     any
   >;
+  bankAccountsService: Interpreter<DataContext, any, DataEvents, any>;
 }
 
 const PrivateRoutesContainer: React.FC<Props> = ({
   authService,
   notificationsService,
-  snackbarService
+  snackbarService,
+  bankAccountsService
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [notificationsState, sendNotifications] = useService(
     notificationsService
   );
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [
-    bankAccountsState,
-    sendBankAccounts,
-    bankAccountsService
-  ] = useMachine(bankAccountsMachine, { devTools: true });
 
   useEffect(() => {
     sendNotifications({ type: "FETCH" });
