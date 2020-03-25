@@ -5,7 +5,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { makeStyles, Box, useTheme, useMediaQuery } from "@material-ui/core";
+import { Box, useTheme, useMediaQuery } from "@material-ui/core";
 import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import { useService, useMachine } from "@xstate/react";
@@ -13,15 +13,6 @@ import { userOnboardingMachine } from "../machines/userOnboardingMachine";
 import { isEmpty } from "lodash/fp";
 import BankAccountForm from "../components/BankAccountForm";
 import { DataContext, DataEvents } from "../machines/dataMachine";
-
-const useStyles = makeStyles(theme => ({
-  paper: {
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column"
-  }
-}));
 
 export interface Props {
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
@@ -32,7 +23,6 @@ const UserOnboardingContainer: React.FC<Props> = ({
   authService,
   bankAccountsService
 }) => {
-  const classes = useStyles();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [bankAccountsState, sendBankAccounts] = useService(bankAccountsService);
