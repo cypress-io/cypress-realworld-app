@@ -219,7 +219,7 @@ describe("Transactions", () => {
       senderId: sender.id,
       receiverId: receiver.id,
       description: `Payment: ${sender.id} to ${receiver.id}`,
-      amount: 100000,
+      amount: 1000,
       privacyLevel: DefaultPrivacyLevel.public,
       status: TransactionStatus.pending
     };
@@ -242,7 +242,7 @@ describe("Transactions", () => {
       senderId: sender.id,
       receiverId: receiver.id,
       description: `Payment: ${sender.id} to ${receiver.id}`,
-      amount: 50000,
+      amount: 500,
       privacyLevel: DefaultPrivacyLevel.public,
       status: TransactionStatus.pending
     };
