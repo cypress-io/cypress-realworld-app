@@ -15,8 +15,9 @@ import {
   SnackbarSchema,
   SnackbarEvents
 } from "../machines/snackbarMachine";
-import { useService } from "@xstate/react";
+import { useService, useMachine } from "@xstate/react";
 import UserOnboardingContainer from "./UserOnboardingContainer";
+import { bankAccountsMachine } from "../machines/bankAccountsMachine";
 
 export interface Props {
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
@@ -38,6 +39,12 @@ const PrivateRoutesContainer: React.FC<Props> = ({
   const [notificationsState, sendNotifications] = useService(
     notificationsService
   );
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [
+    bankAccountsState,
+    sendBankAccounts,
+    bankAccountsService
+  ] = useMachine(bankAccountsMachine, { devTools: true });
 
   useEffect(() => {
     sendNotifications({ type: "FETCH" });
@@ -48,7 +55,10 @@ const PrivateRoutesContainer: React.FC<Props> = ({
       notificationsService={notificationsService}
       authService={authService}
     >
-      <UserOnboardingContainer authService={authService} />
+      <UserOnboardingContainer
+        authService={authService}
+        bankAccountsService={bankAccountsService}
+      />
       <Switch>
         <Route exact path={"/(public|contacts|personal)?"}>
           <TransactionsContainer />
@@ -63,7 +73,10 @@ const PrivateRoutesContainer: React.FC<Props> = ({
           />
         </Route>
         <Route path="/bankaccounts*">
-          <BankAccountsContainer authService={authService} />
+          <BankAccountsContainer
+            authService={authService}
+            bankAccountsService={bankAccountsService}
+          />
         </Route>
         <Route exact path="/transaction/new">
           <TransactionCreateContainer

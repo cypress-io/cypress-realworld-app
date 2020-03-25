@@ -6,13 +6,14 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import BankAccountList from "../components/BankAccountList";
 import { Grid, Button } from "@material-ui/core";
-import { bankAccountsMachine } from "../machines/bankAccountsMachine";
 import BankAccountForm from "../components/BankAccountForm";
 import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import { DataContext, DataEvents } from "../machines/dataMachine";
 
 export interface Props {
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
+  bankAccountsService: Interpreter<DataContext, any, DataEvents, any>;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -24,14 +25,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const BankAccountsContainer: React.FC<Props> = ({ authService }) => {
+const BankAccountsContainer: React.FC<Props> = ({
+  authService,
+  bankAccountsService
+}) => {
   const match = useRouteMatch();
   const classes = useStyles();
   const [authState] = useService(authService);
-  const [bankAccountsState, sendBankAccounts] = useMachine(
-    bankAccountsMachine,
-    { devTools: true }
-  );
+  const [bankAccountsState, sendBankAccounts] = useService(bankAccountsService);
 
   const currentUser = authState.context.user;
 

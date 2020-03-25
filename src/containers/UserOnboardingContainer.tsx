@@ -10,9 +10,9 @@ import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import { useService, useMachine } from "@xstate/react";
 import { userOnboardingMachine } from "../machines/userOnboardingMachine";
-import { bankAccountsMachine } from "../machines/bankAccountsMachine";
 import { isEmpty } from "lodash/fp";
 import BankAccountForm from "../components/BankAccountForm";
+import { DataContext, DataEvents } from "../machines/dataMachine";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -25,17 +25,18 @@ const useStyles = makeStyles(theme => ({
 
 export interface Props {
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
+  bankAccountsService: Interpreter<DataContext, any, DataEvents, any>;
 }
 
-const UserOnboardingContainer: React.FC<Props> = ({ authService }) => {
+const UserOnboardingContainer: React.FC<Props> = ({
+  authService,
+  bankAccountsService
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  const [bankAccountsState, sendBankAccounts] = useMachine(
-    bankAccountsMachine,
-    { devTools: true }
-  );
-  const [authState, sendAuth] = useService(authService);
+  const [bankAccountsState, sendBankAccounts] = useService(bankAccountsService);
+  const [authState] = useService(authService);
   const [
     userOnboardingState,
     sendUserOnboarding
@@ -48,7 +49,7 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService }) => {
   }, [sendBankAccounts]);
 
   const noBankAccounts =
-    bankAccountsState.matches("success.withoutData") &&
+    bankAccountsState?.matches("success.withoutData") &&
     isEmpty(bankAccountsState?.context?.results);
 
   const dialogIsOpen =
