@@ -15,7 +15,8 @@ import {
   get,
   constant,
   filter,
-  inRange
+  inRange,
+  remove
 } from "lodash/fp";
 import { isWithinRange } from "date-fns";
 import low from "lowdb";
@@ -180,6 +181,9 @@ export const searchUsers = (query: string) => {
     query
   ) as User[];
 };
+
+export const removeUserFromResults = (userId: User["id"], results: User[]) =>
+  remove({ id: userId }, results);
 
 // convenience methods
 

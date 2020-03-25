@@ -9,7 +9,8 @@ import {
   updateUserById,
   getUserById,
   getUserByUsername,
-  searchUsers
+  searchUsers,
+  removeUserFromResults
 } from "./database";
 import { User } from "../models/user";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
@@ -31,7 +32,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
   //   - default: scoped user contacts first, then all other users
   //   - "topFirst": contacts with most transactions first
 
-  const users = getAllUsers();
+  const users = removeUserFromResults(req.user?.id!, getAllUsers());
   res.status(200).json({ results: users });
 });
 
@@ -42,7 +43,7 @@ router.get(
   (req, res) => {
     const { q } = req.query;
 
-    const users = searchUsers(q);
+    const users = removeUserFromResults(req.user?.id!, searchUsers(q));
 
     res.status(200).json({ results: users });
   }
