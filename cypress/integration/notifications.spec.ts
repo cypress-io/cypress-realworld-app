@@ -13,13 +13,7 @@ describe("Notifications", function() {
     // TODO: Highlight this use case
     Cypress.Cookies.preserveOnce("connect.sid");
     cy.server();
-    cy.route("GET", "/notifications").as("notifications");
-
     cy.route("GET", "http://localhost:3001/notifications").as("notifications");
-    cy.route("GET", "http://localhost:3001/transactions/public").as(
-      "publicTransactions"
-    );
-    cy.route("GET", "http://localhost:3001/checkAuth").as("userProfile");
   });
   after(function() {
     cy.task("db:seed");
@@ -56,8 +50,6 @@ describe("Notifications", function() {
   });
 
   it("marks a notification as read; updates notification counter badge", function() {
-    cy.wait(["@publicTransactions", "@notifications", "@userProfile"]);
-
     cy.getTest("nav-top-notifications-count").click();
     cy.getTestLike("notification-mark-read")
       .eq(3)
