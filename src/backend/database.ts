@@ -56,7 +56,8 @@ import {
   getDateQueryFields,
   hasAmountQueryFields,
   getAmountQueryFields,
-  getQueryWithoutFilterFields
+  getQueryWithoutFilterFields,
+  getPayAppCreditedAmount
 } from "../utils/transactionUtils";
 
 const USER_TABLE = "users";
@@ -589,23 +590,30 @@ export const getPublicTransactionsByQuery = (
 
 export const resetPayAppBalance = constant(0);
 
-export const updatePayAppBalance = (sender: User, transaction: Transaction) => {
-  if (hasSufficientFunds(sender, transaction)) {
+export const debitPayAppBalance = (user: User, transaction: Transaction) => {
+  if (hasSufficientFunds(user, transaction)) {
     flow(
       getChargeAmount,
-      savePayAppBalance(sender)
+      savePayAppBalance(user)
       // TODO: generate notification?
-    )(sender, transaction);
+    )(user, transaction);
   } else {
     flow(
       getTransferAmount,
-      createBankTransferWithdrawal(sender, transaction),
+      createBankTransferWithdrawal(user, transaction),
       // TODO: generate notification for withdrawal
       resetPayAppBalance,
-      savePayAppBalance(sender)
-    )(sender, transaction);
+      savePayAppBalance(user)
+    )(user, transaction);
   }
 };
+
+export const creditPayAppBalance = (user: User, transaction: Transaction) =>
+  flow(
+    getPayAppCreditedAmount,
+    savePayAppBalance(user)
+    // TODO: generate notification?
+  )(user, transaction);
 
 export const createBankTransferWithdrawal = curry(
   (sender: User, transaction: Transaction, transferAmount: number) =>
@@ -628,6 +636,7 @@ export const createTransaction = (
   transactionDetails: TransactionPayload
 ): Transaction => {
   const sender = getUserById(userId);
+  const receiver = getUserById(transactionDetails.receiverId);
   const transaction: Transaction = {
     id: shortid(),
     uuid: v4(),
@@ -650,7 +659,8 @@ export const createTransaction = (
 
   // if payment, debit sender's balance for payment amount
   if (isPayment(transaction)) {
-    updatePayAppBalance(sender, transaction);
+    debitPayAppBalance(sender, transaction);
+    creditPayAppBalance(receiver, transaction);
     // TODO: update transaction "status"
     updateTransactionById(sender.id, transaction.id, {
       status: TransactionStatus.complete

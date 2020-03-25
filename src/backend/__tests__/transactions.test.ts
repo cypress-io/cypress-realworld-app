@@ -214,6 +214,9 @@ describe("Transactions", () => {
     const receiver: User = getAllUsers()[1];
     const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
 
+    const receiverTransactions = getTransactionsByUserId(receiver.id);
+    expect(receiverTransactions.length).toBe(2);
+
     const paymentDetails: TransactionPayload = {
       source: senderBankAccount.id!,
       senderId: sender.id,
@@ -263,5 +266,14 @@ describe("Transactions", () => {
     );
     expect(secondWithdrawal.type).toBe(BankTransferType.withdrawal);
     expect(secondWithdrawal.amount).toBe(50000);
+
+    // Verify Deposit Transactions for Receiver
+    const updatedReceiverTransactions = getTransactionsByUserId(receiver.id);
+
+    expect(updatedReceiverTransactions.length).toBe(4);
+
+    // Verify Receiver's Updated Pay App Balance
+    const updatedReceiver: User = getAllUsers()[1];
+    expect(updatedReceiver.balance).toBe(210377);
   });
 });

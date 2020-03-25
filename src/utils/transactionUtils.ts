@@ -66,11 +66,22 @@ export const payAppDifference = curry(
     )
 );
 
+export const payAppAddition = curry((sender: User, transaction: Transaction) =>
+  Dinero({ amount: get("balance", sender) }).add(
+    Dinero({ amount: get("amount", transaction) })
+  )
+);
+
 export const getChargeAmount = (sender: User, transaction: Transaction) =>
   Math.abs(payAppDifference(sender, transaction).getAmount());
 
 export const getTransferAmount = (sender: User, transaction: Transaction) =>
   Math.abs(payAppDifference(sender, transaction).getAmount());
+
+export const getPayAppCreditedAmount = (
+  receiver: User,
+  transaction: Transaction
+) => Math.abs(payAppAddition(receiver, transaction).getAmount());
 
 export const hasInsufficientFunds = (sender: User, transaction: Transaction) =>
   payAppDifference(sender, transaction).isNegative();
