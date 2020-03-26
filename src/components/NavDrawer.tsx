@@ -163,7 +163,10 @@ const NavDrawer: React.FC<Props> = ({
   const [authState, sendAuth] = useService(authService);
 
   const currentUser = authState?.context?.user;
-  const signOutPending = () => sendAuth("LOGOUT");
+  const signOutPending = () => {
+    sendAuth("LOGOUT");
+    localStorage.removeItem("authState");
+  };
 
   return (
     <Drawer
