@@ -45,11 +45,15 @@ passport.deserializeUser(function(id: string, done) {
 router.post(
   "/login",
   passport.authenticate("local", {
-    successRedirect: "/",
     failureRedirect: "/"
   }),
   (req: Request, res: Response): void => {
-    res.sendStatus(200);
+    if (req.body.remember) {
+      req.session!.cookie.maxAge = 24 * 60 * 60 * 1000 * 30; // Expire in 30 days
+    } else {
+      req.session!.cookie.expires = false;
+    }
+    res.redirect(200, "/");
   }
 );
 
