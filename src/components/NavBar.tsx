@@ -72,7 +72,7 @@ const NavBar: React.FC<NavBarProps> = ({
   const classes = useStyles();
   const [notificationsState] = useService(notificationsService);
 
-  const allNotifications = notificationsState.context.results;
+  const allNotifications = notificationsState?.context?.results;
 
   return (
     <AppBar

@@ -32,7 +32,7 @@ const UserOnboardingContainer: React.FC<Props> = ({
     sendUserOnboarding
   ] = useMachine(userOnboardingMachine, { devTools: true });
 
-  const currentUser = authState.context.user;
+  const currentUser = authState?.context?.user;
 
   useEffect(() => {
     sendBankAccounts("FETCH");

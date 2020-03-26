@@ -19,10 +19,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const savedAuthState = localStorage.getItem("authState");
+
+const persistedAuthState = savedAuthState && JSON.parse(savedAuthState);
+
 const App: React.FC = () => {
   const classes = useStyles();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [authState, sendAuth, authService] = useMachine(authMachine, {
+    state: persistedAuthState,
     devTools: true
   });
   const [
