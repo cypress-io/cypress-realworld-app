@@ -25,7 +25,9 @@ export type UserSettingsPayload = Pick<
   "firstName" | "lastName" | "email" | "phoneNumber" | "defaultPrivacyLevel"
 >;
 
-export type SignInPayload = Pick<User, "username" | "password">;
+export type SignInPayload = Pick<User, "username" | "password"> & {
+  remember?: Boolean;
+};
 
 export type SignUpPayload = Pick<
   User,

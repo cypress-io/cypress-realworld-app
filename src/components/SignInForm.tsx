@@ -56,7 +56,11 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
   const classes = useStyles();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [authState, sendAuth] = useService(authService);
-  const initialValues: SignInPayload = { username: "", password: "" };
+  const initialValues: SignInPayload = {
+    username: "",
+    password: "",
+    remember: undefined
+  };
 
   const signInPending = (payload: SignInPayload) => sendAuth("LOGIN", payload);
 
@@ -117,7 +121,20 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                 )}
               </Field>
               <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
+                control={
+                  <Field
+                    name={"remember"}
+                    render={({ field }: FieldProps) => {
+                      return (
+                        <Checkbox
+                          color="primary"
+                          {...field}
+                          checked={field.value}
+                        />
+                      );
+                    }}
+                  />
+                }
                 label="Remember me"
                 data-test="signin-remember-me"
               />
