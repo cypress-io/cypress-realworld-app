@@ -113,7 +113,6 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
                     id="lastName"
                     label="Last Name"
                     type="text"
-                    autoFocus
                     data-test="signup-last-name"
                     error={meta.touched && Boolean(meta.error)}
                     helperText={meta.touched ? meta.error : ""}
@@ -131,7 +130,6 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
                     id="username"
                     label="Username"
                     type="text"
-                    autoFocus
                     data-test="signup-username"
                     error={meta.touched && Boolean(meta.error)}
                     helperText={meta.touched ? meta.error : ""}
