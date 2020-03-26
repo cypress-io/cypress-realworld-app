@@ -6,35 +6,33 @@ import faker from "faker";
 const apiUsers = `${Cypress.env("apiUrl")}/users`;
 
 describe("Users API", function() {
-  before(function() {
-    //cy.task("db:reset");
+  beforeEach(function() {
     cy.task("db:seed");
-    // TODO: Refactor
-    // hacks/experiements
+
     cy.fixture("users").as("users");
-    cy.get("@users").then(user => (this.currentUser = this.users[0]));
+    cy.get("@users").then(users => {
+      this.currentUser = this.users[0];
+      this.searchUser = this.users[1];
+      cy.apiLogin(this.users[0].username);
+    });
   });
 
   afterEach(function() {
-    //cy.task("db:reset");
     cy.task("db:seed");
   });
 
   context("GET /users", function() {
     it("gets a list of users", function() {
-      cy.apiLogin(this.currentUser.username);
-
       cy.request("GET", apiUsers).then(response => {
         expect(response.status).to.eq(200);
-        expect(response.body.results.length).to.eq(10);
+        expect(response.body.results.length).to.eq(9);
       });
     });
   });
 
   context("GET /users/:userId", function() {
     it("get a user", function() {
-      const { id, username } = this.currentUser;
-      cy.apiLogin(username);
+      const { id } = this.currentUser;
 
       cy.request("GET", `${apiUsers}/${id}`).then(response => {
         expect(response.status).to.eq(200);
@@ -43,9 +41,6 @@ describe("Users API", function() {
     });
 
     it("error when invalid userId", function() {
-      const { username } = this.currentUser;
-      cy.apiLogin(username);
-
       cy.request({
         method: "GET",
         url: `${apiUsers}/1234`,
@@ -60,7 +55,6 @@ describe("Users API", function() {
   context("GET /users/profile/:username", function() {
     it("get a user profile by username", function() {
       const { username, firstName, lastName, avatar } = this.currentUser;
-      cy.apiLogin(username);
       cy.request("GET", `${apiUsers}/profile/${username}`).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.user).to.deep.equal({
@@ -75,10 +69,7 @@ describe("Users API", function() {
 
   context("GET /users/search", function() {
     it("get users by email", function() {
-      const { username, email, firstName } = this.currentUser;
-      cy.log(this.currentUser);
-      cy.apiLogin(username);
-
+      const { email, firstName } = this.searchUser;
       cy.request({
         method: "GET",
         url: `${apiUsers}/search`,
@@ -86,19 +77,18 @@ describe("Users API", function() {
       }).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.results[0]).to.contain({
-          firstName
+          firstName: firstName
         });
       });
     });
 
     it("get users by phone number", function() {
-      const { username, firstName } = this.currentUser;
-      cy.apiLogin(username);
+      const { firstName } = this.searchUser;
 
       cy.request({
         method: "GET",
         url: `${apiUsers}/search`,
-        qs: { q: "+12133734253" }
+        qs: { q: "154-023-4116" }
       }).then(response => {
         expect(response.status).to.eq(200);
         expect(response.body.results[0]).to.contain({
@@ -108,8 +98,7 @@ describe("Users API", function() {
     });
 
     it("get users by username", function() {
-      const { username, firstName } = this.currentUser;
-      cy.apiLogin(username);
+      const { username, firstName } = this.searchUser;
 
       cy.request({
         method: "GET",
@@ -143,9 +132,6 @@ describe("Users API", function() {
     });
 
     it("error when invalid field sent", function() {
-      const { username } = this.currentUser;
-      cy.apiLogin(username);
-
       cy.request({
         method: "POST",
         url: `${apiUsers}`,
@@ -163,8 +149,7 @@ describe("Users API", function() {
   context("PATCH /users/:userId", function() {
     it("updates a user", function() {
       const firstName = faker.name.firstName();
-      const { id, username } = this.currentUser;
-      cy.apiLogin(username);
+      const { id } = this.currentUser;
 
       cy.request("PATCH", `${apiUsers}/${id}`, {
         firstName
@@ -174,8 +159,7 @@ describe("Users API", function() {
     });
 
     it("error when invalid field sent", function() {
-      const { id, username } = this.currentUser;
-      cy.apiLogin(username);
+      const { id } = this.currentUser;
 
       cy.request({
         method: "PATCH",
