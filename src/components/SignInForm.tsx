@@ -128,15 +128,14 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                       return (
                         <Checkbox
                           color="primary"
+                          data-test="signin-remember-me"
                           {...field}
-                          checked={field.value}
                         />
                       );
                     }}
                   />
                 }
                 label="Remember me"
-                data-test="signin-remember-me"
               />
               <Button
                 type="submit"
