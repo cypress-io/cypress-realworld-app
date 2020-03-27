@@ -6,7 +6,7 @@ import { useTheme, makeStyles } from "@material-ui/core/styles";
 
 import TransactionItem from "./TransactionItem";
 import { TransactionResponseItem, TransactionPagination } from "../models";
-import { useMediaQuery } from "@material-ui/core";
+import { useMediaQuery, Divider } from "@material-ui/core";
 
 export interface TransactionListProps {
   transactions: TransactionResponseItem[];
@@ -16,10 +16,8 @@ export interface TransactionListProps {
 
 const useStyles = makeStyles(theme => ({
   transactionList: {
-    minHeight: theme.spacing(80),
-    [theme.breakpoints.down("sm")]: {
-      minHeight: theme.spacing(60)
-    },
+    width: "100%",
+    height: "100%",
     display: "flex",
     overflow: "auto",
     flexDirection: "column"
@@ -59,6 +57,7 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
       return (
         <div style={style}>
           <TransactionItem transaction={transaction} transactionIndex={index} />
+          <Divider />
         </div>
       );
     }
@@ -77,9 +76,9 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
             itemCount={itemCount}
             ref={ref}
             onItemsRendered={onItemsRendered}
-            height={isMobile ? theme.spacing(78) : theme.spacing(72)}
-            width={isMobile ? theme.spacing(36.5) : theme.spacing(106.25)}
-            itemSize={isMobile ? theme.spacing(40) : theme.spacing(24.75)}
+            height={isMobile ? theme.spacing(78) : theme.spacing(64)}
+            width={isMobile ? theme.spacing(36.5) : theme.spacing(112)}
+            itemSize={isMobile ? theme.spacing(40) : theme.spacing(16)}
           >
             {Item}
           </FixedSizeList>
