@@ -120,9 +120,8 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
               </Field>
               <FormControlLabel
                 control={
-                  <Field
-                    name={"remember"}
-                    render={({ field }: FieldProps) => {
+                  <Field name={"remember"}>
+                    {({ field }: FieldProps) => {
                       return (
                         <Checkbox
                           color="primary"
@@ -131,7 +130,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                         />
                       );
                     }}
-                  />
+                  </Field>
                 }
                 label="Remember me"
               />
