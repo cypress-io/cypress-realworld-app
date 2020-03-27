@@ -90,7 +90,6 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                   <TextField
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
                     id="username"
                     label="Username"
@@ -108,7 +107,6 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                   <TextField
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
                     label="Password"
                     type="password"
