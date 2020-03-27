@@ -1,6 +1,9 @@
 import React from "react";
+import { head } from "lodash/fp";
+import { Interpreter } from "xstate";
 import { useService } from "@xstate/react";
 import clsx from "clsx";
+import { useMediaQuery, useTheme } from "@material-ui/core";
 import { Link as RouterLink } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -18,21 +21,19 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import { Grid, Avatar, Typography } from "@material-ui/core";
 import { formatAmount } from "../utils/transactionUtils";
-import { head } from "lodash/fp";
-import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 
 const drawerWidth = 240;
 
 export const mainListItems = (
-  handleDrawerClose:
+  toggleDrawer:
     | ((event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void)
     | undefined
 ) => (
   <div>
     <ListItem
       button
-      onClick={handleDrawerClose}
+      onClick={toggleDrawer}
       component={RouterLink}
       to="/"
       data-test="sidenav-home"
@@ -44,7 +45,7 @@ export const mainListItems = (
     </ListItem>
     <ListItem
       button
-      onClick={handleDrawerClose}
+      onClick={toggleDrawer}
       component={RouterLink}
       to="/user/settings"
       data-test="sidenav-user-settings"
@@ -56,7 +57,7 @@ export const mainListItems = (
     </ListItem>
     <ListItem
       button
-      onClick={handleDrawerClose}
+      onClick={toggleDrawer}
       component={RouterLink}
       to="/bankaccounts"
       data-test="sidenav-bankaccounts"
@@ -68,7 +69,7 @@ export const mainListItems = (
     </ListItem>
     <ListItem
       button
-      onClick={handleDrawerClose}
+      onClick={toggleDrawer}
       component={RouterLink}
       to="/auth"
       data-test="sidenav-auth"
@@ -149,19 +150,21 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface Props {
-  handleDrawerClose: () => void;
+  toggleDrawer: () => void;
   drawerOpen: boolean;
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
 }
 
 const NavDrawer: React.FC<Props> = ({
-  handleDrawerClose,
+  toggleDrawer,
   drawerOpen,
   authService
 }) => {
   const classes = useStyles();
+  const theme = useTheme();
   const [authState, sendAuth] = useService(authService);
 
+  const showTemporaryDrawer = useMediaQuery(theme.breakpoints.down("xs"));
   const currentUser = authState?.context?.user;
   const signOutPending = () => {
     sendAuth("LOGOUT");
@@ -170,7 +173,7 @@ const NavDrawer: React.FC<Props> = ({
 
   return (
     <Drawer
-      variant="temporary"
+      variant={showTemporaryDrawer ? "temporary" : "persistent"}
       classes={{
         paper: clsx(
           classes.drawerPaper,
@@ -178,6 +181,9 @@ const NavDrawer: React.FC<Props> = ({
         )
       }}
       open={drawerOpen}
+      ModalProps={{
+        onBackdropClick: () => toggleDrawer()
+      }}
     >
       <Grid
         container
@@ -205,13 +211,7 @@ const NavDrawer: React.FC<Props> = ({
             </Grid>
           </>
         )}
-        <Grid item>
-          <div className={classes.toolbarIcon}>
-            <IconButton onClick={handleDrawerClose} data-test="sidenav-close">
-              <ChevronLeftIcon />
-            </IconButton>
-          </div>
-        </Grid>
+        <Grid item></Grid>
       </Grid>
       {currentUser && (
         <Grid
@@ -239,7 +239,7 @@ const NavDrawer: React.FC<Props> = ({
         </Grid>
       )}
       <Divider />
-      <List>{mainListItems(handleDrawerClose)}</List>
+      <List>{mainListItems(toggleDrawer)}</List>
       <Divider />
       <List>{secondaryListItems(signOutPending)}</List>
     </Drawer>

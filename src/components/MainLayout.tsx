@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useMachine } from "@xstate/react";
 import { Interpreter } from "xstate";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
+import { useMediaQuery, useTheme } from "@material-ui/core";
 
 import Copyright from "../components/Copyright";
 import NavBar from "./NavBar";
@@ -47,22 +48,49 @@ const MainLayout: React.FC<Props> = ({
   authService
 }) => {
   const classes = useStyles();
-  const [drawerState, sendDrawer] = useMachine(drawerMachine);
+  const theme = useTheme();
+  const [drawerState, sendDrawer] = useMachine(drawerMachine, {
+    devTools: true
+  });
 
-  const drawerOpen = drawerState.matches("open");
+  console.log("BP: ", theme);
+
+  const aboveLargeBreakpoint = useMediaQuery(theme.breakpoints.up("lg"));
+  const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
+
+  const drawerOpen = drawerState?.matches("open");
   const toggleDrawer = () => {
     sendDrawer("TOGGLE");
   };
 
+  const openDrawer = () => {
+    sendDrawer("OPEN");
+  };
+
+  const closeDrawer = () => {
+    sendDrawer("CLOSE");
+  };
+  /*
+  useEffect(() => {
+    if (!drawerOpen && aboveLargeBreakpoint) {
+      openDrawer();
+    }
+
+    if (drawerOpen && xsBreakpoint) {
+      closeDrawer();
+    }
+  }, [aboveLargeBreakpoint, xsBreakpoint, openDrawer, closeDrawer]);
+  */
+
   return (
     <>
       <NavBar
-        handleDrawerOpen={toggleDrawer}
+        toggleDrawer={toggleDrawer}
         drawerOpen={drawerOpen}
         notificationsService={notificationsService}
       />
       <NavDrawer
-        handleDrawerClose={toggleDrawer}
+        toggleDrawer={toggleDrawer}
         drawerOpen={drawerOpen}
         authService={authService}
       />

@@ -60,13 +60,13 @@ const useStyles = makeStyles(theme => ({
 
 interface NavBarProps {
   drawerOpen: boolean;
-  handleDrawerOpen: () => void;
+  toggleDrawer: Function;
   notificationsService: Interpreter<DataContext, any, DataEvents, any>;
 }
 
 const NavBar: React.FC<NavBarProps> = ({
   drawerOpen,
-  handleDrawerOpen,
+  toggleDrawer,
   notificationsService
 }) => {
   const classes = useStyles();
@@ -85,8 +85,7 @@ const NavBar: React.FC<NavBarProps> = ({
           edge="start"
           color="inherit"
           aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          className={clsx(drawerOpen && classes.menuButtonHidden)}
+          onClick={() => toggleDrawer()}
         >
           <MenuIcon data-test="drawer-icon" />
         </IconButton>
