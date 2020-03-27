@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { head } from "lodash/fp";
 import { Interpreter } from "xstate";
 import { useService } from "@xstate/react";
@@ -150,26 +150,36 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface Props {
+  openDrawer: () => void;
+  closeDrawer: () => void;
   toggleDrawer: () => void;
   drawerOpen: boolean;
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
 }
 
 const NavDrawer: React.FC<Props> = ({
+  openDrawer,
   toggleDrawer,
+  closeDrawer,
   drawerOpen,
   authService
 }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [authState, sendAuth] = useService(authService);
+  const showTemporaryDrawer = useMediaQuery(theme.breakpoints.only("xs"));
 
-  const showTemporaryDrawer = useMediaQuery(theme.breakpoints.down("xs"));
   const currentUser = authState?.context?.user;
   const signOutPending = () => {
     sendAuth("LOGOUT");
     localStorage.removeItem("authState");
   };
+
+  useEffect(() => {
+    if (drawerOpen && showTemporaryDrawer) {
+      closeDrawer();
+    }
+  }, []);
 
   return (
     <Drawer
@@ -182,7 +192,7 @@ const NavDrawer: React.FC<Props> = ({
       }}
       open={drawerOpen}
       ModalProps={{
-        onBackdropClick: () => toggleDrawer()
+        onBackdropClick: () => closeDrawer()
       }}
     >
       <Grid

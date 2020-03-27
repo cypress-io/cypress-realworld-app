@@ -2,7 +2,7 @@ import { Machine } from "xstate";
 
 export const drawerMachine = Machine({
   id: "drawer",
-  initial: "open",
+  initial: "closed",
   states: {
     closed: {
       on: { TOGGLE: "open", OPEN: "open" }

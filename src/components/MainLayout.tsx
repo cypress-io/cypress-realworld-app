@@ -55,7 +55,7 @@ const MainLayout: React.FC<Props> = ({
 
   console.log("BP: ", theme);
 
-  const aboveLargeBreakpoint = useMediaQuery(theme.breakpoints.up("lg"));
+  const aboveSmallBreakpoint = useMediaQuery(theme.breakpoints.up("sm"));
   const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
 
   const drawerOpen = drawerState?.matches("open");
@@ -70,17 +70,12 @@ const MainLayout: React.FC<Props> = ({
   const closeDrawer = () => {
     sendDrawer("CLOSE");
   };
-  /*
+
   useEffect(() => {
-    if (!drawerOpen && aboveLargeBreakpoint) {
+    if (!drawerOpen && aboveSmallBreakpoint) {
       openDrawer();
     }
-
-    if (drawerOpen && xsBreakpoint) {
-      closeDrawer();
-    }
-  }, [aboveLargeBreakpoint, xsBreakpoint, openDrawer, closeDrawer]);
-  */
+  }, [aboveSmallBreakpoint, openDrawer]);
 
   return (
     <>
@@ -91,6 +86,8 @@ const MainLayout: React.FC<Props> = ({
       />
       <NavDrawer
         toggleDrawer={toggleDrawer}
+        closeDrawer={closeDrawer}
+        openDrawer={openDrawer}
         drawerOpen={drawerOpen}
         authService={authService}
       />
