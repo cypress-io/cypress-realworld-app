@@ -148,7 +148,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link to="/forgotpassword">Forgot password?</Link>
+                  {/*<Link to="/forgotpassword">Forgot password?</Link>*/}
                 </Grid>
                 <Grid item>
                   <Link to="/signup">{"Don't have an account? Sign Up"}</Link>
