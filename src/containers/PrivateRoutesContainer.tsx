@@ -44,8 +44,6 @@ const PrivateRoutesContainer: React.FC<Props> = ({
   useEffect(() => {
     sendNotifications({ type: "FETCH" });
     const authSubscription = authService.subscribe(state => {
-      console.log(state);
-
       localStorage.setItem("authState", JSON.stringify(state));
     });
 
