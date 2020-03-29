@@ -90,7 +90,6 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                   <TextField
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
                     id="username"
                     label="Username"
@@ -108,7 +107,6 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                   <TextField
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
                     label="Password"
                     type="password"
@@ -122,9 +120,8 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
               </Field>
               <FormControlLabel
                 control={
-                  <Field
-                    name={"remember"}
-                    render={({ field }: FieldProps) => {
+                  <Field name={"remember"}>
+                    {({ field }: FieldProps) => {
                       return (
                         <Checkbox
                           color="primary"
@@ -133,7 +130,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                         />
                       );
                     }}
-                  />
+                  </Field>
                 }
                 label="Remember me"
               />
@@ -150,7 +147,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link to="/forgotpassword">Forgot password?</Link>
+                  {/*<Link to="/forgotpassword">Forgot password?</Link>*/}
                 </Grid>
                 <Grid item>
                   <Link to="/signup">{"Don't have an account? Sign Up"}</Link>
