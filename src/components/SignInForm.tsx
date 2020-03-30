@@ -83,7 +83,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
             signInPending(values);
           }}
         >
-          {({ isValid, isSubmitting }) => (
+          {({ isValid, isSubmitting, dirty }) => (
             <Form className={classes.form}>
               <Field name="username">
                 {({ field, meta }: FieldProps) => (
@@ -96,8 +96,8 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                     type="text"
                     autoFocus
                     data-test="signin-username"
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched ? meta.error : ""}
+                    error={dirty && meta.touched && Boolean(meta.error)}
+                    helperText={dirty && meta.touched ? meta.error : ""}
                     {...field}
                   />
                 )}
@@ -112,8 +112,8 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                     type="password"
                     id="password"
                     data-test="signin-password"
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched ? meta.error : ""}
+                    error={dirty && meta.touched && Boolean(meta.error)}
+                    helperText={dirty && meta.touched ? meta.error : ""}
                     {...field}
                   />
                 )}

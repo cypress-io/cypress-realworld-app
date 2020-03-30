@@ -83,7 +83,7 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
             signUpPending(values);
           }}
         >
-          {({ isValid, isSubmitting }) => (
+          {({ isValid, isSubmitting, dirty }) => (
             <Form className={classes.form}>
               <Field name="firstName">
                 {({ field, meta }: FieldProps) => (
@@ -97,8 +97,8 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
                     type="text"
                     autoFocus
                     data-test="signup-first-name"
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched ? meta.error : ""}
+                    error={dirty && meta.touched && Boolean(meta.error)}
+                    helperText={dirty && meta.touched ? meta.error : ""}
                     {...field}
                   />
                 )}
@@ -114,8 +114,8 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
                     label="Last Name"
                     type="text"
                     data-test="signup-last-name"
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched ? meta.error : ""}
+                    error={dirty && meta.touched && Boolean(meta.error)}
+                    helperText={dirty && meta.touched ? meta.error : ""}
                     {...field}
                   />
                 )}
@@ -131,8 +131,8 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
                     label="Username"
                     type="text"
                     data-test="signup-username"
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched ? meta.error : ""}
+                    error={dirty && meta.touched && Boolean(meta.error)}
+                    helperText={dirty && meta.touched ? meta.error : ""}
                     {...field}
                   />
                 )}
@@ -148,8 +148,8 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
                     type="password"
                     id="password"
                     data-test="signup-password"
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched ? meta.error : ""}
+                    error={dirty && meta.touched && Boolean(meta.error)}
+                    helperText={dirty && meta.touched ? meta.error : ""}
                     {...field}
                   />
                 )}
@@ -165,8 +165,8 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
                     id="confirmPassword"
                     data-test="signup-confirmPassword"
                     type="password"
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched ? meta.error : ""}
+                    error={dirty && meta.touched && Boolean(meta.error)}
+                    helperText={dirty && meta.touched ? meta.error : ""}
                     {...field}
                   />
                 )}
