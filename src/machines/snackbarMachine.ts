@@ -24,33 +24,33 @@ export const snackbarMachine = Machine<
     initial: "invisible",
     context: {
       severity: undefined,
-      message: undefined
+      message: undefined,
     },
     states: {
       invisible: {
         entry: "resetSnackbar",
-        on: { SHOW: "visible" }
+        on: { SHOW: "visible" },
       },
       visible: {
         entry: "setSnackbar",
         on: { HIDE: "invisible" },
         after: {
           // after 5 seconds, transition to invisible
-          3000: "invisible"
-        }
-      }
-    }
+          3000: "invisible",
+        },
+      },
+    },
   },
   {
     actions: {
       setSnackbar: assign((ctx, event: any) => ({
         severity: event.severity,
-        message: event.message
+        message: event.message,
       })),
       resetSnackbar: assign((ctx, event: any) => ({
         severity: undefined,
-        message: undefined
-      }))
-    }
+        message: undefined,
+      })),
+    },
   }
 );

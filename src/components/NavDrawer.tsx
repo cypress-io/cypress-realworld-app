@@ -97,16 +97,16 @@ export const secondaryListItems = (signOutPending: Function) => (
   </div>
 );
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   toolbar: {
-    paddingRight: 24 // keep right padding when drawer closed
+    paddingRight: 24, // keep right padding when drawer closed
   },
   toolbarIcon: {
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-end",
     padding: "0 8px",
-    ...theme.mixins.toolbar
+    ...theme.mixins.toolbar,
   },
   drawerPaper: {
     position: "relative",
@@ -114,39 +114,39 @@ const useStyles = makeStyles(theme => ({
     width: drawerWidth,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   drawerPaperClose: {
     marginTop: 50,
     overflowX: "hidden",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
+      duration: theme.transitions.duration.leavingScreen,
     }),
     width: theme.spacing(7),
     [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9)
-    }
+      width: theme.spacing(9),
+    },
   },
   userProfile: {
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   userProfileHidden: {
-    display: "none"
+    display: "none",
   },
   avatar: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   accountBalance: {
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   amount: {
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   accountBalanceHidden: {
-    display: "none"
-  }
+    display: "none",
+  },
 }));
 
 interface Props {
@@ -162,7 +162,7 @@ const NavDrawer: React.FC<Props> = ({
   toggleDrawer,
   closeDrawer,
   drawerOpen,
-  authService
+  authService,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -188,7 +188,7 @@ const NavDrawer: React.FC<Props> = ({
         paper: clsx(
           classes.drawerPaper,
           !drawerOpen && classes.drawerPaperClose
-        )
+        ),
       }}
       open={drawerOpen}
       ModalProps={{

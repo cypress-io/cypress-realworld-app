@@ -14,20 +14,20 @@ export interface TransactionListProps {
   pagination: TransactionPagination;
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   transactionList: {
     width: "100%",
     height: "100%",
     display: "flex",
     overflow: "auto",
-    flexDirection: "column"
-  }
+    flexDirection: "column",
+  },
 }));
 
 const TransactionInfiniteList: React.FC<TransactionListProps> = ({
   transactions,
   loadNextPage,
-  pagination
+  pagination,
 }) => {
   const classes = useStyles();
   const theme = useTheme();

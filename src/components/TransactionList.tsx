@@ -20,11 +20,11 @@ export interface TransactionListProps {
   pagination: TransactionPagination;
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     paddingTop: theme.spacing(1),
-    paddingLeft: theme.spacing(1)
-  }
+    paddingLeft: theme.spacing(1),
+  },
 }));
 
 const TransactionList: React.FC<TransactionListProps> = ({
@@ -33,7 +33,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
   isLoading,
   showCreateButton,
   loadNextPage,
-  pagination
+  pagination,
 }) => {
   const classes = useStyles();
 

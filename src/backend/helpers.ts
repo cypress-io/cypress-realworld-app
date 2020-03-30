@@ -9,7 +9,7 @@ export const ensureAuthenticated = (
     return next();
   }
   res.status(401).send({
-    error: "Unauthorized"
+    error: "Unauthorized",
   });
 };
 

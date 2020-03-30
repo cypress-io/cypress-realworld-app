@@ -7,8 +7,8 @@ import { Link, useRouteMatch } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 });
 
 export default function TransactionNavTabs() {
@@ -20,7 +20,7 @@ export default function TransactionNavTabs() {
     "/": 0,
     "/public": 0,
     "/contacts": 1,
-    "/personal": 2
+    "/personal": 2,
   };
 
   // Set selected tab based on url

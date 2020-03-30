@@ -14,26 +14,26 @@ import { DataContext, DataEvents } from "../machines/dataMachine";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import { drawerMachine } from "../machines/drawerMachine";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex"
+    display: "flex",
   },
   toolbar: {
-    paddingRight: 24 // keep right padding when drawer closed
+    paddingRight: 24, // keep right padding when drawer closed
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
     height: "100vh",
-    overflow: "auto"
+    overflow: "auto",
   },
   container: {
     paddingTop: theme.spacing(8),
     [theme.breakpoints.down("sm")]: {
-      paddingTop: theme.spacing(2)
+      paddingTop: theme.spacing(2),
     },
-    paddingBottom: theme.spacing(4)
-  }
+    paddingBottom: theme.spacing(4),
+  },
 }));
 
 interface Props {
@@ -45,7 +45,7 @@ interface Props {
 const MainLayout: React.FC<Props> = ({
   children,
   notificationsService,
-  authService
+  authService,
 }) => {
   const classes = useStyles();
   const theme = useTheme();

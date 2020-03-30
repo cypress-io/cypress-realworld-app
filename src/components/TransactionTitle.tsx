@@ -4,29 +4,29 @@ import { makeStyles } from "@material-ui/core/styles";
 import { TransactionResponseItem } from "../models";
 import {
   isRequestTransaction,
-  isAcceptedRequestTransaction
+  isAcceptedRequestTransaction,
 } from "../utils/transactionUtils";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: 18,
     [theme.breakpoints.down("sm")]: {
-      fontSize: theme.typography.fontSize
-    }
+      fontSize: theme.typography.fontSize,
+    },
   },
   titleAction: {
     fontSize: 18,
     [theme.breakpoints.down("sm")]: {
-      fontSize: theme.typography.fontSize
-    }
+      fontSize: theme.typography.fontSize,
+    },
   },
   titleName: {
     fontSize: 18,
     [theme.breakpoints.down("sm")]: {
-      fontSize: theme.typography.fontSize
+      fontSize: theme.typography.fontSize,
     },
-    color: "#1A202C"
-  }
+    color: "#1A202C",
+  },
 }));
 
 const TransactionTitle: React.FC<{

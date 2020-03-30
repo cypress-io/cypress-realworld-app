@@ -7,13 +7,13 @@ import NotificationList from "../components/NotificationList";
 import { DataContext, DataSchema, DataEvents } from "../machines/dataMachine";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
-    flexDirection: "column"
-  }
+    flexDirection: "column",
+  },
 }));
 
 export interface Props {
@@ -23,7 +23,7 @@ export interface Props {
 
 const NotificationsContainer: React.FC<Props> = ({
   authService,
-  notificationsService
+  notificationsService,
 }) => {
   const classes = useStyles();
   const [authState] = useService(authService);

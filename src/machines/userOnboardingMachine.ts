@@ -24,28 +24,28 @@ export const userOnboardingMachine = Machine<
   states: {
     idle: {
       on: {
-        NEXT: "stepOne"
-      }
+        NEXT: "stepOne",
+      },
     },
     stepOne: {
       on: {
-        NEXT: "stepTwo"
-      }
+        NEXT: "stepTwo",
+      },
     },
     stepTwo: {
       on: {
         PREV: "stepOne",
-        NEXT: "stepThree"
-      }
+        NEXT: "stepThree",
+      },
     },
     stepThree: {
       on: {
         PREV: "stepTwo",
-        NEXT: "done"
-      }
+        NEXT: "done",
+      },
     },
     done: {
-      type: "final"
-    }
-  }
+      type: "final",
+    },
+  },
 });

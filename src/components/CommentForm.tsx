@@ -5,20 +5,20 @@ import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 
 const validationSchema = object({
-  content: string()
+  content: string(),
 });
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
-  }
+    marginTop: theme.spacing(1),
+  },
 }));
 
 export interface CommentFormProps {
@@ -28,7 +28,7 @@ export interface CommentFormProps {
 
 const CommentForm: React.FC<CommentFormProps> = ({
   transactionId,
-  transactionComment
+  transactionComment,
 }) => {
   const classes = useStyles();
   const initialValues = { content: "" };

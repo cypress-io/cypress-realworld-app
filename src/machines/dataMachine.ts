@@ -42,7 +42,7 @@ export const dataMachine = (machineId: string) =>
       initial: "idle",
       context: {
         pageData: {},
-        results: []
+        results: [],
       },
       states: {
         idle: {
@@ -50,36 +50,36 @@ export const dataMachine = (machineId: string) =>
             FETCH: "loading",
             CREATE: "creating",
             UPDATE: "updating",
-            DELETE: "deleting"
-          }
+            DELETE: "deleting",
+          },
         },
         loading: {
           invoke: {
             src: "fetchData",
             onDone: { target: "success" },
-            onError: { target: "failure", actions: "setMessage" }
-          }
+            onError: { target: "failure", actions: "setMessage" },
+          },
         },
         updating: {
           invoke: {
             src: "updateData",
             onDone: { target: "loading" },
-            onError: { target: "failure", actions: "setMessage" }
-          }
+            onError: { target: "failure", actions: "setMessage" },
+          },
         },
         creating: {
           invoke: {
             src: "createData",
             onDone: { target: "loading" },
-            onError: { target: "failure", actions: "setMessage" }
-          }
+            onError: { target: "failure", actions: "setMessage" },
+          },
         },
         deleting: {
           invoke: {
             src: "deleteData",
             onDone: { target: "loading" },
-            onError: { target: "failure", actions: "setMessage" }
-          }
+            onError: { target: "failure", actions: "setMessage" },
+          },
         },
         success: {
           entry: ["setResults", "setPageData"],
@@ -87,7 +87,7 @@ export const dataMachine = (machineId: string) =>
             FETCH: "loading",
             CREATE: "creating",
             UPDATE: "updating",
-            DELETE: "deleting"
+            DELETE: "deleting",
           },
           initial: "unknown",
           states: {
@@ -95,21 +95,21 @@ export const dataMachine = (machineId: string) =>
               on: {
                 "": [
                   { target: "withData", cond: "hasData" },
-                  { target: "withoutData" }
-                ]
-              }
+                  { target: "withoutData" },
+                ],
+              },
             },
             withData: {},
-            withoutData: {}
-          }
+            withoutData: {},
+          },
         },
         failure: {
           entry: ["setMessage"],
           on: {
-            FETCH: "loading"
-          }
-        }
-      }
+            FETCH: "loading",
+          },
+        },
+      },
     },
     {
       actions: {
@@ -117,18 +117,18 @@ export const dataMachine = (machineId: string) =>
           results:
             event.data && event.data.pageData && event.data.pageData.page > 1
               ? concat(ctx.results, event.data.results)
-              : event.data.results
+              : event.data.results,
         })),
         setPageData: assign((ctx: DataContext, event: any) => ({
-          pageData: event.data.pageData
+          pageData: event.data.pageData,
         })),
         setMessage: assign((ctx, event: any) => ({
-          message: event.message
-        }))
+          message: event.message,
+        })),
       },
       guards: {
         hasData: (ctx: DataContext, event) =>
-          !!ctx.results && ctx.results.length > 0
-      }
+          !!ctx.results && ctx.results.length > 0,
+      },
     }
   );

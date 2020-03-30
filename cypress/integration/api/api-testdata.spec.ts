@@ -3,23 +3,23 @@
 
 const apiTestData = `${Cypress.env("apiUrl")}/testData`;
 
-describe("Test Data API", function() {
-  before(function() {
+describe("Test Data API", function () {
+  before(function () {
     cy.task("db:seed");
     cy.fixture("users").as("users");
-    cy.get("@users").then(user => (this.currentUser = this.users[0]));
+    cy.get("@users").then((user) => (this.currentUser = this.users[0]));
   });
 
-  beforeEach(function() {
+  beforeEach(function () {
     const { username } = this.currentUser;
     cy.apiLogin(username);
   });
 
-  afterEach(function() {
+  afterEach(function () {
     cy.task("db:seed");
   });
 
-  context("GET /testData/:entity", function() {
+  context("GET /testData/:entity", function () {
     Cypress._.each(
       [
         "users",
@@ -29,11 +29,11 @@ describe("Test Data API", function() {
         "transactions",
         "likes",
         "comments",
-        "banktransfers"
+        "banktransfers",
       ],
-      entity => {
-        it(`gets remote mock data for ${entity}`, function() {
-          cy.request("GET", `${apiTestData}/${entity}`).then(response => {
+      (entity) => {
+        it(`gets remote mock data for ${entity}`, function () {
+          cy.request("GET", `${apiTestData}/${entity}`).then((response) => {
             expect(response.status).to.eq(200);
             expect(response.body.results.length).to.be.greaterThan(1);
           });

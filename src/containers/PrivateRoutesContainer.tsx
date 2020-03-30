@@ -13,7 +13,7 @@ import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import {
   SnackbarContext,
   SnackbarSchema,
-  SnackbarEvents
+  SnackbarEvents,
 } from "../machines/snackbarMachine";
 import { useService } from "@xstate/react";
 import UserOnboardingContainer from "./UserOnboardingContainer";
@@ -34,7 +34,7 @@ const PrivateRoutesContainer: React.FC<Props> = ({
   authService,
   notificationsService,
   snackbarService,
-  bankAccountsService
+  bankAccountsService,
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [notificationsState, sendNotifications] = useService(
@@ -43,7 +43,7 @@ const PrivateRoutesContainer: React.FC<Props> = ({
 
   useEffect(() => {
     sendNotifications({ type: "FETCH" });
-    const authSubscription = authService.subscribe(state => {
+    const authSubscription = authService.subscribe((state) => {
       localStorage.setItem("authState", JSON.stringify(state));
     });
 

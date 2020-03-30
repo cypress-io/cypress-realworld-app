@@ -21,7 +21,7 @@ export interface Props {
 
 const UserOnboardingContainer: React.FC<Props> = ({
   authService,
-  bankAccountsService
+  bankAccountsService,
 }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -29,7 +29,7 @@ const UserOnboardingContainer: React.FC<Props> = ({
   const [authState] = useService(authService);
   const [
     userOnboardingState,
-    sendUserOnboarding
+    sendUserOnboarding,
   ] = useMachine(userOnboardingMachine, { devTools: true });
 
   const currentUser = authState?.context?.user;

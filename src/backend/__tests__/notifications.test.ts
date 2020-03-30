@@ -12,7 +12,7 @@ import {
   createNotifications,
   updateNotificationById,
   getNotificationById,
-  formatNotificationForApiResponse
+  formatNotificationForApiResponse,
 } from "../database";
 
 import {
@@ -25,7 +25,7 @@ import {
   LikeNotification,
   CommentNotification,
   NotificationsType,
-  NotificationType
+  NotificationType,
 } from "../../models";
 
 describe("Notifications", () => {
@@ -101,18 +101,18 @@ describe("Notifications", () => {
         {
           type: NotificationsType.payment,
           transactionId: transaction.id,
-          status: PaymentNotificationStatus.received
+          status: PaymentNotificationStatus.received,
         },
         {
           type: NotificationsType.like,
           transactionId: transaction.id,
-          likeId: like.id
+          likeId: like.id,
         },
         {
           type: NotificationsType.comment,
           transactionId: transaction.id,
-          commentId: comment.id
-        }
+          commentId: comment.id,
+        },
       ];
 
       const notifications = createNotifications(user.id, notificationsPayload);
@@ -148,7 +148,7 @@ describe("Notifications", () => {
   it("should update a notification", () => {
     const notifications = getNotificationsByUserId(user.id);
     const edits: Partial<NotificationType> = {
-      isRead: true
+      isRead: true,
     };
     // @ts-ignore
     updateNotificationById(user.id, notifications[0].id, edits);

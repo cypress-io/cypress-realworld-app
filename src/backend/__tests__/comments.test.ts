@@ -4,7 +4,7 @@ import {
   getAllUsers,
   getTransactionsByUserId,
   createComment,
-  getCommentsByTransactionId
+  getCommentsByTransactionId,
 } from "../database";
 
 import { User, Transaction } from "../../models";

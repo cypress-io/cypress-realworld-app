@@ -4,7 +4,7 @@ import {
   TransactionPagination,
   TransactionResponseItem,
   TransactionDateRangePayload,
-  TransactionAmountRangePayload
+  TransactionAmountRangePayload,
 } from "../models";
 import TransactionNavTabs from "./TransactionNavTabs";
 import TransactionList from "./TransactionList";
@@ -19,10 +19,10 @@ export interface TransactionContactListProps {
 const TransactionContactsList: React.FC<TransactionContactListProps> = ({
   filterComponent,
   dateRangeFilters,
-  amountRangeFilters
+  amountRangeFilters,
 }) => {
   const [current, send] = useMachine(contactsTransactionsMachine, {
-    devTools: true
+    devTools: true,
   });
   const { pageData, results } = current.context;
 

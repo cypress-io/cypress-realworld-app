@@ -6,7 +6,7 @@ import {
   getBankAccountsByUserId,
   getBankAccountById,
   createBankAccountForUser,
-  removeBankAccountById
+  removeBankAccountById,
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import { shortIdValidation, isBankAccountValidator } from "./validators";

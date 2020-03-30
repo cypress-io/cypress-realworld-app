@@ -16,7 +16,7 @@ const bankAccounts = users.map(
       routingNumber: faker.finance.account(9),
       isDeleted: faker.helpers.randomize([true, false]),
       createdAt: faker.date.past(),
-      modifiedAt: faker.date.recent()
+      modifiedAt: faker.date.recent(),
     };
   }
 );
@@ -24,7 +24,7 @@ const bankAccounts = users.map(
 fs.writeFile(
   __dirname + "/bankaccounts.json",
   JSON.stringify(bankAccounts),
-  function() {
+  function () {
     console.log("bank account records generated");
   }
 );

@@ -4,13 +4,13 @@ import UsersList from "./UsersList";
 import { User } from "../models";
 import UserListSearchForm from "./UserListSearchForm";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
-    flexDirection: "column"
-  }
+    flexDirection: "column",
+  },
 }));
 
 export interface TransactionCreateStepOneProps {
@@ -22,7 +22,7 @@ export interface TransactionCreateStepOneProps {
 const TransactionCreateStepOne: React.FC<TransactionCreateStepOneProps> = ({
   setReceiver,
   userListSearch,
-  users
+  users,
 }) => {
   const classes = useStyles();
 

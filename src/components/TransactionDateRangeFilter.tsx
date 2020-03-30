@@ -18,21 +18,21 @@ export type TransactionListDateRangeFilterProps = {
   resetDateRange: Function;
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   popover: {
     [theme.breakpoints.down("sm")]: {
       top: 0,
       left: 0,
       right: 0,
-      bottom: 0
-    }
-  }
+      bottom: 0,
+    },
+  },
 }));
 
 const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterProps> = ({
   filterDateRange,
   dateRangeFilters,
-  resetDateRange
+  resetDateRange,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -42,14 +42,16 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
 
   const [
     dateRangeAnchorEl,
-    setDateRangeAnchorEl
+    setDateRangeAnchorEl,
   ] = React.useState<HTMLDivElement | null>(null);
 
   const onCalendarSelect = (e: { eventType: number; start: any; end: any }) => {
     if (e.eventType === 3) {
       filterDateRange({
         dateRangeStart: new Date(e.start.setUTCHours(0, 0, 0, 0)).toISOString(),
-        dateRangeEnd: new Date(e.end.setUTCHours(23, 59, 59, 999)).toISOString()
+        dateRangeEnd: new Date(
+          e.end.setUTCHours(23, 59, 59, 999)
+        ).toISOString(),
       });
       setDateRangeAnchorEl(null);
     }
@@ -114,11 +116,11 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
         onClose={handleDateRangeClose}
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "left"
+          horizontal: "left",
         }}
         transformOrigin={{
           vertical: "top",
-          horizontal: "left"
+          horizontal: "left",
         }}
         className={classes.popover}
       >
@@ -130,7 +132,7 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
           selected={false}
           onSelect={onCalendarSelect}
           locale={{
-            headerFormat: "MMM Do"
+            headerFormat: "MMM Do",
           }}
           theme={{
             accentColor: indigo["400"],
@@ -140,8 +142,8 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
             floatingNav: {
               background: indigo["400"],
               color: "#FFF",
-              chevron: "#FFA726"
-            }
+              chevron: "#FFA726",
+            },
           }}
         />
       </Popover>

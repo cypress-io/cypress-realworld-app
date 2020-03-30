@@ -1,13 +1,13 @@
 export enum PaymentNotificationStatus {
   requested = "requested",
   received = "received",
-  incomplete = "incomplete"
+  incomplete = "incomplete",
 }
 
 export enum NotificationsType {
   payment = "payment",
   like = "like",
-  comment = "comment"
+  comment = "comment",
 }
 
 export interface NotificationBase {

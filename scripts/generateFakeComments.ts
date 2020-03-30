@@ -15,7 +15,7 @@ export const createFakeComment = (
   userId,
   transactionId,
   createdAt: faker.date.past(),
-  modifiedAt: faker.date.recent()
+  modifiedAt: faker.date.recent(),
 });
 
 const comments = users.flatMap((user: User): Comment[] => {
@@ -28,7 +28,7 @@ const comments = users.flatMap((user: User): Comment[] => {
   const selectedTransactions = randomTransactions.slice(0, 2);
 
   // iterate over transactions and comment
-  return selectedTransactions.map(transaction =>
+  return selectedTransactions.map((transaction) =>
     createFakeComment(user.id, transaction!.id)
   );
 });
@@ -36,7 +36,7 @@ const comments = users.flatMap((user: User): Comment[] => {
 fs.writeFile(
   __dirname + "/comments.json",
   JSON.stringify(comments),
-  function() {
+  function () {
     console.log("comment records generated");
   }
 );

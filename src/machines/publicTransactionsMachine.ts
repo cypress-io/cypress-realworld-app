@@ -11,9 +11,9 @@ export const publicTransactionsMachine = dataMachine(
       const resp = await axios
         .create({ withCredentials: true })
         .get(`http://localhost:3001/transactions/public`, {
-          params: !isEmpty(payload) ? payload : undefined
+          params: !isEmpty(payload) ? payload : undefined,
         });
       return resp.data;
-    }
-  }
+    },
+  },
 });
