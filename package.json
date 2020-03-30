@@ -123,7 +123,7 @@
     "eject": "react-scripts eject",
     "start:server-and-api": "start-test start:api 3001 start:react",
     "start:server-and-api:watch": "start-test start:api:watch 3001 start:react",
-    "prettier": "prettier --write '**/*.{ts,js,tsx}'"
+    "prettier": "prettier --write '**/**.{ts,js,tsx}'"
   },
   "eslintConfig": {
     "env": {
