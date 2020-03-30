@@ -31,14 +31,14 @@ describe("Transaction Feed", function () {
   it("renders everyone (public) (infinite list)", function () {
     cy.getTest("nav-public-tab").should("have.class", "Mui-selected");
 
-    cy.getTestLike("transaction-item").children().should("have.length", 5);
+    cy.getTestLike("transaction-item").children().should("have.length", 6);
   });
 
   it("renders friends (contacts) transaction feed  (infinite list)", function () {
     cy.getTest("nav-contacts-tab") // On get Navigation tabs are hidden under the AppBar in the UI
       .scrollIntoView() // TODO: Bug? Does not work as expected to scroll the tab into view
       .click({ force: true }); // Current solution is to force the click
-    cy.getTestLike("transaction-item").should("have.length", 5);
+    cy.getTestLike("transaction-item").should("have.length", 6);
     cy.getTest("nav-contacts-tab").should("have.class", "Mui-selected");
     cy.getTest("transaction-list").children().scrollTo("bottom");
     cy.getTest("transaction-loading").should("be.visible");
@@ -52,7 +52,7 @@ describe("Transaction Feed", function () {
     cy.getTest("nav-personal-tab").click({ force: true });
     cy.getTest("nav-personal-tab").should("have.class", "Mui-selected");
 
-    cy.getTestLike("transaction-item").should("have.length", 5);
+    cy.getTestLike("transaction-item").should("have.length", 6);
 
     // TODO: Test infinite scrolling by adding more personal transactions
     /*
