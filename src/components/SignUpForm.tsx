@@ -26,27 +26,27 @@ const validationSchema = object({
     .required("Enter your password"),
   confirmPassword: string()
     .required("Confirm your password")
-    .oneOf([ref("password")], "Password does not match")
+    .oneOf([ref("password")], "Password does not match"),
 });
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 export interface Props {
@@ -62,7 +62,7 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
     lastName: "",
     username: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   };
 
   const signUpPending = (payload: SignUpPayload) => sendAuth("SIGNUP", payload);

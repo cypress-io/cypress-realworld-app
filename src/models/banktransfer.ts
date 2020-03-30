@@ -1,6 +1,6 @@
 export enum BankTransferType {
   withdrawal = "withdrawal",
-  deposit = "deposit"
+  deposit = "deposit",
 }
 export interface BankTransfer {
   id: string;

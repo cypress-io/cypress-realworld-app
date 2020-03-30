@@ -22,7 +22,7 @@ import testDataRoutes from "./backend/testdata-routes";
 
 const corsOption = {
   origin: "http://localhost:3000",
-  credentials: true
+  credentials: true,
 };
 
 const app = express();

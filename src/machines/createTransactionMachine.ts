@@ -21,8 +21,8 @@ const transactionDataMachine = dataMachine("transactionData").withConfig({
         payload
       );
       return resp.data;
-    }
-  }
+    },
+  },
 });
 
 export type CreateTransactionMachineEvents =
@@ -46,31 +46,31 @@ export const createTransactionMachine = Machine<
     states: {
       stepOne: {
         on: {
-          SET_USERS: "stepTwo"
-        }
+          SET_USERS: "stepTwo",
+        },
       },
       stepTwo: {
         entry: "setSenderAndReceiver",
         invoke: {
           id: "transactionDataMachine",
           src: transactionDataMachine,
-          autoForward: true
+          autoForward: true,
         },
         on: {
-          CREATE: "done"
-        }
+          CREATE: "done",
+        },
       },
       done: {
-        type: "final"
-      }
-    }
+        type: "final",
+      },
+    },
   },
   {
     actions: {
       setSenderAndReceiver: assign((ctx, event: any) => ({
         sender: event.sender,
-        receiver: event.receiver
-      }))
-    }
+        receiver: event.receiver,
+      })),
+    },
   }
 );

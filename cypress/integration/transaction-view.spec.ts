@@ -1,14 +1,14 @@
 // check this file using TypeScript if available
 // @ts-check
 
-describe("Transaction View", function() {
-  before(function() {
+describe("Transaction View", function () {
+  before(function () {
     cy.fixture("users").as("users");
-    cy.get("@users").then(users => {
+    cy.get("@users").then((users) => {
       cy.login(this.users[0].username);
     });
   });
-  beforeEach(function() {
+  beforeEach(function () {
     cy.task("db:seed");
     Cypress.Cookies.preserveOnce("connect.sid");
     cy.server();
@@ -16,23 +16,21 @@ describe("Transaction View", function() {
     cy.route("PATCH", "http://localhost:3001/transactions/*").as(
       "updateTransaction"
     );
-    cy.getTest("app-name-logo")
-      .find("a")
-      .click();
+    cy.getTest("app-name-logo").find("a").click();
     cy.getTest("nav-personal-tab").click({ force: true });
     // DISCUSS: No longer works
     //.should("have.class", "Mui-selected");
   });
 
-  afterEach(function() {
+  afterEach(function () {
     cy.task("db:seed");
   });
 
-  after(function() {
+  after(function () {
     cy.task("db:seed");
   });
 
-  it("displays transaction view page", function() {
+  it("displays transaction view page", function () {
     cy.getTestLike("transaction-view")
       .eq(3)
       .scrollIntoView()
@@ -41,7 +39,7 @@ describe("Transaction View", function() {
     cy.location("pathname").should("include", "/transaction");
   });
 
-  it("likes a transaction", function() {
+  it("likes a transaction", function () {
     cy.getTestLike("transaction-view")
       .eq(2)
       .scrollIntoView()
@@ -52,7 +50,7 @@ describe("Transaction View", function() {
     cy.getTestLike(`transaction-like-count`).should("contain", 1);
   });
 
-  it("makes a comment on a transaction", function() {
+  it("makes a comment on a transaction", function () {
     cy.getTestLike("transaction-view")
       .eq(2)
       .scrollIntoView()
@@ -61,12 +59,10 @@ describe("Transaction View", function() {
     cy.getTestLike(`transaction-comment-input`).type(
       "This is my comment{enter}"
     );
-    cy.getTestLike(`comments-list`)
-      .children()
-      .should("have.length", 1);
+    cy.getTestLike(`comments-list`).children().should("have.length", 1);
   });
 
-  it("accepts a transaction request", function() {
+  it("accepts a transaction request", function () {
     cy.getTestLike("transaction-view")
       .eq(0)
       .scrollIntoView()
@@ -76,7 +72,7 @@ describe("Transaction View", function() {
     cy.wait("@updateTransaction").should("have.property", "status", 204);
   });
 
-  it("rejects a transaction request", function() {
+  it("rejects a transaction request", function () {
     cy.getTestLike("transaction-view")
       .eq(4)
       .scrollIntoView()
@@ -86,7 +82,7 @@ describe("Transaction View", function() {
     cy.wait("@updateTransaction").should("have.property", "status", 204);
   });
 
-  it("does not display accept/reject buttons on completed request", function() {
+  it("does not display accept/reject buttons on completed request", function () {
     cy.getTestLike("transaction-view")
       .eq(3)
       .scrollIntoView()

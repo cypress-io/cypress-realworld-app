@@ -17,7 +17,7 @@ const path = require("path");
 const low = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
 
-const getDataFile = filename =>
+const getDataFile = (filename) =>
   path.join(__dirname, "../../src/data", filename);
 
 let seedFileName = "test-seed.json";
@@ -38,7 +38,7 @@ const adapter = new FileSync(databaseFile);
 let db = low(adapter);
 
 const defaultStructure = {
-  users: []
+  users: [],
 };
 
 module.exports = (on, config) => {
@@ -48,7 +48,7 @@ module.exports = (on, config) => {
   on("task", {
     "db:seed"() {
       // seed database with test data
-      return readFile(getDataFile(seedFileName), "utf-8").then(data => {
+      return readFile(getDataFile(seedFileName), "utf-8").then((data) => {
         db.setState(JSON.parse(data)).write();
         console.log(`${seedFileName} seeded into ${databaseFileName}`);
         return null;
@@ -59,6 +59,6 @@ module.exports = (on, config) => {
       db.setState(defaultStructure).write();
       console.log("test database reset");
       return null;
-    }
+    },
   });
 };

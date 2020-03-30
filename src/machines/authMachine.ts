@@ -39,50 +39,50 @@ export const authMachine = Machine<
       unauthorized: {
         on: {
           LOGIN: "loading",
-          SIGNUP: "signup"
-        }
+          SIGNUP: "signup",
+        },
       },
       signup: {
         invoke: {
           src: "performSignup",
           onDone: { target: "unauthorized", actions: ["onSuccess"] },
-          onError: { target: "unauthorized", actions: "onError" }
-        }
+          onError: { target: "unauthorized", actions: "onError" },
+        },
       },
       loading: {
         invoke: {
           src: "performLogin",
           onDone: { target: "authorized", actions: ["onSuccess"] },
-          onError: { target: "unauthorized", actions: "onError" }
-        }
+          onError: { target: "unauthorized", actions: "onError" },
+        },
       },
       updating: {
         invoke: {
           src: "updateProfile",
           onDone: { target: "authorized", actions: ["onSuccess"] },
-          onError: { target: "unauthorized", actions: "onError" }
-        }
+          onError: { target: "unauthorized", actions: "onError" },
+        },
       },
       refreshing: {
         invoke: {
           src: "getUserProfile",
           onDone: { target: "authorized" },
-          onError: { target: "unauthorized", actions: "onError" }
-        }
+          onError: { target: "unauthorized", actions: "onError" },
+        },
       },
       authorized: {
         invoke: {
           src: "getUserProfile",
           onDone: { actions: ["setUserProfile"] },
-          onError: { actions: "onError" }
+          onError: { actions: "onError" },
         },
         on: {
           UPDATE: "updating",
           REFRESH: "refreshing",
-          LOGOUT: "unauthorized"
-        }
-      }
-    }
+          LOGOUT: "unauthorized",
+        },
+      },
+    },
   },
   {
     services: {
@@ -119,20 +119,20 @@ export const authMachine = Machine<
           payload
         );
         return resp.data;
-      }
+      },
     },
     actions: {
       setUserProfile: assign((ctx: any, event: any) => ({
-        user: event.data.user
+        user: event.data.user,
       })),
       onSuccess: assign((ctx: any, event: any) => ({
         newLink: event.reverse ? "/" : null,
-        errorMessage: null
+        errorMessage: null,
       })),
       onError: assign((ctx: any, event: any) => ({
         newLink: event.reverse ? null : "/signin",
-        errorMessage: event.errorMessage
-      }))
-    }
+        errorMessage: event.errorMessage,
+      })),
+    },
   }
 );

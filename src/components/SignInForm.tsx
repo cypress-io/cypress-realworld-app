@@ -25,27 +25,27 @@ const validationSchema = object({
   username: string().required("Username is required"),
   password: string()
     .min(4, "Password must contain at least 4 characters")
-    .required("Enter your password")
+    .required("Enter your password"),
 });
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 export interface Props {
@@ -59,7 +59,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
   const initialValues: SignInPayload = {
     username: "",
     password: "",
-    remember: undefined
+    remember: undefined,
   };
 
   const signInPending = (payload: SignInPayload) => sendAuth("LOGIN", payload);

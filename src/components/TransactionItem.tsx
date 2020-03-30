@@ -5,7 +5,7 @@ import {
   Grid,
   Avatar,
   ListItemAvatar,
-  Paper
+  Paper,
 } from "@material-ui/core";
 import LikeIcon from "@material-ui/icons/ThumbUpAltOutlined";
 import CommentIcon from "@material-ui/icons/CommentRounded";
@@ -15,40 +15,40 @@ import { useHistory } from "react-router";
 import TransactionTitle from "./TransactionTitle";
 import TransactionAmount from "./TransactionAmount";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   paper: {
     padding: theme.spacing(0),
     margin: "auto",
     width: "100%",
     [theme.breakpoints.down("sm")]: {
-      maxWidth: 600
-    }
+      maxWidth: 600,
+    },
   },
   avatar: {
-    width: theme.spacing(2)
+    width: theme.spacing(2),
   },
   socialStats: {
     [theme.breakpoints.down("sm")]: {
-      marginTop: theme.spacing(2)
-    }
+      marginTop: theme.spacing(2),
+    },
   },
   countIcons: {
-    color: theme.palette.grey[400]
+    color: theme.palette.grey[400],
   },
   countText: {
     color: theme.palette.grey[400],
     marginTop: 2,
     height: theme.spacing(2),
-    width: theme.spacing(2)
+    width: theme.spacing(2),
   },
   viewTransactionButton: {
     [theme.breakpoints.down("sm")]: {
-      width: theme.spacing(1)
-    }
-  }
+      width: theme.spacing(1),
+    },
+  },
 }));
 
 type TransactionProps = {
@@ -58,7 +58,7 @@ type TransactionProps = {
 
 const TransactionItem: React.FC<TransactionProps> = ({
   transaction,
-  transactionIndex
+  transactionIndex,
 }) => {
   const classes = useStyles();
   const history = useHistory();

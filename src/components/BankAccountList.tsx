@@ -12,7 +12,7 @@ export interface BankAccountListProps {
 
 const BankAccountList: React.FC<BankAccountListProps> = ({
   bankAccounts,
-  deleteBankAccount
+  deleteBankAccount,
 }) => {
   return (
     <>

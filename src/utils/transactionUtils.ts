@@ -7,7 +7,7 @@ import {
   TransactionResponseItem,
   TransactionQueryPayload,
   TransactionDateRangePayload,
-  TransactionAmountRangePayload
+  TransactionAmountRangePayload,
 } from "../models";
 import faker from "faker";
 import Dinero from "dinero.js";
@@ -25,7 +25,7 @@ import {
   find,
   omit,
   map,
-  drop
+  drop,
 } from "lodash/fp";
 import { getUserById } from "../backend/database";
 
@@ -149,7 +149,7 @@ export const currentUserLikesTransaction = (
   transaction: TransactionResponseItem
 ) =>
   flow(
-    find(like => flow(get("userId"), isEqual(get("id", currentUser)))(like)),
+    find((like) => flow(get("userId"), isEqual(get("id", currentUser)))(like)),
     negate(isEmpty)
   )(transaction.likes);
 
@@ -221,6 +221,6 @@ export const getPaginatedItems = (page: number, limit: number, items: any) => {
 
   return {
     totalPages: Math.ceil(items.length / limit),
-    data: pagedItems
+    data: pagedItems,
   };
 };

@@ -2,19 +2,19 @@ import React from "react";
 import { makeStyles, Paper, Grid } from "@material-ui/core";
 import {
   TransactionDateRangePayload,
-  TransactionAmountRangePayload
+  TransactionAmountRangePayload,
 } from "../models";
 import TransactionListDateRangeFilter from "./TransactionDateRangeFilter";
 import TransactionListAmountRangeFilter from "./TransactionListAmountRangeFilter";
 import { debounce } from "lodash/fp";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
-    flexDirection: "column"
-  }
+    flexDirection: "column",
+  },
 }));
 
 export type TransactionListFiltersProps = {
@@ -26,7 +26,7 @@ export type TransactionListFiltersProps = {
 const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
   sendFilterEvent,
   dateRangeFilters,
-  amountRangeFilters
+  amountRangeFilters,
 }) => {
   const classes = useStyles();
 

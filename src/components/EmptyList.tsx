@@ -4,7 +4,7 @@ import grey from "@material-ui/core/colors/grey";
 
 const EmptyList: React.FC<{ entity: string; children?: React.ReactNode }> = ({
   entity,
-  children
+  children,
 }) => {
   return (
     <Box

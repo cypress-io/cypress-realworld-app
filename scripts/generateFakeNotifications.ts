@@ -5,7 +5,7 @@ import faker from "faker";
 import {
   getTransactionsForUserContacts,
   getLikesByTransactionId,
-  getCommentsByTransactionId
+  getCommentsByTransactionId,
 } from "../src/backend/database";
 import {
   User,
@@ -15,7 +15,7 @@ import {
   LikeNotification,
   CommentNotification,
   Like,
-  Comment
+  Comment,
 } from "../src/models";
 import { users, getRandomTransactions } from "./utils";
 
@@ -30,11 +30,11 @@ export const createFakePaymentNotification = (
   status: faker.helpers.randomize([
     PaymentNotificationStatus.received,
     PaymentNotificationStatus.requested,
-    PaymentNotificationStatus.incomplete
+    PaymentNotificationStatus.incomplete,
   ]),
   isRead: faker.helpers.randomize([true, false]),
   createdAt: faker.date.past(),
-  modifiedAt: faker.date.recent()
+  modifiedAt: faker.date.recent(),
 });
 
 export const createFakeLikeNotification = (
@@ -49,7 +49,7 @@ export const createFakeLikeNotification = (
   transactionId,
   isRead: faker.helpers.randomize([true, false]),
   createdAt: faker.date.past(),
-  modifiedAt: faker.date.recent()
+  modifiedAt: faker.date.recent(),
 });
 
 export const createFakeCommentNotification = (
@@ -64,7 +64,7 @@ export const createFakeCommentNotification = (
   transactionId,
   isRead: faker.helpers.randomize([true, false]),
   createdAt: faker.date.past(),
-  modifiedAt: faker.date.recent()
+  modifiedAt: faker.date.recent(),
 });
 
 const notifications = users.flatMap((user: User): NotificationType[] => {
@@ -77,7 +77,7 @@ const notifications = users.flatMap((user: User): NotificationType[] => {
   const selectedTransactions = randomTransactions.slice(0, 2);
 
   // iterate over transactions and notification
-  const transactionNotifications = selectedTransactions.map(transaction => {
+  const transactionNotifications = selectedTransactions.map((transaction) => {
     const likes = getLikesByTransactionId(transaction!.id);
     const comments = getCommentsByTransactionId(transaction!.id);
 
@@ -107,7 +107,7 @@ const notifications = users.flatMap((user: User): NotificationType[] => {
 fs.writeFile(
   __dirname + "/notifications.json",
   JSON.stringify(notifications),
-  function() {
+  function () {
     console.log("notification records generated");
   }
 );

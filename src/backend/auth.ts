@@ -8,7 +8,7 @@ const router = express.Router();
 
 // configure passport for local strategy
 passport.use(
-  new LocalStrategy(function(
+  new LocalStrategy(function (
     username: string,
     password: string,
     done: Function
@@ -29,11 +29,11 @@ passport.use(
   })
 );
 
-passport.serializeUser(function(user: User, done) {
+passport.serializeUser(function (user: User, done) {
   done(null, user.id);
 });
 
-passport.deserializeUser(function(id: string, done) {
+passport.deserializeUser(function (id: string, done) {
   const user = getUserById(id);
   // TODO: Limit fields returned in deserialized user object?
   //.pick(["id", "firstName", "lastName"])
@@ -45,7 +45,7 @@ passport.deserializeUser(function(id: string, done) {
 router.post(
   "/login",
   passport.authenticate("local", {
-    failureRedirect: "/"
+    failureRedirect: "/",
   }),
   (req: Request, res: Response): void => {
     if (req.body.remember) {

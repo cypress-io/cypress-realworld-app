@@ -18,7 +18,7 @@ const TransactionDetailsContainer: React.FC<Props> = ({ authService }) => {
   const [transactionDetailState, sendTransactionDetail] = useMachine(
     transactionDetailMachine,
     {
-      devTools: true
+      devTools: true,
     }
   );
   useEffect(() => {

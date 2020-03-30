@@ -9,13 +9,13 @@ declare namespace Cypress {
     /**
      * Logs in using API request
      */
-    apiLogin(username: string, password?: string): Chainable<Response>
+    apiLogin(username: string, password?: string): Chainable<Response>;
     /**
      * Logs in using user interface
      */
-    login(username: string, password?: string): void
+    login(username: string, password?: string): void;
 
-    getTest(dataTestAttribute: string): Chainable<Element>
-    getTestLike(dataTestPrefixAttribute: string): Chainable<Element>
+    getTest(dataTestAttribute: string): Chainable<Element>;
+    getTestLike(dataTestPrefixAttribute: string): Chainable<Element>;
   }
 }

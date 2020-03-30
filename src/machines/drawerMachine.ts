@@ -5,10 +5,10 @@ export const drawerMachine = Machine({
   initial: "closed",
   states: {
     closed: {
-      on: { TOGGLE: "open" }
+      on: { TOGGLE: "open" },
     },
     open: {
-      on: { TOGGLE: "closed" }
-    }
-  }
+      on: { TOGGLE: "closed" },
+    },
+  },
 });

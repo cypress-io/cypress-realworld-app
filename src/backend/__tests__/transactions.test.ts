@@ -13,7 +13,7 @@ import {
   getTransactionById,
   getPublicTransactionsDefaultSort,
   getUserById,
-  getBankTransferByTransactionId
+  getBankTransferByTransactionId,
 } from "../database";
 
 import {
@@ -23,7 +23,7 @@ import {
   DefaultPrivacyLevel,
   BankTransferType,
   TransactionPayload,
-  TransactionStatus
+  TransactionStatus,
 } from "../../models";
 import { getFakeAmount } from "../../utils/transactionUtils";
 
@@ -47,7 +47,7 @@ describe("Transactions", () => {
     const userToLookup: User = getAllUsers()[0];
 
     const result: Transaction[] = getTransactionsForUserByObj(userToLookup.id, {
-      status: "complete"
+      status: "complete",
     });
     expect(result[0].receiverId).toBe(userToLookup.id);
   });
@@ -85,7 +85,7 @@ describe("Transactions", () => {
       userToLookup.id,
       {
         dateRangeStart: new Date("Dec 01 2019"),
-        dateRangeEnd: new Date("Dec 05 2019")
+        dateRangeEnd: new Date("Dec 05 2019"),
       }
     );
     expect(result.length).toBe(2);
@@ -119,7 +119,7 @@ describe("Transactions", () => {
       description: `Payment: ${sender.id} to ${receiver.id}`,
       amount: getFakeAmount(),
       privacyLevel: DefaultPrivacyLevel.public,
-      status: TransactionStatus.pending
+      status: TransactionStatus.pending,
     };
 
     const result = createTransaction(sender.id, "payment", paymentDetails);
@@ -140,7 +140,7 @@ describe("Transactions", () => {
       description: `Request: ${sender.id} to ${receiver.id}`,
       amount: getFakeAmount(),
       privacyLevel: DefaultPrivacyLevel.public,
-      status: TransactionStatus.pending
+      status: TransactionStatus.pending,
     };
 
     const result = createTransaction(sender.id, "request", requestDetails);
@@ -161,7 +161,7 @@ describe("Transactions", () => {
       description: `Payment: ${sender.id} to ${receiver.id}`,
       amount: getFakeAmount(),
       privacyLevel: DefaultPrivacyLevel.private,
-      status: TransactionStatus.pending
+      status: TransactionStatus.pending,
     };
 
     const payment = createTransaction(sender.id, "payment", paymentDetails);
@@ -185,7 +185,7 @@ describe("Transactions", () => {
     expect(transaction.requestStatus).not.toEqual("rejected");
 
     const edits: Partial<Transaction> = {
-      requestStatus: TransactionRequestStatus.rejected
+      requestStatus: TransactionRequestStatus.rejected,
     };
     updateTransactionById(user.id, transaction.id, edits);
 
@@ -224,7 +224,7 @@ describe("Transactions", () => {
       description: `Payment: ${sender.id} to ${receiver.id}`,
       amount: 1000,
       privacyLevel: DefaultPrivacyLevel.public,
-      status: TransactionStatus.pending
+      status: TransactionStatus.pending,
     };
 
     const transaction = createTransaction(sender.id, "payment", paymentDetails);
@@ -247,7 +247,7 @@ describe("Transactions", () => {
       description: `Payment: ${sender.id} to ${receiver.id}`,
       amount: 500,
       privacyLevel: DefaultPrivacyLevel.public,
-      status: TransactionStatus.pending
+      status: TransactionStatus.pending,
     };
     const secondTransaction = createTransaction(
       sender.id,

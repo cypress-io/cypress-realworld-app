@@ -13,10 +13,10 @@ import SignInForm from "../components/SignInForm";
 import SignUpForm from "../components/SignUpForm";
 import { bankAccountsMachine } from "../machines/bankAccountsMachine";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex"
-  }
+    display: "flex",
+  },
 }));
 
 const savedAuthState = localStorage.getItem("authState");
@@ -28,23 +28,23 @@ const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [authState, sendAuth, authService] = useMachine(authMachine, {
     state: persistedAuthState,
-    devTools: true
+    devTools: true,
   });
   const [
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     notificationsState,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     sendNotifications,
-    notificationsService
+    notificationsService,
   ] = useMachine(notificationsMachine, {
-    devTools: true
+    devTools: true,
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [snackbarState, sendSnackbar, snackbarService] = useMachine(
     snackbarMachine,
     {
-      devTools: true
+      devTools: true,
     }
   );
 
@@ -53,7 +53,7 @@ const App: React.FC = () => {
     bankAccountsState,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     sendBankAccounts,
-    bankAccountsService
+    bankAccountsService,
   ] = useMachine(bankAccountsMachine, { devTools: true });
 
   const isLoggedIn =
