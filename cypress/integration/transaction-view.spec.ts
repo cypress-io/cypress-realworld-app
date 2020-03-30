@@ -31,7 +31,7 @@ describe("Transaction View", function () {
   });
 
   it("displays transaction view page", function () {
-    cy.getTestLike("transaction-view")
+    cy.getTestLike("transaction-item")
       .eq(3)
       .scrollIntoView()
       .click({ force: true });
@@ -40,7 +40,7 @@ describe("Transaction View", function () {
   });
 
   it("likes a transaction", function () {
-    cy.getTestLike("transaction-view")
+    cy.getTestLike("transaction-item")
       .eq(2)
       .scrollIntoView()
       .click({ force: true });
@@ -51,7 +51,7 @@ describe("Transaction View", function () {
   });
 
   it("makes a comment on a transaction", function () {
-    cy.getTestLike("transaction-view")
+    cy.getTestLike("transaction-item")
       .eq(2)
       .scrollIntoView()
       .click({ force: true });
@@ -63,7 +63,7 @@ describe("Transaction View", function () {
   });
 
   it("accepts a transaction request", function () {
-    cy.getTestLike("transaction-view")
+    cy.getTestLike("transaction-item")
       .eq(0)
       .scrollIntoView()
       .click({ force: true });
@@ -73,7 +73,7 @@ describe("Transaction View", function () {
   });
 
   it("rejects a transaction request", function () {
-    cy.getTestLike("transaction-view")
+    cy.getTestLike("transaction-item")
       .eq(4)
       .scrollIntoView()
       .click({ force: true });
@@ -83,7 +83,7 @@ describe("Transaction View", function () {
   });
 
   it("does not display accept/reject buttons on completed request", function () {
-    cy.getTestLike("transaction-view")
+    cy.getTestLike("transaction-item")
       .eq(3)
       .scrollIntoView()
       .click({ force: true });
