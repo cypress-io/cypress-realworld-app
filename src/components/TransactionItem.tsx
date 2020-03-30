@@ -1,7 +1,6 @@
 import React from "react";
 import {
   ListItem,
-  Button,
   Typography,
   Grid,
   Avatar,
@@ -21,9 +20,9 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   paper: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(0),
     margin: "auto",
-    width: "95%",
+    width: "100%",
     [theme.breakpoints.down("sm")]: {
       maxWidth: 600
     }
@@ -72,8 +71,9 @@ const TransactionItem: React.FC<TransactionProps> = ({
     <ListItem
       data-test={`transaction-item-${transaction.id}`}
       alignItems="flex-start"
+      onClick={() => showTransactionDetail(transaction.id)}
     >
-      <Paper className={classes.paper}>
+      <Paper className={classes.paper} elevation={0}>
         <Grid container spacing={2}>
           <Grid item>
             <ListItemAvatar>
@@ -114,17 +114,6 @@ const TransactionItem: React.FC<TransactionProps> = ({
                     </Typography>
                   </Grid>
                 </Grid>
-              </Grid>
-              <Grid item>
-                <Button
-                  className={classes.viewTransactionButton}
-                  color="primary"
-                  size="small"
-                  onClick={() => showTransactionDetail(transaction.id)}
-                  data-test={`transaction-view-${transaction.id}`}
-                >
-                  Details
-                </Button>
               </Grid>
             </Grid>
             <Grid item>
