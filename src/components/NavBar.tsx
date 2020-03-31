@@ -10,11 +10,12 @@ import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import Link from "@material-ui/core/Link";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import { Interpreter } from "xstate";
 import { DataContext, DataEvents } from "../machines/dataMachine";
 import { useService } from "@xstate/react";
+import TransactionNavTabs from "./TransactionNavTabs";
 
 const drawerWidth = 240;
 
@@ -69,6 +70,7 @@ const NavBar: React.FC<NavBarProps> = ({
   toggleDrawer,
   notificationsService,
 }) => {
+  const match = useLocation();
   const classes = useStyles();
   const [notificationsState] = useService(notificationsService);
 
@@ -132,6 +134,10 @@ const NavBar: React.FC<NavBarProps> = ({
           </Badge>
         </IconButton>
       </Toolbar>
+      {(match.pathname === "/" ||
+        RegExp("/(?:public|contacts|personal)").test(match.pathname)) && (
+        <TransactionNavTabs />
+      )}
     </AppBar>
   );
 };

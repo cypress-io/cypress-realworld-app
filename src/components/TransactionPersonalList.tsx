@@ -6,7 +6,6 @@ import {
   TransactionDateRangePayload,
   TransactionAmountRangePayload,
 } from "../models";
-import TransactionNavTabs from "./TransactionNavTabs";
 import TransactionList from "./TransactionList";
 import { personalTransactionsMachine } from "../machines/personalTransactionsMachine";
 
@@ -35,7 +34,6 @@ const TransactionPersonalList: React.FC<TransactionPersonalListProps> = ({
 
   return (
     <>
-      <TransactionNavTabs />
       {filterComponent}
       <br />
       <TransactionList
