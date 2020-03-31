@@ -23,9 +23,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0),
     margin: "auto",
     width: "100%",
-    [theme.breakpoints.down("sm")]: {
-      maxWidth: 600,
-    },
   },
   avatar: {
     width: theme.spacing(2),
@@ -43,11 +40,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 2,
     height: theme.spacing(2),
     width: theme.spacing(2),
-  },
-  viewTransactionButton: {
-    [theme.breakpoints.down("sm")]: {
-      width: theme.spacing(1),
-    },
   },
 }));
 

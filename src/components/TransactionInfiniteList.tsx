@@ -31,6 +31,7 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
 }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const isXsBreakpoint = useMediaQuery(theme.breakpoints.down("xs"));
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const itemCount = pagination.hasNextPages
@@ -57,7 +58,7 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
       return (
         <div style={style}>
           <TransactionItem transaction={transaction} transactionIndex={index} />
-          <Divider variant="inset" />
+          <Divider variant={isMobile ? "fullWidth" : "inset"} />
         </div>
       );
     }
@@ -76,9 +77,9 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
             itemCount={itemCount}
             ref={ref}
             onItemsRendered={onItemsRendered}
-            height={isMobile ? theme.spacing(78) : theme.spacing(64)}
-            width={isMobile ? theme.spacing(36.5) : theme.spacing(112)}
-            itemSize={isMobile ? theme.spacing(40) : theme.spacing(16)}
+            height={isXsBreakpoint ? theme.spacing(48) : theme.spacing(64)}
+            width={"98%"}
+            itemSize={isXsBreakpoint ? theme.spacing(28) : theme.spacing(16)}
           >
             {Item}
           </FixedSizeList>
