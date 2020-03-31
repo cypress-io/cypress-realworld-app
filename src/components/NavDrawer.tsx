@@ -166,21 +166,12 @@ const NavDrawer: React.FC<Props> = ({
   const theme = useTheme();
   const [authState, sendAuth] = useService(authService);
   const showTemporaryDrawer = useMediaQuery(theme.breakpoints.only("xs"));
-  /*const isBetweenXsAndSmall = useMediaQuery(
-    theme.breakpoints.between("xs", "sm")
-  );*/
 
   const currentUser = authState?.context?.user;
   const signOutPending = () => {
     sendAuth("LOGOUT");
     localStorage.removeItem("authState");
   };
-
-  /*useEffect(() => {
-    if (drawerOpen && isBetweenXsAndSmall) {
-      closeDrawer();
-    }
-  }, [closeDrawer, drawerOpen, isBetweenXsAndSmall]);*/
 
   return (
     <Drawer

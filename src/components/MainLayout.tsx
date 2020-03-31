@@ -65,15 +65,13 @@ const MainLayout: React.FC<Props> = ({
     sendDrawer("TOGGLE_MOBILE");
   };
 
-  const openDesktopDrawer = () => sendDrawer("OPEN_DESKTOP");
-  const closeDesktopDrawer = () => sendDrawer("CLOSE_DESKTOP");
-
-  const openMobileDrawer = () => sendDrawer("OPEN_MOBILE");
+  const openDesktopDrawer = (payload: any) =>
+    sendDrawer("OPEN_DESKTOP", payload);
   const closeMobileDrawer = () => sendDrawer("CLOSE_MOBILE");
 
   useEffect(() => {
     if (!desktopDrawerOpen && aboveSmallBreakpoint) {
-      openDesktopDrawer();
+      openDesktopDrawer({ aboveSmallBreakpoint });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [aboveSmallBreakpoint, desktopDrawerOpen]);
