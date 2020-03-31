@@ -32,7 +32,8 @@ export const mainListItems = (
   <div>
     <ListItem
       button
-      onClick={showTemporaryDrawer && toggleDrawer}
+      // @ts-ignore
+      onClick={() => showTemporaryDrawer && toggleDrawer()}
       component={RouterLink}
       to="/"
       data-test="sidenav-home"
@@ -44,7 +45,8 @@ export const mainListItems = (
     </ListItem>
     <ListItem
       button
-      onClick={showTemporaryDrawer && toggleDrawer}
+      // @ts-ignore
+      onClick={() => showTemporaryDrawer && toggleDrawer()}
       component={RouterLink}
       to="/user/settings"
       data-test="sidenav-user-settings"
@@ -56,7 +58,8 @@ export const mainListItems = (
     </ListItem>
     <ListItem
       button
-      onClick={showTemporaryDrawer && toggleDrawer}
+      // @ts-ignore
+      onClick={() => showTemporaryDrawer && toggleDrawer()}
       component={RouterLink}
       to="/bankaccounts"
       data-test="sidenav-bankaccounts"
@@ -68,7 +71,8 @@ export const mainListItems = (
     </ListItem>
     <ListItem
       button
-      onClick={showTemporaryDrawer && toggleDrawer}
+      // @ts-ignore
+      onClick={() => showTemporaryDrawer && toggleDrawer()}
       component={RouterLink}
       to="/auth"
       data-test="sidenav-auth"

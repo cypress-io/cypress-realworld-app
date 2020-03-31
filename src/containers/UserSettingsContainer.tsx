@@ -22,7 +22,7 @@ const UserSettingsContainer: React.FC<Props> = ({ authService }) => {
   const classes = useStyles();
   const [authState, sendAuth] = useService(authService);
 
-  const currentUser = authState.context.user;
+  const currentUser = authState?.context?.user;
   const updateUser = (payload: any) => sendAuth("UPDATE", payload);
 
   return (

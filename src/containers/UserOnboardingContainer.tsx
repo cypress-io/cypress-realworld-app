@@ -45,7 +45,8 @@ const UserOnboardingContainer: React.FC<Props> = ({
   const dialogIsOpen =
     (userOnboardingState.matches("stepTwo") && !noBankAccounts) ||
     (userOnboardingState.matches("stepThree") && !noBankAccounts) ||
-    (!userOnboardingState.matches("done") && noBankAccounts);
+    (!userOnboardingState.matches("done") && noBankAccounts) ||
+    false;
 
   const nextStep = () => sendUserOnboarding("NEXT");
 
