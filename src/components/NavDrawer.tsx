@@ -150,17 +150,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-  openDrawer: () => void;
-  closeDrawer: () => void;
+  closeMobileDrawer: () => void;
   toggleDrawer: () => void;
   drawerOpen: boolean;
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
 }
 
 const NavDrawer: React.FC<Props> = ({
-  openDrawer,
   toggleDrawer,
-  closeDrawer,
+  closeMobileDrawer,
   drawerOpen,
   authService,
 }) => {
@@ -168,6 +166,9 @@ const NavDrawer: React.FC<Props> = ({
   const theme = useTheme();
   const [authState, sendAuth] = useService(authService);
   const showTemporaryDrawer = useMediaQuery(theme.breakpoints.only("xs"));
+  /*const isBetweenXsAndSmall = useMediaQuery(
+    theme.breakpoints.between("xs", "sm")
+  );*/
 
   const currentUser = authState?.context?.user;
   const signOutPending = () => {
@@ -175,11 +176,11 @@ const NavDrawer: React.FC<Props> = ({
     localStorage.removeItem("authState");
   };
 
-  useEffect(() => {
-    if (drawerOpen && showTemporaryDrawer) {
+  /*useEffect(() => {
+    if (drawerOpen && isBetweenXsAndSmall) {
       closeDrawer();
     }
-  }, []);
+  }, [closeDrawer, drawerOpen, isBetweenXsAndSmall]);*/
 
   return (
     <Drawer
@@ -192,7 +193,7 @@ const NavDrawer: React.FC<Props> = ({
       }}
       open={drawerOpen}
       ModalProps={{
-        onBackdropClick: () => closeDrawer()
+        onBackdropClick: () => closeMobileDrawer(),
       }}
     >
       <Grid

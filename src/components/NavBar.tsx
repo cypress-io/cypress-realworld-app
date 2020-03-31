@@ -66,7 +66,7 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({
   drawerOpen,
-  handleDrawerOpen,
+  toggleDrawer,
   notificationsService,
 }) => {
   const classes = useStyles();

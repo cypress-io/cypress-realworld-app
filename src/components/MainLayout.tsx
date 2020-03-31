@@ -50,45 +50,45 @@ const MainLayout: React.FC<Props> = ({
   const classes = useStyles();
   const theme = useTheme();
   const [drawerState, sendDrawer] = useMachine(drawerMachine, {
-    devTools: true
+    devTools: true,
   });
-
-  console.log("BP: ", theme);
 
   const aboveSmallBreakpoint = useMediaQuery(theme.breakpoints.up("sm"));
   const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
 
-  const drawerOpen = drawerState?.matches("open");
-  const toggleDrawer = () => {
-    sendDrawer("TOGGLE");
+  const desktopDrawerOpen = drawerState?.matches({ desktop: "open" });
+  const mobileDrawerOpen = drawerState?.matches({ mobile: "open" });
+  const toggleDesktopDrawer = () => {
+    sendDrawer("TOGGLE_DESKTOP");
+  };
+  const toggleMobileDrawer = () => {
+    sendDrawer("TOGGLE_MOBILE");
   };
 
-  const openDrawer = () => {
-    sendDrawer("OPEN");
-  };
+  const openDesktopDrawer = () => sendDrawer("OPEN_DESKTOP");
+  const closeDesktopDrawer = () => sendDrawer("CLOSE_DESKTOP");
 
-  const closeDrawer = () => {
-    sendDrawer("CLOSE");
-  };
+  const openMobileDrawer = () => sendDrawer("OPEN_MOBILE");
+  const closeMobileDrawer = () => sendDrawer("CLOSE_MOBILE");
 
   useEffect(() => {
-    if (!drawerOpen && aboveSmallBreakpoint) {
-      openDrawer();
+    if (!desktopDrawerOpen && aboveSmallBreakpoint) {
+      openDesktopDrawer();
     }
-  }, [aboveSmallBreakpoint, openDrawer]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [aboveSmallBreakpoint, desktopDrawerOpen]);
 
   return (
     <>
       <NavBar
-        toggleDrawer={toggleDrawer}
-        drawerOpen={drawerOpen}
+        toggleDrawer={xsBreakpoint ? toggleMobileDrawer : toggleDesktopDrawer}
+        drawerOpen={xsBreakpoint ? mobileDrawerOpen : desktopDrawerOpen}
         notificationsService={notificationsService}
       />
       <NavDrawer
-        toggleDrawer={toggleDrawer}
-        closeDrawer={closeDrawer}
-        openDrawer={openDrawer}
-        drawerOpen={drawerOpen}
+        toggleDrawer={xsBreakpoint ? toggleMobileDrawer : toggleDesktopDrawer}
+        drawerOpen={xsBreakpoint ? mobileDrawerOpen : desktopDrawerOpen}
+        closeMobileDrawer={closeMobileDrawer}
         authService={authService}
       />
       <main className={classes.content} data-test="main">
