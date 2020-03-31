@@ -26,12 +26,13 @@ const drawerWidth = 240;
 export const mainListItems = (
   toggleDrawer:
     | ((event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void)
-    | undefined
+    | undefined,
+  showTemporaryDrawer: Boolean
 ) => (
   <div>
     <ListItem
       button
-      onClick={toggleDrawer}
+      onClick={showTemporaryDrawer && toggleDrawer}
       component={RouterLink}
       to="/"
       data-test="sidenav-home"
@@ -43,7 +44,7 @@ export const mainListItems = (
     </ListItem>
     <ListItem
       button
-      onClick={toggleDrawer}
+      onClick={showTemporaryDrawer && toggleDrawer}
       component={RouterLink}
       to="/user/settings"
       data-test="sidenav-user-settings"
@@ -55,7 +56,7 @@ export const mainListItems = (
     </ListItem>
     <ListItem
       button
-      onClick={toggleDrawer}
+      onClick={showTemporaryDrawer && toggleDrawer}
       component={RouterLink}
       to="/bankaccounts"
       data-test="sidenav-bankaccounts"
@@ -67,7 +68,7 @@ export const mainListItems = (
     </ListItem>
     <ListItem
       button
-      onClick={toggleDrawer}
+      onClick={showTemporaryDrawer && toggleDrawer}
       component={RouterLink}
       to="/auth"
       data-test="sidenav-auth"
@@ -183,6 +184,7 @@ const NavDrawer: React.FC<Props> = ({
       open={drawerOpen}
       ModalProps={{
         onBackdropClick: () => closeMobileDrawer(),
+        closeAfterTransition: showTemporaryDrawer,
       }}
     >
       <Grid
@@ -239,7 +241,7 @@ const NavDrawer: React.FC<Props> = ({
         </Grid>
       )}
       <Divider />
-      <List>{mainListItems(toggleDrawer)}</List>
+      <List>{mainListItems(toggleDrawer, showTemporaryDrawer)}</List>
       <Divider />
       <List>{secondaryListItems(signOutPending)}</List>
     </Drawer>

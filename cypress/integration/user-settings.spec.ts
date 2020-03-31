@@ -15,7 +15,6 @@ describe("User Settings", function () {
     cy.route("PATCH", "http://localhost:3001/users/*").as("updateUser");
     cy.fixture("users").as("users");
 
-    cy.getTest("sidenav-open").click();
     cy.getTest("sidenav-user-settings").click();
   });
   after(function () {

@@ -20,24 +20,19 @@ describe("Bank Accounts", function () {
     );
     cy.route("GET", "http://localhost:3001/bankAccounts").as("bankAccounts");
     cy.fixture("users").as("users");
-
-    cy.getTest("sidenav-open").click();
-    cy.getTest("sidenav-bankaccounts").click();
   });
   after(function () {
     cy.task("db:seed");
   });
 
   it("renders a list of bank accounts for the user", function () {
-    cy.getTest("bankaccount-list").should("be.visible");
+    cy.getTest("sidenav-bankaccounts").click();
 
     cy.wait("@bankAccounts");
     cy.getTestLike("bankaccount-list-item").should("have.length", 1);
   });
 
   it("soft deletes a bank account", function () {
-    cy.getTest("bankaccount-list").should("be.visible");
-
     cy.getTestLike("bankaccount-delete").first().click();
 
     cy.wait("@deleteBankAccount").should("have.property", "status", 200);

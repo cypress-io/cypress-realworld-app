@@ -55,7 +55,6 @@ describe("User Sign-up and Login", function () {
     cy.getTest("transaction-list").should("be.visible");
 
     // Logout User
-    cy.getTest("sidenav-open").click();
     cy.getTest("sidenav-signout").click();
     cy.location("pathname").should("eq", "/");
   });
@@ -78,7 +77,6 @@ describe("User Sign-up and Login", function () {
       cy.getCookie("connect.sid").should("have.property", "expiry");
 
       // Logout User
-      cy.getTest("sidenav-open").click();
       cy.getTest("sidenav-signout").click();
       cy.location("pathname").should("eq", "/");
     });

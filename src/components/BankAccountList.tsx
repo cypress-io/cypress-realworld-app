@@ -16,7 +16,7 @@ const BankAccountList: React.FC<BankAccountListProps> = ({
 }) => {
   return (
     <>
-      {bankAccounts.length > 0 ? (
+      {bankAccounts?.length > 0 ? (
         <List data-test="bankaccount-list">
           {bankAccounts.map((bankAccount: BankAccount) => (
             <BankAccountItem
