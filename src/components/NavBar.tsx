@@ -10,38 +10,39 @@ import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import Link from "@material-ui/core/Link";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import { Interpreter } from "xstate";
 import { DataContext, DataEvents } from "../machines/dataMachine";
 import { useService } from "@xstate/react";
+import TransactionNavTabs from "./TransactionNavTabs";
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   toolbar: {
-    paddingRight: 24 // keep right padding when drawer closed
+    paddingRight: 24, // keep right padding when drawer closed
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
+      duration: theme.transitions.duration.leavingScreen,
+    }),
   },
   appBarShift: {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   menuButtonHidden: {
-    display: "none"
+    display: "none",
   },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   newTransactionButton: {
     fontSize: 16,
@@ -53,22 +54,23 @@ const useStyles = makeStyles(theme => ({
     "&:hover": {
       backgroundColor: "#4CAF50",
       borderColor: "#00C853",
-      boxShadow: "none"
-    }
-  }
+      boxShadow: "none",
+    },
+  },
 }));
 
 interface NavBarProps {
   drawerOpen: boolean;
-  handleDrawerOpen: () => void;
+  toggleDrawer: Function;
   notificationsService: Interpreter<DataContext, any, DataEvents, any>;
 }
 
 const NavBar: React.FC<NavBarProps> = ({
   drawerOpen,
-  handleDrawerOpen,
-  notificationsService
+  toggleDrawer,
+  notificationsService,
 }) => {
+  const match = useLocation();
   const classes = useStyles();
   const [notificationsState] = useService(notificationsService);
 
@@ -85,8 +87,7 @@ const NavBar: React.FC<NavBarProps> = ({
           edge="start"
           color="inherit"
           aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          className={clsx(drawerOpen && classes.menuButtonHidden)}
+          onClick={() => toggleDrawer()}
         >
           <MenuIcon data-test="drawer-icon" />
         </IconButton>
@@ -133,6 +134,10 @@ const NavBar: React.FC<NavBarProps> = ({
           </Badge>
         </IconButton>
       </Toolbar>
+      {(match.pathname === "/" ||
+        RegExp("/(?:public|contacts|personal)").test(match.pathname)) && (
+        <TransactionNavTabs />
+      )}
     </AppBar>
   );
 };

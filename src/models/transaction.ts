@@ -4,13 +4,13 @@ import { Like, Comment } from ".";
 export enum TransactionStatus {
   pending = "pending",
   incomplete = "incomplete",
-  complete = "complete"
+  complete = "complete",
 }
 
 export enum TransactionRequestStatus {
   pending = "pending",
   accepted = "accepted",
-  rejected = "rejected"
+  rejected = "rejected",
 }
 
 export interface Transaction {

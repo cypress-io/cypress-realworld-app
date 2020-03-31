@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useMachine } from "@xstate/react";
 import { Interpreter } from "xstate";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
+import { useMediaQuery, useTheme } from "@material-ui/core";
 
 import Copyright from "../components/Copyright";
 import NavBar from "./NavBar";
@@ -13,26 +14,23 @@ import { DataContext, DataEvents } from "../machines/dataMachine";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import { drawerMachine } from "../machines/drawerMachine";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex"
+    display: "flex",
   },
   toolbar: {
-    paddingRight: 24 // keep right padding when drawer closed
+    paddingRight: 24, // keep right padding when drawer closed
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
     height: "100vh",
-    overflow: "auto"
+    overflow: "auto",
   },
   container: {
     paddingTop: theme.spacing(8),
-    [theme.breakpoints.down("sm")]: {
-      paddingTop: theme.spacing(2)
-    },
-    paddingBottom: theme.spacing(4)
-  }
+    paddingBottom: theme.spacing(4),
+  },
 }));
 
 interface Props {
@@ -44,26 +42,48 @@ interface Props {
 const MainLayout: React.FC<Props> = ({
   children,
   notificationsService,
-  authService
+  authService,
 }) => {
   const classes = useStyles();
-  const [drawerState, sendDrawer] = useMachine(drawerMachine);
+  const theme = useTheme();
+  const [drawerState, sendDrawer] = useMachine(drawerMachine, {
+    devTools: true,
+  });
 
-  const drawerOpen = drawerState.matches("open");
-  const toggleDrawer = () => {
-    sendDrawer("TOGGLE");
+  const aboveSmallBreakpoint = useMediaQuery(theme.breakpoints.up("sm"));
+  const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
+
+  const desktopDrawerOpen = drawerState?.matches({ desktop: "open" });
+  const mobileDrawerOpen = drawerState?.matches({ mobile: "open" });
+  const toggleDesktopDrawer = () => {
+    sendDrawer("TOGGLE_DESKTOP");
   };
+  const toggleMobileDrawer = () => {
+    sendDrawer("TOGGLE_MOBILE");
+  };
+
+  const openDesktopDrawer = (payload: any) =>
+    sendDrawer("OPEN_DESKTOP", payload);
+  const closeMobileDrawer = () => sendDrawer("CLOSE_MOBILE");
+
+  useEffect(() => {
+    if (!desktopDrawerOpen && aboveSmallBreakpoint) {
+      openDesktopDrawer({ aboveSmallBreakpoint });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [aboveSmallBreakpoint, desktopDrawerOpen]);
 
   return (
     <>
       <NavBar
-        handleDrawerOpen={toggleDrawer}
-        drawerOpen={drawerOpen}
+        toggleDrawer={xsBreakpoint ? toggleMobileDrawer : toggleDesktopDrawer}
+        drawerOpen={xsBreakpoint ? mobileDrawerOpen : desktopDrawerOpen}
         notificationsService={notificationsService}
       />
       <NavDrawer
-        handleDrawerClose={toggleDrawer}
-        drawerOpen={drawerOpen}
+        toggleDrawer={xsBreakpoint ? toggleMobileDrawer : toggleDesktopDrawer}
+        drawerOpen={xsBreakpoint ? mobileDrawerOpen : desktopDrawerOpen}
+        closeMobileDrawer={closeMobileDrawer}
         authService={authService}
       />
       <main className={classes.content} data-test="main">

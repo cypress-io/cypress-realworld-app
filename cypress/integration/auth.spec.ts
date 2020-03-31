@@ -1,8 +1,8 @@
 // check this file using TypeScript if available
 // @ts-check
 
-describe("User Sign-up and Login", function() {
-  beforeEach(function() {
+describe("User Sign-up and Login", function () {
+  beforeEach(function () {
     cy.task("db:seed");
 
     cy.server();
@@ -12,7 +12,7 @@ describe("User Sign-up and Login", function() {
     cy.route("POST", "http://localhost:3001/login").as("login");
   });
 
-  it("should allow a visitor to sign-up, login, and logout", function() {
+  it("should allow a visitor to sign-up, login, and logout", function () {
     // Sign-up User
     cy.visit("/signup");
     cy.getTest("signup-first-name").type("First");
@@ -55,23 +55,20 @@ describe("User Sign-up and Login", function() {
     cy.getTest("transaction-list").should("be.visible");
 
     // Logout User
-    cy.getTest("sidenav-open").click();
     cy.getTest("sidenav-signout").click();
     cy.location("pathname").should("eq", "/");
   });
 
-  it("should remember a user for 30 days after login", function() {
+  it("should remember a user for 30 days after login", function () {
     cy.fixture("users").as("users");
 
     cy.visit("/");
 
-    cy.get("@users").then(users => {
+    cy.get("@users").then((users) => {
       // Login User
       cy.getTest("signin-username").type(this.users[0].username);
       cy.getTest("signin-password").type("s3cret");
-      cy.getTest("signin-remember-me")
-        .find("input")
-        .check();
+      cy.getTest("signin-remember-me").find("input").check();
       cy.getTest("signin-submit").click();
 
       cy.wait("@login");
@@ -80,7 +77,6 @@ describe("User Sign-up and Login", function() {
       cy.getCookie("connect.sid").should("have.property", "expiry");
 
       // Logout User
-      cy.getTest("sidenav-open").click();
       cy.getTest("sidenav-signout").click();
       cy.location("pathname").should("eq", "/");
     });

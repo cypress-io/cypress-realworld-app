@@ -5,7 +5,7 @@ import {
   Grid,
   Avatar,
   Paper,
-  IconButton
+  IconButton,
 } from "@material-ui/core";
 import LikeIcon from "@material-ui/icons/ThumbUpAltOutlined";
 import CommentIcon from "@material-ui/icons/CommentRounded";
@@ -13,13 +13,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import {
   TransactionResponseItem,
   TransactionRequestStatus,
-  User
+  User,
 } from "../models";
 import CommentForm from "./CommentForm";
 import {
   isPendingRequestTransaction,
   receiverIsCurrentUser,
-  currentUserLikesTransaction
+  currentUserLikesTransaction,
 } from "../utils/transactionUtils";
 import { random } from "lodash/fp";
 import CommentsList from "./CommentList";
@@ -27,29 +27,29 @@ import TransactionTitle from "./TransactionTitle";
 import TransactionAmount from "./TransactionAmount";
 
 const imgNumber = random(3, 50);
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   paperComments: {
     marginTop: theme.spacing(6),
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   avatar: {
-    width: theme.spacing(2)
+    width: theme.spacing(2),
   },
   headline: {
-    marginTop: theme.spacing(4)
+    marginTop: theme.spacing(4),
   },
   avatarLarge: {
     width: theme.spacing(7),
-    height: theme.spacing(7)
+    height: theme.spacing(7),
   },
   redButton: {
     backgrounColor: "red",
@@ -62,8 +62,8 @@ const useStyles = makeStyles(theme => ({
     "&:hover": {
       backgroundColor: "red",
       borderColor: "red",
-      boxShadow: "none"
-    }
+      boxShadow: "none",
+    },
   },
   greenButton: {
     marginRight: theme.spacing(2),
@@ -76,9 +76,9 @@ const useStyles = makeStyles(theme => ({
     "&:hover": {
       backgroundColor: "#4CAF50",
       borderColor: "#00C853",
-      boxShadow: "none"
-    }
-  }
+      boxShadow: "none",
+    },
+  },
 }));
 
 type TransactionProps = {
@@ -94,7 +94,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
   transactionLike,
   transactionComment,
   transactionUpdate,
-  currentUser
+  currentUser,
 }) => {
   const classes = useStyles();
 
@@ -175,7 +175,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
                       onClick={() =>
                         transactionUpdate({
                           id: transaction.id,
-                          requestStatus: TransactionRequestStatus.accepted
+                          requestStatus: TransactionRequestStatus.accepted,
                         })
                       }
                       data-test={`transaction-accept-request-${transaction.id}`}
@@ -189,7 +189,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
                       onClick={() =>
                         transactionUpdate({
                           id: transaction.id,
-                          requestStatus: TransactionRequestStatus.rejected
+                          requestStatus: TransactionRequestStatus.rejected,
                         })
                       }
                       data-test={`transaction-reject-request-${transaction.id}`}
@@ -203,7 +203,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
           <Grid item>
             <CommentForm
               transactionId={transaction.id}
-              transactionComment={payload => transactionComment(payload)}
+              transactionComment={(payload) => transactionComment(payload)}
             />
           </Grid>
         </Grid>

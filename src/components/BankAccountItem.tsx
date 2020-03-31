@@ -11,7 +11,7 @@ export interface BankAccountListItemProps {
 
 const BankAccountListItem: React.FC<BankAccountListItemProps> = ({
   bankAccount,
-  deleteBankAccount
+  deleteBankAccount,
 }) => {
   return (
     <ListItem data-test={`bankaccount-list-item-${bankAccount.id}`}>

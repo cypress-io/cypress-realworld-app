@@ -4,9 +4,8 @@ import {
   TransactionPagination,
   TransactionResponseItem,
   TransactionDateRangePayload,
-  TransactionAmountRangePayload
+  TransactionAmountRangePayload,
 } from "../models";
-import TransactionNavTabs from "./TransactionNavTabs";
 import TransactionList from "./TransactionList";
 import { personalTransactionsMachine } from "../machines/personalTransactionsMachine";
 
@@ -19,10 +18,10 @@ export interface TransactionPersonalListProps {
 const TransactionPersonalList: React.FC<TransactionPersonalListProps> = ({
   filterComponent,
   dateRangeFilters,
-  amountRangeFilters
+  amountRangeFilters,
 }) => {
   const [current, send] = useMachine(personalTransactionsMachine, {
-    devTools: true
+    devTools: true,
   });
   const { pageData, results } = current.context;
 
@@ -35,7 +34,6 @@ const TransactionPersonalList: React.FC<TransactionPersonalListProps> = ({
 
   return (
     <>
-      <TransactionNavTabs />
       {filterComponent}
       <br />
       <TransactionList

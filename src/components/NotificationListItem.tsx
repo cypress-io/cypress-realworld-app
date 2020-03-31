@@ -12,14 +12,14 @@ import {
   Typography,
   CardActions,
   Button,
-  makeStyles
+  makeStyles,
 } from "@material-ui/core";
 import {
   isCommentNotification,
   isLikeNotification,
   isPaymentNotification,
   isPaymentRequestedNotification,
-  isPaymentReceivedNotification
+  isPaymentReceivedNotification,
 } from "../utils/transactionUtils";
 
 export interface NotificationListItemProps {
@@ -29,22 +29,22 @@ export interface NotificationListItemProps {
 
 const useStyles = makeStyles({
   card: {
-    minWidth: "100%"
+    minWidth: "100%",
   },
   title: {
-    fontSize: 18
+    fontSize: 18,
   },
   green: {
-    color: "#4CAF50"
+    color: "#4CAF50",
   },
   red: {
-    color: "red"
-  }
+    color: "red",
+  },
 });
 
 const NotificationListItem: React.FC<NotificationListItemProps> = ({
   notification,
-  updateNotification
+  updateNotification,
 }) => {
   const classes = useStyles();
   let listItemText = undefined;

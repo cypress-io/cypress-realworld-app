@@ -12,7 +12,7 @@ export interface NotificationsListProps {
 
 const NotificationsList: React.FC<NotificationsListProps> = ({
   notifications,
-  updateNotification
+  updateNotification,
 }) => {
   return (
     <>

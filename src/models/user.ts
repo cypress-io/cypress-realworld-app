@@ -1,7 +1,7 @@
 export enum DefaultPrivacyLevel {
   public = "public",
   private = "private",
-  contacts = "contacts"
+  contacts = "contacts",
 }
 
 export interface User {

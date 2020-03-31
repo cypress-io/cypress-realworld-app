@@ -4,13 +4,13 @@ import express from "express";
 import {
   createNotifications,
   updateNotificationById,
-  getUnreadNotificationsByUserId
+  getUnreadNotificationsByUserId,
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import {
   isNotificationsBodyValidator,
   shortIdValidation,
-  isNotificationPatchValidator
+  isNotificationPatchValidator,
 } from "./validators";
 const router = express.Router();
 
@@ -46,7 +46,7 @@ router.patch(
   ensureAuthenticated,
   validateMiddleware([
     shortIdValidation("notificationId"),
-    ...isNotificationPatchValidator
+    ...isNotificationPatchValidator,
   ]),
   (req, res) => {
     const { notificationId } = req.params;

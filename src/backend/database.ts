@@ -16,7 +16,7 @@ import {
   constant,
   filter,
   inRange,
-  remove
+  remove,
 } from "lodash/fp";
 import { isWithinRange } from "date-fns";
 import low from "lowdb";
@@ -44,7 +44,7 @@ import {
   BankTransferPayload,
   BankTransferType,
   NotificationResponseItem,
-  TransactionQueryPayload
+  TransactionQueryPayload,
 } from "../models";
 import Fuse from "fuse.js";
 import {
@@ -58,7 +58,7 @@ import {
   hasAmountQueryFields,
   getAmountQueryFields,
   getQueryWithoutFilterFields,
-  getPayAppCreditedAmount
+  getPayAppCreditedAmount,
 } from "../utils/transactionUtils";
 
 const USER_TABLE = "users";
@@ -92,24 +92,13 @@ export const seedDatabase = () => {
   );
   // seed database with test data
   // @ts-ignore
-  db()
-    .setState(testSeed)
-    .write();
+  db().setState(testSeed).write();
 };
-export const getAllUsers = () =>
-  db()
-    .get(USER_TABLE)
-    .value();
+export const getAllUsers = () => db().get(USER_TABLE).value();
 
-export const getAllContacts = () =>
-  db()
-    .get(CONTACT_TABLE)
-    .value();
+export const getAllContacts = () => db().get(CONTACT_TABLE).value();
 
-export const getAllTransactions = () =>
-  db()
-    .get(TRANSACTION_TABLE)
-    .value();
+export const getAllTransactions = () => db().get(TRANSACTION_TABLE).value();
 
 export const getAllPublicTransactions = () =>
   db()
@@ -118,10 +107,7 @@ export const getAllPublicTransactions = () =>
     .filter({ privacyLevel: "public" })
     .value();
 
-export const getAllForEntity = (entity: string) =>
-  db()
-    .get(entity)
-    .value();
+export const getAllForEntity = (entity: string) => db().get(entity).value();
 
 export const getAllBy = (entity: string, key: string, value: any) => {
   const result = db()
@@ -176,7 +162,7 @@ export const searchUsers = (query: string) => {
   return performSearch(
     items,
     {
-      keys: ["username", "email", "phoneNumber"]
+      keys: ["username", "email", "phoneNumber"],
     },
     query
   ) as User[];
@@ -212,7 +198,7 @@ export const createUser = (userDetails: Partial<User>): User => {
     avatar: userDetails.avatar!,
     defaultPrivacyLevel: userDetails.defaultPrivacyLevel!,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   saveUser(user);
@@ -282,7 +268,7 @@ export const createContactForUser = (userId: string, contactUserId: string) => {
     userId,
     contactUserId,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   // TODO: check if contact exists
@@ -333,7 +319,7 @@ export const createBankAccountForUser = (
     routingNumber: accountDetails.routingNumber!,
     isDeleted: false,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   // TODO: check if bank account exists
@@ -377,7 +363,7 @@ export const createBankTransfer = (
     uuid: v4(),
     ...bankTransferDetails,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   const savedBankTransfer = saveBankTransfer(bankTransfer);
@@ -430,7 +416,7 @@ export const formatTransactionForApiResponse = (
     senderName,
     likes,
     comments,
-    ...transaction
+    ...transaction,
   };
 };
 
@@ -440,7 +426,7 @@ export const formatTransactionsForApiResponse = (
   orderBy(
     [(transaction: Transaction) => new Date(transaction.modifiedAt)],
     ["desc"],
-    transactions.map(transaction =>
+    transactions.map((transaction) =>
       formatTransactionForApiResponse(transaction)
     )
   );
@@ -455,12 +441,12 @@ export const getAllTransactionsForUserByObj = curry(
     const userTransactions = flatMap(getTransactionsByObj)([
       {
         receiverId: userId,
-        ...queryFields
+        ...queryFields,
       },
       {
         senderId: userId,
-        ...queryFields
-      }
+        ...queryFields,
+      },
     ]);
 
     if (query && (hasDateQueryFields(query) || hasAmountQueryFields(query))) {
@@ -530,7 +516,7 @@ export const getTransactionsForUserContacts = (
   uniqBy(
     "id",
     flatMap(
-      contactId => getTransactionsForUserForApi(contactId, query),
+      (contactId) => getTransactionsForUserForApi(contactId, query),
       getContactIdsForUser(userId)
     )
   );
@@ -566,7 +552,7 @@ export const getNonContactPublicTransactionsForApi = (userId: string) =>
 
 export const getPublicTransactionsDefaultSort = (userId: string) => ({
   contactsTransactions: getTransactionsForUserContacts(userId),
-  publicTransactions: getNonContactPublicTransactionsForApi(userId)
+  publicTransactions: getNonContactPublicTransactionsForApi(userId),
 });
 
 export const getPublicTransactionsByQuery = (
@@ -582,12 +568,12 @@ export const getPublicTransactionsByQuery = (
       publicTransactions: flow(
         transactionsWithinDateRange(dateRangeStart!, dateRangeEnd!),
         transactionsWithinAmountRange(amountMin!, amountMax!)
-      )(getNonContactPublicTransactionsForApi(userId))
+      )(getNonContactPublicTransactionsForApi(userId)),
     };
   } else {
     return {
       contactsTransactions: getTransactionsForUserContacts(userId),
-      publicTransactions: getNonContactPublicTransactionsForApi(userId)
+      publicTransactions: getNonContactPublicTransactionsForApi(userId),
     };
   }
 };
@@ -626,7 +612,7 @@ export const createBankTransferWithdrawal = curry(
       source: transaction.source,
       amount: transferAmount,
       transactionId: transaction.id,
-      type: BankTransferType.withdrawal
+      type: BankTransferType.withdrawal,
     })
 );
 
@@ -656,7 +642,7 @@ export const createTransaction = (
         ? TransactionRequestStatus.pending
         : undefined,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   const savedTransaction = saveTransaction(transaction);
@@ -667,7 +653,7 @@ export const createTransaction = (
     creditPayAppBalance(receiver, transaction);
     // TODO: update transaction "status"
     updateTransactionById(sender.id, transaction.id, {
-      status: TransactionStatus.complete
+      status: TransactionStatus.complete,
     });
     // TODO: generate notification for transaction - createPaymentNotification(...)
     createPaymentNotification(
@@ -732,7 +718,7 @@ export const createLike = (userId: string, transactionId: string): Like => {
     userId,
     transactionId,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   const savedLike = saveLike(like);
@@ -773,7 +759,7 @@ export const createComment = (
     userId,
     transactionId,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   const savedComment = saveComment(comment);
@@ -833,7 +819,7 @@ export const createPaymentNotification = (
     status,
     isRead: false,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   saveNotification(notification);
@@ -853,7 +839,7 @@ export const createLikeNotification = (
     likeId: likeId,
     isRead: false,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   saveNotification(notification);
@@ -873,7 +859,7 @@ export const createCommentNotification = (
     commentId: commentId,
     isRead: false,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   saveNotification(notification);
@@ -932,7 +918,7 @@ export const formatNotificationForApiResponse = (
 
   return {
     userFullName,
-    ...notification
+    ...notification,
   };
 };
 
@@ -942,10 +928,10 @@ export const formatNotificationsForApiResponse = (
   orderBy(
     [
       (notification: NotificationResponseItem) =>
-        new Date(notification.modifiedAt)
+        new Date(notification.modifiedAt),
     ],
     ["desc"],
-    notifications.map(notification =>
+    notifications.map((notification) =>
       formatNotificationForApiResponse(notification)
     )
   );

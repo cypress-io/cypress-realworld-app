@@ -16,25 +16,25 @@ export interface Props {
   bankAccountsService: Interpreter<DataContext, any, DataEvents, any>;
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
-    flexDirection: "column"
-  }
+    flexDirection: "column",
+  },
 }));
 
 const BankAccountsContainer: React.FC<Props> = ({
   authService,
-  bankAccountsService
+  bankAccountsService,
 }) => {
   const match = useRouteMatch();
   const classes = useStyles();
   const [authState] = useService(authService);
   const [bankAccountsState, sendBankAccounts] = useService(bankAccountsService);
 
-  const currentUser = authState.context.user;
+  const currentUser = authState?.context.user;
 
   const createBankAccount = (payload: any) => {
     sendBankAccounts("CREATE", payload);
@@ -89,7 +89,7 @@ const BankAccountsContainer: React.FC<Props> = ({
         </Grid>
       </Grid>
       <BankAccountList
-        bankAccounts={bankAccountsState.context.results!}
+        bankAccounts={bankAccountsState?.context.results!}
         deleteBankAccount={deleteBankAccount}
       />
     </Paper>

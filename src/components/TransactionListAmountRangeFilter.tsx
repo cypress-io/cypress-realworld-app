@@ -6,7 +6,7 @@ import {
   Typography,
   Slider,
   Chip,
-  Button
+  Button,
 } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import { TransactionAmountRangePayload } from "../models";
@@ -14,25 +14,25 @@ import {
   formatAmountRangeValues,
   amountRangeValueText,
   amountRangeValueTextLabel,
-  padAmountWithZeros
+  padAmountWithZeros,
   //hasAmountQueryFields
 } from "../utils/transactionUtils";
 import { first, last } from "lodash/fp";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   amountRangeRoot: {
     width: 300,
-    margin: 30
+    margin: 30,
   },
   amountRangeTitleRow: {
-    width: "100%"
+    width: "100%",
   },
   amountRangeTitle: {
-    width: 225
+    width: 225,
   },
   amountRangeSlider: {
-    width: 200
-  }
+    width: 200,
+  },
 }));
 
 export type TransactionListAmountRangeFilterProps = {
@@ -44,7 +44,7 @@ export type TransactionListAmountRangeFilterProps = {
 const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilterProps> = ({
   filterAmountRange,
   amountRangeFilters,
-  resetAmountRange
+  resetAmountRange,
 }) => {
   const classes = useStyles();
   // TODO use in place of state
@@ -68,7 +68,7 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
 
   const [
     amountRangeAnchorEl,
-    setAmountRangeAnchorEl
+    setAmountRangeAnchorEl,
   ] = React.useState<HTMLDivElement | null>(null);
 
   const handleAmountRangeClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -85,7 +85,7 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
   ) => {
     filterAmountRange({
       amountMin: padAmountWithZeros(first(amountRange as number[]) as number),
-      amountMax: padAmountWithZeros(last(amountRange as number[]) as number)
+      amountMax: padAmountWithZeros(last(amountRange as number[]) as number),
     });
     setAmountRangeValue(amountRange as number[]);
   };
@@ -111,11 +111,11 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
         onClose={handleAmountRangeClose}
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "left"
+          horizontal: "left",
         }}
         transformOrigin={{
           vertical: "top",
-          horizontal: "left"
+          horizontal: "left",
         }}
       >
         <Grid

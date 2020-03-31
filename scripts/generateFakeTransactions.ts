@@ -9,7 +9,7 @@ import {
   Transaction,
   DefaultPrivacyLevel,
   TransactionStatus,
-  RequestStatus
+  RequestStatus,
 } from "../src/models";
 import { users, getOtherRandomUser } from "./utils";
 import { getFakeAmount } from "../src/utils/transactionUtils";
@@ -32,7 +32,7 @@ export const createTransaction = (
   privacyLevel: faker.helpers.randomize([
     DefaultPrivacyLevel.public,
     DefaultPrivacyLevel.private,
-    DefaultPrivacyLevel.contacts
+    DefaultPrivacyLevel.contacts,
   ]),
   receiverId,
   senderId,
@@ -40,7 +40,7 @@ export const createTransaction = (
   status: faker.helpers.randomize([
     TransactionStatus.pending,
     TransactionStatus.incomplete,
-    TransactionStatus.complete
+    TransactionStatus.complete,
   ]),
   requestStatus:
     type === "request"
@@ -48,11 +48,11 @@ export const createTransaction = (
       : faker.helpers.randomize([
           RequestStatus.pending,
           RequestStatus.accepted,
-          RequestStatus.rejected
+          RequestStatus.rejected,
         ]),
   requestResolvedAt: faker.date.future(),
   createdAt: faker.date.past(),
-  modifiedAt: faker.date.recent()
+  modifiedAt: faker.date.recent(),
 });
 
 export const createPayment = (account: BankAccount, user: User) =>
@@ -84,7 +84,7 @@ const flatTransactions = flattenDeep(transactions);
 fs.writeFile(
   __dirname + "/transactions.json",
   JSON.stringify(flatTransactions),
-  function() {
+  function () {
     console.log("transaction records generated");
   }
 );

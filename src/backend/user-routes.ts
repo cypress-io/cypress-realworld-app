@@ -10,7 +10,7 @@ import {
   getUserById,
   getUserByUsername,
   searchUsers,
-  removeUserFromResults
+  removeUserFromResults,
 } from "./database";
 import { User } from "../models/user";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
@@ -18,7 +18,7 @@ import {
   shortIdValidation,
   searchValidation,
   userFieldsValidator,
-  isUserValidator
+  isUserValidator,
 } from "./validators";
 const router = express.Router();
 
@@ -73,7 +73,7 @@ router.get(
     // Permission: account owner
     if (!isEqual(userId, req.user?.id)) {
       return res.status(401).send({
-        error: "Unauthorized"
+        error: "Unauthorized",
       });
     }
 

@@ -5,13 +5,13 @@ import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import { useService } from "@xstate/react";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
-    flexDirection: "column"
-  }
+    flexDirection: "column",
+  },
 }));
 
 export interface Props {
@@ -22,7 +22,7 @@ const UserSettingsContainer: React.FC<Props> = ({ authService }) => {
   const classes = useStyles();
   const [authState, sendAuth] = useService(authService);
 
-  const currentUser = authState.context.user;
+  const currentUser = authState?.context?.user;
   const updateUser = (payload: any) => sendAuth("UPDATE", payload);
 
   return (

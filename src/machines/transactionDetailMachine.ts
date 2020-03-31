@@ -35,6 +35,6 @@ export const transactionDetailMachine = dataMachine(
         payload
       );
       return resp.data;
-    }
-  }
+    },
+  },
 });

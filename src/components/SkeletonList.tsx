@@ -2,12 +2,12 @@ import React from "react";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
-    width: "95%"
-  }
+    width: "95%",
+  },
 }));
 
 const ListSkeleton = () => {

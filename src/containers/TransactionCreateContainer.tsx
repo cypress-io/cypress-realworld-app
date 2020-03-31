@@ -12,7 +12,7 @@ import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import {
   SnackbarSchema,
   SnackbarContext,
-  SnackbarEvents
+  SnackbarEvents,
 } from "../machines/snackbarMachine";
 
 export interface Props {
@@ -27,7 +27,7 @@ export interface Props {
 
 const TransactionCreateContainer: React.FC<Props> = ({
   authService,
-  snackbarService
+  snackbarService,
 }) => {
   const history = useHistory();
   const [authState, sendAuth] = useService(authService);
@@ -37,7 +37,7 @@ const TransactionCreateContainer: React.FC<Props> = ({
   const [createTransactionState, sendCreateTransaction] = useMachine(
     createTransactionMachine,
     {
-      devTools: true
+      devTools: true,
     }
   );
   const [usersState, sendUsers] = useMachine(usersMachine);

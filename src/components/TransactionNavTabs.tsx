@@ -1,26 +1,19 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { Link, useRouteMatch } from "react-router-dom";
-
-const useStyles = makeStyles({
-  root: {
-    flexGrow: 1
-  }
-});
+import { useTheme } from "@material-ui/core";
 
 export default function TransactionNavTabs() {
   const match = useRouteMatch();
-  const classes = useStyles();
+  const theme = useTheme();
 
   // Route Lookup for tabs
   const navUrls: any = {
     "/": 0,
     "/public": 0,
     "/contacts": 1,
-    "/personal": 2
+    "/personal": 2,
   };
 
   // Set selected tab based on url
@@ -31,39 +24,31 @@ export default function TransactionNavTabs() {
   };
 
   return (
-    <Paper
-      className={classes.root}
-      square={true}
-      variant={undefined}
-      elevation={0}
+    <Tabs
+      value={value}
+      onChange={handleChange}
+      indicatorColor={theme.palette.common.white}
+      centered
+      data-test="nav-transaction-tabs"
     >
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        indicatorColor="primary"
-        textColor="primary"
-        centered
-        data-test="nav-transaction-tabs"
-      >
-        <Tab
-          label="Everyone"
-          component={Link}
-          to="/"
-          data-test="nav-public-tab"
-        />
-        <Tab
-          label="Friends"
-          component={Link}
-          to="/contacts"
-          data-test="nav-contacts-tab"
-        />
-        <Tab
-          label="Mine"
-          component={Link}
-          to="/personal"
-          data-test="nav-personal-tab"
-        />
-      </Tabs>
-    </Paper>
+      <Tab
+        label="Everyone"
+        component={Link}
+        to="/"
+        data-test="nav-public-tab"
+      />
+      <Tab
+        label="Friends"
+        component={Link}
+        to="/contacts"
+        data-test="nav-contacts-tab"
+      />
+      <Tab
+        label="Mine"
+        component={Link}
+        to="/personal"
+        data-test="nav-personal-tab"
+      />
+    </Tabs>
   );
 }

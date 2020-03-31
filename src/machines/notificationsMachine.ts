@@ -8,7 +8,7 @@ export const notificationsMachine = dataMachine("notifications").withConfig({
       const payload = omit("type", event);
       const resp = await httpClient.get(`http://localhost:3001/notifications`, {
         params:
-          !isEmpty(payload) && event.type === "FETCH" ? payload : undefined
+          !isEmpty(payload) && event.type === "FETCH" ? payload : undefined,
       });
       return resp.data;
     },
@@ -19,6 +19,6 @@ export const notificationsMachine = dataMachine("notifications").withConfig({
         payload
       );
       return resp.data;
-    }
-  }
+    },
+  },
 });

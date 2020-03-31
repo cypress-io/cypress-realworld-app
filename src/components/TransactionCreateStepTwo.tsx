@@ -11,23 +11,23 @@ const validationSchema = object({
   amount: number().required("Amount is required"),
   description: string().required("Please type a note"),
   senderId: string(),
-  receiverId: string()
+  receiverId: string(),
 });
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 interface NumberFormatCustomProps {
@@ -42,12 +42,12 @@ function NumberFormatCustom(props: NumberFormatCustomProps) {
     <NumberFormat
       {...other}
       getInputRef={inputRef}
-      onValueChange={values => {
+      onValueChange={(values) => {
         onChange({
           target: {
             ...other,
-            value: values.value
-          }
+            value: values.value,
+          },
         });
       }}
       thousandSeparator
@@ -75,7 +75,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
   receiver,
   sender,
   createTransaction,
-  showSnackbar
+  showSnackbar,
 }) => {
   const classes = useStyles();
   const [transactionType, setTransactionType] = useState();
@@ -83,7 +83,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
     amount: "",
     description: "",
     senderId: sender.id,
-    receiverId: receiver.id
+    receiverId: receiver.id,
   };
 
   return (
@@ -106,7 +106,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
             createTransaction({ transactionType, ...values });
             showSnackbar({
               severity: "success",
-              message: "Transaction Submitted!"
+              message: "Transaction Submitted!",
             });
           }}
         >
@@ -128,7 +128,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                     helperText={meta.touched ? meta.error : ""}
                     InputProps={{
                       inputComponent: NumberFormatCustom as any,
-                      inputProps: { id: "amount" }
+                      inputProps: { id: "amount" },
                     }}
                     {...field}
                   />
