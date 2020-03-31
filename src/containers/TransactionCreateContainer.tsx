@@ -46,7 +46,7 @@ const TransactionCreateContainer: React.FC<Props> = ({
     sendUsers({ type: "FETCH" });
   }, [sendUsers]);
 
-  const sender = authState.context.user;
+  const sender = authState?.context?.user;
   const setReceiver = (receiver: User) => {
     sendCreateTransaction("SET_USERS", { sender, receiver });
   };
