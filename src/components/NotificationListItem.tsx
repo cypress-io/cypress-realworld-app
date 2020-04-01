@@ -7,12 +7,10 @@ import CommentIcon from "@material-ui/icons/CommentRounded";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import { NotificationResponseItem } from "../models";
 import {
-  Card,
-  CardContent,
-  Typography,
-  CardActions,
   Button,
   makeStyles,
+  ListItemIcon,
+  ListItemText,
 } from "@material-ui/core";
 import {
   isCommentNotification,
@@ -75,31 +73,18 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
 
   return (
     <ListItem data-test={`notification-list-item-${notification.id}`}>
-      <Card className={classes.card}>
-        <CardContent>
-          <Typography
-            variant="body2"
-            className={classes.title}
-            color="textSecondary"
-          >
-            {listItemIcon}
-            {"     "}
-            {listItemText}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button
-            color="primary"
-            size="small"
-            onClick={() =>
-              updateNotification({ id: notification.id, isRead: true })
-            }
-            data-test={`notification-mark-read-${notification.id}`}
-          >
-            Mark as read
-          </Button>
-        </CardActions>
-      </Card>
+      <ListItemIcon>{listItemIcon!}</ListItemIcon>
+      <ListItemText primary={listItemText} />
+      <Button
+        color="primary"
+        size="small"
+        onClick={() =>
+          updateNotification({ id: notification.id, isRead: true })
+        }
+        data-test={`notification-mark-read-${notification.id}`}
+      >
+        Mark as read
+      </Button>
     </ListItem>
   );
 };
