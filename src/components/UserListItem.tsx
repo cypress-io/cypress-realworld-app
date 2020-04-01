@@ -26,28 +26,35 @@ const UserListItem: React.FC<UserListItemProps> = ({
       <ListItemText
         primary={`${user.firstName} ${user.lastName}`}
         secondary={
-          <Grid
-            container
-            direction="row"
-            justify="flex-start"
-            alignItems="flex-start"
-            spacing={1}
-          >
-            <Grid item>
-              <b>U: </b>
-              {user.username}
+          <span>
+            <Grid
+              component={"span"}
+              container
+              direction="row"
+              justify="flex-start"
+              alignItems="flex-start"
+              spacing={1}
+            >
+              <Grid item component={"span"}>
+                <b>U: </b>
+                {user.username}
+              </Grid>
+              <Grid item component={"span"}>
+                &bull;
+              </Grid>
+              <Grid item component={"span"}>
+                <b>E: </b>
+                {user.email}
+              </Grid>
+              <Grid item component={"span"}>
+                &bull;
+              </Grid>
+              <Grid item component={"span"}>
+                <b>P: </b>
+                {user.phoneNumber}
+              </Grid>
             </Grid>
-            <Grid item>&bull;</Grid>
-            <Grid item>
-              <b>E: </b>
-              {user.email}
-            </Grid>
-            <Grid item>&bull;</Grid>
-            <Grid item>
-              <b>P: </b>
-              {user.phoneNumber}
-            </Grid>
-          </Grid>
+          </span>
         }
       />
     </ListItem>
