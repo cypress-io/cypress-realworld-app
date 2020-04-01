@@ -14,6 +14,7 @@ import {
   Box,
 } from "@material-ui/core";
 import { User } from "../models";
+import { random } from "lodash/fp";
 
 const validationSchema = object({
   amount: number().required("Amount is required"),
@@ -102,11 +103,27 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
         alignItems="center"
         justifyContent="center"
       >
-        <Avatar src={`https://i.pravatar.cc/100?img=${1}`} />
-        <Typography component="h2" variant="h6" color="primary" gutterBottom>
-          {receiver.firstName} {receiver.lastName}
-          {transactionType}
-        </Typography>
+        <Grid
+          container
+          direction="column"
+          justify="flex-start"
+          alignItems="center"
+        >
+          <Grid item>
+            <Avatar src={`https://i.pravatar.cc/100?img=${random(3, 50)}`} />
+          </Grid>
+          <Grid item>
+            <Typography
+              component="h2"
+              variant="h6"
+              color="primary"
+              gutterBottom
+            >
+              {receiver.firstName} {receiver.lastName}
+              {transactionType}
+            </Typography>
+          </Grid>
+        </Grid>
       </Box>
       <Container maxWidth="xs">
         <Formik
