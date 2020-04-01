@@ -4,7 +4,15 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object, number } from "yup";
-import { Paper, Typography, Button, Grid, Container } from "@material-ui/core";
+import {
+  Paper,
+  Typography,
+  Button,
+  Grid,
+  Container,
+  Avatar,
+  Box,
+} from "@material-ui/core";
 import { User } from "../models";
 
 const validationSchema = object({
@@ -16,7 +24,7 @@ const validationSchema = object({
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(2),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -88,10 +96,18 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
 
   return (
     <Paper className={classes.paper}>
-      <Typography component="h2" variant="h6" color="primary" gutterBottom>
-        <b>TO:</b> {receiver.firstName} {receiver.lastName}
-        {transactionType}
-      </Typography>
+      <Box
+        display="flex"
+        height={200}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Avatar src={`https://i.pravatar.cc/100?img=${1}`} />
+        <Typography component="h2" variant="h6" color="primary" gutterBottom>
+          {receiver.firstName} {receiver.lastName}
+          {transactionType}
+        </Typography>
+      </Box>
       <Container maxWidth="xs">
         <Formik
           initialValues={initialValues}

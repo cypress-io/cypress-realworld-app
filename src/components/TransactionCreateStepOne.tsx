@@ -6,6 +6,7 @@ import UserListSearchForm from "./UserListSearchForm";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
+    //marginTop: theme.spacing(2),
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
@@ -27,10 +28,10 @@ const TransactionCreateStepOne: React.FC<TransactionCreateStepOneProps> = ({
   const classes = useStyles();
 
   return (
-    <Paper className={classes.paper}>
-      <Typography component="h2" variant="h6" color="primary" gutterBottom>
+    <Paper className={classes.paper} elevation={0}>
+      {/*<Typography component="h2" variant="h6" color="primary" gutterBottom>
         Select User
-      </Typography>
+  </Typography>*/}
       <UserListSearchForm userListSearch={userListSearch} />
       <UsersList users={users} setReceiver={setReceiver} />
     </Paper>

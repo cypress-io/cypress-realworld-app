@@ -2,12 +2,13 @@ import { omit } from "lodash/fp";
 import { Machine, assign } from "xstate";
 import { dataMachine } from "./dataMachine";
 import { httpClient } from "../utils/asyncUtils";
-import { User } from "../models";
+import { User, TransactionCreatePayload } from "../models";
 
 export interface CreateTransactionMachineSchema {
   states: {
     stepOne: {};
     stepTwo: {};
+    stepThree: {};
     done: {};
   };
 }
@@ -28,11 +29,13 @@ const transactionDataMachine = dataMachine("transactionData").withConfig({
 export type CreateTransactionMachineEvents =
   | { type: "SET_USERS" }
   | { type: "CREATE" }
+  | { type: "CONFIRM" }
   | { type: "COMPLETE" };
 
 export interface CreateTransactionMachineContext {
   sender: User;
   receiver: User;
+  transactionDetails: TransactionCreatePayload;
 }
 
 export const createTransactionMachine = Machine<
@@ -51,6 +54,12 @@ export const createTransactionMachine = Machine<
       },
       stepTwo: {
         entry: "setSenderAndReceiver",
+        on: {
+          CONFIRM: "stepThree",
+        },
+      },
+      stepThree: {
+        entry: "setTransactionDetails",
         invoke: {
           id: "transactionDataMachine",
           src: transactionDataMachine,
@@ -70,6 +79,9 @@ export const createTransactionMachine = Machine<
       setSenderAndReceiver: assign((ctx, event: any) => ({
         sender: event.sender,
         receiver: event.receiver,
+      })),
+      setTransactionDetails: assign((ctx, event: any) => ({
+        transactionDetails: event,
       })),
     },
   }

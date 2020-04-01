@@ -42,6 +42,10 @@ export type TransactionPayload = Omit<
   "id" | "uuid" | "createdAt" | "modifiedAt"
 >;
 
+export type TransactionCreatePayload = Partial<
+  Pick<Transaction, "senderId" | "receiverId" | "amount" | "description">
+>;
+
 export type TransactionUpdateActionPayload = Pick<
   Transaction,
   "id" | "requestStatus"

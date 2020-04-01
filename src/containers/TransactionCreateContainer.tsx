@@ -14,6 +14,7 @@ import {
   SnackbarContext,
   SnackbarEvents,
 } from "../machines/snackbarMachine";
+import { Stepper, Step, StepLabel } from "@material-ui/core";
 
 export interface Props {
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
@@ -65,6 +66,17 @@ const TransactionCreateContainer: React.FC<Props> = ({
 
   return (
     <>
+      <Stepper activeStep={createTransactionState.matches("stepOne") ? 1 : 2}>
+        <Step key={"stepOne"}>
+          <StepLabel>Select Contact</StepLabel>
+        </Step>
+        <Step key={"stepTwo"}>
+          <StepLabel>Pay Or Request</StepLabel>
+        </Step>
+        <Step key={"stepThree"}>
+          <StepLabel>Confirm</StepLabel>
+        </Step>
+      </Stepper>
       {createTransactionState.matches("stepOne") && (
         <TransactionCreateStepOne
           setReceiver={setReceiver}
