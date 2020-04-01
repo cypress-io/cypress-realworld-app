@@ -32,7 +32,7 @@ const NotificationsContainer: React.FC<Props> = ({
   );
 
   useEffect(() => {
-    if (authState.matches("authorized")) {
+    if (authState?.matches("authorized")) {
       sendNotifications({ type: "FETCH" });
     }
   }, [authState, sendNotifications]);
@@ -46,7 +46,7 @@ const NotificationsContainer: React.FC<Props> = ({
         Notifications
       </Typography>
       <NotificationList
-        notifications={notificationsState.context?.results!}
+        notifications={notificationsState?.context?.results!}
         updateNotification={updateNotification}
       />
     </Paper>
