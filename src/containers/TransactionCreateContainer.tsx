@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useHistory } from "react-router";
 import { useMachine, useService } from "@xstate/react";
 import { User, TransactionPayload } from "../models";
 import TransactionCreateStepOne from "../components/TransactionCreateStepOne";
@@ -30,7 +29,6 @@ const TransactionCreateContainer: React.FC<Props> = ({
   authService,
   snackbarService,
 }) => {
-  const history = useHistory();
   const [authState, sendAuth] = useService(authService);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [snackbarState, sendSnackbar] = useService(snackbarService);
@@ -55,7 +53,6 @@ const TransactionCreateContainer: React.FC<Props> = ({
   const createTransaction = (payload: TransactionPayload) => {
     sendCreateTransaction("CREATE", payload);
     refreshUser();
-    //history.push("/");
   };
   const userListSearch = debounce(200, (payload: any) =>
     sendUsers("FETCH", payload)
