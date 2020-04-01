@@ -80,7 +80,7 @@ const TransactionCreateContainer: React.FC<Props> = ({
           <StepLabel>Select Contact</StepLabel>
         </Step>
         <Step key={"stepTwo"}>
-          <StepLabel>Pay Or Request</StepLabel>
+          <StepLabel>Payment</StepLabel>
         </Step>
         <Step key={"stepThree"}>
           <StepLabel>Confirm</StepLabel>

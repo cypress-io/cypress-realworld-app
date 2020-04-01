@@ -3,7 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link as RouterLink } from "react-router-dom";
-import { Button } from "@material-ui/core";
+import { Button, ListSubheader } from "@material-ui/core";
 import { isEmpty } from "lodash/fp";
 
 import SkeletonList from "./SkeletonList";
@@ -42,9 +42,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
 
   return (
     <Paper className={classes.paper}>
-      <Typography component="h6" variant="h6" color="primary" gutterBottom>
-        {header}
-      </Typography>
+      <ListSubheader component="div">{header}</ListSubheader>
       {showSkeleton && <SkeletonList />}
       {transactions.length > 0 && (
         <TransactionInfiniteList
