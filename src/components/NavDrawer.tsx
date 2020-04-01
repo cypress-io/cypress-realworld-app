@@ -74,7 +74,7 @@ export const mainListItems = (
       // @ts-ignore
       onClick={() => showTemporaryDrawer && toggleDrawer()}
       component={RouterLink}
-      to="/auth"
+      to="/notifications"
       data-test="sidenav-auth"
     >
       <ListItemIcon>
