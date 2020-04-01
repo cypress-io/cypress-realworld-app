@@ -80,7 +80,7 @@ describe("Transaction Feed", function () {
       .scrollIntoView()
       .click({ force: true });
 
-    cy.getTest("nav-personal-tab").should("not.be.visible");
+    cy.getTestLike("transaction-item").should("not.be.visible");
   });
 
   it("renders mine (personal) transaction feed, filters by date range, then clears the date range filter", function () {

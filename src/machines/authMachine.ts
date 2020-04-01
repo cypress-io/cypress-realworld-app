@@ -101,6 +101,7 @@ export const authMachine = Machine<
           `http://localhost:3001/login`,
           payload
         );
+        history.push("/");
         return resp.data;
       },
       getUserProfile: async (ctx, event) => {

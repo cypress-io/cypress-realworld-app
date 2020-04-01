@@ -47,6 +47,7 @@ describe("New Transaction", function () {
 
     cy.getTest("sidenav-user-balance").should("contain", "$525.00");
 
+    cy.getTest("app-name-logo").find("a").click();
     // Guide Tip: re-querying DOM for element
     cy.getTest("nav-personal-tab").as("mine-tab");
     cy.get("@mine-tab").click();
@@ -75,6 +76,7 @@ describe("New Transaction", function () {
 
     cy.getTest("sidenav-user-balance").should("contain", "$550.00");
 
+    cy.getTest("app-name-logo").find("a").click();
     // Guide Tip: re-querying DOM for element
     cy.getTest("nav-personal-tab").as("mine-tab");
     cy.get("@mine-tab").click();
