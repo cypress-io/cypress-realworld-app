@@ -37,18 +37,21 @@ const PrivateRoutesContainer: React.FC<Props> = ({
   bankAccountsService,
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [authState, sendAuth] = useService(authService);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [notificationsState, sendNotifications] = useService(
     notificationsService
   );
 
   useEffect(() => {
+    sendAuth("REFRESH");
     sendNotifications({ type: "FETCH" });
     const authSubscription = authService.subscribe((state) => {
       localStorage.setItem("authState", JSON.stringify(state));
     });
 
     return authSubscription.unsubscribe;
-  }, [sendNotifications, authService]);
+  }, [sendNotifications, authService, sendAuth]);
 
   return (
     <MainLayout
