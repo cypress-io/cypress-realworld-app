@@ -2,11 +2,9 @@ import React from "react";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { Link, useRouteMatch } from "react-router-dom";
-import { useTheme } from "@material-ui/core";
 
 export default function TransactionNavTabs() {
   const match = useRouteMatch();
-  const theme = useTheme();
 
   // Route Lookup for tabs
   const navUrls: any = {
@@ -27,7 +25,7 @@ export default function TransactionNavTabs() {
     <Tabs
       value={value}
       onChange={handleChange}
-      indicatorColor={theme.palette.common.white}
+      indicatorColor="secondary"
       centered
       data-test="nav-transaction-tabs"
     >

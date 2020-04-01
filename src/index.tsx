@@ -5,12 +5,23 @@ import { createBrowserHistory } from "history";
 
 import App from "./containers/App";
 import * as serviceWorker from "./serviceWorker";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 
 export const history = createBrowserHistory();
 
+const theme = createMuiTheme({
+  palette: {
+    secondary: {
+      main: "#fff",
+    },
+  },
+});
+
 ReactDOM.render(
   <Router history={history}>
-    <App />
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
   </Router>,
   document.getElementById("root")
 );
