@@ -109,7 +109,7 @@ export const authMachine = Machine<
           `http://localhost:3001/checkAuth`,
           payload
         );
-        history.push("/");
+        //history.push("/");
         return resp.data;
       },
       updateProfile: async (ctx, event: any) => {

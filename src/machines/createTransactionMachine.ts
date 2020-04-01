@@ -54,19 +54,18 @@ export const createTransactionMachine = Machine<
       },
       stepTwo: {
         entry: "setSenderAndReceiver",
-        on: {
-          CONFIRM: "stepThree",
-        },
-      },
-      stepThree: {
-        entry: "setTransactionDetails",
         invoke: {
           id: "transactionDataMachine",
           src: transactionDataMachine,
           autoForward: true,
         },
         on: {
-          CREATE: "done",
+          CREATE: "stepThree",
+        },
+      },
+      stepThree: {
+        on: {
+          CONFIRM: "done",
         },
       },
       done: {
@@ -79,9 +78,6 @@ export const createTransactionMachine = Machine<
       setSenderAndReceiver: assign((ctx, event: any) => ({
         sender: event.sender,
         receiver: event.receiver,
-      })),
-      setTransactionDetails: assign((ctx, event: any) => ({
-        transactionDetails: event,
       })),
     },
   }

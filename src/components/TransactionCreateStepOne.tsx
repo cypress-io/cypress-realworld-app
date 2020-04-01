@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, Paper, Typography } from "@material-ui/core";
+import { makeStyles, Paper } from "@material-ui/core";
 import UsersList from "./UsersList";
 import { User } from "../models";
 import UserListSearchForm from "./UserListSearchForm";
@@ -29,9 +29,6 @@ const TransactionCreateStepOne: React.FC<TransactionCreateStepOneProps> = ({
 
   return (
     <Paper className={classes.paper} elevation={0}>
-      {/*<Typography component="h2" variant="h6" color="primary" gutterBottom>
-        Select User
-  </Typography>*/}
       <UserListSearchForm userListSearch={userListSearch} />
       <UsersList users={users} setReceiver={setReceiver} />
     </Paper>

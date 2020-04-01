@@ -48,25 +48,34 @@ const TransactionCreateContainer: React.FC<Props> = ({
   }, [sendUsers]);
 
   const sender = authState?.context?.user;
+  const refreshUser = () => sendAuth("REFRESH");
   const setReceiver = (receiver: User) => {
     sendCreateTransaction("SET_USERS", { sender, receiver });
   };
   const createTransaction = (payload: TransactionPayload) => {
     sendCreateTransaction("CREATE", payload);
     refreshUser();
-    history.push("/");
+    //history.push("/");
   };
   const userListSearch = debounce(200, (payload: any) =>
     sendUsers("FETCH", payload)
   );
-  const refreshUser = () => sendAuth("REFRESH");
 
   const showSnackbar = (payload: SnackbarContext) =>
     sendSnackbar("SHOW", payload);
 
+  let activeStep;
+  if (createTransactionState.matches("stepTwo")) {
+    activeStep = 1;
+  } else if (createTransactionState.matches("stepThree")) {
+    activeStep = 3;
+  } else {
+    activeStep = 0;
+  }
+
   return (
     <>
-      <Stepper activeStep={createTransactionState.matches("stepOne") ? 1 : 2}>
+      <Stepper activeStep={activeStep}>
         <Step key={"stepOne"}>
           <StepLabel>Select Contact</StepLabel>
         </Step>
@@ -92,6 +101,7 @@ const TransactionCreateContainer: React.FC<Props> = ({
           showSnackbar={showSnackbar}
         />
       )}
+      {createTransactionState.matches("stepThree") && <div>Confirmation</div>}
     </>
   );
 };
