@@ -34,9 +34,8 @@ const TransactionContactsList: React.FC<TransactionContactListProps> = ({
 
   return (
     <>
-      {filterComponent}
-      <br />
       <TransactionList
+        filterComponent={filterComponent}
         header="Contacts"
         transactions={results as TransactionResponseItem[]}
         isLoading={current.matches("loading")}

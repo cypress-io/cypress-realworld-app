@@ -90,7 +90,7 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
           variant="outlined"
           onClick={handleDateRangeClick}
           data-test="transaction-list-filter-date-range-button"
-          label={"Date Range: ALL"}
+          label={"Date: ALL"}
           deleteIcon={<ArrowDropDownIcon />}
           onDelete={handleDateRangeClick}
         />
@@ -100,7 +100,7 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
           color="primary"
           variant="outlined"
           onClick={handleDateRangeClick}
-          label={`Date Range: ${dateRangeLabel(dateRangeFilters)}`}
+          label={`Date: ${dateRangeLabel(dateRangeFilters)}`}
           deleteIcon={
             <CancelIcon data-test="transaction-list-filter-date-clear-button" />
           }

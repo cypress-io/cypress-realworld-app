@@ -100,7 +100,7 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
         variant="outlined"
         onClick={handleAmountRangeClick}
         data-test="transaction-list-filter-amount-range-button"
-        label={`Amount Range: ${formatAmountRangeValues(amountRangeValue)}`}
+        label={`Amount: ${formatAmountRangeValues(amountRangeValue)}`}
         deleteIcon={<ArrowDropDownIcon />}
         onDelete={handleAmountRangeClick}
       />
