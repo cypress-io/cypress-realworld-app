@@ -40,10 +40,6 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
   const transactionDetails =
     createTransactionState?.context?.transactionDetails;
 
-  const amount = transactionDetails?.amount
-    ? parseInt(transactionDetails?.amount, 10)
-    : undefined;
-
   return (
     <Paper className={classes.paper} elevation={0}>
       <Box
@@ -54,7 +50,7 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
       >
         <Grid
           container
-          direction="column"
+          direction="row"
           justify="flex-start"
           alignItems="center"
         >
@@ -75,6 +71,11 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
             <Avatar src={`https://i.pravatar.cc/100?img=${random(3, 50)}`} />
           </Grid>
           <Grid item>
+            {transactionDetails?.transactionType === "payment"
+              ? "Paid"
+              : "Requested"}
+          </Grid>
+          <Grid item>
             <Typography
               component="h2"
               variant="h6"
@@ -84,11 +85,13 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
               {receiver.firstName} {receiver.lastName}
             </Typography>
           </Grid>
-          <Grid item>
-            {transactionDetails?.transactionType === "payment"
-              ? "Paid"
-              : "Requested"}
-          </Grid>
+        </Grid>
+        <Grid
+          container
+          direction="row"
+          justify="flex-start"
+          alignItems="center"
+        >
           <Grid item>
             <Typography
               component="h2"
