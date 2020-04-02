@@ -17,7 +17,7 @@ import Container from "@material-ui/core/Container";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 
-import Copyright from "./Copyright";
+import Footer from "./Footer";
 import { SignInPayload } from "../models";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 
@@ -158,7 +158,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
         </Formik>
       </div>
       <Box mt={8}>
-        <Copyright />
+        <Footer />
       </Box>
     </Container>
   );

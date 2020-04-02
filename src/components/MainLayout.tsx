@@ -7,7 +7,7 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { useMediaQuery, useTheme } from "@material-ui/core";
 
-import Copyright from "../components/Copyright";
+import Footer from "./Footer";
 import NavBar from "./NavBar";
 import NavDrawer from "./NavDrawer";
 import { DataContext, DataEvents } from "../machines/dataMachine";
@@ -95,7 +95,7 @@ const MainLayout: React.FC<Props> = ({
             </Grid>
           </Grid>
           <Box pt={4}>
-            <Copyright />
+            <Footer />
           </Box>
         </Container>
       </main>
