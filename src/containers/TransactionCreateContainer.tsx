@@ -82,7 +82,7 @@ const TransactionCreateContainer: React.FC<Props> = ({
           <StepLabel>Payment</StepLabel>
         </Step>
         <Step key={"stepThree"}>
-          <StepLabel>Confirm</StepLabel>
+          <StepLabel>Complete</StepLabel>
         </Step>
       </Stepper>
       {createTransactionState.matches("stepOne") && (
