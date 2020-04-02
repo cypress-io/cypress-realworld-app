@@ -64,6 +64,7 @@ export const createTransactionMachine = Machine<
         },
       },
       stepThree: {
+        entry: "setTransactionDetails",
         on: {
           CONFIRM: "done",
         },
@@ -78,6 +79,9 @@ export const createTransactionMachine = Machine<
       setSenderAndReceiver: assign((ctx, event: any) => ({
         sender: event.sender,
         receiver: event.receiver,
+      })),
+      setTransactionDetails: assign((ctx, event: any) => ({
+        transactionDetails: event,
       })),
     },
   }

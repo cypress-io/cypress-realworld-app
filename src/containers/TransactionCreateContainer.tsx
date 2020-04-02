@@ -3,6 +3,7 @@ import { useMachine, useService } from "@xstate/react";
 import { User, TransactionPayload } from "../models";
 import TransactionCreateStepOne from "../components/TransactionCreateStepOne";
 import TransactionCreateStepTwo from "../components/TransactionCreateStepTwo";
+import TransactionCreateStepThree from "../components/TransactionCreateStepThree";
 import { createTransactionMachine } from "../machines/createTransactionMachine";
 import { usersMachine } from "../machines/usersMachine";
 import { debounce } from "lodash/fp";
@@ -33,12 +34,13 @@ const TransactionCreateContainer: React.FC<Props> = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [snackbarState, sendSnackbar] = useService(snackbarService);
 
-  const [createTransactionState, sendCreateTransaction] = useMachine(
-    createTransactionMachine,
-    {
-      devTools: true,
-    }
-  );
+  const [
+    createTransactionState,
+    sendCreateTransaction,
+    createTransactionService,
+  ] = useMachine(createTransactionMachine, {
+    devTools: true,
+  });
   const [usersState, sendUsers] = useMachine(usersMachine);
 
   useEffect(() => {
@@ -98,7 +100,11 @@ const TransactionCreateContainer: React.FC<Props> = ({
           showSnackbar={showSnackbar}
         />
       )}
-      {createTransactionState.matches("stepThree") && <div>Confirmation</div>}
+      {createTransactionState.matches("stepThree") && (
+        <TransactionCreateStepThree
+          createTransactionService={createTransactionService}
+        />
+      )}
     </>
   );
 };

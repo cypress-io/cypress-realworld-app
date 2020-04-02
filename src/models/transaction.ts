@@ -43,7 +43,10 @@ export type TransactionPayload = Omit<
 >;
 
 export type TransactionCreatePayload = Partial<
-  Pick<Transaction, "senderId" | "receiverId" | "amount" | "description">
+  Pick<Transaction, "senderId" | "receiverId" | "description"> & {
+    amount: string;
+    transactionType: string;
+  }
 >;
 
 export type TransactionUpdateActionPayload = Pick<
