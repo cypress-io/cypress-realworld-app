@@ -217,7 +217,7 @@ const NavDrawer: React.FC<Props> = ({
             </Grid>
           </>
         )}
-        <Grid item></Grid>
+        <Grid item style={{ width: "30%" }}></Grid>
       </Grid>
       {currentUser && (
         <Grid
