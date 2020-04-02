@@ -57,6 +57,10 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: "none",
     },
   },
+  customBadge: {
+    backgroundColor: "red",
+    color: "white",
+  },
 }));
 
 interface NavBarProps {
@@ -127,8 +131,8 @@ const NavBar: React.FC<NavBarProps> = ({
             badgeContent={
               allNotifications ? allNotifications.length : undefined
             }
-            color="secondary"
             data-test="nav-top-notifications-count"
+            classes={{ badge: classes.customBadge }}
           >
             <NotificationsIcon />
           </Badge>
