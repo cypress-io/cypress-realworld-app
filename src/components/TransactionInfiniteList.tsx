@@ -77,7 +77,7 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
             itemCount={itemCount}
             ref={ref}
             onItemsRendered={onItemsRendered}
-            height={isXsBreakpoint ? theme.spacing(48) : theme.spacing(64)}
+            height={isXsBreakpoint ? theme.spacing(48) : theme.spacing(68)}
             width={"98%"}
             itemSize={isXsBreakpoint ? theme.spacing(28) : theme.spacing(16)}
           >
