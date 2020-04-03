@@ -37,6 +37,7 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
   );
 
   const receiver = createTransactionState?.context?.receiver;
+  const sender = createTransactionState?.context?.sender;
   const transactionDetails =
     createTransactionState?.context?.transactionDetails;
 
@@ -55,7 +56,7 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
           alignItems="center"
         >
           <Grid item>
-            <Avatar src={`https://i.pravatar.cc/100?img=${random(3, 50)}`} />
+            <Avatar src={sender.avatar} />
           </Grid>
           <Grid item>
             <Typography
@@ -68,7 +69,7 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
             </Typography>
           </Grid>
           <Grid item>
-            <Avatar src={`https://i.pravatar.cc/100?img=${random(3, 50)}`} />
+            <Avatar src={receiver.avatar} />
           </Grid>
           <Grid item>
             {transactionDetails?.transactionType === "payment"
