@@ -46,6 +46,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     textAlign: "center",
   },
+  logo: {
+    verticalAlign: "bottom",
+  },
   newTransactionButton: {
     fontSize: 16,
     backgroundColor: "#00C853",
@@ -110,7 +113,7 @@ const NavBar: React.FC<NavBarProps> = ({
             style={{ color: "#fff", textDecoration: "none" }}
             component={RouterLink}
           >
-            <img src={PayAppLogo} alt="Pay App Logo" />
+            <img className={classes.logo} src={PayAppLogo} alt="Pay App Logo" />
           </Link>
         </Typography>
         <Button
