@@ -45,19 +45,41 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
     <Paper className={classes.paper} elevation={0}>
       <Box
         display="flex"
-        //height={200}
-        alignItems="center"
         justifyContent="center"
+        width="95%"
+        min-height={200}
+        height={200}
       >
         <Grid
           container
           direction="row"
-          justify="flex-start"
+          justify="space-around"
           alignItems="center"
+          spacing={4}
         >
           <Grid item>
-            <Avatar src={sender.avatar} />
+            <Grid
+              container
+              direction="column"
+              justify="flex-start"
+              alignItems="center"
+            >
+              <Grid item>
+                <Avatar src={sender.avatar} />
+              </Grid>
+              <Grid item>
+                <Typography
+                  component="h2"
+                  variant="h6"
+                  color="primary"
+                  gutterBottom
+                >
+                  You
+                </Typography>
+              </Grid>
+            </Grid>
           </Grid>
+
           <Grid item>
             <Typography
               component="h2"
@@ -65,34 +87,38 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
               color="primary"
               gutterBottom
             >
-              You
+              {transactionDetails?.transactionType === "payment"
+                ? "Paid"
+                : "Requested"}
             </Typography>
           </Grid>
+
           <Grid item>
-            <Avatar src={receiver.avatar} />
-          </Grid>
-          <Grid item>
-            {transactionDetails?.transactionType === "payment"
-              ? "Paid"
-              : "Requested"}
-          </Grid>
-          <Grid item>
-            <Typography
-              component="h2"
-              variant="h6"
-              color="primary"
-              gutterBottom
+            <Grid
+              container
+              direction="column"
+              justify="flex-start"
+              alignItems="center"
             >
-              {receiver.firstName} {receiver.lastName}
-            </Typography>
+              <Grid item>
+                <Avatar src={receiver.avatar} />
+              </Grid>
+              <Grid item>
+                <Typography
+                  component="h2"
+                  variant="h6"
+                  color="primary"
+                  gutterBottom
+                >
+                  {receiver.firstName} {receiver.lastName}
+                </Typography>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
-        <Grid
-          container
-          direction="row"
-          justify="flex-start"
-          alignItems="center"
-        >
+      </Box>
+      <Box display="flex" justifyContent="center" width="100%">
+        <Grid container direction="row" justify="center" alignItems="center">
           <Grid item>
             <Typography
               component="h2"
@@ -101,11 +127,12 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
               gutterBottom
             >
               {transactionDetails?.amount &&
-                formatAmount(parseInt(transactionDetails.amount, 10) * 100)}
+                formatAmount(
+                  parseInt(transactionDetails.amount, 10) * 100
+                )}{" "}
+              for {transactionDetails?.description}
             </Typography>
           </Grid>
-          <Grid item>for</Grid>
-          <Grid item>{transactionDetails?.description}</Grid>
         </Grid>
       </Box>
     </Paper>
