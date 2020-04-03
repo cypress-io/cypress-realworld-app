@@ -16,7 +16,7 @@ import { Interpreter } from "xstate";
 import { DataContext, DataEvents } from "../machines/dataMachine";
 import { useService } from "@xstate/react";
 import TransactionNavTabs from "./TransactionNavTabs";
-import PayAppLogo from "../svgs/pay-app-logo.svg";
+import { ReactComponent as PayAppLogo } from "../svgs/pay-app-logo.svg";
 
 const drawerWidth = 240;
 
@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
   logo: {
+    color: "white",
     verticalAlign: "bottom",
   },
   newTransactionButton: {
@@ -113,7 +114,7 @@ const NavBar: React.FC<NavBarProps> = ({
             style={{ color: "#fff", textDecoration: "none" }}
             component={RouterLink}
           >
-            <img className={classes.logo} src={PayAppLogo} alt="Pay App Logo" />
+            <PayAppLogo className={classes.logo} />
           </Link>
         </Typography>
         <Button
