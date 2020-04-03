@@ -153,10 +153,7 @@ const useStyles = makeStyles((theme) => ({
     display: "none",
   },
   cypressLogo: {
-    position: "absolute",
-    bottom: 50,
     width: "90%",
-    marginLeft: "5%",
   },
 }));
 
@@ -206,70 +203,80 @@ const NavDrawer: React.FC<Props> = ({
         alignItems="center"
         className={drawerOpen ? classes.userProfile : classes.userProfileHidden}
       >
-        {currentUser && (
-          <>
-            <Grid item>
-              <Avatar
-                className={classes.avatar}
-                alt={`${currentUser.firstName} ${currentUser.lastName}`}
-                src={currentUser.avatar}
-              />
-            </Grid>
-            <Grid item>
+        <Grid item>
+          {currentUser && (
+            <Avatar
+              className={classes.avatar}
+              alt={`${currentUser.firstName} ${currentUser.lastName}`}
+              src={currentUser.avatar}
+            />
+          )}
+        </Grid>
+        <Grid item>
+          {currentUser && (
+            <>
               <Typography variant="subtitle1" color="textPrimary">
                 {currentUser.firstName} {head(currentUser.lastName)}
               </Typography>
               <Typography variant="subtitle2" color="inherit" gutterBottom>
                 @{currentUser.username}
               </Typography>
-            </Grid>
-          </>
-        )}
+            </>
+          )}
+        </Grid>
         <Grid item style={{ width: "30%" }}></Grid>
       </Grid>
-      {currentUser && (
-        <Grid
-          container
-          direction="row"
-          justify="space-between"
-          alignItems="center"
-          className={
-            drawerOpen ? classes.userProfile : classes.userProfileHidden
-          }
-        >
-          <Grid item>
-            <Typography
-              variant="h6"
-              color="textPrimary"
-              className={classes.amount}
-              data-test="sidenav-user-balance"
+      <Grid
+        container
+        direction="row"
+        justify="space-between"
+        alignItems="center"
+        className={drawerOpen ? classes.userProfile : classes.userProfileHidden}
+      >
+        <Grid item>
+          {currentUser && (
+            <>
+              <Typography
+                variant="h6"
+                color="textPrimary"
+                className={classes.amount}
+                data-test="sidenav-user-balance"
+              >
+                {currentUser.balance && formatAmount(currentUser.balance)}
+              </Typography>
+              <Typography variant="subtitle2" color="inherit" gutterBottom>
+                Account Balance
+              </Typography>
+            </>
+          )}
+        </Grid>
+        <Grid item>
+          <Divider />
+        </Grid>
+        <Grid item>
+          <List>{mainListItems(toggleDrawer, showTemporaryDrawer)}</List>
+        </Grid>
+        <Grid item>
+          <Divider />
+        </Grid>
+        <Grid item>
+          <List>{secondaryListItems(signOutPending)}</List>
+        </Grid>
+        <Grid item style={{ height: "100%" }}>
+          <Box display="flex" height={showTemporaryDrawer ? "85%" : "110%"}>
+            <Grid
+              container
+              direction="column"
+              justify="flex-end"
+              alignItems="center"
             >
-              {currentUser.balance && formatAmount(currentUser.balance)}
-            </Typography>
-            <Typography variant="subtitle2" color="inherit" gutterBottom>
-              Account Balance
-            </Typography>
-          </Grid>
+              <Grid item style={{ marginLeft: "5%" }}>
+                <CypressLogo className={classes.cypressLogo} />
+              </Grid>
+            </Grid>
+          </Box>
         </Grid>
-      )}
-      <Divider />
-      <List>{mainListItems(toggleDrawer, showTemporaryDrawer)}</List>
-      <Divider />
-      <List>{secondaryListItems(signOutPending)}</List>
-      <CypressLogo className={classes.cypressLogo} />
-      {/*<Box display="flex" height="50%">
-        <Grid
-          container
-          direction="column"
-          justify="flex-end"
-          alignItems="center"
-          // style={{ height: "50%" }}
-        >
-          <Grid item style={{ marginLeft: "5%" }}>
-            <CypressLogo className={classes.cypressLogo} />
-          </Grid>
-        </Grid>
-        </Box>*/}
+      </Grid>
     </Drawer>
   );
 };
