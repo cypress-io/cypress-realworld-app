@@ -271,7 +271,14 @@ const NavDrawer: React.FC<Props> = ({
               alignItems="center"
             >
               <Grid item style={{ marginLeft: "5%" }}>
-                <CypressLogo className={classes.cypressLogo} />
+                <a
+                  style={{ textDecoration: "none" }}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://cypress.io"
+                >
+                  <CypressLogo className={classes.cypressLogo} />
+                </a>
               </Grid>
             </Grid>
           </Box>
