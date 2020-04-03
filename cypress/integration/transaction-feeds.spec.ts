@@ -21,7 +21,7 @@ describe("Transaction Feed", function () {
   });
 
   it("renders the app", function () {
-    cy.getTest("app-name-logo").should("contain", "Pay App");
+    cy.getTest("app-name-logo").should("be.visible");
   });
 
   it("defaults side navigation to closed", function () {

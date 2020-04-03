@@ -8,6 +8,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
+import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -20,6 +21,7 @@ import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import { Grid, Avatar, Typography } from "@material-ui/core";
 import { formatAmount } from "../utils/transactionUtils";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import { ReactComponent as CypressLogo } from "../svgs/cypress-logo.svg";
 
 const drawerWidth = 240;
 
@@ -150,6 +152,9 @@ const useStyles = makeStyles((theme) => ({
   accountBalanceHidden: {
     display: "none",
   },
+  cypressLogo: {
+    width: "90%",
+  },
 }));
 
 interface Props {
@@ -198,56 +203,87 @@ const NavDrawer: React.FC<Props> = ({
         alignItems="center"
         className={drawerOpen ? classes.userProfile : classes.userProfileHidden}
       >
-        {currentUser && (
-          <>
-            <Grid item>
-              <Avatar
-                className={classes.avatar}
-                alt={`${currentUser.firstName} ${currentUser.lastName}`}
-                src={currentUser.avatar}
-              />
-            </Grid>
-            <Grid item>
+        <Grid item>
+          {currentUser && (
+            <Avatar
+              className={classes.avatar}
+              alt={`${currentUser.firstName} ${currentUser.lastName}`}
+              src={currentUser.avatar}
+            />
+          )}
+        </Grid>
+        <Grid item>
+          {currentUser && (
+            <>
               <Typography variant="subtitle1" color="textPrimary">
                 {currentUser.firstName} {head(currentUser.lastName)}
               </Typography>
               <Typography variant="subtitle2" color="inherit" gutterBottom>
                 @{currentUser.username}
               </Typography>
-            </Grid>
-          </>
-        )}
+            </>
+          )}
+        </Grid>
         <Grid item style={{ width: "30%" }}></Grid>
       </Grid>
-      {currentUser && (
-        <Grid
-          container
-          direction="row"
-          justify="space-between"
-          alignItems="center"
-          className={
-            drawerOpen ? classes.userProfile : classes.userProfileHidden
-          }
-        >
-          <Grid item>
-            <Typography
-              variant="h6"
-              color="textPrimary"
-              className={classes.amount}
-              data-test="sidenav-user-balance"
-            >
-              {currentUser.balance && formatAmount(currentUser.balance)}
-            </Typography>
-            <Typography variant="subtitle2" color="inherit" gutterBottom>
-              Account Balance
-            </Typography>
-          </Grid>
+      <Grid
+        container
+        direction="row"
+        justify="space-between"
+        alignItems="center"
+        className={drawerOpen ? classes.userProfile : classes.userProfileHidden}
+      >
+        <Grid item>
+          {currentUser && (
+            <>
+              <Typography
+                variant="h6"
+                color="textPrimary"
+                className={classes.amount}
+                data-test="sidenav-user-balance"
+              >
+                {currentUser.balance && formatAmount(currentUser.balance)}
+              </Typography>
+              <Typography variant="subtitle2" color="inherit" gutterBottom>
+                Account Balance
+              </Typography>
+            </>
+          )}
         </Grid>
-      )}
-      <Divider />
-      <List>{mainListItems(toggleDrawer, showTemporaryDrawer)}</List>
-      <Divider />
-      <List>{secondaryListItems(signOutPending)}</List>
+        <Grid item>
+          <Divider />
+        </Grid>
+        <Grid item>
+          <List>{mainListItems(toggleDrawer, showTemporaryDrawer)}</List>
+        </Grid>
+        <Grid item>
+          <Divider />
+        </Grid>
+        <Grid item>
+          <List>{secondaryListItems(signOutPending)}</List>
+        </Grid>
+        <Grid item style={{ height: "100%" }}>
+          <Box display="flex" height={showTemporaryDrawer ? "85%" : "110%"}>
+            <Grid
+              container
+              direction="column"
+              justify="flex-end"
+              alignItems="center"
+            >
+              <Grid item style={{ marginLeft: "5%" }}>
+                <a
+                  style={{ textDecoration: "none" }}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://cypress.io"
+                >
+                  <CypressLogo className={classes.cypressLogo} />
+                </a>
+              </Grid>
+            </Grid>
+          </Box>
+        </Grid>
+      </Grid>
     </Drawer>
   );
 };

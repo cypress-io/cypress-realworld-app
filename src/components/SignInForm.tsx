@@ -17,6 +17,7 @@ import Container from "@material-ui/core/Container";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 
+import { ReactComponent as PayAppLogo } from "../svgs/pay-app-logo.svg";
 import Footer from "./Footer";
 import { SignInPayload } from "../models";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
@@ -35,9 +36,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
   },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+  logo: {
+    color: theme.palette.primary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -68,9 +68,9 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
+        <div>
+          <PayAppLogo className={classes.logo} />
+        </div>
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
