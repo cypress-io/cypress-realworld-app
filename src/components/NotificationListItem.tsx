@@ -83,7 +83,7 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
         }
         data-test={`notification-mark-read-${notification.id}`}
       >
-        Mark as read
+        Dismiss
       </Button>
     </ListItem>
   );

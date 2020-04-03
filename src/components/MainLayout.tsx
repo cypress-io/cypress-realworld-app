@@ -21,15 +21,24 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
   },
-  appBarSpacer: theme.mixins.toolbar,
+  appBarSpacer: {
+    minHeight: theme.spacing(13),
+    [theme.breakpoints.up("sm")]: {
+      minHeight: theme.spacing(14),
+    },
+  },
   content: {
     flexGrow: 1,
     height: "100vh",
     overflow: "auto",
   },
   container: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(4),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    [theme.breakpoints.up("sm")]: {
+      paddingTop: theme.spacing(4),
+      padding: theme.spacing(4),
+    },
   },
 }));
 
@@ -94,7 +103,7 @@ const MainLayout: React.FC<Props> = ({
               {children}
             </Grid>
           </Grid>
-          <Box pt={4}>
+          <Box pt={2}>
             <Footer />
           </Box>
         </Container>

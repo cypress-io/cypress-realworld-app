@@ -9,6 +9,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import Box from "@material-ui/core/Box";
+import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -153,7 +154,7 @@ const useStyles = makeStyles((theme) => ({
     display: "none",
   },
   cypressLogo: {
-    width: "90%",
+    width: "40%",
   },
 }));
 
@@ -263,14 +264,14 @@ const NavDrawer: React.FC<Props> = ({
           <List>{secondaryListItems(signOutPending)}</List>
         </Grid>
         <Grid item style={{ height: "100%" }}>
-          <Box display="flex" height={showTemporaryDrawer ? "85%" : "110%"}>
+          <Box display="flex" height={showTemporaryDrawer ? "85%" : "115%"}>
             <Grid
               container
               direction="column"
               justify="flex-end"
               alignItems="center"
             >
-              <Grid item style={{ marginLeft: "5%" }}>
+              <Grid item style={{ marginLeft: "35%" }}>
                 <a
                   style={{ textDecoration: "none" }}
                   target="_blank"
