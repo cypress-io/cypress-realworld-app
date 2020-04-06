@@ -13,6 +13,8 @@ import { userOnboardingMachine } from "../machines/userOnboardingMachine";
 import { isEmpty } from "lodash/fp";
 import BankAccountForm from "../components/BankAccountForm";
 import { DataContext, DataEvents } from "../machines/dataMachine";
+import { ReactComponent as ThroughTheParkIllustration } from "../svgs/undraw_through_the_park_lxnl.svg";
+import { ReactComponent as PersonalFinance } from "../svgs/undraw_personal_finance_tqcd.svg";
 
 export interface Props {
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
@@ -76,11 +78,16 @@ const UserOnboardingContainer: React.FC<Props> = ({
           justifyContent="center"
         >
           {userOnboardingState.matches("stepOne") && (
-            <DialogContentText>
-              Pay App requires a Bank Account to perform transactions.
+            <>
+              <ThroughTheParkIllustration />
               <br />
-              Click <b>Next</b> to begin setup of your Bank Account.
-            </DialogContentText>
+              <DialogContentText style={{ paddingLeft: 20 }}>
+                Pay App requires a Bank Account to perform transactions.
+                <br />
+                <br />
+                Click <b>Next</b> to begin setup of your Bank Account.
+              </DialogContentText>
+            </>
           )}
           {userOnboardingState.matches("stepTwo") && (
             <BankAccountForm
@@ -90,9 +97,16 @@ const UserOnboardingContainer: React.FC<Props> = ({
             />
           )}
           {userOnboardingState.matches("stepThree") && (
-            <DialogContentText>
-              You're all set! We're excited to have you aboard Pay App!
-            </DialogContentText>
+            <>
+              <PersonalFinance />
+              <br />
+              <DialogContentText style={{ paddingLeft: 20 }}>
+                You're all set!
+                <br />
+                <br />
+                We're excited to have you aboard Pay App!
+              </DialogContentText>
+            </>
           )}
         </Box>
       </DialogContent>
