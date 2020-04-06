@@ -1,6 +1,13 @@
 import React from "react";
 import { format as formatDate } from "date-fns";
-import { Popover, Chip, useTheme, makeStyles } from "@material-ui/core";
+import {
+  Popover,
+  Chip,
+  useTheme,
+  makeStyles,
+  Drawer,
+  Button,
+} from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import CancelIcon from "@material-ui/icons/Cancel";
 import indigo from "@material-ui/core/colors/indigo";
@@ -36,7 +43,7 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
 }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
   const queryHasDateFields =
     dateRangeFilters && hasDateQueryFields(dateRangeFilters);
 
@@ -109,44 +116,84 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
           }}
         />
       )}
-      <Popover
-        id={dateRangeId}
-        open={dateRangeOpen}
-        anchorEl={dateRangeAnchorEl}
-        onClose={handleDateRangeClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        className={classes.popover}
-      >
-        <InfiniteCalendar
-          width={isMobile ? window.innerWidth : 350}
-          height={isMobile ? window.innerHeight : 300}
-          rowHeight={50}
-          Component={CalendarWithRange}
-          selected={false}
-          onSelect={onCalendarSelect}
-          locale={{
-            headerFormat: "MMM Do",
+      {!xsBreakpoint && (
+        <Popover
+          id={dateRangeId}
+          open={dateRangeOpen}
+          anchorEl={dateRangeAnchorEl}
+          onClose={handleDateRangeClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
           }}
-          theme={{
-            accentColor: indigo["400"],
-            headerColor: indigo["500"],
-            weekdayColor: indigo["300"],
-            selectionColor: indigo["300"],
-            floatingNav: {
-              background: indigo["400"],
-              color: "#FFF",
-              chevron: "#FFA726",
-            },
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
           }}
-        />
-      </Popover>
+          className={classes.popover}
+        >
+          <InfiniteCalendar
+            width={xsBreakpoint ? window.innerWidth : 350}
+            height={xsBreakpoint ? window.innerHeight : 300}
+            rowHeight={50}
+            Component={CalendarWithRange}
+            selected={false}
+            onSelect={onCalendarSelect}
+            locale={{
+              headerFormat: "MMM Do",
+            }}
+            theme={{
+              accentColor: indigo["400"],
+              headerColor: indigo["500"],
+              weekdayColor: indigo["300"],
+              selectionColor: indigo["300"],
+              floatingNav: {
+                background: indigo["400"],
+                color: "#FFF",
+                chevron: "#FFA726",
+              },
+            }}
+          />
+        </Popover>
+      )}
+      {xsBreakpoint && (
+        <Drawer
+          id={dateRangeId}
+          open={dateRangeOpen}
+          ModalProps={{ onClose: handleDateRangeClose }}
+          anchor="bottom"
+          data-test="date-range-filter-drawer"
+        >
+          <Button
+            data-test="date-range-filter-drawer-close"
+            onClick={() => handleDateRangeClose()}
+          >
+            Close
+          </Button>
+          <InfiniteCalendar
+            width={window.innerWidth}
+            height={window.innerHeight - 185}
+            rowHeight={50}
+            Component={CalendarWithRange}
+            selected={false}
+            onSelect={onCalendarSelect}
+            locale={{
+              headerFormat: "MMM Do",
+            }}
+            theme={{
+              accentColor: indigo["400"],
+              headerColor: indigo["500"],
+              weekdayColor: indigo["300"],
+              selectionColor: indigo["300"],
+              floatingNav: {
+                background: indigo["400"],
+                color: "#FFF",
+                chevron: "#FFA726",
+              },
+            }}
+          />
+        </Drawer>
+      )}
     </div>
   );
 };

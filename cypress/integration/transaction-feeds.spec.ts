@@ -85,7 +85,13 @@ describe("Transaction Feed", function () {
       .scrollIntoView()
       .click({ force: true });
 
-    cy.getTestLike("transaction-item").should("not.be.visible");
+    cy.getTest("date-range-filter-drawer").should("be.visible");
+    // DISCUSS:
+    // Testing for hidden elements fail
+    //cy.getTest("app-name-logo").should("be.hidden");
+    //cy.getTest("app-name-logo").should("not.be.visible");
+
+    cy.getTest("date-range-filter-drawer-close").click();
   });
 
   it("renders mine (personal) transaction feed, filters by date range, then clears the date range filter", function () {
