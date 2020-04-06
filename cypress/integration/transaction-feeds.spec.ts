@@ -94,6 +94,22 @@ describe("Transaction Feed", function () {
     cy.getTest("date-range-filter-drawer-close").click();
   });
 
+  it("shows amount range in drawer on mobile", function () {
+    cy.viewport("iphone-6");
+    cy.getTest("main").scrollTo("top");
+    cy.getTest("nav-personal-tab")
+      .click({ force: true })
+      .should("have.class", "Mui-selected");
+
+    cy.getTest("transaction-list-filter-amount-range-button")
+      .scrollIntoView()
+      .click({ force: true });
+
+    cy.getTest("amount-range-filter-drawer").should("be.visible");
+
+    cy.getTest("amount-range-filter-drawer-close").click();
+  });
+
   it("renders mine (personal) transaction feed, filters by date range, then clears the date range filter", function () {
     cy.getTest("nav-personal-tab")
       .click({ force: true })
