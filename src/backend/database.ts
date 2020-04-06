@@ -406,6 +406,9 @@ export const getTransactionsForUserForApi = (userId: string, query?: object) =>
 export const formatTransactionForApiResponse = (
   transaction: Transaction
 ): TransactionResponseItem => {
+  const receiver = getUserById(transaction.receiverId);
+  const sender = getUserById(transaction.senderId);
+
   const receiverName = getFullNameForUser(transaction.receiverId);
   const senderName = getFullNameForUser(transaction.senderId);
   const likes = getLikesByTransactionId(transaction.id);
@@ -414,6 +417,8 @@ export const formatTransactionForApiResponse = (
   return {
     receiverName,
     senderName,
+    receiverAvatar: receiver.avatar,
+    senderAvatar: sender.avatar,
     likes,
     comments,
     ...transaction,

@@ -34,7 +34,9 @@ export interface TransactionResponseItem extends Transaction {
   likes: Like[];
   comments: Comment[];
   receiverName: string;
+  receiverAvatar: string;
   senderName: string;
+  senderAvatar: string;
 }
 
 export type TransactionPayload = Omit<
