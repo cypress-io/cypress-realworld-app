@@ -1,7 +1,14 @@
 import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { Paper, Typography, Grid, Avatar, Box } from "@material-ui/core";
-import { random } from "lodash/fp";
+import {
+  Paper,
+  Typography,
+  Grid,
+  Avatar,
+  Box,
+  Button,
+} from "@material-ui/core";
 import { Interpreter } from "xstate";
 import {
   CreateTransactionMachineContext,
@@ -49,6 +56,7 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
         width="95%"
         min-height={200}
         height={200}
+        style={{ paddingLeft: "7%", paddingTop: "5%", paddingBottom: "5%" }}
       >
         <Grid
           container
@@ -117,7 +125,13 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
           </Grid>
         </Grid>
       </Box>
-      <Box display="flex" justifyContent="center" width="100%">
+      <Box
+        display="flex"
+        justifyContent="center"
+        width="100%"
+        height="100"
+        style={{ paddingBottom: "5%" }}
+      >
         <Grid container direction="row" justify="center" alignItems="center">
           <Grid item>
             <Typography
@@ -132,6 +146,43 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
                 )}{" "}
               for {transactionDetails?.description}
             </Typography>
+          </Grid>
+        </Grid>
+      </Box>
+      <Box
+        display="flex"
+        justifyContent="center"
+        width="100%"
+        height="100"
+        style={{ paddingBottom: "5%" }}
+      >
+        <Grid
+          container
+          direction="row"
+          justify="space-around"
+          alignItems="center"
+        >
+          <Grid item>
+            <Button
+              variant="contained"
+              size="small"
+              component={RouterLink}
+              to="/"
+              data-test="new-transaction-return-to-transactions"
+            >
+              Return To Transactions
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="contained"
+              size="small"
+              component={RouterLink}
+              to="/transaction/new"
+              data-test="new-transaction-create-another-transaction"
+            >
+              Create Another Transaction
+            </Button>
           </Grid>
         </Grid>
       </Box>
