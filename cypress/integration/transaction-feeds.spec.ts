@@ -24,8 +24,13 @@ describe("Transaction Feed", function () {
     cy.getTest("app-name-logo").should("be.visible");
   });
 
-  it("defaults side navigation to closed", function () {
-    cy.getTest("drawer-icon").should("be.visible");
+  it("defaults side navigation to closed (mobile)", function () {
+    cy.viewport("iphone-6");
+    cy.getTest("sidenav-user-balance").should("not.be.visible");
+  });
+
+  it("defaults side navigation to open (desktop)", function () {
+    cy.getTest("sidenav-user-balance").should("be.visible");
   });
 
   it("renders everyone (public) (infinite list)", function () {
