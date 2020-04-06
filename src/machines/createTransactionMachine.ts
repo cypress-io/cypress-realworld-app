@@ -9,7 +9,6 @@ export interface CreateTransactionMachineSchema {
     stepOne: {};
     stepTwo: {};
     stepThree: {};
-    done: {};
   };
 }
 
@@ -29,8 +28,7 @@ const transactionDataMachine = dataMachine("transactionData").withConfig({
 export type CreateTransactionMachineEvents =
   | { type: "SET_USERS" }
   | { type: "CREATE" }
-  | { type: "CONFIRM" }
-  | { type: "COMPLETE" };
+  | { type: "RESET" };
 
 export interface CreateTransactionMachineContext {
   sender: User;
@@ -48,6 +46,7 @@ export const createTransactionMachine = Machine<
     initial: "stepOne",
     states: {
       stepOne: {
+        entry: "clearContext",
         on: {
           SET_USERS: "stepTwo",
         },
@@ -66,11 +65,8 @@ export const createTransactionMachine = Machine<
       stepThree: {
         entry: "setTransactionDetails",
         on: {
-          CONFIRM: "done",
+          RESET: "stepOne",
         },
-      },
-      done: {
-        type: "final",
       },
     },
   },
@@ -83,6 +79,7 @@ export const createTransactionMachine = Machine<
       setTransactionDetails: assign((ctx, event: any) => ({
         transactionDetails: event,
       })),
+      clearContext: assign((ctx, event: any) => ({})),
     },
   }
 );

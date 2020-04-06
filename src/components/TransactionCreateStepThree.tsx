@@ -1,5 +1,5 @@
 import React from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Paper,
@@ -37,6 +37,7 @@ export interface TransactionCreateStepThreeProps {
 const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
   createTransactionService,
 }) => {
+  const history = useHistory();
   const classes = useStyles();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [createTransactionState, sendCreateTransaction] = useService(
@@ -177,8 +178,10 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
             <Button
               variant="contained"
               size="small"
-              component={RouterLink}
-              to="/transaction/new"
+              onClick={() => {
+                sendCreateTransaction("RESET");
+                history.push("/transaction/new");
+              }}
               data-test="new-transaction-create-another-transaction"
             >
               Create Another Transaction
