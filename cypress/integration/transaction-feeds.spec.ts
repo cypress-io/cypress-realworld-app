@@ -164,12 +164,6 @@ describe("Transaction Feed", function () {
     cy.getTestLike("transaction-list-item").should("not.be.visible");
 
     cy.getTest("empty-list-header").should("be.visible");
-
-    cy.getTest("transaction-list-empty-create-transaction-button")
-      .scrollIntoView()
-      .click({ force: true });
-
-    cy.location("pathname").should("eq", "/transaction/new");
   });
 
   it.skip("renders mine (personal) transaction feed, filters by amount range, then clears the amount range filter", function () {
@@ -181,6 +175,8 @@ describe("Transaction Feed", function () {
       .scrollIntoView()
       .click({ force: true });
 
+    // DISCUSS:
+    // How to set hidden input values like this?
     cy.getTest("transaction-list-filter-amount-range-slider")
       .find('input[type="hidden"]')
       .invoke("val", "3,10")
