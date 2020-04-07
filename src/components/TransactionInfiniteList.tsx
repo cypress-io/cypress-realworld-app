@@ -57,7 +57,7 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
       const transaction = get(index, transactions);
       return (
         <div style={style}>
-          <TransactionItem transaction={transaction} transactionIndex={index} />
+          <TransactionItem transaction={transaction} />
           <Divider variant={isMobile ? "fullWidth" : "inset"} />
         </div>
       );

@@ -6,6 +6,10 @@ import {
   Avatar,
   ListItemAvatar,
   Paper,
+  Badge,
+  withStyles,
+  Theme,
+  createStyles,
 } from "@material-ui/core";
 import LikeIcon from "@material-ui/icons/ThumbUpAltOutlined";
 import CommentIcon from "@material-ui/icons/CommentRounded";
@@ -45,13 +49,19 @@ const useStyles = makeStyles((theme) => ({
 
 type TransactionProps = {
   transaction: TransactionResponseItem;
-  transactionIndex: number;
 };
 
-const TransactionItem: React.FC<TransactionProps> = ({
-  transaction,
-  transactionIndex,
-}) => {
+const SmallAvatar = withStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      width: 22,
+      height: 22,
+      border: `2px solid ${theme.palette.background.paper}`,
+    },
+  })
+)(Avatar);
+
+const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -69,9 +79,16 @@ const TransactionItem: React.FC<TransactionProps> = ({
         <Grid container spacing={2}>
           <Grid item>
             <ListItemAvatar>
-              <Avatar
-                src={`https://i.pravatar.cc/100?img=${transactionIndex}`}
-              />
+              <Badge
+                overlap="circle"
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                badgeContent={<SmallAvatar src={transaction.receiverAvatar} />}
+              >
+                <Avatar src={transaction.senderAvatar} />
+              </Badge>
             </ListItemAvatar>
           </Grid>
           <Grid item xs={12} sm container>

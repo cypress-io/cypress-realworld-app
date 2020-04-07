@@ -74,6 +74,8 @@ describe("Transaction Utils", () => {
       const transactionWithLikes: TransactionResponseItem = {
         ...transactionBase,
         receiverName: "Receiver Name",
+        receiverAvatar: "/path/to/receiver/avatar.png",
+        senderAvatar: "/path/to/sender/avatar.png",
         senderName: "Sender Name",
         likes: [
           {
