@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link as RouterLink } from "react-router-dom";
-import { Button, ListSubheader } from "@material-ui/core";
+import { Button, ListSubheader, Box, Grid } from "@material-ui/core";
 import { isEmpty } from "lodash/fp";
 
 import SkeletonList from "./SkeletonList";
@@ -55,20 +55,33 @@ const TransactionList: React.FC<TransactionListProps> = ({
       )}
       {showEmptyList && (
         <EmptyList entity="Transactions">
-          <>
-            <TransferMoneyIllustration />
-            {showCreateButton && (
-              <Button
-                data-test="transaction-list-empty-create-transaction-button"
-                variant="contained"
-                color="primary"
-                component={RouterLink}
-                to="/transaction/new"
-              >
-                Create A Transaction
-              </Button>
-            )}
-          </>
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            style={{ width: "100%" }}
+            spacing={2}
+          >
+            <Grid item>
+              <TransferMoneyIllustration
+                style={{ height: 200, width: 300, marginBottom: 30 }}
+              />
+            </Grid>
+            <Grid item>
+              {showCreateButton && (
+                <Button
+                  data-test="transaction-list-empty-create-transaction-button"
+                  variant="contained"
+                  color="primary"
+                  component={RouterLink}
+                  to="/transaction/new"
+                >
+                  Create A Transaction
+                </Button>
+              )}
+            </Grid>
+          </Grid>
         </EmptyList>
       )}
     </Paper>
