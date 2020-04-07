@@ -88,6 +88,9 @@ describe("Transaction Feed", function () {
     cy.getTest("date-range-filter-drawer").should("be.visible");
     // DISCUSS:
     // Testing for hidden elements fail
+    // and appear to be related to issues filed against Cypress
+    // https://github.com/cypress-io/cypress/issues/1242
+    // https://github.com/cypress-io/cypress/issues/5959
     //cy.getTest("app-name-logo").should("be.hidden");
     //cy.getTest("app-name-logo").should("not.be.visible");
 
