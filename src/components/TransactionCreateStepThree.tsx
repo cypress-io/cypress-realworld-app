@@ -45,7 +45,6 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
   );
 
   const receiver = createTransactionState?.context?.receiver;
-  const sender = createTransactionState?.context?.sender;
   const transactionDetails =
     createTransactionState?.context?.transactionDetails;
 
@@ -57,7 +56,7 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
         width="95%"
         min-height={200}
         height={200}
-        style={{ paddingLeft: "7%", paddingTop: "5%", paddingBottom: "5%" }}
+        style={{ paddingTop: "5%" }}
       >
         <Grid
           container
@@ -66,42 +65,6 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
           alignItems="center"
           spacing={4}
         >
-          <Grid item>
-            <Grid
-              container
-              direction="column"
-              justify="flex-start"
-              alignItems="center"
-            >
-              <Grid item>
-                <Avatar src={sender.avatar} />
-              </Grid>
-              <Grid item>
-                <Typography
-                  component="h2"
-                  variant="h6"
-                  color="primary"
-                  gutterBottom
-                >
-                  You
-                </Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-
-          <Grid item>
-            <Typography
-              component="h2"
-              variant="h6"
-              color="primary"
-              gutterBottom
-            >
-              {transactionDetails?.transactionType === "payment"
-                ? "Paid"
-                : "Requested"}
-            </Typography>
-          </Grid>
-
           <Grid item>
             <Grid
               container
@@ -141,6 +104,9 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
               color="primary"
               gutterBottom
             >
+              {transactionDetails?.transactionType === "payment"
+                ? "Paid "
+                : "Requested "}
               {transactionDetails?.amount &&
                 formatAmount(
                   parseInt(transactionDetails.amount, 10) * 100
