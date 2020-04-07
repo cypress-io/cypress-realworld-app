@@ -9,6 +9,7 @@ import SkeletonList from "./SkeletonList";
 import { TransactionResponseItem, TransactionPagination } from "../models";
 import EmptyList from "./EmptyList";
 import TransactionInfiniteList from "./TransactionInfiniteList";
+import { ReactComponent as TransferMoneyIllustration } from "../svgs/undraw_transfer_money_rywa.svg";
 
 export interface TransactionListProps {
   header: string;
@@ -54,17 +55,20 @@ const TransactionList: React.FC<TransactionListProps> = ({
       )}
       {showEmptyList && (
         <EmptyList entity="Transactions">
-          {showCreateButton && (
-            <Button
-              data-test="transaction-list-empty-create-transaction-button"
-              variant="contained"
-              color="primary"
-              component={RouterLink}
-              to="/transaction/new"
-            >
-              Create A Transaction
-            </Button>
-          )}
+          <>
+            <TransferMoneyIllustration />
+            {showCreateButton && (
+              <Button
+                data-test="transaction-list-empty-create-transaction-button"
+                variant="contained"
+                color="primary"
+                component={RouterLink}
+                to="/transaction/new"
+              >
+                Create A Transaction
+              </Button>
+            )}
+          </>
         </EmptyList>
       )}
     </Paper>
