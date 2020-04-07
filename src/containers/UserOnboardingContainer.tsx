@@ -13,7 +13,7 @@ import { userOnboardingMachine } from "../machines/userOnboardingMachine";
 import { isEmpty } from "lodash/fp";
 import BankAccountForm from "../components/BankAccountForm";
 import { DataContext, DataEvents } from "../machines/dataMachine";
-import { ReactComponent as ThroughTheParkIllustration } from "../svgs/undraw_through_the_park_lxnl.svg";
+import { ReactComponent as NavigatorIllustration } from "../svgs/undraw_navigator_a479.svg";
 import { ReactComponent as PersonalFinance } from "../svgs/undraw_personal_finance_tqcd.svg";
 
 export interface Props {
@@ -79,7 +79,7 @@ const UserOnboardingContainer: React.FC<Props> = ({
         >
           {userOnboardingState.matches("stepOne") && (
             <>
-              <ThroughTheParkIllustration />
+              <NavigatorIllustration />
               <br />
               <DialogContentText style={{ paddingLeft: 20 }}>
                 Pay App requires a Bank Account to perform transactions.
