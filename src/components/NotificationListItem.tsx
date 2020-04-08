@@ -7,19 +7,17 @@ import CommentIcon from "@material-ui/icons/CommentRounded";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import { NotificationResponseItem } from "../models";
 import {
-  Card,
-  CardContent,
-  Typography,
-  CardActions,
   Button,
-  makeStyles
+  makeStyles,
+  ListItemIcon,
+  ListItemText,
 } from "@material-ui/core";
 import {
   isCommentNotification,
   isLikeNotification,
   isPaymentNotification,
   isPaymentRequestedNotification,
-  isPaymentReceivedNotification
+  isPaymentReceivedNotification,
 } from "../utils/transactionUtils";
 
 export interface NotificationListItemProps {
@@ -29,22 +27,22 @@ export interface NotificationListItemProps {
 
 const useStyles = makeStyles({
   card: {
-    minWidth: "100%"
+    minWidth: "100%",
   },
   title: {
-    fontSize: 18
+    fontSize: 18,
   },
   green: {
-    color: "#4CAF50"
+    color: "#4CAF50",
   },
   red: {
-    color: "red"
-  }
+    color: "red",
+  },
 });
 
 const NotificationListItem: React.FC<NotificationListItemProps> = ({
   notification,
-  updateNotification
+  updateNotification,
 }) => {
   const classes = useStyles();
   let listItemText = undefined;
@@ -75,31 +73,18 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
 
   return (
     <ListItem data-test={`notification-list-item-${notification.id}`}>
-      <Card className={classes.card}>
-        <CardContent>
-          <Typography
-            variant="body2"
-            className={classes.title}
-            color="textSecondary"
-          >
-            {listItemIcon}
-            {"     "}
-            {listItemText}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button
-            color="primary"
-            size="small"
-            onClick={() =>
-              updateNotification({ id: notification.id, isRead: true })
-            }
-            data-test={`notification-mark-read-${notification.id}`}
-          >
-            Mark as read
-          </Button>
-        </CardActions>
-      </Card>
+      <ListItemIcon>{listItemIcon!}</ListItemIcon>
+      <ListItemText primary={listItemText} />
+      <Button
+        color="primary"
+        size="small"
+        onClick={() =>
+          updateNotification({ id: notification.id, isRead: true })
+        }
+        data-test={`notification-mark-read-${notification.id}`}
+      >
+        Dismiss
+      </Button>
     </ListItem>
   );
 };

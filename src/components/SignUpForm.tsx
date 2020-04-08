@@ -1,4 +1,6 @@
 import React from "react";
+import { useService } from "@xstate/react";
+import { Interpreter } from "xstate";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -11,8 +13,10 @@ import Container from "@material-ui/core/Container";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object, ref } from "yup";
 
-import Copyright from "./Copyright";
-import { User } from "../models";
+import { ReactComponent as PayAppLogo } from "../svgs/pay-app-logo.svg";
+import Footer from "./Footer";
+import { SignUpPayload } from "../models";
+import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 
 const validationSchema = object({
   firstName: string().required("First Name is required"),
@@ -23,47 +27,53 @@ const validationSchema = object({
     .required("Enter your password"),
   confirmPassword: string()
     .required("Confirm your password")
-    .oneOf([ref("password")], "Password does not match")
+    .oneOf([ref("password")], "Password does not match"),
 });
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+  logo: {
+    color: theme.palette.primary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 export interface Props {
-  signUpPending: (payload: Partial<User>) => void;
+  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
 }
 
-const SignUpForm: React.FC<Props> = ({ signUpPending }) => {
+const SignUpForm: React.FC<Props> = ({ authService }) => {
   const classes = useStyles();
-  const initialValues: Partial<User> & { confirmPassword: string } = {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [authState, sendAuth] = useService(authService);
+  const initialValues: SignUpPayload & { confirmPassword: string } = {
     firstName: "",
     lastName: "",
     username: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   };
+
+  const signUpPending = (payload: SignUpPayload) => sendAuth("SIGNUP", payload);
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
+        <div>
+          <PayAppLogo className={classes.logo} />
+        </div>
         <Typography component="h1" variant="h5">
           Sign Up
         </Typography>
@@ -74,11 +84,9 @@ const SignUpForm: React.FC<Props> = ({ signUpPending }) => {
             setSubmitting(true);
 
             signUpPending(values);
-
-            setSubmitting(false);
           }}
         >
-          {({ isValid, isSubmitting }) => (
+          {({ isValid, isSubmitting, dirty }) => (
             <Form className={classes.form}>
               <Field name="firstName">
                 {({ field, meta }: FieldProps) => (
@@ -92,8 +100,8 @@ const SignUpForm: React.FC<Props> = ({ signUpPending }) => {
                     type="text"
                     autoFocus
                     data-test="signup-first-name"
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched ? meta.error : ""}
+                    error={dirty && meta.touched && Boolean(meta.error)}
+                    helperText={dirty && meta.touched ? meta.error : ""}
                     {...field}
                   />
                 )}
@@ -108,10 +116,9 @@ const SignUpForm: React.FC<Props> = ({ signUpPending }) => {
                     id="lastName"
                     label="Last Name"
                     type="text"
-                    autoFocus
                     data-test="signup-last-name"
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched ? meta.error : ""}
+                    error={dirty && meta.touched && Boolean(meta.error)}
+                    helperText={dirty && meta.touched ? meta.error : ""}
                     {...field}
                   />
                 )}
@@ -126,10 +133,9 @@ const SignUpForm: React.FC<Props> = ({ signUpPending }) => {
                     id="username"
                     label="Username"
                     type="text"
-                    autoFocus
                     data-test="signup-username"
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched ? meta.error : ""}
+                    error={dirty && meta.touched && Boolean(meta.error)}
+                    helperText={dirty && meta.touched ? meta.error : ""}
                     {...field}
                   />
                 )}
@@ -145,8 +151,8 @@ const SignUpForm: React.FC<Props> = ({ signUpPending }) => {
                     type="password"
                     id="password"
                     data-test="signup-password"
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched ? meta.error : ""}
+                    error={dirty && meta.touched && Boolean(meta.error)}
+                    helperText={dirty && meta.touched ? meta.error : ""}
                     {...field}
                   />
                 )}
@@ -162,8 +168,8 @@ const SignUpForm: React.FC<Props> = ({ signUpPending }) => {
                     id="confirmPassword"
                     data-test="signup-confirmPassword"
                     type="password"
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched ? meta.error : ""}
+                    error={dirty && meta.touched && Boolean(meta.error)}
+                    helperText={dirty && meta.touched ? meta.error : ""}
                     {...field}
                   />
                 )}
@@ -177,7 +183,7 @@ const SignUpForm: React.FC<Props> = ({ signUpPending }) => {
                 data-test="signup-submit"
                 disabled={!isValid || isSubmitting}
               >
-                Sign In
+                Sign Up
               </Button>
               <Grid container>
                 <Grid item>
@@ -189,7 +195,7 @@ const SignUpForm: React.FC<Props> = ({ signUpPending }) => {
         </Formik>
       </div>
       <Box mt={8}>
-        <Copyright />
+        <Footer />
       </Box>
     </Container>
   );

@@ -11,7 +11,7 @@
     "@material-ui/core": "4.9.5",
     "@material-ui/icons": "4.9.1",
     "@material-ui/lab": "4.0.0-alpha.45",
-    "@types/bcrypt": "3.0.0",
+    "@types/bcryptjs": "^2.4.2",
     "@types/connect-flash": "0.0.35",
     "@types/cors": "2.8.6",
     "@types/dinero.js": "1.6.2",
@@ -43,7 +43,7 @@
     "@types/yup": "0.26.32",
     "@xstate/react": "0.8.1",
     "axios": "0.19.2",
-    "bcrypt": "3.0.8",
+    "bcryptjs": "^2.4.3",
     "cors": "2.8.5",
     "dinero.js": "1.7.0",
     "dotenv": "8.2.0",
@@ -81,8 +81,11 @@
     "yup": "0.28.3"
   },
   "devDependencies": {
-    "cypress": "4.1.0",
+    "cypress": "4.3.0",
+    "eslint-config-prettier": "^6.10.1",
     "eslint-plugin-cypress": "2.10.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "^2.0.2",
     "start-server-and-test": "1.10.9"
   },
   "scripts": {
@@ -105,7 +108,7 @@
     "start": "NODE_ENV=development yarn start:api & yarn start:react",
     "dev": "yarn start:dev",
     "start:dev": "NODE_ENV=development start-test start:server-and-api:watch 3000 cypress:open",
-    "start:empty": "NODE_ENV=development start-test start:server-and-api:watch 3000 cypress:open",
+    "start:empty": "NODE_ENV=development EMPTY_SEED=true start-test start:server-and-api:watch 3000 cypress:open",
     "start:test": "NODE_ENV=test start-test start:server-and-api:watch 3000 cypress:open",
     "start:react": "react-scripts start",
     "start:api": "yarn tsnode --files src/app.ts",
@@ -119,7 +122,8 @@
     "test:unit:ci": "react-scripts test --watch false --runInBand",
     "eject": "react-scripts eject",
     "start:server-and-api": "start-test start:api 3001 start:react",
-    "start:server-and-api:watch": "start-test start:api:watch 3001 start:react"
+    "start:server-and-api:watch": "start-test start:api:watch 3001 start:react",
+    "prettier": "prettier --write '**/**.{ts,js,tsx}'"
   },
   "eslintConfig": {
     "env": {
@@ -131,7 +135,8 @@
       "plugin:cypress/recommended"
     ],
     "plugins": [
-      "cypress"
+      "cypress",
+      "prettier"
     ]
   },
   "jest": {

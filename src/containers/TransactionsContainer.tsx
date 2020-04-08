@@ -3,16 +3,17 @@ import { useMachine } from "@xstate/react";
 import { useRouteMatch } from "react-router";
 import {
   TransactionDateRangePayload,
-  TransactionAmountRangePayload
+  TransactionAmountRangePayload,
 } from "../models";
 import TransactionListFilters from "../components/TransactionListFilters";
 import TransactionContactsList from "../components/TransactionContactsList";
 import { transactionFiltersMachine } from "../machines/transactionFiltersMachine";
 import {
   getDateQueryFields,
-  getAmountQueryFields
+  getAmountQueryFields,
 } from "../utils/transactionUtils";
 import TransactionPersonalList from "../components/TransactionPersonalList";
+import TransactionPublicList from "../components/TransactionPublicList";
 
 const TransactionsContainer: React.FC = () => {
   const match = useRouteMatch();
@@ -20,13 +21,13 @@ const TransactionsContainer: React.FC = () => {
   const [currentFilters, sendFilterEvent] = useMachine(
     transactionFiltersMachine,
     {
-      devTools: true
+      devTools: true,
     }
   );
 
   const hasDateRangeFilter = currentFilters.matches({ dateRange: "filter" });
   const hasAmountRangeFilter = currentFilters.matches({
-    amountRange: "filter"
+    amountRange: "filter",
   });
 
   const dateRangeFilters =
@@ -64,7 +65,7 @@ const TransactionsContainer: React.FC = () => {
 
   // match.url "/" or "/public"
   return (
-    <TransactionPersonalList
+    <TransactionPublicList
       filterComponent={Filters}
       dateRangeFilters={dateRangeFilters as TransactionDateRangePayload}
       amountRangeFilters={amountRangeFilters as TransactionAmountRangePayload}

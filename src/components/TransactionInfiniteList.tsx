@@ -1,10 +1,12 @@
 import React from "react";
 import InfiniteLoader from "react-window-infinite-loader";
 import { FixedSizeList } from "react-window";
+import { get } from "lodash/fp";
+import { useTheme, makeStyles } from "@material-ui/core/styles";
 
 import TransactionItem from "./TransactionItem";
 import { TransactionResponseItem, TransactionPagination } from "../models";
-import { get } from "lodash/fp";
+import { useMediaQuery, Divider } from "@material-ui/core";
 
 export interface TransactionListProps {
   transactions: TransactionResponseItem[];
@@ -12,11 +14,26 @@ export interface TransactionListProps {
   pagination: TransactionPagination;
 }
 
+const useStyles = makeStyles((theme) => ({
+  transactionList: {
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
+  },
+}));
+
 const TransactionInfiniteList: React.FC<TransactionListProps> = ({
   transactions,
   loadNextPage,
-  pagination
+  pagination,
 }) => {
+  const classes = useStyles();
+  const theme = useTheme();
+  const isXsBreakpoint = useMediaQuery(theme.breakpoints.down("xs"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const itemCount = pagination.hasNextPages
     ? transactions.length + 1
     : transactions.length;
@@ -40,7 +57,8 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
       const transaction = get(index, transactions);
       return (
         <div style={style}>
-          <TransactionItem transaction={transaction} transactionIndex={index} />
+          <TransactionItem transaction={transaction} />
+          <Divider variant={isMobile ? "fullWidth" : "inset"} />
         </div>
       );
     }
@@ -54,14 +72,14 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
       threshold={2}
     >
       {({ onItemsRendered, ref }) => (
-        <div data-test="transaction-list">
+        <div data-test="transaction-list" className={classes.transactionList}>
           <FixedSizeList
             itemCount={itemCount}
             ref={ref}
             onItemsRendered={onItemsRendered}
-            height={500}
-            width={850}
-            itemSize={198}
+            height={isXsBreakpoint ? theme.spacing(48) : theme.spacing(68)}
+            width={"98%"}
+            itemSize={isXsBreakpoint ? theme.spacing(28) : theme.spacing(16)}
           >
             {Item}
           </FixedSizeList>

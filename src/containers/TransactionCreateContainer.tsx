@@ -1,72 +1,112 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
-import { IRootReducerState } from "../reducers";
-import { User } from "../models";
+import React, { useEffect } from "react";
+import { useMachine, useService } from "@xstate/react";
+import { User, TransactionPayload } from "../models";
 import TransactionCreateStepOne from "../components/TransactionCreateStepOne";
 import TransactionCreateStepTwo from "../components/TransactionCreateStepTwo";
-import { transactionCreatePending } from "../actions/transactions";
-import { usersSearchPending } from "../actions/users";
-import { appSnackBarInit } from "../actions/app";
+import TransactionCreateStepThree from "../components/TransactionCreateStepThree";
+import { createTransactionMachine } from "../machines/createTransactionMachine";
+import { usersMachine } from "../machines/usersMachine";
+import { debounce } from "lodash/fp";
+import { Interpreter } from "xstate";
+import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import {
+  SnackbarSchema,
+  SnackbarContext,
+  SnackbarEvents,
+} from "../machines/snackbarMachine";
+import { Stepper, Step, StepLabel } from "@material-ui/core";
 
-export interface DispatchProps {
-  transactionCreate: (payload: object) => void;
-  userListSearch: (payload: object) => void;
-  snackbarInit: Function;
+export interface Props {
+  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
+  snackbarService: Interpreter<
+    SnackbarContext,
+    SnackbarSchema,
+    SnackbarEvents,
+    any
+  >;
 }
-export interface StateProps {
-  searchUsers: User[];
-  allUsers: User[];
-  sender: User;
-}
 
-export type TransactionCreateContainerProps = StateProps & DispatchProps;
-
-const TransactionCreateContainer: React.FC<TransactionCreateContainerProps> = ({
-  allUsers,
-  searchUsers,
-  sender,
-  transactionCreate,
-  userListSearch,
-  snackbarInit
+const TransactionCreateContainer: React.FC<Props> = ({
+  authService,
+  snackbarService,
 }) => {
-  const [receiver, setReceiver] = useState();
+  const [authState, sendAuth] = useService(authService);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [snackbarState, sendSnackbar] = useService(snackbarService);
 
-  // TransactionCreateStepTwo / TransactionCreateForm
-  if (receiver && sender) {
-    return (
-      <TransactionCreateStepTwo
-        receiver={receiver}
-        sender={sender}
-        transactionCreate={transactionCreate}
-        snackbarInit={snackbarInit}
-      />
-    );
+  const [
+    createTransactionState,
+    sendCreateTransaction,
+    createTransactionService,
+  ] = useMachine(createTransactionMachine, {
+    devTools: true,
+  });
+  const [usersState, sendUsers] = useMachine(usersMachine);
+
+  useEffect(() => {
+    sendUsers({ type: "FETCH" });
+  }, [sendUsers]);
+
+  const sender = authState?.context?.user;
+  const refreshUser = () => sendAuth("REFRESH");
+  const setReceiver = (receiver: User) => {
+    sendCreateTransaction("SET_USERS", { sender, receiver });
+  };
+  const createTransaction = (payload: TransactionPayload) => {
+    sendCreateTransaction("CREATE", payload);
+    refreshUser();
+  };
+  const userListSearch = debounce(200, (payload: any) =>
+    sendUsers("FETCH", payload)
+  );
+
+  const showSnackbar = (payload: SnackbarContext) =>
+    sendSnackbar("SHOW", payload);
+
+  let activeStep;
+  if (createTransactionState.matches("stepTwo")) {
+    activeStep = 1;
+  } else if (createTransactionState.matches("stepThree")) {
+    activeStep = 3;
+  } else {
+    activeStep = 0;
   }
 
-  // TransactionCreateStepOne / TransactionCreateSelectUser
   return (
-    <TransactionCreateStepOne
-      allUsers={allUsers}
-      searchUsers={searchUsers}
-      setReceiver={setReceiver}
-      userListSearch={userListSearch}
-    />
+    <>
+      <Stepper activeStep={activeStep}>
+        <Step key={"stepOne"}>
+          <StepLabel>Select Contact</StepLabel>
+        </Step>
+        <Step key={"stepTwo"}>
+          <StepLabel>Payment</StepLabel>
+        </Step>
+        <Step key={"stepThree"}>
+          <StepLabel>Complete</StepLabel>
+        </Step>
+      </Stepper>
+      {createTransactionState.matches("stepOne") && (
+        <TransactionCreateStepOne
+          setReceiver={setReceiver}
+          users={usersState.context.results!}
+          userListSearch={userListSearch}
+        />
+      )}
+      {sender && createTransactionState.matches("stepTwo") && (
+        <TransactionCreateStepTwo
+          receiver={createTransactionState.context.receiver}
+          sender={sender}
+          createTransaction={createTransaction}
+          showSnackbar={showSnackbar}
+        />
+      )}
+      {createTransactionState.matches("stepThree") && (
+        <TransactionCreateStepThree
+          createTransactionService={createTransactionService}
+        />
+      )}
+    </>
   );
 };
 
-const mapStateToProps = (state: IRootReducerState) => ({
-  searchUsers: state.users.search,
-  allUsers: state.users.all,
-  sender: state.user.profile
-});
-
-const mapDispatchToProps = {
-  transactionCreate: transactionCreatePending,
-  userListSearch: usersSearchPending,
-  snackbarInit: appSnackBarInit
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TransactionCreateContainer);
+export default TransactionCreateContainer;

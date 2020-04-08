@@ -9,7 +9,8 @@ import {
   updateUserById,
   getUserById,
   getUserByUsername,
-  searchUsers
+  searchUsers,
+  removeUserFromResults,
 } from "./database";
 import { User } from "../models/user";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
@@ -17,7 +18,7 @@ import {
   shortIdValidation,
   searchValidation,
   userFieldsValidator,
-  isUserValidator
+  isUserValidator,
 } from "./validators";
 const router = express.Router();
 
@@ -31,8 +32,8 @@ router.get("/", ensureAuthenticated, (req, res) => {
   //   - default: scoped user contacts first, then all other users
   //   - "topFirst": contacts with most transactions first
 
-  const users = getAllUsers();
-  res.status(200).json({ users });
+  const users = removeUserFromResults(req.user?.id!, getAllUsers());
+  res.status(200).json({ results: users });
 });
 
 router.get(
@@ -42,9 +43,9 @@ router.get(
   (req, res) => {
     const { q } = req.query;
 
-    const users = searchUsers(q);
+    const users = removeUserFromResults(req.user?.id!, searchUsers(q));
 
-    res.status(200).json({ users });
+    res.status(200).json({ results: users });
   }
 );
 
@@ -72,7 +73,7 @@ router.get(
     // Permission: account owner
     if (!isEqual(userId, req.user?.id)) {
       return res.status(401).send({
-        error: "Unauthorized"
+        error: "Unauthorized",
       });
     }
 

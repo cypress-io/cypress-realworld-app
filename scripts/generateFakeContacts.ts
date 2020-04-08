@@ -14,7 +14,7 @@ const contactRecords = users.map((user: User) => {
       userId: user.id,
       contactUserId: getOtherRandomUser(user.id).id,
       createdAt: faker.date.past(),
-      modifiedAt: faker.date.recent()
+      modifiedAt: faker.date.recent(),
     }));
 });
 
@@ -23,7 +23,7 @@ const flatContactRecords = flattenDeep(contactRecords);
 fs.writeFile(
   __dirname + "/contacts.json",
   JSON.stringify(flatContactRecords),
-  function() {
+  function () {
     console.log("contact records generated");
   }
 );

@@ -25,15 +25,15 @@ const users = Array(10)
         defaultPrivacyLevel: faker.helpers.randomize([
           "public",
           "private",
-          "contacts"
+          "contacts",
         ]),
         balance: faker.random.number(),
         createdAt: faker.date.past(),
-        modifiedAt: faker.date.recent()
+        modifiedAt: faker.date.recent(),
       };
     }
   );
 
-fs.writeFile(__dirname + "/users.json", JSON.stringify(users), function() {
+fs.writeFile(__dirname + "/users.json", JSON.stringify(users), function () {
   console.log("users generated");
 });

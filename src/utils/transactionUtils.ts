@@ -7,7 +7,7 @@ import {
   TransactionResponseItem,
   TransactionQueryPayload,
   TransactionDateRangePayload,
-  TransactionAmountRangePayload
+  TransactionAmountRangePayload,
 } from "../models";
 import faker from "faker";
 import Dinero from "dinero.js";
@@ -25,7 +25,7 @@ import {
   find,
   omit,
   map,
-  drop
+  drop,
 } from "lodash/fp";
 import { getUserById } from "../backend/database";
 
@@ -66,11 +66,22 @@ export const payAppDifference = curry(
     )
 );
 
+export const payAppAddition = curry((sender: User, transaction: Transaction) =>
+  Dinero({ amount: get("balance", sender) }).add(
+    Dinero({ amount: get("amount", transaction) })
+  )
+);
+
 export const getChargeAmount = (sender: User, transaction: Transaction) =>
   Math.abs(payAppDifference(sender, transaction).getAmount());
 
 export const getTransferAmount = (sender: User, transaction: Transaction) =>
   Math.abs(payAppDifference(sender, transaction).getAmount());
+
+export const getPayAppCreditedAmount = (
+  receiver: User,
+  transaction: Transaction
+) => Math.abs(payAppAddition(receiver, transaction).getAmount());
 
 export const hasInsufficientFunds = (sender: User, transaction: Transaction) =>
   payAppDifference(sender, transaction).isNegative();
@@ -138,7 +149,7 @@ export const currentUserLikesTransaction = (
   transaction: TransactionResponseItem
 ) =>
   flow(
-    find(like => flow(get("userId"), isEqual(get("id", currentUser)))(like)),
+    find((like) => flow(get("userId"), isEqual(get("id", currentUser)))(like)),
     negate(isEmpty)
   )(transaction.likes);
 
@@ -210,6 +221,6 @@ export const getPaginatedItems = (page: number, limit: number, items: any) => {
 
   return {
     totalPages: Math.ceil(items.length / limit),
-    data: pagedItems
+    data: pagedItems,
   };
 };

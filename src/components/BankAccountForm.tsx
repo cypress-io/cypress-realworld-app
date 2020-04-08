@@ -10,33 +10,35 @@ import { useHistory } from "react-router";
 const validationSchema = object({
   bankName: string(),
   accountNumber: string(),
-  routingNumber: string()
+  routingNumber: string(),
 });
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 export interface BankAccountFormProps {
   userId: User["id"];
   createBankAccount: Function;
+  onboarding?: boolean;
 }
 
 const BankAccountForm: React.FC<BankAccountFormProps> = ({
   userId,
-  createBankAccount
+  createBankAccount,
+  onboarding,
 }) => {
   const history = useHistory();
   const classes = useStyles();
@@ -44,7 +46,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
     userId,
     bankName: "",
     accountNumber: "",
-    routingNumber: ""
+    routingNumber: "",
   };
 
   return (
@@ -56,9 +58,9 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
 
         createBankAccount({ userId, ...values });
 
-        history.push("/bankaccounts");
-
-        setSubmitting(false);
+        if (!onboarding) {
+          history.push("/bankaccounts");
+        }
       }}
     >
       {({ isValid, isSubmitting }) => (

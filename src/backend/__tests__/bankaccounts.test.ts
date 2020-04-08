@@ -5,7 +5,7 @@ import {
   getRandomUser,
   seedDatabase,
   createBankAccountForUser,
-  removeBankAccountById
+  removeBankAccountById,
 } from "../database";
 import { User } from "../../models/user";
 import { BankAccount } from "../../models/bankaccount";
@@ -42,7 +42,7 @@ describe("BankAccounts", () => {
     const accountDetails: Partial<BankAccount> = {
       bankName: `${faker.company.companyName()} Bank`,
       accountNumber,
-      routingNumber: faker.finance.account(9)
+      routingNumber: faker.finance.account(9),
     };
     const result = createBankAccountForUser(user.id, accountDetails);
     expect(result.userId).toBe(user.id);

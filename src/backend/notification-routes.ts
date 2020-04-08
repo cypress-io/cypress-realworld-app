@@ -4,13 +4,13 @@ import express from "express";
 import {
   createNotifications,
   updateNotificationById,
-  getUnreadNotificationsByUserId
+  getUnreadNotificationsByUserId,
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import {
   isNotificationsBodyValidator,
   shortIdValidation,
-  isNotificationPatchValidator
+  isNotificationPatchValidator,
 } from "./validators";
 const router = express.Router();
 
@@ -21,7 +21,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
   const notifications = getUnreadNotificationsByUserId(req.user?.id!);
 
   res.status(200);
-  res.json({ notifications });
+  res.json({ results: notifications });
 });
 
 //POST /notifications/bulk
@@ -36,7 +36,7 @@ router.post(
 
     res.status(200);
     // @ts-ignore
-    res.json({ notifications });
+    res.json({ results: notifications });
   }
 );
 
@@ -46,7 +46,7 @@ router.patch(
   ensureAuthenticated,
   validateMiddleware([
     shortIdValidation("notificationId"),
-    ...isNotificationPatchValidator
+    ...isNotificationPatchValidator,
   ]),
   (req, res) => {
     const { notificationId } = req.params;

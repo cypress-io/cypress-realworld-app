@@ -13,7 +13,7 @@ import {
   getTransactionById,
   getPublicTransactionsDefaultSort,
   getUserById,
-  getBankTransferByTransactionId
+  getBankTransferByTransactionId,
 } from "../database";
 
 import {
@@ -23,11 +23,14 @@ import {
   DefaultPrivacyLevel,
   BankTransferType,
   TransactionPayload,
-  TransactionStatus
+  TransactionStatus,
 } from "../../models";
 import { getFakeAmount } from "../../utils/transactionUtils";
 
 describe("Transactions", () => {
+  beforeEach(() => {
+    seedDatabase();
+  });
   afterEach(() => {
     seedDatabase();
   });
@@ -47,7 +50,7 @@ describe("Transactions", () => {
     const userToLookup: User = getAllUsers()[0];
 
     const result: Transaction[] = getTransactionsForUserByObj(userToLookup.id, {
-      status: "complete"
+      status: "complete",
     });
     expect(result[0].receiverId).toBe(userToLookup.id);
   });
@@ -85,7 +88,7 @@ describe("Transactions", () => {
       userToLookup.id,
       {
         dateRangeStart: new Date("Dec 01 2019"),
-        dateRangeEnd: new Date("Dec 05 2019")
+        dateRangeEnd: new Date("Dec 05 2019"),
       }
     );
     expect(result.length).toBe(2);
@@ -119,7 +122,7 @@ describe("Transactions", () => {
       description: `Payment: ${sender.id} to ${receiver.id}`,
       amount: getFakeAmount(),
       privacyLevel: DefaultPrivacyLevel.public,
-      status: TransactionStatus.pending
+      status: TransactionStatus.pending,
     };
 
     const result = createTransaction(sender.id, "payment", paymentDetails);
@@ -140,7 +143,7 @@ describe("Transactions", () => {
       description: `Request: ${sender.id} to ${receiver.id}`,
       amount: getFakeAmount(),
       privacyLevel: DefaultPrivacyLevel.public,
-      status: TransactionStatus.pending
+      status: TransactionStatus.pending,
     };
 
     const result = createTransaction(sender.id, "request", requestDetails);
@@ -161,7 +164,7 @@ describe("Transactions", () => {
       description: `Payment: ${sender.id} to ${receiver.id}`,
       amount: getFakeAmount(),
       privacyLevel: DefaultPrivacyLevel.private,
-      status: TransactionStatus.pending
+      status: TransactionStatus.pending,
     };
 
     const payment = createTransaction(sender.id, "payment", paymentDetails);
@@ -185,7 +188,7 @@ describe("Transactions", () => {
     expect(transaction.requestStatus).not.toEqual("rejected");
 
     const edits: Partial<Transaction> = {
-      requestStatus: TransactionRequestStatus.rejected
+      requestStatus: TransactionRequestStatus.rejected,
     };
     updateTransactionById(user.id, transaction.id, edits);
 
@@ -214,14 +217,17 @@ describe("Transactions", () => {
     const receiver: User = getAllUsers()[1];
     const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
 
+    const receiverTransactions = getTransactionsByUserId(receiver.id);
+    expect(receiverTransactions.length).toBe(2);
+
     const paymentDetails: TransactionPayload = {
       source: senderBankAccount.id!,
       senderId: sender.id,
       receiverId: receiver.id,
       description: `Payment: ${sender.id} to ${receiver.id}`,
-      amount: 100000,
+      amount: 1000,
       privacyLevel: DefaultPrivacyLevel.public,
-      status: TransactionStatus.pending
+      status: TransactionStatus.pending,
     };
 
     const transaction = createTransaction(sender.id, "payment", paymentDetails);
@@ -242,9 +248,9 @@ describe("Transactions", () => {
       senderId: sender.id,
       receiverId: receiver.id,
       description: `Payment: ${sender.id} to ${receiver.id}`,
-      amount: 50000,
+      amount: 500,
       privacyLevel: DefaultPrivacyLevel.public,
-      status: TransactionStatus.pending
+      status: TransactionStatus.pending,
     };
     const secondTransaction = createTransaction(
       sender.id,
@@ -263,5 +269,14 @@ describe("Transactions", () => {
     );
     expect(secondWithdrawal.type).toBe(BankTransferType.withdrawal);
     expect(secondWithdrawal.amount).toBe(50000);
+
+    // Verify Deposit Transactions for Receiver
+    const updatedReceiverTransactions = getTransactionsByUserId(receiver.id);
+
+    expect(updatedReceiverTransactions.length).toBe(4);
+
+    // Verify Receiver's Updated Pay App Balance
+    const updatedReceiver: User = getAllUsers()[1];
+    expect(updatedReceiver.balance).toBe(210377);
   });
 });

@@ -1,13 +1,13 @@
 export enum PaymentNotificationStatus {
   requested = "requested",
   received = "received",
-  incomplete = "incomplete"
+  incomplete = "incomplete",
 }
 
 export enum NotificationsType {
   payment = "payment",
   like = "like",
-  comment = "comment"
+  comment = "comment",
 }
 
 export interface NotificationBase {
@@ -19,6 +19,10 @@ export interface NotificationBase {
   createdAt: Date;
   modifiedAt: Date;
 }
+
+export type NotificationUpdatePayload = Partial<
+  Pick<NotificationBase, "id" | "isRead">
+>;
 
 export interface PaymentNotification extends NotificationBase {
   status: PaymentNotificationStatus;

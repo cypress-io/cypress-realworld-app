@@ -1,4 +1,5 @@
 import path from "path";
+import bcrypt from "bcryptjs";
 import fs from "fs";
 import v4 from "uuid";
 import {
@@ -14,7 +15,8 @@ import {
   get,
   constant,
   filter,
-  inRange
+  inRange,
+  remove,
 } from "lodash/fp";
 import { isWithinRange } from "date-fns";
 import low from "lowdb";
@@ -42,7 +44,7 @@ import {
   BankTransferPayload,
   BankTransferType,
   NotificationResponseItem,
-  TransactionQueryPayload
+  TransactionQueryPayload,
 } from "../models";
 import Fuse from "fuse.js";
 import {
@@ -55,7 +57,8 @@ import {
   getDateQueryFields,
   hasAmountQueryFields,
   getAmountQueryFields,
-  getQueryWithoutFilterFields
+  getQueryWithoutFilterFields,
+  getPayAppCreditedAmount,
 } from "../utils/transactionUtils";
 
 const USER_TABLE = "users";
@@ -89,24 +92,13 @@ export const seedDatabase = () => {
   );
   // seed database with test data
   // @ts-ignore
-  db()
-    .setState(testSeed)
-    .write();
+  db().setState(testSeed).write();
 };
-export const getAllUsers = () =>
-  db()
-    .get(USER_TABLE)
-    .value();
+export const getAllUsers = () => db().get(USER_TABLE).value();
 
-export const getAllContacts = () =>
-  db()
-    .get(CONTACT_TABLE)
-    .value();
+export const getAllContacts = () => db().get(CONTACT_TABLE).value();
 
-export const getAllTransactions = () =>
-  db()
-    .get(TRANSACTION_TABLE)
-    .value();
+export const getAllTransactions = () => db().get(TRANSACTION_TABLE).value();
 
 export const getAllPublicTransactions = () =>
   db()
@@ -115,10 +107,7 @@ export const getAllPublicTransactions = () =>
     .filter({ privacyLevel: "public" })
     .value();
 
-export const getAllForEntity = (entity: string) =>
-  db()
-    .get(entity)
-    .value();
+export const getAllForEntity = (entity: string) => db().get(entity).value();
 
 export const getAllBy = (entity: string, key: string, value: any) => {
   const result = db()
@@ -173,11 +162,14 @@ export const searchUsers = (query: string) => {
   return performSearch(
     items,
     {
-      keys: ["username", "email", "phoneNumber"]
+      keys: ["username", "email", "phoneNumber"],
     },
     query
   ) as User[];
 };
+
+export const removeUserFromResults = (userId: User["id"], results: User[]) =>
+  remove({ id: userId }, results);
 
 // convenience methods
 
@@ -192,20 +184,21 @@ export const getUsersBy = (key: string, value: any) =>
   getAllBy(USER_TABLE, key, value);
 
 export const createUser = (userDetails: Partial<User>): User => {
+  const password = bcrypt.hashSync(userDetails.password!, 10);
   const user: User = {
     id: shortid(),
     uuid: v4(),
     firstName: userDetails.firstName!,
     lastName: userDetails.lastName!,
     username: userDetails.username!,
-    password: userDetails.password!,
+    password,
     email: userDetails.email!,
     phoneNumber: userDetails.phoneNumber!,
     balance: userDetails.balance!,
     avatar: userDetails.avatar!,
     defaultPrivacyLevel: userDetails.defaultPrivacyLevel!,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   saveUser(user);
@@ -275,7 +268,7 @@ export const createContactForUser = (userId: string, contactUserId: string) => {
     userId,
     contactUserId,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   // TODO: check if contact exists
@@ -326,7 +319,7 @@ export const createBankAccountForUser = (
     routingNumber: accountDetails.routingNumber!,
     isDeleted: false,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   // TODO: check if bank account exists
@@ -370,7 +363,7 @@ export const createBankTransfer = (
     uuid: v4(),
     ...bankTransferDetails,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   const savedBankTransfer = saveBankTransfer(bankTransfer);
@@ -413,6 +406,9 @@ export const getTransactionsForUserForApi = (userId: string, query?: object) =>
 export const formatTransactionForApiResponse = (
   transaction: Transaction
 ): TransactionResponseItem => {
+  const receiver = getUserById(transaction.receiverId);
+  const sender = getUserById(transaction.senderId);
+
   const receiverName = getFullNameForUser(transaction.receiverId);
   const senderName = getFullNameForUser(transaction.senderId);
   const likes = getLikesByTransactionId(transaction.id);
@@ -421,9 +417,11 @@ export const formatTransactionForApiResponse = (
   return {
     receiverName,
     senderName,
+    receiverAvatar: receiver.avatar,
+    senderAvatar: sender.avatar,
     likes,
     comments,
-    ...transaction
+    ...transaction,
   };
 };
 
@@ -433,7 +431,7 @@ export const formatTransactionsForApiResponse = (
   orderBy(
     [(transaction: Transaction) => new Date(transaction.modifiedAt)],
     ["desc"],
-    transactions.map(transaction =>
+    transactions.map((transaction) =>
       formatTransactionForApiResponse(transaction)
     )
   );
@@ -448,12 +446,12 @@ export const getAllTransactionsForUserByObj = curry(
     const userTransactions = flatMap(getTransactionsByObj)([
       {
         receiverId: userId,
-        ...queryFields
+        ...queryFields,
       },
       {
         senderId: userId,
-        ...queryFields
-      }
+        ...queryFields,
+      },
     ]);
 
     if (query && (hasDateQueryFields(query) || hasAmountQueryFields(query))) {
@@ -523,7 +521,7 @@ export const getTransactionsForUserContacts = (
   uniqBy(
     "id",
     flatMap(
-      contactId => getTransactionsForUserForApi(contactId, query),
+      (contactId) => getTransactionsForUserForApi(contactId, query),
       getContactIdsForUser(userId)
     )
   );
@@ -559,7 +557,7 @@ export const getNonContactPublicTransactionsForApi = (userId: string) =>
 
 export const getPublicTransactionsDefaultSort = (userId: string) => ({
   contactsTransactions: getTransactionsForUserContacts(userId),
-  publicTransactions: getNonContactPublicTransactionsForApi(userId)
+  publicTransactions: getNonContactPublicTransactionsForApi(userId),
 });
 
 export const getPublicTransactionsByQuery = (
@@ -575,35 +573,42 @@ export const getPublicTransactionsByQuery = (
       publicTransactions: flow(
         transactionsWithinDateRange(dateRangeStart!, dateRangeEnd!),
         transactionsWithinAmountRange(amountMin!, amountMax!)
-      )(getNonContactPublicTransactionsForApi(userId))
+      )(getNonContactPublicTransactionsForApi(userId)),
     };
   } else {
     return {
       contactsTransactions: getTransactionsForUserContacts(userId),
-      publicTransactions: getNonContactPublicTransactionsForApi(userId)
+      publicTransactions: getNonContactPublicTransactionsForApi(userId),
     };
   }
 };
 
 export const resetPayAppBalance = constant(0);
 
-export const updatePayAppBalance = (sender: User, transaction: Transaction) => {
-  if (hasSufficientFunds(sender, transaction)) {
+export const debitPayAppBalance = (user: User, transaction: Transaction) => {
+  if (hasSufficientFunds(user, transaction)) {
     flow(
       getChargeAmount,
-      savePayAppBalance(sender)
+      savePayAppBalance(user)
       // TODO: generate notification?
-    )(sender, transaction);
+    )(user, transaction);
   } else {
     flow(
       getTransferAmount,
-      createBankTransferWithdrawal(sender, transaction),
+      createBankTransferWithdrawal(user, transaction),
       // TODO: generate notification for withdrawal
       resetPayAppBalance,
-      savePayAppBalance(sender)
-    )(sender, transaction);
+      savePayAppBalance(user)
+    )(user, transaction);
   }
 };
+
+export const creditPayAppBalance = (user: User, transaction: Transaction) =>
+  flow(
+    getPayAppCreditedAmount,
+    savePayAppBalance(user)
+    // TODO: generate notification?
+  )(user, transaction);
 
 export const createBankTransferWithdrawal = curry(
   (sender: User, transaction: Transaction, transferAmount: number) =>
@@ -612,7 +617,7 @@ export const createBankTransferWithdrawal = curry(
       source: transaction.source,
       amount: transferAmount,
       transactionId: transaction.id,
-      type: BankTransferType.withdrawal
+      type: BankTransferType.withdrawal,
     })
 );
 
@@ -626,11 +631,12 @@ export const createTransaction = (
   transactionDetails: TransactionPayload
 ): Transaction => {
   const sender = getUserById(userId);
+  const receiver = getUserById(transactionDetails.receiverId);
   const transaction: Transaction = {
     id: shortid(),
     uuid: v4(),
     source: transactionDetails.source,
-    amount: transactionDetails.amount,
+    amount: transactionDetails.amount * 100,
     description: transactionDetails.description,
     receiverId: transactionDetails.receiverId,
     senderId: userId,
@@ -641,17 +647,18 @@ export const createTransaction = (
         ? TransactionRequestStatus.pending
         : undefined,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   const savedTransaction = saveTransaction(transaction);
 
   // if payment, debit sender's balance for payment amount
   if (isPayment(transaction)) {
-    updatePayAppBalance(sender, transaction);
+    debitPayAppBalance(sender, transaction);
+    creditPayAppBalance(receiver, transaction);
     // TODO: update transaction "status"
     updateTransactionById(sender.id, transaction.id, {
-      status: TransactionStatus.complete
+      status: TransactionStatus.complete,
     });
     // TODO: generate notification for transaction - createPaymentNotification(...)
     createPaymentNotification(
@@ -716,7 +723,7 @@ export const createLike = (userId: string, transactionId: string): Like => {
     userId,
     transactionId,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   const savedLike = saveLike(like);
@@ -757,7 +764,7 @@ export const createComment = (
     userId,
     transactionId,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   const savedComment = saveComment(comment);
@@ -817,7 +824,7 @@ export const createPaymentNotification = (
     status,
     isRead: false,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   saveNotification(notification);
@@ -837,7 +844,7 @@ export const createLikeNotification = (
     likeId: likeId,
     isRead: false,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   saveNotification(notification);
@@ -857,7 +864,7 @@ export const createCommentNotification = (
     commentId: commentId,
     isRead: false,
     createdAt: new Date(),
-    modifiedAt: new Date()
+    modifiedAt: new Date(),
   };
 
   saveNotification(notification);
@@ -916,7 +923,7 @@ export const formatNotificationForApiResponse = (
 
   return {
     userFullName,
-    ...notification
+    ...notification,
   };
 };
 
@@ -926,10 +933,10 @@ export const formatNotificationsForApiResponse = (
   orderBy(
     [
       (notification: NotificationResponseItem) =>
-        new Date(notification.modifiedAt)
+        new Date(notification.modifiedAt),
     ],
     ["desc"],
-    notifications.map(notification =>
+    notifications.map((notification) =>
       formatNotificationForApiResponse(notification)
     )
   );

@@ -4,7 +4,7 @@ import {
   currentUserLikesTransaction,
   getQueryWithoutDateFields,
   getQueryWithoutAmountFields,
-  getQueryWithoutFilterFields
+  getQueryWithoutFilterFields,
 } from "../transactionUtils";
 import faker from "faker";
 import {
@@ -12,7 +12,7 @@ import {
   TransactionRequestStatus,
   DefaultPrivacyLevel,
   TransactionStatus,
-  TransactionResponseItem
+  TransactionResponseItem,
 } from "../../models";
 import shortid from "shortid";
 
@@ -33,7 +33,7 @@ const fakeTransaction = (
   requestStatus,
   requestResolvedAt: faker.date.future(),
   createdAt: faker.date.past(),
-  modifiedAt: createdAt || faker.date.recent()
+  modifiedAt: createdAt || faker.date.recent(),
 });
 
 describe("Transaction Utils", () => {
@@ -68,12 +68,14 @@ describe("Transaction Utils", () => {
         defaultPrivacyLevel: DefaultPrivacyLevel.public,
         balance: faker.random.number(),
         createdAt: faker.date.past(),
-        modifiedAt: faker.date.recent()
+        modifiedAt: faker.date.recent(),
       };
 
       const transactionWithLikes: TransactionResponseItem = {
         ...transactionBase,
         receiverName: "Receiver Name",
+        receiverAvatar: "/path/to/receiver/avatar.png",
+        senderAvatar: "/path/to/sender/avatar.png",
         senderName: "Sender Name",
         likes: [
           {
@@ -82,10 +84,10 @@ describe("Transaction Utils", () => {
             userId: "9IUK0xpw",
             transactionId: "dKAI-6Ua",
             createdAt: new Date(),
-            modifiedAt: new Date()
-          }
+            modifiedAt: new Date(),
+          },
         ],
-        comments: []
+        comments: [],
       };
 
       expect(
@@ -94,7 +96,7 @@ describe("Transaction Utils", () => {
 
       const otherCurrentUser = {
         ...currentUser,
-        id: "ABC123"
+        id: "ABC123",
       };
 
       expect(
@@ -108,12 +110,12 @@ describe("Transaction Utils", () => {
       getQueryWithoutDateFields({
         dateRangeStart: new Date().toString(),
         dateRangeEnd: new Date().toString(),
-        status: TransactionStatus.incomplete
+        status: TransactionStatus.incomplete,
       })
     ).toMatchObject({ status: "incomplete" });
     expect(
       getQueryWithoutDateFields({
-        status: TransactionStatus.incomplete
+        status: TransactionStatus.incomplete,
       })
     ).toMatchObject({ status: "incomplete" });
   });
@@ -123,12 +125,12 @@ describe("Transaction Utils", () => {
       getQueryWithoutAmountFields({
         amountMin: 5,
         amountMax: 10,
-        status: TransactionStatus.incomplete
+        status: TransactionStatus.incomplete,
       })
     ).toMatchObject({ status: "incomplete" });
     expect(
       getQueryWithoutAmountFields({
-        status: TransactionStatus.incomplete
+        status: TransactionStatus.incomplete,
       })
     ).toMatchObject({ status: "incomplete" });
   });
@@ -139,10 +141,10 @@ describe("Transaction Utils", () => {
       amountMax: 10,
       requestStatus: "pending",
       dateRangeStart: "2019-12-01T06:00:00.000Z",
-      dateRangeEnd: "2019-12-05T06:00:00.000Z"
+      dateRangeEnd: "2019-12-05T06:00:00.000Z",
     };
     expect(getQueryWithoutFilterFields(query)).toMatchObject({
-      requestStatus: "pending"
+      requestStatus: "pending",
     });
   });
 });

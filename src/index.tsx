@@ -1,26 +1,28 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Router } from "react-router-dom";
-import { Provider } from "react-redux";
 import { createBrowserHistory } from "history";
-import { PersistGate } from "redux-persist/integration/react";
 
 import App from "./containers/App";
 import * as serviceWorker from "./serviceWorker";
-import configureStore from "./store/configureStore";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 
 export const history = createBrowserHistory();
 
-const { store, persistor } = configureStore({});
+const theme = createMuiTheme({
+  palette: {
+    secondary: {
+      main: "#fff",
+    },
+  },
+});
 
 ReactDOM.render(
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <Router history={history}>
-        <App />
-      </Router>
-    </PersistGate>
-  </Provider>,
+  <Router history={history}>
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
+  </Router>,
   document.getElementById("root")
 );
 

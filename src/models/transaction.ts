@@ -4,13 +4,13 @@ import { Like, Comment } from ".";
 export enum TransactionStatus {
   pending = "pending",
   incomplete = "incomplete",
-  complete = "complete"
+  complete = "complete",
 }
 
 export enum TransactionRequestStatus {
   pending = "pending",
   accepted = "accepted",
-  rejected = "rejected"
+  rejected = "rejected",
 }
 
 export interface Transaction {
@@ -34,12 +34,21 @@ export interface TransactionResponseItem extends Transaction {
   likes: Like[];
   comments: Comment[];
   receiverName: string;
+  receiverAvatar: string;
   senderName: string;
+  senderAvatar: string;
 }
 
 export type TransactionPayload = Omit<
   Transaction,
   "id" | "uuid" | "createdAt" | "modifiedAt"
+>;
+
+export type TransactionCreatePayload = Partial<
+  Pick<Transaction, "senderId" | "receiverId" | "description"> & {
+    amount: string;
+    transactionType: string;
+  }
 >;
 
 export type TransactionUpdateActionPayload = Pick<

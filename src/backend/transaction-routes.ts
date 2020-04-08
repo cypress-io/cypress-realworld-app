@@ -9,7 +9,7 @@ import {
   getPublicTransactionsDefaultSort,
   getTransactionByIdForApi,
   getTransactionsForUserForApi,
-  getPublicTransactionsByQuery
+  getPublicTransactionsByQuery,
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import {
@@ -19,7 +19,7 @@ import {
   isTransactionPayloadValidator,
   shortIdValidation,
   isTransactionPatchValidator,
-  isTransactionPublicQSValidator
+  isTransactionPublicQSValidator,
 } from "./validators";
 import { getPaginatedItems } from "../utils/transactionUtils";
 const router = express.Router();
@@ -33,7 +33,7 @@ router.get(
   validateMiddleware([
     sanitizeTransactionStatus,
     sanitizeRequestStatus,
-    ...isTransactionQSValidator
+    ...isTransactionQSValidator,
   ]),
   (req, res) => {
     const transactions = getTransactionsForUserForApi(req.user?.id!, req.query);
@@ -50,9 +50,9 @@ router.get(
         page: res.locals.paginate.page,
         limit: res.locals.paginate.limit,
         hasNextPages: res.locals.paginate.hasNextPages(totalPages),
-        totalPages
+        totalPages,
       },
-      results: paginatedItems
+      results: paginatedItems,
     });
   }
 );
@@ -64,7 +64,7 @@ router.get(
   validateMiddleware([
     sanitizeTransactionStatus,
     sanitizeRequestStatus,
-    ...isTransactionQSValidator
+    ...isTransactionQSValidator,
   ]),
   (req, res) => {
     const transactions = getTransactionsForUserContacts(
@@ -84,9 +84,9 @@ router.get(
         page: res.locals.paginate.page,
         limit: res.locals.paginate.limit,
         hasNextPages: res.locals.paginate.hasNextPages(totalPages),
-        totalPages
+        totalPages,
       },
-      results: paginatedItems
+      results: paginatedItems,
     });
   }
 );
@@ -128,9 +128,9 @@ router.get(
         page: res.locals.paginate.page,
         limit: res.locals.paginate.limit,
         hasNextPages: res.locals.paginate.hasNextPages(totalPages),
-        totalPages
+        totalPages,
       },
-      results: paginatedItems
+      results: paginatedItems,
     });
   }
 );
@@ -142,9 +142,9 @@ router.post(
   validateMiddleware(isTransactionPayloadValidator),
   (req, res) => {
     const transactionPayload = req.body;
-    const transactionType = transactionPayload.type;
+    const transactionType = transactionPayload.transactionType;
 
-    remove("type", transactionPayload);
+    remove("transactionType", transactionPayload);
 
     const transaction = createTransaction(
       req.user?.id!,
@@ -178,7 +178,7 @@ router.patch(
   ensureAuthenticated,
   validateMiddleware([
     shortIdValidation("transactionId"),
-    ...isTransactionPatchValidator
+    ...isTransactionPatchValidator,
   ]),
   (req, res) => {
     const { transactionId } = req.params;

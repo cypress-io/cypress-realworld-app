@@ -4,31 +4,39 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object, number } from "yup";
-import MainContainer from "../containers/MainContainer";
-import { Paper, Typography, Button, Grid, Container } from "@material-ui/core";
+import {
+  Paper,
+  Typography,
+  Button,
+  Grid,
+  Container,
+  Avatar,
+  Box,
+} from "@material-ui/core";
 import { User } from "../models";
+import { random } from "lodash/fp";
 
 const validationSchema = object({
   amount: number().required("Amount is required"),
   description: string().required("Please type a note"),
   senderId: string(),
-  receiverId: string()
+  receiverId: string(),
 });
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    //marginTop: theme.spacing(2),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 interface NumberFormatCustomProps {
@@ -43,12 +51,12 @@ function NumberFormatCustom(props: NumberFormatCustomProps) {
     <NumberFormat
       {...other}
       getInputRef={inputRef}
-      onValueChange={values => {
+      onValueChange={(values) => {
         onChange({
           target: {
             ...other,
-            value: values.value
-          }
+            value: values.value,
+          },
         });
       }}
       thousandSeparator
@@ -61,8 +69,8 @@ function NumberFormatCustom(props: NumberFormatCustomProps) {
 export interface TransactionCreateStepTwoProps {
   receiver: User;
   sender: User;
-  transactionCreate: (payload: object) => void;
-  snackbarInit: Function;
+  createTransaction: Function;
+  showSnackbar: Function;
 }
 
 interface FormValues {
@@ -75,8 +83,8 @@ interface FormValues {
 const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
   receiver,
   sender,
-  transactionCreate,
-  snackbarInit
+  createTransaction,
+  showSnackbar,
 }) => {
   const classes = useStyles();
   const [transactionType, setTransactionType] = useState();
@@ -84,122 +92,139 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
     amount: "",
     description: "",
     senderId: sender.id,
-    receiverId: receiver.id
+    receiverId: receiver.id,
   };
 
   return (
-    <MainContainer>
-      <Paper className={classes.paper}>
-        <Typography component="h2" variant="h6" color="primary" gutterBottom>
-          <b>TO:</b> {receiver.firstName} {receiver.lastName}
-          {transactionType}
-        </Typography>
-        <Container maxWidth="xs">
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            validateOnMount={true}
-            onSubmit={(values, { setSubmitting }) => {
-              setSubmitting(true);
+    <Paper className={classes.paper} elevation={0}>
+      <Box
+        display="flex"
+        height={200}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Grid
+          container
+          direction="column"
+          justify="flex-start"
+          alignItems="center"
+        >
+          <Grid item>
+            <Avatar src={`https://i.pravatar.cc/100?img=${random(3, 50)}`} />
+          </Grid>
+          <Grid item>
+            <Typography
+              component="h2"
+              variant="h6"
+              color="primary"
+              gutterBottom
+            >
+              {receiver.firstName} {receiver.lastName}
+              {transactionType}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Box>
+      <Container maxWidth="xs">
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          validateOnMount={true}
+          onSubmit={(values, { setSubmitting }) => {
+            setSubmitting(true);
 
-              transactionCreate({ type: transactionType, ...values });
-              snackbarInit({
-                severity: "success",
-                message: "Transaction Submitted!"
-              });
+            // reset transactionType
+            setTransactionType(undefined);
 
-              // reset transactionType
-              setTransactionType(undefined);
-
-              setSubmitting(false);
-            }}
-          >
-            {({ isValid, isSubmitting }) => (
-              <Form
-                className={classes.form}
-                data-test="transaction-create-form"
+            createTransaction({ transactionType, ...values });
+            showSnackbar({
+              severity: "success",
+              message: "Transaction Submitted!",
+            });
+          }}
+        >
+          {({ isValid, isSubmitting }) => (
+            <Form className={classes.form} data-test="transaction-create-form">
+              <Field name="amount">
+                {({ field, meta }: FieldProps) => (
+                  <TextField
+                    variant="outlined"
+                    margin="dense"
+                    fullWidth
+                    required
+                    autoFocus
+                    id={"transaction-create-amount-input"}
+                    type="text"
+                    placeholder="Amount"
+                    data-test={"transaction-create-amount-input"}
+                    error={meta.touched && Boolean(meta.error)}
+                    helperText={meta.touched ? meta.error : ""}
+                    InputProps={{
+                      inputComponent: NumberFormatCustom as any,
+                      inputProps: { id: "amount" },
+                    }}
+                    {...field}
+                  />
+                )}
+              </Field>
+              <Field name="description">
+                {({ field, meta }: FieldProps) => (
+                  <TextField
+                    variant="outlined"
+                    margin="dense"
+                    fullWidth
+                    required
+                    id={"transaction-create-description-input"}
+                    type="text"
+                    placeholder="Add a note"
+                    data-test={"transaction-create-description-input"}
+                    error={meta.touched && Boolean(meta.error)}
+                    helperText={meta.touched ? meta.error : ""}
+                    {...field}
+                  />
+                )}
+              </Field>
+              <Grid
+                container
+                spacing={2}
+                direction="row"
+                justify="center"
+                alignItems="center"
               >
-                <Field name="amount">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      variant="outlined"
-                      margin="dense"
-                      fullWidth
-                      required
-                      autoFocus
-                      id={"transaction-create-amount-input"}
-                      type="text"
-                      placeholder="Amount"
-                      data-test={"transaction-create-amount-input"}
-                      error={meta.touched && Boolean(meta.error)}
-                      helperText={meta.touched ? meta.error : ""}
-                      InputProps={{
-                        inputComponent: NumberFormatCustom as any,
-                        inputProps: { id: "amount" }
-                      }}
-                      {...field}
-                    />
-                  )}
-                </Field>
-                <Field name="description">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      variant="outlined"
-                      margin="dense"
-                      fullWidth
-                      required
-                      id={"transaction-create-description-input"}
-                      type="text"
-                      placeholder="Add a note"
-                      data-test={"transaction-create-description-input"}
-                      error={meta.touched && Boolean(meta.error)}
-                      helperText={meta.touched ? meta.error : ""}
-                      {...field}
-                    />
-                  )}
-                </Field>
-                <Grid
-                  container
-                  spacing={2}
-                  direction="row"
-                  justify="center"
-                  alignItems="center"
-                >
-                  <Grid item>
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      className={classes.submit}
-                      data-test="transaction-create-submit-request"
-                      disabled={!isValid || isSubmitting}
-                      onClick={() => setTransactionType("request")}
-                    >
-                      Request
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      className={classes.submit}
-                      data-test="transaction-create-submit-payment"
-                      disabled={!isValid || isSubmitting}
-                      onClick={() => setTransactionType("payment")}
-                    >
-                      Pay
-                    </Button>
-                  </Grid>
+                <Grid item>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    data-test="transaction-create-submit-request"
+                    disabled={!isValid || isSubmitting}
+                    onClick={() => setTransactionType("request")}
+                  >
+                    Request
+                  </Button>
                 </Grid>
-              </Form>
-            )}
-          </Formik>
-        </Container>
-      </Paper>
-    </MainContainer>
+                <Grid item>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    data-test="transaction-create-submit-payment"
+                    disabled={!isValid || isSubmitting}
+                    onClick={() => setTransactionType("payment")}
+                  >
+                    Pay
+                  </Button>
+                </Grid>
+              </Grid>
+            </Form>
+          )}
+        </Formik>
+      </Container>
+    </Paper>
   );
 };
 

@@ -2,17 +2,17 @@ import React, { useRef } from "react";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
-  }
+    marginTop: theme.spacing(1),
+  },
 }));
 
 export interface UserListSearchFormProps {
@@ -20,7 +20,7 @@ export interface UserListSearchFormProps {
 }
 
 const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
-  userListSearch
+  userListSearch,
 }) => {
   const classes = useStyles();
   const inputEl = useRef<HTMLInputElement>(null);

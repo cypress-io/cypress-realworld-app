@@ -6,7 +6,7 @@ import {
   getBankAccountsByUserId,
   getBankAccountById,
   createBankAccountForUser,
-  removeBankAccountById
+  removeBankAccountById,
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import { shortIdValidation, isBankAccountValidator } from "./validators";
@@ -19,7 +19,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
   const accounts = getBankAccountsByUserId(req.user?.id!);
 
   res.status(200);
-  res.json({ accounts });
+  res.json({ results: accounts });
 });
 
 //GET /bankAccounts/:bankAccountId (scoped-user)

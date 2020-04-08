@@ -6,7 +6,10 @@ import {
   Typography,
   Slider,
   Chip,
-  Button
+  Button,
+  useTheme,
+  useMediaQuery,
+  Drawer,
 } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import { TransactionAmountRangePayload } from "../models";
@@ -14,25 +17,25 @@ import {
   formatAmountRangeValues,
   amountRangeValueText,
   amountRangeValueTextLabel,
-  padAmountWithZeros
+  padAmountWithZeros,
   //hasAmountQueryFields
 } from "../utils/transactionUtils";
 import { first, last } from "lodash/fp";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   amountRangeRoot: {
     width: 300,
-    margin: 30
+    margin: 30,
   },
   amountRangeTitleRow: {
-    width: "100%"
+    width: "100%",
   },
   amountRangeTitle: {
-    width: 225
+    width: 225,
   },
   amountRangeSlider: {
-    width: 200
-  }
+    width: 200,
+  },
 }));
 
 export type TransactionListAmountRangeFilterProps = {
@@ -44,9 +47,11 @@ export type TransactionListAmountRangeFilterProps = {
 const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilterProps> = ({
   filterAmountRange,
   amountRangeFilters,
-  resetAmountRange
+  resetAmountRange,
 }) => {
   const classes = useStyles();
+  const theme = useTheme();
+  const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
   // TODO use in place of state
   /*
   const queryHasAmountFields =
@@ -68,7 +73,7 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
 
   const [
     amountRangeAnchorEl,
-    setAmountRangeAnchorEl
+    setAmountRangeAnchorEl,
   ] = React.useState<HTMLDivElement | null>(null);
 
   const handleAmountRangeClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -85,13 +90,68 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
   ) => {
     filterAmountRange({
       amountMin: padAmountWithZeros(first(amountRange as number[]) as number),
-      amountMax: padAmountWithZeros(last(amountRange as number[]) as number)
+      amountMax: padAmountWithZeros(last(amountRange as number[]) as number),
     });
     setAmountRangeValue(amountRange as number[]);
   };
 
   const amountRangeOpen = Boolean(amountRangeAnchorEl);
   const amountRangeId = amountRangeOpen ? "amount-range-popover" : undefined;
+
+  const AmountRangeFilter = () => (
+    <Grid
+      container
+      direction="column"
+      justify="flex-start"
+      alignItems="flex-start"
+      spacing={1}
+      className={classes.amountRangeRoot}
+    >
+      <Grid item>
+        <Grid
+          container
+          direction="row"
+          justify="space-between"
+          alignItems="center"
+          className={classes.amountRangeTitleRow}
+        >
+          <Grid item className={classes.amountRangeTitle}>
+            <Typography
+              color="textSecondary"
+              data-test="transaction-list-filter-amount-range-text"
+            >
+              Amount Range: {formatAmountRangeValues(amountRangeValue)}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Button
+              data-test="transaction-list-filter-amount-clear-button"
+              onClick={() => {
+                setAmountRangeValue(initialAmountRange);
+                resetAmountRange();
+              }}
+            >
+              Clear
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item>
+        <Slider
+          data-test="transaction-list-filter-amount-range-slider"
+          className={classes.amountRangeSlider}
+          value={amountRangeValue}
+          min={0}
+          max={100}
+          onChange={handleAmountRangeChange}
+          valueLabelDisplay="auto"
+          aria-labelledby="range-slider"
+          getAriaValueText={amountRangeValueText}
+          valueLabelFormat={amountRangeValueTextLabel}
+        />
+      </Grid>
+    </Grid>
+  );
 
   return (
     <div>
@@ -100,77 +160,45 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
         variant="outlined"
         onClick={handleAmountRangeClick}
         data-test="transaction-list-filter-amount-range-button"
-        label={`Amount Range: ${formatAmountRangeValues(amountRangeValue)}`}
+        label={`Amount: ${formatAmountRangeValues(amountRangeValue)}`}
         deleteIcon={<ArrowDropDownIcon />}
         onDelete={handleAmountRangeClick}
       />
-      <Popover
-        id={amountRangeId}
-        open={amountRangeOpen}
-        anchorEl={amountRangeAnchorEl}
-        onClose={handleAmountRangeClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left"
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left"
-        }}
-      >
-        <Grid
-          container
-          direction="column"
-          justify="flex-start"
-          alignItems="flex-start"
-          spacing={1}
-          className={classes.amountRangeRoot}
+      {!xsBreakpoint && (
+        <Popover
+          id={amountRangeId}
+          open={amountRangeOpen}
+          anchorEl={amountRangeAnchorEl}
+          onClose={handleAmountRangeClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
         >
-          <Grid item>
-            <Grid
-              container
-              direction="row"
-              justify="space-between"
-              alignItems="center"
-              className={classes.amountRangeTitleRow}
-            >
-              <Grid item className={classes.amountRangeTitle}>
-                <Typography
-                  color="textSecondary"
-                  data-test="transaction-list-filter-amount-range-text"
-                >
-                  Amount Range: {formatAmountRangeValues(amountRangeValue)}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Button
-                  data-test="transaction-list-filter-amount-clear-button"
-                  onClick={() => {
-                    setAmountRangeValue(initialAmountRange);
-                    resetAmountRange();
-                  }}
-                >
-                  Clear
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Slider
-              data-test="transaction-list-filter-amount-range-slider"
-              className={classes.amountRangeSlider}
-              value={amountRangeValue}
-              min={0}
-              max={100}
-              onChange={handleAmountRangeChange}
-              valueLabelDisplay="auto"
-              aria-labelledby="range-slider"
-              getAriaValueText={amountRangeValueText}
-              valueLabelFormat={amountRangeValueTextLabel}
-            />
-          </Grid>
-        </Grid>
-      </Popover>
+          <AmountRangeFilter />
+        </Popover>
+      )}
+      {xsBreakpoint && (
+        <Drawer
+          id={amountRangeId}
+          open={amountRangeOpen}
+          ModalProps={{ onClose: handleAmountRangeClose }}
+          anchor="bottom"
+          data-test="amount-range-filter-drawer"
+        >
+          <Button
+            data-test="amount-range-filter-drawer-close"
+            onClick={() => handleAmountRangeClose()}
+          >
+            Close
+          </Button>
+          <AmountRangeFilter />
+        </Drawer>
+      )}
     </div>
   );
 };

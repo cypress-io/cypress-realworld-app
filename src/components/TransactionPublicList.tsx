@@ -4,10 +4,8 @@ import {
   TransactionPagination,
   TransactionResponseItem,
   TransactionDateRangePayload,
-  TransactionAmountRangePayload
+  TransactionAmountRangePayload,
 } from "../models";
-import MainContainer from "../containers/MainContainer";
-import TransactionNavTabs from "./TransactionNavTabs";
 import TransactionList from "./TransactionList";
 import { publicTransactionsMachine } from "../machines/publicTransactionsMachine";
 
@@ -20,10 +18,10 @@ export interface TransactionPublicListProps {
 const TransactionPublicList: React.FC<TransactionPublicListProps> = ({
   filterComponent,
   dateRangeFilters,
-  amountRangeFilters
+  amountRangeFilters,
 }) => {
   const [current, send] = useMachine(publicTransactionsMachine, {
-    devTools: true
+    devTools: true,
   });
   const { pageData, results } = current.context;
 
@@ -35,18 +33,16 @@ const TransactionPublicList: React.FC<TransactionPublicListProps> = ({
     send("FETCH", { page, ...dateRangeFilters, ...amountRangeFilters });
 
   return (
-    <MainContainer>
-      <TransactionNavTabs />
-      {filterComponent}
-      <br />
+    <>
       <TransactionList
+        filterComponent={filterComponent}
         header="Public"
         transactions={results as TransactionResponseItem[]}
         isLoading={current.matches("loading")}
         loadNextPage={loadNextPage}
         pagination={pageData as TransactionPagination}
       />
-    </MainContainer>
+    </>
   );
 };
 

@@ -6,7 +6,7 @@ import {
   getRandomUser,
   seedDatabase,
   removeContactById,
-  getContactsByUserId
+  getContactsByUserId,
 } from "../database";
 import { User } from "../../models/user";
 describe("Contacts", () => {

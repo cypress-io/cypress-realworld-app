@@ -1,6 +1,6 @@
 import passport from "passport";
 import express, { Request, Response } from "express";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { getUserBy, getUserById } from "./database";
 import { User } from "../models/user";
 const LocalStrategy = require("passport-local").Strategy;
@@ -8,7 +8,7 @@ const router = express.Router();
 
 // configure passport for local strategy
 passport.use(
-  new LocalStrategy(function(
+  new LocalStrategy(function (
     username: string,
     password: string,
     done: Function
@@ -29,11 +29,11 @@ passport.use(
   })
 );
 
-passport.serializeUser(function(user: User, done) {
+passport.serializeUser(function (user: User, done) {
   done(null, user.id);
 });
 
-passport.deserializeUser(function(id: string, done) {
+passport.deserializeUser(function (id: string, done) {
   const user = getUserById(id);
   // TODO: Limit fields returned in deserialized user object?
   //.pick(["id", "firstName", "lastName"])
@@ -45,11 +45,15 @@ passport.deserializeUser(function(id: string, done) {
 router.post(
   "/login",
   passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/"
+    failureRedirect: "/",
   }),
   (req: Request, res: Response): void => {
-    res.sendStatus(200);
+    if (req.body.remember) {
+      req.session!.cookie.maxAge = 24 * 60 * 60 * 1000 * 30; // Expire in 30 days
+    } else {
+      req.session!.cookie.expires = false;
+    }
+    res.redirect(200, "/");
   }
 );
 

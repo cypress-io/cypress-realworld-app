@@ -5,7 +5,7 @@ import express from "express";
 import {
   getContactsByUsername,
   removeContactById,
-  createContactForUser
+  createContactForUser,
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import { shortIdValidation } from "./validators";

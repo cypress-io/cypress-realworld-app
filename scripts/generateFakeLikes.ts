@@ -14,7 +14,7 @@ export const createFakeLike = (
   userId,
   transactionId,
   createdAt: faker.date.past(),
-  modifiedAt: faker.date.recent()
+  modifiedAt: faker.date.recent(),
 });
 
 const likes = users.flatMap((user: User): Like[] => {
@@ -27,11 +27,11 @@ const likes = users.flatMap((user: User): Like[] => {
   const selectedTransactions = randomTransactions.slice(0, 2);
 
   // iterate over transactions and like
-  return selectedTransactions.map(transaction =>
+  return selectedTransactions.map((transaction) =>
     createFakeLike(user.id, transaction!.id)
   );
 });
 
-fs.writeFile(__dirname + "/likes.json", JSON.stringify(likes), function() {
+fs.writeFile(__dirname + "/likes.json", JSON.stringify(likes), function () {
   console.log("like records generated");
 });

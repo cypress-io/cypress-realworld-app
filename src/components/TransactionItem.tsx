@@ -1,12 +1,15 @@
 import React from "react";
 import {
   ListItem,
-  Button,
   Typography,
   Grid,
   Avatar,
   ListItemAvatar,
-  Paper
+  Paper,
+  Badge,
+  withStyles,
+  Theme,
+  createStyles,
 } from "@material-ui/core";
 import LikeIcon from "@material-ui/icons/ThumbUpAltOutlined";
 import CommentIcon from "@material-ui/icons/CommentRounded";
@@ -16,51 +19,49 @@ import { useHistory } from "react-router";
 import TransactionTitle from "./TransactionTitle";
 import TransactionAmount from "./TransactionAmount";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   paper: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(0),
     margin: "auto",
-    width: "95%",
-    [theme.breakpoints.down("sm")]: {
-      maxWidth: 600
-    }
+    width: "100%",
   },
   avatar: {
-    width: theme.spacing(2)
+    width: theme.spacing(2),
   },
   socialStats: {
     [theme.breakpoints.down("sm")]: {
-      marginTop: theme.spacing(2)
-    }
+      marginTop: theme.spacing(2),
+    },
   },
   countIcons: {
-    color: theme.palette.grey[400]
+    color: theme.palette.grey[400],
   },
   countText: {
     color: theme.palette.grey[400],
     marginTop: 2,
     height: theme.spacing(2),
-    width: theme.spacing(2)
+    width: theme.spacing(2),
   },
-  viewTransactionButton: {
-    [theme.breakpoints.down("sm")]: {
-      width: theme.spacing(1)
-    }
-  }
 }));
 
 type TransactionProps = {
   transaction: TransactionResponseItem;
-  transactionIndex: number;
 };
 
-const TransactionItem: React.FC<TransactionProps> = ({
-  transaction,
-  transactionIndex
-}) => {
+const SmallAvatar = withStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      width: 22,
+      height: 22,
+      border: `2px solid ${theme.palette.background.paper}`,
+    },
+  })
+)(Avatar);
+
+const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -72,14 +73,22 @@ const TransactionItem: React.FC<TransactionProps> = ({
     <ListItem
       data-test={`transaction-item-${transaction.id}`}
       alignItems="flex-start"
+      onClick={() => showTransactionDetail(transaction.id)}
     >
-      <Paper className={classes.paper}>
+      <Paper className={classes.paper} elevation={0}>
         <Grid container spacing={2}>
           <Grid item>
             <ListItemAvatar>
-              <Avatar
-                src={`https://i.pravatar.cc/100?img=${transactionIndex}`}
-              />
+              <Badge
+                overlap="circle"
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                badgeContent={<SmallAvatar src={transaction.receiverAvatar} />}
+              >
+                <Avatar src={transaction.senderAvatar} />
+              </Badge>
             </ListItemAvatar>
           </Grid>
           <Grid item xs={12} sm container>
@@ -114,17 +123,6 @@ const TransactionItem: React.FC<TransactionProps> = ({
                     </Typography>
                   </Grid>
                 </Grid>
-              </Grid>
-              <Grid item>
-                <Button
-                  className={classes.viewTransactionButton}
-                  color="primary"
-                  size="small"
-                  onClick={() => showTransactionDetail(transaction.id)}
-                  data-test={`transaction-view-${transaction.id}`}
-                >
-                  Details
-                </Button>
               </Grid>
             </Grid>
             <Grid item>
