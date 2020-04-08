@@ -87,7 +87,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
   showSnackbar,
 }) => {
   const classes = useStyles();
-  const [transactionType, setTransactionType] = useState();
+  const [transactionType, setTransactionType] = useState<string>();
   const initialValues: FormValues = {
     amount: "",
     description: "",
