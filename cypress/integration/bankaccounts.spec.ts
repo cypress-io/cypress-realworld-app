@@ -32,7 +32,7 @@ describe("Bank Accounts", function () {
     cy.getTestLike("bankaccount-list-item").should("have.length", 1);
   });
 
-  it("soft deletes a bank account", function () {
+  it.skip("soft deletes a bank account", function () {
     cy.getTestLike("bankaccount-delete").first().click();
 
     cy.wait("@deleteBankAccount").should("have.property", "status", 200);
