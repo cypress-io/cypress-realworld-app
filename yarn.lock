@@ -2356,10 +2356,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@types/yup@0.26.32":
-  version "0.26.32"
-  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.26.32.tgz#bd356fb405f3d641eff963854edf7ad854a8e829"
-  integrity sha512-55WFAq8lNYXdRzSP1cenMFFXtPRe7PWsqn5y9ibqKHOQZ/cSLErkcnB1LE89M7W2TSXVDFtx+T7eFePkGoB+xw==
+"@types/yup@0.26.34":
+  version "0.26.34"
+  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.26.34.tgz#199329f9fee5074a7385b4a4a25d1559db628aef"
+  integrity sha512-/zH/Yuwl2vC5fgPE+Qtv67iI/o50qLJJsR0KVc86cpDlY2IsRv3yJop1v/9hfNrgy7J8J5BpJM4BMhyFE3QE4w==
 
 "@typescript-eslint/eslint-plugin@^2.10.0":
   version "2.21.0"
@@ -12509,10 +12509,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@3.7.5:
-  version "3.7.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.5.tgz#0692e21f65fd4108b9330238aac11dd2e177a1ae"
-  integrity sha512-/P5lkRXkWHNAbcJIiHPfRoKqyd7bsyCma1hZNUGfn20qm64T6ZBlrzprymeu918H+mB/0rIg2gGK/BXkhhYgBw==
+typescript@3.8.3:
+  version "3.8.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"
+  integrity sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==
 
 ua-parser-js@^0.7.18:
   version "0.7.21"
