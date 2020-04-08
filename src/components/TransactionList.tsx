@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link as RouterLink } from "react-router-dom";
-import { Button, ListSubheader, Box, Grid } from "@material-ui/core";
+import { Button, ListSubheader, Grid } from "@material-ui/core";
 import { isEmpty } from "lodash/fp";
 
 import SkeletonList from "./SkeletonList";
