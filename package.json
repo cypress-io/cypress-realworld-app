@@ -115,7 +115,7 @@
     "start:api:watch": "nodemon --exec yarn tsnode --watch 'src/app.ts' --watch 'src/backend' src/app.ts",
     "build": "react-scripts build",
     "test": "yarn cypress:open",
-    "test:ci": "NODE_ENV=test yarn start:server-and-api",
+    "test:ci": "NODE_ENV=test CI=false yarn start:server-and-api",
     "test:headless": "yarn cypress:run",
     "test:api": "yarn cypress:run --spec 'integration/api/*'",
     "test:unit": "react-scripts test --runInBand",
