@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: "auto",
   },
   container: {
+    minHeight: "77vh",
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
     [theme.breakpoints.up("sm")]: {
