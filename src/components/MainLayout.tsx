@@ -103,10 +103,18 @@ const MainLayout: React.FC<Props> = ({
               {children}
             </Grid>
           </Grid>
-          <Box pt={2}>
-            <Footer />
-          </Box>
         </Container>
+        <footer
+          style={{
+            width: xsBreakpoint ? "100%" : "80%",
+            position: "absolute",
+            bottom: 0,
+            height: 40,
+            marginTop: 40,
+          }}
+        >
+          <Footer />
+        </footer>
       </main>
     </>
   );

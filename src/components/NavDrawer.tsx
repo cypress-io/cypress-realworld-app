@@ -8,7 +8,6 @@ import { Link as RouterLink } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
-import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -21,7 +20,6 @@ import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import { Grid, Avatar, Typography } from "@material-ui/core";
 import { formatAmount } from "../utils/transactionUtils";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
-import { ReactComponent as CypressLogo } from "../svgs/cypress-logo.svg";
 
 const drawerWidth = 240;
 
@@ -261,27 +259,6 @@ const NavDrawer: React.FC<Props> = ({
         </Grid>
         <Grid item>
           <List>{secondaryListItems(signOutPending)}</List>
-        </Grid>
-        <Grid item style={{ height: "100%" }}>
-          <Box display="flex" height={showTemporaryDrawer ? "85%" : "115%"}>
-            <Grid
-              container
-              direction="column"
-              justify="flex-end"
-              alignItems="center"
-            >
-              <Grid item style={{ marginLeft: "35%" }}>
-                <a
-                  style={{ textDecoration: "none" }}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://cypress.io"
-                >
-                  <CypressLogo className={classes.cypressLogo} />
-                </a>
-              </Grid>
-            </Grid>
-          </Box>
         </Grid>
       </Grid>
     </Drawer>
