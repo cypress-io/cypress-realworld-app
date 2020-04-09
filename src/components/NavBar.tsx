@@ -11,12 +11,13 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import Link from "@material-ui/core/Link";
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import { Button } from "@material-ui/core";
+import { Button, useTheme, useMediaQuery } from "@material-ui/core";
 import { Interpreter } from "xstate";
 import { DataContext, DataEvents } from "../machines/dataMachine";
 import { useService } from "@xstate/react";
 import TransactionNavTabs from "./TransactionNavTabs";
 import { ReactComponent as PayAppLogo } from "../svgs/pay-app-logo.svg";
+import { ReactComponent as PayAppLogoDollar } from "../svgs/pay-app-logo-dollar.svg";
 
 const drawerWidth = 240;
 
@@ -82,9 +83,11 @@ const NavBar: React.FC<NavBarProps> = ({
 }) => {
   const match = useLocation();
   const classes = useStyles();
+  const theme = useTheme();
   const [notificationsState] = useService(notificationsService);
 
   const allNotifications = notificationsState?.context?.results;
+  const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
 
   return (
     <AppBar
@@ -114,7 +117,11 @@ const NavBar: React.FC<NavBarProps> = ({
             style={{ color: "#fff", textDecoration: "none" }}
             component={RouterLink}
           >
-            <PayAppLogo className={classes.logo} />
+            {xsBreakpoint ? (
+              <PayAppLogoDollar className={classes.logo} />
+            ) : (
+              <PayAppLogo className={classes.logo} />
+            )}
           </Link>
         </Typography>
         <Button

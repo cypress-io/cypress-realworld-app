@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useMachine } from "@xstate/react";
 import { Interpreter } from "xstate";
 import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { useMediaQuery, useTheme } from "@material-ui/core";
@@ -33,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: "auto",
   },
   container: {
+    minHeight: "77vh",
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
     [theme.breakpoints.up("sm")]: {
@@ -103,10 +103,10 @@ const MainLayout: React.FC<Props> = ({
               {children}
             </Grid>
           </Grid>
-          <Box pt={2}>
-            <Footer />
-          </Box>
         </Container>
+        <footer>
+          <Footer />
+        </footer>
       </main>
     </>
   );
