@@ -111,7 +111,7 @@
     "start:empty": "NODE_ENV=development EMPTY_SEED=true start-test start:server-and-api:watch 3000 cypress:open",
     "start:test": "NODE_ENV=test start-test start:server-and-api:watch 3000 cypress:open",
     "start:react": "react-scripts start",
-    "start:react:ci": "node test-server.js",
+    "start:react:ci": "node scripts/testServer.js",
     "start:api": "yarn tsnode --files src/app.ts",
     "start:api:watch": "nodemon --exec yarn tsnode --watch 'src/app.ts' --watch 'src/backend' src/app.ts",
     "prebuild": "yarn types",
