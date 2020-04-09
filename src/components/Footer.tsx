@@ -5,7 +5,7 @@ import { Container } from "@material-ui/core";
 
 export default function Footer() {
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" style={{ marginTop: 50 }}>
       <Typography variant="body2" color="textSecondary" align="center">
         Built by
         <a
