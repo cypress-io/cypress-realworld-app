@@ -4,6 +4,8 @@ import ListItem from "@material-ui/core/ListItem";
 import LikeIcon from "@material-ui/icons/ThumbUpAltOutlined";
 import PaymentIcon from "@material-ui/icons/Payment";
 import CommentIcon from "@material-ui/icons/CommentRounded";
+import IconButton from "@material-ui/core/IconButton";
+import CheckIcon from "@material-ui/icons/Check";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import { NotificationResponseItem } from "../models";
 import {
@@ -11,6 +13,8 @@ import {
   makeStyles,
   ListItemIcon,
   ListItemText,
+  useTheme,
+  useMediaQuery,
 } from "@material-ui/core";
 import {
   isCommentNotification,
@@ -45,8 +49,10 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
   updateNotification,
 }) => {
   const classes = useStyles();
+  const theme = useTheme();
   let listItemText = undefined;
   let listItemIcon = undefined;
+  const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
 
   if (isCommentNotification(notification)) {
     listItemIcon = <CommentIcon />;
@@ -75,16 +81,30 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
     <ListItem data-test={`notification-list-item-${notification.id}`}>
       <ListItemIcon>{listItemIcon!}</ListItemIcon>
       <ListItemText primary={listItemText} />
-      <Button
-        color="primary"
-        size="small"
-        onClick={() =>
-          updateNotification({ id: notification.id, isRead: true })
-        }
-        data-test={`notification-mark-read-${notification.id}`}
-      >
-        Dismiss
-      </Button>
+      {xsBreakpoint && (
+        <IconButton
+          aria-label="mark as read"
+          color="primary"
+          onClick={() =>
+            updateNotification({ id: notification.id, isRead: true })
+          }
+          data-test={`notification-mark-read-${notification.id}`}
+        >
+          <CheckIcon />
+        </IconButton>
+      )}
+      {!xsBreakpoint && (
+        <Button
+          color="primary"
+          size="small"
+          onClick={() =>
+            updateNotification({ id: notification.id, isRead: true })
+          }
+          data-test={`notification-mark-read-${notification.id}`}
+        >
+          Dismiss
+        </Button>
+      )}
     </ListItem>
   );
 };
