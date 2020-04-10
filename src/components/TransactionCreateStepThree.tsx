@@ -39,7 +39,6 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
 }) => {
   const history = useHistory();
   const classes = useStyles();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [createTransactionState, sendCreateTransaction] = useService(
     createTransactionService
   );

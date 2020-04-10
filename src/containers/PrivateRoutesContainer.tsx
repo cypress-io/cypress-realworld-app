@@ -36,12 +36,8 @@ const PrivateRoutesContainer: React.FC<Props> = ({
   snackbarService,
   bankAccountsService,
 }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [authState, sendAuth] = useService(authService);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [notificationsState, sendNotifications] = useService(
-    notificationsService
-  );
+  const [, sendAuth] = useService(authService);
+  const [, sendNotifications] = useService(notificationsService);
 
   useEffect(() => {
     sendAuth("REFRESH");

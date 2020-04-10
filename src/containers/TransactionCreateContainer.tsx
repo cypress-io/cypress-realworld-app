@@ -31,16 +31,13 @@ const TransactionCreateContainer: React.FC<Props> = ({
   snackbarService,
 }) => {
   const [authState, sendAuth] = useService(authService);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [snackbarState, sendSnackbar] = useService(snackbarService);
+  const [, sendSnackbar] = useService(snackbarService);
 
   const [
     createTransactionState,
     sendCreateTransaction,
     createTransactionService,
-  ] = useMachine(createTransactionMachine, {
-    devTools: true,
-  });
+  ] = useMachine(createTransactionMachine);
   const [usersState, sendUsers] = useMachine(usersMachine);
 
   useEffect(() => {
