@@ -25,36 +25,14 @@ const persistedAuthState = savedAuthState && JSON.parse(savedAuthState);
 
 const App: React.FC = () => {
   const classes = useStyles();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [authState, sendAuth, authService] = useMachine(authMachine, {
+  const [authState, , authService] = useMachine(authMachine, {
     state: persistedAuthState,
-    devTools: true,
   });
-  const [
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    notificationsState,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    sendNotifications,
-    notificationsService,
-  ] = useMachine(notificationsMachine, {
-    devTools: true,
-  });
+  const [, , notificationsService] = useMachine(notificationsMachine);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [snackbarState, sendSnackbar, snackbarService] = useMachine(
-    snackbarMachine,
-    {
-      devTools: true,
-    }
-  );
+  const [, , snackbarService] = useMachine(snackbarMachine);
 
-  const [
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    bankAccountsState,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    sendBankAccounts,
-    bankAccountsService,
-  ] = useMachine(bankAccountsMachine, { devTools: true });
+  const [, , bankAccountsService] = useMachine(bankAccountsMachine);
 
   const isLoggedIn =
     authState.matches("authorized") ||

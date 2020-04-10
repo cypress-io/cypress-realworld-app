@@ -52,8 +52,7 @@ export interface Props {
 
 const SignInForm: React.FC<Props> = ({ authService }) => {
   const classes = useStyles();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [authState, sendAuth] = useService(authService);
+  const [, sendAuth] = useService(authService);
   const initialValues: SignInPayload = {
     username: "",
     password: "",

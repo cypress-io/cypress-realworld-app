@@ -19,10 +19,7 @@ const TransactionsContainer: React.FC = () => {
   const match = useRouteMatch();
 
   const [currentFilters, sendFilterEvent] = useMachine(
-    transactionFiltersMachine,
-    {
-      devTools: true,
-    }
+    transactionFiltersMachine
   );
 
   const hasDateRangeFilter = currentFilters.matches({ dateRange: "filter" });

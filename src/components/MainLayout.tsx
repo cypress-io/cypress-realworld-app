@@ -55,9 +55,7 @@ const MainLayout: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [drawerState, sendDrawer] = useMachine(drawerMachine, {
-    devTools: true,
-  });
+  const [drawerState, sendDrawer] = useMachine(drawerMachine);
 
   const aboveSmallBreakpoint = useMediaQuery(theme.breakpoints.up("sm"));
   const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));

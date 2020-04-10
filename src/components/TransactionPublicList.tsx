@@ -20,9 +20,7 @@ const TransactionPublicList: React.FC<TransactionPublicListProps> = ({
   dateRangeFilters,
   amountRangeFilters,
 }) => {
-  const [current, send] = useMachine(publicTransactionsMachine, {
-    devTools: true,
-  });
+  const [current, send] = useMachine(publicTransactionsMachine);
   const { pageData, results } = current.context;
 
   useEffect(() => {

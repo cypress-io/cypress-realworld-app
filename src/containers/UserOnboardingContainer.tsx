@@ -29,10 +29,9 @@ const UserOnboardingContainer: React.FC<Props> = ({
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [bankAccountsState, sendBankAccounts] = useService(bankAccountsService);
   const [authState] = useService(authService);
-  const [
-    userOnboardingState,
-    sendUserOnboarding,
-  ] = useMachine(userOnboardingMachine, { devTools: true });
+  const [userOnboardingState, sendUserOnboarding] = useMachine(
+    userOnboardingMachine
+  );
 
   const currentUser = authState?.context?.user;
 

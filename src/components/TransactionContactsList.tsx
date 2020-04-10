@@ -20,9 +20,7 @@ const TransactionContactsList: React.FC<TransactionContactListProps> = ({
   dateRangeFilters,
   amountRangeFilters,
 }) => {
-  const [current, send] = useMachine(contactsTransactionsMachine, {
-    devTools: true,
-  });
+  const [current, send] = useMachine(contactsTransactionsMachine);
   const { pageData, results } = current.context;
 
   useEffect(() => {
