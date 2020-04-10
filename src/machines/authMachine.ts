@@ -10,6 +10,7 @@ export interface AuthMachineSchema {
     signup: {};
     loading: {};
     updating: {};
+    logout: {};
     refreshing: {};
     authorized: {};
   };
@@ -70,6 +71,13 @@ export const authMachine = Machine<
           onError: { target: "unauthorized", actions: "onError" },
         },
       },
+      logout: {
+        invoke: {
+          src: "performLogout",
+          onDone: { target: "unauthorized" },
+          onError: { target: "unauthorized", actions: "onError" },
+        },
+      },
       authorized: {
         invoke: {
           src: "getUserProfile",
@@ -79,7 +87,7 @@ export const authMachine = Machine<
         on: {
           UPDATE: "updating",
           REFRESH: "refreshing",
-          LOGOUT: "unauthorized",
+          LOGOUT: "logout",
         },
       },
     },
@@ -120,6 +128,9 @@ export const authMachine = Machine<
           payload
         );
         return resp.data;
+      },
+      performLogout: async (ctx, event) => {
+        await httpClient.post(`http://localhost:3001/logout`);
       },
     },
     actions: {
