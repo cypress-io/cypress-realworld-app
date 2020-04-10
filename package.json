@@ -150,6 +150,11 @@
       "<rootDir>/src/data/dev-seed.json"
     ]
   },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn types"
+    }
+  },
   "browserslist": {
     "production": [
       ">0.2%",
