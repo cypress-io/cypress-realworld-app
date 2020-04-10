@@ -13,6 +13,7 @@ describe("Transaction Feed", function () {
     // TODO: Highlight this use case
     Cypress.Cookies.preserveOnce("connect.sid");
     cy.server();
+    cy.route("GET", "/transactions/public*").as("publicTransactions");
     cy.route("GET", "/transactions*").as("personalTransactions");
     cy.route("GET", "/transactions/contacts*").as("contactsTransactions");
   });
@@ -36,14 +37,14 @@ describe("Transaction Feed", function () {
   it("renders everyone (public) (infinite list)", function () {
     cy.getTest("nav-public-tab").should("have.class", "Mui-selected");
 
-    cy.getTestLike("transaction-item").should("have.length", 7);
+    cy.getTestLike("transaction-item").should("have.length", 8);
   });
 
   it("renders friends (contacts) transaction feed  (infinite list)", function () {
     cy.getTest("nav-contacts-tab") // On get Navigation tabs are hidden under the AppBar in the UI
       .scrollIntoView() // TODO: Bug? Does not work as expected to scroll the tab into view
       .click({ force: true }); // Current solution is to force the click
-    cy.getTestLike("transaction-item").should("have.length", 7);
+    cy.getTestLike("transaction-item").should("have.length", 8);
     cy.getTest("nav-contacts-tab").should("have.class", "Mui-selected");
     cy.getTest("transaction-list").children().scrollTo("bottom");
     cy.getTest("transaction-loading").should("be.visible");
@@ -57,7 +58,7 @@ describe("Transaction Feed", function () {
     cy.getTest("nav-personal-tab").click({ force: true });
     cy.getTest("nav-personal-tab").should("have.class", "Mui-selected");
 
-    cy.getTestLike("transaction-item").should("have.length", 7);
+    cy.getTestLike("transaction-item").should("have.length", 8);
 
     // TODO: Test infinite scrolling by adding more personal transactions
     /*
@@ -113,34 +114,22 @@ describe("Transaction Feed", function () {
     cy.getTest("amount-range-filter-drawer-close").click();
   });
 
-  it.skip("renders mine (personal) transaction feed, filters by date range, then clears the date range filter", function () {
-    // TODO: Get working
+  it("renders mine (personal) transaction feed, filters by date range, then clears the date range filter", function () {
     cy.wrap(new Date(2019, 11, 1).getTime()).then((now) => {
-      cy.clock(now);
+      cy.clock(now, ["Date"]);
 
-      cy.getTest("nav-personal-tab").click();
-      //.should("have.class", "Mui-selected");
+      cy.getTest("nav-personal-tab")
+        .click()
+        .should("have.class", "Mui-selected");
 
-      cy.wait("@personalTransactions");
-
-      // TODO: Another example of scrollIntoView not working; resort to force clicks
+      cy.getTest("main").scrollTo("top");
       cy.getTest("transaction-list-filter-date-range-button").click({
         force: true,
       });
 
-      /*
       cy.get("[data-date='2019-12-01']").click({ force: true });
       cy.get("[data-date='2019-12-03']").click({ force: true });
-      */
 
-      /*
-    cy.getTest("main").scrollTo("top"); // TODO: does not work to scroll button into view either
-    cy.getTest("transaction-list-filter-date-range-button")
-      .scrollIntoView() // TODO: Does not work
-      .should("contain", "2019-12-01")
-      .should("contain", "2019-12-03");*/
-
-      /*
       cy.wait("@personalTransactions");
 
       cy.getTestLike("transaction-item").should("have.length", 3);
@@ -150,7 +139,6 @@ describe("Transaction Feed", function () {
         .click({ force: true });
 
       cy.getTestLike("transaction-item").should("have.length.greaterThan", 3);
-      */
     });
   });
 

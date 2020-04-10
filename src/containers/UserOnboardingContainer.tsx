@@ -28,7 +28,7 @@ const UserOnboardingContainer: React.FC<Props> = ({
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [bankAccountsState, sendBankAccounts] = useService(bankAccountsService);
-  const [authState] = useService(authService);
+  const [authState, sendAuth] = useService(authService);
   const [userOnboardingState, sendUserOnboarding] = useMachine(
     userOnboardingMachine
   );
@@ -110,11 +110,18 @@ const UserOnboardingContainer: React.FC<Props> = ({
         </Box>
       </DialogContent>
       <DialogActions>
+        <Button
+          style={{ marginRight: "80%" }}
+          onClick={() => sendAuth("LOGOUT")}
+          color="secondary"
+          data-test="user-onboarding-logout"
+        >
+          Logout
+        </Button>
         {!userOnboardingState.matches("stepTwo") && (
           <Button
             onClick={() => nextStep()}
             color="primary"
-            autoFocus
             data-test="user-onboarding-next"
           >
             {userOnboardingState.matches("stepThree")

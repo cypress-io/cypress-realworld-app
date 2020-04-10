@@ -9,6 +9,7 @@ import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
+    minHeight: "90vh",
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
