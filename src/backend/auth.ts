@@ -58,8 +58,12 @@ router.post(
 );
 
 router.post("/logout", (req: Request, res: Response): void => {
+  res.clearCookie("connect.sid");
   req.logout();
-  res.sendStatus(200);
+  req.session!.destroy(function (err) {
+    if (err) console.log(err);
+    res.redirect("/");
+  });
 });
 
 router.get("/checkAuth", (req, res) => {
