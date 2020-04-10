@@ -17,7 +17,7 @@ export interface TransactionListProps {
 const useStyles = makeStyles((theme) => ({
   transactionList: {
     width: "100%",
-    height: "100%",
+    minHeight: "80vh",
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
@@ -77,7 +77,7 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
             itemCount={itemCount}
             ref={ref}
             onItemsRendered={onItemsRendered}
-            height={isXsBreakpoint ? theme.spacing(48) : theme.spacing(68)}
+            height={isXsBreakpoint ? theme.spacing(74) : theme.spacing(88)}
             width={"98%"}
             itemSize={isXsBreakpoint ? theme.spacing(28) : theme.spacing(16)}
           >
