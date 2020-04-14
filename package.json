@@ -77,6 +77,8 @@
     "yup": "0.28.3"
   },
   "devDependencies": {
+    "@cypress/code-coverage": "3.1.0",
+    "@cypress/instrument-cra": "1.1.0",
     "cypress": "4.4.0",
     "eslint-config-prettier": "6.10.1",
     "eslint-plugin-cypress": "2.10.3",
@@ -106,7 +108,7 @@
     "start:dev": "NODE_ENV=development start-test start:server-and-api:watch 3000 cypress:open",
     "start:empty": "NODE_ENV=development EMPTY_SEED=true start-test start:server-and-api:watch 3000 cypress:open",
     "start:test": "NODE_ENV=test start-test start:server-and-api:watch 3000 cypress:open",
-    "start:react": "react-scripts start",
+    "start:react": "react-scripts -r @cypress/instrument-cra start",
     "start:react:ci": "node scripts/testServer.js",
     "start:api": "yarn tsnode --files src/app.ts",
     "start:api:watch": "nodemon --exec yarn tsnode --watch 'src/app.ts' --watch 'src/backend' src/app.ts",
