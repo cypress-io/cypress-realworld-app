@@ -46,7 +46,7 @@ import {
   NotificationResponseItem,
   TransactionQueryPayload,
 } from "../models";
-import Fuse from "fuse.js";
+import Fuse, { FuseResult } from "fuse.js";
 import {
   isPayment,
   getTransferAmount,
@@ -165,11 +165,13 @@ export const searchUsers = (query: string) => {
       keys: ["username", "email", "phoneNumber"],
     },
     query
-  ) as User[];
+  ) as FuseResult<User>[];
 };
 
-export const removeUserFromResults = (userId: User["id"], results: User[]) =>
-  remove({ id: userId }, results);
+export const removeUserFromResults = (
+  userId: User["id"],
+  results: FuseResult<User>[]
+) => remove((result) => result.item.id === userId, results);
 
 // convenience methods
 
