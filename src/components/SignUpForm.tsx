@@ -88,7 +88,10 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
           {({ isValid, isSubmitting, dirty }) => (
             <Form className={classes.form}>
               <Field name="firstName">
-                {({ field, meta }: FieldProps) => (
+                {({
+                  field,
+                  meta: { error, value, initialValue, touched },
+                }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="normal"
@@ -99,14 +102,19 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
                     type="text"
                     autoFocus
                     data-test="signup-first-name"
-                    error={dirty && meta.touched && Boolean(meta.error)}
-                    helperText={dirty && meta.touched ? meta.error : ""}
+                    error={
+                      (touched || value !== initialValue) && Boolean(error)
+                    }
+                    helperText={touched || value !== initialValue ? error : ""}
                     {...field}
                   />
                 )}
               </Field>
               <Field name="lastName">
-                {({ field, meta }: FieldProps) => (
+                {({
+                  field,
+                  meta: { error, value, initialValue, touched },
+                }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="normal"
@@ -116,14 +124,19 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
                     label="Last Name"
                     type="text"
                     data-test="signup-last-name"
-                    error={dirty && meta.touched && Boolean(meta.error)}
-                    helperText={dirty && meta.touched ? meta.error : ""}
+                    error={
+                      (touched || value !== initialValue) && Boolean(error)
+                    }
+                    helperText={touched || value !== initialValue ? error : ""}
                     {...field}
                   />
                 )}
               </Field>
               <Field name="username">
-                {({ field, meta }: FieldProps) => (
+                {({
+                  field,
+                  meta: { error, value, initialValue, touched },
+                }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="normal"
@@ -133,14 +146,19 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
                     label="Username"
                     type="text"
                     data-test="signup-username"
-                    error={dirty && meta.touched && Boolean(meta.error)}
-                    helperText={dirty && meta.touched ? meta.error : ""}
+                    error={
+                      (touched || value !== initialValue) && Boolean(error)
+                    }
+                    helperText={touched || value !== initialValue ? error : ""}
                     {...field}
                   />
                 )}
               </Field>
               <Field name="password">
-                {({ field, meta }: FieldProps) => (
+                {({
+                  field,
+                  meta: { error, value, initialValue, touched },
+                }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="normal"
@@ -150,14 +168,19 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
                     type="password"
                     id="password"
                     data-test="signup-password"
-                    error={dirty && meta.touched && Boolean(meta.error)}
-                    helperText={dirty && meta.touched ? meta.error : ""}
+                    error={
+                      (touched || value !== initialValue) && Boolean(error)
+                    }
+                    helperText={touched || value !== initialValue ? error : ""}
                     {...field}
                   />
                 )}
               </Field>
               <Field name="confirmPassword">
-                {({ field, meta }: FieldProps) => (
+                {({
+                  field,
+                  meta: { error, value, initialValue, touched },
+                }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="normal"
@@ -167,8 +190,10 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
                     id="confirmPassword"
                     data-test="signup-confirmPassword"
                     type="password"
-                    error={dirty && meta.touched && Boolean(meta.error)}
-                    helperText={dirty && meta.touched ? meta.error : ""}
+                    error={
+                      (touched || value !== initialValue) && Boolean(error)
+                    }
+                    helperText={touched || value !== initialValue ? error : ""}
                     {...field}
                   />
                 )}

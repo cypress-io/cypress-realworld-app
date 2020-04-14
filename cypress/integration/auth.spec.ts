@@ -88,36 +88,51 @@ describe("User Sign-up and Login", function () {
     cy.visit("/");
 
     cy.getTest("signin-username").type("User").find("input").clear().blur();
-    cy.get("#username-helper-text").should("be.visible");
+    cy.get("#username-helper-text")
+      .should("be.visible")
+      .and("contain", "Username is required");
 
     cy.getTest("signin-password").type("abc").find("input").blur();
     cy.get("#password-helper-text")
       .should("be.visible")
-      .should("contain", "Password must contain at least 4 characters");
+      .and("contain", "Password must contain at least 4 characters");
+
+    cy.getTest("signin-submit").should("be.disabled");
   });
 
-  it.skip("should display signup errors", function () {
+  it("should display signup errors", function () {
     cy.fixture("users").as("users");
 
     cy.visit("/signup");
 
     cy.getTest("signup-first-name").type("First").find("input").clear().blur();
-    cy.get("#firstName-helper-text").should("be.visible");
+    cy.get("#firstName-helper-text")
+      .should("be.visible")
+      .and("contain", "First Name is required");
 
     cy.getTest("signup-last-name").type("Last").find("input").clear().blur();
-    cy.get("#lastName-helper-text").should("be.visible");
+    cy.get("#lastName-helper-text")
+      .should("be.visible")
+      .and("contain", "Last Name is required");
 
     cy.getTest("signup-username").type("User").find("input").clear().blur();
-    cy.get("#username-helper-text").should("be.visible");
+    cy.get("#username-helper-text")
+      .should("be.visible")
+      .and("contain", "Username is required");
 
     cy.getTest("signup-password").type("password").find("input").clear().blur();
-    cy.get("#password-helper-text").should("be.visible");
+    cy.get("#password-helper-text")
+      .should("be.visible")
+      .and("contain", "Enter your password");
 
     cy.getTest("signup-confirmPassword")
-      .type("password")
+      .type("DIFFERENT PASSWORD")
       .find("input")
-      .clear()
       .blur();
-    cy.get("#confirmPassword-helper-text").should("be.visible");
+    cy.get("#confirmPassword-helper-text")
+      .should("be.visible")
+      .and("contain", "Password does not match");
+
+    cy.getTest("signup-submit").should("be.disabled");
   });
 });
