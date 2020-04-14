@@ -155,7 +155,11 @@ export const setupSearch = curry((items: [], options: {}, query: string) => {
 });
 
 export const performSearch = (items: [], options: {}, query: string) =>
-  flow(cleanSearchQuery, setupSearch(items, options))(query);
+  flow(
+    cleanSearchQuery,
+    setupSearch(items, options),
+    map((result) => result.item)
+  )(query);
 
 export const searchUsers = (query: string) => {
   const items = getAllUsers();
