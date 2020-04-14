@@ -55,8 +55,6 @@ describe("New Transaction", function () {
       cy.getTestLike("user-list-item").contains(contact.firstName).click();
     })
 
-    cy.getTest("transaction-create-form").should("be.visible");
-
     cy.getTest("transaction-create-amount-input").type("25");
     cy.getTest("transaction-create-description-input").type("Indian Food");
     cy.getTest("transaction-create-submit-payment").click();
