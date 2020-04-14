@@ -44,3 +44,4 @@ It provides several existing users with the password of `s3cret`.
 <p style='color: "#3f51b5"' align="center">
   <img width="100" style='color: "#3f51b5"' alt="Cypress Logo" src="./src/svgs/cypress-logo.svg" />
 </p>
+
