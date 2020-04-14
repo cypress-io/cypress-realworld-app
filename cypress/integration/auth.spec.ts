@@ -81,4 +81,19 @@ describe("User Sign-up and Login", function () {
       cy.location("pathname").should("eq", "/");
     });
   });
+
+  it("should display username and password login errors", function () {
+    cy.fixture("users").as("users");
+
+    cy.visit("/");
+
+    cy.get("@users").then((users) => {
+      cy.getTest("signin-username").type("User").find("input").clear().blur();
+      cy.getTest("signin-password").type("abc").find("input").blur();
+      cy.get("#username-helper-text").should("be.visible");
+      cy.get("#password-helper-text")
+        .should("be.visible")
+        .should("contain", "Password must contain at least 4 characters");
+    });
+  });
 });
