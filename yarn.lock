@@ -2225,10 +2225,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-window-infinite-loader@1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@types/react-window-infinite-loader/-/react-window-infinite-loader-1.0.2.tgz#dbca3a93dbf8d781bd68003e120003571200fe90"
-  integrity sha512-vBuiQiu6nuCy122qrSF1SBD4uu2zmvq6h4s89O2fakhQJriB6EADH8m7fM/S9x3uFw3dM3UBi/w+eboHvlLPiw==
+"@types/react-window-infinite-loader@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@types/react-window-infinite-loader/-/react-window-infinite-loader-1.0.3.tgz#fade6e7c625a348e83c4e1f0c897736537bc7f8c"
+  integrity sha512-P+XLcLxH23dwDJgPr571vUL79n++pHweCaCa5XocyxEt9YqdV627F6TCM//2zoUbGw/JnT94F8kSJ7/ijcUSIg==
   dependencies:
     "@types/react" "*"
     "@types/react-window" "*"
