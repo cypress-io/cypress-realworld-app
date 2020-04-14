@@ -64,12 +64,10 @@ describe("New Transaction", function () {
     cy.getTest("sidenav-user-balance").should("contain", "$525.00");
 
     cy.getTest("app-name-logo").find("a").click();
-    // Guide Tip: re-querying DOM for element
-    cy.getTest("nav-personal-tab").as("mine-tab");
-    cy.get("@mine-tab").click();
 
-    // Discussion point: Is it cy.get()
-    cy.get("@mine-tab").should("have.class", "Mui-selected");
+    cy.getTest("nav-personal-tab")
+      .click()
+      .should("have.class", "Mui-selected");
 
     cy.wait("@personalTransactions");
 
