@@ -46,7 +46,7 @@ import {
   NotificationResponseItem,
   TransactionQueryPayload,
 } from "../models";
-import Fuse, { FuseResult } from "fuse.js";
+import Fuse from "fuse.js";
 import {
   isPayment,
   getTransferAmount,
@@ -155,7 +155,11 @@ export const setupSearch = curry((items: [], options: {}, query: string) => {
 });
 
 export const performSearch = (items: [], options: {}, query: string) =>
-  flow(cleanSearchQuery, setupSearch(items, options))(query);
+  flow(
+    cleanSearchQuery,
+    setupSearch(items, options),
+    map((result) => result.item)
+  )(query);
 
 export const searchUsers = (query: string) => {
   const items = getAllUsers();
@@ -165,13 +169,11 @@ export const searchUsers = (query: string) => {
       keys: ["username", "email", "phoneNumber"],
     },
     query
-  ) as FuseResult<User>[];
+  ) as User[];
 };
 
-export const removeUserFromResults = (
-  userId: User["id"],
-  results: FuseResult<User>[]
-) => remove((result) => result.item.id === userId, results);
+export const removeUserFromResults = (userId: User["id"], results: User[]) =>
+  remove({ id: userId }, results);
 
 // convenience methods
 

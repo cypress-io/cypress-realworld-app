@@ -17,7 +17,7 @@ describe("Users", () => {
     const users = searchUsers(email);
 
     expect(users.length).toBe(1);
-    expect(users[0].item.id).toBe(userToLookup.id);
+    expect(users[0].id).toBe(userToLookup.id);
   });
 
   it("should get a user by username", () => {
@@ -27,7 +27,7 @@ describe("Users", () => {
     const users = searchUsers(username);
 
     expect(users.length).toBe(1);
-    expect(users[0].item.id).toBe(userToLookup.id);
+    expect(users[0].id).toBe(userToLookup.id);
   });
 
   it("should get a user by phone number", () => {
@@ -37,7 +37,7 @@ describe("Users", () => {
     const users = searchUsers(phoneNumber);
 
     expect(users.length).toBe(1);
-    expect(users[0].item.id).toBe(userToLookup.id);
+    expect(users[0].id).toBe(userToLookup.id);
   });
 
   it("should get a list of users by alpha (username, email) (fuzzy match)", () => {
