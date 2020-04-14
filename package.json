@@ -76,7 +76,7 @@
     "yup": "0.28.3"
   },
   "devDependencies": {
-    "cypress": "4.3.0",
+    "cypress": "4.4.0",
     "eslint-config-prettier": "6.10.1",
     "eslint-plugin-cypress": "2.10.3",
     "eslint-plugin-prettier": "3.1.2",
