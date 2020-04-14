@@ -82,18 +82,41 @@ describe("User Sign-up and Login", function () {
     });
   });
 
-  it("should display username and password login errors", function () {
+  it("should display login errors", function () {
     cy.fixture("users").as("users");
 
     cy.visit("/");
 
-    cy.get("@users").then((users) => {
-      cy.getTest("signin-username").type("User").find("input").clear().blur();
-      cy.getTest("signin-password").type("abc").find("input").blur();
-      cy.get("#username-helper-text").should("be.visible");
-      cy.get("#password-helper-text")
-        .should("be.visible")
-        .should("contain", "Password must contain at least 4 characters");
-    });
+    cy.getTest("signin-username").type("User").find("input").clear().blur();
+    cy.getTest("signin-password").type("abc").find("input").blur();
+    cy.get("#username-helper-text").should("be.visible");
+    cy.get("#password-helper-text")
+      .should("be.visible")
+      .should("contain", "Password must contain at least 4 characters");
+  });
+
+  it.skip("should display signup errors", function () {
+    cy.fixture("users").as("users");
+
+    cy.visit("/signup");
+
+    cy.getTest("signup-first-name").type("First").find("input").clear().blur();
+    cy.get("#firstName-helper-text").should("be.visible");
+
+    cy.getTest("signup-last-name").type("Last").find("input").clear().blur();
+    cy.get("#lastName-helper-text").should("be.visible");
+
+    cy.getTest("signup-username").type("User").find("input").clear().blur();
+    cy.get("#username-helper-text").should("be.visible");
+
+    cy.getTest("signup-password").type("password").find("input").clear().blur();
+    cy.get("#password-helper-text").should("be.visible");
+
+    cy.getTest("signup-confirmPassword")
+      .type("password")
+      .find("input")
+      .clear()
+      .blur();
+    cy.get("#confirmPassword-helper-text").should("be.visible");
   });
 });
