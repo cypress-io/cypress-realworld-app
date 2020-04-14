@@ -88,8 +88,9 @@ describe("User Sign-up and Login", function () {
     cy.visit("/");
 
     cy.getTest("signin-username").type("User").find("input").clear().blur();
-    cy.getTest("signin-password").type("abc").find("input").blur();
     cy.get("#username-helper-text").should("be.visible");
+
+    cy.getTest("signin-password").type("abc").find("input").blur();
     cy.get("#password-helper-text")
       .should("be.visible")
       .should("contain", "Password must contain at least 4 characters");

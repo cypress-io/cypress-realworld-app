@@ -74,16 +74,19 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={async (values, { setSubmitting, setFieldValue }) => {
+          onSubmit={async (values, { setSubmitting }) => {
             setSubmitting(true);
 
             signInPending(values);
           }}
         >
-          {({ isValid, isSubmitting, dirty }) => (
+          {({ isValid, isSubmitting }) => (
             <Form className={classes.form}>
               <Field name="username">
-                {({ field, meta }: FieldProps) => (
+                {({
+                  field,
+                  meta: { error, value, initialValue, touched },
+                }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="normal"
@@ -93,14 +96,19 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                     type="text"
                     autoFocus
                     data-test="signin-username"
-                    error={dirty && meta.touched && Boolean(meta.error)}
-                    helperText={dirty && meta.touched ? meta.error : ""}
+                    error={
+                      (touched || value !== initialValue) && Boolean(error)
+                    }
+                    helperText={touched || value !== initialValue ? error : ""}
                     {...field}
                   />
                 )}
               </Field>
               <Field name="password">
-                {({ field, meta }: FieldProps) => (
+                {({
+                  field,
+                  meta: { error, value, initialValue, touched },
+                }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="normal"
@@ -109,8 +117,10 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                     type="password"
                     id="password"
                     data-test="signin-password"
-                    error={dirty && meta.touched && Boolean(meta.error)}
-                    helperText={dirty && meta.touched ? meta.error : ""}
+                    error={touched && value !== initialValue && Boolean(error)}
+                    helperText={
+                      touched && value !== initialValue && touched ? error : ""
+                    }
                     {...field}
                   />
                 )}
