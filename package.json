@@ -32,7 +32,7 @@
     "@types/react-infinite-calendar": "2.3.4",
     "@types/react-router": "5.1.5",
     "@types/react-router-dom": "5.1.4",
-    "@types/react-window": "1.8.1",
+    "@types/react-window": "1.8.2",
     "@types/react-window-infinite-loader": "1.0.3",
     "@types/shortid": "0.0.29",
     "@types/supertest": "2.0.8",
