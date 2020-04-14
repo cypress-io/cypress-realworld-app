@@ -29,9 +29,7 @@ describe("New Transaction", function () {
   });
 
   it("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
-    cy.wait("@userProfile");
-    cy.wait("@notifications");
-    cy.wait("@publicTransactions");
+    cy.wait(["@userProfile", "@notifications", "@publicTransactions"])
     cy.getTest("nav-top-new-transaction").click();
 
     cy.wait("@allUsers");
