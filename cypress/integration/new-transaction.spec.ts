@@ -4,10 +4,16 @@
 describe("New Transaction", function () {
   before(function () {
     cy.fixture("users").as("users");
+    // TODO: example for showing how to show fixture types
     cy.get("@users").then((users) => {
-      cy.login(this.users[0].username);
+      // @ts-ignore
+      cy.login(users[0].username).as("user");
+
+      // @ts-ignore
+      cy.wrap(users[1]).as("contact");
     });
   });
+
   beforeEach(function () {
     cy.task("db:seed");
     Cypress.Cookies.preserveOnce("connect.sid");
@@ -32,9 +38,23 @@ describe("New Transaction", function () {
     cy.wait(["@userProfile", "@notifications", "@publicTransactions"])
     cy.getTest("nav-top-new-transaction").click();
 
+    // Wait for users to be fetched for contact selection
+    // Not waiting on a dependent network request can lead to flake
+    // Especially for network activity that has to complete before taking action
     cy.wait("@allUsers");
 
-    cy.getTestLike("user-list-item").contains("Kaden").click();
+    cy.get("@contact").then((contact) => {
+      // @ts-ignore
+      cy.getTest("user-list-search-input").type(contact.firstName)
+
+      // If the user search request is not awaited this contact list filtering can break
+      // without the test catching it.
+      cy.wait("@usersSearch")
+
+      // @ts-ignore
+      cy.getTestLike("user-list-item").contains(contact.firstName).click();
+    })
+
     cy.getTest("transaction-create-form").should("be.visible");
 
     cy.getTest("transaction-create-amount-input").type("25");
