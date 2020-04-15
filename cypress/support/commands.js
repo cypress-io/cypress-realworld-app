@@ -41,6 +41,10 @@ Cypress.Commands.add("directLogin", (username, password = "s3cret") => {
     .invoke("send", ["LOGIN", { username, password }]);
 });
 
+Cypress.Commands.add("directLogout", () => {
+  cy.window().its("authService").invoke("send", ["LOGOUT"]);
+});
+
 Cypress.Commands.add("getTest", (s) => cy.get(`[data-test=${s}]`));
 Cypress.Commands.add("getTestLike", (s) => cy.get(`[data-test*=${s}]`));
 

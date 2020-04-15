@@ -10,10 +10,21 @@ declare namespace Cypress {
      * Logs in using API request
      */
     apiLogin(username: string, password?: string): Chainable<Response>;
+
     /**
      * Logs in using user interface
      */
     login(username: string, password?: string): void;
+
+    /**
+     * Logs in bypassing UI
+     */
+    directLogin(username: string, password?: string): void;
+
+    /**
+     * Logs out bypassing UI
+     */
+    directLogout(): void;
 
     getTest(dataTestAttribute: string): Chainable<Element>;
     getTestLike(dataTestPrefixAttribute: string): Chainable<Element>;
