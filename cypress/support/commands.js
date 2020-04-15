@@ -34,6 +34,13 @@ Cypress.Commands.add("apiLogin", (username, password = "s3cret") => {
   });
 });
 
+Cypress.Commands.add("directLogin", (username, password = "s3cret") => {
+  cy.visit("/signin");
+  cy.window()
+    .its("authService")
+    .invoke("send", ["LOGIN", { username, password }]);
+});
+
 Cypress.Commands.add("getTest", (s) => cy.get(`[data-test=${s}]`));
 Cypress.Commands.add("getTestLike", (s) => cy.get(`[data-test*=${s}]`));
 
