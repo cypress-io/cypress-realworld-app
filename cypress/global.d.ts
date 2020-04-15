@@ -26,6 +26,11 @@ declare namespace Cypress {
      */
     directLogout(): void;
 
+    /**
+     * Create Transaction bypassing UI
+     */
+    createTransaction(payload): void;
+
     getTest(dataTestAttribute: string): Chainable<Element>;
     getTestLike(dataTestPrefixAttribute: string): Chainable<Element>;
   }
