@@ -7,7 +7,7 @@ describe("New Transaction", function () {
     // TODO: example for showing how to show fixture types
     cy.get("@users").then((users) => {
       // @ts-ignore
-      cy.login(users[0].username).as("user");
+      cy.directLogin(users[0].username).as("user");
 
       // @ts-ignore
       cy.wrap(users[1]).as("contact");
@@ -35,7 +35,7 @@ describe("New Transaction", function () {
   });
 
   it("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
-    cy.wait(["@userProfile", "@notifications", "@publicTransactions"])
+    cy.wait(["@userProfile", "@notifications", "@publicTransactions"]);
     cy.getTest("nav-top-new-transaction").click();
 
     // Wait for users to be fetched for contact selection
@@ -45,15 +45,15 @@ describe("New Transaction", function () {
 
     cy.get("@contact").then((contact) => {
       // @ts-ignore
-      cy.getTest("user-list-search-input").type(contact.firstName)
+      cy.getTest("user-list-search-input").type(contact.firstName);
 
       // If the user search request is not awaited this contact list filtering can break
       // without the test catching it.
-      cy.wait("@usersSearch")
+      cy.wait("@usersSearch");
 
       // @ts-ignore
       cy.getTestLike("user-list-item").contains(contact.firstName).click();
-    })
+    });
 
     cy.getTest("transaction-create-amount-input").type("25");
     cy.getTest("transaction-create-description-input").type("Indian Food");
@@ -65,9 +65,7 @@ describe("New Transaction", function () {
 
     cy.getTest("app-name-logo").find("a").click();
 
-    cy.getTest("nav-personal-tab")
-      .click()
-      .should("have.class", "Mui-selected");
+    cy.getTest("nav-personal-tab").click().should("have.class", "Mui-selected");
 
     cy.wait("@personalTransactions");
 
