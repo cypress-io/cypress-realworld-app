@@ -36,17 +36,17 @@ Cypress.Commands.add("apiLogin", (username, password = "s3cret") => {
 
 Cypress.Commands.add("directLogin", (username, password = "s3cret") => {
   cy.visit("/signin");
-  cy.window()
+  return cy.window()
     .its("authService")
     .invoke("send", ["LOGIN", { username, password }]);
 });
 
 Cypress.Commands.add("directLogout", () => {
-  cy.window().its("authService").invoke("send", ["LOGOUT"]);
+  return cy.window().its("authService").invoke("send", ["LOGOUT"]);
 });
 
 Cypress.Commands.add("createTransaction", (payload) => {
-  cy.window()
+  return cy.window()
     .its("createTransactionService")
     .invoke("send", ["CREATE", payload]);
 });
