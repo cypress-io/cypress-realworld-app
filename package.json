@@ -77,7 +77,7 @@
     "yup": "0.28.3"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "3.1.0",
+    "@cypress/code-coverage": "3.2.1",
     "@cypress/instrument-cra": "1.1.0",
     "cypress": "4.4.0",
     "eslint-config-prettier": "6.10.1",
@@ -163,5 +163,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "nyc": {
+    "exclude": ["src/serviceWorker.ts", "src/backend"]
   }
 }
