@@ -85,8 +85,10 @@ describe("New Transaction", function () {
           receiver: contact,
         });
 
+        cy.wait("@createTransaction");
         cy.directLogout();
-        cy.wait("@logout")
+        cy.wait("@logout");
+
         // @ts-ignore
         cy.directLogin(contact.username);
 

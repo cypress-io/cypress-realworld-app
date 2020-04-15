@@ -1,6 +1,8 @@
 // @ts-check
 /// <reference path="../global.d.ts" />
 
+import { pick } from "lodash/fp";
+
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -36,7 +38,8 @@ Cypress.Commands.add("apiLogin", (username, password = "s3cret") => {
 
 Cypress.Commands.add("directLogin", (username, password = "s3cret") => {
   cy.visit("/signin");
-  return cy.window()
+  return cy
+    .window()
     .its("authService")
     .invoke("send", ["LOGIN", { username, password }]);
 });
@@ -46,11 +49,23 @@ Cypress.Commands.add("directLogout", () => {
 });
 
 Cypress.Commands.add("createTransaction", (payload) => {
-  return cy.window()
-    .its("createTransactionService").then((service) => {
-      service.send("SET_USERS", payload)
-      service.send("CREATE", payload)
-    })
+  return cy
+    .window()
+    .its("createTransactionService")
+    .then((service) => {
+      service.send("SET_USERS", payload);
+
+      const createPayload = pick(
+        ["amount", "description", "transactionType"],
+        payload
+      );
+
+      service.send("CREATE", {
+        ...createPayload,
+        senderId: payload.sender.id,
+        receiverId: payload.receiver.id,
+      });
+    });
 });
 
 Cypress.Commands.add("getTest", (s) => cy.get(`[data-test=${s}]`));
