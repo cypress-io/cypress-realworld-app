@@ -47,8 +47,10 @@ Cypress.Commands.add("directLogout", () => {
 
 Cypress.Commands.add("createTransaction", (payload) => {
   return cy.window()
-    .its("createTransactionService")
-    .invoke("send", ["CREATE", payload]);
+    .its("createTransactionService").then((service) => {
+      service.send("SET_USERS", payload)
+      service.send("CREATE", payload)
+    })
 });
 
 Cypress.Commands.add("getTest", (s) => cy.get(`[data-test=${s}]`));

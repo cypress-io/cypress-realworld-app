@@ -81,10 +81,8 @@ describe("New Transaction", function () {
           transactionType: "payment",
           amount: "25",
           description: "Indian Food",
-          // @ts-ignore
-          senderId: user.id,
-          // @ts-ignore
-          receiverId: contact.id,
+          sender: user,
+          receiver: contact,
         });
 
         cy.directLogout();
