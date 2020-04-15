@@ -129,9 +129,8 @@ export const authMachine = Machine<
         );
         return resp.data;
       },
-      performLogout: async (ctx, event) => {
-        await httpClient.post(`http://localhost:3001/logout`);
-      },
+      performLogout: async (ctx, event) =>
+        await httpClient.post(`http://localhost:3001/logout`),
     },
     actions: {
       setUserProfile: assign((ctx: any, event: any) => ({
