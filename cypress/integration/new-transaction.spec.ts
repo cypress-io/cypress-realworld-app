@@ -3,7 +3,9 @@
 import Dinero from "dinero.js";
 
 describe("New Transaction", function () {
-  before(function () {
+  beforeEach(function () {
+    cy.task("db:seed");
+
     cy.fixture("users").as("users");
     // TODO: example for showing how to show fixture types
     cy.get("@users").then((users) => {
@@ -13,11 +15,7 @@ describe("New Transaction", function () {
       // @ts-ignore
       cy.wrap(users[1]).as("contact");
     });
-  });
 
-  beforeEach(function () {
-    cy.task("db:seed");
-    Cypress.Cookies.preserveOnce("connect.sid");
     cy.server();
     cy.route("POST", "http://localhost:3001/logout").as("logout");
     cy.route("POST", "http://localhost:3001/transactions").as(
@@ -33,7 +31,6 @@ describe("New Transaction", function () {
       "personalTransactions"
     );
     cy.route("GET", "http://localhost:3001/users/search*").as("usersSearch");
-    cy.fixture("users").as("users");
   });
 
   it("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
