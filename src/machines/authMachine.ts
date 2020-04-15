@@ -118,7 +118,6 @@ export const authMachine = Machine<
           `http://localhost:3001/checkAuth`,
           payload
         );
-        //history.push("/");
         return resp.data;
       },
       updateProfile: async (ctx, event: any) => {
@@ -129,8 +128,10 @@ export const authMachine = Machine<
         );
         return resp.data;
       },
-      performLogout: async (ctx, event) =>
-        await httpClient.post(`http://localhost:3001/logout`),
+      performLogout: async (ctx, event) => {
+        await httpClient.post(`http://localhost:3001/logout`);
+        localStorage.removeItem("authState");
+      },
     },
     actions: {
       setUserProfile: assign((ctx: any, event: any) => ({

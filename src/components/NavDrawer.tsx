@@ -174,10 +174,7 @@ const NavDrawer: React.FC<Props> = ({
   const showTemporaryDrawer = useMediaQuery(theme.breakpoints.only("xs"));
 
   const currentUser = authState?.context?.user;
-  const signOutPending = () => {
-    sendAuth("LOGOUT");
-    localStorage.removeItem("authState");
-  };
+  const signOut = () => sendAuth("LOGOUT");
 
   return (
     <Drawer
@@ -258,7 +255,7 @@ const NavDrawer: React.FC<Props> = ({
           <Divider />
         </Grid>
         <Grid item>
-          <List>{secondaryListItems(signOutPending)}</List>
+          <List>{secondaryListItems(signOut)}</List>
         </Grid>
       </Grid>
     </Drawer>

@@ -43,7 +43,6 @@ Cypress.Commands.add("directLogin", (username, password = "s3cret") => {
 
 Cypress.Commands.add("directLogout", () => {
   cy.window().its("authService").invoke("send", ["LOGOUT"]);
-  localStorage.removeItem("authState");
 });
 
 Cypress.Commands.add("createTransaction", (payload) => {
