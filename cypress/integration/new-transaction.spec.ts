@@ -1,5 +1,6 @@
 // check this file using TypeScript if available
 // @ts-check
+import Dinero from "dinero.js";
 
 describe("New Transaction", function () {
   before(function () {
@@ -18,6 +19,7 @@ describe("New Transaction", function () {
     cy.task("db:seed");
     Cypress.Cookies.preserveOnce("connect.sid");
     cy.server();
+    cy.route("POST", "http://localhost:3001/logout").as("logout");
     cy.route("POST", "http://localhost:3001/transactions").as(
       "createTransaction"
     );
@@ -70,6 +72,35 @@ describe("New Transaction", function () {
     cy.wait("@personalTransactions");
 
     cy.getTest("transaction-list").first().should("contain", "Indian Food");
+  });
+
+  it("submits a transaction payment and verifies the deposit for the receiver", function () {
+    cy.wait(["@userProfile", "@notifications", "@publicTransactions"]);
+    cy.getTest("nav-top-new-transaction").click();
+
+    cy.get("@contact").then((contact) => {
+      cy.get("@user").then((user) => {
+        cy.createTransaction({
+          transactionType: "payment",
+          amount: "25",
+          description: "Indian Food",
+          // @ts-ignore
+          senderId: user.id,
+          // @ts-ignore
+          receiverId: contact.id,
+        });
+
+        cy.directLogout();
+        // @ts-ignore
+        cy.directLogin(contact.username);
+
+        cy.getTest("sidenav-user-balance").should(
+          "contain",
+          // @ts-ignore
+          Dinero({ amount: contact.balance + 25 * 100 }).toFormat()
+        );
+      });
+    });
   });
 
   it("selects a user and submits a transaction request", function () {
