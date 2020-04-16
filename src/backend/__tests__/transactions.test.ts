@@ -178,7 +178,7 @@ describe("Transactions", () => {
     expect(ids).toContain(payment.id);
   });
 
-  it("should update a transaction", () => {
+  it("should reject (update) a transaction", () => {
     const user: User = getAllUsers()[0];
 
     const transactions = getTransactionsByUserId(user.id);
@@ -194,6 +194,24 @@ describe("Transactions", () => {
 
     const updatedTransaction = getTransactionById(transaction.id);
     expect(updatedTransaction.requestStatus).toEqual("rejected");
+  });
+
+  it("should accept (update) a transaction", () => {
+    const user: User = getAllUsers()[0];
+
+    const transactions = getTransactionsByUserId(user.id);
+    expect(transactions.length).toBe(6);
+
+    const transaction = transactions[0];
+    expect(transaction.requestStatus).not.toEqual("accepted");
+
+    const edits: Partial<Transaction> = {
+      requestStatus: TransactionRequestStatus.accepted,
+    };
+    updateTransactionById(user.id, transaction.id, edits);
+
+    const updatedTransaction = getTransactionById(transaction.id);
+    expect(updatedTransaction.requestStatus).toEqual("accepted");
   });
 
   it("should add additional fields (e.g. retreiverName, senderName, etc) to a list of transactions for a user for API response", () => {
