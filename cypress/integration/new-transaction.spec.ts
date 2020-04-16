@@ -1,20 +1,27 @@
 // check this file using TypeScript if available
 // @ts-check
 import Dinero from "dinero.js";
+import { User } from "../../src/models"
+
+type TestCtx = {
+  allUsers?: User[]
+  user?: User
+  contact?: User
+}
 
 describe("New Transaction", function () {
+  const ctx: TestCtx = {}
+  
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.fixture("users").as("users");
-    // TODO: example for showing how to show fixture types
-    cy.get("@users").then((users) => {
-      // @ts-ignore
-      cy.directLogin(users[0].username).as("user");
+    cy.fixture("users").then((users: User[]) => {
+      ctx.allUsers = users
+      ctx.user = users[0]
+      ctx.contact = users[1]
 
-      // @ts-ignore
-      cy.wrap(users[1]).as("contact");
-    });
+      return cy.directLogin(ctx.user.username);
+    })
 
     cy.server();
     cy.route("POST", "http://localhost:3001/logout").as("logout");
@@ -42,17 +49,14 @@ describe("New Transaction", function () {
     // Especially for network activity that has to complete before taking action
     cy.wait("@allUsers");
 
-    cy.get("@contact").then((contact) => {
-      // @ts-ignore
-      cy.getTest("user-list-search-input").type(contact.firstName);
+    cy.getTest("user-list-search-input").type(ctx.contact!.firstName);
 
-      // If the user search request is not awaited this contact list filtering can break
-      // without the test catching it.
-      cy.wait("@usersSearch");
+    // If the user search request is not awaited this contact list filtering can break
+    // without the test catching it.
+    cy.wait("@usersSearch");
 
-      // @ts-ignore
-      cy.getTestLike("user-list-item").contains(contact.firstName).click();
-    });
+    cy.getTestLike("user-list-item").contains(ctx.contact!.firstName).click();
+
 
     cy.getTest("transaction-create-amount-input").type("25");
     cy.getTest("transaction-create-description-input").type("Indian Food");
@@ -75,30 +79,26 @@ describe("New Transaction", function () {
     cy.wait(["@userProfile", "@notifications", "@publicTransactions"]);
     cy.getTest("nav-top-new-transaction").click();
 
-    cy.get("@contact").then((contact) => {
-      cy.get("@user").then((user) => {
-        cy.createTransaction({
-          transactionType: "payment",
-          amount: "25",
-          description: "Indian Food",
-          sender: user,
-          receiver: contact,
-        });
-
-        cy.wait("@createTransaction");
-        cy.directLogout();
-        cy.wait("@logout");
-
-        // @ts-ignore
-        cy.directLogin(contact.username);
-
-        cy.getTest("sidenav-user-balance").should(
-          "contain",
-          // @ts-ignore
-          Dinero({ amount: contact.balance + 25 * 100 }).toFormat()
-        );
-      });
+    cy.createTransaction({
+      transactionType: "payment",
+      amount: "25",
+      description: "Indian Food",
+      sender: ctx.user,
+      receiver: ctx.contact,
     });
+
+    cy.wait("@createTransaction");
+    cy.directLogout();
+    cy.wait("@logout");
+
+    // @ts-ignore
+    cy.directLogin(ctx.contact.username);
+
+    cy.getTest("sidenav-user-balance").should(
+      "contain",
+      // @ts-ignore
+      Dinero({ amount: ctx.contact.balance + 25 * 100 }).toFormat()
+    );
   });
 
   it("selects a user and submits a transaction request", function () {
@@ -129,53 +129,41 @@ describe("New Transaction", function () {
   });
 
   it("searches for a user by username", function () {
+    const targetUser = ctx.allUsers![6]
+
     cy.getTest("nav-top-new-transaction").click();
-    cy.get("@users").then((users) => {
-      cy.getTest("user-list-search-input").within(($elem) => {
-        cy.get("input")
-          //  .scrollIntoView() // TODO: Bug? Does not work here
-          //  .type({ force: true }) // type must be forced since hidden
-          .type(this.users[6].username, { force: true })
-          .blur();
-      });
-    });
+    cy.wait("@allUsers")
+
+    cy.getTest("user-list-search-input")
+      .type(targetUser.username)
 
     cy.wait("@usersSearch").should("have.property", "status", 200);
-    cy.getTestLike("user-list-item").first().contains("Kaden");
+    cy.getTestLike("user-list-item").first().contains(targetUser.firstName);
   });
 
   it("searches for a user by email", function () {
+    const targetUser = ctx.allUsers![6]
+
     cy.getTest("nav-top-new-transaction").click();
-    cy.get("@users").then((users) => {
-      cy.getTest("user-list-search-input").within(($elem) => {
-        cy.get("input")
-          //  .scrollIntoView() // TODO: Bug? Does not work here
-          //  .type({ force: true }) // type must be forced since hidden
-          .type(this.users[6].email, { force: true })
-          .blur();
-      });
-    });
+    cy.wait("@allUsers")
+
+    cy.getTest("user-list-search-input")
+      .type(targetUser.email)
 
     cy.wait("@usersSearch").should("have.property", "status", 200);
-    cy.getTestLike("user-list-item").first().contains("Kaden");
+    cy.getTestLike("user-list-item").first().contains(targetUser.firstName);
   });
 
   it("searches for a user by phone", function () {
-    cy.getTest("nav-top-new-transaction").click();
-    cy.get("@users").then((users) => {
-      const phone = this.users[6].phoneNumber.replace(/[^0-9]/g, "");
-      const partialPhone = phone;
+    const targetUser = ctx.allUsers![6]
+    const phone = targetUser.phoneNumber.replace(/[^0-9]/g, "");
 
-      cy.getTest("user-list-search-input").within(($elem) => {
-        cy.get("input")
-          //  .scrollIntoView() // TODO: Bug? Does not work here
-          //  .type({ force: true }) // type must be forced since hidden
-          .type(partialPhone, { force: true })
-          .blur();
-      });
-    });
+    cy.getTest("nav-top-new-transaction").click();
+    cy.wait("@allUsers")
+
+    cy.getTest("user-list-search-input").type(phone)
 
     cy.wait("@usersSearch").should("have.property", "status", 200);
-    cy.getTestLike("user-list-item").first().contains("Kaden");
+    cy.getTestLike("user-list-item").first().contains(targetUser.firstName);
   });
 });
