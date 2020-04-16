@@ -10,10 +10,7 @@ import {
 import { User, Transaction } from "../../models";
 
 describe("Comments", () => {
-  afterEach(() => {
-    seedDatabase();
-  });
-  afterAll(() => {
+  beforeEach(() => {
     seedDatabase();
   });
 

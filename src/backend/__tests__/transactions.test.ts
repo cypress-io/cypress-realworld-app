@@ -31,12 +31,6 @@ describe("Transactions", () => {
   beforeEach(() => {
     seedDatabase();
   });
-  afterEach(() => {
-    seedDatabase();
-  });
-  afterAll(() => {
-    seedDatabase();
-  });
 
   it("should retrieve a list of all transactions", () => {
     expect(getAllTransactions().length).toBe(30);

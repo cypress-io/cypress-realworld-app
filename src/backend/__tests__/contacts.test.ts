@@ -10,10 +10,7 @@ import {
 } from "../database";
 import { User } from "../../models/user";
 describe("Contacts", () => {
-  afterEach(() => {
-    seedDatabase();
-  });
-  afterAll(() => {
+  beforeEach(() => {
     seedDatabase();
   });
 
