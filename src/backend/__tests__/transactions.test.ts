@@ -311,7 +311,7 @@ describe("Transactions", () => {
       senderId: sender.id,
       receiverId: receiver.id,
       description: `Request: ${sender.id} to ${receiver.id}`,
-      amount: 1000,
+      amount: 100,
       privacyLevel: DefaultPrivacyLevel.public,
       status: TransactionStatus.pending,
     };
@@ -321,20 +321,24 @@ describe("Transactions", () => {
     expect(transaction.status).toEqual("pending");
     expect(transaction.requestStatus).toBe(TransactionRequestStatus.pending);
 
-    const updatedSender: User = getAllUsers()[0];
-    expect(updatedSender.balance).toBe(0);
+    const edits: Partial<Transaction> = {
+      requestStatus: TransactionRequestStatus.accepted,
+    };
+    updateTransactionById(receiver.id, transaction.id, edits);
 
-    const withdrawal = getBankTransferByTransactionId(transaction.id);
-    expect(withdrawal.type).toBe(BankTransferType.withdrawal);
-    expect(withdrawal.amount).toBe(45000);
+    const updatedTransaction = getTransactionById(transaction.id);
+    expect(updatedTransaction.requestStatus).toEqual("accepted");
 
-    // Verify Deposit Transactions for Receiver
-    const updatedReceiverTransactions = getTransactionsByUserId(receiver.id);
-
-    expect(updatedReceiverTransactions.length).toBe(4);
-
-    // Verify Receiver's Updated Pay App Balance
     const updatedReceiver: User = getAllUsers()[1];
-    expect(updatedReceiver.balance).toBe(210377);
+    expect(updatedReceiver.balance).toBe(50377);
+
+    // Verify Deposit Transactions for Sender
+    const updatedSenderTransactions = getTransactionsByUserId(sender.id);
+
+    expect(updatedSenderTransactions.length).toBe(6);
+
+    // Verify Sender's Updated Pay App Balance
+    const updatedSender: User = getAllUsers()[0];
+    expect(updatedSender.balance).toBe(65000);
   });
 });

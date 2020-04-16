@@ -703,16 +703,13 @@ export const updateTransactionById = (
     if (isRequestTransaction(transaction)) {
       debitPayAppBalance(receiver, transaction);
       creditPayAppBalance(sender, transaction);
-      // TODO: update transaction "status"
-      updateTransactionById(sender.id, transaction.id, {
-        status: TransactionStatus.complete,
-      });
-      createPaymentNotification(
-        transaction.receiverId,
-        transaction.id,
-        PaymentNotificationStatus.requested
-      );
+      edits.status = TransactionStatus.complete;
     }
+    createPaymentNotification(
+      transaction.receiverId,
+      transaction.id,
+      PaymentNotificationStatus.requested
+    );
 
     db()
       .get(TRANSACTION_TABLE)
