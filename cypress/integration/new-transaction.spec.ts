@@ -103,7 +103,7 @@ describe("New Transaction", function () {
     );
   });
 
-  it.only("submits a transaction request and accepts the request for the receiver", function () {
+  it("submits a transaction request and accepts the request for the receiver", function () {
     cy.wait(["@userProfile", "@notifications", "@publicTransactions"]);
     cy.getTest("nav-top-new-transaction").click();
 
