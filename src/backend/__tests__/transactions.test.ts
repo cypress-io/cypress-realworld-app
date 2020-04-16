@@ -297,4 +297,44 @@ describe("Transactions", () => {
     const updatedReceiver: User = getAllUsers()[1];
     expect(updatedReceiver.balance).toBe(210377);
   });
+
+  it("should create a request and withdrawal (bank transfer) for remaining balance", () => {
+    const sender: User = getAllUsers()[0];
+    const receiver: User = getAllUsers()[1];
+    const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
+
+    const receiverTransactions = getTransactionsByUserId(receiver.id);
+    expect(receiverTransactions.length).toBe(2);
+
+    const requestDetails: TransactionPayload = {
+      source: senderBankAccount.id!,
+      senderId: sender.id,
+      receiverId: receiver.id,
+      description: `Request: ${sender.id} to ${receiver.id}`,
+      amount: 1000,
+      privacyLevel: DefaultPrivacyLevel.public,
+      status: TransactionStatus.pending,
+    };
+
+    const transaction = createTransaction(sender.id, "request", requestDetails);
+    expect(transaction.id).toBeDefined();
+    expect(transaction.status).toEqual("pending");
+    expect(transaction.requestStatus).toBe(TransactionRequestStatus.pending);
+
+    const updatedSender: User = getAllUsers()[0];
+    expect(updatedSender.balance).toBe(0);
+
+    const withdrawal = getBankTransferByTransactionId(transaction.id);
+    expect(withdrawal.type).toBe(BankTransferType.withdrawal);
+    expect(withdrawal.amount).toBe(45000);
+
+    // Verify Deposit Transactions for Receiver
+    const updatedReceiverTransactions = getTransactionsByUserId(receiver.id);
+
+    expect(updatedReceiverTransactions.length).toBe(4);
+
+    // Verify Receiver's Updated Pay App Balance
+    const updatedReceiver: User = getAllUsers()[1];
+    expect(updatedReceiver.balance).toBe(210377);
+  });
 });

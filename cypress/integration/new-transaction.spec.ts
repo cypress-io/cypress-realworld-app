@@ -1,27 +1,27 @@
 // check this file using TypeScript if available
 // @ts-check
 import Dinero from "dinero.js";
-import { User } from "../../src/models"
+import { User } from "../../src/models";
 
 type TestCtx = {
-  allUsers?: User[]
-  user?: User
-  contact?: User
-}
+  allUsers?: User[];
+  user?: User;
+  contact?: User;
+};
 
 describe("New Transaction", function () {
-  const ctx: TestCtx = {}
-  
+  const ctx: TestCtx = {};
+
   beforeEach(function () {
     cy.task("db:seed");
 
     cy.fixture("users").then((users: User[]) => {
-      ctx.allUsers = users
-      ctx.user = users[0]
-      ctx.contact = users[1]
+      ctx.allUsers = users;
+      ctx.user = users[0];
+      ctx.contact = users[1];
 
       return cy.directLogin(ctx.user.username);
-    })
+    });
 
     cy.server();
     cy.route("POST", "http://localhost:3001/logout").as("logout");
@@ -38,6 +38,9 @@ describe("New Transaction", function () {
       "personalTransactions"
     );
     cy.route("GET", "http://localhost:3001/users/search*").as("usersSearch");
+    cy.route("PATCH", "http://localhost:3001/transactions/*").as(
+      "updateTransaction"
+    );
   });
 
   it("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
@@ -56,7 +59,6 @@ describe("New Transaction", function () {
     cy.wait("@usersSearch");
 
     cy.getTestLike("user-list-item").contains(ctx.contact!.firstName).click();
-
 
     cy.getTest("transaction-create-amount-input").type("25");
     cy.getTest("transaction-create-description-input").type("Indian Food");
@@ -101,6 +103,45 @@ describe("New Transaction", function () {
     );
   });
 
+  it.only("submits a transaction request and accepts the request for the receiver", function () {
+    cy.wait(["@userProfile", "@notifications", "@publicTransactions"]);
+    cy.getTest("nav-top-new-transaction").click();
+
+    cy.createTransaction({
+      transactionType: "request",
+      amount: "100",
+      description: "Fancy Hotel",
+      sender: ctx.user,
+      receiver: ctx.contact,
+    });
+
+    cy.wait("@createTransaction");
+    cy.directLogout();
+    cy.wait("@logout");
+
+    // @ts-ignore
+    cy.directLogin(ctx.contact.username);
+
+    cy.getTest("nav-personal-tab").click();
+    cy.getTestLike("transaction-item")
+      .should("contain", "Fancy Hotel")
+      .click({ multiple: true, force: true });
+
+    cy.getTestLike(`transaction-accept-request`).click();
+    cy.wait("@updateTransaction").should("have.property", "status", 204);
+
+    cy.directLogout();
+    cy.wait("@logout");
+
+    // @ts-ignore
+    cy.directLogin(ctx.user.username);
+    cy.getTest("sidenav-user-balance").should(
+      "contain",
+      // @ts-ignore
+      Dinero({ amount: ctx.user.balance + 100 * 100 }).toFormat()
+    );
+  });
+
   it("selects a user and submits a transaction request", function () {
     cy.getTest("nav-top-new-transaction").click();
 
@@ -129,39 +170,37 @@ describe("New Transaction", function () {
   });
 
   it("searches for a user by username", function () {
-    const targetUser = ctx.allUsers![6]
+    const targetUser = ctx.allUsers![6];
 
     cy.getTest("nav-top-new-transaction").click();
-    cy.wait("@allUsers")
+    cy.wait("@allUsers");
 
-    cy.getTest("user-list-search-input")
-      .type(targetUser.username)
+    cy.getTest("user-list-search-input").type(targetUser.username);
 
     cy.wait("@usersSearch").should("have.property", "status", 200);
     cy.getTestLike("user-list-item").first().contains(targetUser.firstName);
   });
 
   it("searches for a user by email", function () {
-    const targetUser = ctx.allUsers![6]
+    const targetUser = ctx.allUsers![6];
 
     cy.getTest("nav-top-new-transaction").click();
-    cy.wait("@allUsers")
+    cy.wait("@allUsers");
 
-    cy.getTest("user-list-search-input")
-      .type(targetUser.email)
+    cy.getTest("user-list-search-input").type(targetUser.email);
 
     cy.wait("@usersSearch").should("have.property", "status", 200);
     cy.getTestLike("user-list-item").first().contains(targetUser.firstName);
   });
 
   it("searches for a user by phone", function () {
-    const targetUser = ctx.allUsers![6]
+    const targetUser = ctx.allUsers![6];
     const phone = targetUser.phoneNumber.replace(/[^0-9]/g, "");
 
     cy.getTest("nav-top-new-transaction").click();
-    cy.wait("@allUsers")
+    cy.wait("@allUsers");
 
-    cy.getTest("user-list-search-input").type(phone)
+    cy.getTest("user-list-search-input").type(phone);
 
     cy.wait("@usersSearch").should("have.property", "status", 200);
     cy.getTestLike("user-list-item").first().contains(targetUser.firstName);

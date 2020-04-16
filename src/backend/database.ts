@@ -59,6 +59,7 @@ import {
   getAmountQueryFields,
   getQueryWithoutFilterFields,
   getPayAppCreditedAmount,
+  isRequestTransaction,
 } from "../utils/transactionUtils";
 
 const USER_TABLE = "users";
@@ -692,14 +693,26 @@ export const updateTransactionById = (
   edits: Partial<Transaction>
 ) => {
   const transaction = getTransactionBy("id", transactionId);
+  const { senderId, receiverId } = transaction;
+  const sender = getUserById(senderId);
+  const receiver = getUserById(receiverId);
 
   // TODO: if request accepted - createBankTransfer for withdrawal for the difference associated to the transaction
-  if (userId === transaction.senderId || userId === transaction.receiverId) {
-    createPaymentNotification(
-      transaction.receiverId,
-      transaction.id,
-      PaymentNotificationStatus.requested
-    );
+  if (userId === senderId || userId === receiverId) {
+    // if payment, debit sender's balance for payment amount
+    if (isRequestTransaction(transaction)) {
+      debitPayAppBalance(receiver, transaction);
+      creditPayAppBalance(sender, transaction);
+      // TODO: update transaction "status"
+      updateTransactionById(sender.id, transaction.id, {
+        status: TransactionStatus.complete,
+      });
+      createPaymentNotification(
+        transaction.receiverId,
+        transaction.id,
+        PaymentNotificationStatus.requested
+      );
+    }
 
     db()
       .get(TRANSACTION_TABLE)
