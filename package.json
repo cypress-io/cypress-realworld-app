@@ -105,9 +105,9 @@
     "prestart:empty": "yarn db:seed:empty",
     "start": "NODE_ENV=development yarn start:api & yarn start:react",
     "dev": "yarn start:dev",
-    "start:dev": "NODE_ENV=development start-test start:server-and-api:watch 3000 cypress:open",
-    "start:empty": "NODE_ENV=development EMPTY_SEED=true start-test start:server-and-api:watch 3000 cypress:open",
-    "start:test": "NODE_ENV=test start-test start:server-and-api:watch 3000 cypress:open",
+    "start:dev": "NODE_ENV=development start-test start:api:watch 3001 start:react 3000 cypress:open",
+    "start:empty": "NODE_ENV=development EMPTY_SEED=true start-test start:api:watch 3001 start:react 3000 cypress:open",
+    "start:test": "NODE_ENV=test start-test start:api:watch 3001 start:react 3000 cypress:open",
     "start:react": "react-scripts -r @cypress/instrument-cra start",
     "start:react:ci": "node scripts/testServer.js",
     "start:api": "yarn tsnode --files src/app.ts",
@@ -115,14 +115,12 @@
     "prebuild": "yarn types",
     "build": "react-scripts build",
     "test": "yarn cypress:open",
-    "test:ci": "NODE_ENV=test yarn start:server-and-api",
+    "test:ci": "NODE_ENV=test start-test start:api 3001 start:react:ci 3000 cypress:run",
     "test:headless": "yarn cypress:run",
     "test:api": "yarn cypress:run --spec 'integration/api/*'",
     "test:unit": "react-scripts test --runInBand",
     "test:unit:ci": "react-scripts test --watch false --runInBand",
     "eject": "react-scripts eject",
-    "start:server-and-api": "start-test start:api 3001 start:react:ci",
-    "start:server-and-api:watch": "start-test start:api:watch 3001 start:react",
     "prettier": "prettier --write '**/**.{ts,js,tsx}'"
   },
   "eslintConfig": {
@@ -165,6 +163,9 @@
     ]
   },
   "nyc": {
-    "exclude": ["src/serviceWorker.ts", "src/backend"]
+    "exclude": [
+      "src/serviceWorker.ts",
+      "src/backend"
+    ]
   }
 }
