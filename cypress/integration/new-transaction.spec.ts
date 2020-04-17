@@ -3,14 +3,14 @@
 import Dinero from "dinero.js";
 import { User } from "../../src/models";
 
-type TestCtx = {
+type NewTransactionTestCtx = {
   allUsers?: User[];
   user?: User;
   contact?: User;
 };
 
 describe("New Transaction", function () {
-  const ctx: TestCtx = {};
+  const ctx: NewTransactionTestCtx = {};
 
   beforeEach(function () {
     cy.task("db:seed");
