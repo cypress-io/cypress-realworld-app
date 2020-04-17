@@ -54,7 +54,10 @@ app.use("/likes", likeRoutes);
 app.use("/comments", commentRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/bankTransfers", bankTransferRoutes);
-app.use("/testData", testDataRoutes);
+
+if(process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {
+  app.use("/testData", testDataRoutes);
+}
 
 app.use(express.static(path.join(__dirname, "../public")));
 
