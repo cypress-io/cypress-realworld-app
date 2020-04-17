@@ -3,10 +3,7 @@ import { seedDatabase, getAllUsers, searchUsers } from "../database";
 import { User } from "../../models";
 
 describe("Users", () => {
-  afterEach(() => {
-    seedDatabase();
-  });
-  afterAll(() => {
+  beforeEach(() => {
     seedDatabase();
   });
 

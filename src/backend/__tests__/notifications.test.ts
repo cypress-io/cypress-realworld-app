@@ -31,13 +31,8 @@ import {
 describe("Notifications", () => {
   let user: User;
   beforeEach(() => {
+    seedDatabase();
     user = getAllUsers()[0];
-  });
-  afterEach(() => {
-    seedDatabase();
-  });
-  afterAll(() => {
-    seedDatabase();
   });
 
   describe("create notifications", () => {

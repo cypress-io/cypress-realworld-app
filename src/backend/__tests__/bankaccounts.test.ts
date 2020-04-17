@@ -10,10 +10,7 @@ import {
 import { User } from "../../models/user";
 import { BankAccount } from "../../models/bankaccount";
 describe("BankAccounts", () => {
-  afterEach(() => {
-    seedDatabase();
-  });
-  afterAll(() => {
+  beforeEach(() => {
     seedDatabase();
   });
 

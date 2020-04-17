@@ -28,6 +28,10 @@ const App: React.FC = () => {
   const [authState, , authService] = useMachine(authMachine, {
     state: persistedAuthState,
   });
+
+  // Expose authService on window for Cypress
+  // @ts-ignore
+  window.authService = authService;
   const [, , notificationsService] = useMachine(notificationsMachine);
 
   const [, , snackbarService] = useMachine(snackbarMachine);
