@@ -32,7 +32,7 @@ const TransactionDetailsContainer: React.FC<Props> = ({ authService }) => {
     sendTransactionDetail("UPDATE", payload);
 
   const transaction = first(transactionDetailState.context?.results);
-  const currentUser = authState.context.user;
+  const currentUser = authState?.context.user;
 
   return (
     <>

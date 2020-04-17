@@ -38,13 +38,9 @@ const CommentForm: React.FC<CommentFormProps> = ({
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values, { setSubmitting, setFieldValue }) => {
+        onSubmit={(values, { setSubmitting }) => {
           setSubmitting(true);
-
           transactionComment({ transactionId, ...values });
-
-          setFieldValue("content", "");
-          setSubmitting(false);
         }}
       >
         {() => (

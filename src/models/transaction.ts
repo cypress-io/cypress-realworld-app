@@ -24,8 +24,8 @@ export interface Transaction {
   senderId: string;
   balanceAtCompletion?: number;
   status: TransactionStatus;
-  requestStatus?: TransactionRequestStatus;
-  requestResolvedAt?: Date;
+  requestStatus?: TransactionRequestStatus | string;
+  requestResolvedAt?: Date | string;
   createdAt: Date;
   modifiedAt: Date;
 }
