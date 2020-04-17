@@ -1,7 +1,7 @@
 import fs from "fs";
 import shortid from "shortid";
 import faker from "faker";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { User } from "../src/models/user";
 
 const passwordHash = bcrypt.hashSync("s3cret", 10);
