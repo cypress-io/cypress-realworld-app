@@ -14285,10 +14285,10 @@ xregexp@^4.3.0:
   dependencies:
     "@babel/runtime-corejs3" "^7.8.3"
 
-xstate@4.9.0:
-  version "4.9.0"
-  resolved "https://registry.yarnpkg.com/xstate/-/xstate-4.9.0.tgz#6211f8e3405f90d01ae7cd9dc99f076ab15110f6"
-  integrity sha512-cwZuPw4m05K9IvL5uHfvX8hMYnvZ1Om1w8f2FaNav07supE4FVG5b2ay3mb/7NlrvSLkJ46t4thbY+OsTt9pXA==
+xstate@4.9.1:
+  version "4.9.1"
+  resolved "https://registry.yarnpkg.com/xstate/-/xstate-4.9.1.tgz#da883ae0993b129ba0b54592c59b069963b0fe0a"
+  integrity sha512-cfNnRaBebnr1tvs0nHBUTyomfJx36+8MWwXceyNTZfjyELMM8nIoiBDcUzfKmpNlnAvs2ZPREos19cw6Zl4nng==
 
 xtend@^4.0.0, xtend@^4.0.1, xtend@^4.0.2, xtend@~4.0.1:
   version "4.0.2"
