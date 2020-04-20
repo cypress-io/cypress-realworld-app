@@ -7,22 +7,22 @@ import { User } from "../../src/models";
 type CyCtx = {};
 
 type NewTransactionTestCtx = CyCtx & {
-  allUsers?: User[];
-  user?: User;
-  contact?: User;
+  allUsers: User[];
+  user: User;
+  contact: User;
 };
 
-const ctx: NewTransactionTestCtx = {};
+let ctx: NewTransactionTestCtx;
 */
 
 type NewTransactionTestCtx = {
-  allUsers?: User[];
-  user?: User;
-  contact?: User;
+  allUsers: User[];
+  user: User;
+  contact: User;
 };
 
 describe("New Transaction", function () {
-  const ctx: NewTransactionTestCtx = {};
+  let ctx: NewTransactionTestCtx;
   beforeEach(function () {
     cy.task("db:seed");
 
@@ -63,13 +63,13 @@ describe("New Transaction", function () {
     // Especially for network activity that has to complete before taking action
     cy.wait("@allUsers");
 
-    cy.getTest("user-list-search-input").type(ctx.contact!.firstName);
+    cy.getTest("user-list-search-input").type(ctx.contact.firstName);
 
     // If the user search request is not awaited this contact list filtering can break
     // without the test catching it.
     cy.wait("@usersSearch");
 
-    cy.getTestLike("user-list-item").contains(ctx.contact!.firstName).click();
+    cy.getTestLike("user-list-item").contains(ctx.contact.firstName).click();
 
     cy.getTest("transaction-create-amount-input").type("25");
     cy.getTest("transaction-create-description-input").type("Indian Food");
