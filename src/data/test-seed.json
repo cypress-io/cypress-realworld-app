@@ -11,7 +11,7 @@
       "phoneNumber": "+12133734253",
       "avatar": "https://i.pravatar.cc/150?img=32",
       "defaultPrivacyLevel": "private",
-      "balance": 55000,
+      "balance": 54325,
       "createdAt": "2020-01-02T04:17:12.289Z",
       "modifiedAt": "2020-01-06T20:43:57.569Z"
     },
@@ -86,7 +86,7 @@
       "phoneNumber": "383-303-5538 x727",
       "avatar": "https://i.pravatar.cc/150?img=5",
       "defaultPrivacyLevel": "contacts",
-      "balance": 91529,
+      "balance": 92204,
       "createdAt": "2019-07-26T01:50:01.882Z",
       "modifiedAt": "2020-01-07T16:21:16.977Z"
     },
@@ -513,12 +513,12 @@
       "amount": 675,
       "description": "Payment: 9IUK0xpw to 6VhSm-R4i",
       "privacyLevel": "private",
-      "receiverId": "6VhSm-R4i",
-      "senderId": "9IUK0xpw",
+      "receiverId": "9IUK0xpw",
+      "senderId": "6VhSm-R4i",
       "balanceAtCompletion": 876,
-      "status": "pending",
-      "requestStatus": "",
-      "requestResolvedAt": "2021-02-02T20:04:02.846Z",
+      "status": "complete",
+      "requestStatus": "rejected",
+      "requestResolvedAt": "",
       "createdAt": "2020-02-09T04:36:15.496Z",
       "modifiedAt": "2020-04-17T03:53:56.768Z"
     },
@@ -2029,6 +2029,16 @@
       "isRead": false,
       "createdAt": "2020-01-13T04:41:42.732Z",
       "modifiedAt": "2020-01-16T07:24:51.441Z"
+    },
+    {
+      "id": "UpEF0oHA6",
+      "uuid": "c155fa2f-9769-4088-935a-c34eb52b465c",
+      "userId": "9IUK0xpw",
+      "transactionId": "ZoR2OkTgK",
+      "status": "requested",
+      "isRead": false,
+      "createdAt": "2020-04-20T18:20:59.797Z",
+      "modifiedAt": "2020-04-20T18:20:59.797Z"
     }
   ],
   "banktransfers": [
