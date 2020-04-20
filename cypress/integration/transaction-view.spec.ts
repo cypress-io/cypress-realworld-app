@@ -14,10 +14,20 @@ describe("Transaction View", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
+    cy.server();
+    cy.route("GET", "/transactions").as("personalTransactions");
+    cy.route("PATCH", "http://localhost:3001/transactions/*").as(
+      "updateTransaction"
+    );
+    //ZoR2OkTgK
+    cy.route("GET", "http://localhost:3001/transactions/*").as(
+      "getTransaction"
+    );
+
     cy.fixture("users").then((users: User[]) => {
       const authenticatedUser = users[0];
 
-      cy.directLogin(authenticatedUser.username);
+      cy.login(authenticatedUser.username);
 
       cy.request("http://localhost:3001/testData/transactions")
         .its("body.results")
@@ -32,12 +42,6 @@ describe("Transaction View", function () {
           cy.log(ctx.transactionRequest);
         });
     });
-
-    cy.server();
-    cy.route("GET", "/transactions").as("personalTransactions");
-    cy.route("PATCH", "http://localhost:3001/transactions/*").as(
-      "updateTransaction"
-    );
 
     cy.getTest("nav-personal-tab").click();
   });
@@ -76,21 +80,23 @@ describe("Transaction View", function () {
   it("accepts a transaction request", function () {
     cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
 
+    cy.wait(["@getTransaction"]);
+
     cy.getTestLike("transaction-accept-request").click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
   });
 
   it("rejects a transaction request", function () {
-    cy.getTestLike("transaction-item")
-      .eq(4)
-      .scrollIntoView()
-      .click({ force: true });
+    cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
+
+    cy.wait(["@getTransaction"]);
 
     cy.getTestLike(`transaction-reject-request`).click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
   });
 
-  it("does not display accept/reject buttons on completed request", function () {
+  // TODO: cy.request "completed" request
+  it.skip("does not display accept/reject buttons on completed request", function () {
     cy.getTestLike("transaction-item")
       .eq(3)
       .scrollIntoView()
