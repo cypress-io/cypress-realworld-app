@@ -822,15 +822,9 @@
       "balanceAtCompletion": 756,
       "status": "incomplete",
       "requestStatus": "pending",
-<<<<<<< Updated upstream
       "requestResolvedAt": "2020-03-23T11:03:49.769Z",
       "createdAt": "2019-06-14T15:33:43.006Z",
       "modifiedAt": "2020-01-26T19:23:23.487Z"
-=======
-      "requestResolvedAt": "",
-      "createdAt": "2019-08-05T09:42:22.166Z",
-      "modifiedAt": "2020-04-16T19:22:14.295Z"
->>>>>>> Stashed changes
     }
   ],
   "likes": [
