@@ -6,6 +6,7 @@ const { _ } = Cypress;
 
 type NewTransactionCtx = {
   transactionRequest?: Transaction;
+  authenticatedUser?: User;
 };
 
 describe("Transaction View", function () {
@@ -25,15 +26,15 @@ describe("Transaction View", function () {
     );
 
     cy.fixture("users").then((users: User[]) => {
-      const authenticatedUser = users[0];
+      ctx.authenticatedUser = users[0];
 
-      cy.login(authenticatedUser.username);
+      cy.login(ctx.authenticatedUser.username);
 
       cy.request("http://localhost:3001/testData/transactions")
         .its("body.results")
         .then((results) => {
           ctx.transactionRequest = _.filter(results, {
-            receiverId: authenticatedUser.id,
+            receiverId: ctx.authenticatedUser?.id,
             requestStatus: "pending",
             requestResolvedAt: "",
           })[0];
@@ -97,14 +98,18 @@ describe("Transaction View", function () {
 
   // TODO: cy.request "completed" request
   it.skip("does not display accept/reject buttons on completed request", function () {
-    cy.getTestLike("transaction-item")
-      .eq(3)
-      .scrollIntoView()
-      .click({ force: true });
+    cy.request("http://localhost:3001/testData/transactions")
+      .its("body.results")
+      .then((results) => {
+        const transactionRequest = _.filter(results, {
+          receiverId: ctx.authenticatedUser?.id,
+          requestStatus: "completed",
+        })[0];
 
-    cy.getTest("nav-transaction-tabs").should("not.be.visible");
+        cy.visit(`/transaction/${transactionRequest!.id}`);
 
-    cy.getTest("transaction-accept-request").should("not.be.visible");
-    cy.getTest("transaction-reject-request").should("not.be.visible");
+        cy.getTest("transaction-accept-request").should("not.be.visible");
+        cy.getTest("transaction-reject-request").should("not.be.visible");
+      });
   });
 });
