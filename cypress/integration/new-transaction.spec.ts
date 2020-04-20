@@ -3,6 +3,18 @@
 import Dinero from "dinero.js";
 import { User } from "../../src/models";
 
+/* Option #1 Ctx Pattern built into Cypress
+type CyCtx = {};
+
+type NewTransactionTestCtx = CyCtx & {
+  allUsers?: User[];
+  user?: User;
+  contact?: User;
+};
+
+const ctx: NewTransactionTestCtx = {};
+*/
+
 type NewTransactionTestCtx = {
   allUsers?: User[];
   user?: User;
@@ -11,7 +23,6 @@ type NewTransactionTestCtx = {
 
 describe("New Transaction", function () {
   const ctx: NewTransactionTestCtx = {};
-
   beforeEach(function () {
     cy.task("db:seed");
 
@@ -43,7 +54,7 @@ describe("New Transaction", function () {
     });
   });
 
-  it("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
+  it.only("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
     cy.wait(["@userProfile", "@notifications", "@publicTransactions"]);
     cy.getTest("nav-top-new-transaction").click();
 
