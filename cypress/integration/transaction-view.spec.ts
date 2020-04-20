@@ -103,7 +103,8 @@ describe("Transaction View", function () {
       .then((results) => {
         const transactionRequest = _.filter(results, {
           receiverId: ctx.authenticatedUser?.id,
-          requestStatus: "completed",
+          status: "complete",
+          requestStatus: "accepted",
         })[0];
 
         cy.visit(`/transaction/${transactionRequest!.id}`);
