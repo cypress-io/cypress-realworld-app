@@ -6,7 +6,15 @@ import fs from "fs";
 import shortid from "shortid";
 import faker from "faker";
 import bcrypt from "bcryptjs";
-import { flattenDeep } from "lodash";
+import {
+  flattenDeep,
+  times,
+  concat,
+  sample,
+  reject,
+  uniq,
+  flow,
+} from "lodash/fp";
 import {
   BankAccount,
   User,
@@ -19,15 +27,35 @@ import {
   LikeNotification,
   CommentNotification,
   Transaction,
+  TransactionStatus,
+  TransactionRequestStatus,
+  TransactionScenario,
+  FakeTransaction,
 } from "../src/models";
-import { getOtherRandomUser, getRandomTransactions } from "./utils";
 import {
   getTransactionsForUserContacts,
   getLikesByTransactionId,
   getCommentsByTransactionId,
-} from "../src/backend/database";
+  getBankAccountsByUserId,
+} from "../backend/database";
+import { getFakeAmount } from "../src/utils/transactionUtils";
 
+const userbaseSize = process.env.SEED_USERBASE_SIZE;
+const paymentsPerUser = process.env.SEED_PAYMENTS_PER_USER;
+const requestsPerUser = process.env.SEED_REQUESTS_PER_USER;
+
+const isPayment = (type: string) => type === "payment";
 const passwordHash = bcrypt.hashSync("s3cret", 10);
+
+export const getRandomTransactions = (
+  baseCount: number,
+  baseTransactions: Transaction[]
+) =>
+  uniq(
+    Array(baseCount)
+      .fill(null)
+      .map(() => sample(baseTransactions))
+  );
 
 const createFakeUser = (): User => ({
   id: shortid(),
@@ -49,7 +77,14 @@ const createFakeUser = (): User => ({
   modifiedAt: faker.date.recent(),
 });
 
-const seedUsers = Array(10).fill(null).map(createFakeUser);
+// @ts-ignore
+const seedUsers = times(() => createFakeUser(), userbaseSize);
+console.log("seed users", seedUsers);
+
+// returns a random user other than the one passed in
+export const getOtherRandomUser = (userId: string): User =>
+  // @ts-ignore
+  flow(reject(["id", userId]), sample)(seedUsers);
 
 const contacts = seedUsers.map((user: User) => {
   return Array(3)
@@ -83,7 +118,145 @@ const seedBankAccounts = seedUsers.map(
 );
 
 // TRANSACTIONS
-const seedTransactions: Transaction[] = [];
+
+export const createTransaction = (
+  type: "payment" | "request",
+  account: BankAccount,
+  details: FakeTransaction
+): Transaction => {
+  const { senderId, receiverId } = details;
+
+  const createdAt = faker.date.past();
+  const modifiedAt = faker.date.recent();
+
+  const status = faker.helpers.randomize([
+    TransactionStatus.pending,
+    TransactionStatus.incomplete,
+    TransactionStatus.complete,
+  ]);
+
+  let requestStatus = "";
+
+  if (type === "request") {
+    requestStatus = TransactionRequestStatus.pending;
+
+    if (status !== TransactionStatus.incomplete) {
+      requestStatus = faker.helpers.randomize([
+        TransactionRequestStatus.pending,
+        TransactionRequestStatus.accepted,
+        TransactionRequestStatus.rejected,
+      ]);
+    }
+
+    if (status === TransactionStatus.complete) {
+      requestStatus = faker.helpers.randomize([
+        TransactionRequestStatus.accepted,
+        TransactionRequestStatus.rejected,
+      ]);
+    }
+  }
+
+  const requestResolvedAt =
+    requestStatus === TransactionRequestStatus.pending
+      ? ""
+      : faker.date.future(undefined, createdAt);
+
+  return {
+    id: shortid(),
+    uuid: faker.random.uuid(),
+    source: account.id,
+    amount: getFakeAmount(),
+    description: isPayment(type)
+      ? `Payment: ${senderId} to ${receiverId}`
+      : `Request: ${receiverId} to ${senderId}`,
+    privacyLevel: faker.helpers.randomize([
+      DefaultPrivacyLevel.public,
+      DefaultPrivacyLevel.private,
+      DefaultPrivacyLevel.contacts,
+    ]),
+    receiverId,
+    senderId,
+    balanceAtCompletion: getFakeAmount(),
+    status,
+    requestStatus,
+    requestResolvedAt,
+    createdAt,
+    modifiedAt,
+  };
+};
+
+export const createPayment = (account: BankAccount, user: User) => {
+  const paymentScenarios: TransactionScenario[] = [
+    {
+      status: TransactionStatus.pending,
+      requestStatus: "",
+    },
+    {
+      status: TransactionStatus.incomplete,
+      requestStatus: "",
+    },
+    {
+      status: TransactionStatus.complete,
+      requestStatus: "",
+    },
+  ];
+
+  const receiverId = getOtherRandomUser(user.id).id;
+
+  return paymentScenarios.map((details) => {
+    return createTransaction("payment", account, {
+      senderId: user.id,
+      receiverId,
+      ...details,
+    });
+  });
+};
+
+export const createRequest = (account: BankAccount, user: User) => {
+  const requestScenarios: TransactionScenario[] = [
+    {
+      status: TransactionStatus.pending,
+      requestStatus: "pending",
+    },
+    {
+      status: TransactionStatus.incomplete,
+      requestStatus: "pending",
+    },
+    {
+      status: TransactionStatus.complete,
+      requestStatus: "accepted",
+    },
+    {
+      status: TransactionStatus.complete,
+      requestStatus: "rejected",
+    },
+  ];
+
+  const receiverId = getOtherRandomUser(user.id).id;
+
+  return requestScenarios.map((details) => {
+    return createTransaction("request", account, {
+      senderId: user.id,
+      receiverId,
+      ...details,
+    });
+  });
+};
+
+const transactions = seedUsers.map((user: User): Transaction[][] => {
+  const accounts = getBankAccountsByUserId(user.id);
+
+  return accounts.map((account: BankAccount) => {
+    // @ts-ignore
+    const payments = times(() => createPayment(account, user), paymentsPerUser);
+    // @ts-ignore
+    const requests = times(() => createRequest(account, user), requestsPerUser);
+
+    return concat(payments, requests);
+  });
+});
+
+const seedTransactions: Transaction[] = flattenDeep(transactions);
 
 const createFakeLike = (userId: string, transactionId: string): Like => ({
   id: shortid(),
@@ -234,10 +407,16 @@ const testSeed = {
   transactions: seedTransactions,
 };
 
+const fileData = JSON.stringify(testSeed, null, 2);
+console.log("data:", fileData);
 fs.writeFile(
-  path.join(process.cwd(), "../src/data", "test-seed.json"),
-  JSON.stringify(testSeed),
-  function () {
-    console.log("notification records generated");
+  path.join(process.cwd(), "data", "test-seed.json"),
+  fileData,
+  (err) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log("test seed generated");
   }
 );
