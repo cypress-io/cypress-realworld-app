@@ -1,12 +1,18 @@
 ///<reference path="types.ts" />
 
 import express from "express";
-import { getAllForEntity } from "./database";
+import { getAllForEntity, seedDatabase } from "./database";
 import { validateMiddleware } from "./helpers";
 import { isValidEntityValidator } from "./validators";
 const router = express.Router();
 
 // Routes
+
+//GET /testData/seed
+router.post("/seed", (req, res) => {
+  seedDatabase();
+  res.sendStatus(200);
+});
 
 //GET /testData/:entity
 router.get(

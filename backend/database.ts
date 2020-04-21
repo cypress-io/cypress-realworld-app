@@ -88,10 +88,12 @@ export const seedDatabase = () => {
   const testSeed = JSON.parse(
     fs.readFileSync(path.join(process.cwd(), "data", "test-seed.json"), "utf-8")
   );
+
   // seed database with test data
-  // @ts-ignore
   db.setState(testSeed).write();
+  return;
 };
+
 export const getAllUsers = () => db.get(USER_TABLE).value();
 
 export const getAllContacts = () => db.get(CONTACT_TABLE).value();

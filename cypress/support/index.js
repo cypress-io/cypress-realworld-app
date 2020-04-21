@@ -20,3 +20,7 @@ import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+after(() => {
+  cy.task("db:seed");
+});
