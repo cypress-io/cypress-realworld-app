@@ -30,6 +30,23 @@ export interface Transaction {
   modifiedAt: Date;
 }
 
+export interface FakeTransaction {
+  id?: string;
+  uuid?: string;
+  source?: string; // Empty if Payment or Request; Populated with BankAccount ID
+  amount?: number;
+  description?: string;
+  privacyLevel?: DefaultPrivacyLevel;
+  receiverId: string;
+  senderId: string;
+  balanceAtCompletion?: number;
+  status?: TransactionStatus;
+  requestStatus?: TransactionRequestStatus | string;
+  requestResolvedAt?: Date | string;
+  createdAt?: Date;
+  modifiedAt?: Date;
+}
+
 export interface TransactionResponseItem extends Transaction {
   likes: Like[];
   comments: Comment[];
@@ -38,6 +55,11 @@ export interface TransactionResponseItem extends Transaction {
   senderName: string;
   senderAvatar: string;
 }
+
+export type TransactionScenario = {
+  status: TransactionStatus;
+  requestStatus: TransactionRequestStatus | string;
+};
 
 export type TransactionPayload = Omit<
   Transaction,
