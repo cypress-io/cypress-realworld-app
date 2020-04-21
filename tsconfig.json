@@ -15,5 +15,5 @@
     "noEmit": true,
     "jsx": "react"
   },
-  "include": ["src", "scripts", "backend"]
+  "include": ["src", "scripts", "backend", "src/__tests__"]
 }

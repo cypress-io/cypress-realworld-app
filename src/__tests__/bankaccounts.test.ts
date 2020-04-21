@@ -6,7 +6,7 @@ import {
   seedDatabase,
   createBankAccountForUser,
   removeBankAccountById,
-} from "../database";
+} from "../../backend/database";
 import { User } from "../../src/models/user";
 import { BankAccount } from "../../src/models/bankaccount";
 describe("BankAccounts", () => {

@@ -13,7 +13,7 @@ import {
   updateNotificationById,
   getNotificationById,
   formatNotificationForApiResponse,
-} from "../database";
+} from "../../backend/database";
 
 import {
   User,

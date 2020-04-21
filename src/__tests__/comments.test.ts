@@ -5,7 +5,7 @@ import {
   getTransactionsByUserId,
   createComment,
   getCommentsByTransactionId,
-} from "../database";
+} from "../../backend/database";
 
 import { User, Transaction } from "../../src/models";
 

@@ -7,7 +7,7 @@ import {
   seedDatabase,
   removeContactById,
   getContactsByUserId,
-} from "../database";
+} from "../../backend/database";
 import { User } from "../../src/models/user";
 describe("Contacts", () => {
   beforeEach(() => {

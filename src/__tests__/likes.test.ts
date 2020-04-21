@@ -5,7 +5,7 @@ import {
   getTransactionsByUserId,
   createLike,
   getLikesByTransactionId,
-} from "../database";
+} from "../../backend/database";
 
 import { User, Transaction } from "../../src/models";
 

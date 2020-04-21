@@ -1,6 +1,6 @@
-import { seedDatabase, getAllUsers, searchUsers } from "../database";
+import { seedDatabase, getAllUsers, searchUsers } from "../../backend/database";
 
-import { User } from "../../src/models";
+import { User } from "../models";
 
 describe("Users", () => {
   beforeEach(() => {

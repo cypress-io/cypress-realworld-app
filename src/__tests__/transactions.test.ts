@@ -14,7 +14,7 @@ import {
   getPublicTransactionsDefaultSort,
   getUserById,
   getBankTransferByTransactionId,
-} from "../database";
+} from "../../backend/database";
 
 import {
   User,
