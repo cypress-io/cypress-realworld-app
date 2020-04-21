@@ -2,7 +2,7 @@ import passport from "passport";
 import express, { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import { getUserBy, getUserById } from "./database";
-import { User } from "../models/user";
+import { User } from "../src/models/user";
 const LocalStrategy = require("passport-local").Strategy;
 const router = express.Router();
 

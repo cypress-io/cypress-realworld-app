@@ -24,8 +24,8 @@ import {
   BankTransferType,
   TransactionPayload,
   TransactionStatus,
-} from "../../models";
-import { getFakeAmount } from "../../utils/transactionUtils";
+} from "../../src/models";
+import { getFakeAmount } from "../../src/utils/transactionUtils";
 
 describe("Transactions", () => {
   beforeEach(() => {

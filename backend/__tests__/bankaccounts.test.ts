@@ -7,8 +7,8 @@ import {
   createBankAccountForUser,
   removeBankAccountById,
 } from "../database";
-import { User } from "../../models/user";
-import { BankAccount } from "../../models/bankaccount";
+import { User } from "../../src/models/user";
+import { BankAccount } from "../../src/models/bankaccount";
 describe("BankAccounts", () => {
   beforeEach(() => {
     seedDatabase();

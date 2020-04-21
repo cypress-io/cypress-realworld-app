@@ -21,7 +21,7 @@ import {
   isTransactionPatchValidator,
   isTransactionPublicQSValidator,
 } from "./validators";
-import { getPaginatedItems } from "../utils/transactionUtils";
+import { getPaginatedItems } from "../src/utils/transactionUtils";
 const router = express.Router();
 
 // Routes

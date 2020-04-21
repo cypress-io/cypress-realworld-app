@@ -90,10 +90,10 @@
     "tsnode": "ts-node -O '{\"isolatedModules\": false, \"module\": \"commonjs\" }'",
     "tsnode:test": "NODE_ENV=test ts-node -O '{\"isolatedModules\": false, \"module\": \"commonjs\" }'",
     "types": "tsc --noEmit",
-    "db:seed:empty": "cp src/data/empty-seed.json src/data/database.json",
-    "db:seed:dev": "cp src/data/dev-seed.json src/data/database.json",
-    "db:seed:test": "cp src/data/test-seed.json src/data/database.test.json",
-    "db:updatedevseed": "cp src/data/test-seed.json src/data/dev-seed.json",
+    "db:seed:empty": "cp data/empty-seed.json data/database.json",
+    "db:seed:dev": "cp data/dev-seed.json data/database.json",
+    "db:seed:test": "cp data/test-seed.json data/database.test.json",
+    "db:updatedevseed": "cp data/test-seed.json data/dev-seed.json",
     "predb:updatedevseed": "yarn db:seed:test",
     "postdb:updatedevseed": "yarn db:seed:dev",
     "cypress:open": "cypress open",
@@ -110,8 +110,8 @@
     "start:test": "NODE_ENV=test start-test start:server-and-api:watch 3000 cypress:open",
     "start:react": "react-scripts start",
     "start:react:ci": "node scripts/testServer.js",
-    "start:api": "yarn tsnode --files src/app.ts",
-    "start:api:watch": "nodemon --exec yarn tsnode --watch 'src/app.ts' --watch 'src/backend' src/app.ts",
+    "start:api": "yarn tsnode --files backend/app.ts",
+    "start:api:watch": "nodemon --exec yarn tsnode --watch 'backend' backend/app.ts",
     "prebuild": "yarn types",
     "build": "react-scripts build",
     "test": "yarn cypress:open",
@@ -141,10 +141,10 @@
   },
   "jest": {
     "watchPathIgnorePatterns": [
-      "<rootDir>/src/data/database.json",
-      "<rootDir>/src/data/database.test.json",
-      "<rootDir>/src/data/test-seed.json",
-      "<rootDir>/src/data/dev-seed.json"
+      "<rootDir>/data/database.json",
+      "<rootDir>/data/database.test.json",
+      "<rootDir>/data/test-seed.json",
+      "<rootDir>/data/dev-seed.json"
     ]
   },
   "husky": {
@@ -166,8 +166,8 @@
   },
   "nyc": {
     "exclude": [
-      "src/serviceWorker.ts",
-      "src/backend"
+      "serviceWorker.ts",
+      "backend"
     ]
   }
 }

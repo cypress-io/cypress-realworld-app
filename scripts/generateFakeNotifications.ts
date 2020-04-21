@@ -6,7 +6,7 @@ import {
   getTransactionsForUserContacts,
   getLikesByTransactionId,
   getCommentsByTransactionId,
-} from "../src/backend/database";
+} from "../backend/database";
 import {
   User,
   PaymentNotification,

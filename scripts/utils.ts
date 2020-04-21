@@ -1,7 +1,7 @@
 import { sample, reject, uniq, flow } from "lodash/fp";
 import { Transaction, User } from "../src/models";
 
-const testSeed = require("../src/data/test-seed.json");
+const testSeed = require("../data/test-seed.json");
 export const users = testSeed.users;
 export const contacts = testSeed.contacts;
 export const transactions = testSeed.transactions;

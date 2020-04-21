@@ -9,8 +9,7 @@ const low = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
 const axios = require("axios").default;
 
-const getDataFile = (filename) =>
-  path.join(__dirname, "../../src/data", filename);
+const getDataFile = (filename) => path.join(__dirname, "../../data", filename);
 
 let seedFileName = "test-seed.json";
 let databaseFileName = "database.test.json";

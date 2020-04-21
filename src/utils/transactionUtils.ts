@@ -27,7 +27,6 @@ import {
   map,
   drop,
 } from "lodash/fp";
-import { getUserById } from "../backend/database";
 
 export const isRequestTransaction = (transaction: Transaction) =>
   flow(get("requestStatus"), negate(isEmpty))(transaction);
@@ -108,9 +107,6 @@ export const receiverIsCurrentUser = (
 
 export const formatFullName = (user: User) =>
   flow(pick(["firstName", "lastName"]), values, join(" "))(user);
-
-export const getFullNameForUser = (userId: User["id"]) =>
-  flow(getUserById, formatFullName)(userId);
 
 export const isCommentNotification = (notification: NotificationType) =>
   has("commentId")(notification);

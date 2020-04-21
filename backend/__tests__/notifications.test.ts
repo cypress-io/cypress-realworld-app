@@ -26,7 +26,7 @@ import {
   CommentNotification,
   NotificationsType,
   NotificationType,
-} from "../../models";
+} from "../../src/models";
 
 describe("Notifications", () => {
   let user: User;

@@ -1,7 +1,7 @@
 import fs from "fs";
 import shortid from "shortid";
 import faker from "faker";
-import { getTransactionsForUserContacts } from "../src/backend/database";
+import { getTransactionsForUserContacts } from "../backend/database";
 import { User, Comment } from "../src/models";
 import { users, getRandomTransactions } from "./utils";
 

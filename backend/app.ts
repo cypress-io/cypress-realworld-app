@@ -9,16 +9,16 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import paginate from "express-paginate";
 
-import auth from "./backend/auth";
-import userRoutes from "./backend/user-routes";
-import contactRoutes from "./backend/contact-routes";
-import bankAccountRoutes from "./backend/bankaccount-routes";
-import transactionRoutes from "./backend/transaction-routes";
-import likeRoutes from "./backend/like-routes";
-import commentRoutes from "./backend/comment-routes";
-import notificationRoutes from "./backend/notification-routes";
-import bankTransferRoutes from "./backend/banktransfer-routes";
-import testDataRoutes from "./backend/testdata-routes";
+import auth from "./auth";
+import userRoutes from "./user-routes";
+import contactRoutes from "./contact-routes";
+import bankAccountRoutes from "./bankaccount-routes";
+import transactionRoutes from "./transaction-routes";
+import likeRoutes from "./like-routes";
+import commentRoutes from "./comment-routes";
+import notificationRoutes from "./notification-routes";
+import bankTransferRoutes from "./banktransfer-routes";
+import testDataRoutes from "./testdata-routes";
 
 const corsOption = {
   origin: "http://localhost:3000",
@@ -55,7 +55,7 @@ app.use("/comments", commentRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/bankTransfers", bankTransferRoutes);
 
-if(process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {
   app.use("/testData", testDataRoutes);
 }
 

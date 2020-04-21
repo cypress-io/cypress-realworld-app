@@ -12,7 +12,7 @@ import {
   searchUsers,
   removeUserFromResults,
 } from "./database";
-import { User } from "../models/user";
+import { User } from "../src/models/user";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import {
   shortIdValidation,

@@ -7,7 +7,7 @@ import shortid from "shortid";
 import { flattenDeep, times, concat } from "lodash/fp";
 import { users, getOtherRandomUser } from "./utils";
 import { getFakeAmount } from "../src/utils/transactionUtils";
-import { getBankAccountsByUserId } from "../src/backend/database";
+import { getBankAccountsByUserId } from "../backend/database";
 import {
   User,
   BankAccount,

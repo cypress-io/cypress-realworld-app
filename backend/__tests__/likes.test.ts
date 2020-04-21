@@ -7,7 +7,7 @@ import {
   getLikesByTransactionId,
 } from "../database";
 
-import { User, Transaction } from "../../models";
+import { User, Transaction } from "../../src/models";
 
 describe("Transactions", () => {
   beforeEach(() => {

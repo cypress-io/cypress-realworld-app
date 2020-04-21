@@ -45,14 +45,13 @@ import {
   BankTransferType,
   NotificationResponseItem,
   TransactionQueryPayload,
-} from "../models";
+} from "../src/models";
 import Fuse from "fuse.js";
 import {
   isPayment,
   getTransferAmount,
   hasSufficientFunds,
   getChargeAmount,
-  getFullNameForUser,
   hasDateQueryFields,
   getDateQueryFields,
   hasAmountQueryFields,
@@ -60,7 +59,8 @@ import {
   getQueryWithoutFilterFields,
   getPayAppCreditedAmount,
   isRequestTransaction,
-} from "../utils/transactionUtils";
+  formatFullName,
+} from "../src/utils/transactionUtils";
 
 const USER_TABLE = "users";
 const CONTACT_TABLE = "contacts";
@@ -86,10 +86,7 @@ const db = () => low(adapter);
 
 export const seedDatabase = () => {
   const testSeed = JSON.parse(
-    fs.readFileSync(
-      path.join(process.cwd(), "src/data", "test-seed.json"),
-      "utf-8"
-    )
+    fs.readFileSync(path.join(process.cwd(), "data", "test-seed.json"), "utf-8")
   );
   // seed database with test data
   // @ts-ignore
@@ -407,6 +404,9 @@ export const getTransactionsForUserForApi = (userId: string, query?: object) =>
     getTransactionsForUserByObj(userId),
     formatTransactionsForApiResponse
   )(query);
+
+export const getFullNameForUser = (userId: User["id"]) =>
+  flow(getUserById, formatFullName)(userId);
 
 export const formatTransactionForApiResponse = (
   transaction: Transaction

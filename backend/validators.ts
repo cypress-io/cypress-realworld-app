@@ -6,7 +6,7 @@ import {
   DefaultPrivacyLevel,
   NotificationsType,
   //PaymentNotificationStatus
-} from "../models";
+} from "../src/models";
 import { includes } from "lodash/fp";
 
 const TransactionStatusValues = Object.values(TransactionStatus);
