@@ -14,32 +14,49 @@ describe("Transaction View", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.fixture("users").then((users: User[]) => {
-      const authenticatedUser = users[0];
-
-      cy.directLogin(authenticatedUser.username);
-
-      cy.request("http://localhost:3001/testData/transactions")
-        .its("body.results")
-        .then((results) => {
-          ctx.transactionRequest = _.filter(results, {
-            receiverId: authenticatedUser.id,
-            requestStatus: "pending",
-            requestResolvedAt: "",
-          })[0];
-
-          // @ts-ignore
-          cy.log(ctx.transactionRequest);
-        });
-    });
-
     cy.server();
-    cy.route("GET", "/transactions").as("personalTransactions");
+    cy.route("GET", "http://localhost:3001/transactions").as(
+      "personalTransactions"
+    );
+    cy.route("GET", "http://localhost:3001/transactions/public").as(
+      "publicTransactions"
+    );
+    cy.route("GET", "http://localhost:3001/transactions/*").as(
+      "getTransaction"
+    );
     cy.route("PATCH", "http://localhost:3001/transactions/*").as(
       "updateTransaction"
     );
 
+    cy.route("POST", "http://localhost:3001/login").as("loginUser");
+    cy.route("GET", "http://localhost:3001/checkAuth").as("userProfile");
+    cy.route("GET", "http://localhost:3001/notifications").as(
+      "getNotifications"
+    );
+    cy.route("GET", "http://localhost:3001/bankAccounts").as("getBankAccounts");
+
+    cy.fixture("users").then((users: User[]) => {
+      const authenticatedUser = users[0];
+
+      cy.directLogin(authenticatedUser.username);
+      cy.wait("@loginUser");
+
+      cy.task("fetch:data", {
+        entity: "transactions",
+        findAttrs: {
+          // @ts-ignore
+          receiverId: authenticatedUser.id,
+          status: "pending",
+          requestStatus: "pending",
+          requestResolvedAt: "",
+        },
+      }).then((results) => {
+        ctx.transactionRequest = results;
+      });
+    });
+
     cy.getTest("nav-personal-tab").click();
+    cy.wait("@personalTransactions");
   });
 
   it("transactions navigation tabs are hidden on a transaction view page", function () {
@@ -75,7 +92,7 @@ describe("Transaction View", function () {
 
   it("accepts a transaction request", function () {
     cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
-
+    cy.wait("@getTransaction");
     cy.getTestLike("transaction-accept-request").click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
   });
