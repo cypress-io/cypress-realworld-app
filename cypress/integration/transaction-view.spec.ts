@@ -6,6 +6,7 @@ const { _ } = Cypress;
 
 type NewTransactionCtx = {
   transactionRequest?: Transaction;
+  authenticatedUser?: User;
 };
 
 describe("Transaction View", function () {
@@ -36,16 +37,15 @@ describe("Transaction View", function () {
     cy.route("GET", "http://localhost:3001/bankAccounts").as("getBankAccounts");
 
     cy.fixture("users").then((users: User[]) => {
-      const authenticatedUser = users[0];
+      ctx.authenticatedUser = users[0];
 
-      cy.directLogin(authenticatedUser.username);
+      cy.directLogin(ctx.authenticatedUser.username);
       cy.wait("@loginUser");
 
       cy.task("fetch:data", {
         entity: "transactions",
         findAttrs: {
-          // @ts-ignore
-          receiverId: authenticatedUser.id,
+          receiverId: ctx.authenticatedUser.id,
           status: "pending",
           requestStatus: "pending",
           requestResolvedAt: "",
@@ -98,24 +98,28 @@ describe("Transaction View", function () {
   });
 
   it("rejects a transaction request", function () {
-    cy.getTestLike("transaction-item")
-      .eq(4)
-      .scrollIntoView()
-      .click({ force: true });
+    cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
+    cy.wait("@getTransaction");
 
     cy.getTestLike(`transaction-reject-request`).click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
   });
 
-  it("does not display accept/reject buttons on completed request", function () {
-    cy.getTestLike("transaction-item")
-      .eq(3)
-      .scrollIntoView()
-      .click({ force: true });
+  // TODO: cy.request "completed" request
+  it.skip("does not display accept/reject buttons on completed request", function () {
+    cy.request("http://localhost:3001/testData/transactions")
+      .its("body.results")
+      .then((results) => {
+        const transactionRequest = _.filter(results, {
+          receiverId: ctx.authenticatedUser?.id,
+          status: "complete",
+          requestStatus: "accepted",
+        })[0];
 
-    cy.getTest("nav-transaction-tabs").should("not.be.visible");
+        cy.visit(`/transaction/${transactionRequest!.id}`);
 
-    cy.getTest("transaction-accept-request").should("not.be.visible");
-    cy.getTest("transaction-reject-request").should("not.be.visible");
+        cy.getTest("transaction-accept-request").should("not.be.visible");
+        cy.getTest("transaction-reject-request").should("not.be.visible");
+      });
   });
 });
