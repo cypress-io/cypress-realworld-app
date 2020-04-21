@@ -2,9 +2,11 @@
 require("dotenv").config();
 
 import fs from "fs";
-import { flattenDeep, times, concat } from "lodash/fp";
-import shortid from "shortid";
 import faker from "faker";
+import shortid from "shortid";
+import { flattenDeep, times, concat } from "lodash/fp";
+import { users, getOtherRandomUser } from "./utils";
+import { getFakeAmount } from "../src/utils/transactionUtils";
 import { getBankAccountsByUserId } from "../src/backend/database";
 import {
   User,
@@ -13,9 +15,9 @@ import {
   DefaultPrivacyLevel,
   TransactionStatus,
   TransactionRequestStatus,
+  TransactionScenario,
+  FakeTransaction,
 } from "../src/models";
-import { users, getOtherRandomUser } from "./utils";
-import { getFakeAmount } from "../src/utils/transactionUtils";
 
 const paymentsPerUser = process.env.SEED_PAYMENTS_PER_USER;
 const requestsPerUser = process.env.SEED_REQUESTS_PER_USER;
@@ -23,11 +25,12 @@ const requestsPerUser = process.env.SEED_REQUESTS_PER_USER;
 const isPayment = (type: string) => type === "payment";
 
 export const createTransaction = (
+  type: "payment" | "request",
   account: BankAccount,
-  senderId: string,
-  receiverId: string,
-  type: "payment" | "request"
+  details: FakeTransaction
 ): Transaction => {
+  const { senderId, receiverId } = details;
+
   const createdAt = faker.date.past();
   const modifiedAt = faker.date.recent();
 
@@ -87,24 +90,65 @@ export const createTransaction = (
   };
 };
 
-export const createPayment = (account: BankAccount, user: User) =>
-  createTransaction(
-    account,
-    user.id,
-    getOtherRandomUser(user.id).id,
-    "payment"
-  );
+export const createPayment = (account: BankAccount, user: User) => {
+  const paymentScenarios: TransactionScenario[] = [
+    {
+      status: TransactionStatus.pending,
+      requestStatus: "",
+    },
+    {
+      status: TransactionStatus.incomplete,
+      requestStatus: "",
+    },
+    {
+      status: TransactionStatus.complete,
+      requestStatus: "",
+    },
+  ];
 
-export const createRequest = (account: BankAccount, user: User) =>
-  createTransaction(
-    account,
-    user.id,
-    getOtherRandomUser(user.id).id,
-    "request"
-  );
+  const receiverId = getOtherRandomUser(user.id).id;
+
+  return paymentScenarios.map((details) => {
+    return createTransaction("payment", account, {
+      senderId: user.id,
+      receiverId,
+      ...details,
+    });
+  });
+};
+
+export const createRequest = (account: BankAccount, user: User) => {
+  const requestScenarios: TransactionScenario[] = [
+    {
+      status: TransactionStatus.pending,
+      requestStatus: "pending",
+    },
+    {
+      status: TransactionStatus.incomplete,
+      requestStatus: "pending",
+    },
+    {
+      status: TransactionStatus.complete,
+      requestStatus: "accepted",
+    },
+    {
+      status: TransactionStatus.complete,
+      requestStatus: "rejected",
+    },
+  ];
+
+  const receiverId = getOtherRandomUser(user.id).id;
+
+  return requestScenarios.map((details) => {
+    return createTransaction("request", account, {
+      senderId: user.id,
+      receiverId,
+      ...details,
+    });
+  });
+};
 
 const transactions = users.map((user: User): Transaction[][] => {
-  console.log(user.id);
   const accounts = getBankAccountsByUserId(user.id);
 
   return accounts.map((account: BankAccount) => {

@@ -33,5 +33,6 @@ declare namespace Cypress {
 
     getTest(dataTestAttribute: string): Chainable<Element>;
     getTestLike(dataTestPrefixAttribute: string): Chainable<Element>;
+    fetchTestData(entity: string, filterDetails: object): Chainable<any[]>;
   }
 }
