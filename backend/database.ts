@@ -82,7 +82,7 @@ if (process.env.NODE_ENV === "test") {
 const databaseFile = path.join(__dirname, "../data", databaseFileName);
 const adapter = new FileSync(databaseFile);
 
-const db = () => low(adapter);
+const db = low(adapter);
 
 export const seedDatabase = () => {
   const testSeed = JSON.parse(
@@ -90,25 +90,25 @@ export const seedDatabase = () => {
   );
   // seed database with test data
   // @ts-ignore
-  db().setState(testSeed).write();
+  db.setState(testSeed).write();
 };
-export const getAllUsers = () => db().get(USER_TABLE).value();
+export const getAllUsers = () => db.get(USER_TABLE).value();
 
-export const getAllContacts = () => db().get(CONTACT_TABLE).value();
+export const getAllContacts = () => db.get(CONTACT_TABLE).value();
 
-export const getAllTransactions = () => db().get(TRANSACTION_TABLE).value();
+export const getAllTransactions = () => db.get(TRANSACTION_TABLE).value();
 
 export const getAllPublicTransactions = () =>
-  db()
+  db
     .get(TRANSACTION_TABLE)
     // @ts-ignore
     .filter({ privacyLevel: "public" })
     .value();
 
-export const getAllForEntity = (entity: string) => db().get(entity).value();
+export const getAllForEntity = (entity: string) => db.get(entity).value();
 
 export const getAllBy = (entity: string, key: string, value: any) => {
-  const result = db()
+  const result = db
     .get(entity)
     // @ts-ignore
     .filter({ [`${key}`]: value })
@@ -118,7 +118,7 @@ export const getAllBy = (entity: string, key: string, value: any) => {
 };
 
 export const getBy = (entity: string, key: string, value: any) => {
-  const result = db()
+  const result = db
     .get(entity)
     // @ts-ignore
     .find({ [`${key}`]: value })
@@ -128,7 +128,7 @@ export const getBy = (entity: string, key: string, value: any) => {
 };
 
 export const getAllByObj = (entity: string, query: object) => {
-  const result = db()
+  const result = db
     .get(entity)
     // @ts-ignore
     .filter(query)
@@ -137,7 +137,7 @@ export const getAllByObj = (entity: string, query: object) => {
   return result;
 };
 export const getByObj = (entity: string, query: object) =>
-  db()
+  db
     .get(entity)
     // @ts-ignore
     .find(query)
@@ -208,8 +208,7 @@ export const createUser = (userDetails: Partial<User>): User => {
 };
 
 const saveUser = (user: User) => {
-  db()
-    .get(USER_TABLE)
+  db.get(USER_TABLE)
     // @ts-ignore
     .push(user)
     .write();
@@ -219,8 +218,7 @@ export const updateUserById = (userId: string, edits: Partial<User>) => {
   const user = getUserById(userId);
 
   if (user) {
-    db()
-      .get(USER_TABLE)
+    db.get(USER_TABLE)
       // @ts-ignore
       .find(user)
       .assign(edits)
@@ -242,8 +240,7 @@ export const getContactsByUserId = (userId: string): Contact[] =>
   getContactsBy("userId", userId);
 
 export const createContact = (contact: Contact) => {
-  db()
-    .get(CONTACT_TABLE)
+  db.get(CONTACT_TABLE)
     // @ts-ignore
     .push(contact)
     .write();
@@ -255,8 +252,7 @@ export const createContact = (contact: Contact) => {
 export const removeContactById = (contactId: string) => {
   const contact = getContactBy("id", contactId);
 
-  db()
-    .get(CONTACT_TABLE)
+  db.get(CONTACT_TABLE)
     // @ts-ignore
     .remove(contact)
     .write();
@@ -297,8 +293,7 @@ export const getActiveBankAccountsByUserId = (userId: string) =>
   getAllByObj(BANK_ACCOUNT_TABLE, { userId, isDeleted: false });
 
 export const createBankAccount = (bankaccount: BankAccount) => {
-  db()
-    .get(BANK_ACCOUNT_TABLE)
+  db.get(BANK_ACCOUNT_TABLE)
     // @ts-ignore
     .push(bankaccount)
     .write();
@@ -333,8 +328,7 @@ export const createBankAccountForUser = (
 };
 
 export const removeBankAccountById = (bankAccountId: string) => {
-  db()
-    .get(BANK_ACCOUNT_TABLE)
+  db.get(BANK_ACCOUNT_TABLE)
     // @ts-ignore
     .find({ id: bankAccountId })
     .assign({ isDeleted: true }) // soft delete
@@ -373,8 +367,7 @@ export const createBankTransfer = (
 };
 
 const saveBankTransfer = (bankTransfer: BankTransfer): BankTransfer => {
-  db()
-    .get(BANK_TRANSFER_TABLE)
+  db.get(BANK_TRANSFER_TABLE)
     // @ts-ignore
     .push(bankTransfer)
     .write();
@@ -677,8 +670,7 @@ export const createTransaction = (
 };
 
 const saveTransaction = (transaction: Transaction): Transaction => {
-  db()
-    .get(TRANSACTION_TABLE)
+  db.get(TRANSACTION_TABLE)
     // @ts-ignore
     .push(transaction)
     .write();
@@ -711,8 +703,7 @@ export const updateTransactionById = (
       PaymentNotificationStatus.requested
     );
 
-    db()
-      .get(TRANSACTION_TABLE)
+    db.get(TRANSACTION_TABLE)
       // @ts-ignore
       .find(transaction)
       .assign(edits)
@@ -745,8 +736,7 @@ export const createLike = (userId: string, transactionId: string): Like => {
 };
 
 const saveLike = (like: Like): Like => {
-  db()
-    .get(LIKE_TABLE)
+  db.get(LIKE_TABLE)
     // @ts-ignore
     .push(like)
     .write();
@@ -786,8 +776,7 @@ export const createComment = (
 };
 
 const saveComment = (comment: Comment): Comment => {
-  db()
-    .get(COMMENT_TABLE)
+  db.get(COMMENT_TABLE)
     // @ts-ignore
     .push(comment)
     .write();
@@ -886,8 +875,7 @@ export const createCommentNotification = (
 };
 
 const saveNotification = (notification: NotificationType) => {
-  db()
-    .get(NOTIFICATION_TABLE)
+  db.get(NOTIFICATION_TABLE)
     // @ts-ignore
     .push(notification)
     .write();
@@ -921,8 +909,7 @@ export const updateNotificationById = (
   const notification = getNotificationBy("id", notificationId);
 
   if (userId === notification.userId) {
-    db()
-      .get(NOTIFICATION_TABLE)
+    db.get(NOTIFICATION_TABLE)
       // @ts-ignore
       .find(notification)
       .assign(edits)
