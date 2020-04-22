@@ -33,6 +33,9 @@ import {
   tail,
   assignWith,
   toPairs,
+  head,
+  mergeWith,
+  assignIn,
 } from "lodash/fp";
 import {
   BankAccount,
@@ -120,30 +123,21 @@ const createContact = (userId: User["id"], contactUserId: User["id"]) => ({
 });
 
 const createContacts = flow(
-  get("users"),
-  console.log,
-  map(get("id")),
-  console.log
-  //map(flow(get("id"), console.log, randomContactsForUser))
-);
-
-const work = flow(
   over([
     identity,
     flow(
       get("users"),
       map(flow(get("id"), randomContactsForUser)),
-      flattenDeep
-      //assign
+      flattenDeep,
+      set("contacts", __, {})
     ),
   ]),
-  //merge,
   console.log
 );
 
 const initialData = { users: seedUsers };
 
-export const buildDatabase = () => flow(work)(initialData);
+export const buildDatabase = () => flow(createContacts)(initialData);
 //flow(update("contacts", createContacts))(initialData);
 //const result = database();
 //console.log(result);
