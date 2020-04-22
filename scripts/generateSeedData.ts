@@ -7,6 +7,7 @@ import shortid from "shortid";
 import faker from "faker";
 import bcrypt from "bcryptjs";
 import {
+  __,
   map,
   flattenDeep,
   times,
@@ -22,6 +23,16 @@ import {
   curry,
   pick,
   identity,
+  over,
+  assign,
+  zip,
+  fromPairs,
+  zipObject,
+  merge,
+  setWith,
+  tail,
+  assignWith,
+  toPairs,
 } from "lodash/fp";
 import {
   BankAccount,
@@ -109,20 +120,40 @@ const createContact = (userId: User["id"], contactUserId: User["id"]) => ({
 });
 
 const createContacts = flow(
-  //console.log,
   get("users"),
-  map(flow(get("id"), randomContactsForUser))
+  console.log,
+  map(get("id")),
+  console.log
+  //map(flow(get("id"), console.log, randomContactsForUser))
 );
+
+const work = flow(
+  over([
+    identity,
+    flow(
+      get("users"),
+      map(flow(get("id"), randomContactsForUser)),
+      flattenDeep
+      //assign
+    ),
+  ]),
+  //merge,
+  console.log
+);
+
 const initialData = { users: seedUsers };
-export const buildDatabase = () =>
-  flow(update("contacts", createContacts))(initialData);
+
+export const buildDatabase = () => flow(work)(initialData);
+//flow(update("contacts", createContacts))(initialData);
 //const result = database();
 //console.log(result);
 
+/*
 const name = () => "abc";
 const two = flow(get("users"), console.log, name);
 const test = flow(update("contacts", two))({ users: { id: 1, name: "kevin" } });
 console.log(test);
+*/
 
 /*
 const seedBankAccounts = seedUsers.map(
