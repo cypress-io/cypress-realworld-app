@@ -15,14 +15,6 @@ describe("New Transaction", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.fixture("users").then((users: User[]) => {
-      ctx.allUsers = users;
-      ctx.user = users[0];
-      ctx.contact = users[1];
-
-      return cy.directLogin(ctx.user.username);
-    });
-
     cy.server();
     cy.route("POST", "http://localhost:3001/logout").as("logout");
     cy.route("POST", "http://localhost:3001/transactions").as(
@@ -41,6 +33,14 @@ describe("New Transaction", function () {
     cy.route("PATCH", "http://localhost:3001/transactions/*").as(
       "updateTransaction"
     );
+
+    cy.fixture("users").then((users: User[]) => {
+      ctx.allUsers = users;
+      ctx.user = users[0];
+      ctx.contact = users[1];
+
+      return cy.directLogin(ctx.user.username);
+    });
   });
 
   it("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
