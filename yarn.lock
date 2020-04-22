@@ -1549,12 +1549,12 @@
     istanbul-lib-coverage "3.0.0"
     nyc "15.0.1"
 
-"@cypress/instrument-cra@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@cypress/instrument-cra/-/instrument-cra-1.1.0.tgz#1dfa041765f07dc0b6e9cbf5b32500fd2f0da951"
-  integrity sha512-mM8jbVbiYhVZOpERv52NmRK3YTk9gjyRRP8hgWRP94PjGjeZq2ezD1zoJG2FpUhObOONfH8l+O0jAf2KuyS68g==
+"@cypress/instrument-cra@1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@cypress/instrument-cra/-/instrument-cra-1.1.1.tgz#4696c556235c52d28a86d4b98ae7cc7e6776aaef"
+  integrity sha512-B+RLX73HUbXSf9eE8rYjk75jYAT0NAE8S8agH0752+3gZobRaohlEtcHix88qAGWtru9rWrI6g9KKttFfnSPrw==
   dependencies:
-    babel-plugin-istanbul "5.2.0"
+    babel-plugin-istanbul "6.0.0"
     debug "4.1.1"
     find-yarn-workspace-root "^1.2.1"
 
@@ -3268,7 +3268,18 @@ babel-plugin-dynamic-import-node@^2.3.0:
   dependencies:
     object.assign "^4.1.0"
 
-babel-plugin-istanbul@5.2.0, babel-plugin-istanbul@^5.1.0:
+babel-plugin-istanbul@6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-istanbul/-/babel-plugin-istanbul-6.0.0.tgz#e159ccdc9af95e0b570c75b4573b7c34d671d765"
+  integrity sha512-AF55rZXpe7trmEylbaE1Gv54wn6rwU03aptvRoVIGP8YykoSxqdVLV1TfwflBCE/QtHmqtP8SWlTENqbK8GCSQ==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@istanbuljs/load-nyc-config" "^1.0.0"
+    "@istanbuljs/schema" "^0.1.2"
+    istanbul-lib-instrument "^4.0.0"
+    test-exclude "^6.0.0"
+
+babel-plugin-istanbul@^5.1.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-istanbul/-/babel-plugin-istanbul-5.2.0.tgz#df4ade83d897a92df069c4d9a25cf2671293c854"
   integrity sha512-5LphC0USA8t4i1zCtjbbNb6jJj/9+X6P37Qfirc/70EQ34xKlMW+a1RHGwxGI+SwWpNwZ27HqvzAobeqaXwiZw==

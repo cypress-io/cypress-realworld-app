@@ -78,7 +78,7 @@
   },
   "devDependencies": {
     "@cypress/code-coverage": "3.2.1",
-    "@cypress/instrument-cra": "1.1.0",
+    "@cypress/instrument-cra": "1.1.1",
     "cypress": "4.4.0",
     "eslint-config-prettier": "6.10.1",
     "eslint-plugin-cypress": "2.10.3",
