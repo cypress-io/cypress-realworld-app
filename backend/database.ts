@@ -62,6 +62,17 @@ import {
   formatFullName,
 } from "../src/utils/transactionUtils";
 
+export type TDatabase = {
+  users: User[];
+  contacts: Contact[];
+  bankaccounts: BankAccount[];
+  transactions: Transaction[];
+  likes: Like[];
+  comments: Comment[];
+  notifications: Notification[];
+  banktransfers: BankTransfer[];
+};
+
 const USER_TABLE = "users";
 const CONTACT_TABLE = "contacts";
 const BANK_ACCOUNT_TABLE = "bankaccounts";

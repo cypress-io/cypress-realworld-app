@@ -7,6 +7,7 @@ import shortid from "shortid";
 import faker from "faker";
 import bcrypt from "bcryptjs";
 import {
+  map,
   flattenDeep,
   times,
   concat,
@@ -14,6 +15,13 @@ import {
   reject,
   uniq,
   flow,
+  set,
+  get,
+  update,
+  tap,
+  curry,
+  pick,
+  identity,
 } from "lodash/fp";
 import {
   BankAccount,
@@ -37,6 +45,7 @@ import {
   getLikesByTransactionId,
   getCommentsByTransactionId,
   getBankAccountsByUserId,
+  TDatabase,
 } from "../backend/database";
 import { getFakeAmount } from "../src/utils/transactionUtils";
 
@@ -78,29 +87,44 @@ const createFakeUser = (): User => ({
 });
 
 // @ts-ignore
-const seedUsers = times(() => createFakeUser(), userbaseSize);
-console.log("seed users", seedUsers);
+const createSeedUsers = () => times(() => createFakeUser(), userbaseSize);
+const seedUsers = createSeedUsers();
+//console.log("seed users", seedUsers);
 
 // returns a random user other than the one passed in
 export const getOtherRandomUser = (userId: string): User =>
   // @ts-ignore
   flow(reject(["id", userId]), sample)(seedUsers);
 
-const contacts = seedUsers.map((user: User) => {
-  return Array(3)
-    .fill(null)
-    .map(() => ({
-      id: shortid(),
-      uuid: faker.random.uuid(),
-      userId: user.id,
-      contactUserId: getOtherRandomUser(user.id).id,
-      createdAt: faker.date.past(),
-      modifiedAt: faker.date.recent(),
-    }));
+const randomContactsForUser = (userId: User["id"]) =>
+  times(() => getOtherRandomUser(userId), 3);
+
+const createContact = (userId: User["id"], contactUserId: User["id"]) => ({
+  id: shortid(),
+  uuid: faker.random.uuid(),
+  userId,
+  contactUserId,
+  createdAt: faker.date.past(),
+  modifiedAt: faker.date.recent(),
 });
 
-const seedContacts = flattenDeep(contacts);
+const createContacts = flow(
+  //console.log,
+  get("users"),
+  map(flow(get("id"), randomContactsForUser))
+);
+const initialData = { users: seedUsers };
+export const buildDatabase = () =>
+  flow(update("contacts", createContacts))(initialData);
+//const result = database();
+//console.log(result);
 
+const name = () => "abc";
+const two = flow(get("users"), console.log, name);
+const test = flow(update("contacts", two))({ users: { id: 1, name: "kevin" } });
+console.log(test);
+
+/*
 const seedBankAccounts = seedUsers.map(
   (x: User): BankAccount => {
     return {
@@ -267,7 +291,7 @@ const createFakeLike = (userId: string, transactionId: string): Like => ({
   modifiedAt: faker.date.recent(),
 });
 
-const seedLikes = seedUsers.flatMap((user: User): Like[] => {
+const seedLikes = seedUsers.map((user: User): Like[] => {
   const transactions = getTransactionsForUserContacts(user.id);
 
   // choose random transactions
@@ -420,3 +444,5 @@ fs.writeFile(
     console.log("test seed generated");
   }
 );
+
+*/
