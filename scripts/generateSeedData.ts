@@ -115,23 +115,21 @@ const createContact = curry(
 );
 
 // returns a random user other than the one passed in
-export const getOtherRandomUser = curry(
+const getOtherRandomUser = curry(
   (seedUsers: User[], userId: User["id"]): User =>
     flow(reject(["id", userId]), sample)(seedUsers)
 );
 
-const randomContactsForUser = curry((seedUsers: User[], userId: User["id"]) => {
-  return times(() => getOtherRandomUser(seedUsers, userId), 3);
-});
+const randomContactsForUser = curry((seedUsers: User[], user: User) =>
+  times(() => getOtherRandomUser(seedUsers, user.id), 3)
+);
+const generateRandomContactsForUser = (seedUsers: User[]) =>
+  map(randomContactsForUser(seedUsers))(seedUsers);
 
-const createContactsForUser = (seedUsers: User[]) => {
-  return map(
-    (user: User) => randomContactsForUser(seedUsers, user.id)
-    //map((contact: User) => createContact(user.id, contact.id))
-  )(seedUsers);
-};
+//const createContactsForUser = (user: User[], randomContacts: User[]) =>
+//map((contact: User) => createContact(user.id, contact.id))
 const createSeedContacts = (seedUsers: User[]) => {
-  return flow(createContactsForUser)(seedUsers);
+  return flow(generateRandomContactsForUser)(seedUsers);
 };
 
 export const buildDatabase = () => {
