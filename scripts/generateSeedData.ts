@@ -142,33 +142,36 @@ const createSeedContacts = (seedUsers: User[]) => {
   return flow(generateRandomContactsForUser, createContactsForUser)(seedUsers);
 };
 
+const createSeedBankAccounts = (seedUsers: User[]) =>
+  map(
+    (user: User): BankAccount => {
+      return {
+        id: shortid(),
+        uuid: faker.random.uuid(),
+        userId: user.id,
+        bankName: `${faker.company.companyName()} Bank`,
+        accountNumber: faker.finance.account(10),
+        routingNumber: faker.finance.account(9),
+        isDeleted: faker.helpers.randomize([true, false]),
+        createdAt: faker.date.past(),
+        modifiedAt: faker.date.recent(),
+      };
+    }
+  )(seedUsers);
+
 export const buildDatabase = () => {
   const seedUsers = createSeedUsers();
   const seedContacts = createSeedContacts(seedUsers);
+  const seedBankAccounts = createSeedBankAccounts(seedUsers);
 
   return {
     users: seedUsers,
     contacts: seedContacts,
+    bankaccounts: seedBankAccounts,
   };
 };
 
 /*
-const seedBankAccounts = seedUsers.map(
-  (x: User): BankAccount => {
-    return {
-      id: shortid(),
-      uuid: faker.random.uuid(),
-      userId: x.id,
-      bankName: `${faker.company.companyName()} Bank`,
-      accountNumber: faker.finance.account(10),
-      routingNumber: faker.finance.account(9),
-      isDeleted: faker.helpers.randomize([true, false]),
-      createdAt: faker.date.past(),
-      modifiedAt: faker.date.recent(),
-    };
-  }
-);
-
 // TRANSACTIONS
 
 export const createTransaction = (

@@ -16,4 +16,9 @@ describe("Seed Database", () => {
     expect(database).toHaveProperty("contacts");
     expect(database.contacts.length).toBe(15);
   });
+
+  it("should contain a list of bankaccounts", () => {
+    expect(database).toHaveProperty("bankaccounts");
+    expect(database.bankaccounts.length).toBe(5);
+  });
 });
