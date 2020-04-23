@@ -102,52 +102,53 @@ const createFakeUser = (): User => ({
 
 // @ts-ignore
 const createSeedUsers = () => times(() => createFakeUser(), userbaseSize);
-const seedUsers = createSeedUsers();
-//console.log("seed users", seedUsers);
 
-// returns a random user other than the one passed in
-export const getOtherRandomUser = (userId: string): User =>
-  // @ts-ignore
-  flow(reject(["id", userId]), sample)(seedUsers);
-
-const randomContactsForUser = (userId: User["id"]) =>
-  times(() => getOtherRandomUser(userId), 3);
-
-const createContact = (userId: User["id"], contactUserId: User["id"]) => ({
-  id: shortid(),
-  uuid: faker.random.uuid(),
-  userId,
-  contactUserId,
-  createdAt: faker.date.past(),
-  modifiedAt: faker.date.recent(),
-});
-
-const createContacts = flow(
-  over([
-    identity,
-    flow(
-      get("users"),
-      map(flow(get("id"), randomContactsForUser)),
-      flattenDeep,
-      set("contacts", __, {})
-    ),
-  ]),
-  console.log
+const createContact = curry(
+  (userId: User["id"], contactUserId: User["id"]) => ({
+    id: shortid(),
+    uuid: faker.random.uuid(),
+    userId,
+    contactUserId,
+    createdAt: faker.date.past(),
+    modifiedAt: faker.date.recent(),
+  })
 );
 
-const initialData = { users: seedUsers };
+// returns a random user other than the one passed in
+export const getOtherRandomUser = curry(
+  (seedUsers: User[], userId: User["id"]): User =>
+    flow(reject(["id", userId]), sample)(seedUsers)
+);
 
-export const buildDatabase = () => flow(createContacts)(initialData);
-//flow(update("contacts", createContacts))(initialData);
-//const result = database();
-//console.log(result);
+const randomContactsForUser = curry((seedUsers: User[], userId: User["id"]) =>
+  times(() => getOtherRandomUser(seedUsers, userId), 3)
+);
 
-/*
-const name = () => "abc";
-const two = flow(get("users"), console.log, name);
-const test = flow(update("contacts", two))({ users: { id: 1, name: "kevin" } });
-console.log(test);
-*/
+const createContactsForUser = (seedUsers: User[]) => {
+  const getRandomContactsForUser = randomContactsForUser(seedUsers);
+  return map((user: User) =>
+    flow(
+      tap(console.log),
+      // @ts-ignore
+      getRandomContactsForUser(user.id),
+      map((contact: User) => createContact(user.id, contact.id))
+    )
+  )(seedUsers); //, randomContactsForUser));
+};
+const createSeedContacts = (seedUsers: User[]) => {
+  return flow(createContactsForUser)(seedUsers);
+};
+
+export const buildDatabase = () => {
+  const seedUsers = createSeedUsers();
+  const seedContacts = createSeedContacts(seedUsers);
+  //console.log("seed users", seedUsers);
+  console.log("seed contacts", seedContacts);
+  return {
+    users: seedUsers,
+    contacts: seedContacts,
+  };
+};
 
 /*
 const seedBankAccounts = seedUsers.map(
