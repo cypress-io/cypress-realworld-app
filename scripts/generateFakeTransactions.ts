@@ -106,15 +106,25 @@ export const createPayment = (account: BankAccount, user: User) => {
     },
   ];
 
-  const receiverId = getOtherRandomUser(user.id).id;
+  const otherUserId = getOtherRandomUser(user.id).id;
 
-  return paymentScenarios.map((details) => {
-    return createTransaction("payment", account, {
+  const allScenarios = paymentScenarios.map((details) => {
+    const paymentTransaction = createTransaction("payment", account, {
       senderId: user.id,
-      receiverId,
+      receiverId: otherUserId,
       ...details,
     });
+
+    const paymentInverseTransaction = createTransaction("payment", account, {
+      senderId: otherUserId,
+      receiverId: user.id,
+      ...details,
+    });
+
+    return [paymentTransaction, paymentInverseTransaction];
   });
+
+  return flattenDeep(allScenarios);
 };
 
 export const createRequest = (account: BankAccount, user: User) => {
@@ -137,15 +147,25 @@ export const createRequest = (account: BankAccount, user: User) => {
     },
   ];
 
-  const receiverId = getOtherRandomUser(user.id).id;
+  const otherUserId = getOtherRandomUser(user.id).id;
 
-  return requestScenarios.map((details) => {
-    return createTransaction("request", account, {
+  const allScenarios = requestScenarios.map((details) => {
+    const requestTransaction = createTransaction("request", account, {
       senderId: user.id,
-      receiverId,
+      receiverId: otherUserId,
       ...details,
     });
+
+    const requestInverseTransaction = createTransaction("request", account, {
+      senderId: otherUserId,
+      receiverId: user.id,
+      ...details,
+    });
+
+    return [requestTransaction, requestInverseTransaction];
   });
+
+  return flattenDeep(allScenarios);
 };
 
 const transactions = users.map((user: User): Transaction[][] => {

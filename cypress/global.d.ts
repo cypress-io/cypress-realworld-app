@@ -3,8 +3,15 @@
 /// <reference types="cypress" />
 
 declare namespace Cypress {
+  import { Transaction } from "../src/models";
   interface Chainable {
     // describe new "cy" commands here
+
+    task(
+      event: "fetch:testData",
+      arg?: any,
+      options?: Partial<Loggable & Timeoutable>
+    ): Chainable<Transaction>;
 
     /**
      * Logs in using API request

@@ -16,7 +16,8 @@ module.exports = (on, config) => {
         .post(`http://localhost:3001/testData/seed`)
         .then((resp) => resp.data);
     },
-    "fetch:data"({ entity, findAttrs }) {
+    // fetch test data from a database (MySQL, PostgreSQL, etc...)
+    "fetch:testData"({ entity, findAttrs }) {
       return axios
         .get(`http://localhost:3001/testData/${entity}`)
         .then(({ data }) => find(findAttrs, data.results));

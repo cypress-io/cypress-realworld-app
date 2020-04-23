@@ -2,8 +2,6 @@
 // @ts-check
 import { User, Transaction } from "../../src/models";
 
-const { _ } = Cypress;
-
 type NewTransactionCtx = {
   transactionRequest?: Transaction;
   authenticatedUser?: User;
@@ -42,7 +40,7 @@ describe("Transaction View", function () {
       cy.directLogin(ctx.authenticatedUser.username);
       cy.wait("@loginUser");
 
-      cy.task("fetch:data", {
+      cy.task("fetch:testData", {
         entity: "transactions",
         findAttrs: {
           receiverId: ctx.authenticatedUser.id,
@@ -50,8 +48,8 @@ describe("Transaction View", function () {
           requestStatus: "pending",
           requestResolvedAt: "",
         },
-      }).then((results) => {
-        ctx.transactionRequest = results;
+      }).then((transaction) => {
+        ctx.transactionRequest = transaction;
       });
     });
 
@@ -79,9 +77,8 @@ describe("Transaction View", function () {
 
     const comments = ["Thank you!", "Appreciate it."];
 
-    _.each(comments, (comment, index) => {
+    comments.forEach((comment, index) => {
       cy.getTestLike("comment-input").type(`${comment}{enter}`);
-
       cy.getTestLike("comments-list").children().eq(index).contains(comment);
     });
 
@@ -105,21 +102,19 @@ describe("Transaction View", function () {
     cy.wait("@updateTransaction").should("have.property", "status", 204);
   });
 
-  // TODO: cy.request "completed" request
-  it.skip("does not display accept/reject buttons on completed request", function () {
-    cy.request("http://localhost:3001/testData/transactions")
-      .its("body.results")
-      .then((results) => {
-        const transactionRequest = _.filter(results, {
-          receiverId: ctx.authenticatedUser?.id,
-          status: "complete",
-          requestStatus: "accepted",
-        })[0];
+  it("does not display accept/reject buttons on completed request", function () {
+    cy.task("fetch:testData", {
+      entity: "transactions",
+      findAttrs: {
+        receiverId: ctx.authenticatedUser!.id,
+        status: "complete",
+        requestStatus: "accepted",
+      },
+    }).then((transactionRequest) => {
+      cy.visit(`/transaction/${transactionRequest!.id}`);
 
-        cy.visit(`/transaction/${transactionRequest!.id}`);
-
-        cy.getTest("transaction-accept-request").should("not.be.visible");
-        cy.getTest("transaction-reject-request").should("not.be.visible");
-      });
+      cy.getTest("transaction-accept-request").should("not.be.visible");
+      cy.getTest("transaction-reject-request").should("not.be.visible");
+    });
   });
 });
