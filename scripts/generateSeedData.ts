@@ -168,6 +168,11 @@ export const buildDatabase = () => {
     users: seedUsers,
     contacts: seedContacts,
     bankaccounts: seedBankAccounts,
+    transactions: [],
+    likes: [],
+    comments: [],
+    notifications: [],
+    banktransfers: [],
   };
 };
 
