@@ -145,8 +145,7 @@ const createSeedContacts = (seedUsers: User[]) => {
 export const buildDatabase = () => {
   const seedUsers = createSeedUsers();
   const seedContacts = createSeedContacts(seedUsers);
-  //console.log("seed users", seedUsers);
-  console.log("seed contacts", seedContacts);
+
   return {
     users: seedUsers,
     contacts: seedContacts,

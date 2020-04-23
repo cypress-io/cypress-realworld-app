@@ -8,7 +8,12 @@ describe("Seed Database", () => {
   });
 
   it("should contain a list of users", () => {
+    expect(database).toHaveProperty("users");
+    expect(database.users.length).toBe(5);
+  });
+
+  it("should contain a list of contacts", () => {
     expect(database).toHaveProperty("contacts");
-    expect(database.contacts.length).toBeGreaterThan(1);
+    expect(database.contacts.length).toBe(15);
   });
 });
