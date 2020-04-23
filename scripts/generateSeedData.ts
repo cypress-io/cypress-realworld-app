@@ -60,6 +60,7 @@ import {
   getCommentsByTransactionId,
   getBankAccountsByUserId,
   TDatabase,
+  createContactForUser,
 } from "../backend/database";
 import { getFakeAmount } from "../src/utils/transactionUtils";
 
@@ -103,16 +104,14 @@ const createFakeUser = (): User => ({
 // @ts-ignore
 const createSeedUsers = () => times(() => createFakeUser(), userbaseSize);
 
-const createContact = curry(
-  (userId: User["id"], contactUserId: User["id"]) => ({
-    id: shortid(),
-    uuid: faker.random.uuid(),
-    userId,
-    contactUserId,
-    createdAt: faker.date.past(),
-    modifiedAt: faker.date.recent(),
-  })
-);
+const createContact = (userId: User["id"], contactUserId: User["id"]) => ({
+  id: shortid(),
+  uuid: faker.random.uuid(),
+  userId,
+  contactUserId,
+  createdAt: faker.date.past(),
+  modifiedAt: faker.date.recent(),
+});
 
 // returns a random user other than the one passed in
 const getOtherRandomUser = curry(
@@ -124,12 +123,23 @@ const randomContactsForUser = curry((seedUsers: User[], user: User) =>
   times(() => getOtherRandomUser(seedUsers, user.id), 3)
 );
 const generateRandomContactsForUser = (seedUsers: User[]) =>
-  map(randomContactsForUser(seedUsers))(seedUsers);
+  map((user: User) => ({
+    userId: user.id,
+    contacts: randomContactsForUser(seedUsers, user),
+  }))(seedUsers);
 
-//const createContactsForUser = (user: User[], randomContacts: User[]) =>
-//map((contact: User) => createContact(user.id, contact.id))
+const createContactsForUser = curry((randomContacts: any) =>
+  flattenDeep(
+    map((item: any) =>
+      map((contact: User) => createContact(item.userId, contact.id))(
+        item.contacts
+      )
+    )(randomContacts)
+  )
+);
+
 const createSeedContacts = (seedUsers: User[]) => {
-  return flow(generateRandomContactsForUser)(seedUsers);
+  return flow(generateRandomContactsForUser, createContactsForUser)(seedUsers);
 };
 
 export const buildDatabase = () => {
