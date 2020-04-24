@@ -60,13 +60,22 @@ describe("New Transaction", function () {
 
     cy.getTestLike("user-list-item").contains(ctx.contact!.firstName).click();
 
-    cy.getTest("transaction-create-amount-input").type("25");
+    cy.getTest("transaction-create-amount-input").type("35");
     cy.getTest("transaction-create-description-input").type("Indian Food");
     cy.getTest("transaction-create-submit-payment").click();
 
     cy.wait("@createTransaction").should("have.property", "status", 200);
 
-    cy.getTest("sidenav-user-balance").should("contain", "$525.00");
+    cy.task("find:testData", {
+      entity: "users",
+      findAttr: { id: ctx.contact!.id },
+    }).then((updatedContact: User) => {
+      const updatedBalance = Dinero({
+        amount: updatedContact.balance,
+      }).toFormat();
+
+      cy.getTest("sidenav-user-balance").should("contain", updatedBalance);
+    });
 
     cy.getTest("app-name-logo").find("a").click();
 
