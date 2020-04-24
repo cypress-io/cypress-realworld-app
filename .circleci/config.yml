@@ -6,7 +6,7 @@ workflows:
     jobs:
       - cypress/run:
           build: yarn build
-          executor: cypress/base-12-14-0
+          executor: cypress/base:13.6.0
           yarn: true
           start: yarn test:ci
           wait-on: "http://localhost:3000"
