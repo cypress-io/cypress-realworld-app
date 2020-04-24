@@ -544,7 +544,7 @@ export const buildDatabase = () => {
   };
 };
 
-const testSeed = buildDatabase();
+const testSeed: TDatabase = buildDatabase();
 
 const fileData = JSON.stringify(testSeed, null, 2);
 //console.log("data:", fileData);
