@@ -7,7 +7,6 @@ import shortid from "shortid";
 import faker from "faker";
 import bcrypt from "bcryptjs";
 import {
-  __,
   map,
   flattenDeep,
   times,
@@ -16,26 +15,8 @@ import {
   reject,
   uniq,
   flow,
-  set,
   get,
-  update,
-  tap,
   curry,
-  pick,
-  identity,
-  over,
-  assign,
-  zip,
-  fromPairs,
-  zipObject,
-  merge,
-  setWith,
-  tail,
-  assignWith,
-  toPairs,
-  head,
-  mergeWith,
-  assignIn,
   filter,
   isEqual,
   flattenDepth,
@@ -73,6 +54,7 @@ export const paymentsPerUser = +process.env.SEED_PAYMENTS_PER_USER!;
 export const requestsPerUser = +process.env.SEED_REQUESTS_PER_USER!;
 export const bankAccountsPerUser = +process.env.SEED_BANK_ACCOUNTS_PER_USER!;
 export const likesPerUser = +process.env.SEED_LIKES_PER_USER!;
+export const commentsPerUser = +process.env.SEED_COMMENTS_PER_USER!;
 
 const paymentVariations = 3;
 const requestVariations = 4;
@@ -84,6 +66,7 @@ export const transactionsPerUser =
   requestsPerUser * requestVariations * 2;
 export const totalTransactions = userbaseSize! * transactionsPerUser!;
 export const totalLikes = userbaseSize! * likesPerUser!;
+export const totalComments = userbaseSize! * commentsPerUser!;
 
 const isPayment = (type: string) => type === "payment";
 const passwordHash = bcrypt.hashSync("s3cret", 10);
@@ -394,29 +377,6 @@ const createSeedLikes = (seedUsers: User[], seedTransactions: Transaction[]) =>
     })(seedUsers)
   );
 
-export const buildDatabase = () => {
-  const seedUsers: User[] = createSeedUsers();
-  const seedContacts: Contact[] = createSeedContacts(seedUsers);
-  const seedBankAccounts: BankAccount[] = createSeedBankAccounts(seedUsers);
-  const seedTransactions: Transaction[] = createSeedTransactions(
-    seedUsers,
-    seedBankAccounts
-  );
-  const seedLikes: Like[] = createSeedLikes(seedUsers, seedTransactions);
-
-  return {
-    users: seedUsers,
-    contacts: seedContacts,
-    bankaccounts: seedBankAccounts,
-    transactions: seedTransactions,
-    likes: seedLikes,
-    comments: [],
-    notifications: [],
-    banktransfers: [],
-  };
-};
-
-/*
 export const createFakeComment = (
   userId: string,
   transactionId: string
@@ -430,21 +390,57 @@ export const createFakeComment = (
   modifiedAt: faker.date.recent(),
 });
 
-const seedComments = seedUsers.flatMap((user: User): Comment[] => {
-  const transactions = getTransactionsForUserContacts(user.id);
+const createSeedComments = (
+  seedUsers: User[],
+  seedTransactions: Transaction[]
+) =>
+  flattenDeep(
+    map((user: User): Comment[] => {
+      const transactions = getPublicTransactionsForOtherUsers(
+        seedTransactions,
+        user.id
+      );
 
-  // choose random transactions
-  const randomTransactions = getRandomTransactions(5, transactions);
+      // choose random transactions
+      const randomTransactions = getRandomTransactions(5, transactions);
 
-  // get a slice of random transactions
-  const selectedTransactions = randomTransactions.slice(0, 2);
+      // get a slice of random transactions
+      const selectedTransactions = randomTransactions.slice(0, commentsPerUser);
 
-  // iterate over transactions and comment
-  return selectedTransactions.map((transaction) =>
-    createFakeComment(user.id, transaction!.id)
+      // iterate over transactions and comment
+      return selectedTransactions.map((transaction) =>
+        createFakeComment(user.id, transaction!.id)
+      );
+    })(seedUsers)
   );
-});
 
+export const buildDatabase = () => {
+  const seedUsers: User[] = createSeedUsers();
+  const seedContacts: Contact[] = createSeedContacts(seedUsers);
+  const seedBankAccounts: BankAccount[] = createSeedBankAccounts(seedUsers);
+  const seedTransactions: Transaction[] = createSeedTransactions(
+    seedUsers,
+    seedBankAccounts
+  );
+  const seedLikes: Like[] = createSeedLikes(seedUsers, seedTransactions);
+  const seedComments: Comment[] = createSeedComments(
+    seedUsers,
+    seedTransactions
+  );
+
+  return {
+    users: seedUsers,
+    contacts: seedContacts,
+    bankaccounts: seedBankAccounts,
+    transactions: seedTransactions,
+    likes: seedLikes,
+    comments: seedComments,
+    notifications: [],
+    banktransfers: [],
+  };
+};
+
+/*
 const createFakePaymentNotification = (
   userId: string,
   transactionId: string
@@ -532,15 +528,8 @@ const seedNotifications = seedUsers.flatMap(
   }
 );
 
-const testSeed = {
-  users: seedUsers,
-  contacts: seedContacts,
-  bankcaccounts: seedBankAccounts,
-  likes: seedLikes,
-  comments: seedComments,
-  notifications: seedNotifications,
-  transactions: seedTransactions,
-};
+
+const testSeed = buildDatabase();
 
 const fileData = JSON.stringify(testSeed, null, 2);
 console.log("data:", fileData);
