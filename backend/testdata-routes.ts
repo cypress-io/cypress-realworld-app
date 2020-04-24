@@ -8,7 +8,7 @@ const router = express.Router();
 
 // Routes
 
-//GET /testData/seed
+//POST /testData/seed
 router.post("/seed", (req, res) => {
   seedDatabase();
   res.sendStatus(200);

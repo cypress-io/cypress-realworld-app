@@ -177,7 +177,7 @@ export const searchUsers = (query: string) => {
   return performSearch(
     items,
     {
-      keys: ["username", "email", "phoneNumber"],
+      keys: ["firstName", "lastName", "username", "email", "phoneNumber"],
     },
     query
   ) as User[];

@@ -1,4 +1,3 @@
-// check this file using TypeScript if available
 // @ts-check
 import Dinero from "dinero.js";
 import { User } from "../../src/models";
@@ -20,6 +19,7 @@ describe("New Transaction", function () {
     cy.route("POST", "http://localhost:3001/transactions").as(
       "createTransaction"
     );
+
     cy.route("GET", "http://localhost:3001/users").as("allUsers");
     cy.route("GET", "http://localhost:3001/notifications").as("notifications");
     cy.route("GET", "http://localhost:3001/transactions/public").as(
@@ -34,7 +34,7 @@ describe("New Transaction", function () {
       "updateTransaction"
     );
 
-    cy.fixture("users").then((users: User[]) => {
+    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
       ctx.allUsers = users;
       ctx.user = users[0];
       ctx.contact = users[1];
@@ -60,13 +60,22 @@ describe("New Transaction", function () {
 
     cy.getTestLike("user-list-item").contains(ctx.contact!.firstName).click();
 
-    cy.getTest("transaction-create-amount-input").type("25");
+    cy.getTest("transaction-create-amount-input").type("35");
     cy.getTest("transaction-create-description-input").type("Indian Food");
     cy.getTest("transaction-create-submit-payment").click();
 
     cy.wait("@createTransaction").should("have.property", "status", 200);
 
-    cy.getTest("sidenav-user-balance").should("contain", "$525.00");
+    cy.task("find:testData", {
+      entity: "users",
+      findAttr: { id: ctx.contact!.id },
+    }).then((updatedContact: User) => {
+      const updatedBalance = Dinero({
+        amount: updatedContact.balance,
+      }).toFormat();
+
+      cy.getTest("sidenav-user-balance").should("contain", updatedBalance);
+    });
 
     cy.getTest("app-name-logo").find("a").click();
 
@@ -143,66 +152,48 @@ describe("New Transaction", function () {
   });
 
   it("selects a user and submits a transaction request", function () {
-    cy.getTest("nav-top-new-transaction").click();
+    cy.getTestLike("new-transaction").click();
 
     cy.wait("@allUsers");
 
-    cy.getTestLike("user-list-item").contains("Kaden").click();
+    cy.getTestLike("user-list-item").contains(ctx.contact!.firstName).click();
     cy.getTest("transaction-create-form").should("be.visible");
 
-    cy.getTest("transaction-create-amount-input").type("95");
-    cy.getTest("transaction-create-description-input").type("Fancy Hotel");
-    cy.getTest("transaction-create-submit-request").click();
+    cy.getTestLike("amount-input").type("95");
+    cy.getTestLike("description-input").type("Fancy Hotel");
+    cy.getTestLike("submit-request").click();
 
-    cy.wait("@createTransaction").should("have.property", "status", 200);
+    cy.wait("@createTransaction").its("status").should("equal", 200);
 
-    cy.getTest("sidenav-user-balance").should("contain", "$550.00");
-
-    cy.getTest("app-name-logo").find("a").click();
-    // Guide Tip: re-querying DOM for element
-    cy.getTest("nav-personal-tab").as("mine-tab");
-    cy.get("@mine-tab").click();
-
-    // Discussion point: Is it cy.get()
-    cy.get("@mine-tab").should("have.class", "Mui-selected");
+    cy.getTestLike("return-to-transactions").click();
+    cy.getTest("nav-personal-tab").click().should("have.class", "Mui-selected");
 
     cy.getTestLike("transaction-item").should("contain", "Fancy Hotel");
   });
 
-  it("searches for a user by username", function () {
-    const targetUser = ctx.allUsers![6];
+  it("searches for a user by attributes", function () {
+    const targetUser = ctx.allUsers![2];
+    const searchAttrs: (keyof User)[] = [
+      "firstName",
+      "lastName",
+      "username",
+      "email",
+      "phoneNumber",
+    ];
 
-    cy.getTest("nav-top-new-transaction").click();
+    cy.getTestLike("new-transaction").click();
     cy.wait("@allUsers");
 
-    cy.getTest("user-list-search-input").type(targetUser.username);
+    cy.wrap(searchAttrs).each((attr: keyof User) => {
+      cy.getTest("user-list-search-input").type(targetUser[attr] as string);
+      cy.wait("@usersSearch");
 
-    cy.wait("@usersSearch").should("have.property", "status", 200);
-    cy.getTestLike("user-list-item").first().contains(targetUser.firstName);
-  });
+      cy.getTestLike("user-list-item")
+        .first()
+        .contains(targetUser[attr] as string);
 
-  it("searches for a user by email", function () {
-    const targetUser = ctx.allUsers![6];
-
-    cy.getTest("nav-top-new-transaction").click();
-    cy.wait("@allUsers");
-
-    cy.getTest("user-list-search-input").type(targetUser.email);
-
-    cy.wait("@usersSearch").should("have.property", "status", 200);
-    cy.getTestLike("user-list-item").first().contains(targetUser.firstName);
-  });
-
-  it("searches for a user by phone", function () {
-    const targetUser = ctx.allUsers![6];
-    const phone = targetUser.phoneNumber.replace(/[^0-9]/g, "");
-
-    cy.getTest("nav-top-new-transaction").click();
-    cy.wait("@allUsers");
-
-    cy.getTest("user-list-search-input").type(phone);
-
-    cy.wait("@usersSearch").should("have.property", "status", 200);
-    cy.getTestLike("user-list-item").first().contains(targetUser.firstName);
+      // cy.getTest("user-list-search-input").clear({ force: true });
+      cy.getTest("user-list-search-input").type("{selectall}{backspace}");
+    });
   });
 });
