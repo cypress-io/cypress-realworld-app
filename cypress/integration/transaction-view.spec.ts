@@ -34,13 +34,13 @@ describe("Transaction View", function () {
     );
     cy.route("GET", "http://localhost:3001/bankAccounts").as("getBankAccounts");
 
-    cy.fixture("users").then((users: User[]) => {
-      ctx.authenticatedUser = users[0];
+    cy.task("find:testData", { entity: "users" }).then((user: User) => {
+      ctx.authenticatedUser = user;
 
       cy.directLogin(ctx.authenticatedUser.username);
       cy.wait("@loginUser");
 
-      cy.task("fetch:testData", {
+      cy.task("find:testData", {
         entity: "transactions",
         findAttrs: {
           receiverId: ctx.authenticatedUser.id,
@@ -103,7 +103,7 @@ describe("Transaction View", function () {
   });
 
   it("does not display accept/reject buttons on completed request", function () {
-    cy.task("fetch:testData", {
+    cy.task("find:testData", {
       entity: "transactions",
       findAttrs: {
         receiverId: ctx.authenticatedUser!.id,
