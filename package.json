@@ -36,7 +36,7 @@
     "@types/react-window-infinite-loader": "1.0.3",
     "@types/shortid": "0.0.29",
     "@types/supertest": "2.0.8",
-    "@types/uuid": "7.0.2",
+    "@types/uuid": "7.0.3",
     "@types/validator": "13.0.0",
     "@types/webpack-env": "1.15.1",
     "@types/yup": "0.26.36",
