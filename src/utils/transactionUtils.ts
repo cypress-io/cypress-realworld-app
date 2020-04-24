@@ -74,8 +74,10 @@ export const payAppAddition = curry((sender: User, transaction: Transaction) =>
 export const getChargeAmount = (sender: User, transaction: Transaction) =>
   Math.abs(payAppDifference(sender, transaction).getAmount());
 
-export const getTransferAmount = (sender: User, transaction: Transaction) =>
-  Math.abs(payAppDifference(sender, transaction).getAmount());
+export const getTransferAmount = curry(
+  (sender: User, transaction: Transaction) =>
+    Math.abs(payAppDifference(sender, transaction).getAmount())
+);
 
 export const getPayAppCreditedAmount = (
   receiver: User,

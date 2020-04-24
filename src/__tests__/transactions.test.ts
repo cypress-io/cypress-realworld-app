@@ -241,7 +241,7 @@ describe("Transactions", () => {
     expect(transaction.comments).toBeDefined();
   });
 
-  it.only("should create a payment and withdrawal (bank transfer) for remaining balance", () => {
+  it("should create a payment and withdrawal (bank transfer) for remaining balance", () => {
     const sender: User = getAllUsers()[0];
     const receiver: User = getAllUsers()[1];
     const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
@@ -322,16 +322,19 @@ describe("Transactions", () => {
     const sender: User = getAllUsers()[0];
     const receiver: User = getAllUsers()[1];
     const senderBankAccount = getBankAccountsByUserId(sender.id)[0];
+    const requestAmount = 100;
 
     const receiverTransactions = getTransactionsByUserId(receiver.id);
-    expect(receiverTransactions.length).toBe(2);
+    expect(receiverTransactions.length).toBeGreaterThanOrEqual(
+      transactionsPerUser
+    );
 
     const requestDetails: TransactionPayload = {
       source: senderBankAccount.id!,
       senderId: sender.id,
       receiverId: receiver.id,
       description: `Request: ${sender.id} to ${receiver.id}`,
-      amount: 100,
+      amount: requestAmount,
       privacyLevel: DefaultPrivacyLevel.public,
       status: TransactionStatus.pending,
     };
@@ -350,15 +353,17 @@ describe("Transactions", () => {
     expect(updatedTransaction.requestStatus).toEqual("accepted");
 
     const updatedReceiver: User = getAllUsers()[1];
-    expect(updatedReceiver.balance).toBe(50377);
+    expect(updatedReceiver.balance).toBe(receiver.balance + requestAmount);
 
     // Verify Deposit Transactions for Sender
     const updatedSenderTransactions = getTransactionsByUserId(sender.id);
 
-    expect(updatedSenderTransactions.length).toBe(6);
+    expect(updatedSenderTransactions.length).toBe(
+      receiverTransactions.length + 2
+    );
 
     // Verify Sender's Updated Pay App Balance
     const updatedSender: User = getAllUsers()[0];
-    expect(updatedSender.balance).toBe(65000);
+    expect(updatedSender.balance).toBe(sender.balance - requestAmount);
   });
 });

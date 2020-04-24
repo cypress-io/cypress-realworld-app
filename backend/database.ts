@@ -605,12 +605,12 @@ export const debitPayAppBalance = (user: User, transaction: Transaction) => {
     )(user, transaction);
   } else {
     flow(
-      getTransferAmount,
+      getTransferAmount(user),
       createBankTransferWithdrawal(user, transaction),
       // TODO: generate notification for withdrawal
       resetPayAppBalance,
       savePayAppBalance(user)
-    )(user, transaction);
+    )(transaction);
   }
 };
 
