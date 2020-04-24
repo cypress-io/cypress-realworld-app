@@ -9,20 +9,21 @@ import {
   getContactsByUserId,
 } from "../../backend/database";
 import { User } from "../../src/models/user";
+import { totalContacts, contactsPerUser } from "../../scripts/seedDataUtils";
 describe("Contacts", () => {
   beforeEach(() => {
     seedDatabase();
   });
 
   it("should retrieve a list of contacts", () => {
-    expect(getAllContacts().length).toBe(30);
+    expect(getAllContacts().length).toEqual(totalContacts);
   });
 
   it("should retrieve a list of contacts for a username", () => {
     const userToLookup: User = getAllUsers()[0];
 
     const result = getContactsByUsername(userToLookup.username);
-    expect(result.length).toBe(3);
+    expect(result.length).toBeGreaterThanOrEqual(contactsPerUser);
     expect(result[0].userId).toBe(userToLookup.id);
   });
 
@@ -30,7 +31,7 @@ describe("Contacts", () => {
     const userToLookup: User = getAllUsers()[0];
 
     const result = getContactsByUserId(userToLookup.id);
-    expect(result.length).toBe(3);
+    expect(result.length).toBeGreaterThanOrEqual(3);
     expect(result[0].userId).toBe(userToLookup.id);
   });
 
@@ -46,13 +47,12 @@ describe("Contacts", () => {
     const userToLookup: User = getRandomUser();
 
     const contacts = getContactsByUsername(userToLookup.username);
-    //expect(result[0].userId).toBe(userToLookup.id);
 
     const contactId = contacts[0].id;
 
     removeContactById(contactId);
 
     const updatedContacts = getContactsByUsername(userToLookup.username);
-    expect(updatedContacts.length).toBe(2);
+    expect(updatedContacts.length).toBeLessThan(contacts.length);
   });
 });
