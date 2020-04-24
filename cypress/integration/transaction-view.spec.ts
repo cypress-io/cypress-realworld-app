@@ -48,7 +48,7 @@ describe("Transaction View", function () {
           requestStatus: "pending",
           requestResolvedAt: "",
         },
-      }).then((transaction) => {
+      }).then((transaction: Transaction) => {
         ctx.transactionRequest = transaction;
       });
     });
