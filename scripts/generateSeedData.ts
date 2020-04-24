@@ -39,6 +39,7 @@ import {
   filter,
   isEqual,
   flattenDepth,
+  negate,
 } from "lodash/fp";
 import {
   BankAccount,
@@ -71,6 +72,7 @@ export const contactsPerUser = +process.env.SEED_CONTACTS_PER_USER!;
 export const paymentsPerUser = +process.env.SEED_PAYMENTS_PER_USER!;
 export const requestsPerUser = +process.env.SEED_REQUESTS_PER_USER!;
 export const bankAccountsPerUser = +process.env.SEED_BANK_ACCOUNTS_PER_USER!;
+export const likesPerUser = +process.env.SEED_LIKES_PER_USER!;
 
 const paymentVariations = 3;
 const requestVariations = 4;
@@ -81,6 +83,7 @@ export const transactionsPerUser =
   paymentsPerUser * paymentVariations * 2 +
   requestsPerUser * requestVariations * 2;
 export const totalTransactions = userbaseSize! * transactionsPerUser!;
+export const totalLikes = userbaseSize! * likesPerUser!;
 
 const isPayment = (type: string) => type === "payment";
 const passwordHash = bcrypt.hashSync("s3cret", 10);
@@ -351,29 +354,6 @@ const createSeedTransactions = (
     })(seedUsers)
   );
 
-export const buildDatabase = () => {
-  const seedUsers: User[] = createSeedUsers();
-  const seedContacts: Contact[] = createSeedContacts(seedUsers);
-  const seedBankAccounts: BankAccount[] = createSeedBankAccounts(seedUsers);
-  const seedTransactions: Transaction[] = createSeedTransactions(
-    seedUsers,
-    seedBankAccounts
-  );
-
-  return {
-    users: seedUsers,
-    contacts: seedContacts,
-    bankaccounts: seedBankAccounts,
-    transactions: seedTransactions,
-    likes: [],
-    comments: [],
-    notifications: [],
-    banktransfers: [],
-  };
-};
-
-/*
-
 const createFakeLike = (userId: string, transactionId: string): Like => ({
   id: shortid(),
   uuid: faker.random.uuid(),
@@ -383,21 +363,60 @@ const createFakeLike = (userId: string, transactionId: string): Like => ({
   modifiedAt: faker.date.recent(),
 });
 
-const seedLikes = seedUsers.map((user: User): Like[] => {
-  const transactions = getTransactionsForUserContacts(user.id);
+const getPublicTransactionsForOtherUsers = (
+  seedTransactions: Transaction[],
+  userId: User["id"]
+): Transaction[] =>
+  flow(
+    filter({ privacyLevel: DefaultPrivacyLevel.public }),
+    filter(flow(get("senderId"), negate(isEqual(userId)))),
+    filter(flow(get("receiverId"), negate(isEqual(userId))))
+  )(seedTransactions);
 
-  // choose random transactions
-  const randomTransactions = getRandomTransactions(5, transactions);
+const createSeedLikes = (seedUsers: User[], seedTransactions: Transaction[]) =>
+  flattenDeep(
+    map((user: User): Like[] => {
+      const transactions = getPublicTransactionsForOtherUsers(
+        seedTransactions,
+        user.id
+      );
 
-  // get a slice of random transactions
-  const selectedTransactions = randomTransactions.slice(0, 2);
+      // choose random transactions
+      const randomTransactions = getRandomTransactions(5, transactions);
 
-  // iterate over transactions and like
-  return selectedTransactions.map((transaction) =>
-    createFakeLike(user.id, transaction!.id)
+      // get a slice of random transactions
+      const selectedTransactions = randomTransactions.slice(0, likesPerUser);
+
+      // iterate over transactions and like
+      return selectedTransactions.map((transaction) =>
+        createFakeLike(user.id, transaction!.id)
+      );
+    })(seedUsers)
   );
-});
 
+export const buildDatabase = () => {
+  const seedUsers: User[] = createSeedUsers();
+  const seedContacts: Contact[] = createSeedContacts(seedUsers);
+  const seedBankAccounts: BankAccount[] = createSeedBankAccounts(seedUsers);
+  const seedTransactions: Transaction[] = createSeedTransactions(
+    seedUsers,
+    seedBankAccounts
+  );
+  const seedLikes: Like[] = createSeedLikes(seedUsers, seedTransactions);
+
+  return {
+    users: seedUsers,
+    contacts: seedContacts,
+    bankaccounts: seedBankAccounts,
+    transactions: seedTransactions,
+    likes: seedLikes,
+    comments: [],
+    notifications: [],
+    banktransfers: [],
+  };
+};
+
+/*
 export const createFakeComment = (
   userId: string,
   transactionId: string

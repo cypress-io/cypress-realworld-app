@@ -7,6 +7,7 @@ import {
   contactsPerUser,
   totalTransactions,
   bankAccountsPerUser,
+  totalLikes,
 } from "../../scripts/generateSeedData";
 import { TDatabase } from "../../backend/database";
 
@@ -36,5 +37,10 @@ describe("Seed Database", () => {
   it("should contain a list of transactions", () => {
     expect(database).toHaveProperty("transactions");
     expect(database.transactions.length).toBe(totalTransactions);
+  });
+
+  it("should contain a list of likes", () => {
+    expect(database).toHaveProperty("likes");
+    expect(database.likes.length).toBe(totalLikes);
   });
 });
