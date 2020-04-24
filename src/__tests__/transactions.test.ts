@@ -26,6 +26,7 @@ import {
   TransactionStatus,
 } from "../../src/models";
 import { getFakeAmount } from "../../src/utils/transactionUtils";
+import { totalTransactions } from "../../scripts/seedDataUtils";
 
 describe("Transactions", () => {
   beforeEach(() => {
@@ -33,11 +34,11 @@ describe("Transactions", () => {
   });
 
   it("should retrieve a list of all transactions", () => {
-    expect(getAllTransactions().length).toBe(30);
+    expect(getAllTransactions().length).toBe(totalTransactions);
   });
 
   it("should retrieve a list of all public transactions", () => {
-    expect(getAllPublicTransactions().length).toBe(10);
+    expect(getAllPublicTransactions().length).toBeLessThan(totalTransactions);
   });
 
   it("should retrieve a list of transactions for a user (user is receiver)", () => {
