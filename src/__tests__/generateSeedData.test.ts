@@ -7,7 +7,7 @@ import {
   totalLikes,
   totalComments,
   totalNotifications,
-} from "../../scripts/generateSeedData";
+} from "../../scripts/seedDataUtils";
 import { TDatabase } from "../../backend/database";
 
 describe("Seed Database", () => {
