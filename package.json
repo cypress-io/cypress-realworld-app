@@ -38,7 +38,7 @@
     "@types/supertest": "2.0.8",
     "@types/uuid": "7.0.2",
     "@types/validator": "13.0.0",
-    "@types/webpack-env": "1.15.1",
+    "@types/webpack-env": "1.15.2",
     "@types/yup": "0.26.36",
     "@xstate/react": "0.8.1",
     "axios": "0.19.2",
