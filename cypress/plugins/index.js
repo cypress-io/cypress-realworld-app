@@ -2,7 +2,7 @@ const cypressTypeScriptPreprocessor = require("./cy-ts-preprocessor");
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-const { find } = require("lodash/fp");
+const { find, filter } = require("lodash/fp");
 const axios = require("axios").default;
 
 module.exports = (on, config) => {
@@ -17,7 +17,12 @@ module.exports = (on, config) => {
         .then((resp) => resp.data);
     },
     // fetch test data from a database (MySQL, PostgreSQL, etc...)
-    "fetch:testData"({ entity, findAttrs }) {
+    "filter:testData"({ entity, filterAttrs }) {
+      return axios
+        .get(`http://localhost:3001/testData/${entity}`)
+        .then(({ data }) => filter(filterAttrs, data.results));
+    },
+    "find:testData"({ entity, findAttrs }) {
       return axios
         .get(`http://localhost:3001/testData/${entity}`)
         .then(({ data }) => find(findAttrs, data.results));

@@ -90,6 +90,8 @@
     "tsnode": "ts-node -O '{\"isolatedModules\": false, \"module\": \"commonjs\" }'",
     "tsnode:test": "NODE_ENV=test ts-node -O '{\"isolatedModules\": false, \"module\": \"commonjs\" }'",
     "types": "tsc --noEmit",
+    "db:seed": "yarn tsnode scripts/generateSeedData",
+    "postdb:seed": "yarn db:updatedevseed",
     "db:seed:empty": "cp data/empty-seed.json data/database.json",
     "db:seed:dev": "cp data/dev-seed.json data/database.json",
     "db:seed:test": "cp data/test-seed.json data/database.test.json",
