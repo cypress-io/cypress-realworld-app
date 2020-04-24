@@ -8,7 +8,13 @@ declare namespace Cypress {
     // describe new "cy" commands here
 
     task(
-      event: "fetch:testData",
+      event: "filter:testData",
+      arg?: any,
+      options?: Partial<Loggable & Timeoutable>
+    ): Chainable<Transaction[]>;
+
+    task(
+      event: "find:testData",
       arg?: any,
       options?: Partial<Loggable & Timeoutable>
     ): Chainable<Transaction>;
