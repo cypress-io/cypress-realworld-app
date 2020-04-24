@@ -72,7 +72,7 @@ export const totalNotifications = userbaseSize! * notificationsPerUser!;
 const isPayment = (type: string) => type === "payment";
 const passwordHash = bcrypt.hashSync("s3cret", 10);
 
-export const getRandomTransactions = (
+const getRandomTransactions = (
   baseCount: number,
   baseTransactions: Transaction[]
 ) =>
@@ -378,10 +378,7 @@ const createSeedLikes = (seedUsers: User[], seedTransactions: Transaction[]) =>
     })(seedUsers)
   );
 
-export const createFakeComment = (
-  userId: string,
-  transactionId: string
-): Comment => ({
+const createFakeComment = (userId: string, transactionId: string): Comment => ({
   id: shortid(),
   uuid: faker.random.uuid(),
   content: faker.lorem.words(),
