@@ -41,7 +41,6 @@ import {
   Contact,
 } from "../src/models";
 import {
-  getTransactionsForUserContacts,
   getLikesByTransactionId,
   getCommentsByTransactionId,
   TDatabase,
@@ -55,6 +54,7 @@ export const requestsPerUser = +process.env.SEED_REQUESTS_PER_USER!;
 export const bankAccountsPerUser = +process.env.SEED_BANK_ACCOUNTS_PER_USER!;
 export const likesPerUser = +process.env.SEED_LIKES_PER_USER!;
 export const commentsPerUser = +process.env.SEED_COMMENTS_PER_USER!;
+export const notificationsPerUser = +process.env.SEED_NOTIFICATIONS_PER_USER!;
 
 const paymentVariations = 3;
 const requestVariations = 4;
@@ -67,6 +67,7 @@ export const transactionsPerUser =
 export const totalTransactions = userbaseSize! * transactionsPerUser!;
 export const totalLikes = userbaseSize! * likesPerUser!;
 export const totalComments = userbaseSize! * commentsPerUser!;
+export const totalNotifications = userbaseSize! * notificationsPerUser!;
 
 const isPayment = (type: string) => type === "payment";
 const passwordHash = bcrypt.hashSync("s3cret", 10);
@@ -414,33 +415,6 @@ const createSeedComments = (
     })(seedUsers)
   );
 
-export const buildDatabase = () => {
-  const seedUsers: User[] = createSeedUsers();
-  const seedContacts: Contact[] = createSeedContacts(seedUsers);
-  const seedBankAccounts: BankAccount[] = createSeedBankAccounts(seedUsers);
-  const seedTransactions: Transaction[] = createSeedTransactions(
-    seedUsers,
-    seedBankAccounts
-  );
-  const seedLikes: Like[] = createSeedLikes(seedUsers, seedTransactions);
-  const seedComments: Comment[] = createSeedComments(
-    seedUsers,
-    seedTransactions
-  );
-
-  return {
-    users: seedUsers,
-    contacts: seedContacts,
-    bankaccounts: seedBankAccounts,
-    transactions: seedTransactions,
-    likes: seedLikes,
-    comments: seedComments,
-    notifications: [],
-    banktransfers: [],
-  };
-};
-
-/*
 const createFakePaymentNotification = (
   userId: string,
   transactionId: string
@@ -489,50 +463,91 @@ const createFakeCommentNotification = (
   modifiedAt: faker.date.recent(),
 });
 
-const seedNotifications = seedUsers.flatMap(
-  (user: User): NotificationType[] => {
-    const transactions = getTransactionsForUserContacts(user.id);
-
-    // choose random transactions
-    const randomTransactions = getRandomTransactions(5, transactions);
-
-    // get a slice of random transactions
-    const selectedTransactions = randomTransactions.slice(0, 2);
-
-    // iterate over transactions and notification
-    const transactionNotifications = selectedTransactions.map((transaction) => {
-      const likes = getLikesByTransactionId(transaction!.id);
-      const comments = getCommentsByTransactionId(transaction!.id);
-
-      let allNotifications = [];
-
-      // payment notification
-      allNotifications.push(
-        createFakePaymentNotification(user.id, transaction!.id)
+const createSeedNotifications = (
+  seedUsers: User[],
+  seedTransactions: Transaction[]
+) =>
+  flattenDeep(
+    map((user: User): NotificationType[] => {
+      const transactions = getPublicTransactionsForOtherUsers(
+        seedTransactions,
+        user.id
       );
 
-      // like notifications
-      const likeNotifications = likes.map((like: Like) =>
-        createFakeLikeNotification(user.id, transaction!.id, like!.id)
+      // choose random transactions
+      const randomTransactions = getRandomTransactions(5, transactions);
+
+      // get a slice of random transactions
+      const selectedTransactions = randomTransactions.slice(
+        0,
+        notificationsPerUser
       );
 
-      // comment notifications
-      const commentNotifications = comments.map((comment: Comment) =>
-        createFakeCommentNotification(user.id, transaction!.id, comment!.id)
+      // iterate over transactions and notification
+      const transactionNotifications = selectedTransactions.map(
+        (transaction) => {
+          const likes = getLikesByTransactionId(transaction!.id);
+          const comments = getCommentsByTransactionId(transaction!.id);
+
+          let allNotifications = [];
+
+          // payment notification
+          allNotifications.push(
+            createFakePaymentNotification(user.id, transaction!.id)
+          );
+
+          // like notifications
+          const likeNotifications = likes.map((like: Like) =>
+            createFakeLikeNotification(user.id, transaction!.id, like!.id)
+          );
+
+          // comment notifications
+          const commentNotifications = comments.map((comment: Comment) =>
+            createFakeCommentNotification(user.id, transaction!.id, comment!.id)
+          );
+
+          return [allNotifications, likeNotifications, commentNotifications];
+        }
       );
 
-      return [allNotifications, likeNotifications, commentNotifications];
-    });
+      return flattenDeep(transactionNotifications);
+    })(seedUsers)
+  );
 
-    return flattenDeep(transactionNotifications);
-  }
-);
+export const buildDatabase = () => {
+  const seedUsers: User[] = createSeedUsers();
+  const seedContacts: Contact[] = createSeedContacts(seedUsers);
+  const seedBankAccounts: BankAccount[] = createSeedBankAccounts(seedUsers);
+  const seedTransactions: Transaction[] = createSeedTransactions(
+    seedUsers,
+    seedBankAccounts
+  );
+  const seedLikes: Like[] = createSeedLikes(seedUsers, seedTransactions);
+  const seedComments: Comment[] = createSeedComments(
+    seedUsers,
+    seedTransactions
+  );
+  const seedNotifications: NotificationType[] = createSeedNotifications(
+    seedUsers,
+    seedTransactions
+  );
 
+  return {
+    users: seedUsers,
+    contacts: seedContacts,
+    bankaccounts: seedBankAccounts,
+    transactions: seedTransactions,
+    likes: seedLikes,
+    comments: seedComments,
+    notifications: seedNotifications,
+    banktransfers: [],
+  };
+};
 
 const testSeed = buildDatabase();
 
 const fileData = JSON.stringify(testSeed, null, 2);
-console.log("data:", fileData);
+//console.log("data:", fileData);
 fs.writeFile(
   path.join(process.cwd(), "data", "test-seed.json"),
   fileData,
@@ -544,5 +559,3 @@ fs.writeFile(
     console.log("test seed generated");
   }
 );
-
-*/

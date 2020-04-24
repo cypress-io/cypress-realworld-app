@@ -69,7 +69,7 @@ export type TDatabase = {
   transactions: Transaction[];
   likes: Like[];
   comments: Comment[];
-  notifications: Notification[];
+  notifications: NotificationType[];
   banktransfers: BankTransfer[];
 };
 

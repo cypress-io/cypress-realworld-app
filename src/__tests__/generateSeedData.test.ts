@@ -9,6 +9,7 @@ import {
   bankAccountsPerUser,
   totalLikes,
   totalComments,
+  totalNotifications,
 } from "../../scripts/generateSeedData";
 import { TDatabase } from "../../backend/database";
 
@@ -48,5 +49,10 @@ describe("Seed Database", () => {
   it("should contain a list of comments", () => {
     expect(database).toHaveProperty("comments");
     expect(database.comments.length).toBe(totalComments);
+  });
+
+  it("should contain a list of notifications", () => {
+    expect(database).toHaveProperty("notifications");
+    expect(database.notifications.length).toBe(totalNotifications);
   });
 });
