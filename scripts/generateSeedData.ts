@@ -38,6 +38,7 @@ import {
   assignIn,
   filter,
   isEqual,
+  flattenDepth,
 } from "lodash/fp";
 import {
   BankAccount,
@@ -65,9 +66,13 @@ import {
 } from "../backend/database";
 import { getFakeAmount } from "../src/utils/transactionUtils";
 
-const userbaseSize = process.env.SEED_USERBASE_SIZE;
-const paymentsPerUser = process.env.SEED_PAYMENTS_PER_USER;
-const requestsPerUser = process.env.SEED_REQUESTS_PER_USER;
+const userbaseSize = +process.env.SEED_USERBASE_SIZE!;
+const paymentsPerUser = +process.env.SEED_PAYMENTS_PER_USER!;
+const requestsPerUser = +process.env.SEED_REQUESTS_PER_USER!;
+const transactionsPerUser = paymentsPerUser + requestsPerUser;
+const totalTransactions = userbaseSize! * transactionsPerUser!;
+console.log("TPU: ", transactionsPerUser);
+console.log("TT: ", totalTransactions);
 
 const isPayment = (type: string) => type === "payment";
 const passwordHash = bcrypt.hashSync("s3cret", 10);
@@ -312,25 +317,29 @@ const createSeedTransactions = (
   seedUsers: User[],
   seedBankAccounts: BankAccount[]
 ) =>
-  flattenDeep(
-    map((user: User): Transaction[][] => {
+  flattenDepth(
+    2,
+    map((user: User): Transaction[] => {
       const accounts = getBankAccountsByUserId(seedBankAccounts, user.id);
-      const randomUser = getOtherRandomUser(seedUsers, user.id);
 
-      return accounts.map((account: BankAccount) => {
-        // @ts-ignore
-        const payments = times(
-          () => createPayment(account, user, randomUser),
-          paymentsPerUser
-        );
-        // @ts-ignore
-        const requests = times(
-          () => createRequest(account, user, randomUser),
-          requestsPerUser
-        );
+      return flattenDepth(
+        2,
+        map((account: BankAccount): Transaction[] => {
+          const randomUser = getOtherRandomUser(seedUsers, user.id);
+          // @ts-ignore
+          const payments = times(
+            () => createPayment(account, user, randomUser),
+            paymentsPerUser
+          );
+          // @ts-ignore
+          const requests = times(
+            () => createRequest(account, user, randomUser),
+            requestsPerUser
+          );
 
-        return concat(payments, requests);
-      });
+          return concat(payments, requests);
+        })(accounts)
+      );
     })(seedUsers)
   );
 
@@ -342,6 +351,7 @@ export const buildDatabase = () => {
     seedUsers,
     seedBankAccounts
   );
+  //console.log(seedTransactions.slice(0));
 
   return {
     users: seedUsers,
