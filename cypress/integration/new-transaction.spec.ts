@@ -1,4 +1,3 @@
-// check this file using TypeScript if available
 // @ts-check
 import Dinero from "dinero.js";
 import { User } from "../../src/models";
@@ -20,6 +19,7 @@ describe("New Transaction", function () {
     cy.route("POST", "http://localhost:3001/transactions").as(
       "createTransaction"
     );
+
     cy.route("GET", "http://localhost:3001/users").as("allUsers");
     cy.route("GET", "http://localhost:3001/notifications").as("notifications");
     cy.route("GET", "http://localhost:3001/transactions/public").as(
@@ -34,7 +34,7 @@ describe("New Transaction", function () {
       "updateTransaction"
     );
 
-    cy.fixture("users").then((users: User[]) => {
+    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
       ctx.allUsers = users;
       ctx.user = users[0];
       ctx.contact = users[1];
