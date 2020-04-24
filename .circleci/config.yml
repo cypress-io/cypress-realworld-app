@@ -6,7 +6,7 @@ workflows:
     jobs:
       - cypress/run:
           build: yarn build
-          executor: cypress/browsers:node13.6.0-chrome80-ff72
+          executor: cypress/browsers:node12.13.0-chrome78-ff70
           yarn: true
           start: yarn test:ci
           wait-on: "http://localhost:3000"
