@@ -69,7 +69,7 @@ import { getFakeAmount } from "../src/utils/transactionUtils";
 const userbaseSize = +process.env.SEED_USERBASE_SIZE!;
 const paymentsPerUser = +process.env.SEED_PAYMENTS_PER_USER!;
 const requestsPerUser = +process.env.SEED_REQUESTS_PER_USER!;
-const transactionsPerUser = paymentsPerUser + requestsPerUser;
+const transactionsPerUser = paymentsPerUser * 3 + requestsPerUser * 4;
 const totalTransactions = userbaseSize! * transactionsPerUser!;
 console.log("TPU: ", transactionsPerUser);
 console.log("TT: ", totalTransactions);
@@ -321,6 +321,7 @@ const createSeedTransactions = (
     2,
     map((user: User): Transaction[] => {
       const accounts = getBankAccountsByUserId(seedBankAccounts, user.id);
+      console.log("accounts", accounts.length);
 
       return flattenDepth(
         2,
@@ -337,7 +338,7 @@ const createSeedTransactions = (
             requestsPerUser
           );
 
-          return concat(payments, requests);
+          return flattenDeep(concat(payments, requests));
         })(accounts)
       );
     })(seedUsers)
