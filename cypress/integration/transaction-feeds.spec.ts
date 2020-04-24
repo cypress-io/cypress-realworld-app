@@ -1,24 +1,29 @@
-// check this file using TypeScript if available
 // @ts-check
 
+import { User } from "../../src/models";
+
+type TransactionFeedsCtx = {
+  allUsers?: User[];
+  user?: User;
+};
+
 describe("Transaction Feed", function () {
-  before(function () {
-    cy.fixture("users").as("users");
-    cy.get("@users").then((users) => {
-      cy.login(this.users[0].username);
-    });
-  });
+  const ctx: TransactionFeedsCtx = {};
+
   beforeEach(function () {
     cy.task("db:seed");
-    // TODO: Highlight this use case
-    Cypress.Cookies.preserveOnce("connect.sid");
+
     cy.server();
-    cy.route("GET", "/transactions/public*").as("publicTransactions");
-    cy.route("GET", "/transactions*").as("personalTransactions");
-    cy.route("GET", "/transactions/contacts*").as("contactsTransactions");
-  });
-  after(function () {
-    cy.task("db:seed");
+    cy.route("/transactions*").as("personalTransactions");
+    cy.route("/transactions/public*").as("publicTransactions");
+    cy.route("/transactions/contacts*").as("contactsTransactions");
+
+    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+      ctx.user = users[0];
+      ctx.allUsers = users;
+
+      cy.directLogin(ctx.user.username);
+    });
   });
 
   it("renders the app", function () {
@@ -34,10 +39,86 @@ describe("Transaction Feed", function () {
     cy.getTest("sidenav-user-balance").should("be.visible");
   });
 
-  it("renders everyone (public) (infinite list)", function () {
-    cy.getTest("nav-public-tab").should("have.class", "Mui-selected");
+  it.skip("renders everyone (public) (infinite list)", function () {
+    // Discussion: Should repeated assertions like this be wrapped up in commands
+    cy.getTest("nav-public-tab")
+      .should("have.class", "Mui-selected")
+      .contains("everyone", { matchCase: false })
+      .should("have.css", { "text-transform": "uppercase" });
+
+    // Assert at the network layer
+    // TODO: make 10 an importable constant
+    cy.wait("@publicTransactions")
+      .its("response.body.results")
+      .should("have.length", 10);
 
     cy.getTestLike("transaction-item").should("have.length", 8);
+
+    cy.getTest("transaction-list").children().scrollTo("bottom");
+
+    cy.wait("@publicTransactions")
+      .its("response.body")
+      .then(({ results, pageData }) => {
+        expect(results).have.length(10);
+        expect(pageData.page).to.equal(2);
+      });
+
+    // TODO: asserting network call count
+    // cy.wait("@publicTransactions").should("have.callCount", 2);
+    // cy.wait("@publicTransactions").should("be.calledTwice");
+  });
+
+  it.skip("renders everyone (public) (infinite list)", function () {
+    // Options for Testing Paginated views
+    // - Assert at the network layer
+    // - Assert at the UI layer
+    // - Assert internal state
+
+    // Discussion: Should repeated assertions like this be wrapped up in commands
+    cy.getTest("nav-public-tab")
+      .should("have.class", "Mui-selected")
+      .contains("everyone", { matchCase: false })
+      .should("have.css", { "text-transform": "uppercase" });
+
+    // Assert at the network layer
+    cy.wait("@publicTransactions")
+      .its("response.body")
+      .then(({ results, pageData }) => {
+        // TODO: use satisfy assertion
+        if (pageData.totalPages > 1) {
+          expect(results).to.have.lengthOf(10);
+        } else {
+          expect(results).to.have.at.least(10);
+        }
+
+        expect(pageData.page).to.equal(1);
+
+        Array.from({ length: pageData.totalPages }, (v, pageIndex) => {
+          const currentPage = pageIndex + 2;
+
+          cy.getTest("transaction-list").children().scrollTo("bottom");
+          cy.getTest("transaction-loading").should("be.visible");
+
+          if (currentPage < pageData.totalPages) {
+            cy.wait("@publicTransactions")
+              .its("response.body.results")
+              .then(({ results, pageData }) => {
+                expect(pageData.page).to.equal(currentPage);
+
+                if (pageData.page < pageData.totalPages) {
+                  expect(results).to.have.lengthOf(10); // this runs first because it's sync
+                  return cy
+                    .getTest("transaction-loading")
+                    .should("not.be.visible");
+                }
+
+                expect(results.length).to.be.at.least(1);
+              });
+          }
+        });
+      });
+
+    cy.getTestLike("transaction-item").should("have.length", 10);
   });
 
   it("renders friends (contacts) transaction feed  (infinite list)", function () {
@@ -143,16 +224,14 @@ describe("Transaction Feed", function () {
   });
 
   it("renders mine (personal) transaction feed, filters by date range, then shows empty state", function () {
-    cy.getTest("nav-personal-tab")
-      .click({ force: true })
-      .should("have.class", "Mui-selected");
+    cy.getTest("nav-personal-tab").click().should("have.class", "Mui-selected");
 
     cy.getTest("transaction-list-filter-date-range-button")
       .scrollIntoView()
       .click({ force: true });
 
     cy.get("[data-date='2020-02-01']").click({ force: true });
-    cy.get("[data-date='2020-02-03']").click({ force: true });
+    cy.get("[data-date='2020-02-02']").click({ force: true });
 
     cy.wait("@personalTransactions");
 
