@@ -66,13 +66,21 @@ import {
 } from "../backend/database";
 import { getFakeAmount } from "../src/utils/transactionUtils";
 
-const userbaseSize = +process.env.SEED_USERBASE_SIZE!;
-const paymentsPerUser = +process.env.SEED_PAYMENTS_PER_USER!;
-const requestsPerUser = +process.env.SEED_REQUESTS_PER_USER!;
-const transactionsPerUser = paymentsPerUser * 3 + requestsPerUser * 4;
-const totalTransactions = userbaseSize! * transactionsPerUser!;
-console.log("TPU: ", transactionsPerUser);
-console.log("TT: ", totalTransactions);
+export const userbaseSize = +process.env.SEED_USERBASE_SIZE!;
+export const contactsPerUser = +process.env.SEED_CONTACTS_PER_USER!;
+export const paymentsPerUser = +process.env.SEED_PAYMENTS_PER_USER!;
+export const requestsPerUser = +process.env.SEED_REQUESTS_PER_USER!;
+export const bankAccountsPerUser = +process.env.SEED_BANK_ACCOUNTS_PER_USER!;
+
+const paymentVariations = 3;
+const requestVariations = 4;
+// transactions per user = paymentsPerUser * paymentVariations * sender/receiver(2)
+// +
+// requestsPerUser * requestVariations * sender/receiver(2)
+export const transactionsPerUser =
+  paymentsPerUser * paymentVariations * 2 +
+  requestsPerUser * requestVariations * 2;
+export const totalTransactions = userbaseSize! * transactionsPerUser!;
 
 const isPayment = (type: string) => type === "payment";
 const passwordHash = bcrypt.hashSync("s3cret", 10);
@@ -126,7 +134,7 @@ const getOtherRandomUser = curry(
 );
 
 const randomContactsForUser = curry((seedUsers: User[], user: User) =>
-  times(() => getOtherRandomUser(seedUsers, user.id), 3)
+  times(() => getOtherRandomUser(seedUsers, user.id), contactsPerUser)
 );
 const generateRandomContactsForUser = (seedUsers: User[]) =>
   map((user: User) => ({
@@ -321,7 +329,6 @@ const createSeedTransactions = (
     2,
     map((user: User): Transaction[] => {
       const accounts = getBankAccountsByUserId(seedBankAccounts, user.id);
-      console.log("accounts", accounts.length);
 
       return flattenDepth(
         2,
@@ -352,7 +359,6 @@ export const buildDatabase = () => {
     seedUsers,
     seedBankAccounts
   );
-  //console.log(seedTransactions.slice(0));
 
   return {
     users: seedUsers,
