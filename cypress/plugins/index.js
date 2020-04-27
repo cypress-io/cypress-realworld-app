@@ -1,4 +1,4 @@
-const cypressTypeScriptPreprocessor = require("./cy-ts-preprocessor");
+// const cypressTypeScriptPreprocessor = require("./cy-ts-preprocessor");
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
@@ -6,7 +6,7 @@ const { find, filter } = require("lodash/fp");
 const axios = require("axios").default;
 
 module.exports = (on, config) => {
-  on("file:preprocessor", cypressTypeScriptPreprocessor);
+  // on("file:preprocessor", cypressTypeScriptPreprocessor);
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
   on("task", {
