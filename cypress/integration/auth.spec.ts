@@ -6,26 +6,33 @@ describe("User Sign-up and Login", function () {
     cy.task("db:seed");
 
     cy.server();
-    cy.route("POST", "http://localhost:3001/bankAccounts").as(
-      "createBankAccount"
-    );
-    cy.route("POST", "http://localhost:3001/login").as("login");
+    cy.route("POST", "/login").as("login");
+    cy.route("POST", "/users").as("signup");
+    cy.route("POST", "/bankAccounts").as("createBankAccount");
   });
 
-  it("should allow a visitor to sign-up, login, and logout", function () {
+  it.only("should allow a visitor to sign-up, login, and logout", function () {
+    const userInfo = {
+      firstName: "Bob",
+      lastName: "Ross",
+      username: "PainterJoy90",
+      password: "s3cret",
+    };
+
     // Sign-up User
-    cy.visit("/signup");
-    cy.getTest("signup-first-name").type("First");
-    cy.getTest("signup-last-name").type("Last");
-    cy.getTest("signup-username").type("Username");
-    cy.getTest("signup-password").type("password");
-    cy.getTest("signup-confirmPassword").type("password");
+    cy.visit("/");
+    cy.getTest("signup").click();
+
+    cy.getTest("signup-first-name").type(userInfo.firstName);
+    cy.getTest("signup-last-name").type(userInfo.lastName);
+    cy.getTest("signup-username").type(userInfo.username);
+    cy.getTest("signup-password").type(userInfo.password);
+    cy.getTest("signup-confirmPassword").type(userInfo.password);
     cy.getTest("signup-submit").click();
+    cy.wait("@signup");
 
     // Login User
-    cy.getTest("signin-username").type("Username");
-    cy.getTest("signin-password").type("password");
-    cy.getTest("signin-submit").click();
+    cy.login(userInfo.username, userInfo.password);
 
     // Onboarding
     cy.getTest("user-onboarding-dialog").should("be.visible");
@@ -62,12 +69,13 @@ describe("User Sign-up and Login", function () {
 
     cy.task("find:testData", { entity: "users" }).then((user: User) => {
       // Login User
-      cy.getTest("signin-username").type(user.username);
-      cy.getTest("signin-password").type("s3cret");
-      cy.getTest("signin-remember-me").find("input").check();
-      cy.getTest("signin-submit").click();
+      // cy.getTest("signin-username").type(user.username);
+      // cy.getTest("signin-password").type("s3cret");
+      // cy.getTest("signin-remember-me").find("input").check();
+      // cy.getTest("signin-submit").click();
 
-      cy.wait("@login");
+      // cy.wait("@login");
+      cy.login(user.username, "s3cret", true);
     });
 
     // Verify Session Cookie
