@@ -3,7 +3,7 @@
 
 import { pick } from "lodash/fp";
 
-const defaultPassword = "s3cret";
+const defaultPassword = Cypress.env("defaultPassword");
 
 Cypress.Commands.add("login", (username, password, rememberUser = false) => {
   const signinPath = "/signin";
