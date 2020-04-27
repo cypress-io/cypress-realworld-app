@@ -15,7 +15,8 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
   });
 
   cy.server();
-  cy.route("POST", "/login").as("login");
+  cy.route("POST", "/login").as("loginUser");
+  cy.route("GET", "checkAuth").as("getUserProfile");
 
   cy.location("pathname", { log: false }).then((currentPath) => {
     if (currentPath !== signinPath) {
@@ -23,7 +24,7 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
     }
   });
 
-  log.snapshot("before");
+  // log.snapshot("before");
 
   cy.getTest("signin-username").type(username);
   cy.getTest("signin-password").type(password);
@@ -33,10 +34,23 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
   }
 
   cy.getTest("signin-submit").click();
-  cy.wait("@login");
+  cy.wait(["@loginUser", "@getUserProfile"]).spread(
+    (loginUser, getUserProfile) => {
+      log.set({
+        consoleProps() {
+          return {
+            username,
+            password,
+            rememberUser,
+            userId: getUserProfile.response.body.user.id,
+          };
+        },
+      });
+    }
+  );
 
-  log.snapshot("after");
-  log.end();
+  // log.snapshot("after");
+  // log.end();
 });
 
 Cypress.Commands.add("loginByApi", (username, password = defaultPassword) => {
