@@ -96,5 +96,15 @@ Cypress.Commands.add("createTransaction", (payload) => {
     });
 });
 
+Cypress.Commands.add("nextTransactionFeedPage", (service, page) => {
+  return cy
+    .window()
+    .its(service)
+    .then((service) => {
+      // @ts-ignore
+      return service.send("FETCH", { page });
+    });
+});
+
 Cypress.Commands.add("getTest", (s) => cy.get(`[data-test=${s}]`));
 Cypress.Commands.add("getTestLike", (s) => cy.get(`[data-test*=${s}]`));

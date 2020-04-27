@@ -42,7 +42,9 @@ declare namespace Cypress {
     /**
      * Create Transaction bypassing UI
      */
-    createTransaction(payload): void;
+    createTransaction(payload): Chainable<any>;
+
+    nextTransactionFeedPage(service: string, page: number): Chainable<any>;
 
     getTest(dataTestAttribute: string): Chainable<Element>;
     getTestLike(dataTestPrefixAttribute: string): Chainable<Element>;
