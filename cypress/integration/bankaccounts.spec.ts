@@ -22,7 +22,7 @@ describe("Bank Accounts", function () {
     cy.task("find:testData", { entity: "users" }).then((user: User) => {
       ctx.user = user;
 
-      return cy.directLogin(ctx.user.username);
+      return cy.loginByXstate(ctx.user.username);
     });
   });
 

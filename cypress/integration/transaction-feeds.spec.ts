@@ -22,7 +22,7 @@ describe("Transaction Feed", function () {
       ctx.user = users[0];
       ctx.allUsers = users;
 
-      cy.directLogin(ctx.user.username);
+      cy.loginByXstate(ctx.user.username);
     });
   });
 

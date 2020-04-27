@@ -3,48 +3,62 @@
 
 import { pick } from "lodash/fp";
 
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+const defaultPassword = "s3cret";
 
-Cypress.Commands.add("apiLogin", (username, password = "s3cret") => {
+Cypress.Commands.add("login", (username, password, rememberUser = false) => {
+  const signinPath = "/signin";
+  const log = Cypress.log({
+    name: "login",
+    displayName: "LOGIN",
+    // @ts-ignore
+    message: `🔐 Authenticating | ${username}`,
+  });
+
+  cy.server();
+  cy.route("POST", "/login").as("login");
+
+  cy.location("pathname", { log: false }).then((currentPath) => {
+    if (currentPath !== signinPath) {
+      cy.visit(signinPath);
+    }
+  });
+
+  log.snapshot("before");
+
+  cy.getTest("signin-username").type(username);
+  cy.getTest("signin-password").type(password);
+
+  if (rememberUser) {
+    cy.getTest("signin-remember-me").find("input").check();
+  }
+
+  cy.getTest("signin-submit").click();
+  cy.wait("@login");
+
+  log.snapshot("after");
+  log.end();
+});
+
+Cypress.Commands.add("loginByApi", (username, password = defaultPassword) => {
   return cy.request("POST", `${Cypress.env("apiUrl")}/login`, {
     username,
     password,
   });
 });
 
-Cypress.Commands.add("directLogin", (username, password = "s3cret") => {
-  cy.visit("/signin");
-  return cy
-    .window()
-    .its("authService")
-    .invoke("send", ["LOGIN", { username, password }]);
-});
+Cypress.Commands.add(
+  "loginByXstate",
+  (username, password = defaultPassword) => {
+    cy.visit("/signin");
 
-Cypress.Commands.add("directLogout", () => {
+    return cy
+      .window()
+      .its("authService")
+      .invoke("send", ["LOGIN", { username, password }]);
+  }
+);
+
+Cypress.Commands.add("logoutByXstate", () => {
   return cy.window().its("authService").invoke("send", ["LOGOUT"]);
 });
 
@@ -70,13 +84,3 @@ Cypress.Commands.add("createTransaction", (payload) => {
 
 Cypress.Commands.add("getTest", (s) => cy.get(`[data-test=${s}]`));
 Cypress.Commands.add("getTestLike", (s) => cy.get(`[data-test*=${s}]`));
-
-Cypress.Commands.add("login", (username, password = "s3cret") => {
-  cy.visit("/signin");
-
-  cy.getTest("signin-username").type(username);
-
-  cy.getTest("signin-password").type(password);
-
-  cy.getTest("signin-submit").click();
-});

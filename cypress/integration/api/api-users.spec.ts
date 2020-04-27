@@ -13,7 +13,7 @@ describe("Users API", function () {
     cy.get("@users").then((users) => {
       this.currentUser = this.users[0];
       this.searchUser = this.users[1];
-      cy.apiLogin(this.users[0].username);
+      cy.loginByApi(this.users[0].username);
     });
   });
 
@@ -177,7 +177,7 @@ describe("Users API", function () {
 
   context("POST /login", function () {
     it("login as user", function () {
-      cy.apiLogin(this.currentUser.username).then((response) => {
+      cy.loginByApi(this.currentUser.username).then((response) => {
         expect(response.status).to.eq(200);
       });
     });

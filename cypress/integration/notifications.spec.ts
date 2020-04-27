@@ -13,7 +13,7 @@ describe.skip("Notifications", function () {
     );
 
     cy.task("find:testData", { entity: "users" }).then((user: User) => {
-      cy.directLogin(user.username);
+      cy.loginByXstate(user.username);
     });
   });
 

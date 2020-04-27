@@ -39,7 +39,7 @@ describe("New Transaction", function () {
       ctx.user = users[0];
       ctx.contact = users[1];
 
-      return cy.directLogin(ctx.user.username);
+      return cy.loginByXstate(ctx.user.username);
     });
   });
 
@@ -125,10 +125,10 @@ describe("New Transaction", function () {
     cy.createTransaction(transactionPayload);
     cy.wait("@createTransaction");
 
-    cy.directLogout();
+    cy.logoutByXstate();
     cy.wait("@logout");
 
-    cy.directLogin(ctx.contact!.username);
+    cy.loginByXstate(ctx.contact!.username);
 
     const newContactBalance = Dinero({
       amount: ctx.contact!.balance + transactionPayload.amount * 100,
@@ -151,10 +151,10 @@ describe("New Transaction", function () {
     cy.createTransaction(transactionPayload);
     cy.wait("@createTransaction");
 
-    cy.directLogout();
+    cy.logoutByXstate();
     cy.wait("@logout");
 
-    cy.directLogin(ctx.contact!.username);
+    cy.loginByXstate(ctx.contact!.username);
 
     cy.getTest("nav-personal-tab").click();
     cy.getTestLike("transaction-item")
@@ -164,10 +164,10 @@ describe("New Transaction", function () {
     cy.getTestLike("accept-request").click();
     cy.wait("@updateTransaction").its("status").should("equal", 204);
 
-    cy.directLogout();
+    cy.logoutByXstate();
     cy.wait("@logout");
 
-    cy.directLogin(ctx.user!.username);
+    cy.loginByXstate(ctx.user!.username);
     cy.getTest("sidenav-user-balance").should(
       "contain",
       Dinero({
