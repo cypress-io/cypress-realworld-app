@@ -1,47 +1,50 @@
 // check this file using TypeScript if available
 // @ts-check
 
+import { User, Comment } from "../../../src/models";
+
 const apiComments = `${Cypress.env("apiUrl")}/comments`;
 
+type TestCommentsCtx = {
+  allUsers?: User[];
+  authenticatedUser?: User;
+  transactionId?: string;
+};
+
 describe("Comments API", function () {
-  before(function () {
-    //cy.task("db:reset");
-    cy.task("db:seed");
-    // TODO: Refactor
-    // hacks/experiements
-    cy.fixture("users").as("users");
-    cy.fixture("transactions").as("transactions");
-    cy.get("@users").then((user) => (this.currentUser = this.users[0]));
-    cy.get("@transactions").then(
-      (transactions) => (this.transactions = transactions)
-    );
-  });
+  let ctx: TestCommentsCtx = {};
 
   beforeEach(function () {
-    const { username } = this.currentUser;
-    cy.apiLogin(username);
-  });
-
-  afterEach(function () {
     cy.task("db:seed");
+
+    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+      ctx.authenticatedUser = users[0];
+      ctx.allUsers = users;
+
+      return cy.apiLogin(ctx.authenticatedUser.username);
+    });
+
+    cy.task("filter:testData", {
+      entity: "comments",
+    }).then((comments: Comment[]) => {
+      ctx.transactionId = comments[0].transactionId;
+    });
   });
 
   context("GET /comments/:transactionId", function () {
     it("gets a list of comments for a transaction", function () {
-      const transaction = this.transactions[0];
-
-      cy.request("GET", `${apiComments}/${transaction.id}`).then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body.comments.length).to.eq(3);
-      });
+      cy.request("GET", `${apiComments}/${ctx.transactionId}`).then(
+        (response) => {
+          expect(response.status).to.eq(200);
+          expect(response.body.comments.length).to.eq(1);
+        }
+      );
     });
   });
 
   context("POST /comments/:transactionId", function () {
     it("creates a new comment for a transaction", function () {
-      const transaction = this.transactions[0];
-
-      cy.request("POST", `${apiComments}/${transaction.id}`, {
+      cy.request("POST", `${apiComments}/${ctx.transactionId}`, {
         content: "This is my comment",
       }).then((response) => {
         expect(response.status).to.eq(200);
