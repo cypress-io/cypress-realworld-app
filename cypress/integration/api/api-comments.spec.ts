@@ -6,7 +6,6 @@ import { User, Comment } from "../../../src/models";
 const apiComments = `${Cypress.env("apiUrl")}/comments`;
 
 type TestCommentsCtx = {
-  allUsers?: User[];
   authenticatedUser?: User;
   transactionId?: string;
 };
@@ -19,15 +18,14 @@ describe("Comments API", function () {
 
     cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
       ctx.authenticatedUser = users[0];
-      ctx.allUsers = users;
 
       return cy.apiLogin(ctx.authenticatedUser.username);
     });
 
-    cy.task("filter:testData", {
+    cy.task("find:testData", {
       entity: "comments",
-    }).then((comments: Comment[]) => {
-      ctx.transactionId = comments[0].transactionId;
+    }).then((comment: Comment) => {
+      ctx.transactionId = comment.transactionId;
     });
   });
 
