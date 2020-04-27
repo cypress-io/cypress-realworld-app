@@ -52,6 +52,7 @@ export const bankAccountsPerUser = +process.env.SEED_BANK_ACCOUNTS_PER_USER!;
 export const likesPerUser = +process.env.SEED_LIKES_PER_USER!;
 export const commentsPerUser = +process.env.SEED_COMMENTS_PER_USER!;
 export const notificationsPerUser = +process.env.SEED_NOTIFICATIONS_PER_USER!;
+export const defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD!;
 
 export const paymentVariations = 3;
 export const requestVariations = 4;
@@ -68,7 +69,7 @@ export const totalNotifications = userbaseSize! * notificationsPerUser!;
 export const totalContacts = userbaseSize! * contactsPerUser!;
 
 export const isPayment = (type: string) => type === "payment";
-export const passwordHash = bcrypt.hashSync("s3cret", 10);
+export const passwordHash = bcrypt.hashSync(defaultPassword, 10);
 
 export const getRandomTransactions = (
   baseCount: number,
