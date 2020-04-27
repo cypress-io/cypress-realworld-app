@@ -6,12 +6,24 @@ describe("User Sign-up and Login", function () {
     cy.task("db:seed");
 
     cy.server();
-    cy.route("POST", "/login").as("login");
     cy.route("POST", "/users").as("signup");
     cy.route("POST", "/bankAccounts").as("createBankAccount");
   });
 
-  it.only("should allow a visitor to sign-up, login, and logout", function () {
+  it("should remember a user for 30 days after login", function () {
+    cy.task("find:testData", { entity: "users" }).then((user: User) => {
+      cy.login(user.username, "s3cret", true);
+    });
+
+    // Verify Session Cookie
+    cy.getCookie("connect.sid").should("have.property", "expiry");
+
+    // Logout User
+    cy.getTest("sidenav-signout").click();
+    cy.location("pathname").should("eq", "/");
+  });
+
+  it("should allow a visitor to sign-up, login, and logout", function () {
     const userInfo = {
       firstName: "Bob",
       lastName: "Ross",
@@ -58,28 +70,6 @@ describe("User Sign-up and Login", function () {
     cy.getTest("user-onboarding-next").click();
 
     cy.getTest("transaction-list").should("be.visible");
-
-    // Logout User
-    cy.getTest("sidenav-signout").click();
-    cy.location("pathname").should("eq", "/");
-  });
-
-  it("should remember a user for 30 days after login", function () {
-    cy.visit("/");
-
-    cy.task("find:testData", { entity: "users" }).then((user: User) => {
-      // Login User
-      // cy.getTest("signin-username").type(user.username);
-      // cy.getTest("signin-password").type("s3cret");
-      // cy.getTest("signin-remember-me").find("input").check();
-      // cy.getTest("signin-submit").click();
-
-      // cy.wait("@login");
-      cy.login(user.username, "s3cret", true);
-    });
-
-    // Verify Session Cookie
-    cy.getCookie("connect.sid").should("have.property", "expiry");
 
     // Logout User
     cy.getTest("sidenav-signout").click();
