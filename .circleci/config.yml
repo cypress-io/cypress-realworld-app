@@ -11,8 +11,6 @@ workflows:
           start: yarn test:ci
           wait-on: "http://localhost:3000"
           record: true
-          parallel: true
-          parallelism: 2
           post-steps:
             # run jest tests
             - run: yarn test:unit
