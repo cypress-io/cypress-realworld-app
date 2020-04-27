@@ -51,8 +51,8 @@ describe("Bank Accounts", function () {
     cy.getTestLike("list-item").children().contains("Deleted");
   });
 
-  // TODO: this test is actually super interesting. Need to discuss various approaches
-  it("renders an empty bank account list state", function () {
+  // TODO: the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
+  it("renders an empty bank account list state with onboarding modal", function () {
     cy.route("GET", "http://localhost:3001/bankAccounts", []);
     cy.getTest("sidenav-bankaccounts").click({ force: true });
     cy.getTest("bankaccount-list").should("not.be.visible");
