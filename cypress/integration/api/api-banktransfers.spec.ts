@@ -1,31 +1,33 @@
 // check this file using TypeScript if available
 // @ts-check
 
+import { User } from "../../../src/models";
+
 const apiBankTransfer = `${Cypress.env("apiUrl")}/bankTransfers`;
 
-describe("Bank Transfer API", function () {
-  before(function () {
-    cy.task("db:seed");
-    cy.fixture("users").as("users");
-    cy.get("@users").then((user) => (this.currentUser = this.users[0]));
-  });
+type TestBankTransferCtx = {
+  authenticatedUser?: User;
+};
+
+describe.skip("Bank Transfer API", function () {
+  let ctx: TestBankTransferCtx = {};
 
   beforeEach(function () {
-    const { username } = this.currentUser;
-    cy.apiLogin(username);
-  });
-
-  afterEach(function () {
-    //cy.task("db:reset");
     cy.task("db:seed");
+
+    cy.task("find:testData", { entity: "users" }).then((user: User) => {
+      ctx.authenticatedUser = user;
+
+      return cy.apiLogin(ctx.authenticatedUser.username);
+    });
   });
 
   context("GET /bankTransfer", function () {
     it("gets a list of bank transfers for user", function () {
-      const { id } = this.currentUser;
+      const { id: userId } = ctx.authenticatedUser!;
       cy.request("GET", `${apiBankTransfer}`).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.transfers[0].userId).to.eq(id);
+        expect(response.body.transfers[0].userId).to.eq(userId);
       });
     });
   });
