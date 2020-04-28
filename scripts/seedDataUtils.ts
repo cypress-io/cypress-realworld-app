@@ -69,11 +69,7 @@ export const totalNotifications = userbaseSize! * notificationsPerUser!;
 export const totalContacts = userbaseSize! * contactsPerUser!;
 
 export const isPayment = (type: string) => type === "payment";
-<<<<<<< HEAD
-export const passwordHash = bcrypt.hashSync("s3cret", 10);
-=======
 export const passwordHash = bcrypt.hashSync(defaultPassword, 10);
->>>>>>> test-refactors
 
 export const getRandomTransactions = (
   baseCount: number,
