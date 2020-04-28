@@ -18,7 +18,7 @@ describe.skip("Bank Transfer API", function () {
     cy.task("find:testData", { entity: "users" }).then((user: User) => {
       ctx.authenticatedUser = user;
 
-      return cy.apiLogin(ctx.authenticatedUser.username);
+      return cy.loginByApi(ctx.authenticatedUser.username);
     });
   });
 

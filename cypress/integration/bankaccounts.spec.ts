@@ -1,16 +1,16 @@
-// check this file using TypeScript if available
 // @ts-check
+import { User } from "../../src/models";
+
+type BankAccountsTestCtx = {
+  user?: User;
+};
 
 describe("Bank Accounts", function () {
-  before(function () {
-    cy.fixture("users").as("users");
-    cy.get("@users").then((users) => {
-      cy.login(this.users[0].username);
-    });
-  });
+  const ctx: BankAccountsTestCtx = {};
+
   beforeEach(function () {
     cy.task("db:seed");
-    Cypress.Cookies.preserveOnce("connect.sid");
+
     cy.server();
     cy.route("POST", "http://localhost:3001/bankAccounts").as(
       "createBankAccount"
@@ -18,52 +18,45 @@ describe("Bank Accounts", function () {
     cy.route("DELETE", "http://localhost:3001/bankAccounts/*").as(
       "deleteBankAccount"
     );
-    cy.route("GET", "http://localhost:3001/bankAccounts").as("bankAccounts");
-    cy.fixture("users").as("users");
-  });
-  after(function () {
-    cy.task("db:seed");
-  });
 
-  it("renders a list of bank accounts for the user", function () {
-    cy.getTest("sidenav-bankaccounts").click();
+    cy.task("find:testData", { entity: "users" }).then((user: User) => {
+      ctx.user = user;
 
-    cy.wait("@bankAccounts");
-    cy.getTestLike("bankaccount-list-item").should("have.length", 1);
-  });
-
-  it.skip("soft deletes a bank account", function () {
-    cy.getTestLike("bankaccount-delete").first().click();
-
-    cy.wait("@deleteBankAccount").should("have.property", "status", 200);
-    cy.wait("@bankAccounts");
-
-    cy.getTestLike("bankaccount-list-item").children().contains("Deleted");
+      return cy.loginByXstate(ctx.user.username);
+    });
   });
 
   it("creates a new bank account", function () {
-    cy.getTest("bankaccount-list").should("be.visible");
+    cy.getTest("sidenav-bankaccounts").click();
+
     cy.getTest("bankaccount-new").click();
     cy.location("pathname").should("be", "/bankaccounts/new");
 
-    cy.getTest("bankaccount-form").should("be.visible");
+    cy.getTestLike("bankName-input").type("The Best Bank");
+    cy.getTestLike("accountNumber-input").type("123456789");
+    cy.getTestLike("routingNumber-input").type("987654321");
+    cy.getTestLike("submit").click();
 
-    cy.getTest("bankaccount-bankName-input").type("The Best Bank");
-    cy.getTest("bankaccount-accountNumber-input").type("123456789");
-    cy.getTest("bankaccount-routingNumber-input").type("987654321");
-    cy.getTest("bankaccount-submit").click();
+    cy.wait("@createBankAccount");
 
-    cy.wait("@createBankAccount").should("have.property", "status", 200);
-
-    cy.getTestLike("bankaccount-list-item").should("contain", "The Best Bank");
+    cy.getTestLike("bankaccount-list-item")
+      .should("have.length", 2)
+      .eq(1)
+      .should("contain", "The Best Bank");
   });
 
-  it.skip("renders an empty bank account list state", function () {
-    // TODO: does not work per https://github.com/cypress-io/cypress/issues/3890
-    // Overwrite default bank account response
-    // cy.route("http://localhost:3001/bankAccounts", []).as("bankAccounts");
-    cy.getTest("nav-top-notifications-count").click();
+  it("soft deletes a bank account", function () {
+    cy.getTest("sidenav-bankaccounts").click();
+    cy.getTestLike("delete").first().click();
+    cy.getTestLike("list-item").children().contains("Deleted");
+  });
+
+  // TODO: the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
+  it("renders an empty bank account list state with onboarding modal", function () {
+    cy.route("GET", "http://localhost:3001/bankAccounts", []);
+    cy.getTest("sidenav-bankaccounts").click({ force: true });
     cy.getTest("bankaccount-list").should("not.be.visible");
     cy.getTest("empty-list-header").should("contain", "No Bank Accounts");
+    cy.getTest("user-onboarding-dialog").should("be.visible");
   });
 });

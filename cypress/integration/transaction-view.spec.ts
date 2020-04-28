@@ -37,7 +37,7 @@ describe("Transaction View", function () {
     cy.task("find:testData", { entity: "users" }).then((user: User) => {
       ctx.authenticatedUser = user;
 
-      cy.directLogin(ctx.authenticatedUser.username);
+      cy.loginByXstate(ctx.authenticatedUser.username);
       cy.wait("@loginUser");
 
       cy.task("find:testData", {

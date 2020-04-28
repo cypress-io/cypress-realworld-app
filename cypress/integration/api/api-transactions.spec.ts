@@ -26,7 +26,7 @@ describe("Transactions API", function () {
 
   beforeEach(function () {
     const { username } = this.currentUser;
-    cy.apiLogin(username);
+    cy.loginByApi(username);
   });
 
   afterEach(function () {

@@ -26,7 +26,7 @@ describe("Notifications API", function () {
     cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
       ctx.authenticatedUser = users[0];
 
-      return cy.apiLogin(ctx.authenticatedUser.username);
+      return cy.loginByApi(ctx.authenticatedUser.username);
     });
 
     cy.task("find:testData", {

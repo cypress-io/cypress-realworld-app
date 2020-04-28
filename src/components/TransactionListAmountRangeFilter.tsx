@@ -95,6 +95,12 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
     setAmountRangeValue(amountRange as number[]);
   };
 
+  // @ts-ignore
+  if (window.Cypress) {
+    // @ts-ignore
+    window.handleAmountRangeChange = handleAmountRangeChange;
+  }
+
   const amountRangeOpen = Boolean(amountRangeAnchorEl);
   const amountRangeId = amountRangeOpen ? "amount-range-popover" : undefined;
 

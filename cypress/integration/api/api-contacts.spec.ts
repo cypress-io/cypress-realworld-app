@@ -20,7 +20,7 @@ describe("Contacts API", function () {
       ctx.authenticatedUser = users[0];
       ctx.allUsers = users;
 
-      return cy.apiLogin(ctx.authenticatedUser.username);
+      return cy.loginByApi(ctx.authenticatedUser.username);
     });
 
     cy.task("find:testData", {

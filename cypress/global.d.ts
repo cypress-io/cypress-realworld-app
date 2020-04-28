@@ -20,29 +20,33 @@ declare namespace Cypress {
     ): Chainable<Transaction>;
 
     /**
-     * Logs in using API request
-     */
-    apiLogin(username: string, password?: string): Chainable<Response>;
-
-    /**
      * Logs in using user interface
      */
-    login(username: string, password?: string): void;
+    login(username: string, password: string, rememberUser?: boolean): void;
+
+    /**
+     * Logs in using API request
+     */
+    loginByApi(username: string, password?: string): Chainable<Response>;
 
     /**
      * Logs in bypassing UI
      */
-    directLogin(username: string, password?: string): void;
+    loginByXstate(username: string, password?: string): Chainable<any>;
 
     /**
      * Logs out bypassing UI
      */
-    directLogout(): void;
+    logoutByXstate(): Chainable<void>;
 
     /**
      * Create Transaction bypassing UI
      */
-    createTransaction(payload): void;
+    createTransaction(payload): Chainable<any>;
+
+    nextTransactionFeedPage(service: string, page: number): Chainable<any>;
+
+    pickDateRange(startDate: Date, endDate: Date): Chainable<void>;
 
     getTest(dataTestAttribute: string): Chainable<Element>;
     getTestLike(dataTestPrefixAttribute: string): Chainable<Element>;

@@ -39,13 +39,17 @@ describe("New Transaction", function () {
       ctx.user = users[0];
       ctx.contact = users[1];
 
-      return cy.directLogin(ctx.user.username);
+      return cy.loginByXstate(ctx.user.username);
     });
   });
 
   it("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
-    cy.wait(["@userProfile", "@notifications", "@publicTransactions"]);
-    cy.getTest("nav-top-new-transaction").click();
+    const payment = {
+      amount: "35",
+      description: "Sushi dinner 🍣",
+    };
+
+    cy.getTestLike("new-transaction").click();
 
     // Wait for users to be fetched for contact selection
     // Not waiting on a dependent network request can lead to flake
@@ -60,11 +64,10 @@ describe("New Transaction", function () {
 
     cy.getTestLike("user-list-item").contains(ctx.contact!.firstName).click();
 
-    cy.getTest("transaction-create-amount-input").type("35");
-    cy.getTest("transaction-create-description-input").type("Indian Food");
-    cy.getTest("transaction-create-submit-payment").click();
-
-    cy.wait("@createTransaction").should("have.property", "status", 200);
+    cy.getTestLike("amount-input").type(payment.amount);
+    cy.getTestLike("description-input").type(payment.description);
+    cy.getTestLike("submit-payment").click();
+    cy.wait("@createTransaction");
 
     cy.task("find:testData", {
       entity: "users",
@@ -78,97 +81,99 @@ describe("New Transaction", function () {
     });
 
     cy.getTest("app-name-logo").find("a").click();
-
     cy.getTest("nav-personal-tab").click().should("have.class", "Mui-selected");
-
     cy.wait("@personalTransactions");
 
-    cy.getTest("transaction-list").first().should("contain", "Indian Food");
+    cy.getTest("transaction-list")
+      .first()
+      .should("contain", payment.description);
   });
 
-  it("submits a transaction payment and verifies the deposit for the receiver", function () {
-    cy.wait(["@userProfile", "@notifications", "@publicTransactions"]);
-    cy.getTest("nav-top-new-transaction").click();
+  it("navigates to the new transaction form, selects a user and submits a transaction request", function () {
+    const request = {
+      amount: "95",
+      description: "Fancy Hotel 🏨",
+    };
 
-    cy.createTransaction({
-      transactionType: "payment",
-      amount: "25",
-      description: "Indian Food",
-      sender: ctx.user,
-      receiver: ctx.contact,
-    });
-
-    cy.wait("@createTransaction");
-    cy.directLogout();
-    cy.wait("@logout");
-
-    // @ts-ignore
-    cy.directLogin(ctx.contact.username);
-
-    cy.getTest("sidenav-user-balance").should(
-      "contain",
-      // @ts-ignore
-      Dinero({ amount: ctx.contact.balance + 25 * 100 }).toFormat()
-    );
-  });
-
-  it("submits a transaction request and accepts the request for the receiver", function () {
-    cy.wait(["@userProfile", "@notifications", "@publicTransactions"]);
-    cy.getTest("nav-top-new-transaction").click();
-
-    cy.createTransaction({
-      transactionType: "request",
-      amount: "100",
-      description: "Fancy Hotel",
-      sender: ctx.user,
-      receiver: ctx.contact,
-    });
-
-    cy.wait("@createTransaction");
-    cy.directLogout();
-    cy.wait("@logout");
-
-    // @ts-ignore
-    cy.directLogin(ctx.contact.username);
-
-    cy.getTest("nav-personal-tab").click();
-    cy.getTestLike("transaction-item")
-      .should("contain", "Fancy Hotel")
-      .click({ multiple: true, force: true });
-
-    cy.getTestLike(`transaction-accept-request`).click();
-    cy.wait("@updateTransaction").should("have.property", "status", 204);
-
-    cy.directLogout();
-    cy.wait("@logout");
-
-    // @ts-ignore
-    cy.directLogin(ctx.user.username);
-    cy.getTest("sidenav-user-balance").should(
-      "contain",
-      // @ts-ignore
-      Dinero({ amount: ctx.user.balance + 100 * 100 }).toFormat()
-    );
-  });
-
-  it("selects a user and submits a transaction request", function () {
     cy.getTestLike("new-transaction").click();
-
     cy.wait("@allUsers");
 
     cy.getTestLike("user-list-item").contains(ctx.contact!.firstName).click();
-    cy.getTest("transaction-create-form").should("be.visible");
 
-    cy.getTestLike("amount-input").type("95");
-    cy.getTestLike("description-input").type("Fancy Hotel");
+    cy.getTestLike("amount-input").type(request.amount);
+    cy.getTestLike("description-input").type(request.description);
     cy.getTestLike("submit-request").click();
-
-    cy.wait("@createTransaction").its("status").should("equal", 200);
+    cy.wait("@createTransaction");
 
     cy.getTestLike("return-to-transactions").click();
     cy.getTest("nav-personal-tab").click().should("have.class", "Mui-selected");
 
-    cy.getTestLike("transaction-item").should("contain", "Fancy Hotel");
+    cy.getTestLike("transaction-item").should("contain", request.description);
+  });
+
+  it("submits a transaction payment and verifies the deposit for the receiver", function () {
+    cy.getTest("nav-top-new-transaction").click();
+
+    const transactionPayload = {
+      transactionType: "payment",
+      amount: 25,
+      description: "Indian Food",
+      sender: ctx.user,
+      receiver: ctx.contact,
+    };
+
+    cy.createTransaction(transactionPayload);
+    cy.wait("@createTransaction");
+
+    cy.logoutByXstate();
+    cy.wait("@logout");
+
+    cy.loginByXstate(ctx.contact!.username);
+
+    const newContactBalance = Dinero({
+      amount: ctx.contact!.balance + transactionPayload.amount * 100,
+    }).toFormat();
+
+    cy.getTest("sidenav-user-balance").should("contain", newContactBalance);
+  });
+
+  it("submits a transaction request and accepts the request for the receiver", function () {
+    cy.getTestLike("new-transaction").click();
+
+    const transactionPayload = {
+      transactionType: "request",
+      amount: 100,
+      description: "Fancy Hotel",
+      sender: ctx.user,
+      receiver: ctx.contact,
+    };
+
+    cy.createTransaction(transactionPayload);
+    cy.wait("@createTransaction");
+
+    cy.logoutByXstate();
+    cy.wait("@logout");
+
+    cy.loginByXstate(ctx.contact!.username);
+
+    cy.getTest("nav-personal-tab").click();
+    cy.getTestLike("transaction-item")
+      .contains(transactionPayload.description)
+      .click({ force: true });
+
+    cy.getTestLike("accept-request").click();
+    cy.wait("@updateTransaction").its("status").should("equal", 204);
+
+    cy.logoutByXstate();
+    cy.wait("@logout");
+
+    cy.loginByXstate(ctx.user!.username);
+    cy.getTest("sidenav-user-balance").should(
+      "contain",
+      Dinero({
+        amount: ctx.user!.balance + transactionPayload.amount * 100,
+      }).toFormat()
+    );
   });
 
   it("searches for a user by attributes", function () {
@@ -192,8 +197,7 @@ describe("New Transaction", function () {
         .first()
         .contains(targetUser[attr] as string);
 
-      // cy.getTest("user-list-search-input").clear({ force: true });
-      cy.getTest("user-list-search-input").type("{selectall}{backspace}");
+      cy.focused().clear();
     });
   });
 });

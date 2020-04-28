@@ -1,5 +1,3 @@
-//require("dotenv").config();
-
 import express from "express";
 import path from "path";
 import logger from "morgan";
@@ -19,6 +17,8 @@ import commentRoutes from "./comment-routes";
 import notificationRoutes from "./notification-routes";
 import bankTransferRoutes from "./banktransfer-routes";
 import testDataRoutes from "./testdata-routes";
+
+require("dotenv").config();
 
 const corsOption = {
   origin: "http://localhost:3000",
@@ -43,7 +43,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(paginate.middleware(10, 50));
+app.use(paginate.middleware(+process.env.PAGINATION_PAGE_SIZE!));
 
 app.use(auth);
 app.use("/users", userRoutes);
