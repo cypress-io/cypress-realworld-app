@@ -160,6 +160,9 @@ describe("Transaction Feed", function () {
             expect(
               isWithinRange(createdAt, dateRangeStart, dateRangeEnd)
             ).to.equal(true);
+
+            // Fixme: using chai-datetime plugin results in "TypeError: date.getFullYear is not a function"
+            // expect(createdAt).to.be.withinDate(dateRangeStart, dateRangeEnd);
           });
         });
 
