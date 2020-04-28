@@ -9,7 +9,7 @@ type TestBankTransferCtx = {
   authenticatedUser?: User;
 };
 
-describe.skip("Bank Transfer API", function () {
+describe("Bank Transfer API", function () {
   let ctx: TestBankTransferCtx = {};
 
   beforeEach(function () {
