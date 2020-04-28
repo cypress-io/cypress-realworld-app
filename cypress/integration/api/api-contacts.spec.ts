@@ -1,33 +1,38 @@
 // check this file using TypeScript if available
 // @ts-check
 
+import { User, Contact } from "../../../src/models";
+
 const apiContacts = `${Cypress.env("apiUrl")}/contacts`;
 
+type TestContactsCtx = {
+  allUsers?: User[];
+  authenticatedUser?: User;
+  contact?: Contact;
+};
 describe("Contacts API", function () {
-  before(function () {
-    //cy.task("db:reset");
-    cy.task("db:seed");
-    // TODO: Refactor
-    // hacks/experiements
-    cy.fixture("users").as("users");
-    cy.fixture("contacts").as("contacts");
-    cy.get("@users").then((user) => (this.currentUser = this.users[0]));
-    cy.get("@contacts").then((contacts) => (this.contacts = contacts));
-  });
+  let ctx: TestContactsCtx = {};
 
   beforeEach(function () {
-    const { username } = this.currentUser;
-    cy.loginByApi(username);
-  });
-
-  afterEach(function () {
-    //cy.task("db:reset");
     cy.task("db:seed");
+
+    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+      ctx.authenticatedUser = users[0];
+      ctx.allUsers = users;
+
+      return cy.loginByApi(ctx.authenticatedUser.username);
+    });
+
+    cy.task("find:testData", {
+      entity: "contacts",
+    }).then((contact: Contact) => {
+      ctx.contact = contact;
+    });
   });
 
   context("GET /contacts/:username", function () {
     it("gets a list of contacts by username", function () {
-      const { username } = this.currentUser;
+      const { username } = ctx.authenticatedUser!;
       cy.request("GET", `${apiContacts}/${username}`).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.contacts[0]).to.have.property("userId");
@@ -37,15 +42,14 @@ describe("Contacts API", function () {
 
   context("POST /contacts", function () {
     it("creates a new contact", function () {
-      const { id } = this.currentUser;
-      const contact = this.contacts[0];
+      const { id: userId } = ctx.authenticatedUser!;
 
       cy.request("POST", `${apiContacts}`, {
-        contactUserId: contact.id,
+        contactUserId: ctx.contact!.id,
       }).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.contact.id).to.be.a("string");
-        expect(response.body.contact.userId).to.eq(id);
+        expect(response.body.contact.userId).to.eq(userId);
       });
     });
 
@@ -65,11 +69,11 @@ describe("Contacts API", function () {
   });
   context("DELETE /contacts/:contactId", function () {
     it("deletes a contact", function () {
-      const contact = this.contacts[0];
-
-      cy.request("DELETE", `${apiContacts}/${contact.id}`).then((response) => {
-        expect(response.status).to.eq(200);
-      });
+      cy.request("DELETE", `${apiContacts}/${ctx.contact!.id}`).then(
+        (response) => {
+          expect(response.status).to.eq(200);
+        }
+      );
     });
   });
 });

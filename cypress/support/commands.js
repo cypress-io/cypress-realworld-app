@@ -68,12 +68,15 @@ Cypress.Commands.add("loginByApi", (username, password = defaultPassword) => {
 Cypress.Commands.add(
   "loginByXstate",
   (username, password = defaultPassword) => {
+    cy.server();
+    cy.route("POST", "/login").as("loginUser");
     cy.visit("/signin");
 
-    return cy
-      .window()
+    cy.window()
       .its("authService")
       .invoke("send", ["LOGIN", { username, password }]);
+
+    return cy.wait("@loginUser");
   }
 );
 

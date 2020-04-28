@@ -1,85 +1,101 @@
 // check this file using TypeScript if available
 // @ts-check
-
+import {
+  User,
+  NotificationType,
+  Like,
+  Comment,
+  Transaction,
+} from "../../../src/models";
 const apiNotifications = `${Cypress.env("apiUrl")}/notifications`;
 
+type TestNotificationsCtx = {
+  authenticatedUser?: User;
+  transactionId?: string;
+  notificationId?: string;
+  likeId?: string;
+  commentId?: string;
+};
+
 describe("Notifications API", function () {
-  before(function () {
-    //cy.task("db:reset");
-    cy.task("db:seed");
-    // TODO: Refactor
-    // hacks/experiements
-    cy.fixture("users").as("users");
-    cy.fixture("transactions").as("transactions");
-    cy.fixture("likes").as("likes");
-    cy.fixture("comments").as("comments");
-    cy.fixture("notifications").as("notifications");
-    cy.get("@users").then((users) => (this.currentUser = users[0]));
-    cy.get("@likes").then((likes) => (this.likes = likes));
-    cy.get("@comments").then((comments) => (this.comments = comments));
-    cy.get("@transactions").then(
-      (transactions) => (this.transactions = transactions)
-    );
-    cy.get("@notifications").then(
-      (notifications) => (this.notifications = notifications)
-    );
-  });
+  let ctx: TestNotificationsCtx = {};
 
   beforeEach(function () {
-    const { username } = this.currentUser;
-    cy.loginByApi(username);
-  });
-
-  afterEach(function () {
     cy.task("db:seed");
+
+    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+      ctx.authenticatedUser = users[0];
+
+      return cy.loginByApi(ctx.authenticatedUser.username);
+    });
+
+    cy.task("find:testData", {
+      entity: "transactions",
+    }).then((transaction: Transaction) => {
+      ctx.transactionId = transaction.id;
+    });
+
+    cy.task("find:testData", {
+      entity: "notifications",
+    }).then((notification: NotificationType) => {
+      ctx.notificationId = notification.id;
+    });
+
+    cy.task("find:testData", {
+      entity: "likes",
+    }).then((like: Like) => {
+      ctx.likeId = like.transactionId;
+    });
+
+    cy.task("find:testData", {
+      entity: "comments",
+    }).then((comment: Comment) => {
+      ctx.commentId = comment.transactionId;
+    });
   });
 
   context("GET /notifications", function () {
     it("gets a list of notifications for a user", function () {
       cy.request("GET", `${apiNotifications}`).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.results.length).to.eq(6);
+        expect(response.body.results.length).to.be.greaterThan(0);
       });
     });
   });
 
   context("POST /notifications", function () {
     it("creates notifications for transaction, like and comment", function () {
-      const transaction = this.transactions[0];
-      const like = this.likes[0];
-      const comment = this.comments[0];
-
       cy.request("POST", `${apiNotifications}/bulk`, {
         items: [
           {
             type: "payment",
-            transactionId: transaction.id,
+            transactionId: ctx.transactionId,
             status: "received",
           },
           {
             type: "like",
-            transactionId: transaction.id,
-            likeId: like.id,
+            transactionId: ctx.transactionId,
+            likeId: ctx.likeId,
           },
           {
             type: "comment",
-            transactionId: transaction.id,
-            commentId: comment.id,
+            transactionId: ctx.transactionId,
+            commentId: ctx.commentId,
           },
         ],
       }).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.results.length).to.equal(3);
-        expect(response.body.results[0].transactionId).to.equal(transaction.id);
+        expect(response.body.results[0].transactionId).to.equal(
+          ctx.transactionId
+        );
       });
     });
   });
 
   context("PATCH /notifications/:notificationId", function () {
     it("updates a notification", function () {
-      const notification = this.notifications[0];
-
-      cy.request("PATCH", `${apiNotifications}/${notification.id}`, {
+      cy.request("PATCH", `${apiNotifications}/${ctx.notificationId}`, {
         isRead: true,
       }).then((response) => {
         expect(response.status).to.eq(204);
@@ -87,14 +103,12 @@ describe("Notifications API", function () {
     });
 
     it("error when invalid field sent", function () {
-      const notification = this.notifications[0];
-
       cy.request({
         method: "PATCH",
-        url: `${apiNotifications}/${notification.id}`,
+        url: `${apiNotifications}/${ctx.notificationId}`,
         failOnStatusCode: false,
         body: {
-          notAUserField: "not a user field",
+          notANotificationField: "not a notification field",
         },
       }).then((response) => {
         expect(response.status).to.eq(422);

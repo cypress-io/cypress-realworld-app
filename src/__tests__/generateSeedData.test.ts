@@ -7,6 +7,7 @@ import {
   totalLikes,
   totalComments,
   totalNotifications,
+  totalBankTransfers,
 } from "../../scripts/seedDataUtils";
 import { TDatabase } from "../../backend/database";
 
@@ -51,5 +52,10 @@ describe("Seed Database", () => {
   it("should contain a list of notifications", () => {
     expect(database).toHaveProperty("notifications");
     expect(database.notifications.length).toBe(totalNotifications);
+  });
+
+  it("should contain a list of bank transfers", () => {
+    expect(database).toHaveProperty("banktransfers");
+    expect(database.banktransfers.length).toBe(totalBankTransfers);
   });
 });

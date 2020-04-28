@@ -2,49 +2,71 @@
 // @ts-check
 
 import faker from "faker";
-const getFakeAmount = () => parseInt(faker.finance.amount(), 10);
 
+import {
+  User,
+  NotificationType,
+  Transaction,
+  BankAccount,
+} from "../../../src/models";
+import { isEqual } from "lodash/fp";
+
+type TestTransactionsCtx = {
+  authenticatedUser?: User;
+  receiver?: User;
+  transactionId?: string;
+  notificationId?: string;
+  bankAccountId?: string;
+};
+
+const getFakeAmount = () => parseInt(faker.finance.amount(), 10);
 const apiTransactions = `${Cypress.env("apiUrl")}/transactions`;
 
 describe("Transactions API", function () {
-  before(function () {
-    //cy.task("db:reset");
-    cy.task("db:seed");
-    // TODO: Refactor
-    // hacks/experiements
-    cy.fixture("users").as("users");
-    cy.fixture("contacts").as("contacts");
-    cy.fixture("bankAccounts").as("bankAccounts");
-    cy.fixture("transactions").as("transactions");
-    cy.get("@users").then((user) => (this.currentUser = this.users[0]));
-    cy.get("@contacts").then((contacts) => (this.contacts = contacts));
-    cy.get("@bankAccounts").then((accounts) => (this.bankAccounts = accounts));
-    cy.get("@transactions").then(
-      (transactions) => (this.transactions = transactions)
-    );
-  });
+  let ctx: TestTransactionsCtx = {};
+
+  const isSenderOrReceiver = ({ senderId, receiverId }: Transaction) =>
+    isEqual(senderId, ctx.authenticatedUser!.id) ||
+    isEqual(receiverId, ctx.authenticatedUser!.id);
 
   beforeEach(function () {
-    const { username } = this.currentUser;
-    cy.loginByApi(username);
-  });
-
-  afterEach(function () {
-    //cy.task("db:reset");
     cy.task("db:seed");
+
+    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+      ctx.authenticatedUser = users[0];
+      ctx.receiver = users[1];
+
+      return cy.loginByApi(ctx.authenticatedUser.username);
+    });
+
+    cy.task("find:testData", {
+      entity: "transactions",
+    }).then((transaction: Transaction) => {
+      ctx.transactionId = transaction.id;
+    });
+
+    cy.task("find:testData", {
+      entity: "notifications",
+    }).then((notification: NotificationType) => {
+      ctx.notificationId = notification.id;
+    });
+
+    cy.task("find:testData", {
+      entity: "bankaccounts",
+    }).then((bankaccount: BankAccount) => {
+      ctx.bankAccountId = bankaccount.id;
+    });
   });
 
   context("GET /transactions", function () {
     it("gets a list of transactions for user (default)", function () {
-      const { id } = this.currentUser;
       cy.request("GET", `${apiTransactions}`).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.results[2].senderId).to.eq(id);
+        expect(response.body.results[0]).to.satisfy(isSenderOrReceiver);
       });
     });
 
     it("gets a list of pending request transactions for user", function () {
-      const { id } = this.currentUser;
       cy.request({
         method: "GET",
         url: `${apiTransactions}`,
@@ -53,23 +75,22 @@ describe("Transactions API", function () {
         },
       }).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.results[0].receiverId).to.eq(id);
+        expect(response.body.results[0]).to.satisfy(isSenderOrReceiver);
       });
     });
 
     it("gets a list of pending request transactions for user between a time range", function () {
-      const { id } = this.currentUser;
       cy.request({
         method: "GET",
         url: `${apiTransactions}`,
         qs: {
           requestStatus: "pending",
-          dateRangeStart: new Date("Dec 01 2019"),
-          dateRangeEnd: new Date("Dec 05 2019"),
+          dateRangeStart: new Date("Jan 01 2018"),
+          dateRangeEnd: new Date("Dec 05 2030"),
         },
       }).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.results.length).to.eq(1);
+        expect(response.body.results[0]).to.satisfy(isSenderOrReceiver);
       });
     });
   });
@@ -78,7 +99,7 @@ describe("Transactions API", function () {
     it("gets a list of transactions for users list of contacts, page one", function () {
       cy.request("GET", `${apiTransactions}/contacts`).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.results.length).to.eq(10);
+        expect(response.body.results).length.to.be.greaterThan(1);
       });
     });
 
@@ -86,7 +107,7 @@ describe("Transactions API", function () {
       cy.request("GET", `${apiTransactions}/contacts?page=2`).then(
         (response) => {
           expect(response.status).to.eq(200);
-          expect(response.body.results.length).to.eq(7);
+          expect(response.body.results).length.to.be.greaterThan(1);
         }
       );
     });
@@ -100,7 +121,7 @@ describe("Transactions API", function () {
         },
       }).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.results.length).to.eq(3);
+        expect(response.body.results).length.to.be.greaterThan(1);
       });
     });
   });
@@ -109,42 +130,38 @@ describe("Transactions API", function () {
     it("gets a list of public transactions", function () {
       cy.request("GET", `${apiTransactions}/public`).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.results.length).to.eq(8);
+        expect(response.body.results).length.to.be.greaterThan(1);
       });
     });
   });
 
   context("POST /transactions", function () {
     it("creates a new payment", function () {
-      const sender = this.currentUser;
-      const receiver = this.users[1];
-      const senderBankAccount = this.bankAccounts[0];
-
       cy.request("POST", `${apiTransactions}`, {
         transactionType: "payment",
-        source: senderBankAccount.id,
-        receiverId: receiver.id,
-        description: `Payment: ${sender.id} to ${receiver.id}`,
+        source: ctx.bankAccountId,
+        receiverId: ctx.receiver!.id,
+        description: `Payment: ${ctx.authenticatedUser!.id} to ${
+          ctx.receiver!.id
+        }`,
         amount: getFakeAmount(),
         privacyLevel: "public",
       }).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.transaction.id).to.be.a("string");
-        expect(response.body.transaction.status).to.eq("pending");
+        expect(response.body.transaction.status).to.eq("complete");
         expect(response.body.transaction.requestStatus).to.eq(undefined);
       });
     });
 
     it("creates a new request", function () {
-      const sender = this.currentUser;
-      const receiver = this.users[1];
-      const senderBankAccount = this.bankAccounts[0];
-
       cy.request("POST", `${apiTransactions}`, {
         transactionType: "request",
-        source: senderBankAccount.id,
-        receiverId: receiver.id,
-        description: `Request: ${sender.id} from ${receiver.id}`,
+        source: ctx.bankAccountId,
+        receiverId: ctx.receiver!.id,
+        description: `Request: ${ctx.authenticatedUser!.id} from ${
+          ctx.receiver!.id
+        }`,
         amount: getFakeAmount(),
         privacyLevel: "public",
       }).then((response) => {
@@ -158,9 +175,7 @@ describe("Transactions API", function () {
 
   context("PATCH /transactions/:transactionId", function () {
     it("updates a transaction", function () {
-      const transaction = this.transactions[0];
-
-      cy.request("PATCH", `${apiTransactions}/${transaction.id}`, {
+      cy.request("PATCH", `${apiTransactions}/${ctx.transactionId}`, {
         requestStatus: "rejected",
       }).then((response) => {
         expect(response.status).to.eq(204);
@@ -168,14 +183,12 @@ describe("Transactions API", function () {
     });
 
     it("error when invalid field sent", function () {
-      const transaction = this.transactions[0];
-
       cy.request({
         method: "PATCH",
-        url: `${apiTransactions}/${transaction.id}`,
+        url: `${apiTransactions}/${ctx.transactionId}`,
         failOnStatusCode: false,
         body: {
-          notAUserField: "not a user field",
+          notATransactionField: "not a transaction field",
         },
       }).then((response) => {
         expect(response.status).to.eq(422);

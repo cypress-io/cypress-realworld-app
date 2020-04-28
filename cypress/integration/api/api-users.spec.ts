@@ -2,42 +2,44 @@
 // @ts-check
 
 import faker from "faker";
+import { User } from "../../../src/models";
 
 const apiUsers = `${Cypress.env("apiUrl")}/users`;
 
+type TestUserCtx = {
+  authenticatedUser?: User;
+};
+
 describe("Users API", function () {
+  let ctx: TestUserCtx = {};
+
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.fixture("users").as("users");
-    cy.get("@users").then((users) => {
-      this.currentUser = this.users[0];
-      this.searchUser = this.users[1];
-      cy.loginByApi(this.users[0].username);
-    });
-  });
+    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+      ctx.authenticatedUser = users[0];
 
-  afterEach(function () {
-    cy.task("db:seed");
+      return cy.loginByApi(ctx.authenticatedUser.username);
+    });
   });
 
   context("GET /users", function () {
     it("gets a list of users", function () {
       cy.request("GET", apiUsers).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.results.length).to.eq(9);
+        expect(response.body.results).length.to.be.greaterThan(1);
       });
     });
   });
 
   context("GET /users/:userId", function () {
     it("get a user", function () {
-      const { id } = this.currentUser;
-
-      cy.request("GET", `${apiUsers}/${id}`).then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body.user).to.have.property("firstName");
-      });
+      cy.request("GET", `${apiUsers}/${ctx.authenticatedUser!.id}`).then(
+        (response) => {
+          expect(response.status).to.eq(200);
+          expect(response.body.user).to.have.property("firstName");
+        }
+      );
     });
 
     it("error when invalid userId", function () {
@@ -54,7 +56,7 @@ describe("Users API", function () {
 
   context("GET /users/profile/:username", function () {
     it("get a user profile by username", function () {
-      const { username, firstName, lastName, avatar } = this.currentUser;
+      const { username, firstName, lastName, avatar } = ctx.authenticatedUser!;
       cy.request("GET", `${apiUsers}/profile/${username}`).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.user).to.deep.equal({
@@ -69,21 +71,21 @@ describe("Users API", function () {
 
   context("GET /users/search", function () {
     it("get users by email", function () {
-      const { email, firstName } = this.searchUser;
+      const { email, firstName } = ctx.authenticatedUser!;
       cy.request({
         method: "GET",
         url: `${apiUsers}/search`,
         qs: { q: email },
       }).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.results[0]).to.contain({
+        expect(response.body.results).to.contain({
           firstName: firstName,
         });
       });
     });
 
     it("get users by phone number", function () {
-      const { firstName } = this.searchUser;
+      const { firstName } = ctx.authenticatedUser!;
 
       cy.request({
         method: "GET",
@@ -98,7 +100,7 @@ describe("Users API", function () {
     });
 
     it("get users by username", function () {
-      const { username, firstName } = this.searchUser;
+      const { username, firstName } = ctx.authenticatedUser!;
 
       cy.request({
         method: "GET",
@@ -149,9 +151,8 @@ describe("Users API", function () {
   context("PATCH /users/:userId", function () {
     it("updates a user", function () {
       const firstName = faker.name.firstName();
-      const { id } = this.currentUser;
 
-      cy.request("PATCH", `${apiUsers}/${id}`, {
+      cy.request("PATCH", `${apiUsers}/${ctx.authenticatedUser!.id}`, {
         firstName,
       }).then((response) => {
         expect(response.status).to.eq(204);
@@ -159,11 +160,9 @@ describe("Users API", function () {
     });
 
     it("error when invalid field sent", function () {
-      const { id } = this.currentUser;
-
       cy.request({
         method: "PATCH",
-        url: `${apiUsers}/${id}`,
+        url: `${apiUsers}/${ctx.authenticatedUser!.id}`,
         failOnStatusCode: false,
         body: {
           notAUserField: "not a user field",
@@ -177,7 +176,7 @@ describe("Users API", function () {
 
   context("POST /login", function () {
     it("login as user", function () {
-      cy.loginByApi(this.currentUser.username).then((response) => {
+      cy.loginByApi(ctx.authenticatedUser!.username).then((response) => {
         expect(response.status).to.eq(200);
       });
     });

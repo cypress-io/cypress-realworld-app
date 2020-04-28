@@ -1,36 +1,37 @@
 // check this file using TypeScript if available
 // @ts-check
 
+import { User, Like } from "../../../src/models";
+
 const apiLikes = `${Cypress.env("apiUrl")}/likes`;
 
+type TestLikesCtx = {
+  authenticatedUser?: User;
+  transactionId?: string;
+};
+
 describe("Likes API", function () {
-  before(function () {
-    //cy.task("db:reset");
-    cy.task("db:seed");
-    // TODO: Refactor
-    // hacks/experiements
-    cy.fixture("users").as("users");
-    cy.fixture("transactions").as("transactions");
-    cy.get("@users").then((user) => (this.currentUser = this.users[0]));
-    cy.get("@transactions").then(
-      (transactions) => (this.transactions = transactions)
-    );
-  });
+  let ctx: TestLikesCtx = {};
 
   beforeEach(function () {
-    const { username } = this.currentUser;
-    cy.loginByApi(username);
-  });
-
-  afterEach(function () {
     cy.task("db:seed");
+
+    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+      ctx.authenticatedUser = users[0];
+
+      return cy.loginByApi(ctx.authenticatedUser.username);
+    });
+
+    cy.task("find:testData", {
+      entity: "likes",
+    }).then((like: Like) => {
+      ctx.transactionId = like.transactionId;
+    });
   });
 
   context("GET /likes/:transactionId", function () {
     it("gets a list of likes for a transaction", function () {
-      const transaction = this.transactions[0];
-
-      cy.request("GET", `${apiLikes}/${transaction.id}`).then((response) => {
+      cy.request("GET", `${apiLikes}/${ctx.transactionId}`).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.likes.length).to.eq(1);
       });
@@ -39,10 +40,8 @@ describe("Likes API", function () {
 
   context("POST /likes/:transactionId", function () {
     it("creates a new like for a transaction", function () {
-      const transaction = this.transactions[0];
-
-      cy.request("POST", `${apiLikes}/${transaction.id}`, {
-        transactionId: transaction.id,
+      cy.request("POST", `${apiLikes}/${ctx.transactionId}`, {
+        transactionId: ctx.transactionId,
       }).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.like.id).to.be.a("string");
