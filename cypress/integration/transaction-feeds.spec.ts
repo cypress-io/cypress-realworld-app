@@ -163,9 +163,14 @@ describe("Transaction Feed", function () {
           });
         });
 
-      // cy.getTest("transaction-list-filter-date-clear-button").click({
-      //   force: true,
-      // });
+      cy.getTestLike("filter-date-clear-button").click({ force: true });
+
+      // @ts-ignore
+      cy.get("@unfilteredResults").then((unfilteredResults: Transaction[]) => {
+        cy.wait("@personalTransactions")
+          .its("response.body.results")
+          .should("deep.equal", unfilteredResults);
+      });
     });
   });
 
