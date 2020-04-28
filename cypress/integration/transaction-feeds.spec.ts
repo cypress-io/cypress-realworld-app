@@ -27,181 +27,192 @@ describe("Transaction Feed", function () {
     });
   });
 
-  it("renders the app", function () {
-    cy.getTest("app-name-logo").should("be.visible");
-  });
-
-  it("defaults side navigation to closed (mobile)", function () {
-    cy.viewport("iphone-6");
-    cy.getTest("sidenav-user-balance").should("not.be.visible");
-  });
-
-  it("defaults side navigation to open (desktop)", function () {
-    cy.getTest("sidenav-user-balance").should("be.visible");
-  });
-
-  const feedViews = [
-    {
-      tab: "nav-public-tab",
-      tabLabel: "everyone",
-      routeAlias: "publicTransactions",
-      service: "publicTransactionService",
-    },
-    {
-      tab: "nav-contacts-tab",
-      tabLabel: "friends",
-      routeAlias: "contactsTransactions",
-      service: "contactTransactionService",
-    },
-    {
-      tab: "nav-personal-tab",
-      tabLabel: "mine",
-      routeAlias: "personalTransactions",
-      service: "personalTransactionService",
-    },
-  ];
-
-  feedViews.forEach((feed) => {
-    it(`renders ${feed.tabLabel} transaction feed (infinite list)`, function () {
-      cy.getTest(feed.tab)
-        .click()
-        .should("have.class", "Mui-selected")
-        .contains(feed.tabLabel, { matchCase: false })
-        .should("have.css", { "text-transform": "uppercase" });
-
-      // Assert at the network layer
-      cy.wait(`@${feed.routeAlias}`)
-        .its("response.body.results")
-        .should("have.length", Cypress.env("paginationPageSize"));
-
-      // Assert visible UI
-      cy.getTestLike("transaction-item").should("have.length", 8);
-
-      // Scroll to paginate to next page
-      cy.getTest("transaction-list").children().scrollTo("bottom");
-
-      // TODO: Flakey assertion, seems to only fail for personal tab
-      cy.getTest("transaction-loading").should("be.visible");
-
-      cy.wait(`@${feed.routeAlias}`)
-        .its("response.body")
-        .then(({ results, pageData }) => {
-          expect(results).have.length(Cypress.env("paginationPageSize"));
-          expect(pageData.page).to.equal(2);
-          // @ts-ignore
-          cy.nextTransactionFeedPage(feed.service, pageData.totalPages);
-        });
-
-      cy.wait(`@${feed.routeAlias}`)
-        .its("response.body")
-        .then(({ results, pageData }) => {
-          expect(results).to.have.length.greaterThan(1);
-          expect(pageData.page).to.equal(pageData.totalPages);
-          expect(pageData.hasNextPages).to.equal(false);
-        });
+  // TODO: temporary placement
+  describe("ancillary tests", function () {
+    it("defaults side navigation to closed (mobile)", function () {
+      cy.viewport("iphone-6");
+      cy.getTest("sidenav-user-balance").should("not.be.visible");
     });
-  });
 
-  it("shows date range calendar full screen on mobile", function () {
-    cy.viewport("iphone-6");
+    it("defaults side navigation to open (desktop)", function () {
+      cy.getTest("sidenav-user-balance").should("be.visible");
+    });
 
-    cy.getTest("nav-personal-tab").click().should("have.class", "Mui-selected");
+    it("shows amount range in drawer on mobile", function () {
+      cy.viewport("iphone-6");
 
-    cy.getTestLike("filter-date-range-button")
-      .scrollIntoView()
-      .click({ force: true });
+      cy.getTest("nav-personal-tab")
+        .click()
+        .should("have.class", "Mui-selected");
+      cy.getTestLike("filter-amount-range-button").click({ force: true });
+      cy.getTest("amount-range-filter-drawer").should("be.visible");
+      cy.getTest("amount-range-filter-drawer-close").click();
+    });
 
-    cy.getTest("date-range-filter-drawer").should("be.visible");
-
-    // Potential Cypress Bug:
-    // This is a potential bug with two overlapping fixed elements
-    // https://github.com/cypress-io/cypress/issues/1242
-    // https://github.com/cypress-io/cypress/issues/5959
-    // cy.getTest("app-name-logo").should("not.be.visible");
-
-    cy.getTest("date-range-filter-drawer-close").click();
-  });
-
-  it("shows amount range in drawer on mobile", function () {
-    cy.viewport("iphone-6");
-
-    cy.getTest("nav-personal-tab").click().should("have.class", "Mui-selected");
-    cy.getTestLike("filter-amount-range-button").click({ force: true });
-    cy.getTest("amount-range-filter-drawer").should("be.visible");
-    cy.getTest("amount-range-filter-drawer-close").click();
-  });
-
-  it("renders mine (personal) transaction feed, filters by date range, then clears the date range filter", function () {
-    cy.task("find:testData", {
-      entity: "transactions",
-    }).then((transaction: Transaction) => {
-      const dateRangeStart = new Date(transaction.createdAt);
-      const dateRangeEnd = addDays(dateRangeStart, 1);
+    it("shows date range calendar full screen on mobile", function () {
+      cy.viewport("iphone-6");
 
       cy.getTest("nav-personal-tab")
         .click()
         .should("have.class", "Mui-selected");
 
-      cy.wait("@personalTransactions")
-        .its("response.body.results")
-        .as("unfilteredResults");
+      cy.getTestLike("filter-date-range-button")
+        .scrollIntoView()
+        .click({ force: true });
 
-      cy.pickDateRange(dateRangeStart, dateRangeEnd);
+      cy.getTest("date-range-filter-drawer").should("be.visible");
 
-      cy.wait("@personalTransactions")
-        .its("response.body.results")
-        .then((transactions: Transaction[]) => {
-          cy.getTestLike("transaction-item").should(
-            "have.length",
-            transactions.length
-          );
+      // Potential Cypress Bug:
+      // This is a potential bug with two overlapping fixed elements
+      // https://github.com/cypress-io/cypress/issues/1242
+      // https://github.com/cypress-io/cypress/issues/5959
+      // cy.getTest("app-name-logo").should("not.be.visible");
 
-          transactions.forEach(({ createdAt }) => {
-            expect(
-              isWithinRange(createdAt, dateRangeStart, dateRangeEnd)
-            ).to.equal(true);
+      cy.getTest("date-range-filter-drawer-close").click();
+    });
+  });
 
-            // Fixme: using chai-datetime plugin results in "TypeError: date.getFullYear is not a function"
-            // expect(createdAt).to.be.withinDate(dateRangeStart, dateRangeEnd);
+  describe("renders and paginates all transaction feeds", function () {
+    const feedViews = [
+      {
+        tab: "nav-public-tab",
+        tabLabel: "everyone",
+        routeAlias: "publicTransactions",
+        service: "publicTransactionService",
+      },
+      {
+        tab: "nav-contacts-tab",
+        tabLabel: "friends",
+        routeAlias: "contactsTransactions",
+        service: "contactTransactionService",
+      },
+      {
+        tab: "nav-personal-tab",
+        tabLabel: "mine",
+        routeAlias: "personalTransactions",
+        service: "personalTransactionService",
+      },
+    ];
+
+    feedViews.forEach((feed) => {
+      it(`renders and paginates ${feed.tabLabel} transaction feed`, function () {
+        cy.getTest(feed.tab)
+          .click()
+          .should("have.class", "Mui-selected")
+          .contains(feed.tabLabel, { matchCase: false })
+          .should("have.css", { "text-transform": "uppercase" });
+
+        // Assert at the network layer
+        cy.wait(`@${feed.routeAlias}`)
+          .its("response.body.results")
+          .should("have.length", Cypress.env("paginationPageSize"));
+
+        // Assert visible UI
+        cy.getTestLike("transaction-item").should("have.length", 8);
+
+        // Scroll to paginate to next page
+        cy.getTest("transaction-list").children().scrollTo("bottom");
+
+        // TODO: Flakey assertion, seems to only fail for personal tab
+        cy.getTest("transaction-loading").should("be.visible");
+
+        cy.wait(`@${feed.routeAlias}`)
+          .its("response.body")
+          .then(({ results, pageData }) => {
+            expect(results).have.length(Cypress.env("paginationPageSize"));
+            expect(pageData.page).to.equal(2);
+            // @ts-ignore
+            cy.nextTransactionFeedPage(feed.service, pageData.totalPages);
           });
-        });
 
-      cy.getTestLike("filter-date-clear-button").click({ force: true });
+        cy.wait(`@${feed.routeAlias}`)
+          .its("response.body")
+          .then(({ results, pageData }) => {
+            expect(results).to.have.length.greaterThan(1);
+            expect(pageData.page).to.equal(pageData.totalPages);
+            expect(pageData.hasNextPages).to.equal(false);
+          });
+      });
+    });
+  });
 
-      // @ts-ignore
-      cy.get("@unfilteredResults").then((unfilteredResults: Transaction[]) => {
+  describe("filters transaction feeds by date range", function () {
+    it("filters mine (personal) transaction feed by date range", function () {
+      cy.task("find:testData", {
+        entity: "transactions",
+      }).then((transaction: Transaction) => {
+        const dateRangeStart = new Date(transaction.createdAt);
+        const dateRangeEnd = addDays(dateRangeStart, 1);
+
+        cy.getTest("nav-personal-tab")
+          .click()
+          .should("have.class", "Mui-selected");
+
         cy.wait("@personalTransactions")
           .its("response.body.results")
-          .should("deep.equal", unfilteredResults);
+          .as("unfilteredResults");
+
+        cy.pickDateRange(dateRangeStart, dateRangeEnd);
+
+        cy.wait("@personalTransactions")
+          .its("response.body.results")
+          .then((transactions: Transaction[]) => {
+            cy.getTestLike("transaction-item").should(
+              "have.length",
+              transactions.length
+            );
+
+            transactions.forEach(({ createdAt }) => {
+              expect(
+                isWithinRange(createdAt, dateRangeStart, dateRangeEnd)
+              ).to.equal(true);
+
+              // Fixme: using chai-datetime plugin results in "TypeError: date.getFullYear is not a function"
+              // expect(createdAt).to.be.withinDate(dateRangeStart, dateRangeEnd);
+            });
+          });
+
+        cy.getTestLike("filter-date-clear-button").click({ force: true });
+
+        cy.get("@unfilteredResults").then(
+          // @ts-ignore
+          (unfilteredResults: Transaction[]) => {
+            cy.wait("@personalTransactions")
+              .its("response.body.results")
+              .should("deep.equal", unfilteredResults);
+          }
+        );
       });
     });
   });
 
   // TODO: add a test to filter for transaction out of known seed date range limit
 
-  it.skip("renders mine (personal) transaction feed, filters by amount range, then clears the amount range filter", function () {
-    cy.getTest("nav-personal-tab")
-      .click({ force: true })
-      .should("have.class", "Mui-selected");
+  describe("filters transaction feeds by amount range", function () {
+    it.skip("filters mine (personal) transaction feed by amount range", function () {
+      cy.getTest("nav-personal-tab")
+        .click({ force: true })
+        .should("have.class", "Mui-selected");
 
-    cy.getTest("transaction-list-filter-amount-range-button")
-      .scrollIntoView()
-      .click({ force: true });
+      cy.getTest("transaction-list-filter-amount-range-button")
+        .scrollIntoView()
+        .click({ force: true });
 
-    cy.window().invoke("handleAmountRangeChange", [null, [2, 50]]);
+      cy.window().invoke("handleAmountRangeChange", [null, [2, 50]]);
 
-    // DISCUSS:
-    // How to set hidden input values like this?
-    // cy.getTest("transaction-list-filter-amount-range-slider")
-    //   .find("[data-index='0']")
-    //   .trigger("mousedown");
+      // DISCUSS:
+      // How to set hidden input values like this?
+      // cy.getTest("transaction-list-filter-amount-range-slider")
+      //   .find("[data-index='0']")
+      //   .trigger("mousedown");
 
-    cy.getTest("transaction-list-filter-amount-range-text")
-      .should("contain", "$30")
-      .and("contain", "$100");
+      cy.getTest("transaction-list-filter-amount-range-text")
+        .should("contain", "$30")
+        .and("contain", "$100");
 
-    cy.wait("@personalTransactions");
+      cy.wait("@personalTransactions");
 
-    cy.getTest("transaction-list").children().should("have.length", 3);
+      cy.getTest("transaction-list").children().should("have.length", 3);
+    });
   });
 });
