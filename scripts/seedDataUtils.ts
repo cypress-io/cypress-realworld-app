@@ -19,6 +19,8 @@ import {
   isEqual,
   flattenDepth,
   negate,
+  find,
+  intersectionWith,
 } from "lodash/fp";
 import {
   BankAccount,
@@ -40,10 +42,6 @@ import {
   BankTransferType,
   BankTransfer,
 } from "../src/models";
-import {
-  getLikesByTransactionId,
-  getCommentsByTransactionId,
-} from "../backend/database";
 import { getFakeAmount } from "../src/utils/transactionUtils";
 
 export const userbaseSize = +process.env.SEED_USERBASE_SIZE!;
@@ -494,9 +492,43 @@ export const createFakeCommentNotification = (
   modifiedAt: faker.date.recent(),
 });
 
+const getTransactionsWithLikes = (
+  transactions: Transaction[],
+  seedLikes: Like[]
+) =>
+  intersectionWith(
+    ({ id: transactionId }, { transactionId: likeTransactionId }) =>
+      isEqual(transactionId, likeTransactionId),
+    transactions,
+    seedLikes
+  );
+
+const getLikeByTransactionId = (
+  transactionId: Transaction["id"],
+  seedLikes: Like[]
+) => find({ transactionId }, seedLikes) as Like;
+
+const getTransactionsWithComments = (
+  transactions: Transaction[],
+  seedComments: Comment[]
+) =>
+  intersectionWith(
+    ({ id: transactionId }, { transactionId: commentTransactionId }) =>
+      isEqual(transactionId, commentTransactionId),
+    transactions,
+    seedComments
+  );
+
+const getCommentByTransactionId = (
+  transactionId: Transaction["id"],
+  seedComments: Comment[]
+) => find({ transactionId }, seedComments) as Comment;
+
 export const createSeedNotifications = (
   seedUsers: User[],
-  seedTransactions: Transaction[]
+  seedTransactions: Transaction[],
+  seedLikes: Like[],
+  seedComments: Comment[]
 ) =>
   flattenDeep(
     map((user: User): NotificationType[] => {
@@ -505,43 +537,59 @@ export const createSeedNotifications = (
         user.id
       );
 
+      const transactionsWithLikes = getTransactionsWithLikes(
+        transactions,
+        seedLikes
+      );
+
+      const transactionsWithComments = getTransactionsWithComments(
+        transactions,
+        seedComments
+      );
+
+      const likeTransaction = getRandomTransactions(
+        1,
+        transactionsWithLikes
+      )[0];
+      const like = getLikeByTransactionId(likeTransaction!.id, seedLikes);
+      const likeNotification = createFakeLikeNotification(
+        user.id,
+        likeTransaction!.id,
+        like!.id
+      );
+
+      const commentTransaction = getRandomTransactions(
+        1,
+        transactionsWithComments
+      )[0];
+      const comment = getCommentByTransactionId(
+        commentTransaction!.id,
+        seedComments
+      );
+      // comment notification
+      const commentNotification = createFakeCommentNotification(
+        user.id,
+        commentTransaction!.id,
+        comment!.id
+      );
+
       // choose random transactions
-      const randomTransactions = getRandomTransactions(5, transactions);
-
-      // get a slice of random transactions
-      const selectedTransactions = randomTransactions.slice(
-        0,
-        notificationsPerUser
+      const randomTransactions = getRandomTransactions(
+        notificationsPerUser - 2,
+        transactions
       );
 
-      // iterate over transactions and notification
-      const transactionNotifications = selectedTransactions.map(
-        (transaction) => {
-          const likes = getLikesByTransactionId(transaction!.id);
-          const comments = getCommentsByTransactionId(transaction!.id);
-
-          let allNotifications = [];
-
-          // payment notification
-          allNotifications.push(
-            createFakePaymentNotification(user.id, transaction!.id)
-          );
-
-          // like notifications
-          const likeNotifications = likes.map((like: Like) =>
-            createFakeLikeNotification(user.id, transaction!.id, like!.id)
-          );
-
-          // comment notifications
-          const commentNotifications = comments.map((comment: Comment) =>
-            createFakeCommentNotification(user.id, transaction!.id, comment!.id)
-          );
-
-          return [allNotifications, likeNotifications, commentNotifications];
-        }
+      const paymentNotifications = randomTransactions.map((transaction) =>
+        createFakePaymentNotification(user.id, transaction!.id)
       );
 
-      return flattenDeep(transactionNotifications);
+      let allNotifications = [likeNotification, commentNotification];
+
+      // @ts-ignore
+      return concat(
+        allNotifications,
+        paymentNotifications
+      ) as NotificationType[];
     })(seedUsers)
   );
 
@@ -619,7 +667,9 @@ export const buildDatabase = () => {
   );
   const seedNotifications: NotificationType[] = createSeedNotifications(
     seedUsers,
-    seedTransactions
+    seedTransactions,
+    seedLikes,
+    seedComments
   );
   const seedBankTransfers: BankTransfer[] = createSeedBankTransfers(
     seedUsers,
