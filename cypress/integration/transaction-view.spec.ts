@@ -27,7 +27,6 @@ describe("Transaction View", function () {
       "updateTransaction"
     );
 
-    cy.route("POST", "http://localhost:3001/login").as("loginUser");
     cy.route("GET", "http://localhost:3001/checkAuth").as("userProfile");
     cy.route("GET", "http://localhost:3001/notifications").as(
       "getNotifications"
@@ -38,7 +37,6 @@ describe("Transaction View", function () {
       ctx.authenticatedUser = user;
 
       cy.loginByXstate(ctx.authenticatedUser.username);
-      cy.wait("@loginUser");
 
       cy.task("find:testData", {
         entity: "transactions",

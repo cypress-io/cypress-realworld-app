@@ -72,9 +72,14 @@ Cypress.Commands.add(
     cy.route("POST", "/login").as("loginUser");
     cy.visit("/signin");
 
-    cy.window()
-      .its("authService")
-      .invoke("send", ["LOGIN", { username, password }]);
+    cy.window({ log: false }).should((win) => {
+      // @ts-ignore
+      // eslint-disable-next-line
+      expect(win.authService.initialized).to.be.true;
+
+      // @ts-ignore
+      win.authService.send("LOGIN", { username, password });
+    });
 
     return cy.wait("@loginUser");
   }
