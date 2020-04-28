@@ -25,7 +25,7 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
     }
   });
 
-  // log.snapshot("before");
+  log.snapshot("before");
 
   cy.getTest("signin-username").type(username);
   cy.getTest("signin-password").type(password);
@@ -47,11 +47,12 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
           };
         },
       });
+
+      // Question: what is the "2" state in between before and after snapshots
+      log.snapshot("after");
+      log.end();
     }
   );
-
-  // log.snapshot("after");
-  // log.end();
 });
 
 Cypress.Commands.add("loginByApi", (username, password = defaultPassword) => {
@@ -108,11 +109,26 @@ Cypress.Commands.add("nextTransactionFeedPage", (service, page) => {
 });
 
 Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
+  const log = Cypress.log({
+    name: "pickdaterange",
+    displayName: "PICK DATE RANGE",
+    // @ts-ignore
+    message: `🗓 ${startDate.toDateString()} to ${endDate.toDateString()}`,
+    consoleProps() {
+      return {
+        startDate,
+        endDate,
+      };
+    },
+  });
+
   const selectDate = (date) => {
     return cy
       .get(`[data-date='${formatDate(date, "YYYY-MM-DD")}']`)
       .click({ force: true });
   };
+
+  log.snapshot("before");
 
   // Focus initial viewable date picker range around target start date
   // @ts-ignore: Cypress expects wrapped variable to be a jQuery type
@@ -123,7 +139,10 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
 
   // Select date range
   selectDate(startDate);
-  selectDate(endDate);
+  selectDate(endDate).then(() => {
+    log.snapshot("after");
+    log.end();
+  });
 });
 
 Cypress.Commands.add("getTest", (s) => cy.get(`[data-test=${s}]`));
