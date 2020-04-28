@@ -94,7 +94,7 @@ describe("Notifications API", function () {
   });
 
   context("PATCH /notifications/:notificationId", function () {
-    it.only("updates a notification", function () {
+    it("updates a notification", function () {
       cy.request("PATCH", `${apiNotifications}/${ctx.notificationId}`, {
         isRead: true,
       }).then((response) => {

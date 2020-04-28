@@ -2,7 +2,7 @@
 import { User } from "../../src/models";
 
 // TODO: fix these tests after latest data seeding generators are merged in
-describe.skip("Notifications", function () {
+describe("Notifications", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
@@ -19,12 +19,12 @@ describe.skip("Notifications", function () {
 
   it("renders the notifications badge with count", function () {
     cy.wait("@notifications");
-    cy.getTest("nav-top-notifications-count").should("contain", 1);
+    cy.getTest("nav-top-notifications-count").should("have.length.gte", 1);
   });
 
   it("renders a notifications list", function () {
     cy.getTest("nav-top-notifications-count").click();
-    cy.getTestLike("notification-list-item").should("have.length", 6);
+    cy.getTestLike("notification-list-item").should("have.length.gte", 1);
   });
 
   it("renders a like notification", function () {
@@ -48,13 +48,23 @@ describe.skip("Notifications", function () {
   });
 
   it("marks a notification as read; updates notification counter badge", function () {
-    cy.getTest("nav-top-notifications-count").click();
-    cy.getTestLike("notification-mark-read").eq(3).click();
+    cy.visit("/notifications");
+
+    cy.wait("@notifications")
+      .its("response.body.results.length")
+      .as("notificationsCount");
+
+    cy.getTestLike("notification-mark-read").first().click({ force: true });
 
     cy.wait("@updateNotification");
-    cy.wait("@notifications");
 
-    cy.getTestLike("notification-list-item").should("have.length", 5);
+    cy.get("@notificationsCount").then((count) => {
+      cy.getTestLike("notification-list-item").should(
+        "have.length.lessThan",
+        // @ts-ignore
+        count - 1
+      );
+    });
   });
 
   it("renders an empty notifications state", function () {
