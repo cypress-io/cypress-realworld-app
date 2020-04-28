@@ -163,8 +163,12 @@ describe("Transaction Feed", function () {
             );
 
             transactions.forEach(({ createdAt }) => {
+              const createdAtDate = new Date(createdAt);
               expect(
-                isWithinRange(createdAt, dateRangeStart, dateRangeEnd)
+                isWithinRange(createdAt, dateRangeStart, dateRangeEnd),
+                `transaction created date (${createdAtDate.toDateString()}) 
+                is within ${dateRangeStart.toDateString()} 
+                and ${dateRangeEnd.toDateString()}`
               ).to.equal(true);
 
               // Fixme: using chai-datetime plugin results in "TypeError: date.getFullYear is not a function"
