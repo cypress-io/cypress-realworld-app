@@ -457,7 +457,7 @@ export const createFakePaymentNotification = (
     PaymentNotificationStatus.requested,
     PaymentNotificationStatus.incomplete,
   ]),
-  isRead: faker.helpers.randomize([true, false]),
+  isRead: false,
   createdAt: faker.date.past(),
   modifiedAt: faker.date.recent(),
 });
@@ -472,7 +472,7 @@ export const createFakeLikeNotification = (
   userId,
   likeId,
   transactionId,
-  isRead: faker.helpers.randomize([true, false]),
+  isRead: false,
   createdAt: faker.date.past(),
   modifiedAt: faker.date.recent(),
 });
@@ -487,7 +487,7 @@ export const createFakeCommentNotification = (
   userId,
   commentId,
   transactionId,
-  isRead: faker.helpers.randomize([true, false]),
+  isRead: false,
   createdAt: faker.date.past(),
   modifiedAt: faker.date.recent(),
 });
