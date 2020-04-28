@@ -2,6 +2,7 @@
 /// <reference path="../global.d.ts" />
 
 import { pick } from "lodash/fp";
+import { format as formatDate } from "date-fns";
 
 const defaultPassword = Cypress.env("defaultPassword");
 
@@ -104,6 +105,25 @@ Cypress.Commands.add("nextTransactionFeedPage", (service, page) => {
       // @ts-ignore
       return service.send("FETCH", { page });
     });
+});
+
+Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
+  const selectDate = (date) => {
+    return cy
+      .get(`[data-date='${formatDate(date, "YYYY-MM-DD")}']`)
+      .click({ force: true });
+  };
+
+  // Focus initial viewable date picker range around target start date
+  // @ts-ignore: Cypress expects wrapped variable to be a jQuery type
+  cy.wrap(startDate.getTime()).then((now) => cy.clock(now, ["Date"]));
+
+  // Open date range picker
+  cy.getTestLike("filter-date-range-button").click({ force: true });
+
+  // Select date range
+  selectDate(startDate);
+  selectDate(endDate);
 });
 
 Cypress.Commands.add("getTest", (s) => cy.get(`[data-test=${s}]`));

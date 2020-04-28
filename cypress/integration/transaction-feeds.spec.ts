@@ -1,7 +1,7 @@
 // @ts-check
 
 import { User, Transaction } from "../../src/models";
-import { format as formatDate, addDays, isWithinRange } from "date-fns";
+import { addDays, isWithinRange } from "date-fns";
 
 type TransactionFeedsCtx = {
   allUsers?: User[];
@@ -131,32 +131,22 @@ describe("Transaction Feed", function () {
     cy.getTest("amount-range-filter-drawer-close").click();
   });
 
-  it("renders mine (personal) transaction feed, filters by date range, then clears the date range filter", function () {
+  it.only("renders mine (personal) transaction feed, filters by date range, then clears the date range filter", function () {
     cy.task("find:testData", {
       entity: "transactions",
     }).then((transaction: Transaction) => {
-      const dateFormat = "YYYY-MM-DD";
       const dateRangeStart = new Date(transaction.createdAt);
       const dateRangeEnd = addDays(dateRangeStart, 1);
-
-      cy.wrap(dateRangeStart.getTime()).then((now) => {
-        cy.clock(now, ["Date"]);
-      });
 
       cy.getTest("nav-personal-tab")
         .click()
         .should("have.class", "Mui-selected");
 
-      cy.wait("@personalTransactions");
+      cy.wait("@personalTransactions")
+        .its("response.body.results")
+        .as("unfilteredResults");
 
-      cy.getTestLike("filter-date-range-button").click({ force: true });
-
-      cy.get(`[data-date='${formatDate(dateRangeStart, dateFormat)}']`).click({
-        force: true,
-      });
-      cy.get(`[data-date='${formatDate(dateRangeEnd, dateFormat)}']`).click({
-        force: true,
-      });
+      cy.pickDateRange(dateRangeStart, dateRangeEnd);
 
       cy.wait("@personalTransactions")
         .its("response.body.results")

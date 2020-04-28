@@ -46,6 +46,8 @@ declare namespace Cypress {
 
     nextTransactionFeedPage(service: string, page: number): Chainable<any>;
 
+    pickDateRange(startDate: Date, endDate: Date): Chainable<void>;
+
     getTest(dataTestAttribute: string): Chainable<Element>;
     getTestLike(dataTestPrefixAttribute: string): Chainable<Element>;
     fetchTestData(entity: string, filterDetails: object): Chainable<any[]>;
