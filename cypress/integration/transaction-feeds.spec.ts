@@ -131,7 +131,7 @@ describe("Transaction Feed", function () {
     cy.getTest("amount-range-filter-drawer-close").click();
   });
 
-  it.only("renders mine (personal) transaction feed, filters by date range, then clears the date range filter", function () {
+  it("renders mine (personal) transaction feed, filters by date range, then clears the date range filter", function () {
     cy.task("find:testData", {
       entity: "transactions",
     }).then((transaction: Transaction) => {
@@ -174,22 +174,7 @@ describe("Transaction Feed", function () {
     });
   });
 
-  it("renders mine (personal) transaction feed, filters by date range, then shows empty state", function () {
-    cy.getTest("nav-personal-tab").click().should("have.class", "Mui-selected");
-
-    cy.getTest("transaction-list-filter-date-range-button")
-      .scrollIntoView()
-      .click({ force: true });
-
-    cy.get("[data-date='2020-02-01']").click({ force: true });
-    cy.get("[data-date='2020-02-02']").click({ force: true });
-
-    cy.wait("@personalTransactions");
-
-    cy.getTestLike("transaction-list-item").should("not.be.visible");
-
-    cy.getTest("empty-list-header").should("be.visible");
-  });
+  // TODO: add a test to filter for transaction out of known seed date range limit
 
   it.skip("renders mine (personal) transaction feed, filters by amount range, then clears the amount range filter", function () {
     cy.getTest("nav-personal-tab")
