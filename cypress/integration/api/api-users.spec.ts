@@ -8,6 +8,7 @@ const apiUsers = `${Cypress.env("apiUrl")}/users`;
 
 type TestUserCtx = {
   authenticatedUser?: User;
+  searchUser?: User;
 };
 
 describe("Users API", function () {
@@ -18,6 +19,7 @@ describe("Users API", function () {
 
     cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
       ctx.authenticatedUser = users[0];
+      ctx.searchUser = users[1];
 
       return cy.loginByApi(ctx.authenticatedUser.username);
     });
@@ -71,26 +73,26 @@ describe("Users API", function () {
 
   context("GET /users/search", function () {
     it("get users by email", function () {
-      const { email, firstName } = ctx.authenticatedUser!;
+      const { email, firstName } = ctx.searchUser!;
       cy.request({
         method: "GET",
         url: `${apiUsers}/search`,
         qs: { q: email },
       }).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.results).to.contain({
+        expect(response.body.results[0]).to.contain({
           firstName: firstName,
         });
       });
     });
 
     it("get users by phone number", function () {
-      const { firstName } = ctx.authenticatedUser!;
+      const { phoneNumber, firstName } = ctx.searchUser!;
 
       cy.request({
         method: "GET",
         url: `${apiUsers}/search`,
-        qs: { q: "154-023-4116" },
+        qs: { q: phoneNumber },
       }).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.results[0]).to.contain({
@@ -100,7 +102,7 @@ describe("Users API", function () {
     });
 
     it("get users by username", function () {
-      const { username, firstName } = ctx.authenticatedUser!;
+      const { username, firstName } = ctx.searchUser!;
 
       cy.request({
         method: "GET",
