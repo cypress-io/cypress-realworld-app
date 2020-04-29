@@ -140,7 +140,10 @@
     "plugins": [
       "cypress",
       "prettier"
-    ]
+    ],
+    "rules": {
+      "no-unused-expressions": 0
+    }
   },
   "jest": {
     "watchPathIgnorePatterns": [
