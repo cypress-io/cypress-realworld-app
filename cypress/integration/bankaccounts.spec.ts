@@ -53,8 +53,11 @@ describe("Bank Accounts", function () {
 
   // TODO: the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
   it("renders an empty bank account list state with onboarding modal", function () {
-    cy.route("GET", "http://localhost:3001/bankAccounts", []);
-    cy.getTest("sidenav-bankaccounts").click({ force: true });
+    cy.route("GET", "/bankAccounts", []).as("getBankAccounts");
+
+    cy.visit("/bankaccounts");
+    cy.wait("@getBankAccounts");
+
     cy.getTest("bankaccount-list").should("not.be.visible");
     cy.getTest("empty-list-header").should("contain", "No Bank Accounts");
     cy.getTest("user-onboarding-dialog").should("be.visible");
