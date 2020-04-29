@@ -73,11 +73,8 @@ Cypress.Commands.add(
     cy.visit("/signin");
 
     cy.window({ log: false }).should((win) => {
-      // @ts-ignore
-      // eslint-disable-next-line
-      expect(win.authService.initialized).to.be.true;
-
-      // @ts-ignore
+      expect(win.authService.initialized, "Authentication Service is ready").to
+        .be.true;
       win.authService.send("LOGIN", { username, password });
     });
 
