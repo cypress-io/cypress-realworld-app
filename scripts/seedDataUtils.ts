@@ -158,7 +158,7 @@ export const createSeedBankAccounts = (seedUsers: User[]) =>
         bankName: `${faker.company.companyName()} Bank`,
         accountNumber: faker.finance.account(10),
         routingNumber: faker.finance.account(9),
-        isDeleted: faker.helpers.randomize([true, false]),
+        isDeleted: false,
         createdAt: faker.date.past(),
         modifiedAt: faker.date.recent(),
       };
