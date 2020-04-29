@@ -140,7 +140,7 @@ describe("Transaction Feed", function () {
     });
   });
 
-  describe.only("filters transaction feeds by date range", function () {
+  describe("filters transaction feeds by date range", function () {
     it("filters mine (personal) transaction feed by date range", function () {
       cy.task("find:testData", {
         entity: "transactions",
