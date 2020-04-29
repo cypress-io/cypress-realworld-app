@@ -676,6 +676,12 @@ export const createTransaction = (
       transaction.id,
       PaymentNotificationStatus.received
     );
+  } else {
+    createPaymentNotification(
+      transaction.receiverId,
+      transaction.id,
+      PaymentNotificationStatus.requested
+    );
   }
 
   return savedTransaction;
@@ -708,12 +714,20 @@ export const updateTransactionById = (
       debitPayAppBalance(receiver, transaction);
       creditPayAppBalance(sender, transaction);
       edits.status = TransactionStatus.complete;
+
+      createPaymentNotification(
+        transaction.senderId,
+        transaction.id,
+        PaymentNotificationStatus.received
+      );
     }
-    createPaymentNotification(
-      transaction.receiverId,
-      transaction.id,
-      PaymentNotificationStatus.requested
-    );
+    // else {
+    //   createPaymentNotification(
+    //     transaction.receiverId,
+    //     transaction.id,
+    //     PaymentNotificationStatus.requested
+    //   );
+    // }
 
     db.get(TRANSACTION_TABLE)
       // @ts-ignore
@@ -733,7 +747,10 @@ export const getLikeById = (id: string): Like => getLikeBy("id", id);
 export const getLikesByTransactionId = (transactionId: string) =>
   getLikesByObj({ transactionId });
 
-export const createLike = (userId: string, transactionId: string): Like => {
+export const createLikeAndNotification = (
+  userId: string,
+  transactionId: string
+): Like => {
   const like = {
     id: shortid(),
     uuid: v4(),
@@ -742,9 +759,21 @@ export const createLike = (userId: string, transactionId: string): Like => {
     createdAt: new Date(),
     modifiedAt: new Date(),
   };
-
+  createLikeNotification(userId, transactionId, like.id);
   const savedLike = saveLike(like);
   return savedLike;
+};
+
+export const createLikes = (userId: string, transactionId: string) => {
+  const { senderId, receiverId } = getTransactionById(transactionId);
+  if (userId !== senderId || userId !== receiverId) {
+    createLikeAndNotification(senderId, transactionId);
+    createLikeAndNotification(receiverId, transactionId);
+  } else if (userId === senderId) {
+    createLikeAndNotification(senderId, transactionId);
+  } else {
+    createLikeAndNotification(receiverId, transactionId);
+  }
 };
 
 const saveLike = (like: Like): Like => {
@@ -932,7 +961,12 @@ export const updateNotificationById = (
 export const formatNotificationForApiResponse = (
   notification: NotificationType
 ): NotificationResponseItem => {
-  const userFullName = getFullNameForUser(notification.userId);
+  let userFullName = getFullNameForUser(notification.userId);
+  const transaction = getTransactionById(notification.transactionId);
+
+  if (isRequestTransaction(transaction)) {
+    userFullName = getFullNameForUser(transaction.senderId);
+  }
 
   return {
     userFullName,

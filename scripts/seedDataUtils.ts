@@ -179,7 +179,7 @@ export const createTransaction = (
 
   const status = faker.helpers.randomize([
     TransactionStatus.pending,
-    TransactionStatus.incomplete,
+    // TransactionStatus.incomplete,
     TransactionStatus.complete,
   ]);
 
@@ -243,10 +243,10 @@ export const createPayment = (
       status: TransactionStatus.pending,
       requestStatus: "",
     },
-    {
-      status: TransactionStatus.incomplete,
-      requestStatus: "",
-    },
+    // {
+    //   status: TransactionStatus.incomplete,
+    //   requestStatus: "",
+    // },
     {
       status: TransactionStatus.complete,
       requestStatus: "",
@@ -282,10 +282,10 @@ export const createRequest = (
       status: TransactionStatus.pending,
       requestStatus: "pending",
     },
-    {
-      status: TransactionStatus.incomplete,
-      requestStatus: "pending",
-    },
+    // {
+    //   status: TransactionStatus.incomplete,
+    //   requestStatus: "pending",
+    // },
     {
       status: TransactionStatus.complete,
       requestStatus: "accepted",
@@ -446,17 +446,14 @@ export const createSeedComments = (
 
 export const createFakePaymentNotification = (
   userId: string,
-  transactionId: string
+  transaction: Transaction
 ): PaymentNotification => ({
   id: shortid(),
   uuid: faker.random.uuid(),
   userId,
-  transactionId,
-  status: faker.helpers.randomize([
-    PaymentNotificationStatus.received,
-    PaymentNotificationStatus.requested,
-    PaymentNotificationStatus.incomplete,
-  ]),
+  transactionId: transaction.id,
+  // @ts-ignore
+  status: transaction.status,
   isRead: false,
   createdAt: faker.date.past(),
   modifiedAt: faker.date.recent(),
@@ -580,7 +577,7 @@ export const createSeedNotifications = (
       );
 
       const paymentNotifications = randomTransactions.map((transaction) =>
-        createFakePaymentNotification(user.id, transaction!.id)
+        createFakePaymentNotification(user.id, transaction!)
       );
 
       let allNotifications = [likeNotification, commentNotification];

@@ -134,6 +134,9 @@ export const isPaymentReceivedNotification = (notification: NotificationType) =>
     isEqual(PaymentNotificationStatus.received)
   )(notification);
 
+// export const isPaymentPendingNotification = (notification: NotificationType) =>
+//   flow(get("status"), isEqual(PaymentNotificationStatus.pending))(notification);
+
 export const isNewBankAccountPath = (pathname: string) =>
   pathname.match(/bankaccounts\/new/);
 

@@ -35,7 +35,7 @@ describe("Notifications", function () {
     cy.getTestLike("notification-list-item").should("contain", "commented");
   });
 
-  it("renders an requested payment request notification", function () {
+  it.only("renders a payment request notification", function () {
     cy.getTest("nav-top-notifications-count").click();
     cy.getTestLike("notification-list-item").should("contain", "requested");
   });
