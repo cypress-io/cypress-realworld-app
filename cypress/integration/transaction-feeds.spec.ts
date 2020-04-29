@@ -1,5 +1,3 @@
-// @ts-check
-
 import { User, Transaction } from "../../src/models";
 import { addDays, isWithinInterval, startOfDay } from "date-fns";
 import { startOfDayUTC, endOfDayUTC } from "../../src/utils/transactionUtils";
@@ -18,7 +16,6 @@ describe("Transaction Feed", function () {
     cy.server();
     cy.route("/transactions*").as("personalTransactions");
     cy.route("/transactions/public*").as("publicTransactions");
-    cy.route("/transactions/public?*").as("publicFilterTransactions");
     cy.route("/transactions/contacts*").as("contactsTransactions");
 
     cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
@@ -79,12 +76,12 @@ describe("Transaction Feed", function () {
       // TODO: the new seed for public transactions currently only has 5 transactions,
       //       which is less than the pagination page limit. This introduces a new test case
       //       where a paginated view renders a list with only 1 page to load
-      // {
-      //   tab: "nav-public-tab",
-      //   tabLabel: "everyone",
-      //   routeAlias: "publicTransactions",
-      //   service: "publicTransactionService",
-      // },
+      {
+        tab: "nav-public-tab",
+        tabLabel: "everyone",
+        routeAlias: "publicTransactions",
+        service: "publicTransactionService",
+      },
       {
         tab: "nav-contacts-tab",
         tabLabel: "friends",
@@ -167,9 +164,9 @@ describe("Transaction Feed", function () {
               transactions.length
             );
 
-            // TODO: need to make this assertion more robust or ensure backend logic matches
             transactions.forEach(({ createdAt }) => {
               const createdAtDate = startOfDayUTC(new Date(createdAt));
+
               expect(
                 isWithinInterval(createdAtDate, {
                   start: startOfDayUTC(dateRangeStart),
@@ -179,9 +176,6 @@ describe("Transaction Feed", function () {
                 is within ${dateRangeStart.toISOString()} 
                 and ${dateRangeEnd.toISOString()}`
               ).to.equal(true);
-
-              // Fixme: using chai-datetime plugin results in "TypeError: date.getFullYear is not a function"
-              // expect(createdAt).to.be.withinDate(dateRangeStart, dateRangeEnd);
             });
           });
 
@@ -223,7 +217,7 @@ describe("Transaction Feed", function () {
         .should("contain", "$40")
         .and("contain", "$300");
 
-      cy.wait("@publicFilterTransactions");
+      cy.wait("@publicTransactions");
 
       cy.getTestLike("transaction-item").should("have.length.greaterThan", 1);
     });
