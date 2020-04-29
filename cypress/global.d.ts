@@ -4,8 +4,16 @@
 
 declare namespace Cypress {
   import { Transaction } from "../src/models";
+
+  interface CustomWindow extends Window {
+    authService: any;
+    createTransactionService: any;
+    publicTransactionService: any;
+    contactTransactionService: any;
+    personalTransactionService: any;
+  }
   interface Chainable {
-    // describe new "cy" commands here
+    window(options?: Partial<Loggable & Timeoutable>): Chainable<CustomWindow>;
 
     task(
       event: "filter:testData",
