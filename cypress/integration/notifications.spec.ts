@@ -7,18 +7,16 @@ describe("Notifications", function () {
     cy.task("db:seed");
 
     cy.server();
-    cy.route("GET", "http://localhost:3001/notifications").as("notifications");
-    cy.route("PATCH", "http://localhost:3001/notifications/*").as(
-      "updateNotification"
-    );
+    cy.route("GET", "/notifications").as("notifications");
+    cy.route("PATCH", "/notifications/*").as("updateNotification");
 
     cy.task("find:testData", { entity: "users" }).then((user: User) => {
       cy.loginByXstate(user.username);
     });
+    cy.wait("@notifications");
   });
 
   it("renders the notifications badge with count", function () {
-    cy.wait("@notifications");
     cy.getTest("nav-top-notifications-count").should("have.length.gte", 1);
   });
 
@@ -58,11 +56,12 @@ describe("Notifications", function () {
 
     cy.wait("@updateNotification");
 
+    // TODO: double check the command log dom snapshots during this assertion
     cy.get("@notificationsCount").then((count) => {
       cy.getTestLike("notification-list-item").should(
         "have.length.lessThan",
         // @ts-ignore
-        count - 1
+        count
       );
     });
   });
