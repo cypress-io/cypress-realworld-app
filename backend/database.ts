@@ -60,6 +60,8 @@ import {
   getPayAppCreditedAmount,
   isRequestTransaction,
   formatFullName,
+  isLikeNotification,
+  isCommentNotification,
 } from "../src/utils/transactionUtils";
 
 export type TDatabase = {
@@ -747,10 +749,7 @@ export const getLikeById = (id: string): Like => getLikeBy("id", id);
 export const getLikesByTransactionId = (transactionId: string) =>
   getLikesByObj({ transactionId });
 
-export const createLikeAndNotification = (
-  userId: string,
-  transactionId: string
-): Like => {
+export const createLike = (userId: string, transactionId: string): Like => {
   const like = {
     id: shortid(),
     uuid: v4(),
@@ -759,20 +758,23 @@ export const createLikeAndNotification = (
     createdAt: new Date(),
     modifiedAt: new Date(),
   };
-  createLikeNotification(userId, transactionId, like.id);
+
   const savedLike = saveLike(like);
   return savedLike;
 };
 
 export const createLikes = (userId: string, transactionId: string) => {
   const { senderId, receiverId } = getTransactionById(transactionId);
+
+  const like = createLike(userId, transactionId);
+
   if (userId !== senderId || userId !== receiverId) {
-    createLikeAndNotification(senderId, transactionId);
-    createLikeAndNotification(receiverId, transactionId);
+    createLikeNotification(senderId, transactionId, like.id);
+    createLikeNotification(receiverId, transactionId, like.id);
   } else if (userId === senderId) {
-    createLikeAndNotification(senderId, transactionId);
+    createLikeNotification(senderId, transactionId, like.id);
   } else {
-    createLikeAndNotification(receiverId, transactionId);
+    createLikeNotification(receiverId, transactionId, like.id);
   }
 };
 
@@ -814,6 +816,25 @@ export const createComment = (
 
   const savedComment = saveComment(comment);
   return savedComment;
+};
+
+export const createComments = (
+  userId: string,
+  transactionId: string,
+  content: string
+) => {
+  const { senderId, receiverId } = getTransactionById(transactionId);
+
+  const comment = createComment(userId, transactionId, content);
+
+  if (userId !== senderId || userId !== receiverId) {
+    createCommentNotification(senderId, transactionId, comment.id);
+    createCommentNotification(receiverId, transactionId, comment.id);
+  } else if (userId === senderId) {
+    createCommentNotification(senderId, transactionId, comment.id);
+  } else {
+    createCommentNotification(receiverId, transactionId, comment.id);
+  }
 };
 
 const saveComment = (comment: Comment): Comment => {
@@ -966,6 +987,18 @@ export const formatNotificationForApiResponse = (
 
   if (isRequestTransaction(transaction)) {
     userFullName = getFullNameForUser(transaction.senderId);
+  }
+
+  if (isLikeNotification(notification)) {
+    // @ts-ignore
+    const like = getLikeById(notification.likeId);
+    userFullName = getFullNameForUser(like.userId);
+  }
+
+  if (isCommentNotification(notification)) {
+    // @ts-ignore
+    const comment = getCommentById(notification.commentId);
+    userFullName = getFullNameForUser(comment.userId);
   }
 
   return {

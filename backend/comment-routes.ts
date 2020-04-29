@@ -1,7 +1,7 @@
 ///<reference path="types.ts" />
 
 import express from "express";
-import { getCommentsByTransactionId, createComment } from "./database";
+import { getCommentsByTransactionId, createComments } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import { shortIdValidation, isCommentValidator } from "./validators";
 const router = express.Router();
@@ -31,7 +31,7 @@ router.post(
     const { transactionId } = req.params;
     const { content } = req.body;
 
-    const comment = createComment(req.user?.id!, transactionId, content);
+    const comment = createComments(req.user?.id!, transactionId, content);
 
     res.status(200);
     res.json({ comment });
