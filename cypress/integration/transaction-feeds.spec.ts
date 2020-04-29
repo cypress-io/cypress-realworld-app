@@ -18,6 +18,7 @@ describe("Transaction Feed", function () {
     cy.server();
     cy.route("/transactions*").as("personalTransactions");
     cy.route("/transactions/public*").as("publicTransactions");
+    cy.route("/transactions/public?*").as("publicFilterTransactions");
     cy.route("/transactions/contacts*").as("contactsTransactions");
 
     cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
@@ -220,13 +221,11 @@ describe("Transaction Feed", function () {
 
       cy.getTest("transaction-list-filter-amount-range-text")
         .should("contain", "$40")
-        .and("contain", "$100");
+        .and("contain", "$300");
 
-      cy.wait("@personalTransactions");
+      cy.wait("@publicFilterTransactions");
 
-      cy.getTest("transaction-list")
-        .children()
-        .should("have.length.greaterThan", 1);
+      cy.getTestLike("transaction-item").should("have.length.greaterThan", 1);
     });
   });
 });
