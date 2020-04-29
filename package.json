@@ -14,7 +14,7 @@
     "@types/bcryptjs": "2.4.2",
     "@types/connect-flash": "0.0.35",
     "@types/cors": "2.8.6",
-    "@types/dinero.js": "1.6.2",
+    "@types/dinero.js": "1.6.4",
     "@types/dotenv": "8.2.0",
     "@types/express-paginate": "1.0.0",
     "@types/express-session": "1.17.0",
