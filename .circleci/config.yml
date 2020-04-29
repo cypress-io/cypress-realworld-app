@@ -11,9 +11,9 @@ workflows:
             - run:
                 name: Check Types
                 command: yarn types
-            - run:
-                name: Unit Tests
-                command: yarn test:unit
+            #- run:
+            #    name: Unit Tests
+            #    command: yarn test:unit
       - cypress/run:
           name: "API & Unit Tests"
           requires:
