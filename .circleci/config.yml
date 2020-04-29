@@ -4,15 +4,19 @@ orbs:
 workflows:
   build:
     jobs:
-      - cypress/run:
-          name: type checks
-          command: yarn types
-      - cypress/run:
-          name: unit tests
-          command: yarn test:unit
+      - cypress/install:
+          build: "npm run build"
+          post-steps:
+            - run:
+                name: Check Types
+                command: yarn types
+            - run:
+                name: Unit Tests
+                command: yarn test:unit
       - cypress/run:
           name: "API & Unit Tests"
-          build: yarn build
+          requires:
+            - cypress/install
           executor: cypress/browsers-chrome78-ff70
           browser: firefox
           yarn: true
@@ -22,7 +26,8 @@ workflows:
           spec: cypress/integration/api/*
       - cypress/run:
           name: "E2E Tests"
-          build: yarn build
+          requires:
+            - cypress/install
           executor: cypress/browsers-chrome78-ff70
           browser: chrome
           yarn: true
