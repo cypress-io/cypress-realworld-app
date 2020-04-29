@@ -76,7 +76,7 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
   const dateRangeId = dateRangeOpen ? "date-range-popover" : undefined;
 
   const formatButtonDate = (date: string) => {
-    return formatDate(new Date(date), "MMM, D YYYY");
+    return formatDate(new Date(date), "MMM, d yyyy");
   };
 
   const dateRangeLabel = (dateRangeFields: TransactionDateRangePayload) => {

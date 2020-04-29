@@ -132,7 +132,7 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
 
   const selectDate = (date) => {
     return cy
-      .get(`[data-date='${formatDate(date, "YYYY-MM-DD")}']`)
+      .get(`[data-date='${formatDate(date, "yyyy-MM-dd")}']`)
       .click({ force: true });
   };
 

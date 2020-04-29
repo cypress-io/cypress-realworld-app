@@ -18,7 +18,7 @@ import {
   inRange,
   remove,
 } from "lodash/fp";
-import { isWithinRange } from "date-fns";
+import { isWithinInterval } from "date-fns";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 import shortid from "shortid";
@@ -504,11 +504,10 @@ export const transactionsWithinDateRange = curry(
 
     return filter(
       (transaction: Transaction) =>
-        isWithinRange(
-          new Date(transaction.createdAt),
-          new Date(dateRangeStart),
-          new Date(dateRangeEnd)
-        ),
+        isWithinInterval(new Date(transaction.createdAt), {
+          start: new Date(dateRangeStart),
+          end: new Date(dateRangeEnd),
+        }),
       transactions
     );
   }

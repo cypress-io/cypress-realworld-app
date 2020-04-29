@@ -1,7 +1,7 @@
 // @ts-check
 
 import { User, Transaction } from "../../src/models";
-import { addDays, isWithinRange, startOfDay, endOfDay } from "date-fns";
+import { addDays, isWithinInterval, startOfDay, endOfDay } from "date-fns";
 
 type TransactionFeedsCtx = {
   allUsers?: User[];
@@ -139,12 +139,15 @@ describe("Transaction Feed", function () {
     });
   });
 
-  describe("filters transaction feeds by date range", function () {
+  describe.only("filters transaction feeds by date range", function () {
     it("filters mine (personal) transaction feed by date range", function () {
       cy.task("find:testData", {
         entity: "transactions",
       }).then((transaction: Transaction) => {
-        const dateRangeStart = startOfDay(new Date(transaction.createdAt));
+        const dateRangeStart = startOfDay(
+          //new Date(transaction.createdAt)
+          new Date(transaction.createdAt).setUTCHours(0, 0, 0, 0)
+        );
         const dateRangeEnd = endOfDay(addDays(dateRangeStart, 1));
 
         cy.getTest("nav-personal-tab")
@@ -167,9 +170,12 @@ describe("Transaction Feed", function () {
 
             // TODO: need to make this assertion more robust or ensure backend logic matches
             transactions.forEach(({ createdAt }) => {
-              const createdAtDate = endOfDay(new Date(createdAt));
+              const createdAtDate = new Date(createdAt);
               expect(
-                isWithinRange(createdAtDate, dateRangeStart, dateRangeEnd),
+                isWithinInterval(createdAtDate, {
+                  start: dateRangeStart,
+                  end: dateRangeEnd,
+                }),
                 `transaction created date (${createdAtDate.toISOString()}) 
                 is within ${dateRangeStart.toISOString()} 
                 and ${dateRangeEnd.toISOString()}`
