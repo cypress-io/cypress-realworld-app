@@ -5,6 +5,7 @@ workflows:
   build:
     jobs:
       - cypress/install:
+          yarn: true
           build: "npm run build"
           post-steps:
             - run:
