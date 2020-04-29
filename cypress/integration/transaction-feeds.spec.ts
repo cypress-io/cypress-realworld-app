@@ -202,7 +202,7 @@ describe("Transaction Feed", function () {
   // TODO: add a test to filter for transaction out of known seed date range limit
 
   describe("filters transaction feeds by amount range", function () {
-    it.only("filters public (everyone) transaction feed by amount range", function () {
+    it("filters public (everyone) transaction feed by amount range", function () {
       cy.getTest("nav-public-tab")
         .click({ force: true })
         .should("have.class", "Mui-selected");
