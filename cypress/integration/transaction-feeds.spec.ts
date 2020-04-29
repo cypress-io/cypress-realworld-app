@@ -201,8 +201,8 @@ describe("Transaction Feed", function () {
   // TODO: add a test to filter for transaction out of known seed date range limit
 
   describe("filters transaction feeds by amount range", function () {
-    it.skip("filters mine (personal) transaction feed by amount range", function () {
-      cy.getTest("nav-personal-tab")
+    it.only("filters public (everyone) transaction feed by amount range", function () {
+      cy.getTest("nav-public-tab")
         .click({ force: true })
         .should("have.class", "Mui-selected");
 
@@ -210,21 +210,23 @@ describe("Transaction Feed", function () {
         .scrollIntoView()
         .click({ force: true });
 
-      cy.window().invoke("handleAmountRangeChange", [null, [2, 50]]);
+      cy.get("[data-index='0']")
+        .trigger("mousedown", { force: true })
+        .trigger("mousemove", 10, -10, { force: true });
 
-      // DISCUSS:
-      // How to set hidden input values like this?
-      // cy.getTest("transaction-list-filter-amount-range-slider")
-      //   .find("[data-index='0']")
-      //   .trigger("mousedown");
+      cy.get("[data-index='1']")
+        .trigger("mousedown", { force: true })
+        .trigger("mousemove", -100, 100, { force: true });
 
       cy.getTest("transaction-list-filter-amount-range-text")
-        .should("contain", "$30")
+        .should("contain", "$40")
         .and("contain", "$100");
 
       cy.wait("@personalTransactions");
 
-      cy.getTest("transaction-list").children().should("have.length", 3);
+      cy.getTest("transaction-list")
+        .children()
+        .should("have.length.greaterThan", 1);
     });
   });
 });
