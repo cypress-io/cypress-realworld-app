@@ -222,3 +222,11 @@ export const getPaginatedItems = (page: number, limit: number, items: any) => {
     data: pagedItems,
   };
 };
+
+// Custom UTC functions per:
+// https://github.com/date-fns/date-fns/issues/376#issuecomment-544274031
+export const startOfDayUTC = (date: Date) =>
+  new Date(new Date(date).setUTCHours(0, 0, 0, 0));
+
+export const endOfDayUTC = (date: Date) =>
+  new Date(new Date(date).setUTCHours(23, 59, 59, 999));
