@@ -65,6 +65,14 @@ Cypress.Commands.add("loginByApi", (username, password = defaultPassword) => {
   });
 });
 
+Cypress.Commands.add("waitForXstateService", (service) => {
+  return cy.window({ log: false }).should((win) => {
+    const message = `${service} is ready`;
+    // @ts-ignore
+    expect(win[service].initialized, message).to.be.true;
+  });
+});
+
 Cypress.Commands.add(
   "loginByXstate",
   (username, password = defaultPassword) => {
@@ -72,11 +80,11 @@ Cypress.Commands.add(
     cy.route("POST", "/login").as("loginUser");
     cy.visit("/signin");
 
-    cy.window({ log: false }).should((win) => {
-      expect(win.authService.initialized, "Authentication Service is ready").to
-        .be.true;
-      win.authService.send("LOGIN", { username, password });
-    });
+    cy.waitForXstateService("authService");
+
+    cy.window({ log: false })
+      .its("authService")
+      .invoke("send", ["LOGIN", { username, password }]);
 
     return cy.wait("@loginUser");
   }

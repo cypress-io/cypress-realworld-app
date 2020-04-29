@@ -6,6 +6,7 @@ declare namespace Cypress {
   import { Transaction } from "../src/models";
 
   interface CustomWindow extends Window {
+    // TODO: Fix up service types
     authService: any;
     createTransactionService: any;
     publicTransactionService: any;
@@ -26,6 +27,8 @@ declare namespace Cypress {
       arg?: any,
       options?: Partial<Loggable & Timeoutable>
     ): Chainable<Transaction>;
+
+    waitForXstateService(service: string): Chainable<CustomWindow>;
 
     /**
      * Logs in using user interface
