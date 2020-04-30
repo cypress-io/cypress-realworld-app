@@ -4,13 +4,35 @@ orbs:
 workflows:
   build:
     jobs:
+      - cypress/install:
+          yarn: true
+          build: "npm run build"
+          post-steps:
+            - run:
+                name: Check Types
+                command: yarn types
+            #- run:
+            #    name: Unit Tests
+            #    command: yarn test:unit
       - cypress/run:
-          build: yarn build
-          executor: cypress/base-12-14-0
+          name: "API & Unit Tests"
+          requires:
+            - cypress/install
+          executor: cypress/browsers-chrome78-ff70
+          browser: firefox
           yarn: true
           start: yarn test:ci
           wait-on: "http://localhost:3000"
           record: true
-          post-steps:
-            # run jest tests
-            - run: yarn test:unit
+          spec: cypress/integration/api/*
+      - cypress/run:
+          name: "E2E Tests"
+          requires:
+            - cypress/install
+          executor: cypress/browsers-chrome78-ff70
+          browser: chrome
+          yarn: true
+          start: yarn test:ci
+          wait-on: "http://localhost:3000"
+          record: true
+          spec: cypress/integration/*.spec.ts
