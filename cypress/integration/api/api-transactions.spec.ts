@@ -112,7 +112,7 @@ describe("Transactions API", function () {
       );
     });
 
-    it("gets a list of transactions for users list of contacts - status 'incomplete'", function () {
+    it.skip("gets a list of transactions for users list of contacts - status 'incomplete'", function () {
       cy.request({
         method: "GET",
         url: `${apiTransactions}/contacts`,
