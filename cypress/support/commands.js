@@ -80,6 +80,9 @@ Cypress.Commands.add(
     cy.route("POST", "/login").as("loginUser");
     cy.visit("/signin");
 
+    // Temporary fix
+    cy.wait(10, { log: false });
+
     cy.waitForXstateService("authService");
 
     cy.window({ log: false })
