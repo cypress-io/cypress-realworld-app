@@ -42,16 +42,16 @@ workflows:
           spec: cypress/tests/ui/*
           group: "UI - Chrome"
       - cypress/run:
-        name: "UI Tests - Firefox"
-        requires:
-          - cypress/install
-        executor: cypress/browsers-chrome78-ff70
-        browser: firefox
-        yarn: true
-        start: yarn test:ci
-        wait-on: "http://localhost:3000"
-        record: true
-        parallel: true
-        parallelism: 2
-        spec: cypress/tests/ui/*
-        group: "UI - Firefox"
+          name: "UI Tests - Firefox"
+          requires:
+            - cypress/install
+          executor: cypress/browsers-chrome78-ff70
+          browser: firefox
+          yarn: true
+          start: yarn test:ci
+          wait-on: "http://localhost:3000"
+          record: true
+          parallel: true
+          parallelism: 2
+          spec: cypress/tests/ui/*
+          group: "UI - Firefox"
