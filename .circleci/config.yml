@@ -52,6 +52,6 @@ workflows:
           wait-on: "http://localhost:3000"
           record: true
           parallel: true
-          parallelism: 2
+          parallelism: 4
           spec: cypress/tests/ui/*
           group: "UI - Firefox"
