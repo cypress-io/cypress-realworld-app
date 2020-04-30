@@ -15,7 +15,7 @@ workflows:
             #    name: Unit Tests
             #    command: yarn test:unit
       - cypress/run:
-          name: "API & Unit Tests"
+          name: "API Tests"
           requires:
             - cypress/install
           executor: cypress/browsers-chrome78-ff70
