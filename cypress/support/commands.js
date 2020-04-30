@@ -96,8 +96,8 @@ Cypress.Commands.add(
     cy.waitForXstateService("authService");
 
     cy.window({ log: false })
-      .its("authService", { log: false })
-      .invoke("send", ["LOGIN", { username, password }], { log: false });
+      .its("authService")
+      .invoke("send", ["LOGIN", { username, password }]);
 
     return cy
       .wait(["@loginUser", "@getUserProfile"])
