@@ -25,8 +25,10 @@ workflows:
           wait-on: "http://localhost:3000"
           record: true
           spec: cypress/integration/api/*
+          parallel: true
+          group: API
       - cypress/run:
-          name: "E2E Tests"
+          name: "UI Tests"
           requires:
             - cypress/install
           executor: cypress/browsers-chrome78-ff70
@@ -35,4 +37,7 @@ workflows:
           start: yarn test:ci
           wait-on: "http://localhost:3000"
           record: true
+          parallel: true
+          parallelism: 2
           spec: cypress/integration/*.spec.ts
+          group: UI
