@@ -1,5 +1,5 @@
 // @ts-check
-import { User } from "../../src/models";
+import { User } from "../../../src/models";
 
 // TODO: fix these tests after latest data seeding generators are merged in
 describe("Notifications", function () {

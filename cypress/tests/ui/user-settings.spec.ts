@@ -1,5 +1,5 @@
 // @ts-check
-import { User } from "../../src/models";
+import { User } from "../../../src/models";
 
 describe("User Settings", function () {
   beforeEach(function () {

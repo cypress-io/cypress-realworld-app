@@ -1,6 +1,9 @@
-import { User, Transaction } from "../../src/models";
+import { User, Transaction } from "../../../src/models";
 import { addDays, isWithinInterval, startOfDay } from "date-fns";
-import { startOfDayUTC, endOfDayUTC } from "../../src/utils/transactionUtils";
+import {
+  startOfDayUTC,
+  endOfDayUTC,
+} from "../../../src/utils/transactionUtils";
 
 type TransactionFeedsCtx = {
   allUsers?: User[];
