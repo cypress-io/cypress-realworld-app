@@ -76,20 +76,46 @@ Cypress.Commands.add("waitForXstateService", (service) => {
 Cypress.Commands.add(
   "loginByXstate",
   (username, password = defaultPassword) => {
+    const log = Cypress.log({
+      name: "loginbyxstate",
+      displayName: "LOGIN BY XSTATE",
+      // @ts-ignore
+      message: `🔐 Authenticating | ${username}`,
+    });
+
     cy.server();
     cy.route("POST", "/login").as("loginUser");
+    cy.route("GET", "checkAuth").as("getUserProfile");
     cy.visit("/signin");
 
     // Temporary fix
     cy.wait(10, { log: false });
 
+    log.snapshot("before");
+
     cy.waitForXstateService("authService");
 
     cy.window({ log: false })
-      .its("authService")
-      .invoke("send", ["LOGIN", { username, password }]);
+      .its("authService", { log: false })
+      .invoke("send", ["LOGIN", { username, password }], { log: false });
 
-    return cy.wait("@loginUser");
+    return cy
+      .wait(["@loginUser", "@getUserProfile"])
+      .spread((loginUser, getUserProfile) => {
+        log.set({
+          consoleProps() {
+            return {
+              username,
+              password,
+              userId: getUserProfile.response.body.user.id,
+            };
+          },
+        });
+
+        // Question: what is the "2" state in between before and after snapshots
+        log.snapshot("after");
+        log.end();
+      });
   }
 );
 
