@@ -89,15 +89,15 @@ Cypress.Commands.add(
     cy.visit("/signin");
 
     // Temporary fix
-    cy.wait(10, { log: false });
+    cy.wait(100, { log: false });
 
     log.snapshot("before");
 
     cy.waitForXstateService("authService");
 
-    cy.window({ log: false })
-      .its("authService")
-      .invoke("send", ["LOGIN", { username, password }]);
+    cy.window({ log: false }).then((win) =>
+      win.authService.send("LOGIN", { username, password })
+    );
 
     return cy
       .wait(["@loginUser", "@getUserProfile"])
@@ -120,42 +120,76 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("logoutByXstate", () => {
-  return cy.window().its("authService").invoke("send", ["LOGOUT"]);
+  cy.server();
+  cy.route("POST", "/logout").as("logoutUser");
+
+  const log = Cypress.log({
+    name: "logoutByXstate",
+    displayName: "LOGOUT BY XSTATE",
+    // @ts-ignore
+    message: `🔒 Logging out current user`,
+  });
+
+  log.snapshot("before");
+
+  // cy.window({ log: false }).its("authService").invoke("send", ["LOGOUT"]);
+  cy.window({ log: false }).then((win) => win.authService.send("LOGOUT"));
+  cy.wait("@logoutUser");
+
+  log.snapshot("after");
+  log.end();
 });
 
 Cypress.Commands.add("createTransaction", (payload) => {
-  return cy
-    .window()
-    .its("createTransactionService")
-    .then((service) => {
-      service.send("SET_USERS", payload);
+  Cypress.log({
+    name: "createTransaction",
+    displayName: "CREATE TRANSACTION",
+    // @ts-ignore
+    message: `💸 (${payload.transactionType}): ${payload.sender.id} <> ${payload.receiver.id}`,
+    consoleProps() {
+      return payload;
+    },
+  });
 
-      const createPayload = pick(
-        ["amount", "description", "transactionType"],
-        payload
-      );
+  return cy.window({ log: false }).then((win) => {
+    win.createTransactionService.send("SET_USERS", payload);
 
-      service.send("CREATE", {
-        ...createPayload,
-        senderId: payload.sender.id,
-        receiverId: payload.receiver.id,
-      });
+    const createPayload = pick(
+      ["amount", "description", "transactionType"],
+      payload
+    );
+
+    win.createTransactionService.send("CREATE", {
+      ...createPayload,
+      senderId: payload.sender.id,
+      receiverId: payload.receiver.id,
     });
+  });
 });
 
 Cypress.Commands.add("nextTransactionFeedPage", (service, page) => {
-  return cy
-    .window()
-    .its(service)
-    .then((service) => {
-      // @ts-ignore
-      return service.send("FETCH", { page });
-    });
+  Cypress.log({
+    name: "nextTransactionFeedPage",
+    displayName: "NEXT TRANSACTION FEED PAGE",
+    // @ts-ignore
+    message: `📃 Fetching page ${page} with ${service}`,
+    consoleProps() {
+      return {
+        service,
+        page,
+      };
+    },
+  });
+
+  return cy.window({ log: false }).then((win) => {
+    // @ts-ignore
+    return win[service].send("FETCH", { page });
+  });
 });
 
 Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
   const log = Cypress.log({
-    name: "pickdaterange",
+    name: "pickDateRange",
     displayName: "PICK DATE RANGE",
     // @ts-ignore
     message: `🗓 ${startDate.toDateString()} to ${endDate.toDateString()}`,

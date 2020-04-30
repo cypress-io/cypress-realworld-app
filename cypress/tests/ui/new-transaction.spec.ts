@@ -15,24 +15,15 @@ describe("New Transaction", function () {
     cy.task("db:seed");
 
     cy.server();
-    cy.route("POST", "http://localhost:3001/logout").as("logout");
-    cy.route("POST", "http://localhost:3001/transactions").as(
-      "createTransaction"
-    );
+    cy.route("POST", "/transactions").as("createTransaction");
 
-    cy.route("GET", "http://localhost:3001/users").as("allUsers");
-    cy.route("GET", "http://localhost:3001/notifications").as("notifications");
-    cy.route("GET", "http://localhost:3001/transactions/public").as(
-      "publicTransactions"
-    );
-    cy.route("GET", "http://localhost:3001/checkAuth").as("userProfile");
-    cy.route("GET", "http://localhost:3001/transactions").as(
-      "personalTransactions"
-    );
-    cy.route("GET", "http://localhost:3001/users/search*").as("usersSearch");
-    cy.route("PATCH", "http://localhost:3001/transactions/*").as(
-      "updateTransaction"
-    );
+    cy.route("GET", "/users").as("allUsers");
+    cy.route("GET", "/notifications").as("notifications");
+    cy.route("GET", "/transactions/public").as("publicTransactions");
+    cy.route("GET", "/checkAuth").as("userProfile");
+    cy.route("GET", "/transactions").as("personalTransactions");
+    cy.route("GET", "/users/search*").as("usersSearch");
+    cy.route("PATCH", "/transactions/*").as("updateTransaction");
 
     cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
       ctx.allUsers = users;
@@ -126,7 +117,6 @@ describe("New Transaction", function () {
     cy.wait("@createTransaction");
 
     cy.logoutByXstate();
-    cy.wait("@logout");
 
     cy.loginByXstate(ctx.contact!.username);
 
@@ -152,7 +142,6 @@ describe("New Transaction", function () {
     cy.wait("@createTransaction");
 
     cy.logoutByXstate();
-    cy.wait("@logout");
 
     cy.loginByXstate(ctx.contact!.username);
 
@@ -165,7 +154,6 @@ describe("New Transaction", function () {
     cy.wait("@updateTransaction").its("status").should("equal", 204);
 
     cy.logoutByXstate();
-    cy.wait("@logout");
 
     cy.loginByXstate(ctx.user!.username);
     cy.getTest("sidenav-user-balance").should(
