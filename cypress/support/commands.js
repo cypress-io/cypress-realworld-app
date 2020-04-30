@@ -85,7 +85,7 @@ Cypress.Commands.add(
 
     cy.server();
     cy.route("POST", "/login").as("loginUser");
-    cy.route("GET", "checkAuth").as("getUserProfile");
+    cy.route("GET", "/checkAuth").as("getUserProfile");
     cy.visit("/signin");
 
     // Temporary fix
@@ -224,5 +224,9 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
   });
 });
 
-Cypress.Commands.add("getTest", (s) => cy.get(`[data-test=${s}]`));
-Cypress.Commands.add("getTestLike", (s) => cy.get(`[data-test*=${s}]`));
+Cypress.Commands.add("getTest", (s, ...args) =>
+  cy.get(`[data-test=${s}]`, ...args)
+);
+Cypress.Commands.add("getTestLike", (s, ...args) =>
+  cy.get(`[data-test*=${s}]`, ...args)
+);

@@ -20,7 +20,6 @@ describe("New Transaction", function () {
     cy.route("GET", "/users").as("allUsers");
     cy.route("GET", "/notifications").as("notifications");
     cy.route("GET", "/transactions/public").as("publicTransactions");
-    cy.route("GET", "/checkAuth").as("userProfile");
     cy.route("GET", "/transactions").as("personalTransactions");
     cy.route("GET", "/users/search*").as("usersSearch");
     cy.route("PATCH", "/transactions/*").as("updateTransaction");
@@ -68,7 +67,10 @@ describe("New Transaction", function () {
         amount: updatedContact.balance,
       }).toFormat();
 
-      cy.getTest("sidenav-user-balance").should("contain", updatedBalance);
+      cy.getTest("sidenav-user-balance", { timeout: 5000 }).should(
+        "contain",
+        updatedBalance
+      );
     });
 
     cy.getTest("app-name-logo").find("a").click();
