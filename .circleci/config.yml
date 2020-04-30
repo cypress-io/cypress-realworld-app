@@ -40,7 +40,7 @@ workflows:
           parallel: true
           parallelism: 2
           spec: cypress/tests/ui/*
-          group: UI - Chrome
+          group: "UI - Chrome"
       - cypress/run:
         name: "UI Tests - Firefox"
         requires:
@@ -54,4 +54,4 @@ workflows:
         parallel: true
         parallelism: 2
         spec: cypress/tests/ui/*
-        group: UI - Firefox
+        group: "UI - Firefox"
