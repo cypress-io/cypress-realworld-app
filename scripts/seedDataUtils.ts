@@ -21,6 +21,7 @@ import {
   negate,
   find,
   intersectionWith,
+  compact,
 } from "lodash/fp";
 import {
   BankAccount,
@@ -76,12 +77,7 @@ export const passwordHash = bcrypt.hashSync(defaultPassword, 10);
 export const getRandomTransactions = (
   baseCount: number,
   baseTransactions: Transaction[]
-) =>
-  uniq(
-    Array(baseCount)
-      .fill(null)
-      .map(() => sample(baseTransactions))
-  );
+) => compact(uniq(times(() => sample(baseTransactions), baseCount)));
 
 export const createFakeUser = (): User => ({
   id: shortid(),
@@ -395,7 +391,7 @@ export const createSeedLikes = (
       );
 
       // choose random transactions
-      const randomTransactions = getRandomTransactions(5, transactions);
+      const randomTransactions = getRandomTransactions(10, transactions);
 
       // get a slice of random transactions
       const selectedTransactions = randomTransactions.slice(0, likesPerUser);
@@ -544,10 +540,9 @@ export const createSeedNotifications = (
         seedComments
       );
 
-      const likeTransaction = getRandomTransactions(
-        1,
-        transactionsWithLikes
-      )[0];
+      const likeTransaction = sample(
+        compact(getRandomTransactions(5, transactionsWithLikes))
+      );
       const like = getLikeByTransactionId(likeTransaction!.id, seedLikes);
       const likeNotification = createFakeLikeNotification(
         user.id,
@@ -555,10 +550,9 @@ export const createSeedNotifications = (
         like!.id
       );
 
-      const commentTransaction = getRandomTransactions(
-        1,
-        transactionsWithComments
-      )[0];
+      const commentTransaction = sample(
+        compact(getRandomTransactions(5, transactionsWithComments))
+      );
       const comment = getCommentByTransactionId(
         commentTransaction!.id,
         seedComments
