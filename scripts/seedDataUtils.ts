@@ -55,8 +55,8 @@ export const notificationsPerUser = +process.env.SEED_NOTIFICATIONS_PER_USER!;
 export const bankTransfersPerUser = +process.env.SEED_BANK_TRANSFERS_PER_USER!;
 export const defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD!;
 
-export const paymentVariations = 3;
-export const requestVariations = 4;
+export const paymentVariations = 2;
+export const requestVariations = 3;
 // transactions per user = paymentsPerUser * paymentVariations * sender/receiver(2)
 // +
 // requestsPerUser * requestVariations * sender/receiver(2)
