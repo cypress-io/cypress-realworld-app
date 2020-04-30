@@ -30,10 +30,9 @@ router.post(
   (req, res) => {
     const { transactionId } = req.params;
 
-    const like = createLikes(req.user?.id!, transactionId);
+    createLikes(req.user?.id!, transactionId);
 
-    res.status(200);
-    res.json({ like });
+    res.sendStatus(200);
   }
 );
 

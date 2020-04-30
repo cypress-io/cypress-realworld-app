@@ -44,7 +44,6 @@ describe("Likes API", function () {
         transactionId: ctx.transactionId,
       }).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.like.id).to.be.a("string");
       });
     });
   });

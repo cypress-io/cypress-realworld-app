@@ -31,10 +31,9 @@ router.post(
     const { transactionId } = req.params;
     const { content } = req.body;
 
-    const comment = createComments(req.user?.id!, transactionId, content);
+    createComments(req.user?.id!, transactionId, content);
 
-    res.status(200);
-    res.json({ comment });
+    res.sendStatus(200);
   }
 );
 
