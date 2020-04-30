@@ -6,6 +6,7 @@ workflows:
     jobs:
       - cypress/install:
           yarn: true
+          executor: cypress/browsers-chrome78-ff70
           build: "npm run build"
           post-steps:
             - run:
