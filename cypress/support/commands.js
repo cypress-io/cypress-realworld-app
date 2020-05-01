@@ -70,7 +70,39 @@ Cypress.Commands.add("waitForXstateService", (service) => {
     const message = `${service} is ready`;
     // @ts-ignore
     expect(win[service].initialized, message).to.be.true;
+
+Cypress.Commands.add("component", { prevSubject: "element" }, ($el) => {
+  if ($el.length !== 1) {
+    throw new Error(
+      `cy.component() requires element of length 1 but got ${$el.length}`
+    );
+  }
+  const key = Object.keys($el.get(0)).find((key) =>
+    key.startsWith("__reactInternalInstance$")
+  );
+  // @ts-ignore
+  const domFiber = $el.prop(key);
+
+  Cypress.log({
+    name: "component",
+    consoleProps() {
+      return {
+        component: domFiber,
+      };
+    },
   });
+    log.snapshot("before");
+
+
+  return domFiber._debugOwner;
+});
+
+Cypress.Commands.add("setTransactionAmountRange", (min, max) => {
+  return cy
+    .getTestLike("filter-amount-range-slider")
+    .component()
+    .its("memoizedProps")
+    .invoke("onChange", null, [min / 10, max / 10]);
 });
 
 Cypress.Commands.add(
