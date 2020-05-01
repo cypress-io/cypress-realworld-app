@@ -94,8 +94,6 @@ Cypress.Commands.add("component", { prevSubject: "element" }, ($el) => {
       };
     },
   });
-    log.snapshot("before");
-
 
   return domFiber._debugOwner;
 });
@@ -116,17 +114,18 @@ Cypress.Commands.add(
       displayName: "LOGIN BY XSTATE",
       // @ts-ignore
       message: `🔐 Authenticating | ${username}`,
+      autoEnd: false,
     });
 
     cy.server();
     cy.route("POST", "/login").as("loginUser");
     cy.route("GET", "/checkAuth").as("getUserProfile");
-    cy.visit("/signin");
+    cy.visit("/signin", { log: false }).then(() => {
+      log.snapshot("before");
+    });
 
     // Temporary fix
     cy.wait(100, { log: false });
-
-    log.snapshot("before");
 
     cy.waitForXstateService("authService");
 
@@ -147,7 +146,6 @@ Cypress.Commands.add(
           },
         });
 
-        // Question: what is the "2" state in between before and after snapshots
         log.snapshot("after");
         log.end();
       });
