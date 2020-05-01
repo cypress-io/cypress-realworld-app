@@ -67,9 +67,12 @@ Cypress.Commands.add("loginByApi", (username, password = defaultPassword) => {
 
 Cypress.Commands.add("waitForXstateService", (service) => {
   return cy.window({ log: false }).should((win) => {
-    const message = `${service} is ready`;
     // @ts-ignore
-    expect(win[service].initialized, message).to.be.true;
+    if (!win[service].initialized) {
+      throw new Error(`${service} is not ready!`);
+    }
+  });
+});
 
 Cypress.Commands.add("component", { prevSubject: "element" }, ($el) => {
   if ($el.length !== 1) {
