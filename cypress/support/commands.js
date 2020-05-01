@@ -96,9 +96,10 @@ Cypress.Commands.add("component", { prevSubject: "element" }, ($el) => {
     },
   });
 
-  return domFiber._debugOwner
-    ? domFiber._debugOwner
-    : domFiber.return.stateNode;
+  //return domFiber._debugOwner
+  //  ? domFiber._debugOwner
+  //  : domFiber.return.stateNode;
+  return domFiber._debugOwner ? domFiber._debugOwner : domFiber.return;
 });
 
 Cypress.Commands.add("setTransactionAmountRange", (min, max) => {
