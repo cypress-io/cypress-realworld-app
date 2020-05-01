@@ -74,7 +74,7 @@ Cypress.Commands.add("waitForXstateService", (service) => {
   });
 });
 
-Cypress.Commands.add("component", { prevSubject: "element" }, ($el) => {
+Cypress.Commands.add("reactComponent", { prevSubject: "element" }, ($el) => {
   if ($el.length !== 1) {
     throw new Error(
       `cy.component() requires element of length 1 but got ${$el.length}`
@@ -96,13 +96,13 @@ Cypress.Commands.add("component", { prevSubject: "element" }, ($el) => {
     },
   });
 
-  return domFiber._debugOwner ? domFiber._debugOwner : domFiber.return;
+  return domFiber.return;
 });
 
 Cypress.Commands.add("setTransactionAmountRange", (min, max) => {
   return cy
     .getTestLike("filter-amount-range-slider")
-    .component()
+    .reactComponent()
     .its("memoizedProps")
     .invoke("onChange", null, [min / 10, max / 10]);
 });
@@ -126,7 +126,7 @@ Cypress.Commands.add(
     });
 
     // Temporary fix
-    cy.wait(100, { log: false });
+    // cy.wait(100, { log: false });
 
     cy.waitForXstateService("authService");
 

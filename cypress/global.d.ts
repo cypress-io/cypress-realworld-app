@@ -65,7 +65,7 @@ declare namespace Cypress {
       args?: any
     ): Chainable<Element>;
     fetchTestData(entity: string, filterDetails: object): Chainable<any[]>;
-    component(): Chainable<any>;
+    reactComponent(): Chainable<any>;
     setTransactionAmountRange(min: number, max: number): Chainable<any>;
   }
 }
