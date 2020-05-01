@@ -72,7 +72,10 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
       {({ isValid, isSubmitting }) => (
         <Form className={classes.form} data-test="bankaccount-form">
           <Field name="bankName">
-            {({ field, meta }: FieldProps) => (
+            {({
+              field,
+              meta: { error, value, initialValue, touched },
+            }: FieldProps) => (
               <TextField
                 variant="outlined"
                 margin="dense"
@@ -82,14 +85,17 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
                 type="text"
                 placeholder="Bank Name"
                 data-test={"bankaccount-bankName-input"}
-                error={meta.touched && Boolean(meta.error)}
-                helperText={meta.touched ? meta.error : ""}
+                error={(touched || value !== initialValue) && Boolean(error)}
+                helperText={touched || value !== initialValue ? error : ""}
                 {...field}
               />
             )}
           </Field>
           <Field name="routingNumber">
-            {({ field, meta }: FieldProps) => (
+            {({
+              field,
+              meta: { error, value, initialValue, touched },
+            }: FieldProps) => (
               <TextField
                 variant="outlined"
                 margin="dense"
@@ -99,14 +105,17 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
                 type="text"
                 placeholder="Routing Number"
                 data-test={"bankaccount-routingNumber-input"}
-                error={meta.touched && Boolean(meta.error)}
-                helperText={meta.touched ? meta.error : ""}
+                error={(touched || value !== initialValue) && Boolean(error)}
+                helperText={touched || value !== initialValue ? error : ""}
                 {...field}
               />
             )}
           </Field>
           <Field name="accountNumber">
-            {({ field, meta }: FieldProps) => (
+            {({
+              field,
+              meta: { error, value, initialValue, touched },
+            }: FieldProps) => (
               <TextField
                 variant="outlined"
                 margin="dense"
@@ -116,8 +125,8 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
                 type="text"
                 placeholder="Account Number"
                 data-test={"bankaccount-accountNumber-input"}
-                error={meta.touched && Boolean(meta.error)}
-                helperText={meta.touched ? meta.error : ""}
+                error={(touched || value !== initialValue) && Boolean(error)}
+                helperText={touched || value !== initialValue ? error : ""}
                 {...field}
               />
             )}
