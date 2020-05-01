@@ -255,6 +255,7 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
     displayName: "PICK DATE RANGE",
     // @ts-ignore
     message: `🗓 ${startDate.toDateString()} to ${endDate.toDateString()}`,
+    autoEnd: false,
     consoleProps() {
       return {
         startDate,
