@@ -17,8 +17,8 @@ import { User } from "../models";
 import { random } from "lodash/fp";
 
 const validationSchema = object({
-  amount: number().required("Amount is required"),
-  description: string().required("Please type a note"),
+  amount: number().required("Please enter a valid amount"),
+  description: string().required("Please enter a note"),
   senderId: string(),
   receiverId: string(),
 });
@@ -146,7 +146,10 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
           {({ isValid, isSubmitting }) => (
             <Form className={classes.form} data-test="transaction-create-form">
               <Field name="amount">
-                {({ field, meta }: FieldProps) => (
+                {({
+                  field,
+                  meta: { error, value, initialValue, touched },
+                }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="dense"
@@ -157,8 +160,10 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                     type="text"
                     placeholder="Amount"
                     data-test={"transaction-create-amount-input"}
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched ? meta.error : ""}
+                    error={
+                      (touched || value !== initialValue) && Boolean(error)
+                    }
+                    helperText={touched || value !== initialValue ? error : ""}
                     InputProps={{
                       inputComponent: NumberFormatCustom as any,
                       inputProps: { id: "amount" },
@@ -168,7 +173,10 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                 )}
               </Field>
               <Field name="description">
-                {({ field, meta }: FieldProps) => (
+                {({
+                  field,
+                  meta: { error, value, initialValue, touched },
+                }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="dense"
@@ -178,8 +186,10 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                     type="text"
                     placeholder="Add a note"
                     data-test={"transaction-create-description-input"}
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched ? meta.error : ""}
+                    error={
+                      (touched || value !== initialValue) && Boolean(error)
+                    }
+                    helperText={touched || value !== initialValue ? error : ""}
                     {...field}
                   />
                 )}
