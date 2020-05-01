@@ -83,8 +83,19 @@ Cypress.Commands.add("component", { prevSubject: "element" }, ($el) => {
   const key = Object.keys($el.get(0)).find((key) =>
     key.startsWith("__reactInternalInstance$")
   );
+
+  // @ts-ignore
+  if (!key) {
+    throw new Error(`react internal instance not defined: ${$el.get(0)}`);
+  }
+
   // @ts-ignore
   const domFiber = $el.prop(key);
+
+  // @ts-ignore
+  if (!domFiber) {
+    throw new Error("domFiber not defined");
+  }
 
   Cypress.log({
     name: "component",
