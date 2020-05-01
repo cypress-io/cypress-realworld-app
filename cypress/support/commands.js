@@ -85,17 +85,7 @@ Cypress.Commands.add("component", { prevSubject: "element" }, ($el) => {
   );
 
   // @ts-ignore
-  if (!key) {
-    throw new Error(`react internal instance not defined: ${$el.get(0)}`);
-  }
-
-  // @ts-ignore
   const domFiber = $el.prop(key);
-
-  // @ts-ignore
-  if (!domFiber) {
-    throw new Error("domFiber not defined");
-  }
 
   Cypress.log({
     name: "component",
@@ -106,8 +96,9 @@ Cypress.Commands.add("component", { prevSubject: "element" }, ($el) => {
     },
   });
 
-  //return domFiber._debugOwner;
-  return domFiber;
+  return domFiber._debugOwner
+    ? domFiber._debugOwner
+    : domFiber.return.stateNode;
 });
 
 Cypress.Commands.add("setTransactionAmountRange", (min, max) => {
