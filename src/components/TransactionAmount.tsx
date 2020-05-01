@@ -25,6 +25,7 @@ const TransactionAmount: React.FC<{
 
   return (
     <Typography
+      data-test={`transaction-amount-${transaction.id}`}
       className={
         isRequestTransaction(transaction)
           ? classes.amountPositive
