@@ -161,51 +161,62 @@ Cypress.Commands.add("logoutByXstate", () => {
     displayName: "LOGOUT BY XSTATE",
     // @ts-ignore
     message: `🔒 Logging out current user`,
+    autoEnd: false,
   });
 
-  log.snapshot("before");
+  cy.window({ log: false }).then((win) => {
+    log.snapshot("before");
+    win.authService.send("LOGOUT");
+  });
 
-  // cy.window({ log: false }).its("authService").invoke("send", ["LOGOUT"]);
-  cy.window({ log: false }).then((win) => win.authService.send("LOGOUT"));
-  cy.wait("@logoutUser");
-
-  log.snapshot("after");
-  log.end();
+  return cy.wait("@logoutUser").then(() => {
+    log.snapshot("after");
+    log.end();
+  });
 });
 
 Cypress.Commands.add("createTransaction", (payload) => {
-  Cypress.log({
+  const log = Cypress.log({
     name: "createTransaction",
     displayName: "CREATE TRANSACTION",
     // @ts-ignore
     message: `💸 (${payload.transactionType}): ${payload.sender.id} <> ${payload.receiver.id}`,
+    autoEnd: false,
     consoleProps() {
       return payload;
     },
   });
 
-  return cy.window({ log: false }).then((win) => {
-    win.createTransactionService.send("SET_USERS", payload);
+  return cy
+    .window({ log: false })
+    .then((win) => {
+      log.snapshot("before");
+      win.createTransactionService.send("SET_USERS", payload);
 
-    const createPayload = pick(
-      ["amount", "description", "transactionType"],
-      payload
-    );
+      const createPayload = pick(
+        ["amount", "description", "transactionType"],
+        payload
+      );
 
-    win.createTransactionService.send("CREATE", {
-      ...createPayload,
-      senderId: payload.sender.id,
-      receiverId: payload.receiver.id,
+      return win.createTransactionService.send("CREATE", {
+        ...createPayload,
+        senderId: payload.sender.id,
+        receiverId: payload.receiver.id,
+      });
+    })
+    .then(() => {
+      log.snapshot("after");
+      log.end();
     });
-  });
 });
 
 Cypress.Commands.add("nextTransactionFeedPage", (service, page) => {
-  Cypress.log({
+  const log = Cypress.log({
     name: "nextTransactionFeedPage",
     displayName: "NEXT TRANSACTION FEED PAGE",
     // @ts-ignore
     message: `📃 Fetching page ${page} with ${service}`,
+    autoEnd: false,
     consoleProps() {
       return {
         service,
@@ -214,10 +225,17 @@ Cypress.Commands.add("nextTransactionFeedPage", (service, page) => {
     },
   });
 
-  return cy.window({ log: false }).then((win) => {
-    // @ts-ignore
-    return win[service].send("FETCH", { page });
-  });
+  return cy
+    .window({ log: false })
+    .then((win) => {
+      log.snapshot("before");
+      // @ts-ignore
+      return win[service].send("FETCH", { page });
+    })
+    .then(() => {
+      log.snapshot("after");
+      log.end();
+    });
 });
 
 Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
@@ -240,11 +258,13 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
       .click({ force: true });
   };
 
-  log.snapshot("before");
-
   // Focus initial viewable date picker range around target start date
   // @ts-ignore: Cypress expects wrapped variable to be a jQuery type
-  cy.wrap(startDate.getTime()).then((now) => cy.clock(now, ["Date"]));
+  cy.wrap(startDate.getTime()).then((now) => {
+    log.snapshot("before");
+    // @ts-ignore
+    cy.clock(now, ["Date"]);
+  });
 
   // Open date range picker
   cy.getTestLike("filter-date-range-button").click({ force: true });
