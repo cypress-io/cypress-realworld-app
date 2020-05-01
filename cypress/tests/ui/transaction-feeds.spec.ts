@@ -54,49 +54,47 @@ describe("Transaction Feed", function () {
 
   // TODO: temporary placement
   describe("ancillary tests", function () {
-    it("defaults side navigation to closed (mobile)", function () {
-      cy.viewport("iphone-6");
-      cy.getTest("sidenav-user-balance").should("not.be.visible");
-    });
+    if (Cypress.config("viewportWidth") < 414) {
+      it("defaults side navigation to closed (mobile)", function () {
+        cy.getTest("sidenav-user-balance").should("not.be.visible");
+      });
 
-    it("defaults side navigation to open (desktop)", function () {
-      cy.getTest("sidenav-user-balance").should("be.visible");
-    });
+      it("shows amount range in drawer on mobile", function () {
+        cy.getTest("nav-personal-tab")
+          .click()
+          .should("have.class", "Mui-selected");
+        cy.getTestLike("filter-amount-range-button").click({ force: true });
+        cy.getTest("amount-range-filter-drawer").should("be.visible");
+        cy.getTest("amount-range-filter-drawer-close").click();
+      });
 
-    it("shows amount range in drawer on mobile", function () {
-      cy.viewport("iphone-6");
+      it("shows date range calendar full screen on mobile", function () {
+        cy.getTest("nav-personal-tab")
+          .click()
+          .should("have.class", "Mui-selected");
 
-      cy.getTest("nav-personal-tab")
-        .click()
-        .should("have.class", "Mui-selected");
-      cy.getTestLike("filter-amount-range-button").click({ force: true });
-      cy.getTest("amount-range-filter-drawer").should("be.visible");
-      cy.getTest("amount-range-filter-drawer-close").click();
-    });
+        cy.getTestLike("filter-date-range-button")
+          .scrollIntoView()
+          .click({ force: true });
 
-    it("shows date range calendar full screen on mobile", function () {
-      cy.viewport("iphone-6");
+        cy.getTest("date-range-filter-drawer").should("be.visible");
 
-      cy.getTest("nav-personal-tab")
-        .click()
-        .should("have.class", "Mui-selected");
+        // Potential Cypress Bug:
+        // This is a potential bug with two overlapping fixed elements
+        // https://github.com/cypress-io/cypress/issues/1242
+        // https://github.com/cypress-io/cypress/issues/5959
+        // cy.getTest("app-name-logo").should("not.be.visible");
 
-      cy.getTestLike("filter-date-range-button")
-        .scrollIntoView()
-        .click({ force: true });
-
-      cy.getTest("date-range-filter-drawer").should("be.visible");
-
-      // Potential Cypress Bug:
-      // This is a potential bug with two overlapping fixed elements
-      // https://github.com/cypress-io/cypress/issues/1242
-      // https://github.com/cypress-io/cypress/issues/5959
-      // cy.getTest("app-name-logo").should("not.be.visible");
-
-      cy.getTest("date-range-filter-drawer-close").click();
-    });
+        cy.getTest("date-range-filter-drawer-close").click();
+      });
+    } else {
+      it("defaults side navigation to open (desktop)", function () {
+        cy.getTest("sidenav-user-balance").should("be.visible");
+      });
+    }
   });
 
+  // TODO: expand test to verify that amount formatting based on +/-
   describe("renders and paginates all transaction feeds", function () {
     _.each(feedViews, (feed, feedName) => {
       it(`renders and paginates ${feedName} transaction feed`, function () {
