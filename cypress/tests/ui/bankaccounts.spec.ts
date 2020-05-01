@@ -33,8 +33,8 @@ describe("Bank Accounts", function () {
     cy.location("pathname").should("be", "/bankaccounts/new");
 
     cy.getTestLike("bankName-input").type("The Best Bank");
-    cy.getTestLike("accountNumber-input").type("123456789");
     cy.getTestLike("routingNumber-input").type("987654321");
+    cy.getTestLike("accountNumber-input").type("123456789");
     cy.getTestLike("submit").click();
 
     cy.wait("@createBankAccount");
