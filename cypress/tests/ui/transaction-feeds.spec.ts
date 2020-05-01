@@ -1,3 +1,4 @@
+import Dinero from "dinero.js";
 import { User, Transaction } from "../../../src/models";
 import { addDays, isWithinInterval, startOfDay } from "date-fns";
 import {
@@ -198,33 +199,53 @@ describe("Transaction Feed", function () {
   });
 
   // TODO: add a test to filter for transaction out of known seed date range limit
-
   describe("filters transaction feeds by amount range", function () {
+    const dollarAmountRange = {
+      min: 200,
+      max: 800,
+    };
     _.each(feedViews, (feed, feedName) => {
       it(`filters ${feedName} transaction feed by amount range`, function () {
         cy.getTestLike(feed.tab)
           .click({ force: true })
           .should("have.class", "Mui-selected");
 
+        cy.wait(`@${feed.routeAlias}`);
+
         cy.getTest("transaction-list-filter-amount-range-button")
           .scrollIntoView()
           .click({ force: true });
 
-        cy.get("[data-index='0']")
-          .trigger("mousedown", { force: true })
-          .trigger("mousemove", 10, -10, { force: true });
+        cy.setTransactionAmountRange(
+          dollarAmountRange.min,
+          dollarAmountRange.max
+        );
 
-        cy.get("[data-index='1']")
-          .trigger("mousedown", { force: true })
-          .trigger("mousemove", -100, 100, { force: true });
+        cy.getTestLike("filter-amount-range-text").should(
+          "contain",
+          `$${dollarAmountRange.min} - $${dollarAmountRange.max}`
+        );
 
-        cy.getTest("transaction-list-filter-amount-range-text")
-          .should("contain", "$40")
-          .and("contain", "$300");
+        cy.wait(`@${feed.routeAlias}`).then((xhr) => {
+          // @ts-ignore
+          const transactions = xhr.response.body.results;
+          const urlParams = new URLSearchParams(xhr.url.split("?")[1]);
 
-        cy.wait(`@${feed.routeAlias}`);
+          const rawAmountMin = dollarAmountRange.min * 100;
+          const rawAmountMax = dollarAmountRange.max * 100;
 
-        cy.getTestLike("transaction-item").should("have.length.greaterThan", 1);
+          expect(urlParams.get("amountMin")).to.equal(`${rawAmountMin}`);
+          expect(urlParams.get("amountMax")).to.equal(`${rawAmountMax}`);
+
+          // @ts-ignore
+          transactions.slice(0, 5).forEach(({ id, amount }) => {
+            expect(amount).to.be.within(rawAmountMin, rawAmountMax);
+            cy.getTestLike(`transaction-amount-${id}`).should(
+              "contain",
+              Dinero({ amount }).toFormat()
+            );
+          });
+        });
       });
     });
   });
