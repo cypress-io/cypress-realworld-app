@@ -39,7 +39,7 @@
     "@types/uuid": "7.0.2",
     "@types/validator": "13.0.0",
     "@types/webpack-env": "1.15.1",
-    "@types/yup": "0.26.36",
+    "@types/yup": "0.28.0",
     "@xstate/react": "0.8.1",
     "axios": "0.19.2",
     "bcryptjs": "2.4.3",
@@ -74,7 +74,7 @@
     "typescript": "3.8.3",
     "uuid": "7.0.3",
     "xstate": "4.9.0",
-    "yup": "0.28.3"
+    "yup": "0.28.5"
   },
   "devDependencies": {
     "@cypress/code-coverage": "3.2.1",
