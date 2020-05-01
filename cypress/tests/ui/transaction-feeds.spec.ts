@@ -110,7 +110,11 @@ describe("Transaction Feed", function () {
           .should("have.length", Cypress.env("paginationPageSize"));
 
         // Assert visible UI
-        cy.getTestLike("transaction-item").should("have.length", 8);
+        cy.getTestLike("transaction-item").should(
+          "have.length.within",
+          5,
+          parseInt(Cypress.env("paginationPageSize"))
+        );
 
         // Scroll to paginate to next page
         cy.getTest("transaction-list").children().scrollTo("bottom");
