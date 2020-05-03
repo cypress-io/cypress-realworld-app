@@ -70,7 +70,7 @@
     "redux-devtools-extension": "2.13.8",
     "shortid": "2.2.15",
     "supertest": "4.0.2",
-    "ts-node": "8.8.2",
+    "ts-node": "8.10.1",
     "typescript": "3.8.3",
     "uuid": "7.0.3",
     "xstate": "4.9.0",
