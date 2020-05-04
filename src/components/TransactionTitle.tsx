@@ -37,6 +37,7 @@ const TransactionTitle: React.FC<{
   return (
     <Typography color="textSecondary" className={classes.title} gutterBottom>
       <Typography
+        data-test={`transaction-sender-${transaction.id}`}
         className={classes.titleName}
         display="inline"
         component="span"
@@ -44,6 +45,7 @@ const TransactionTitle: React.FC<{
         {transaction.senderName}
       </Typography>
       <Typography
+        data-test={`transaction-action-${transaction.id}`}
         display="inline"
         className={classes.titleAction}
         component="span"
@@ -55,6 +57,7 @@ const TransactionTitle: React.FC<{
           : " paid "}
       </Typography>
       <Typography
+        data-test={`transaction-receiver-${transaction.id}`}
         className={classes.titleName}
         display="inline"
         component="span"
