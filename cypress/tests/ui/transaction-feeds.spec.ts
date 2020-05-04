@@ -1,5 +1,11 @@
 import Dinero from "dinero.js";
-import { User, Transaction } from "../../../src/models";
+import {
+  User,
+  Transaction,
+  TransactionRequestStatus,
+  TransactionResponseItem,
+  Contact,
+} from "../../../src/models";
 import { addDays, isWithinInterval, startOfDay } from "date-fns";
 import {
   startOfDayUTC,
@@ -15,6 +21,9 @@ type TransactionFeedsCtx = {
 
 describe("Transaction Feed", function () {
   const ctx: TransactionFeedsCtx = {};
+  const isMobile =
+    Cypress.config("viewportWidth") < Cypress.env("mobileViewportWidth");
+  const initialFeedItemCount = isMobile ? 5 : 8;
 
   const feedViews = {
     public: {
@@ -55,7 +64,7 @@ describe("Transaction Feed", function () {
 
   // TODO: temporary placement
   describe("ancillary tests", function () {
-    if (Cypress.config("viewportWidth") < 414) {
+    if (isMobile) {
       it("defaults side navigation to closed (mobile)", function () {
         cy.getTest("sidenav-user-balance").should("not.be.visible");
       });
@@ -70,6 +79,7 @@ describe("Transaction Feed", function () {
       });
 
       it("shows date range calendar full screen on mobile", function () {
+        // cy.viewport("iphone-6"); // for review demo
         cy.getTest("nav-personal-tab")
           .click()
           .should("have.class", "Mui-selected");
@@ -95,7 +105,6 @@ describe("Transaction Feed", function () {
     }
   });
 
-  // TODO: expand test to verify that amount formatting based on +/-
   describe("renders and paginates all transaction feeds", function () {
     _.each(feedViews, (feed, feedName) => {
       it(`renders and paginates ${feedName} transaction feed`, function () {
@@ -105,17 +114,71 @@ describe("Transaction Feed", function () {
           .contains(feed.tabLabel, { matchCase: false })
           .should("have.css", { "text-transform": "uppercase" });
 
-        // Assert at the network layer
         cy.wait(`@${feed.routeAlias}`)
           .its("response.body.results")
-          .should("have.length", Cypress.env("paginationPageSize"));
+          .should("have.length", Cypress.env("paginationPageSize"))
+          .then((transactions) => {
+            cy.getTestLike("transaction-item")
+              .should("have.length", initialFeedItemCount)
+              .each(($el) => {
+                const transactionId = _.last(
+                  // @ts-ignore
+                  // TODO: generate only alphanumeric ids
+                  $el.get(0).dataset.test.split("transaction-item-")
+                );
+                const transaction = _.find(transactions, {
+                  id: transactionId,
+                })!;
+                const formattedAmount = Dinero({
+                  amount: transaction.amount,
+                }).toFormat();
 
-        // Assert visible UI
-        cy.getTestLike("transaction-item").should(
-          "have.length.within",
-          5,
-          parseInt(Cypress.env("paginationPageSize"))
-        );
+                cy.wrap($el.get(0), { log: false })
+                  .should("contain", transaction.description)
+                  .within(() => {
+                    cy.getTestLike("like-count").should(
+                      "have.text",
+                      `${transaction.likes.length}`
+                    );
+                    cy.getTestLike("comment-count").should(
+                      "have.text",
+                      `${transaction.comments.length}`
+                    );
+
+                    cy.getTestLike("sender").should(
+                      "contain",
+                      transaction.senderName
+                    );
+                    cy.getTestLike("receiver").should(
+                      "contain",
+                      transaction.receiverName
+                    );
+
+                    if (transaction.requestStatus) {
+                      const expectedAction =
+                        transaction.requestStatus ===
+                        TransactionRequestStatus.accepted
+                          ? "charged"
+                          : "requested";
+
+                      cy.getTestLike("action").should(
+                        "contain",
+                        expectedAction
+                      );
+
+                      return cy
+                        .getTestLike("amount")
+                        .should("contain", `+${formattedAmount}`)
+                        .should("have.css", "color", "rgb(76, 175, 80)");
+                    }
+
+                    cy.getTestLike("action").should("contain", "paid");
+                    cy.getTestLike("amount")
+                      .should("contain", `-${formattedAmount}`)
+                      .should("have.css", "color", "rgb(255, 0, 0)");
+                  });
+              });
+          });
 
         // Scroll to paginate to next page
         cy.getTest("transaction-list").children().scrollTo("bottom");
@@ -183,16 +246,15 @@ describe("Transaction Feed", function () {
               });
             });
 
-          cy.getTestLike("filter-date-clear-button").click({ force: true });
+          cy.getTestLike("filter-date-clear-button").click({
+            force: true,
+          });
 
-          cy.get("@unfilteredResults").then(
-            // @ts-ignore
-            (unfilteredResults: Transaction[]) => {
-              cy.wait(`@${feed.routeAlias}`)
-                .its("response.body.results")
-                .should("deep.equal", unfilteredResults);
-            }
-          );
+          cy.get("@unfilteredResults").then((unfilteredResults) => {
+            cy.wait(`@${feed.routeAlias}`)
+              .its("response.body.results")
+              .should("deep.equal", unfilteredResults);
+          });
         });
       });
     });
@@ -204,6 +266,7 @@ describe("Transaction Feed", function () {
       min: 200,
       max: 800,
     };
+
     _.each(feedViews, (feed, feedName) => {
       it(`filters ${feedName} transaction feed by amount range`, function () {
         cy.getTestLike(feed.tab)
@@ -226,10 +289,10 @@ describe("Transaction Feed", function () {
           `$${dollarAmountRange.min} - $${dollarAmountRange.max}`
         );
 
-        cy.wait(`@${feed.routeAlias}`).then((xhr) => {
+        cy.wait(`@${feed.routeAlias}`).then(({ response: { body }, url }) => {
           // @ts-ignore
-          const transactions = xhr.response.body.results;
-          const urlParams = new URLSearchParams(xhr.url.split("?")[1]);
+          const transactions = body.results as TransactionResponseItem[];
+          const urlParams = new URLSearchParams(_.last(url.split("?")));
 
           const rawAmountMin = dollarAmountRange.min * 100;
           const rawAmountMax = dollarAmountRange.max * 100;
@@ -237,15 +300,52 @@ describe("Transaction Feed", function () {
           expect(urlParams.get("amountMin")).to.equal(`${rawAmountMin}`);
           expect(urlParams.get("amountMax")).to.equal(`${rawAmountMax}`);
 
-          // @ts-ignore
-          transactions.slice(0, 5).forEach(({ id, amount }) => {
+          transactions.forEach(({ amount }) => {
             expect(amount).to.be.within(rawAmountMin, rawAmountMax);
-            cy.getTestLike(`transaction-amount-${id}`).should(
-              "contain",
-              Dinero({ amount }).toFormat()
-            );
           });
         });
+      });
+    });
+  });
+
+  describe("Feed Item Visibility", () => {
+    it("mine feed only shows personal transactions", function () {
+      cy.task("filter:testData", {
+        entity: "contacts",
+        filterAttrs: { userId: ctx.user!.id },
+      }).then((contacts: Contact[]) => {
+        cy.visit("/personal");
+
+        cy.wait("@personalTransactions")
+          .its("response.body.results")
+          .each((transaction: Transaction) => {
+            const transactionParticipants = [
+              transaction.senderId,
+              transaction.receiverId,
+            ];
+            expect(transactionParticipants).to.include(ctx.user!.id);
+          });
+      });
+    });
+
+    it.skip("friends feed only shows contact transactions", function () {
+      cy.task("filter:testData", {
+        entity: "contacts",
+        filterAttrs: { userId: ctx.user!.id },
+      }).then((contacts: Contact[]) => {
+        // FIX ME: contacts seed generator an can generate duplicate contacts
+        const contactIds = contacts.map((contact) => contact.contactUserId);
+        cy.visit("/personal");
+
+        cy.wait("@personalTransactions")
+          .its("response.body.results")
+          .each((transaction: Transaction) => {
+            const transactionParticipants = [
+              transaction.senderId,
+              transaction.receiverId,
+            ];
+            expect(transactionParticipants).to.include.members(contactIds);
+          });
       });
     });
   });
