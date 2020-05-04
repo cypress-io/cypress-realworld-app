@@ -104,6 +104,30 @@ describe("New Transaction", function () {
     cy.getTestLike("transaction-item").should("contain", request.description);
   });
 
+  it("displays new transaction errors", function () {
+    cy.getTestLike("new-transaction").click();
+    cy.wait("@allUsers");
+
+    cy.getTestLike("user-list-item").contains(ctx.contact!.firstName).click();
+
+    cy.getTestLike("amount-input").type("43").find("input").clear().blur();
+    cy.get("#transaction-create-amount-input-helper-text")
+      .should("be.visible")
+      .and("contain", "Please enter a valid amount");
+
+    cy.getTestLike("description-input")
+      .type("Fun")
+      .find("input")
+      .clear()
+      .blur();
+    cy.get("#transaction-create-description-input-helper-text")
+      .should("be.visible")
+      .and("contain", "Please enter a note");
+
+    cy.getTestLike("submit-request").should("be.disabled");
+    cy.getTestLike("submit-payment").should("be.disabled");
+  });
+
   it("submits a transaction payment and verifies the deposit for the receiver", function () {
     cy.getTest("nav-top-new-transaction").click();
 

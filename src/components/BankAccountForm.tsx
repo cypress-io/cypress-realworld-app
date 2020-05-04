@@ -8,9 +8,15 @@ import { BankAccountPayload, User } from "../models";
 import { useHistory } from "react-router";
 
 const validationSchema = object({
-  bankName: string(),
-  accountNumber: string(),
-  routingNumber: string(),
+  bankName: string()
+    .min(5, "Must contain at least 5 characters")
+    .required("Enter a bank name"),
+  routingNumber: string()
+    .length(9, "Must contain a valid routing number")
+    .required("Enter a valid bank routing number"),
+  accountNumber: string()
+    .length(9, "Must contain a valid account number")
+    .required("Enter a valid bank account number"),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -66,7 +72,10 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
       {({ isValid, isSubmitting }) => (
         <Form className={classes.form} data-test="bankaccount-form">
           <Field name="bankName">
-            {({ field, meta }: FieldProps) => (
+            {({
+              field,
+              meta: { error, value, initialValue, touched },
+            }: FieldProps) => (
               <TextField
                 variant="outlined"
                 margin="dense"
@@ -76,31 +85,17 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
                 type="text"
                 placeholder="Bank Name"
                 data-test={"bankaccount-bankName-input"}
-                error={meta.touched && Boolean(meta.error)}
-                helperText={meta.touched ? meta.error : ""}
-                {...field}
-              />
-            )}
-          </Field>
-          <Field name="accountNumber">
-            {({ field, meta }: FieldProps) => (
-              <TextField
-                variant="outlined"
-                margin="dense"
-                fullWidth
-                required
-                id={"bankaccount-accountNumber-input"}
-                type="text"
-                placeholder="Account Number"
-                data-test={"bankaccount-accountNumber-input"}
-                error={meta.touched && Boolean(meta.error)}
-                helperText={meta.touched ? meta.error : ""}
+                error={(touched || value !== initialValue) && Boolean(error)}
+                helperText={touched || value !== initialValue ? error : ""}
                 {...field}
               />
             )}
           </Field>
           <Field name="routingNumber">
-            {({ field, meta }: FieldProps) => (
+            {({
+              field,
+              meta: { error, value, initialValue, touched },
+            }: FieldProps) => (
               <TextField
                 variant="outlined"
                 margin="dense"
@@ -110,8 +105,28 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
                 type="text"
                 placeholder="Routing Number"
                 data-test={"bankaccount-routingNumber-input"}
-                error={meta.touched && Boolean(meta.error)}
-                helperText={meta.touched ? meta.error : ""}
+                error={(touched || value !== initialValue) && Boolean(error)}
+                helperText={touched || value !== initialValue ? error : ""}
+                {...field}
+              />
+            )}
+          </Field>
+          <Field name="accountNumber">
+            {({
+              field,
+              meta: { error, value, initialValue, touched },
+            }: FieldProps) => (
+              <TextField
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                required
+                id={"bankaccount-accountNumber-input"}
+                type="text"
+                placeholder="Account Number"
+                data-test={"bankaccount-accountNumber-input"}
+                error={(touched || value !== initialValue) && Boolean(error)}
+                helperText={touched || value !== initialValue ? error : ""}
                 {...field}
               />
             )}

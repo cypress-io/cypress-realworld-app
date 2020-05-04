@@ -33,8 +33,8 @@ describe("Bank Accounts", function () {
     cy.location("pathname").should("be", "/bankaccounts/new");
 
     cy.getTestLike("bankName-input").type("The Best Bank");
-    cy.getTestLike("accountNumber-input").type("123456789");
     cy.getTestLike("routingNumber-input").type("987654321");
+    cy.getTestLike("accountNumber-input").type("123456789");
     cy.getTestLike("submit").click();
 
     cy.wait("@createBankAccount");
@@ -43,6 +43,42 @@ describe("Bank Accounts", function () {
       .should("have.length", 2)
       .eq(1)
       .should("contain", "The Best Bank");
+  });
+
+  it("should display bank account form errors", function () {
+    cy.getTest("sidenav-bankaccounts").click();
+    cy.getTest("bankaccount-new").click();
+
+    cy.getTestLike("bankName-input").type("The").find("input").clear().blur();
+    cy.get("#bankaccount-bankName-input-helper-text")
+      .should("be.visible")
+      .and("contain", "Enter a bank name");
+
+    cy.getTestLike("bankName-input").type("The").find("input").blur();
+    cy.get("#bankaccount-bankName-input-helper-text")
+      .should("be.visible")
+      .and("contain", "Must contain at least 5 characters");
+
+    ["routing", "account"].forEach((field) => {
+      cy.getTestLike(`${field}Number-input`)
+        .type("123")
+        .find("input")
+        .clear()
+        .blur();
+      cy.get(`#bankaccount-${field}Number-input-helper-text`)
+        .should("be.visible")
+        .and("contain", `Enter a valid bank ${field} number`);
+
+      cy.getTestLike(`${field}Number-input`)
+        .type("12345678")
+        .find("input")
+        .blur();
+      cy.get(`#bankaccount-${field}Number-input-helper-text`)
+        .should("be.visible")
+        .and("contain", `Must contain a valid ${field} number`);
+    });
+
+    cy.getTest("bankaccount-submit").should("be.disabled");
   });
 
   it("soft deletes a bank account", function () {
