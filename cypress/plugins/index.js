@@ -10,6 +10,7 @@ require("dotenv").config();
 module.exports = (on, config) => {
   config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD;
   config.env.paginationPageSize = process.env.PAGINATION_PAGE_SIZE;
+  config.env.mobileViewportWidth = process.env.MOBILE_VIEWPORT_WIDTH;
 
   // on("file:preprocessor", cypressTypeScriptPreprocessor);
   // `on` is used to hook into various events Cypress emits
