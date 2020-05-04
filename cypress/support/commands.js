@@ -279,9 +279,9 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
   });
 });
 
-Cypress.Commands.add("getTest", (s, ...args) =>
-  cy.get(`[data-test=${s}]`, ...args)
+Cypress.Commands.add("getTest", (selector, ...args) =>
+  cy.get(`[data-test=${selector}]`, ...args)
 );
-Cypress.Commands.add("getTestLike", (s, ...args) =>
-  cy.get(`[data-test*=${s}]`, ...args)
+Cypress.Commands.add("getTestLike", (selector, ...args) =>
+  cy.get(`[data-test*=${selector}]`, ...args)
 );
