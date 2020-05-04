@@ -5,6 +5,7 @@ import {
   TransactionRequestStatus,
   TransactionResponseItem,
   Contact,
+  TransactionStatus,
 } from "../../../src/models";
 import { addDays, isWithinInterval, startOfDay } from "date-fns";
 import {
@@ -118,73 +119,110 @@ describe("Transaction Feed", function () {
           .its("response.body.results")
           .should("have.length", Cypress.env("paginationPageSize"))
           .then((transactions) => {
-            cy.getTestLike("transaction-item")
-              .should("have.length", initialFeedItemCount)
-              .each(($el) => {
-                const transactionId = _.last(
-                  // @ts-ignore
-                  // TODO: generate only alphanumeric ids
-                  $el.get(0).dataset.test.split("transaction-item-")
-                );
-                const transaction = _.find(transactions, {
-                  id: transactionId,
-                })!;
+            cy.getTestLike("transaction-item").should(
+              "have.length",
+              initialFeedItemCount
+            );
+
+            const getTransactionFromEl = (
+              $el: JQuery<Element>
+            ): TransactionResponseItem => {
+              const transactionId = $el
+                .data("test")
+                .split("transaction-item-")[1];
+              return _.find(transactions, {
+                id: transactionId,
+              })!;
+            };
+
+            cy.log("🚩Testing a paid payment transaction item");
+            cy.contains("[data-test*='transaction-item']", "paid").within(
+              ($el) => {
+                const transaction = getTransactionFromEl($el);
                 const formattedAmount = Dinero({
                   amount: transaction.amount,
                 }).toFormat();
 
-                cy.wrap($el.get(0), { log: false })
-                  .should("contain", transaction.description)
-                  .within(() => {
-                    cy.getTestLike("like-count").should(
-                      "have.text",
-                      `${transaction.likes.length}`
-                    );
-                    cy.getTestLike("comment-count").should(
-                      "have.text",
-                      `${transaction.comments.length}`
-                    );
+                expect([
+                  TransactionStatus.pending,
+                  TransactionStatus.complete,
+                ]).to.include(transaction.status);
+                expect(transaction.requestStatus).to.be.empty;
 
-                    cy.getTestLike("sender").should(
-                      "contain",
-                      transaction.senderName
-                    );
-                    cy.getTestLike("receiver").should(
-                      "contain",
-                      transaction.receiverName
-                    );
+                cy.getTestLike("like-count").should(
+                  "have.text",
+                  `${transaction.likes.length}`
+                );
+                cy.getTestLike("comment-count").should(
+                  "have.text",
+                  `${transaction.comments.length}`
+                );
 
-                    if (transaction.requestStatus) {
-                      const expectedAction =
-                        transaction.requestStatus ===
-                        TransactionRequestStatus.accepted
-                          ? "charged"
-                          : "requested";
+                cy.getTestLike("sender").should(
+                  "contain",
+                  transaction.senderName
+                );
+                cy.getTestLike("receiver").should(
+                  "contain",
+                  transaction.receiverName
+                );
 
-                      cy.getTestLike("action").should(
-                        "contain",
-                        expectedAction
-                      );
+                cy.getTestLike("amount")
+                  .should("contain", `-${formattedAmount}`)
+                  .should("have.css", "color", "rgb(255, 0, 0)");
+              }
+            );
 
-                      return cy
-                        .getTestLike("amount")
-                        .should("contain", `+${formattedAmount}`)
-                        .should("have.css", "color", "rgb(76, 175, 80)");
-                    }
+            cy.log("🚩Testing a charged payment transaction item");
+            cy.contains("[data-test*='transaction-item']", "charged").within(
+              ($el) => {
+                const transaction = getTransactionFromEl($el);
+                const formattedAmount = Dinero({
+                  amount: transaction.amount,
+                }).toFormat();
 
-                    cy.getTestLike("action").should("contain", "paid");
-                    cy.getTestLike("amount")
-                      .should("contain", `-${formattedAmount}`)
-                      .should("have.css", "color", "rgb(255, 0, 0)");
-                  });
-              });
+                expect([
+                  // TODO: charged state should have only complete transaction status
+                  TransactionStatus.pending,
+                  TransactionStatus.complete,
+                ]).to.include(transaction.status);
+                expect(transaction.requestStatus).to.equal(
+                  TransactionRequestStatus.accepted
+                );
+
+                cy.getTestLike("amount")
+                  .should("contain", `+${formattedAmount}`)
+                  .should("have.css", "color", "rgb(76, 175, 80)");
+              }
+            );
+
+            cy.log("🚩Testing a requested payment transaction item");
+            cy.contains("[data-test*='transaction-item']", "requested").within(
+              ($el) => {
+                const transaction = getTransactionFromEl($el);
+                const formattedAmount = Dinero({
+                  amount: transaction.amount,
+                }).toFormat();
+
+                expect([
+                  TransactionStatus.pending,
+                  // TODO: requested state should have only pending transaction status
+                  TransactionStatus.complete,
+                ]).to.include(transaction.status);
+                expect([
+                  TransactionRequestStatus.pending,
+                  TransactionRequestStatus.rejected,
+                ]).to.include(transaction.requestStatus);
+
+                cy.getTestLike("amount")
+                  .should("contain", `+${formattedAmount}`)
+                  .should("have.css", "color", "rgb(76, 175, 80)");
+              }
+            );
           });
 
-        // Scroll to paginate to next page
+        cy.log("📃 Scroll to next page");
         cy.getTest("transaction-list").children().scrollTo("bottom");
-
-        // TODO: Flakey assertion
-        // cy.getTest("transaction-loading").should("be.visible");
 
         cy.wait(`@${feed.routeAlias}`)
           .its("response.body")
@@ -246,6 +284,7 @@ describe("Transaction Feed", function () {
               });
             });
 
+          cy.log("Clearing date range filter. Data set should revert");
           cy.getTestLike("filter-date-clear-button").click({
             force: true,
           });
