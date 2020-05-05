@@ -11,7 +11,7 @@ import {
   concat,
   sample,
   reject,
-  uniq,
+  uniqBy,
   flow,
   get,
   curry,
@@ -22,6 +22,7 @@ import {
   find,
   intersectionWith,
   compact,
+  differenceBy,
 } from "lodash/fp";
 import {
   BankAccount,
@@ -30,7 +31,6 @@ import {
   Like,
   Comment,
   PaymentNotification,
-  PaymentNotificationStatus,
   NotificationType,
   LikeNotification,
   CommentNotification,
@@ -74,10 +74,42 @@ export const totalBankTransfers = userbaseSize! * bankTransfersPerUser * 2; // d
 export const isPayment = (type: string) => type === "payment";
 export const passwordHash = bcrypt.hashSync(defaultPassword, 10);
 
+const requestScenarios: TransactionScenario[] = [
+  {
+    status: TransactionStatus.pending,
+    requestStatus: "pending",
+  },
+  {
+    status: TransactionStatus.complete,
+    requestStatus: "accepted",
+  },
+  {
+    status: TransactionStatus.complete,
+    requestStatus: "rejected",
+  },
+];
+
+const paymentScenarios: TransactionScenario[] = [
+  {
+    status: TransactionStatus.pending,
+    requestStatus: "",
+  },
+  {
+    status: TransactionStatus.complete,
+    requestStatus: "",
+  },
+];
+
 export const getRandomTransactions = (
   baseCount: number,
   baseTransactions: Transaction[]
-) => compact(uniq(times(() => sample(baseTransactions), baseCount)));
+) =>
+  compact(
+    uniqBy(
+      "id",
+      times(() => sample(baseTransactions), baseCount)
+    )
+  );
 
 export const createFakeUser = (): User => ({
   id: shortid(),
@@ -122,7 +154,10 @@ export const getOtherRandomUser = curry(
 );
 
 export const randomContactsForUser = curry((seedUsers: User[], user: User) =>
-  uniq(times(() => getOtherRandomUser(seedUsers, user.id), contactsPerUser))
+  uniqBy(
+    "id",
+    times(() => getOtherRandomUser(seedUsers, user.id), contactsPerUser)
+  )
 );
 export const generateRandomContactsForUser = (seedUsers: User[]) =>
   map((user: User) => ({
@@ -175,7 +210,6 @@ export const createTransaction = (
 
   const status = faker.helpers.randomize([
     TransactionStatus.pending,
-    // TransactionStatus.incomplete,
     TransactionStatus.complete,
   ]);
 
@@ -183,14 +217,6 @@ export const createTransaction = (
 
   if (type === "request") {
     requestStatus = TransactionRequestStatus.pending;
-
-    if (status !== TransactionStatus.incomplete) {
-      requestStatus = faker.helpers.randomize([
-        TransactionRequestStatus.pending,
-        TransactionRequestStatus.accepted,
-        TransactionRequestStatus.rejected,
-      ]);
-    }
 
     if (status === TransactionStatus.complete) {
       requestStatus = faker.helpers.randomize([
@@ -234,21 +260,6 @@ export const createPayment = (
   user: User,
   randomUser: User
 ) => {
-  const paymentScenarios: TransactionScenario[] = [
-    {
-      status: TransactionStatus.pending,
-      requestStatus: "",
-    },
-    // {
-    //   status: TransactionStatus.incomplete,
-    //   requestStatus: "",
-    // },
-    {
-      status: TransactionStatus.complete,
-      requestStatus: "",
-    },
-  ];
-
   const allScenarios = paymentScenarios.map((details) => {
     const paymentTransaction = createTransaction("payment", account, {
       senderId: user.id,
@@ -273,25 +284,6 @@ export const createRequest = (
   user: User,
   randomUser: User
 ) => {
-  const requestScenarios: TransactionScenario[] = [
-    {
-      status: TransactionStatus.pending,
-      requestStatus: "pending",
-    },
-    // {
-    //   status: TransactionStatus.incomplete,
-    //   requestStatus: "pending",
-    // },
-    {
-      status: TransactionStatus.complete,
-      requestStatus: "accepted",
-    },
-    {
-      status: TransactionStatus.complete,
-      requestStatus: "rejected",
-    },
-  ];
-
   const allScenarios = requestScenarios.map((details) => {
     const requestTransaction = createTransaction("request", account, {
       senderId: user.id,
@@ -351,7 +343,31 @@ export const createSeedTransactions = (
             requestsPerUser
           );
 
-          return flattenDeep(concat(payments, requests));
+          const allScenarios = flattenDeep(concat(payments, requests));
+          const requestedTransaction = filter(
+            requestScenarios[0],
+            allScenarios
+          )[0];
+          const chargedTransaction = filter(
+            requestScenarios[1],
+            allScenarios
+          )[0];
+          const paidTransaction = filter(paymentScenarios[1], allScenarios)[0];
+
+          const testTransactions = [
+            paidTransaction,
+            requestedTransaction,
+            chargedTransaction,
+          ];
+
+          const remainingScenarios = differenceBy(
+            get("id"),
+            allScenarios,
+            testTransactions
+          );
+
+          // @ts-ignore
+          return flattenDeep(concat(testTransactions, remainingScenarios));
         })(accounts)
       );
     })(seedUsers)
