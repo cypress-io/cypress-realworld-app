@@ -122,7 +122,7 @@ export const getOtherRandomUser = curry(
 );
 
 export const randomContactsForUser = curry((seedUsers: User[], user: User) =>
-  times(() => getOtherRandomUser(seedUsers, user.id), contactsPerUser)
+  uniq(times(() => getOtherRandomUser(seedUsers, user.id), contactsPerUser))
 );
 export const generateRandomContactsForUser = (seedUsers: User[]) =>
   map((user: User) => ({
