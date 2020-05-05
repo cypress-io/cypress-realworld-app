@@ -47,6 +47,7 @@ const TransactionPublicList: React.FC<TransactionPublicListProps> = ({
         isLoading={current.matches("loading")}
         loadNextPage={loadNextPage}
         pagination={pageData as TransactionPagination}
+        showCreateButton
       />
     </>
   );

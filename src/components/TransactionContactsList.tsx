@@ -47,6 +47,7 @@ const TransactionContactsList: React.FC<TransactionContactListProps> = ({
         isLoading={current.matches("loading")}
         loadNextPage={loadNextPage}
         pagination={pageData as TransactionPagination}
+        showCreateButton
       />
     </>
   );
