@@ -59,8 +59,8 @@ declare namespace Cypress {
 
     pickDateRange(startDate: Date, endDate: Date): Chainable<void>;
 
-    getTest(dataTestAttribute: string, args?: any): Chainable<Element>;
-    getTestLike(
+    getBySel(dataTestAttribute: string, args?: any): Chainable<Element>;
+    getBySelLike(
       dataTestPrefixAttribute: string,
       args?: any
     ): Chainable<Element>;

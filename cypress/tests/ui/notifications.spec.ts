@@ -17,32 +17,32 @@ describe.skip("Notifications", function () {
   });
 
   it("renders the notifications badge with count", function () {
-    cy.getTest("nav-top-notifications-count").should("have.length.gte", 1);
+    cy.getBySel("nav-top-notifications-count").should("have.length.gte", 1);
   });
 
   it("renders a notifications list", function () {
-    cy.getTest("nav-top-notifications-count").click();
-    cy.getTestLike("notification-list-item").should("have.length.gte", 1);
+    cy.getBySel("nav-top-notifications-count").click();
+    cy.getBySelLike("notification-list-item").should("have.length.gte", 1);
   });
 
   it("renders a like notification", function () {
-    cy.getTest("nav-top-notifications-count").click();
-    cy.getTestLike("notification-list-item").should("contain", "liked");
+    cy.getBySel("nav-top-notifications-count").click();
+    cy.getBySelLike("notification-list-item").should("contain", "liked");
   });
 
   it("renders a comment notification", function () {
-    cy.getTest("nav-top-notifications-count").click();
-    cy.getTestLike("notification-list-item").should("contain", "commented");
+    cy.getBySel("nav-top-notifications-count").click();
+    cy.getBySelLike("notification-list-item").should("contain", "commented");
   });
 
   it("renders a payment request notification", function () {
-    cy.getTest("nav-top-notifications-count").click();
-    cy.getTestLike("notification-list-item").should("contain", "requested");
+    cy.getBySel("nav-top-notifications-count").click();
+    cy.getBySelLike("notification-list-item").should("contain", "requested");
   });
 
   it("renders a received payment request notification", function () {
-    cy.getTest("nav-top-notifications-count").click();
-    cy.getTestLike("notification-list-item").should("contain", "received");
+    cy.getBySel("nav-top-notifications-count").click();
+    cy.getBySelLike("notification-list-item").should("contain", "received");
   });
 
   it("marks a notification as read; updates notification counter badge", function () {
@@ -52,13 +52,13 @@ describe.skip("Notifications", function () {
       .its("response.body.results.length")
       .as("notificationsCount");
 
-    cy.getTestLike("notification-mark-read").first().click({ force: true });
+    cy.getBySelLike("notification-mark-read").first().click({ force: true });
 
     cy.wait("@updateNotification");
 
     // TODO: double check the command log dom snapshots during this assertion
     cy.get("@notificationsCount").then((count) => {
-      cy.getTestLike("notification-list-item").should(
+      cy.getBySelLike("notification-list-item").should(
         "have.length.lessThan",
         // @ts-ignore
         count
@@ -68,8 +68,8 @@ describe.skip("Notifications", function () {
 
   it("renders an empty notifications state", function () {
     cy.route("GET", "/notifications", []).as("notifications");
-    cy.getTest("nav-top-notifications-count").click({ force: true });
-    cy.getTest("notification-list").should("not.be.visible");
-    cy.getTest("empty-list-header").should("contain", "No Notifications");
+    cy.getBySel("nav-top-notifications-count").click({ force: true });
+    cy.getBySel("notification-list").should("not.be.visible");
+    cy.getBySel("empty-list-header").should("contain", "No Notifications");
   });
 });

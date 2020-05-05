@@ -67,41 +67,41 @@ describe("Transaction Feed", function () {
   describe("ancillary tests", function () {
     if (isMobile) {
       it("defaults side navigation to closed (mobile)", function () {
-        cy.getTest("sidenav-user-balance").should("not.be.visible");
+        cy.getBySel("sidenav-user-balance").should("not.be.visible");
       });
 
       it("shows amount range in drawer on mobile", function () {
-        cy.getTest("nav-personal-tab")
+        cy.getBySel("nav-personal-tab")
           .click()
           .should("have.class", "Mui-selected");
-        cy.getTestLike("filter-amount-range-button").click({ force: true });
-        cy.getTest("amount-range-filter-drawer").should("be.visible");
-        cy.getTest("amount-range-filter-drawer-close").click();
+        cy.getBySelLike("filter-amount-range-button").click({ force: true });
+        cy.getBySel("amount-range-filter-drawer").should("be.visible");
+        cy.getBySel("amount-range-filter-drawer-close").click();
       });
 
       it("shows date range calendar full screen on mobile", function () {
         // cy.viewport("iphone-6"); // for review demo
-        cy.getTest("nav-personal-tab")
+        cy.getBySel("nav-personal-tab")
           .click()
           .should("have.class", "Mui-selected");
 
-        cy.getTestLike("filter-date-range-button")
+        cy.getBySelLike("filter-date-range-button")
           .scrollIntoView()
           .click({ force: true });
 
-        cy.getTest("date-range-filter-drawer").should("be.visible");
+        cy.getBySel("date-range-filter-drawer").should("be.visible");
 
         // Potential Cypress Bug:
         // This is a potential bug with two overlapping fixed elements
         // https://github.com/cypress-io/cypress/issues/1242
         // https://github.com/cypress-io/cypress/issues/5959
-        // cy.getTest("app-name-logo").should("not.be.visible");
+        // cy.getBySel("app-name-logo").should("not.be.visible");
 
-        cy.getTest("date-range-filter-drawer-close").click();
+        cy.getBySel("date-range-filter-drawer-close").click();
       });
     } else {
       it("defaults side navigation to open (desktop)", function () {
-        cy.getTest("sidenav-user-balance").should("be.visible");
+        cy.getBySel("sidenav-user-balance").should("be.visible");
       });
     }
   });
@@ -109,7 +109,7 @@ describe("Transaction Feed", function () {
   describe("renders and paginates all transaction feeds", function () {
     _.each(feedViews, (feed, feedName) => {
       it(`renders and paginates ${feedName} transaction feed`, function () {
-        cy.getTestLike(feed.tab)
+        cy.getBySelLike(feed.tab)
           .click()
           .should("have.class", "Mui-selected")
           .contains(feed.tabLabel, { matchCase: false })
@@ -119,7 +119,7 @@ describe("Transaction Feed", function () {
           .its("response.body.results")
           .should("have.length", Cypress.env("paginationPageSize"))
           .then((transactions) => {
-            cy.getTestLike("transaction-item").should(
+            cy.getBySelLike("transaction-item").should(
               "have.length",
               initialFeedItemCount
             );
@@ -149,25 +149,25 @@ describe("Transaction Feed", function () {
                 ]).to.include(transaction.status);
                 expect(transaction.requestStatus).to.be.empty;
 
-                cy.getTestLike("like-count").should(
+                cy.getBySelLike("like-count").should(
                   "have.text",
                   `${transaction.likes.length}`
                 );
-                cy.getTestLike("comment-count").should(
+                cy.getBySelLike("comment-count").should(
                   "have.text",
                   `${transaction.comments.length}`
                 );
 
-                cy.getTestLike("sender").should(
+                cy.getBySelLike("sender").should(
                   "contain",
                   transaction.senderName
                 );
-                cy.getTestLike("receiver").should(
+                cy.getBySelLike("receiver").should(
                   "contain",
                   transaction.receiverName
                 );
 
-                cy.getTestLike("amount")
+                cy.getBySelLike("amount")
                   .should("contain", `-${formattedAmount}`)
                   .should("have.css", "color", "rgb(255, 0, 0)");
               }
@@ -190,7 +190,7 @@ describe("Transaction Feed", function () {
                   TransactionRequestStatus.accepted
                 );
 
-                cy.getTestLike("amount")
+                cy.getBySelLike("amount")
                   .should("contain", `+${formattedAmount}`)
                   .should("have.css", "color", "rgb(76, 175, 80)");
               }
@@ -214,7 +214,7 @@ describe("Transaction Feed", function () {
                   TransactionRequestStatus.rejected,
                 ]).to.include(transaction.requestStatus);
 
-                cy.getTestLike("amount")
+                cy.getBySelLike("amount")
                   .should("contain", `+${formattedAmount}`)
                   .should("have.css", "color", "rgb(76, 175, 80)");
               }
@@ -222,7 +222,7 @@ describe("Transaction Feed", function () {
           });
 
         cy.log("📃 Scroll to next page");
-        cy.getTest("transaction-list").children().scrollTo("bottom");
+        cy.getBySel("transaction-list").children().scrollTo("bottom");
 
         cy.wait(`@${feed.routeAlias}`)
           .its("response.body")
@@ -253,7 +253,9 @@ describe("Transaction Feed", function () {
           const dateRangeStart = startOfDay(new Date(transaction.createdAt));
           const dateRangeEnd = endOfDayUTC(addDays(dateRangeStart, 1));
 
-          cy.getTestLike(feed.tab).click().should("have.class", "Mui-selected");
+          cy.getBySelLike(feed.tab)
+            .click()
+            .should("have.class", "Mui-selected");
 
           cy.wait(`@${feed.routeAlias}`)
             .its("response.body.results")
@@ -264,7 +266,7 @@ describe("Transaction Feed", function () {
           cy.wait(`@${feed.routeAlias}`)
             .its("response.body.results")
             .then((transactions: Transaction[]) => {
-              cy.getTestLike("transaction-item").should(
+              cy.getBySelLike("transaction-item").should(
                 "have.length",
                 transactions.length
               );
@@ -285,7 +287,7 @@ describe("Transaction Feed", function () {
             });
 
           cy.log("Clearing date range filter. Data set should revert");
-          cy.getTestLike("filter-date-clear-button").click({
+          cy.getBySelLike("filter-date-clear-button").click({
             force: true,
           });
 
@@ -308,13 +310,13 @@ describe("Transaction Feed", function () {
 
     _.each(feedViews, (feed, feedName) => {
       it(`filters ${feedName} transaction feed by amount range`, function () {
-        cy.getTestLike(feed.tab)
+        cy.getBySelLike(feed.tab)
           .click({ force: true })
           .should("have.class", "Mui-selected");
 
         cy.wait(`@${feed.routeAlias}`);
 
-        cy.getTest("transaction-list-filter-amount-range-button")
+        cy.getBySel("transaction-list-filter-amount-range-button")
           .scrollIntoView()
           .click({ force: true });
 
@@ -323,7 +325,7 @@ describe("Transaction Feed", function () {
           dollarAmountRange.max
         );
 
-        cy.getTestLike("filter-amount-range-text").should(
+        cy.getBySelLike("filter-amount-range-text").should(
           "contain",
           `$${dollarAmountRange.min} - $${dollarAmountRange.max}`
         );

@@ -30,14 +30,14 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
 
   log.snapshot("before");
 
-  cy.getTest("signin-username").type(username);
-  cy.getTest("signin-password").type(password);
+  cy.getBySel("signin-username").type(username);
+  cy.getBySel("signin-password").type(password);
 
   if (rememberUser) {
-    cy.getTest("signin-remember-me").find("input").check();
+    cy.getBySel("signin-remember-me").find("input").check();
   }
 
-  cy.getTest("signin-submit").click();
+  cy.getBySel("signin-submit").click();
   cy.wait(["@loginUser", "@getUserProfile"]).spread(
     (loginUser, getUserProfile) => {
       log.set({
@@ -101,7 +101,7 @@ Cypress.Commands.add("reactComponent", { prevSubject: "element" }, ($el) => {
 
 Cypress.Commands.add("setTransactionAmountRange", (min, max) => {
   return cy
-    .getTestLike("filter-amount-range-slider")
+    .getBySelLike("filter-amount-range-slider")
     .reactComponent()
     .its("memoizedProps")
     .invoke("onChange", null, [min / 10, max / 10]);
@@ -269,7 +269,7 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
   });
 
   // Open date range picker
-  cy.getTestLike("filter-date-range-button").click({ force: true });
+  cy.getBySelLike("filter-date-range-button").click({ force: true });
 
   // Select date range
   selectDate(startDate);
@@ -279,9 +279,9 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
   });
 });
 
-Cypress.Commands.add("getTest", (selector, ...args) =>
+Cypress.Commands.add("getBySel", (selector, ...args) =>
   cy.get(`[data-test=${selector}]`, ...args)
 );
-Cypress.Commands.add("getTestLike", (selector, ...args) =>
+Cypress.Commands.add("getBySelLike", (selector, ...args) =>
   cy.get(`[data-test*=${selector}]`, ...args)
 );

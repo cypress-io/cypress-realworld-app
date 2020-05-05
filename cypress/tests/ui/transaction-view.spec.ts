@@ -51,36 +51,36 @@ describe("Transaction View", function () {
       });
     });
 
-    cy.getTest("nav-personal-tab").click();
+    cy.getBySel("nav-personal-tab").click();
     cy.wait("@personalTransactions");
   });
 
   it("transactions navigation tabs are hidden on a transaction view page", function () {
-    cy.getTestLike("transaction-item").first().click({ force: true });
+    cy.getBySelLike("transaction-item").first().click({ force: true });
 
     cy.location("pathname").should("include", "/transaction");
-    cy.getTest("nav-transaction-tabs").should("not.be.visible");
+    cy.getBySel("nav-transaction-tabs").should("not.be.visible");
   });
 
   it("likes a transaction", function () {
-    cy.getTestLike("transaction-item").first().click({ force: true });
+    cy.getBySelLike("transaction-item").first().click({ force: true });
 
-    cy.getTestLike("like-button").click();
-    cy.getTestLike("like-count").should("contain", 1);
-    cy.getTestLike("like-button").should("be.disabled");
+    cy.getBySelLike("like-button").click();
+    cy.getBySelLike("like-count").should("contain", 1);
+    cy.getBySelLike("like-button").should("be.disabled");
   });
 
   it("makes a comment on a transaction", function () {
-    cy.getTestLike("transaction-item").first().click({ force: true });
+    cy.getBySelLike("transaction-item").first().click({ force: true });
 
     const comments = ["Thank you!", "Appreciate it."];
 
     comments.forEach((comment, index) => {
-      cy.getTestLike("comment-input").type(`${comment}{enter}`);
-      cy.getTestLike("comments-list").children().eq(index).contains(comment);
+      cy.getBySelLike("comment-input").type(`${comment}{enter}`);
+      cy.getBySelLike("comments-list").children().eq(index).contains(comment);
     });
 
-    cy.getTestLike("comments-list")
+    cy.getBySelLike("comments-list")
       .children()
       .should("have.length", comments.length);
   });
@@ -88,7 +88,7 @@ describe("Transaction View", function () {
   it("accepts a transaction request", function () {
     cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
     cy.wait("@getTransaction");
-    cy.getTestLike("transaction-accept-request").click();
+    cy.getBySelLike("transaction-accept-request").click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
   });
 
@@ -96,7 +96,7 @@ describe("Transaction View", function () {
     cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
     cy.wait("@getTransaction");
 
-    cy.getTestLike(`transaction-reject-request`).click();
+    cy.getBySelLike(`transaction-reject-request`).click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
   });
 
@@ -111,8 +111,8 @@ describe("Transaction View", function () {
     }).then((transactionRequest) => {
       cy.visit(`/transaction/${transactionRequest!.id}`);
 
-      cy.getTest("transaction-accept-request").should("not.be.visible");
-      cy.getTest("transaction-reject-request").should("not.be.visible");
+      cy.getBySel("transaction-accept-request").should("not.be.visible");
+      cy.getBySel("transaction-reject-request").should("not.be.visible");
     });
   });
 });
