@@ -80,7 +80,6 @@ describe("Transaction Feed", function () {
       });
 
       it("shows date range calendar full screen on mobile", function () {
-        // cy.viewport("iphone-6"); // for review demo
         cy.getBySel("nav-personal-tab")
           .click()
           .should("have.class", "Mui-selected");
@@ -182,11 +181,7 @@ describe("Transaction Feed", function () {
                   amount: transaction.amount,
                 }).toFormat();
 
-                expect([
-                  // TODO: charged state should have only complete transaction status
-                  TransactionStatus.pending,
-                  TransactionStatus.complete,
-                ]).to.include(transaction.status);
+                expect(TransactionStatus.complete).to.equal(transaction.status);
 
                 expect(transaction.requestStatus).to.equal(
                   TransactionRequestStatus.accepted
@@ -208,7 +203,6 @@ describe("Transaction Feed", function () {
 
                 expect([
                   TransactionStatus.pending,
-                  // TODO: requested state should have only pending transaction status
                   TransactionStatus.complete,
                 ]).to.include(transaction.status);
                 expect([
@@ -362,8 +356,7 @@ describe("Transaction Feed", function () {
         });
       });
 
-      // TODO: unskip after seed update to enable this scenario
-      it.skip(`does not show ${feedName} transactions for out of range amount limits`, function () {
+      it(`does not show ${feedName} transactions for out of range amount limits`, function () {
         cy.getBySelLike(feed.tab).click();
         cy.wait(`@${feed.routeAlias}`);
 
@@ -409,11 +402,10 @@ describe("Transaction Feed", function () {
         entity: "contacts",
         filterAttrs: { userId: ctx.user!.id },
       }).then((contacts: Contact[]) => {
-        // TODO: contacts seed generator an can generate duplicate contacts
         const contactIds = contacts.map((contact) => contact.contactUserId);
-        cy.visit("/personal");
+        cy.visit("/contacts");
 
-        cy.wait("@personalTransactions")
+        cy.wait("@contactsTransactions")
           .its("response.body.results")
           .each((transaction: Transaction) => {
             const transactionParticipants = [
@@ -422,9 +414,10 @@ describe("Transaction Feed", function () {
             ];
 
             const contactsInTransaction = _.intersection(
-              transactionParticipants,
-              contactIds
+              contactIds,
+              transactionParticipants
             );
+
             const message = `"${contactsInTransaction}" are contacts of ${
               ctx.user!.id
             }`;
@@ -433,8 +426,7 @@ describe("Transaction Feed", function () {
       });
     });
 
-    // TODO: unskip after seed update to enable this scenario
-    it.skip("first five items belong to contacts in public feed", function () {
+    it("first five items belong to contacts in public feed", function () {
       cy.task("filter:testData", {
         entity: "contacts",
         filterAttrs: { userId: ctx.user!.id },
