@@ -147,6 +147,7 @@ describe("Transaction Feed", function () {
                   TransactionStatus.pending,
                   TransactionStatus.complete,
                 ]).to.include(transaction.status);
+
                 expect(transaction.requestStatus).to.be.empty;
 
                 cy.getBySelLike("like-count").should(
@@ -186,6 +187,7 @@ describe("Transaction Feed", function () {
                   TransactionStatus.pending,
                   TransactionStatus.complete,
                 ]).to.include(transaction.status);
+
                 expect(transaction.requestStatus).to.equal(
                   TransactionRequestStatus.accepted
                 );
@@ -298,10 +300,27 @@ describe("Transaction Feed", function () {
           });
         });
       });
+
+      it(`does not show ${feedName} transactions for out of range date limits`, function () {
+        const dateRangeStart = startOfDay(new Date(2014, 1, 1));
+        const dateRangeEnd = endOfDayUTC(addDays(dateRangeStart, 1));
+
+        cy.getBySelLike(feed.tab).click();
+        cy.wait(`@${feed.routeAlias}`);
+
+        cy.pickDateRange(dateRangeStart, dateRangeEnd);
+        cy.wait(`@${feed.routeAlias}`);
+
+        cy.getBySelLike("transaction-item").should("have.length", 0);
+        cy.getBySel("empty-list-header").should("contain", "No Transactions");
+        cy.getBySelLike("empty-create-transaction-button")
+          .should("have.attr", "href", "/transaction/new")
+          .contains("create a transaction", { matchCase: false })
+          .should("have.css", { "text-transform": "uppercase" });
+      });
     });
   });
 
-  // TODO: add a test to filter for transaction out of known seed date range limit
   describe("filters transaction feeds by amount range", function () {
     const dollarAmountRange = {
       min: 200,
@@ -315,10 +334,6 @@ describe("Transaction Feed", function () {
           .should("have.class", "Mui-selected");
 
         cy.wait(`@${feed.routeAlias}`);
-
-        cy.getBySel("transaction-list-filter-amount-range-button")
-          .scrollIntoView()
-          .click({ force: true });
 
         cy.setTransactionAmountRange(
           dollarAmountRange.min,
@@ -346,6 +361,26 @@ describe("Transaction Feed", function () {
           });
         });
       });
+
+      // TODO: unskip after seed update to enable this scenario
+      it.skip(`does not show ${feedName} transactions for out of range amount limits`, function () {
+        cy.getBySelLike(feed.tab).click();
+        cy.wait(`@${feed.routeAlias}`);
+
+        cy.setTransactionAmountRange(550, 1000);
+        cy.getBySelLike("filter-amount-range-text").should(
+          "contain",
+          "$550 - $1,000"
+        );
+        cy.wait(`@${feed.routeAlias}`);
+
+        cy.getBySelLike("transaction-item").should("have.length", 0);
+        cy.getBySel("empty-list-header").should("contain", "No Transactions");
+        cy.getBySelLike("empty-create-transaction-button")
+          .should("have.attr", "href", "/transaction/new")
+          .contains("create a transaction", { matchCase: false })
+          .should("have.css", { "text-transform": "uppercase" });
+      });
     });
   });
 
@@ -369,12 +404,12 @@ describe("Transaction Feed", function () {
       });
     });
 
-    it.skip("friends feed only shows contact transactions", function () {
+    it("friends feed only shows contact transactions", function () {
       cy.task("filter:testData", {
         entity: "contacts",
         filterAttrs: { userId: ctx.user!.id },
       }).then((contacts: Contact[]) => {
-        // FIX ME: contacts seed generator an can generate duplicate contacts
+        // TODO: contacts seed generator an can generate duplicate contacts
         const contactIds = contacts.map((contact) => contact.contactUserId);
         cy.visit("/personal");
 
@@ -385,7 +420,47 @@ describe("Transaction Feed", function () {
               transaction.senderId,
               transaction.receiverId,
             ];
-            expect(transactionParticipants).to.include.members(contactIds);
+
+            const contactsInTransaction = _.intersection(
+              transactionParticipants,
+              contactIds
+            );
+            const message = `"${contactsInTransaction}" are contacts of ${
+              ctx.user!.id
+            }`;
+            expect(contactsInTransaction, message).to.not.be.empty;
+          });
+      });
+    });
+
+    // TODO: unskip after seed update to enable this scenario
+    it.skip("first five items belong to contacts in public feed", function () {
+      cy.task("filter:testData", {
+        entity: "contacts",
+        filterAttrs: { userId: ctx.user!.id },
+      }).then((contacts: Contact[]) => {
+        const contactIds = contacts.map((contact) => contact.contactUserId);
+
+        cy.wait("@publicTransactions")
+          .its("response.body.results")
+          .then((transactions: TransactionResponseItem[]) => {
+            const transactionsOfContacts = transactions.slice(0, 5);
+
+            transactionsOfContacts.forEach((transaction) => {
+              const transactionParticipants = [
+                transaction.senderId,
+                transaction.receiverId,
+              ];
+
+              const contactsInTransaction = _.intersection(
+                transactionParticipants,
+                contactIds
+              );
+              const message = `"${contactsInTransaction}" are contacts of ${
+                ctx.user!.id
+              }`;
+              expect(contactsInTransaction, message).to.not.be.empty;
+            });
           });
       });
     });
