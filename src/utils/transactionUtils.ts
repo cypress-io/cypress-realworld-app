@@ -51,7 +51,7 @@ export const isRejectedRequestTransaction = (transaction: Transaction) =>
 
 export const isPayment = negate(isRequestTransaction);
 
-export const getFakeAmount = (min: number = 1000, max: number = 100000) =>
+export const getFakeAmount = (min: number = 1000, max: number = 50000) =>
   parseInt(faker.finance.amount(min, max), 10);
 
 export const formatAmount = (amount: number) => Dinero({ amount }).toFormat();
