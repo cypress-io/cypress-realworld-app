@@ -14,24 +14,14 @@ describe("Transaction View", function () {
     cy.task("db:seed");
 
     cy.server();
-    cy.route("GET", "http://localhost:3001/transactions").as(
-      "personalTransactions"
-    );
-    cy.route("GET", "http://localhost:3001/transactions/public").as(
-      "publicTransactions"
-    );
-    cy.route("GET", "http://localhost:3001/transactions/*").as(
-      "getTransaction"
-    );
-    cy.route("PATCH", "http://localhost:3001/transactions/*").as(
-      "updateTransaction"
-    );
+    cy.route("GET", "/transactions").as("personalTransactions");
+    cy.route("GET", "/transactions/public").as("publicTransactions");
+    cy.route("GET", "/transactions/*").as("getTransaction");
+    cy.route("PATCH", "/transactions/*").as("updateTransaction");
 
-    cy.route("GET", "http://localhost:3001/checkAuth").as("userProfile");
-    cy.route("GET", "http://localhost:3001/notifications").as(
-      "getNotifications"
-    );
-    cy.route("GET", "http://localhost:3001/bankAccounts").as("getBankAccounts");
+    cy.route("GET", "/checkAuth").as("userProfile");
+    cy.route("GET", "/notifications").as("getNotifications");
+    cy.route("GET", "/bankAccounts").as("getBankAccounts");
 
     cy.task("find:testData", { entity: "users" }).then((user: User) => {
       ctx.authenticatedUser = user;
@@ -88,7 +78,8 @@ describe("Transaction View", function () {
   it("accepts a transaction request", function () {
     cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
     cy.wait("@getTransaction");
-    cy.getBySelLike("transaction-accept-request").click();
+
+    cy.getBySelLike("accept-request").click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
   });
 
@@ -96,7 +87,7 @@ describe("Transaction View", function () {
     cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
     cy.wait("@getTransaction");
 
-    cy.getBySelLike(`transaction-reject-request`).click();
+    cy.getBySelLike("reject-request").click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
   });
 
