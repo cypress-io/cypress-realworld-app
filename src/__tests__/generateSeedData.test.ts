@@ -29,9 +29,7 @@ describe("Seed Database", () => {
 
   it("should contain a list of bankaccounts", () => {
     expect(database).toHaveProperty("bankaccounts");
-    expect(database.bankaccounts.length).toBe(
-      bankAccountsPerUser * userbaseSize
-    );
+    expect(database.bankaccounts.length).toBe(bankAccountsPerUser * userbaseSize);
   });
 
   it("should contain a list of transactions", () => {
@@ -51,15 +49,11 @@ describe("Seed Database", () => {
 
   it("should contain a list of notifications", () => {
     expect(database).toHaveProperty("notifications");
-    expect(database.notifications.length).toBeGreaterThanOrEqual(
-      totalNotifications
-    );
+    expect(database.notifications.length).toBeGreaterThanOrEqual(totalNotifications);
   });
 
   it("should contain a list of bank transfers", () => {
     expect(database).toHaveProperty("banktransfers");
-    expect(database.banktransfers.length).toBeLessThanOrEqual(
-      totalBankTransfers
-    );
+    expect(database.banktransfers.length).toBeLessThanOrEqual(totalBankTransfers);
   });
 });

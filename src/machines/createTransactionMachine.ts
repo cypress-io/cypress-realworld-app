@@ -16,19 +16,13 @@ const transactionDataMachine = dataMachine("transactionData").withConfig({
   services: {
     createData: async (ctx, event: any) => {
       const payload = omit("type", event);
-      const resp = await httpClient.post(
-        `http://localhost:3001/transactions`,
-        payload
-      );
+      const resp = await httpClient.post(`http://localhost:3001/transactions`, payload);
       return resp.data;
     },
   },
 });
 
-export type CreateTransactionMachineEvents =
-  | { type: "SET_USERS" }
-  | { type: "CREATE" }
-  | { type: "RESET" };
+export type CreateTransactionMachineEvents = { type: "SET_USERS" } | { type: "CREATE" } | { type: "RESET" };
 
 export interface CreateTransactionMachineContext {
   sender: User;

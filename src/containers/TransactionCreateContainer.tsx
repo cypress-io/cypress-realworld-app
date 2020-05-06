@@ -9,35 +9,21 @@ import { usersMachine } from "../machines/usersMachine";
 import { debounce } from "lodash/fp";
 import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
-import {
-  SnackbarSchema,
-  SnackbarContext,
-  SnackbarEvents,
-} from "../machines/snackbarMachine";
+import { SnackbarSchema, SnackbarContext, SnackbarEvents } from "../machines/snackbarMachine";
 import { Stepper, Step, StepLabel } from "@material-ui/core";
 
 export interface Props {
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
-  snackbarService: Interpreter<
-    SnackbarContext,
-    SnackbarSchema,
-    SnackbarEvents,
-    any
-  >;
+  snackbarService: Interpreter<SnackbarContext, SnackbarSchema, SnackbarEvents, any>;
 }
 
-const TransactionCreateContainer: React.FC<Props> = ({
-  authService,
-  snackbarService,
-}) => {
+const TransactionCreateContainer: React.FC<Props> = ({ authService, snackbarService }) => {
   const [authState, sendAuth] = useService(authService);
   const [, sendSnackbar] = useService(snackbarService);
 
-  const [
-    createTransactionState,
-    sendCreateTransaction,
-    createTransactionService,
-  ] = useMachine(createTransactionMachine);
+  const [createTransactionState, sendCreateTransaction, createTransactionService] = useMachine(
+    createTransactionMachine
+  );
 
   // Expose createTransactionService on window for Cypress
   // @ts-ignore
@@ -58,12 +44,9 @@ const TransactionCreateContainer: React.FC<Props> = ({
     sendCreateTransaction("CREATE", payload);
     refreshUser();
   };
-  const userListSearch = debounce(200, (payload: any) =>
-    sendUsers("FETCH", payload)
-  );
+  const userListSearch = debounce(200, (payload: any) => sendUsers("FETCH", payload));
 
-  const showSnackbar = (payload: SnackbarContext) =>
-    sendSnackbar("SHOW", payload);
+  const showSnackbar = (payload: SnackbarContext) => sendSnackbar("SHOW", payload);
 
   let activeStep;
   if (createTransactionState.matches("stepTwo")) {
@@ -103,9 +86,7 @@ const TransactionCreateContainer: React.FC<Props> = ({
         />
       )}
       {createTransactionState.matches("stepThree") && (
-        <TransactionCreateStepThree
-          createTransactionService={createTransactionService}
-        />
+        <TransactionCreateStepThree createTransactionService={createTransactionService} />
       )}
     </>
   );

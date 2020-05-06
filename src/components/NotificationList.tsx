@@ -11,10 +11,7 @@ export interface NotificationsListProps {
   updateNotification: Function;
 }
 
-const NotificationsList: React.FC<NotificationsListProps> = ({
-  notifications,
-  updateNotification,
-}) => {
+const NotificationsList: React.FC<NotificationsListProps> = ({ notifications, updateNotification }) => {
   return (
     <>
       {notifications?.length > 0 ? (
@@ -29,9 +26,7 @@ const NotificationsList: React.FC<NotificationsListProps> = ({
         </List>
       ) : (
         <EmptyList entity="Notifications">
-          <RemindersIllustration
-            style={{ height: 200, width: 250, marginBottom: 30 }}
-          />
+          <RemindersIllustration style={{ height: 200, width: 250, marginBottom: 30 }} />
         </EmptyList>
       )}
     </>

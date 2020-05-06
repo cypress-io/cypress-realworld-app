@@ -26,10 +26,7 @@ export interface CommentFormProps {
   transactionComment: (payload: object) => void;
 }
 
-const CommentForm: React.FC<CommentFormProps> = ({
-  transactionId,
-  transactionComment,
-}) => {
+const CommentForm: React.FC<CommentFormProps> = ({ transactionId, transactionComment }) => {
   const classes = useStyles();
   const initialValues = { content: "" };
 

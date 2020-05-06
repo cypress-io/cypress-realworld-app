@@ -67,21 +67,14 @@ describe("New Transaction", function () {
         amount: updatedContact.balance,
       }).toFormat();
 
-      cy.getBySel("sidenav-user-balance", { timeout: 5000 }).should(
-        "contain",
-        updatedBalance
-      );
+      cy.getBySel("sidenav-user-balance", { timeout: 5000 }).should("contain", updatedBalance);
     });
 
     cy.getBySel("app-name-logo").find("a").click();
-    cy.getBySel("nav-personal-tab")
-      .click()
-      .should("have.class", "Mui-selected");
+    cy.getBySel("nav-personal-tab").click().should("have.class", "Mui-selected");
     cy.wait("@personalTransactions");
 
-    cy.getBySel("transaction-list")
-      .first()
-      .should("contain", payment.description);
+    cy.getBySel("transaction-list").first().should("contain", payment.description);
   });
 
   it("navigates to the new transaction form, selects a user and submits a transaction request", function () {
@@ -101,9 +94,7 @@ describe("New Transaction", function () {
     cy.wait("@createTransaction");
 
     cy.getBySelLike("return-to-transactions").click();
-    cy.getBySel("nav-personal-tab")
-      .click()
-      .should("have.class", "Mui-selected");
+    cy.getBySel("nav-personal-tab").click().should("have.class", "Mui-selected");
 
     cy.getBySelLike("transaction-item").should("contain", request.description);
   });
@@ -119,11 +110,7 @@ describe("New Transaction", function () {
       .should("be.visible")
       .and("contain", "Please enter a valid amount");
 
-    cy.getBySelLike("description-input")
-      .type("Fun")
-      .find("input")
-      .clear()
-      .blur();
+    cy.getBySelLike("description-input").type("Fun").find("input").clear().blur();
     cy.get("#transaction-create-description-input-helper-text")
       .should("be.visible")
       .and("contain", "Please enter a note");
@@ -176,9 +163,7 @@ describe("New Transaction", function () {
     cy.loginByXstate(ctx.contact!.username);
 
     cy.getBySel("nav-personal-tab").click();
-    cy.getBySelLike("transaction-item")
-      .contains(transactionPayload.description)
-      .click({ force: true });
+    cy.getBySelLike("transaction-item").contains(transactionPayload.description).click({ force: true });
 
     cy.getBySelLike("accept-request").click();
     cy.wait("@updateTransaction").its("status").should("equal", 204);
@@ -196,13 +181,7 @@ describe("New Transaction", function () {
 
   it("searches for a user by attributes", function () {
     const targetUser = ctx.allUsers![2];
-    const searchAttrs: (keyof User)[] = [
-      "firstName",
-      "lastName",
-      "username",
-      "email",
-      "phoneNumber",
-    ];
+    const searchAttrs: (keyof User)[] = ["firstName", "lastName", "username", "email", "phoneNumber"];
 
     cy.getBySelLike("new-transaction").click();
     cy.wait("@allUsers");

@@ -19,9 +19,7 @@ export interface UserListSearchFormProps {
   userListSearch: Function;
 }
 
-const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
-  userListSearch,
-}) => {
+const UserListSearchForm: React.FC<UserListSearchFormProps> = ({ userListSearch }) => {
   const classes = useStyles();
   const inputEl = useRef<HTMLInputElement>(null);
 

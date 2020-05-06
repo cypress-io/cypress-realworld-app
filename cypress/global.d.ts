@@ -16,17 +16,9 @@ declare namespace Cypress {
   interface Chainable {
     window(options?: Partial<Loggable & Timeoutable>): Chainable<CustomWindow>;
 
-    task(
-      event: "filter:testData",
-      arg?: any,
-      options?: Partial<Loggable & Timeoutable>
-    ): Chainable<Transaction[]>;
+    task(event: "filter:testData", arg?: any, options?: Partial<Loggable & Timeoutable>): Chainable<Transaction[]>;
 
-    task(
-      event: "find:testData",
-      arg?: any,
-      options?: Partial<Loggable & Timeoutable>
-    ): Chainable<Transaction>;
+    task(event: "find:testData", arg?: any, options?: Partial<Loggable & Timeoutable>): Chainable<Transaction>;
 
     waitForXstateService(service: string): Chainable<CustomWindow>;
 
@@ -60,10 +52,7 @@ declare namespace Cypress {
     pickDateRange(startDate: Date, endDate: Date): Chainable<void>;
 
     getBySel(dataTestAttribute: string, args?: any): Chainable<Element>;
-    getBySelLike(
-      dataTestPrefixAttribute: string,
-      args?: any
-    ): Chainable<Element>;
+    getBySelLike(dataTestPrefixAttribute: string, args?: any): Chainable<Element>;
     fetchTestData(entity: string, filterDetails: object): Chainable<any[]>;
     reactComponent(): Chainable<any>;
     setTransactionAmountRange(min: number, max: number): Chainable<any>;

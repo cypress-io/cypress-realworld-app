@@ -20,9 +20,7 @@ const TransactionPublicList: React.FC<TransactionPublicListProps> = ({
   dateRangeFilters,
   amountRangeFilters,
 }) => {
-  const [current, send, publicTransactionService] = useMachine(
-    publicTransactionsMachine
-  );
+  const [current, send, publicTransactionService] = useMachine(publicTransactionsMachine);
   const { pageData, results } = current.context;
 
   // @ts-ignore
@@ -35,8 +33,7 @@ const TransactionPublicList: React.FC<TransactionPublicListProps> = ({
     send("FETCH", { ...dateRangeFilters, ...amountRangeFilters });
   }, [send, dateRangeFilters, amountRangeFilters]);
 
-  const loadNextPage = (page: number) =>
-    send("FETCH", { page, ...dateRangeFilters, ...amountRangeFilters });
+  const loadNextPage = (page: number) => send("FETCH", { page, ...dateRangeFilters, ...amountRangeFilters });
 
   return (
     <>

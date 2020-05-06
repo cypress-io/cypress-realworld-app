@@ -2,10 +2,7 @@ import React from "react";
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { TransactionResponseItem } from "../models";
-import {
-  isRequestTransaction,
-  isAcceptedRequestTransaction,
-} from "../utils/transactionUtils";
+import { isRequestTransaction, isAcceptedRequestTransaction } from "../utils/transactionUtils";
 
 const useStyles = makeStyles((theme) => ({
   title: {

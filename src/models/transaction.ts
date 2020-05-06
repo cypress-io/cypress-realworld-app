@@ -61,10 +61,7 @@ export type TransactionScenario = {
   requestStatus: TransactionRequestStatus | string;
 };
 
-export type TransactionPayload = Omit<
-  Transaction,
-  "id" | "uuid" | "createdAt" | "modifiedAt"
->;
+export type TransactionPayload = Omit<Transaction, "id" | "uuid" | "createdAt" | "modifiedAt">;
 
 export type TransactionCreatePayload = Partial<
   Pick<Transaction, "senderId" | "receiverId" | "description"> & {
@@ -73,10 +70,7 @@ export type TransactionCreatePayload = Partial<
   }
 >;
 
-export type TransactionUpdateActionPayload = Pick<
-  Transaction,
-  "id" | "requestStatus"
->;
+export type TransactionUpdateActionPayload = Pick<Transaction, "id" | "requestStatus">;
 
 type TransactionQueryBase = {
   dateRangeStart?: string;
@@ -90,17 +84,11 @@ type TransactionQueryBase = {
 
 export type TransactionQueryPayload = Partial<TransactionQueryBase>;
 
-export type TransactionDateRangePayload = Partial<
-  Pick<TransactionQueryPayload, "dateRangeStart" | "dateRangeEnd">
->;
+export type TransactionDateRangePayload = Partial<Pick<TransactionQueryPayload, "dateRangeStart" | "dateRangeEnd">>;
 
-export type TransactionAmountRangePayload = Partial<
-  Pick<TransactionQueryPayload, "amountMin" | "amountMax">
->;
+export type TransactionAmountRangePayload = Partial<Pick<TransactionQueryPayload, "amountMin" | "amountMax">>;
 
-export type TransactionPaginationPayload = Partial<
-  Pick<TransactionQueryPayload, "page" | "limit">
->;
+export type TransactionPaginationPayload = Partial<Pick<TransactionQueryPayload, "page" | "limit">>;
 
 export type TransactionClearFiltersPayload = {
   filterType: "date" | "amount";

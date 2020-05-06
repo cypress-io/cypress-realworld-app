@@ -1,12 +1,6 @@
 // check this file using TypeScript if available
 // @ts-check
-import {
-  User,
-  NotificationType,
-  Like,
-  Comment,
-  Transaction,
-} from "../../../src/models";
+import { User, NotificationType, Like, Comment, Transaction } from "../../../src/models";
 const apiNotifications = `${Cypress.env("apiUrl")}/notifications`;
 
 type TestNotificationsCtx = {
@@ -86,9 +80,7 @@ describe("Notifications API", function () {
       }).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.results.length).to.equal(3);
-        expect(response.body.results[0].transactionId).to.equal(
-          ctx.transactionId
-        );
+        expect(response.body.results[0].transactionId).to.equal(ctx.transactionId);
       });
     });
   });

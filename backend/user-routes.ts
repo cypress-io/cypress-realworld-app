@@ -14,12 +14,7 @@ import {
 } from "./database";
 import { User } from "../src/models/user";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
-import {
-  shortIdValidation,
-  searchValidation,
-  userFieldsValidator,
-  isUserValidator,
-} from "./validators";
+import { shortIdValidation, searchValidation, userFieldsValidator, isUserValidator } from "./validators";
 const router = express.Router();
 
 // Routes
@@ -36,61 +31,43 @@ router.get("/", ensureAuthenticated, (req, res) => {
   res.status(200).json({ results: users });
 });
 
-router.get(
-  "/search",
-  ensureAuthenticated,
-  validateMiddleware([searchValidation]),
-  (req, res) => {
-    const { q } = req.query;
+router.get("/search", ensureAuthenticated, validateMiddleware([searchValidation]), (req, res) => {
+  const { q } = req.query;
 
-    const users = removeUserFromResults(req.user?.id!, searchUsers(q));
+  const users = removeUserFromResults(req.user?.id!, searchUsers(q));
 
-    res.status(200).json({ results: users });
+  res.status(200).json({ results: users });
+});
+
+router.post("/", userFieldsValidator, validateMiddleware(isUserValidator), (req, res) => {
+  const userDetails: User = req.body;
+
+  const user = createUser(userDetails);
+
+  res.status(201);
+  res.json({ user: user });
+});
+
+router.get("/:userId", ensureAuthenticated, validateMiddleware([shortIdValidation("userId")]), (req, res) => {
+  const { userId } = req.params;
+
+  // Permission: account owner
+  if (!isEqual(userId, req.user?.id)) {
+    return res.status(401).send({
+      error: "Unauthorized",
+    });
   }
-);
 
-router.post(
-  "/",
-  userFieldsValidator,
-  validateMiddleware(isUserValidator),
-  (req, res) => {
-    const userDetails: User = req.body;
+  const user = getUserById(userId);
 
-    const user = createUser(userDetails);
-
-    res.status(201);
-    res.json({ user: user });
-  }
-);
-
-router.get(
-  "/:userId",
-  ensureAuthenticated,
-  validateMiddleware([shortIdValidation("userId")]),
-  (req, res) => {
-    const { userId } = req.params;
-
-    // Permission: account owner
-    if (!isEqual(userId, req.user?.id)) {
-      return res.status(401).send({
-        error: "Unauthorized",
-      });
-    }
-
-    const user = getUserById(userId);
-
-    res.status(200);
-    res.json({ user });
-  }
-);
+  res.status(200);
+  res.json({ user });
+});
 
 router.get("/profile/:username", (req, res) => {
   const { username } = req.params;
 
-  const user = pick(
-    ["firstName", "lastName", "avatar"],
-    getUserByUsername(username)
-  );
+  const user = pick(["firstName", "lastName", "avatar"], getUserByUsername(username));
 
   res.status(200);
   res.json({ user });

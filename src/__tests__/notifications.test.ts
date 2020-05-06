@@ -47,31 +47,17 @@ describe("Notifications", () => {
       user = getAllUsers()[0];
       transactions = getTransactionsForUserContacts(user.id);
       transaction = transactions[0];
-      paymentNotification = createPaymentNotification(
-        user.id,
-        transaction.id,
-        PaymentNotificationStatus.received
-      );
+      paymentNotification = createPaymentNotification(user.id, transaction.id, PaymentNotificationStatus.received);
       like = createLike(user.id, transaction.id);
-      likeNotification = createLikeNotification(
-        user.id,
-        transaction.id,
-        like.id
-      );
+      likeNotification = createLikeNotification(user.id, transaction.id, like.id);
       comment = createComment(user.id, transaction.id, "This is my comment");
 
-      commentNotification = createCommentNotification(
-        user.id,
-        transaction.id,
-        comment.id
-      );
+      commentNotification = createCommentNotification(user.id, transaction.id, comment.id);
     });
 
     it("should create a payment notification for a transaction", () => {
       expect(paymentNotification.transactionId).toBe(transaction.id);
-      expect(paymentNotification.status).toBe(
-        PaymentNotificationStatus.received
-      );
+      expect(paymentNotification.status).toBe(PaymentNotificationStatus.received);
     });
 
     it("should create a like notification for a transaction", () => {
@@ -85,9 +71,7 @@ describe("Notifications", () => {
     });
 
     it("should format comment notification for api", () => {
-      const apiNotification = formatNotificationForApiResponse(
-        commentNotification
-      );
+      const apiNotification = formatNotificationForApiResponse(commentNotification);
       expect(apiNotification.userFullName).toBeDefined();
     });
 
@@ -125,11 +109,7 @@ describe("Notifications", () => {
     const transaction = transactions[0];
 
     // create comment and like and notifications for transaction
-    const comment = createComment(
-      user.id,
-      transaction.id,
-      "This is my notification content"
-    );
+    const comment = createComment(user.id, transaction.id, "This is my notification content");
     createCommentNotification(user.id, transaction.id, comment.id);
     const like = createLike(user.id, transaction.id);
     createLikeNotification(user.id, transaction.id, like.id);

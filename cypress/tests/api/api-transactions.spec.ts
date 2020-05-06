@@ -3,12 +3,7 @@
 
 import faker from "faker";
 
-import {
-  User,
-  NotificationType,
-  Transaction,
-  BankAccount,
-} from "../../../src/models";
+import { User, NotificationType, Transaction, BankAccount } from "../../../src/models";
 import { isEqual } from "lodash/fp";
 
 type TestTransactionsCtx = {
@@ -26,8 +21,7 @@ describe("Transactions API", function () {
   let ctx: TestTransactionsCtx = {};
 
   const isSenderOrReceiver = ({ senderId, receiverId }: Transaction) =>
-    isEqual(senderId, ctx.authenticatedUser!.id) ||
-    isEqual(receiverId, ctx.authenticatedUser!.id);
+    isEqual(senderId, ctx.authenticatedUser!.id) || isEqual(receiverId, ctx.authenticatedUser!.id);
 
   beforeEach(function () {
     cy.task("db:seed");
@@ -104,12 +98,10 @@ describe("Transactions API", function () {
     });
 
     it("gets a list of transactions for users list of contacts, page two", function () {
-      cy.request("GET", `${apiTransactions}/contacts?page=2`).then(
-        (response) => {
-          expect(response.status).to.eq(200);
-          expect(response.body.results).length.to.be.greaterThan(1);
-        }
-      );
+      cy.request("GET", `${apiTransactions}/contacts?page=2`).then((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.body.results).length.to.be.greaterThan(1);
+      });
     });
 
     it.skip("gets a list of transactions for users list of contacts - status 'incomplete'", function () {
@@ -141,9 +133,7 @@ describe("Transactions API", function () {
         transactionType: "payment",
         source: ctx.bankAccountId,
         receiverId: ctx.receiver!.id,
-        description: `Payment: ${ctx.authenticatedUser!.id} to ${
-          ctx.receiver!.id
-        }`,
+        description: `Payment: ${ctx.authenticatedUser!.id} to ${ctx.receiver!.id}`,
         amount: getFakeAmount(),
         privacyLevel: "public",
       }).then((response) => {
@@ -159,9 +149,7 @@ describe("Transactions API", function () {
         transactionType: "request",
         source: ctx.bankAccountId,
         receiverId: ctx.receiver!.id,
-        description: `Request: ${ctx.authenticatedUser!.id} from ${
-          ctx.receiver!.id
-        }`,
+        description: `Request: ${ctx.authenticatedUser!.id} from ${ctx.receiver!.id}`,
         amount: getFakeAmount(),
         privacyLevel: "public",
       }).then((response) => {

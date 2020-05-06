@@ -31,12 +31,10 @@ describe("Comments API", function () {
 
   context("GET /comments/:transactionId", function () {
     it("gets a list of comments for a transaction", function () {
-      cy.request("GET", `${apiComments}/${ctx.transactionId}`).then(
-        (response) => {
-          expect(response.status).to.eq(200);
-          expect(response.body.comments.length).to.eq(1);
-        }
-      );
+      cy.request("GET", `${apiComments}/${ctx.transactionId}`).then((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.body.comments.length).to.eq(1);
+      });
     });
   });
 

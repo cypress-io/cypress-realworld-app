@@ -7,17 +7,13 @@ export const notificationsMachine = dataMachine("notifications").withConfig({
     fetchData: async (ctx, event: any) => {
       const payload = omit("type", event);
       const resp = await httpClient.get(`http://localhost:3001/notifications`, {
-        params:
-          !isEmpty(payload) && event.type === "FETCH" ? payload : undefined,
+        params: !isEmpty(payload) && event.type === "FETCH" ? payload : undefined,
       });
       return resp.data;
     },
     updateData: async (ctx, event: any) => {
       const payload = omit("type", event);
-      const resp = await httpClient.patch(
-        `http://localhost:3001/notifications/${payload.id}`,
-        payload
-      );
+      const resp = await httpClient.patch(`http://localhost:3001/notifications/${payload.id}`, payload);
       return resp.data;
     },
   },

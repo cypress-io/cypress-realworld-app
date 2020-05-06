@@ -8,10 +8,7 @@ import {
   TransactionStatus,
 } from "../../../src/models";
 import { addDays, isWithinInterval, startOfDay } from "date-fns";
-import {
-  startOfDayUTC,
-  endOfDayUTC,
-} from "../../../src/utils/transactionUtils";
+import { startOfDayUTC, endOfDayUTC } from "../../../src/utils/transactionUtils";
 
 const { _ } = Cypress;
 
@@ -22,8 +19,7 @@ type TransactionFeedsCtx = {
 
 describe("Transaction Feed", function () {
   const ctx: TransactionFeedsCtx = {};
-  const isMobile =
-    Cypress.config("viewportWidth") < Cypress.env("mobileViewportWidth");
+  const isMobile = Cypress.config("viewportWidth") < Cypress.env("mobileViewportWidth");
   const initialFeedItemCount = isMobile ? 5 : 8;
 
   const feedViews = {
@@ -71,22 +67,16 @@ describe("Transaction Feed", function () {
       });
 
       it("shows amount range in drawer on mobile", function () {
-        cy.getBySel("nav-personal-tab")
-          .click()
-          .should("have.class", "Mui-selected");
+        cy.getBySel("nav-personal-tab").click().should("have.class", "Mui-selected");
         cy.getBySelLike("filter-amount-range-button").click({ force: true });
         cy.getBySel("amount-range-filter-drawer").should("be.visible");
         cy.getBySel("amount-range-filter-drawer-close").click();
       });
 
       it("shows date range calendar full screen on mobile", function () {
-        cy.getBySel("nav-personal-tab")
-          .click()
-          .should("have.class", "Mui-selected");
+        cy.getBySel("nav-personal-tab").click().should("have.class", "Mui-selected");
 
-        cy.getBySelLike("filter-date-range-button")
-          .scrollIntoView()
-          .click({ force: true });
+        cy.getBySelLike("filter-date-range-button").scrollIntoView().click({ force: true });
 
         cy.getBySel("date-range-filter-drawer").should("be.visible");
 
@@ -118,103 +108,69 @@ describe("Transaction Feed", function () {
           .its("response.body.results")
           .should("have.length", Cypress.env("paginationPageSize"))
           .then((transactions) => {
-            cy.getBySelLike("transaction-item").should(
-              "have.length",
-              initialFeedItemCount
-            );
+            cy.getBySelLike("transaction-item").should("have.length", initialFeedItemCount);
 
-            const getTransactionFromEl = (
-              $el: JQuery<Element>
-            ): TransactionResponseItem => {
-              const transactionId = $el
-                .data("test")
-                .split("transaction-item-")[1];
+            const getTransactionFromEl = ($el: JQuery<Element>): TransactionResponseItem => {
+              const transactionId = $el.data("test").split("transaction-item-")[1];
               return _.find(transactions, {
                 id: transactionId,
               })!;
             };
 
             cy.log("🚩Testing a paid payment transaction item");
-            cy.contains("[data-test*='transaction-item']", "paid").within(
-              ($el) => {
-                const transaction = getTransactionFromEl($el);
-                const formattedAmount = Dinero({
-                  amount: transaction.amount,
-                }).toFormat();
+            cy.contains("[data-test*='transaction-item']", "paid").within(($el) => {
+              const transaction = getTransactionFromEl($el);
+              const formattedAmount = Dinero({
+                amount: transaction.amount,
+              }).toFormat();
 
-                expect([
-                  TransactionStatus.pending,
-                  TransactionStatus.complete,
-                ]).to.include(transaction.status);
+              expect([TransactionStatus.pending, TransactionStatus.complete]).to.include(transaction.status);
 
-                expect(transaction.requestStatus).to.be.empty;
+              expect(transaction.requestStatus).to.be.empty;
 
-                cy.getBySelLike("like-count").should(
-                  "have.text",
-                  `${transaction.likes.length}`
-                );
-                cy.getBySelLike("comment-count").should(
-                  "have.text",
-                  `${transaction.comments.length}`
-                );
+              cy.getBySelLike("like-count").should("have.text", `${transaction.likes.length}`);
+              cy.getBySelLike("comment-count").should("have.text", `${transaction.comments.length}`);
 
-                cy.getBySelLike("sender").should(
-                  "contain",
-                  transaction.senderName
-                );
-                cy.getBySelLike("receiver").should(
-                  "contain",
-                  transaction.receiverName
-                );
+              cy.getBySelLike("sender").should("contain", transaction.senderName);
+              cy.getBySelLike("receiver").should("contain", transaction.receiverName);
 
-                cy.getBySelLike("amount")
-                  .should("contain", `-${formattedAmount}`)
-                  .should("have.css", "color", "rgb(255, 0, 0)");
-              }
-            );
+              cy.getBySelLike("amount")
+                .should("contain", `-${formattedAmount}`)
+                .should("have.css", "color", "rgb(255, 0, 0)");
+            });
 
             cy.log("🚩Testing a charged payment transaction item");
-            cy.contains("[data-test*='transaction-item']", "charged").within(
-              ($el) => {
-                const transaction = getTransactionFromEl($el);
-                const formattedAmount = Dinero({
-                  amount: transaction.amount,
-                }).toFormat();
+            cy.contains("[data-test*='transaction-item']", "charged").within(($el) => {
+              const transaction = getTransactionFromEl($el);
+              const formattedAmount = Dinero({
+                amount: transaction.amount,
+              }).toFormat();
 
-                expect(TransactionStatus.complete).to.equal(transaction.status);
+              expect(TransactionStatus.complete).to.equal(transaction.status);
 
-                expect(transaction.requestStatus).to.equal(
-                  TransactionRequestStatus.accepted
-                );
+              expect(transaction.requestStatus).to.equal(TransactionRequestStatus.accepted);
 
-                cy.getBySelLike("amount")
-                  .should("contain", `+${formattedAmount}`)
-                  .should("have.css", "color", "rgb(76, 175, 80)");
-              }
-            );
+              cy.getBySelLike("amount")
+                .should("contain", `+${formattedAmount}`)
+                .should("have.css", "color", "rgb(76, 175, 80)");
+            });
 
             cy.log("🚩Testing a requested payment transaction item");
-            cy.contains("[data-test*='transaction-item']", "requested").within(
-              ($el) => {
-                const transaction = getTransactionFromEl($el);
-                const formattedAmount = Dinero({
-                  amount: transaction.amount,
-                }).toFormat();
+            cy.contains("[data-test*='transaction-item']", "requested").within(($el) => {
+              const transaction = getTransactionFromEl($el);
+              const formattedAmount = Dinero({
+                amount: transaction.amount,
+              }).toFormat();
 
-                expect([
-                  TransactionStatus.pending,
-                  TransactionStatus.complete,
-                ]).to.include(transaction.status);
-                expect([
-                  TransactionRequestStatus.pending,
-                  TransactionRequestStatus.rejected,
-                ]).to.include(transaction.requestStatus);
+              expect([TransactionStatus.pending, TransactionStatus.complete]).to.include(transaction.status);
+              expect([TransactionRequestStatus.pending, TransactionRequestStatus.rejected]).to.include(
+                transaction.requestStatus
+              );
 
-                cy.getBySelLike("amount")
-                  .should("contain", `+${formattedAmount}`)
-                  .should("have.css", "color", "rgb(76, 175, 80)");
-              }
-            );
+              cy.getBySelLike("amount")
+                .should("contain", `+${formattedAmount}`)
+                .should("have.css", "color", "rgb(76, 175, 80)");
+            });
           });
 
         cy.log("📃 Scroll to next page");
@@ -249,23 +205,16 @@ describe("Transaction Feed", function () {
           const dateRangeStart = startOfDay(new Date(transaction.createdAt));
           const dateRangeEnd = endOfDayUTC(addDays(dateRangeStart, 1));
 
-          cy.getBySelLike(feed.tab)
-            .click()
-            .should("have.class", "Mui-selected");
+          cy.getBySelLike(feed.tab).click().should("have.class", "Mui-selected");
 
-          cy.wait(`@${feed.routeAlias}`)
-            .its("response.body.results")
-            .as("unfilteredResults");
+          cy.wait(`@${feed.routeAlias}`).its("response.body.results").as("unfilteredResults");
 
           cy.pickDateRange(dateRangeStart, dateRangeEnd);
 
           cy.wait(`@${feed.routeAlias}`)
             .its("response.body.results")
             .then((transactions: Transaction[]) => {
-              cy.getBySelLike("transaction-item").should(
-                "have.length",
-                transactions.length
-              );
+              cy.getBySelLike("transaction-item").should("have.length", transactions.length);
 
               transactions.forEach(({ createdAt }) => {
                 const createdAtDate = startOfDayUTC(new Date(createdAt));
@@ -288,9 +237,7 @@ describe("Transaction Feed", function () {
           });
 
           cy.get("@unfilteredResults").then((unfilteredResults) => {
-            cy.wait(`@${feed.routeAlias}`)
-              .its("response.body.results")
-              .should("deep.equal", unfilteredResults);
+            cy.wait(`@${feed.routeAlias}`).its("response.body.results").should("deep.equal", unfilteredResults);
           });
         });
       });
@@ -323,16 +270,11 @@ describe("Transaction Feed", function () {
 
     _.each(feedViews, (feed, feedName) => {
       it(`filters ${feedName} transaction feed by amount range`, function () {
-        cy.getBySelLike(feed.tab)
-          .click({ force: true })
-          .should("have.class", "Mui-selected");
+        cy.getBySelLike(feed.tab).click({ force: true }).should("have.class", "Mui-selected");
 
         cy.wait(`@${feed.routeAlias}`);
 
-        cy.setTransactionAmountRange(
-          dollarAmountRange.min,
-          dollarAmountRange.max
-        );
+        cy.setTransactionAmountRange(dollarAmountRange.min, dollarAmountRange.max);
 
         cy.getBySelLike("filter-amount-range-text").should(
           "contain",
@@ -361,10 +303,7 @@ describe("Transaction Feed", function () {
         cy.wait(`@${feed.routeAlias}`);
 
         cy.setTransactionAmountRange(550, 1000);
-        cy.getBySelLike("filter-amount-range-text").should(
-          "contain",
-          "$550 - $1,000"
-        );
+        cy.getBySelLike("filter-amount-range-text").should("contain", "$550 - $1,000");
         cy.wait(`@${feed.routeAlias}`);
 
         cy.getBySelLike("transaction-item").should("have.length", 0);
@@ -388,10 +327,7 @@ describe("Transaction Feed", function () {
         cy.wait("@personalTransactions")
           .its("response.body.results")
           .each((transaction: Transaction) => {
-            const transactionParticipants = [
-              transaction.senderId,
-              transaction.receiverId,
-            ];
+            const transactionParticipants = [transaction.senderId, transaction.receiverId];
             expect(transactionParticipants).to.include(ctx.user!.id);
           });
       });
@@ -408,19 +344,11 @@ describe("Transaction Feed", function () {
         cy.wait("@contactsTransactions")
           .its("response.body.results")
           .each((transaction: Transaction) => {
-            const transactionParticipants = [
-              transaction.senderId,
-              transaction.receiverId,
-            ];
+            const transactionParticipants = [transaction.senderId, transaction.receiverId];
 
-            const contactsInTransaction = _.intersection(
-              contactIds,
-              transactionParticipants
-            );
+            const contactsInTransaction = _.intersection(contactIds, transactionParticipants);
 
-            const message = `"${contactsInTransaction}" are contacts of ${
-              ctx.user!.id
-            }`;
+            const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
             expect(contactsInTransaction, message).to.not.be.empty;
           });
       });
@@ -439,18 +367,10 @@ describe("Transaction Feed", function () {
             const transactionsOfContacts = transactions.slice(0, 5);
 
             transactionsOfContacts.forEach((transaction) => {
-              const transactionParticipants = [
-                transaction.senderId,
-                transaction.receiverId,
-              ];
+              const transactionParticipants = [transaction.senderId, transaction.receiverId];
 
-              const contactsInTransaction = _.intersection(
-                transactionParticipants,
-                contactIds
-              );
-              const message = `"${contactsInTransaction}" are contacts of ${
-                ctx.user!.id
-              }`;
+              const contactsInTransaction = _.intersection(transactionParticipants, contactIds);
+              const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
               expect(contactsInTransaction, message).to.not.be.empty;
             });
           });

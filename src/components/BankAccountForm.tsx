@@ -8,9 +8,7 @@ import { BankAccountPayload, User } from "../models";
 import { useHistory } from "react-router";
 
 const validationSchema = object({
-  bankName: string()
-    .min(5, "Must contain at least 5 characters")
-    .required("Enter a bank name"),
+  bankName: string().min(5, "Must contain at least 5 characters").required("Enter a bank name"),
   routingNumber: string()
     .length(9, "Must contain a valid routing number")
     .required("Enter a valid bank routing number"),
@@ -41,11 +39,7 @@ export interface BankAccountFormProps {
   onboarding?: boolean;
 }
 
-const BankAccountForm: React.FC<BankAccountFormProps> = ({
-  userId,
-  createBankAccount,
-  onboarding,
-}) => {
+const BankAccountForm: React.FC<BankAccountFormProps> = ({ userId, createBankAccount, onboarding }) => {
   const history = useHistory();
   const classes = useStyles();
   const initialValues: BankAccountPayload = {
@@ -72,10 +66,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
       {({ isValid, isSubmitting }) => (
         <Form className={classes.form} data-test="bankaccount-form">
           <Field name="bankName">
-            {({
-              field,
-              meta: { error, value, initialValue, touched },
-            }: FieldProps) => (
+            {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
               <TextField
                 variant="outlined"
                 margin="dense"
@@ -92,10 +83,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
             )}
           </Field>
           <Field name="routingNumber">
-            {({
-              field,
-              meta: { error, value, initialValue, touched },
-            }: FieldProps) => (
+            {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
               <TextField
                 variant="outlined"
                 margin="dense"
@@ -112,10 +100,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
             )}
           </Field>
           <Field name="accountNumber">
-            {({
-              field,
-              meta: { error, value, initialValue, touched },
-            }: FieldProps) => (
+            {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
               <TextField
                 variant="outlined"
                 margin="dense"
@@ -131,13 +116,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
               />
             )}
           </Field>
-          <Grid
-            container
-            spacing={2}
-            direction="row"
-            justify="flex-start"
-            alignItems="flex-start"
-          >
+          <Grid container spacing={2} direction="row" justify="flex-start" alignItems="flex-start">
             <Grid item>
               <Button
                 type="submit"

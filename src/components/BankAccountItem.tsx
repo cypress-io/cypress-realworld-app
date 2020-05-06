@@ -9,22 +9,13 @@ export interface BankAccountListItemProps {
   deleteBankAccount: Function;
 }
 
-const BankAccountListItem: React.FC<BankAccountListItemProps> = ({
-  bankAccount,
-  deleteBankAccount,
-}) => {
+const BankAccountListItem: React.FC<BankAccountListItemProps> = ({ bankAccount, deleteBankAccount }) => {
   return (
     <ListItem data-test={`bankaccount-list-item-${bankAccount.id}`}>
-      <Grid
-        container
-        direction="row"
-        justify="space-between"
-        alignItems="flex-start"
-      >
+      <Grid container direction="row" justify="space-between" alignItems="flex-start">
         <Grid item>
           <Typography variant="body1" color="primary" gutterBottom>
-            {bankAccount.bankName}{" "}
-            {bankAccount.isDeleted ? "(Deleted)" : undefined}
+            {bankAccount.bankName} {bankAccount.isDeleted ? "(Deleted)" : undefined}
           </Typography>
         </Grid>
         {!bankAccount.isDeleted && (

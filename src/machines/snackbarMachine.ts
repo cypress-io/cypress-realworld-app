@@ -14,11 +14,7 @@ export interface SnackbarContext {
   message?: string;
 }
 
-export const snackbarMachine = Machine<
-  SnackbarContext,
-  SnackbarSchema,
-  SnackbarEvents
->(
+export const snackbarMachine = Machine<SnackbarContext, SnackbarSchema, SnackbarEvents>(
   {
     id: "snackbar",
     initial: "invisible",

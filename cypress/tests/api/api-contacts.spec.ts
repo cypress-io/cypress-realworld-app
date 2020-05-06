@@ -69,11 +69,9 @@ describe("Contacts API", function () {
   });
   context("DELETE /contacts/:contactId", function () {
     it("deletes a contact", function () {
-      cy.request("DELETE", `${apiContacts}/${ctx.contact!.id}`).then(
-        (response) => {
-          expect(response.status).to.eq(200);
-        }
-      );
+      cy.request("DELETE", `${apiContacts}/${ctx.contact!.id}`).then((response) => {
+        expect(response.status).to.eq(200);
+      });
     });
   });
 });

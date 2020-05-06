@@ -10,16 +10,9 @@ export interface UserListItemProps {
   index: Number;
 }
 
-const UserListItem: React.FC<UserListItemProps> = ({
-  user,
-  setReceiver,
-  index,
-}) => {
+const UserListItem: React.FC<UserListItemProps> = ({ user, setReceiver, index }) => {
   return (
-    <ListItem
-      data-test={`user-list-item-${user.id}`}
-      onClick={() => setReceiver(user)}
-    >
+    <ListItem data-test={`user-list-item-${user.id}`} onClick={() => setReceiver(user)}>
       <ListItemAvatar>
         <Avatar src={`https://i.pravatar.cc/100?img=${index}`} />
       </ListItemAvatar>
@@ -27,14 +20,7 @@ const UserListItem: React.FC<UserListItemProps> = ({
         primary={`${user.firstName} ${user.lastName}`}
         secondary={
           <span>
-            <Grid
-              component={"span"}
-              container
-              direction="row"
-              justify="flex-start"
-              alignItems="flex-start"
-              spacing={1}
-            >
+            <Grid component={"span"} container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
               <Grid item component={"span"}>
                 <b>U: </b>
                 {user.username}

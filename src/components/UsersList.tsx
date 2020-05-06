@@ -14,12 +14,7 @@ const UsersList: React.FC<UsersListProps> = ({ users, setReceiver }) => {
     <List data-test="users-list">
       {users &&
         users.map((user: User, index: number) => (
-          <UserListItem
-            key={user.id}
-            user={user}
-            setReceiver={setReceiver}
-            index={index}
-          />
+          <UserListItem key={user.id} user={user} setReceiver={setReceiver} index={index} />
         ))}
     </List>
   );

@@ -24,27 +24,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TransactionInfiniteList: React.FC<TransactionListProps> = ({
-  transactions,
-  loadNextPage,
-  pagination,
-}) => {
+const TransactionInfiniteList: React.FC<TransactionListProps> = ({ transactions, loadNextPage, pagination }) => {
   const classes = useStyles();
   const theme = useTheme();
   const isXsBreakpoint = useMediaQuery(theme.breakpoints.down("xs"));
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const itemCount = pagination.hasNextPages
-    ? transactions.length + 1
-    : transactions.length;
+  const itemCount = pagination.hasNextPages ? transactions.length + 1 : transactions.length;
 
   const loadMoreItems = () =>
-    Promise.resolve("").then(
-      () => pagination.hasNextPages && loadNextPage(pagination.page + 1)
-    );
+    Promise.resolve("").then(() => pagination.hasNextPages && loadNextPage(pagination.page + 1));
 
-  const isItemLoaded = (index: number) =>
-    !pagination.hasNextPages || index < transactions.length;
+  const isItemLoaded = (index: number) => !pagination.hasNextPages || index < transactions.length;
 
   const Item = ({ index, style }: { index: number; style: any }) => {
     if (!isItemLoaded(index)) {
@@ -65,12 +56,7 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
   };
 
   return (
-    <InfiniteLoader
-      isItemLoaded={isItemLoaded}
-      loadMoreItems={loadMoreItems}
-      itemCount={itemCount}
-      threshold={2}
-    >
+    <InfiniteLoader isItemLoaded={isItemLoaded} loadMoreItems={loadMoreItems} itemCount={itemCount} threshold={2}>
       {({ onItemsRendered, ref }) => (
         <div data-test="transaction-list" className={classes.transactionList}>
           <FixedSizeList

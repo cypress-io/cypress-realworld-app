@@ -47,9 +47,7 @@ describe("Notifications", function () {
 
         cy.visit("/notifications");
 
-        cy.getBySelLike("notification-list-item")
-          .should("contain", ctx.userA?.firstName)
-          .and("contain", "liked");
+        cy.getBySelLike("notification-list-item").should("contain", ctx.userA?.firstName).and("contain", "liked");
       });
     });
 
@@ -70,9 +68,7 @@ describe("Notifications", function () {
 
         cy.visit("/notifications");
 
-        cy.getBySelLike("notification-list-item")
-          .should("contain", ctx.userA?.firstName)
-          .and("contain", "commented");
+        cy.getBySelLike("notification-list-item").should("contain", ctx.userA?.firstName).and("contain", "commented");
       });
     });
 
@@ -146,9 +142,7 @@ describe("Notifications", function () {
     it("marks a notification as read; updates notification counter badge", function () {
       cy.visit("/notifications");
 
-      cy.wait("@notifications")
-        .its("response.body.results.length")
-        .as("notificationsCount");
+      cy.wait("@notifications").its("response.body.results.length").as("notificationsCount");
 
       cy.getBySelLike("notification-mark-read").first().click({ force: true });
 

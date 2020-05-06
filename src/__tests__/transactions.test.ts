@@ -26,10 +26,7 @@ import {
   TransactionStatus,
 } from "../../src/models";
 import { getFakeAmount } from "../../src/utils/transactionUtils";
-import {
-  totalTransactions,
-  transactionsPerUser,
-} from "../../scripts/seedDataUtils";
+import { totalTransactions, transactionsPerUser } from "../../scripts/seedDataUtils";
 
 describe("Transactions", () => {
   beforeEach(() => {
@@ -41,9 +38,7 @@ describe("Transactions", () => {
   });
 
   it("should retrieve a list of all public transactions", () => {
-    expect(getAllPublicTransactions().length).toBeGreaterThan(
-      transactionsPerUser
-    );
+    expect(getAllPublicTransactions().length).toBeGreaterThan(transactionsPerUser);
     expect(getAllPublicTransactions().length).toBeLessThan(totalTransactions);
   });
 
@@ -59,18 +54,13 @@ describe("Transactions", () => {
   it("should retrieve a list of transactions for a user (user is sender)", () => {
     const userToLookup: User = getAllUsers()[0];
 
-    const result: Transaction[] = getTransactionsForUserByObj(
-      userToLookup.id,
-      {}
-    );
+    const result: Transaction[] = getTransactionsForUserByObj(userToLookup.id, {});
     expect(result.pop()!.senderId).toBe(userToLookup.id);
   });
 
   it("should retrieve a list of transactions for a users contacts", () => {
     const userToLookup: User = getAllUsers()[0];
-    const result: Transaction[] = getTransactionsForUserContacts(
-      userToLookup.id
-    );
+    const result: Transaction[] = getTransactionsForUserContacts(userToLookup.id);
 
     expect(result.length).toBeGreaterThan(transactionsPerUser);
     expect(result.length).toBeLessThan(totalTransactions);
@@ -78,10 +68,7 @@ describe("Transactions", () => {
 
   it.skip("should retrieve a list of transactions for a users contacts - status 'incomplete'", () => {
     const userToLookup: User = getAllUsers()[0];
-    const result: Transaction[] = getTransactionsForUserContacts(
-      userToLookup.id,
-      { status: "incomplete" }
-    );
+    const result: Transaction[] = getTransactionsForUserContacts(userToLookup.id, { status: "incomplete" });
     expect(result[10]).toMatchObject({ status: "incomplete" });
 
     expect(result.length).toBeGreaterThan(1);
@@ -90,30 +77,23 @@ describe("Transactions", () => {
 
   it("should retrieve a list of transactions for a users contacts - between date range", () => {
     const userToLookup: User = getAllUsers()[0];
-    const result: Transaction[] = getTransactionsForUserContacts(
-      userToLookup.id,
-      {
-        dateRangeStart: new Date("Dec 01 2019"),
-        dateRangeEnd: new Date("Dec 05 2019"),
-      }
-    );
+    const result: Transaction[] = getTransactionsForUserContacts(userToLookup.id, {
+      dateRangeStart: new Date("Dec 01 2019"),
+      dateRangeEnd: new Date("Dec 05 2019"),
+    });
     expect(result.length).toBeGreaterThan(1);
   });
 
   it("should retrieve a list of public transactions, default sort", () => {
     const user: User = getAllUsers()[0];
-    const contactsTransactions: Transaction[] = getTransactionsForUserContacts(
-      user.id
-    );
+    const contactsTransactions: Transaction[] = getTransactionsForUserContacts(user.id);
     expect(contactsTransactions.length).toBeGreaterThan(1);
     expect(contactsTransactions.length).toBeLessThan(totalTransactions);
 
     const response = getPublicTransactionsDefaultSort(user.id);
 
     expect(response.contactsTransactions.length).toBeGreaterThan(1);
-    expect(response.contactsTransactions.length).toBeLessThan(
-      totalTransactions
-    );
+    expect(response.contactsTransactions.length).toBeLessThan(totalTransactions);
     expect(response.publicTransactions.length).toBeGreaterThan(1);
     expect(response.publicTransactions.length).toBeLessThan(totalTransactions);
 
@@ -181,10 +161,7 @@ describe("Transactions", () => {
     const payment = createTransaction(sender.id, "payment", paymentDetails);
     expect(payment.id).toBeDefined();
 
-    const personalTransactions: Transaction[] = getTransactionsForUserByObj(
-      sender.id,
-      {}
-    );
+    const personalTransactions: Transaction[] = getTransactionsForUserByObj(sender.id, {});
     const ids = map("id", personalTransactions);
     expect(ids).toContain(payment.id);
   });
@@ -284,11 +261,7 @@ describe("Transactions", () => {
       privacyLevel: DefaultPrivacyLevel.public,
       status: TransactionStatus.pending,
     };
-    const secondTransaction = createTransaction(
-      sender.id,
-      "payment",
-      secondPaymentDetails
-    );
+    const secondTransaction = createTransaction(sender.id, "payment", secondPaymentDetails);
     expect(secondTransaction.id).toBeDefined();
     expect(secondTransaction.status).toEqual("complete");
     expect(secondTransaction.requestStatus).not.toBeDefined();
@@ -296,24 +269,18 @@ describe("Transactions", () => {
     const secondUpdatedSender: User = getAllUsers()[0];
     expect(secondUpdatedSender.balance).toBe(0);
 
-    const secondWithdrawal = getBankTransferByTransactionId(
-      secondTransaction.id
-    );
+    const secondWithdrawal = getBankTransferByTransactionId(secondTransaction.id);
     expect(secondWithdrawal.type).toBe(BankTransferType.withdrawal);
     expect(secondWithdrawal.amount).toBe(secondPaymentAmount);
 
     // Verify Deposit Transactions for Receiver
     const updatedReceiverTransactions = getTransactionsByUserId(receiver.id);
 
-    expect(updatedReceiverTransactions.length).toBe(
-      receiverTransactions.length + 2
-    );
+    expect(updatedReceiverTransactions.length).toBe(receiverTransactions.length + 2);
 
     // Verify Receiver's Updated Pay App Balance
     const updatedReceiver: User = getAllUsers()[1];
-    expect(updatedReceiver.balance).toBe(
-      receiver.balance + firstPaymentAmount + secondPaymentAmount
-    );
+    expect(updatedReceiver.balance).toBe(receiver.balance + firstPaymentAmount + secondPaymentAmount);
   });
 
   it.skip("should create a request and withdrawal (bank transfer) for remaining balance", () => {
@@ -354,9 +321,7 @@ describe("Transactions", () => {
     // Verify Deposit Transactions for Sender
     const updatedSenderTransactions = getTransactionsByUserId(sender.id);
 
-    expect(updatedSenderTransactions.length).toBe(
-      receiverTransactions.length + 2
-    );
+    expect(updatedSenderTransactions.length).toBe(receiverTransactions.length + 2);
 
     // Verify Sender's Updated Pay App Balance
     const updatedSender: User = getAllUsers()[0];

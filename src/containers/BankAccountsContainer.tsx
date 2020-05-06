@@ -25,10 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BankAccountsContainer: React.FC<Props> = ({
-  authService,
-  bankAccountsService,
-}) => {
+const BankAccountsContainer: React.FC<Props> = ({ authService, bankAccountsService }) => {
   const match = useRouteMatch();
   const classes = useStyles();
   const [authState] = useService(authService);
@@ -54,22 +51,14 @@ const BankAccountsContainer: React.FC<Props> = ({
         <Typography component="h2" variant="h6" color="primary" gutterBottom>
           Create Bank Account
         </Typography>
-        <BankAccountForm
-          userId={currentUser?.id}
-          createBankAccount={createBankAccount}
-        />
+        <BankAccountForm userId={currentUser?.id} createBankAccount={createBankAccount} />
       </Paper>
     );
   }
 
   return (
     <Paper className={classes.paper}>
-      <Grid
-        container
-        direction="row"
-        justify="space-between"
-        alignItems="center"
-      >
+      <Grid container direction="row" justify="space-between" alignItems="center">
         <Grid item>
           <Typography component="h2" variant="h6" color="primary" gutterBottom>
             Bank Accounts
@@ -88,10 +77,7 @@ const BankAccountsContainer: React.FC<Props> = ({
           </Button>
         </Grid>
       </Grid>
-      <BankAccountList
-        bankAccounts={bankAccountsState?.context.results!}
-        deleteBankAccount={deleteBankAccount}
-      />
+      <BankAccountList bankAccounts={bankAccountsState?.context.results!} deleteBankAccount={deleteBankAccount} />
     </Paper>
   );
 };

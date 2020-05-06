@@ -70,9 +70,7 @@ describe("Transaction View", function () {
       cy.getBySelLike("comments-list").children().eq(index).contains(comment);
     });
 
-    cy.getBySelLike("comments-list")
-      .children()
-      .should("have.length", comments.length);
+    cy.getBySelLike("comments-list").children().should("have.length", comments.length);
   });
 
   it("accepts a transaction request", function () {

@@ -13,15 +13,9 @@ const DefaultPrivacyLevelValues = Object.values(DefaultPrivacyLevel);
 const validationSchema = object({
   firstName: string().required("Enter a first name"),
   lastName: string().required("Enter a last name"),
-  email: string()
-    .email("Must contain a valid email address")
-    .required("Enter an email address"),
-  phoneNumber: string()
-    .matches(phoneRegExp, "Phone number is not valid")
-    .required("Enter a phone number"),
-  defaultPrivacyLevel: mixed<DefaultPrivacyLevel>().oneOf(
-    DefaultPrivacyLevelValues
-  ),
+  email: string().email("Must contain a valid email address").required("Enter an email address"),
+  phoneNumber: string().matches(phoneRegExp, "Phone number is not valid").required("Enter a phone number"),
+  defaultPrivacyLevel: mixed<DefaultPrivacyLevel>().oneOf(DefaultPrivacyLevelValues),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -45,10 +39,7 @@ export interface UserSettingsProps {
   updateUser: Function;
 }
 
-const UserSettingsForm: React.FC<UserSettingsProps> = ({
-  userProfile,
-  updateUser,
-}) => {
+const UserSettingsForm: React.FC<UserSettingsProps> = ({ userProfile, updateUser }) => {
   const classes = useStyles();
   const initialValues: UserSettingsPayload = {
     firstName: userProfile.firstName,
@@ -71,10 +62,7 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({
       {({ isValid, isSubmitting }) => (
         <Form className={classes.form} data-test="user-settings-form">
           <Field name="firstName">
-            {({
-              field,
-              meta: { error, value, initialValue, touched },
-            }: FieldProps) => (
+            {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
               <TextField
                 variant="outlined"
                 margin="dense"
@@ -91,10 +79,7 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({
             )}
           </Field>
           <Field name="lastName">
-            {({
-              field,
-              meta: { error, value, initialValue, touched },
-            }: FieldProps) => (
+            {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
               <TextField
                 variant="outlined"
                 margin="dense"
@@ -111,10 +96,7 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({
             )}
           </Field>
           <Field name="email">
-            {({
-              field,
-              meta: { error, value, initialValue, touched },
-            }: FieldProps) => (
+            {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
               <TextField
                 variant="outlined"
                 margin="dense"
@@ -131,10 +113,7 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({
             )}
           </Field>
           <Field name="phoneNumber">
-            {({
-              field,
-              meta: { error, value, initialValue, touched },
-            }: FieldProps) => (
+            {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
               <TextField
                 variant="outlined"
                 margin="dense"
@@ -150,13 +129,7 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({
               />
             )}
           </Field>
-          <Grid
-            container
-            spacing={2}
-            direction="row"
-            justify="flex-start"
-            alignItems="flex-start"
-          >
+          <Grid container spacing={2} direction="row" justify="flex-start" alignItems="flex-start">
             <Grid item>
               <Button
                 type="submit"

@@ -18,9 +18,7 @@ module.exports = (on, config) => {
   on("task", {
     "db:seed"() {
       // seed database with test data
-      return axios
-        .post(`http://localhost:3001/testData/seed`)
-        .then((resp) => resp.data);
+      return axios.post(`http://localhost:3001/testData/seed`).then((resp) => resp.data);
     },
     // fetch test data from a database (MySQL, PostgreSQL, etc...)
     "filter:testData"({ entity, filterAttrs }) {
@@ -29,9 +27,7 @@ module.exports = (on, config) => {
         .then(({ data }) => filter(filterAttrs, data.results));
     },
     "find:testData"({ entity, findAttrs }) {
-      return axios
-        .get(`http://localhost:3001/testData/${entity}`)
-        .then(({ data }) => find(findAttrs, data.results));
+      return axios.get(`http://localhost:3001/testData/${entity}`).then(({ data }) => find(findAttrs, data.results));
     },
   });
 

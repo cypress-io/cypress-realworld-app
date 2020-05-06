@@ -24,9 +24,7 @@ import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 const drawerWidth = 240;
 
 export const mainListItems = (
-  toggleDrawer:
-    | ((event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void)
-    | undefined,
+  toggleDrawer: ((event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void) | undefined,
   showTemporaryDrawer: Boolean
 ) => (
   <div>
@@ -91,11 +89,7 @@ export const secondaryListItems = (signOutPending: Function) => (
       <ListItemIcon>
         <LogoutIcon />
       </ListItemIcon>
-      <ListItemText
-        primary="Logout"
-        data-test="sidenav-signout"
-        onClick={() => signOutPending()}
-      />
+      <ListItemText primary="Logout" data-test="sidenav-signout" onClick={() => signOutPending()} />
     </ListItem>
   </div>
 );
@@ -162,12 +156,7 @@ interface Props {
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
 }
 
-const NavDrawer: React.FC<Props> = ({
-  toggleDrawer,
-  closeMobileDrawer,
-  drawerOpen,
-  authService,
-}) => {
+const NavDrawer: React.FC<Props> = ({ toggleDrawer, closeMobileDrawer, drawerOpen, authService }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [authState, sendAuth] = useService(authService);
@@ -180,10 +169,7 @@ const NavDrawer: React.FC<Props> = ({
     <Drawer
       variant={showTemporaryDrawer ? "temporary" : "persistent"}
       classes={{
-        paper: clsx(
-          classes.drawerPaper,
-          !drawerOpen && classes.drawerPaperClose
-        ),
+        paper: clsx(classes.drawerPaper, !drawerOpen && classes.drawerPaperClose),
       }}
       open={drawerOpen}
       ModalProps={{
@@ -231,12 +217,7 @@ const NavDrawer: React.FC<Props> = ({
         <Grid item>
           {currentUser && (
             <>
-              <Typography
-                variant="h6"
-                color="textPrimary"
-                className={classes.amount}
-                data-test="sidenav-user-balance"
-              >
+              <Typography variant="h6" color="textPrimary" className={classes.amount} data-test="sidenav-user-balance">
                 {currentUser.balance && formatAmount(currentUser.balance)}
               </Typography>
               <Typography variant="subtitle2" color="inherit" gutterBottom>

@@ -9,14 +9,7 @@ import CheckIcon from "@material-ui/icons/Check";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 // import HourglassEmpty from "@material-ui/icons/HourglassEmpty";
 import { NotificationResponseItem } from "../models";
-import {
-  Button,
-  makeStyles,
-  ListItemIcon,
-  ListItemText,
-  useTheme,
-  useMediaQuery,
-} from "@material-ui/core";
+import { Button, makeStyles, ListItemIcon, ListItemText, useTheme, useMediaQuery } from "@material-ui/core";
 import {
   isCommentNotification,
   isLikeNotification,
@@ -49,10 +42,7 @@ const useStyles = makeStyles({
   },
 });
 
-const NotificationListItem: React.FC<NotificationListItemProps> = ({
-  notification,
-  updateNotification,
-}) => {
+const NotificationListItem: React.FC<NotificationListItemProps> = ({ notification, updateNotification }) => {
   const classes = useStyles();
   const theme = useTheme();
   let listItemText = undefined;
@@ -93,9 +83,7 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
         <IconButton
           aria-label="mark as read"
           color="primary"
-          onClick={() =>
-            updateNotification({ id: notification.id, isRead: true })
-          }
+          onClick={() => updateNotification({ id: notification.id, isRead: true })}
           data-test={`notification-mark-read-${notification.id}`}
         >
           <CheckIcon />
@@ -105,9 +93,7 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
         <Button
           color="primary"
           size="small"
-          onClick={() =>
-            updateNotification({ id: notification.id, isRead: true })
-          }
+          onClick={() => updateNotification({ id: notification.id, isRead: true })}
           data-test={`notification-mark-read-${notification.id}`}
         >
           Dismiss

@@ -1,10 +1,7 @@
 import React from "react";
 import { Box, Typography, Grid } from "@material-ui/core";
 import grey from "@material-ui/core/colors/grey";
-const EmptyList: React.FC<{ entity: string; children?: React.ReactNode }> = ({
-  entity,
-  children,
-}) => {
+const EmptyList: React.FC<{ entity: string; children?: React.ReactNode }> = ({ entity, children }) => {
   return (
     <Box
       display="flex"
@@ -29,13 +26,7 @@ const EmptyList: React.FC<{ entity: string; children?: React.ReactNode }> = ({
           </Typography>
         </Grid>
         <Grid item>
-          <Box
-            data-test="empty-list-children"
-            display="flex"
-            width={300}
-            alignItems="center"
-            justifyContent="center"
-          >
+          <Box data-test="empty-list-children" display="flex" width={300} alignItems="center" justifyContent="center">
             {children}
           </Box>
         </Grid>

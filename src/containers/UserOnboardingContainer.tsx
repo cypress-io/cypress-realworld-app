@@ -21,17 +21,12 @@ export interface Props {
   bankAccountsService: Interpreter<DataContext, any, DataEvents, any>;
 }
 
-const UserOnboardingContainer: React.FC<Props> = ({
-  authService,
-  bankAccountsService,
-}) => {
+const UserOnboardingContainer: React.FC<Props> = ({ authService, bankAccountsService }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [bankAccountsState, sendBankAccounts] = useService(bankAccountsService);
   const [authState, sendAuth] = useService(authService);
-  const [userOnboardingState, sendUserOnboarding] = useMachine(
-    userOnboardingMachine
-  );
+  const [userOnboardingState, sendUserOnboarding] = useMachine(userOnboardingMachine);
 
   const currentUser = authState?.context?.user;
 
@@ -40,8 +35,7 @@ const UserOnboardingContainer: React.FC<Props> = ({
   }, [sendBankAccounts]);
 
   const noBankAccounts =
-    bankAccountsState?.matches("success.withoutData") &&
-    isEmpty(bankAccountsState?.context?.results);
+    bankAccountsState?.matches("success.withoutData") && isEmpty(bankAccountsState?.context?.results);
 
   const dialogIsOpen =
     (userOnboardingState.matches("stepTwo") && !noBankAccounts) ||
@@ -57,11 +51,7 @@ const UserOnboardingContainer: React.FC<Props> = ({
   };
 
   return (
-    <Dialog
-      data-test="user-onboarding-dialog"
-      fullScreen={fullScreen}
-      open={dialogIsOpen}
-    >
+    <Dialog data-test="user-onboarding-dialog" fullScreen={fullScreen} open={dialogIsOpen}>
       <DialogTitle data-test="user-onboarding-dialog-title">
         {userOnboardingState.matches("stepOne") && "Get Started with Pay App"}
         {userOnboardingState.matches("stepTwo") && "Create Bank Account"}
@@ -89,11 +79,7 @@ const UserOnboardingContainer: React.FC<Props> = ({
             </>
           )}
           {userOnboardingState.matches("stepTwo") && (
-            <BankAccountForm
-              userId={currentUser?.id!}
-              createBankAccount={createBankAccountWithNextStep}
-              onboarding
-            />
+            <BankAccountForm userId={currentUser?.id!} createBankAccount={createBankAccountWithNextStep} onboarding />
           )}
           {userOnboardingState.matches("stepThree") && (
             <>
@@ -119,14 +105,8 @@ const UserOnboardingContainer: React.FC<Props> = ({
           Logout
         </Button>
         {!userOnboardingState.matches("stepTwo") && (
-          <Button
-            onClick={() => nextStep()}
-            color="primary"
-            data-test="user-onboarding-next"
-          >
-            {userOnboardingState.matches("stepThree")
-              ? "Take me to Pay App"
-              : "Next"}
+          <Button onClick={() => nextStep()} color="primary" data-test="user-onboarding-next">
+            {userOnboardingState.matches("stepThree") ? "Take me to Pay App" : "Next"}
           </Button>
         )}
       </DialogActions>

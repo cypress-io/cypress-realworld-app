@@ -43,9 +43,7 @@ const App: React.FC = () => {
   const [, , bankAccountsService] = useMachine(bankAccountsMachine);
 
   const isLoggedIn =
-    authState.matches("authorized") ||
-    authState.matches("refreshing") ||
-    authState.matches("updating");
+    authState.matches("authorized") || authState.matches("refreshing") || authState.matches("updating");
 
   return (
     <div className={classes.root}>

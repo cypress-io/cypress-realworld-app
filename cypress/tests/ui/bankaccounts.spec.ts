@@ -12,12 +12,8 @@ describe("Bank Accounts", function () {
     cy.task("db:seed");
 
     cy.server();
-    cy.route("POST", "http://localhost:3001/bankAccounts").as(
-      "createBankAccount"
-    );
-    cy.route("DELETE", "http://localhost:3001/bankAccounts/*").as(
-      "deleteBankAccount"
-    );
+    cy.route("POST", "http://localhost:3001/bankAccounts").as("createBankAccount");
+    cy.route("DELETE", "http://localhost:3001/bankAccounts/*").as("deleteBankAccount");
 
     cy.task("find:testData", { entity: "users" }).then((user: User) => {
       ctx.user = user;
@@ -39,10 +35,7 @@ describe("Bank Accounts", function () {
 
     cy.wait("@createBankAccount");
 
-    cy.getBySelLike("bankaccount-list-item")
-      .should("have.length", 2)
-      .eq(1)
-      .should("contain", "The Best Bank");
+    cy.getBySelLike("bankaccount-list-item").should("have.length", 2).eq(1).should("contain", "The Best Bank");
   });
 
   it("should display bank account form errors", function () {
@@ -50,9 +43,7 @@ describe("Bank Accounts", function () {
     cy.getBySel("bankaccount-new").click();
 
     cy.getBySelLike("bankName-input").type("The").find("input").clear().blur();
-    cy.get("#bankaccount-bankName-input-helper-text")
-      .should("be.visible")
-      .and("contain", "Enter a bank name");
+    cy.get("#bankaccount-bankName-input-helper-text").should("be.visible").and("contain", "Enter a bank name");
 
     cy.getBySelLike("bankName-input").type("The").find("input").blur();
     cy.get("#bankaccount-bankName-input-helper-text")
@@ -60,19 +51,12 @@ describe("Bank Accounts", function () {
       .and("contain", "Must contain at least 5 characters");
 
     ["routing", "account"].forEach((field) => {
-      cy.getBySelLike(`${field}Number-input`)
-        .type("123")
-        .find("input")
-        .clear()
-        .blur();
+      cy.getBySelLike(`${field}Number-input`).type("123").find("input").clear().blur();
       cy.get(`#bankaccount-${field}Number-input-helper-text`)
         .should("be.visible")
         .and("contain", `Enter a valid bank ${field} number`);
 
-      cy.getBySelLike(`${field}Number-input`)
-        .type("12345678")
-        .find("input")
-        .blur();
+      cy.getBySelLike(`${field}Number-input`).type("12345678").find("input").blur();
       cy.get(`#bankaccount-${field}Number-input-helper-text`)
         .should("be.visible")
         .and("contain", `Must contain a valid ${field} number`);

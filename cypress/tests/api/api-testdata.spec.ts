@@ -21,16 +21,7 @@ describe("Test Data API", function () {
 
   context("GET /testData/:entity", function () {
     Cypress._.each(
-      [
-        "users",
-        "contacts",
-        "bankaccounts",
-        "notifications",
-        "transactions",
-        "likes",
-        "comments",
-        "banktransfers",
-      ],
+      ["users", "contacts", "bankaccounts", "notifications", "transactions", "likes", "comments", "banktransfers"],
       (entity) => {
         it(`gets remote mock data for ${entity}`, function () {
           cy.request("GET", `${apiTestData}/${entity}`).then((response) => {

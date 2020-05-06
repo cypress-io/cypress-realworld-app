@@ -10,20 +10,13 @@ export interface BankAccountListProps {
   deleteBankAccount: Function;
 }
 
-const BankAccountList: React.FC<BankAccountListProps> = ({
-  bankAccounts,
-  deleteBankAccount,
-}) => {
+const BankAccountList: React.FC<BankAccountListProps> = ({ bankAccounts, deleteBankAccount }) => {
   return (
     <>
       {bankAccounts?.length > 0 ? (
         <List data-test="bankaccount-list">
           {bankAccounts.map((bankAccount: BankAccount) => (
-            <BankAccountItem
-              key={bankAccount.id}
-              bankAccount={bankAccount}
-              deleteBankAccount={deleteBankAccount}
-            />
+            <BankAccountItem key={bankAccount.id} bankAccount={bankAccount} deleteBankAccount={deleteBankAccount} />
           ))}
         </List>
       ) : (

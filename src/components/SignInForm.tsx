@@ -22,9 +22,7 @@ import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 
 const validationSchema = object({
   username: string().required("Username is required"),
-  password: string()
-    .min(4, "Password must contain at least 4 characters")
-    .required("Enter your password"),
+  password: string().min(4, "Password must contain at least 4 characters").required("Enter your password"),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -83,10 +81,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
           {({ isValid, isSubmitting }) => (
             <Form className={classes.form}>
               <Field name="username">
-                {({
-                  field,
-                  meta: { error, value, initialValue, touched },
-                }: FieldProps) => (
+                {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="normal"
@@ -96,19 +91,14 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                     type="text"
                     autoFocus
                     data-test="signin-username"
-                    error={
-                      (touched || value !== initialValue) && Boolean(error)
-                    }
+                    error={(touched || value !== initialValue) && Boolean(error)}
                     helperText={touched || value !== initialValue ? error : ""}
                     {...field}
                   />
                 )}
               </Field>
               <Field name="password">
-                {({
-                  field,
-                  meta: { error, value, initialValue, touched },
-                }: FieldProps) => (
+                {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="normal"
@@ -118,9 +108,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                     id="password"
                     data-test="signin-password"
                     error={touched && value !== initialValue && Boolean(error)}
-                    helperText={
-                      touched && value !== initialValue && touched ? error : ""
-                    }
+                    helperText={touched && value !== initialValue && touched ? error : ""}
                     {...field}
                   />
                 )}
@@ -129,13 +117,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                 control={
                   <Field name={"remember"}>
                     {({ field }: FieldProps) => {
-                      return (
-                        <Checkbox
-                          color="primary"
-                          data-test="signin-remember-me"
-                          {...field}
-                        />
-                      );
+                      return <Checkbox color="primary" data-test="signin-remember-me" {...field} />;
                     }}
                   </Field>
                 }

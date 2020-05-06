@@ -22,15 +22,10 @@ export interface Props {
   notificationsService: Interpreter<DataContext, DataSchema, DataEvents, any>;
 }
 
-const NotificationsContainer: React.FC<Props> = ({
-  authService,
-  notificationsService,
-}) => {
+const NotificationsContainer: React.FC<Props> = ({ authService, notificationsService }) => {
   const classes = useStyles();
   const [authState] = useService(authService);
-  const [notificationsState, sendNotifications] = useService(
-    notificationsService
-  );
+  const [notificationsState, sendNotifications] = useService(notificationsService);
 
   useEffect(() => {
     if (authState?.matches("authorized")) {
@@ -38,18 +33,14 @@ const NotificationsContainer: React.FC<Props> = ({
     }
   }, [authState, sendNotifications]);
 
-  const updateNotification = (payload: NotificationUpdatePayload) =>
-    sendNotifications("UPDATE", payload);
+  const updateNotification = (payload: NotificationUpdatePayload) => sendNotifications("UPDATE", payload);
 
   return (
     <Paper className={classes.paper}>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
         Notifications
       </Typography>
-      <NotificationList
-        notifications={notificationsState?.context?.results!}
-        updateNotification={updateNotification}
-      />
+      <NotificationList notifications={notificationsState?.context?.results!} updateNotification={updateNotification} />
     </Paper>
   );
 };

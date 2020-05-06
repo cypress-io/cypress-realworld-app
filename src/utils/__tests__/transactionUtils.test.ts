@@ -16,10 +16,7 @@ import {
 } from "../../models";
 import shortid from "shortid";
 
-const fakeTransaction = (
-  requestStatus?: TransactionRequestStatus,
-  createdAt?: Date
-): Transaction => ({
+const fakeTransaction = (requestStatus?: TransactionRequestStatus, createdAt?: Date): Transaction => ({
   id: shortid(),
   uuid: faker.random.uuid(),
   source: shortid(),
@@ -90,18 +87,14 @@ describe("Transaction Utils", () => {
         comments: [],
       };
 
-      expect(
-        currentUserLikesTransaction(currentUser, transactionWithLikes)
-      ).toBe(true);
+      expect(currentUserLikesTransaction(currentUser, transactionWithLikes)).toBe(true);
 
       const otherCurrentUser = {
         ...currentUser,
         id: "ABC123",
       };
 
-      expect(
-        currentUserLikesTransaction(otherCurrentUser, transactionWithLikes)
-      ).toBe(false);
+      expect(currentUserLikesTransaction(otherCurrentUser, transactionWithLikes)).toBe(false);
     });
   });
 

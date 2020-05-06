@@ -27,11 +27,7 @@ export interface AuthMachineContext {
   user?: User;
 }
 
-export const authMachine = Machine<
-  AuthMachineContext,
-  AuthMachineSchema,
-  AuthMachineEvents
->(
+export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMachineEvents>(
   {
     id: "authentication",
     initial: "unauthorized",
@@ -96,36 +92,24 @@ export const authMachine = Machine<
     services: {
       performSignup: async (ctx, event) => {
         const payload = omit("type", event);
-        const resp = await httpClient.post(
-          `http://localhost:3001/users`,
-          payload
-        );
+        const resp = await httpClient.post(`http://localhost:3001/users`, payload);
         history.push("/signin");
         return resp.data;
       },
       performLogin: async (ctx, event) => {
         const payload = omit("type", event);
-        const resp = await httpClient.post(
-          `http://localhost:3001/login`,
-          payload
-        );
+        const resp = await httpClient.post(`http://localhost:3001/login`, payload);
         history.push("/");
         return resp.data;
       },
       getUserProfile: async (ctx, event) => {
         const payload = omit("type", event);
-        const resp = await httpClient.get(
-          `http://localhost:3001/checkAuth`,
-          payload
-        );
+        const resp = await httpClient.get(`http://localhost:3001/checkAuth`, payload);
         return resp.data;
       },
       updateProfile: async (ctx, event: any) => {
         const payload = omit("type", event);
-        const resp = await httpClient.patch(
-          `http://localhost:3001/users/${payload.id}`,
-          payload
-        );
+        const resp = await httpClient.patch(`http://localhost:3001/users/${payload.id}`, payload);
         return resp.data;
       },
       performLogout: async (ctx, event) => {

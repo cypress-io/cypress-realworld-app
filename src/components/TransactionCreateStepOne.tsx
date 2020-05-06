@@ -20,11 +20,7 @@ export interface TransactionCreateStepOneProps {
   users: User[];
 }
 
-const TransactionCreateStepOne: React.FC<TransactionCreateStepOneProps> = ({
-  setReceiver,
-  userListSearch,
-  users,
-}) => {
+const TransactionCreateStepOne: React.FC<TransactionCreateStepOneProps> = ({ setReceiver, userListSearch, users }) => {
   const classes = useStyles();
 
   return (

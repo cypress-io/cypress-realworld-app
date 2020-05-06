@@ -36,12 +36,10 @@ describe("Users API", function () {
 
   context("GET /users/:userId", function () {
     it("get a user", function () {
-      cy.request("GET", `${apiUsers}/${ctx.authenticatedUser!.id}`).then(
-        (response) => {
-          expect(response.status).to.eq(200);
-          expect(response.body.user).to.have.property("firstName");
-        }
-      );
+      cy.request("GET", `${apiUsers}/${ctx.authenticatedUser!.id}`).then((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.body.user).to.have.property("firstName");
+      });
     });
 
     it("error when invalid userId", function () {

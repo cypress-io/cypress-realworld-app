@@ -10,23 +10,14 @@ import TransactionCreateContainer from "./TransactionCreateContainer";
 import TransactionDetailContainer from "./TransactionDetailContainer";
 import { DataContext, DataSchema, DataEvents } from "../machines/dataMachine";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
-import {
-  SnackbarContext,
-  SnackbarSchema,
-  SnackbarEvents,
-} from "../machines/snackbarMachine";
+import { SnackbarContext, SnackbarSchema, SnackbarEvents } from "../machines/snackbarMachine";
 import { useService } from "@xstate/react";
 import UserOnboardingContainer from "./UserOnboardingContainer";
 
 export interface Props {
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
   notificationsService: Interpreter<DataContext, DataSchema, DataEvents, any>;
-  snackbarService: Interpreter<
-    SnackbarContext,
-    SnackbarSchema,
-    SnackbarEvents,
-    any
-  >;
+  snackbarService: Interpreter<SnackbarContext, SnackbarSchema, SnackbarEvents, any>;
   bankAccountsService: Interpreter<DataContext, any, DataEvents, any>;
 }
 
@@ -50,14 +41,8 @@ const PrivateRoutesContainer: React.FC<Props> = ({
   }, [sendNotifications, authService, sendAuth]);
 
   return (
-    <MainLayout
-      notificationsService={notificationsService}
-      authService={authService}
-    >
-      <UserOnboardingContainer
-        authService={authService}
-        bankAccountsService={bankAccountsService}
-      />
+    <MainLayout notificationsService={notificationsService} authService={authService}>
+      <UserOnboardingContainer authService={authService} bankAccountsService={bankAccountsService} />
       <Switch>
         <Route exact path={"/(public|contacts|personal)?"}>
           <TransactionsContainer />
@@ -66,22 +51,13 @@ const PrivateRoutesContainer: React.FC<Props> = ({
           <UserSettingsContainer authService={authService} />
         </Route>
         <Route exact path="/notifications">
-          <NotificationsContainer
-            authService={authService}
-            notificationsService={notificationsService}
-          />
+          <NotificationsContainer authService={authService} notificationsService={notificationsService} />
         </Route>
         <Route path="/bankaccounts*">
-          <BankAccountsContainer
-            authService={authService}
-            bankAccountsService={bankAccountsService}
-          />
+          <BankAccountsContainer authService={authService} bankAccountsService={bankAccountsService} />
         </Route>
         <Route exact path="/transaction/new">
-          <TransactionCreateContainer
-            authService={authService}
-            snackbarService={snackbarService}
-          />
+          <TransactionCreateContainer authService={authService} snackbarService={snackbarService} />
         </Route>
         <Route exact path="/transaction/:transactionId">
           <TransactionDetailContainer authService={authService} />

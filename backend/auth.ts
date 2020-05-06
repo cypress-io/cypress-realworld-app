@@ -8,11 +8,7 @@ const router = express.Router();
 
 // configure passport for local strategy
 passport.use(
-  new LocalStrategy(function (
-    username: string,
-    password: string,
-    done: Function
-  ) {
+  new LocalStrategy(function (username: string, password: string, done: Function) {
     const user = getUserBy("username", username);
 
     const failureMessage = "Incorrect username or password.";

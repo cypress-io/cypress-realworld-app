@@ -38,24 +38,22 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
   }
 
   cy.getBySel("signin-submit").click();
-  cy.wait(["@loginUser", "@getUserProfile"]).spread(
-    (loginUser, getUserProfile) => {
-      log.set({
-        consoleProps() {
-          return {
-            username,
-            password,
-            rememberUser,
-            userId: getUserProfile.response.body.user.id,
-          };
-        },
-      });
+  cy.wait(["@loginUser", "@getUserProfile"]).spread((loginUser, getUserProfile) => {
+    log.set({
+      consoleProps() {
+        return {
+          username,
+          password,
+          rememberUser,
+          userId: getUserProfile.response.body.user.id,
+        };
+      },
+    });
 
-      // Question: what is the "2" state in between before and after snapshots
-      log.snapshot("after");
-      log.end();
-    }
-  );
+    // Question: what is the "2" state in between before and after snapshots
+    log.snapshot("after");
+    log.end();
+  });
 });
 
 Cypress.Commands.add("loginByApi", (username, password = defaultPassword) => {
@@ -76,13 +74,9 @@ Cypress.Commands.add("waitForXstateService", (service) => {
 
 Cypress.Commands.add("reactComponent", { prevSubject: "element" }, ($el) => {
   if ($el.length !== 1) {
-    throw new Error(
-      `cy.component() requires element of length 1 but got ${$el.length}`
-    );
+    throw new Error(`cy.component() requires element of length 1 but got ${$el.length}`);
   }
-  const key = Object.keys($el.get(0)).find((key) =>
-    key.startsWith("__reactInternalInstance$")
-  );
+  const key = Object.keys($el.get(0)).find((key) => key.startsWith("__reactInternalInstance$"));
 
   // @ts-ignore
   const domFiber = $el.prop(key);
@@ -100,9 +94,7 @@ Cypress.Commands.add("reactComponent", { prevSubject: "element" }, ($el) => {
 });
 
 Cypress.Commands.add("setTransactionAmountRange", (min, max) => {
-  cy.getBySel("transaction-list-filter-amount-range-button")
-    .scrollIntoView()
-    .click({ force: true });
+  cy.getBySel("transaction-list-filter-amount-range-button").scrollIntoView().click({ force: true });
 
   return cy
     .getBySelLike("filter-amount-range-slider")
@@ -111,51 +103,44 @@ Cypress.Commands.add("setTransactionAmountRange", (min, max) => {
     .invoke("onChange", null, [min / 10, max / 10]);
 });
 
-Cypress.Commands.add(
-  "loginByXstate",
-  (username, password = defaultPassword) => {
-    const log = Cypress.log({
-      name: "loginbyxstate",
-      displayName: "LOGIN BY XSTATE",
-      // @ts-ignore
-      message: `🔐 Authenticating | ${username}`,
-      autoEnd: false,
+Cypress.Commands.add("loginByXstate", (username, password = defaultPassword) => {
+  const log = Cypress.log({
+    name: "loginbyxstate",
+    displayName: "LOGIN BY XSTATE",
+    // @ts-ignore
+    message: `🔐 Authenticating | ${username}`,
+    autoEnd: false,
+  });
+
+  cy.server();
+  cy.route("POST", "/login").as("loginUser");
+  cy.route("GET", "/checkAuth").as("getUserProfile");
+  cy.visit("/signin", { log: false }).then(() => {
+    log.snapshot("before");
+  });
+
+  // Temporary fix
+  // cy.wait(100, { log: false });
+
+  cy.waitForXstateService("authService");
+
+  cy.window({ log: false }).then((win) => win.authService.send("LOGIN", { username, password }));
+
+  return cy.wait(["@loginUser", "@getUserProfile"]).spread((loginUser, getUserProfile) => {
+    log.set({
+      consoleProps() {
+        return {
+          username,
+          password,
+          userId: getUserProfile.response.body.user.id,
+        };
+      },
     });
 
-    cy.server();
-    cy.route("POST", "/login").as("loginUser");
-    cy.route("GET", "/checkAuth").as("getUserProfile");
-    cy.visit("/signin", { log: false }).then(() => {
-      log.snapshot("before");
-    });
-
-    // Temporary fix
-    // cy.wait(100, { log: false });
-
-    cy.waitForXstateService("authService");
-
-    cy.window({ log: false }).then((win) =>
-      win.authService.send("LOGIN", { username, password })
-    );
-
-    return cy
-      .wait(["@loginUser", "@getUserProfile"])
-      .spread((loginUser, getUserProfile) => {
-        log.set({
-          consoleProps() {
-            return {
-              username,
-              password,
-              userId: getUserProfile.response.body.user.id,
-            };
-          },
-        });
-
-        log.snapshot("after");
-        log.end();
-      });
-  }
-);
+    log.snapshot("after");
+    log.end();
+  });
+});
 
 Cypress.Commands.add("logoutByXstate", () => {
   cy.server();
@@ -198,10 +183,7 @@ Cypress.Commands.add("createTransaction", (payload) => {
       log.snapshot("before");
       win.createTransactionService.send("SET_USERS", payload);
 
-      const createPayload = pick(
-        ["amount", "description", "transactionType"],
-        payload
-      );
+      const createPayload = pick(["amount", "description", "transactionType"], payload);
 
       return win.createTransactionService.send("CREATE", {
         ...createPayload,
@@ -259,9 +241,7 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
   });
 
   const selectDate = (date) => {
-    return cy
-      .get(`[data-date='${formatDate(date, "yyyy-MM-dd")}']`)
-      .click({ force: true });
+    return cy.get(`[data-date='${formatDate(date, "yyyy-MM-dd")}']`).click({ force: true });
   };
 
   // Focus initial viewable date picker range around target start date
@@ -283,9 +263,5 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
   });
 });
 
-Cypress.Commands.add("getBySel", (selector, ...args) =>
-  cy.get(`[data-test=${selector}]`, ...args)
-);
-Cypress.Commands.add("getBySelLike", (selector, ...args) =>
-  cy.get(`[data-test*=${selector}]`, ...args)
-);
+Cypress.Commands.add("getBySel", (selector, ...args) => cy.get(`[data-test=${selector}]`, ...args));
+Cypress.Commands.add("getBySelLike", (selector, ...args) => cy.get(`[data-test*=${selector}]`, ...args));

@@ -50,10 +50,7 @@ describe("User Sign-up and Login", function () {
     cy.getBySel("user-onboarding-dialog").should("be.visible");
     cy.getBySel("user-onboarding-next").click();
 
-    cy.getBySel("user-onboarding-dialog-title").should(
-      "contain",
-      "Create Bank Account"
-    );
+    cy.getBySel("user-onboarding-dialog-title").should("contain", "Create Bank Account");
 
     cy.getBySelLike("bankName-input").type("The Best Bank");
     cy.getBySelLike("accountNumber-input").type("123456789");
@@ -63,10 +60,7 @@ describe("User Sign-up and Login", function () {
     cy.wait("@createBankAccount");
 
     cy.getBySel("user-onboarding-dialog-title").should("contain", "Finished");
-    cy.getBySel("user-onboarding-dialog-content").should(
-      "contain",
-      "You're all set!"
-    );
+    cy.getBySel("user-onboarding-dialog-content").should("contain", "You're all set!");
     cy.getBySel("user-onboarding-next").click();
 
     cy.getBySel("transaction-list").should("be.visible");
@@ -80,14 +74,10 @@ describe("User Sign-up and Login", function () {
     cy.visit("/");
 
     cy.getBySel("signin-username").type("User").find("input").clear().blur();
-    cy.get("#username-helper-text")
-      .should("be.visible")
-      .and("contain", "Username is required");
+    cy.get("#username-helper-text").should("be.visible").and("contain", "Username is required");
 
     cy.getBySel("signin-password").type("abc").find("input").blur();
-    cy.get("#password-helper-text")
-      .should("be.visible")
-      .and("contain", "Password must contain at least 4 characters");
+    cy.get("#password-helper-text").should("be.visible").and("contain", "Password must contain at least 4 characters");
 
     cy.getBySel("signin-submit").should("be.disabled");
   });
@@ -96,36 +86,19 @@ describe("User Sign-up and Login", function () {
     cy.visit("/signup");
 
     cy.getBySel("signup-first-name").type("First").find("input").clear().blur();
-    cy.get("#firstName-helper-text")
-      .should("be.visible")
-      .and("contain", "First Name is required");
+    cy.get("#firstName-helper-text").should("be.visible").and("contain", "First Name is required");
 
     cy.getBySel("signup-last-name").type("Last").find("input").clear().blur();
-    cy.get("#lastName-helper-text")
-      .should("be.visible")
-      .and("contain", "Last Name is required");
+    cy.get("#lastName-helper-text").should("be.visible").and("contain", "Last Name is required");
 
     cy.getBySel("signup-username").type("User").find("input").clear().blur();
-    cy.get("#username-helper-text")
-      .should("be.visible")
-      .and("contain", "Username is required");
+    cy.get("#username-helper-text").should("be.visible").and("contain", "Username is required");
 
-    cy.getBySel("signup-password")
-      .type("password")
-      .find("input")
-      .clear()
-      .blur();
-    cy.get("#password-helper-text")
-      .should("be.visible")
-      .and("contain", "Enter your password");
+    cy.getBySel("signup-password").type("password").find("input").clear().blur();
+    cy.get("#password-helper-text").should("be.visible").and("contain", "Enter your password");
 
-    cy.getBySel("signup-confirmPassword")
-      .type("DIFFERENT PASSWORD")
-      .find("input")
-      .blur();
-    cy.get("#confirmPassword-helper-text")
-      .should("be.visible")
-      .and("contain", "Password does not match");
+    cy.getBySel("signup-confirmPassword").type("DIFFERENT PASSWORD").find("input").blur();
+    cy.get("#confirmPassword-helper-text").should("be.visible").and("contain", "Password does not match");
 
     cy.getBySel("signup-submit").should("be.disabled");
   });

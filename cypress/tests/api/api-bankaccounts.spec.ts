@@ -25,11 +25,9 @@ describe("Bank Accounts API", function () {
       return cy.loginByApi(ctx.authenticatedUser.username);
     });
 
-    cy.task("filter:testData", { entity: "bankaccounts" }).then(
-      (bankAccounts: BankAccount[]) => {
-        ctx.bankAccounts = bankAccounts;
-      }
-    );
+    cy.task("filter:testData", { entity: "bankaccounts" }).then((bankAccounts: BankAccount[]) => {
+      ctx.bankAccounts = bankAccounts;
+    });
   });
 
   context("GET /bankAccounts", function () {
@@ -46,12 +44,10 @@ describe("Bank Accounts API", function () {
     it("gets a bank account", function () {
       const { id: userId } = ctx.authenticatedUser!;
       const { id: bankAccountId } = ctx.bankAccounts![0];
-      cy.request("GET", `${apiBankAccounts}/${bankAccountId}`).then(
-        (response) => {
-          expect(response.status).to.eq(200);
-          expect(response.body.account.userId).to.eq(userId);
-        }
-      );
+      cy.request("GET", `${apiBankAccounts}/${bankAccountId}`).then((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.body.account.userId).to.eq(userId);
+      });
     });
   });
 
@@ -74,11 +70,9 @@ describe("Bank Accounts API", function () {
   context("DELETE /contacts/:bankAccountId", function () {
     it("deletes a bank account", function () {
       const { id: bankAccountId } = ctx.bankAccounts![0];
-      cy.request("DELETE", `${apiBankAccounts}/${bankAccountId}`).then(
-        (response) => {
-          expect(response.status).to.eq(200);
-        }
-      );
+      cy.request("DELETE", `${apiBankAccounts}/${bankAccountId}`).then((response) => {
+        expect(response.status).to.eq(200);
+      });
     });
   });
 });

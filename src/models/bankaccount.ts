@@ -10,7 +10,4 @@ export interface BankAccount {
   modifiedAt: Date;
 }
 
-export type BankAccountPayload = Pick<
-  BankAccount,
-  "userId" | "bankName" | "accountNumber" | "routingNumber"
->;
+export type BankAccountPayload = Pick<BankAccount, "userId" | "bankName" | "accountNumber" | "routingNumber">;

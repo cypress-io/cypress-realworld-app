@@ -49,14 +49,10 @@ export const isUserValidator = [
   check("phoneNumber").optional({ checkFalsy: true }).isString().trim(),
   check("balance").optional({ checkFalsy: true }).isNumeric().trim(),
   check("avatar").optional({ checkFalsy: true }).isURL().trim(),
-  check("defaultPrivacyLevel")
-    .optional({ checkFalsy: true })
-    .isIn(["public", "private", "contacts"]),
+  check("defaultPrivacyLevel").optional({ checkFalsy: true }).isIn(["public", "private", "contacts"]),
 ];
 
-export const sanitizeTransactionStatus = sanitizeQuery(
-  "status"
-).customSanitizer((value) => {
+export const sanitizeTransactionStatus = sanitizeQuery("status").customSanitizer((value) => {
   if (includes(value, TransactionStatusValues)) {
     return value;
   }
@@ -64,9 +60,7 @@ export const sanitizeTransactionStatus = sanitizeQuery(
 });
 
 // default request status to undefined if not provided
-export const sanitizeRequestStatus = sanitizeQuery(
-  "requestStatus"
-).customSanitizer((value) => {
+export const sanitizeRequestStatus = sanitizeQuery("requestStatus").customSanitizer((value) => {
   if (includes(value, RequestStatusValues)) {
     return value;
   }
@@ -75,10 +69,7 @@ export const sanitizeRequestStatus = sanitizeQuery(
 
 export const isTransactionQSValidator = [
   query("status").isIn(TransactionStatusValues).optional().trim(),
-  query("requestStatus")
-    .optional({ checkFalsy: true })
-    .isIn(RequestStatusValues)
-    .trim(),
+  query("requestStatus").optional({ checkFalsy: true }).isIn(RequestStatusValues).trim(),
   query("receiverId").optional({ checkFalsy: true }).isString().trim(),
   query("senderId").optional({ checkFalsy: true }).isString().trim(),
   query("rangeStartTs").optional({ checkFalsy: true }).isString().trim(),
@@ -96,13 +87,9 @@ export const isTransactionPayloadValidator = [
   body("amount").isNumeric().trim().toInt(),
 ];
 
-export const isTransactionPatchValidator = [
-  body("requestStatus").isIn(RequestStatusValues),
-];
+export const isTransactionPatchValidator = [body("requestStatus").isIn(RequestStatusValues)];
 
-export const isTransactionPublicQSValidator = [
-  query("order").optional({ checkFalsy: true }).isIn(["default"]),
-];
+export const isTransactionPublicQSValidator = [query("order").optional({ checkFalsy: true }).isIn(["default"])];
 
 export const isCommentValidator = body("content").isString().trim();
 
@@ -123,15 +110,6 @@ export const isNotificationPatchValidator = [body("isRead").isBoolean()];
 
 export const isValidEntityValidator = [
   check("entity")
-    .isIn([
-      "users",
-      "contacts",
-      "bankaccounts",
-      "notifications",
-      "transactions",
-      "likes",
-      "comments",
-      "banktransfers",
-    ])
+    .isIn(["users", "contacts", "bankaccounts", "notifications", "transactions", "likes", "comments", "banktransfers"])
     .trim(),
 ];
