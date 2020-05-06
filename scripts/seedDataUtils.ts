@@ -124,7 +124,7 @@ export const createFakeUser = (): User => ({
     DefaultPrivacyLevel.private,
     DefaultPrivacyLevel.contacts,
   ]),
-  balance: faker.random.number(),
+  balance: faker.random.number({ min: 10000, max: 200000 }),
   createdAt: faker.date.past(),
   modifiedAt: faker.date.recent(),
 });
