@@ -108,9 +108,9 @@ export const getRandomTransactions = (
   compact(
     uniqBy(
       "id",
-      times(() => sample(baseTransactions), baseCount)
+      times(() => sample(baseTransactions), baseCount * 3)
     )
-  );
+  ).slice(0, baseCount);
 
 export const createFakeUser = (): User => ({
   id: shortid(),
@@ -157,8 +157,8 @@ export const getOtherRandomUser = curry(
 export const randomContactsForUser = curry((seedUsers: User[], user: User) =>
   uniqBy(
     "id",
-    times(() => getOtherRandomUser(seedUsers, user.id), contactsPerUser)
-  )
+    times(() => getOtherRandomUser(seedUsers, user.id), contactsPerUser * 3)
+  ).slice(0, contactsPerUser)
 );
 export const generateRandomContactsForUser = (seedUsers: User[]) =>
   map((user: User) => ({

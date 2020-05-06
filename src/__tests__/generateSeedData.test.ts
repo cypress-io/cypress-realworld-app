@@ -51,7 +51,7 @@ describe("Seed Database", () => {
 
   it("should contain a list of notifications", () => {
     expect(database).toHaveProperty("notifications");
-    expect(database.notifications.length).toBeLessThanOrEqual(
+    expect(database.notifications.length).toBeGreaterThanOrEqual(
       totalNotifications
     );
   });
