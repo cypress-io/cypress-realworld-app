@@ -53,8 +53,7 @@ describe("Notifications", function () {
           .its("response.body.results.length")
           .as("preDismissedNotificationCount");
 
-        // cy.getBySelLike("notifications-link").click();
-        cy.visit("/notifications");
+        cy.getBySelLike("notifications-link").click();
 
         cy.getBySelLike("notification-list-item")
           .first()
@@ -65,7 +64,7 @@ describe("Notifications", function () {
         cy.getBySelLike("notification-mark-read").first().click({ force: true });
         cy.wait("@updateNotification");
         cy.get("@preDismissedNotificationCount").then((count) => {
-          cy.getBySelLike("notification-list-item").should("have.length.lessThan", Number(count));
+          cy.getBySelLike("notification-list-item").should("have.length", Number(count));
         });
       });
     });
