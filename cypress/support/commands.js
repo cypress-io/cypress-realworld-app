@@ -121,8 +121,8 @@ Cypress.Commands.add("loginByXstate", (username, password = defaultPassword) => 
     log.snapshot("before");
   });
 
-  // Temporary fix
-  // cy.wait(100, { log: false });
+  // Temporary fix for a real world problem
+  cy.wait(100, { log: false });
 
   cy.waitForXstateService("authService");
 
