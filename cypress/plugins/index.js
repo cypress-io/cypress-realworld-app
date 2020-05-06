@@ -1,9 +1,6 @@
-// const cypressTypeScriptPreprocessor = require("./cy-ts-preprocessor");
-
-// This function is called when a project is opened or re-opened (e.g. due to
-// the project's config changing)
-const { find, filter } = require("lodash/fp");
+const Promise = require("bluebird");
 const axios = require("axios").default;
+const { find, filter } = require("lodash/fp");
 
 require("dotenv").config();
 
@@ -11,23 +8,37 @@ module.exports = (on, config) => {
   config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD;
   config.env.paginationPageSize = process.env.PAGINATION_PAGE_SIZE;
   config.env.mobileViewportWidth = process.env.MOBILE_VIEWPORT_WIDTH;
+  const baseApiUrl = process.env.BASE_API_URL;
 
-  // on("file:preprocessor", cypressTypeScriptPreprocessor);
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
   on("task", {
     "db:seed"() {
       // seed database with test data
-      return axios.post(`http://localhost:3001/testData/seed`).then((resp) => resp.data);
+      return axios.post(`${baseApiUrl}/testData/seed`).then((resp) => resp.data);
     },
     // fetch test data from a database (MySQL, PostgreSQL, etc...)
     "filter:testData"({ entity, filterAttrs }) {
-      return axios
-        .get(`http://localhost:3001/testData/${entity}`)
-        .then(({ data }) => filter(filterAttrs, data.results));
+      const fetchData = (attrs) => {
+        return axios
+          .get(`${baseApiUrl}/testData/${entity}`)
+          .then(({ data }) => filter(attrs, data.results));
+      };
+
+      if (Array.isArray(filterAttrs)) {
+        return Promise.map(filterAttrs, fetchData);
+      }
+      return fetchData(filterAttrs);
     },
     "find:testData"({ entity, findAttrs }) {
-      return axios.get(`http://localhost:3001/testData/${entity}`).then(({ data }) => find(findAttrs, data.results));
+      const fetchData = (attrs) => {
+        return axios
+          .get(`${baseApiUrl}/testData/${entity}`)
+          .then(({ data }) => find(attrs, data.results));
+      };
+
+      if (Array.isArray(findAttrs)) {
+        return Promise.map(findAttrs, fetchData);
+      }
+      return fetchData(findAttrs);
     },
   });
 
