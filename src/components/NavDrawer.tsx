@@ -156,7 +156,12 @@ interface Props {
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
 }
 
-const NavDrawer: React.FC<Props> = ({ toggleDrawer, closeMobileDrawer, drawerOpen, authService }) => {
+const NavDrawer: React.FC<Props> = ({
+  toggleDrawer,
+  closeMobileDrawer,
+  drawerOpen,
+  authService,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const [authState, sendAuth] = useService(authService);
@@ -217,7 +222,12 @@ const NavDrawer: React.FC<Props> = ({ toggleDrawer, closeMobileDrawer, drawerOpe
         <Grid item>
           {currentUser && (
             <>
-              <Typography variant="h6" color="textPrimary" className={classes.amount} data-test="sidenav-user-balance">
+              <Typography
+                variant="h6"
+                color="textPrimary"
+                className={classes.amount}
+                data-test="sidenav-user-balance"
+              >
                 {currentUser.balance && formatAmount(currentUser.balance)}
               </Typography>
               <Typography variant="subtitle2" color="inherit" gutterBottom>

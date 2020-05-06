@@ -63,7 +63,8 @@ export const requestVariations = 3;
 // transactions per user = paymentsPerUser * paymentVariations * sender/receiver(2)
 // +
 // requestsPerUser * requestVariations * sender/receiver(2)
-export const transactionsPerUser = paymentsPerUser * paymentVariations * 2 + requestsPerUser * requestVariations * 2;
+export const transactionsPerUser =
+  paymentsPerUser * paymentVariations * 2 + requestsPerUser * requestVariations * 2;
 export const totalTransactions = userbaseSize! * transactionsPerUser!;
 export const totalLikes = userbaseSize! * likesPerUser!;
 export const totalComments = userbaseSize! * commentsPerUser!;
@@ -159,7 +160,9 @@ export const generateRandomContactsForUser = (seedUsers: User[]) =>
 
 export const createContactsForUser = curry((randomContacts: any) =>
   flattenDeep(
-    map((item: any) => map((contact: User) => createContact(item.userId, contact.id))(item.contacts))(randomContacts)
+    map((item: any) =>
+      map((contact: User) => createContact(item.userId, contact.id))(item.contacts)
+    )(randomContacts)
   )
 );
 
@@ -204,19 +207,26 @@ export const createTransaction = (
     requestStatus = TransactionRequestStatus.pending;
 
     if (status === TransactionStatus.complete) {
-      requestStatus = faker.helpers.randomize([TransactionRequestStatus.accepted, TransactionRequestStatus.rejected]);
+      requestStatus = faker.helpers.randomize([
+        TransactionRequestStatus.accepted,
+        TransactionRequestStatus.rejected,
+      ]);
     }
   }
 
   const requestResolvedAt =
-    requestStatus === TransactionRequestStatus.pending ? "" : faker.date.future(undefined, createdAt);
+    requestStatus === TransactionRequestStatus.pending
+      ? ""
+      : faker.date.future(undefined, createdAt);
 
   return {
     id: shortid(),
     uuid: faker.random.uuid(),
     source: account.id,
     amount: getFakeAmount(),
-    description: isPayment(type) ? `Payment: ${senderId} to ${receiverId}` : `Request: ${receiverId} to ${senderId}`,
+    description: isPayment(type)
+      ? `Payment: ${senderId} to ${receiverId}`
+      : `Request: ${receiverId} to ${senderId}`,
     privacyLevel: faker.helpers.randomize([
       DefaultPrivacyLevel.public,
       DefaultPrivacyLevel.private,
@@ -273,11 +283,19 @@ export const createRequest = (account: BankAccount, user: User, randomUser: User
   return flattenDeep(allScenarios);
 };
 
-export const getBankAccountsByUserId = (seedBankAccounts: BankAccount[], userId: User["id"]): BankAccount[] =>
-  filter(flow(get("userId"), isEqual(userId)), seedBankAccounts);
+export const getBankAccountsByUserId = (
+  seedBankAccounts: BankAccount[],
+  userId: User["id"]
+): BankAccount[] => filter(flow(get("userId"), isEqual(userId)), seedBankAccounts);
 
-export const getTransactionsByUserId = (seedTransactions: Transaction[], userId: User["id"]): Transaction[] =>
-  filter(({ senderId, receiverId }) => isEqual(senderId, userId) || isEqual(receiverId, userId), seedTransactions);
+export const getTransactionsByUserId = (
+  seedTransactions: Transaction[],
+  userId: User["id"]
+): Transaction[] =>
+  filter(
+    ({ senderId, receiverId }) => isEqual(senderId, userId) || isEqual(receiverId, userId),
+    seedTransactions
+  );
 
 export const createSeedTransactions = (seedUsers: User[], seedBankAccounts: BankAccount[]) =>
   flattenDepth(
@@ -338,7 +356,10 @@ export const createSeedLikes = (seedUsers: User[], seedTransactions: Transaction
       const randomTransactions = getRandomTransactions(10, transactions);
 
       // get a slice of random transactions
-      const selectedTransactions = sampleSize(likesPerUser, compact(randomTransactions.slice(0, likesPerUser * 2)));
+      const selectedTransactions = sampleSize(
+        likesPerUser,
+        compact(randomTransactions.slice(0, likesPerUser * 2))
+      );
 
       // iterate over transactions and like
       return selectedTransactions.map((transaction) => createFakeLike(user.id, transaction!.id));
@@ -418,7 +439,8 @@ export const createFakeCommentNotification = (
 
 const getTransactionsWithLikes = (transactions: Transaction[], seedLikes: Like[]) =>
   intersectionWith(
-    ({ id: transactionId }, { transactionId: likeTransactionId }) => isEqual(transactionId, likeTransactionId),
+    ({ id: transactionId }, { transactionId: likeTransactionId }) =>
+      isEqual(transactionId, likeTransactionId),
     transactions,
     seedLikes
   );
@@ -428,7 +450,8 @@ const getLikeByTransactionId = (transactionId: Transaction["id"], seedLikes: Lik
 
 const getTransactionsWithComments = (transactions: Transaction[], seedComments: Comment[]) =>
   intersectionWith(
-    ({ id: transactionId }, { transactionId: commentTransactionId }) => isEqual(transactionId, commentTransactionId),
+    ({ id: transactionId }, { transactionId: commentTransactionId }) =>
+      isEqual(transactionId, commentTransactionId),
     transactions,
     seedComments
   );
@@ -454,10 +477,16 @@ export const createSeedNotifications = (
       const like = getLikeByTransactionId(likeTransaction!.id, seedLikes);
       const likeNotification = createFakeLikeNotification(user.id, likeTransaction!.id, like!.id);
 
-      const commentTransaction = sample(compact(getRandomTransactions(5, transactionsWithComments)));
+      const commentTransaction = sample(
+        compact(getRandomTransactions(5, transactionsWithComments))
+      );
       const comment = getCommentByTransactionId(commentTransaction!.id, seedComments);
       // comment notification
-      const commentNotification = createFakeCommentNotification(user.id, commentTransaction!.id, comment!.id);
+      const commentNotification = createFakeCommentNotification(
+        user.id,
+        commentTransaction!.id,
+        comment!.id
+      );
 
       // choose random transactions
       const randomTransactions = getRandomTransactions(notificationsPerUser - 2, transactions);
@@ -508,12 +537,20 @@ export const createSeedBankTransfers = (
       const bankAccounts = getBankAccountsByUserId(seedBankAccounts, user.id);
 
       // choose random transactions
-      const randomTransactions = getRandomTransactions(bankTransfersPerUser, userTransactions) as Transaction[];
+      const randomTransactions = getRandomTransactions(
+        bankTransfersPerUser,
+        userTransactions
+      ) as Transaction[];
 
       return flattenDepth(
         2,
         map((transaction: Transaction): BankTransfer[] => {
-          const deposit = createBankTransfer(BankTransferType.deposit, user.id, transaction.id, bankAccounts[0].id);
+          const deposit = createBankTransfer(
+            BankTransferType.deposit,
+            user.id,
+            transaction.id,
+            bankAccounts[0].id
+          );
           const withdrawal = createBankTransfer(
             BankTransferType.withdrawal,
             user.id,
@@ -540,7 +577,11 @@ export const buildDatabase = () => {
     seedLikes,
     seedComments
   );
-  const seedBankTransfers: BankTransfer[] = createSeedBankTransfers(seedUsers, seedTransactions, seedBankAccounts);
+  const seedBankTransfers: BankTransfer[] = createSeedBankTransfers(
+    seedUsers,
+    seedTransactions,
+    seedBankAccounts
+  );
 
   return {
     users: seedUsers,

@@ -94,7 +94,9 @@ Cypress.Commands.add("reactComponent", { prevSubject: "element" }, ($el) => {
 });
 
 Cypress.Commands.add("setTransactionAmountRange", (min, max) => {
-  cy.getBySel("transaction-list-filter-amount-range-button").scrollIntoView().click({ force: true });
+  cy.getBySel("transaction-list-filter-amount-range-button")
+    .scrollIntoView()
+    .click({ force: true });
 
   return cy
     .getBySelLike("filter-amount-range-slider")
@@ -264,4 +266,6 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
 });
 
 Cypress.Commands.add("getBySel", (selector, ...args) => cy.get(`[data-test=${selector}]`, ...args));
-Cypress.Commands.add("getBySelLike", (selector, ...args) => cy.get(`[data-test*=${selector}]`, ...args));
+Cypress.Commands.add("getBySelLike", (selector, ...args) =>
+  cy.get(`[data-test*=${selector}]`, ...args)
+);

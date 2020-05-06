@@ -23,7 +23,8 @@ const TransactionDetailsContainer: React.FC<Props> = ({ authService }) => {
   const transactionLike = (transactionId: Transaction["id"]) =>
     sendTransactionDetail("CREATE", { entity: "LIKE", transactionId });
 
-  const transactionComment = (payload: any) => sendTransactionDetail("CREATE", { entity: "COMMENT", ...payload });
+  const transactionComment = (payload: any) =>
+    sendTransactionDetail("CREATE", { entity: "COMMENT", ...payload });
 
   const transactionUpdate = (payload: any) => sendTransactionDetail("UPDATE", payload);
 

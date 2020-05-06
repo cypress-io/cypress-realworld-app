@@ -22,7 +22,9 @@ const validationSchema = object({
   firstName: string().required("First Name is required"),
   lastName: string().required("Last Name is required"),
   username: string().required("Username is required"),
-  password: string().min(4, "Password must contain at least 4 characters").required("Enter your password"),
+  password: string()
+    .min(4, "Password must contain at least 4 characters")
+    .required("Enter your password"),
   confirmPassword: string()
     .required("Confirm your password")
     .oneOf([ref("password")], "Password does not match"),

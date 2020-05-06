@@ -163,7 +163,9 @@ describe("New Transaction", function () {
     cy.loginByXstate(ctx.contact!.username);
 
     cy.getBySel("nav-personal-tab").click();
-    cy.getBySelLike("transaction-item").contains(transactionPayload.description).click({ force: true });
+    cy.getBySelLike("transaction-item")
+      .contains(transactionPayload.description)
+      .click({ force: true });
 
     cy.getBySelLike("accept-request").click();
     cy.wait("@updateTransaction").its("status").should("equal", 204);
@@ -181,7 +183,13 @@ describe("New Transaction", function () {
 
   it("searches for a user by attributes", function () {
     const targetUser = ctx.allUsers![2];
-    const searchAttrs: (keyof User)[] = ["firstName", "lastName", "username", "email", "phoneNumber"];
+    const searchAttrs: (keyof User)[] = [
+      "firstName",
+      "lastName",
+      "username",
+      "email",
+      "phoneNumber",
+    ];
 
     cy.getBySelLike("new-transaction").click();
     cy.wait("@allUsers");

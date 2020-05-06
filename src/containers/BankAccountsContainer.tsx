@@ -77,7 +77,10 @@ const BankAccountsContainer: React.FC<Props> = ({ authService, bankAccountsServi
           </Button>
         </Grid>
       </Grid>
-      <BankAccountList bankAccounts={bankAccountsState?.context.results!} deleteBankAccount={deleteBankAccount} />
+      <BankAccountList
+        bankAccounts={bankAccountsState?.context.results!}
+        deleteBankAccount={deleteBankAccount}
+      />
     </Paper>
   );
 };

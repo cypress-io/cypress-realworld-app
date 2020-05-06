@@ -6,9 +6,11 @@ export const contactsTransactionsMachine = dataMachine("contactsTransactions").w
   services: {
     fetchData: async (ctx, event: any) => {
       const payload = omit("type", event);
-      const resp = await axios.create({ withCredentials: true }).get(`http://localhost:3001/transactions/contacts`, {
-        params: !isEmpty(payload) ? payload : undefined,
-      });
+      const resp = await axios
+        .create({ withCredentials: true })
+        .get(`http://localhost:3001/transactions/contacts`, {
+          params: !isEmpty(payload) ? payload : undefined,
+        });
       return resp.data;
     },
   },

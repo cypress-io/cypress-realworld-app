@@ -29,7 +29,9 @@ describe("User Settings", function () {
     });
 
     cy.getBySelLike("email-input").type("abc").find("input").clear().blur();
-    cy.get("#user-settings-email-input-helper-text").should("be.visible").and("contain", "Enter an email address");
+    cy.get("#user-settings-email-input-helper-text")
+      .should("be.visible")
+      .and("contain", "Enter an email address");
 
     cy.getBySelLike("email-input").type("abc@bob.").find("input").blur();
     cy.get("#user-settings-email-input-helper-text")
@@ -37,7 +39,9 @@ describe("User Settings", function () {
       .and("contain", "Must contain a valid email address");
 
     cy.getBySelLike("phoneNumber-input").type("abc").find("input").clear().blur();
-    cy.get("#user-settings-phoneNumber-input-helper-text").should("be.visible").and("contain", "Enter a phone number");
+    cy.get("#user-settings-phoneNumber-input-helper-text")
+      .should("be.visible")
+      .and("contain", "Enter a phone number");
 
     cy.getBySelLike("phoneNumber-input").type("615-555-").find("input").blur();
     cy.get("#user-settings-phoneNumber-input-helper-text")

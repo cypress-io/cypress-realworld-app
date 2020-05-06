@@ -14,7 +14,12 @@ import {
 } from "./database";
 import { User } from "../src/models/user";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
-import { shortIdValidation, searchValidation, userFieldsValidator, isUserValidator } from "./validators";
+import {
+  shortIdValidation,
+  searchValidation,
+  userFieldsValidator,
+  isUserValidator,
+} from "./validators";
 const router = express.Router();
 
 // Routes
@@ -48,21 +53,26 @@ router.post("/", userFieldsValidator, validateMiddleware(isUserValidator), (req,
   res.json({ user: user });
 });
 
-router.get("/:userId", ensureAuthenticated, validateMiddleware([shortIdValidation("userId")]), (req, res) => {
-  const { userId } = req.params;
+router.get(
+  "/:userId",
+  ensureAuthenticated,
+  validateMiddleware([shortIdValidation("userId")]),
+  (req, res) => {
+    const { userId } = req.params;
 
-  // Permission: account owner
-  if (!isEqual(userId, req.user?.id)) {
-    return res.status(401).send({
-      error: "Unauthorized",
-    });
+    // Permission: account owner
+    if (!isEqual(userId, req.user?.id)) {
+      return res.status(401).send({
+        error: "Unauthorized",
+      });
+    }
+
+    const user = getUserById(userId);
+
+    res.status(200);
+    res.json({ user });
   }
-
-  const user = getUserById(userId);
-
-  res.status(200);
-  res.json({ user });
-});
+);
 
 router.get("/profile/:username", (req, res) => {
   const { username } = req.params;

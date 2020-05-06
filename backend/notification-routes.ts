@@ -1,9 +1,17 @@
 ///<reference path="types.ts" />
 
 import express from "express";
-import { createNotifications, updateNotificationById, getUnreadNotificationsByUserId } from "./database";
+import {
+  createNotifications,
+  updateNotificationById,
+  getUnreadNotificationsByUserId,
+} from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
-import { isNotificationsBodyValidator, shortIdValidation, isNotificationPatchValidator } from "./validators";
+import {
+  isNotificationsBodyValidator,
+  shortIdValidation,
+  isNotificationPatchValidator,
+} from "./validators";
 const router = express.Router();
 
 // Routes
@@ -17,15 +25,20 @@ router.get("/", ensureAuthenticated, (req, res) => {
 });
 
 //POST /notifications/bulk
-router.post("/bulk", ensureAuthenticated, validateMiddleware([...isNotificationsBodyValidator]), (req, res) => {
-  const { items } = req.body;
+router.post(
+  "/bulk",
+  ensureAuthenticated,
+  validateMiddleware([...isNotificationsBodyValidator]),
+  (req, res) => {
+    const { items } = req.body;
 
-  const notifications = createNotifications(req.user?.id!, items);
+    const notifications = createNotifications(req.user?.id!, items);
 
-  res.status(200);
-  // @ts-ignore
-  res.json({ results: notifications });
-});
+    res.status(200);
+    // @ts-ignore
+    res.json({ results: notifications });
+  }
+);
 
 //PATCH /notifications/:notificationId - scoped-user
 router.patch(

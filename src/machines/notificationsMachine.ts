@@ -13,7 +13,10 @@ export const notificationsMachine = dataMachine("notifications").withConfig({
     },
     updateData: async (ctx, event: any) => {
       const payload = omit("type", event);
-      const resp = await httpClient.patch(`http://localhost:3001/notifications/${payload.id}`, payload);
+      const resp = await httpClient.patch(
+        `http://localhost:3001/notifications/${payload.id}`,
+        payload
+      );
       return resp.data;
     },
   },

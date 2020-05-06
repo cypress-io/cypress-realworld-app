@@ -9,7 +9,14 @@ import CheckIcon from "@material-ui/icons/Check";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 // import HourglassEmpty from "@material-ui/icons/HourglassEmpty";
 import { NotificationResponseItem } from "../models";
-import { Button, makeStyles, ListItemIcon, ListItemText, useTheme, useMediaQuery } from "@material-ui/core";
+import {
+  Button,
+  makeStyles,
+  ListItemIcon,
+  ListItemText,
+  useTheme,
+  useMediaQuery,
+} from "@material-ui/core";
 import {
   isCommentNotification,
   isLikeNotification,
@@ -42,7 +49,10 @@ const useStyles = makeStyles({
   },
 });
 
-const NotificationListItem: React.FC<NotificationListItemProps> = ({ notification, updateNotification }) => {
+const NotificationListItem: React.FC<NotificationListItemProps> = ({
+  notification,
+  updateNotification,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   let listItemText = undefined;

@@ -100,7 +100,10 @@ const TransactionDetail: React.FC<TransactionProps> = ({
         data-test={`transaction-item-${transaction.id}`}
       >
         <Grid item className={classes.headline}>
-          <Avatar className={classes.avatarLarge} src={`https://i.pravatar.cc/300?img=${imgNumber}`} />
+          <Avatar
+            className={classes.avatarLarge}
+            src={`https://i.pravatar.cc/300?img=${imgNumber}`}
+          />
           <Grid container direction="column" justify="flex-start" alignItems="flex-start">
             <Grid item></Grid>
             <Grid item>
@@ -134,42 +137,46 @@ const TransactionDetail: React.FC<TransactionProps> = ({
               </IconButton>
             </Grid>
             <Grid item>
-              {receiverIsCurrentUser(currentUser, transaction) && isPendingRequestTransaction(transaction) && (
-                <Grid item>
-                  <Button
-                    className={classes.greenButton}
-                    variant="contained"
-                    size="small"
-                    onClick={() =>
-                      transactionUpdate({
-                        id: transaction.id,
-                        requestStatus: TransactionRequestStatus.accepted,
-                      })
-                    }
-                    data-test={`transaction-accept-request-${transaction.id}`}
-                  >
-                    Accept Request
-                  </Button>
-                  <Button
-                    variant="contained"
-                    className={classes.redButton}
-                    size="small"
-                    onClick={() =>
-                      transactionUpdate({
-                        id: transaction.id,
-                        requestStatus: TransactionRequestStatus.rejected,
-                      })
-                    }
-                    data-test={`transaction-reject-request-${transaction.id}`}
-                  >
-                    Reject Request
-                  </Button>
-                </Grid>
-              )}
+              {receiverIsCurrentUser(currentUser, transaction) &&
+                isPendingRequestTransaction(transaction) && (
+                  <Grid item>
+                    <Button
+                      className={classes.greenButton}
+                      variant="contained"
+                      size="small"
+                      onClick={() =>
+                        transactionUpdate({
+                          id: transaction.id,
+                          requestStatus: TransactionRequestStatus.accepted,
+                        })
+                      }
+                      data-test={`transaction-accept-request-${transaction.id}`}
+                    >
+                      Accept Request
+                    </Button>
+                    <Button
+                      variant="contained"
+                      className={classes.redButton}
+                      size="small"
+                      onClick={() =>
+                        transactionUpdate({
+                          id: transaction.id,
+                          requestStatus: TransactionRequestStatus.rejected,
+                        })
+                      }
+                      data-test={`transaction-reject-request-${transaction.id}`}
+                    >
+                      Reject Request
+                    </Button>
+                  </Grid>
+                )}
             </Grid>
           </Grid>
           <Grid item>
-            <CommentForm transactionId={transaction.id} transactionComment={(payload) => transactionComment(payload)} />
+            <CommentForm
+              transactionId={transaction.id}
+              transactionComment={(payload) => transactionComment(payload)}
+            />
           </Grid>
         </Grid>
       </Grid>

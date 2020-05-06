@@ -35,7 +35,10 @@ describe("Bank Accounts", function () {
 
     cy.wait("@createBankAccount");
 
-    cy.getBySelLike("bankaccount-list-item").should("have.length", 2).eq(1).should("contain", "The Best Bank");
+    cy.getBySelLike("bankaccount-list-item")
+      .should("have.length", 2)
+      .eq(1)
+      .should("contain", "The Best Bank");
   });
 
   it("should display bank account form errors", function () {
@@ -43,7 +46,9 @@ describe("Bank Accounts", function () {
     cy.getBySel("bankaccount-new").click();
 
     cy.getBySelLike("bankName-input").type("The").find("input").clear().blur();
-    cy.get("#bankaccount-bankName-input-helper-text").should("be.visible").and("contain", "Enter a bank name");
+    cy.get("#bankaccount-bankName-input-helper-text")
+      .should("be.visible")
+      .and("contain", "Enter a bank name");
 
     cy.getBySelLike("bankName-input").type("The").find("input").blur();
     cy.get("#bankaccount-bankName-input-helper-text")

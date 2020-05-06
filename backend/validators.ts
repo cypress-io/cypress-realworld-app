@@ -49,7 +49,9 @@ export const isUserValidator = [
   check("phoneNumber").optional({ checkFalsy: true }).isString().trim(),
   check("balance").optional({ checkFalsy: true }).isNumeric().trim(),
   check("avatar").optional({ checkFalsy: true }).isURL().trim(),
-  check("defaultPrivacyLevel").optional({ checkFalsy: true }).isIn(["public", "private", "contacts"]),
+  check("defaultPrivacyLevel")
+    .optional({ checkFalsy: true })
+    .isIn(["public", "private", "contacts"]),
 ];
 
 export const sanitizeTransactionStatus = sanitizeQuery("status").customSanitizer((value) => {
@@ -89,7 +91,9 @@ export const isTransactionPayloadValidator = [
 
 export const isTransactionPatchValidator = [body("requestStatus").isIn(RequestStatusValues)];
 
-export const isTransactionPublicQSValidator = [query("order").optional({ checkFalsy: true }).isIn(["default"])];
+export const isTransactionPublicQSValidator = [
+  query("order").optional({ checkFalsy: true }).isIn(["default"]),
+];
 
 export const isCommentValidator = body("content").isString().trim();
 
@@ -110,6 +114,15 @@ export const isNotificationPatchValidator = [body("isRead").isBoolean()];
 
 export const isValidEntityValidator = [
   check("entity")
-    .isIn(["users", "contacts", "bankaccounts", "notifications", "transactions", "likes", "comments", "banktransfers"])
+    .isIn([
+      "users",
+      "contacts",
+      "bankaccounts",
+      "notifications",
+      "transactions",
+      "likes",
+      "comments",
+      "banktransfers",
+    ])
     .trim(),
 ];

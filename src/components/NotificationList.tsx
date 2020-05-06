@@ -11,7 +11,10 @@ export interface NotificationsListProps {
   updateNotification: Function;
 }
 
-const NotificationsList: React.FC<NotificationsListProps> = ({ notifications, updateNotification }) => {
+const NotificationsList: React.FC<NotificationsListProps> = ({
+  notifications,
+  updateNotification,
+}) => {
   return (
     <>
       {notifications?.length > 0 ? (

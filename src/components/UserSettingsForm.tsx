@@ -14,7 +14,9 @@ const validationSchema = object({
   firstName: string().required("Enter a first name"),
   lastName: string().required("Enter a last name"),
   email: string().email("Must contain a valid email address").required("Enter an email address"),
-  phoneNumber: string().matches(phoneRegExp, "Phone number is not valid").required("Enter a phone number"),
+  phoneNumber: string()
+    .matches(phoneRegExp, "Phone number is not valid")
+    .required("Enter a phone number"),
   defaultPrivacyLevel: mixed<DefaultPrivacyLevel>().oneOf(DefaultPrivacyLevelValues),
 });
 

@@ -47,7 +47,9 @@ describe("Notifications", function () {
 
         cy.visit("/notifications");
 
-        cy.getBySelLike("notification-list-item").should("contain", ctx.userA?.firstName).and("contain", "liked");
+        cy.getBySelLike("notification-list-item")
+          .should("contain", ctx.userA?.firstName)
+          .and("contain", "liked");
       });
     });
 
@@ -68,7 +70,9 @@ describe("Notifications", function () {
 
         cy.visit("/notifications");
 
-        cy.getBySelLike("notification-list-item").should("contain", ctx.userA?.firstName).and("contain", "commented");
+        cy.getBySelLike("notification-list-item")
+          .should("contain", ctx.userA?.firstName)
+          .and("contain", "commented");
       });
     });
 

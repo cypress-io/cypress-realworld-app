@@ -84,9 +84,13 @@ type TransactionQueryBase = {
 
 export type TransactionQueryPayload = Partial<TransactionQueryBase>;
 
-export type TransactionDateRangePayload = Partial<Pick<TransactionQueryPayload, "dateRangeStart" | "dateRangeEnd">>;
+export type TransactionDateRangePayload = Partial<
+  Pick<TransactionQueryPayload, "dateRangeStart" | "dateRangeEnd">
+>;
 
-export type TransactionAmountRangePayload = Partial<Pick<TransactionQueryPayload, "amountMin" | "amountMax">>;
+export type TransactionAmountRangePayload = Partial<
+  Pick<TransactionQueryPayload, "amountMin" | "amountMax">
+>;
 
 export type TransactionPaginationPayload = Partial<Pick<TransactionQueryPayload, "page" | "limit">>;
 

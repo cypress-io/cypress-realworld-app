@@ -27,7 +27,8 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
 }) => {
   const classes = useStyles();
 
-  const filterDateRange = (payload: TransactionDateRangePayload) => sendFilterEvent("DATE_FILTER", payload);
+  const filterDateRange = (payload: TransactionDateRangePayload) =>
+    sendFilterEvent("DATE_FILTER", payload);
   const resetDateRange = () => sendFilterEvent("DATE_RESET");
 
   const filterAmountRange = debounce(200, (payload: TransactionAmountRangePayload) =>

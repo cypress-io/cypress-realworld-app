@@ -106,7 +106,11 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
           data-test="app-name-logo"
         >
           <Link to="/" style={{ color: "#fff", textDecoration: "none" }} component={RouterLink}>
-            {xsBreakpoint ? <PayAppLogoDollar className={classes.logo} /> : <PayAppLogo className={classes.logo} />}
+            {xsBreakpoint ? (
+              <PayAppLogoDollar className={classes.logo} />
+            ) : (
+              <PayAppLogo className={classes.logo} />
+            )}
           </Link>
         </Typography>
         <Button
@@ -119,7 +123,12 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
         >
           <AttachMoneyIcon /> New
         </Button>
-        <IconButton color="inherit" component={RouterLink} to="/notifications" data-test="nav-top-notifications-link">
+        <IconButton
+          color="inherit"
+          component={RouterLink}
+          to="/notifications"
+          data-test="nav-top-notifications-link"
+        >
           <Badge
             badgeContent={allNotifications ? allNotifications.length : undefined}
             data-test="nav-top-notifications-count"

@@ -11,7 +11,22 @@ import {
 } from "../models";
 import faker from "faker";
 import Dinero from "dinero.js";
-import { flow, get, isEmpty, negate, curry, isEqual, join, pick, values, has, find, omit, map, drop } from "lodash/fp";
+import {
+  flow,
+  get,
+  isEmpty,
+  negate,
+  curry,
+  isEqual,
+  join,
+  pick,
+  values,
+  has,
+  find,
+  omit,
+  map,
+  drop,
+} from "lodash/fp";
 
 export const isRequestTransaction = (transaction: Transaction) =>
   flow(get("requestStatus"), negate(isEmpty))(transaction);
@@ -27,14 +42,17 @@ export const isRejectedRequestTransaction = (transaction: Transaction) =>
 
 export const isPayment = negate(isRequestTransaction);
 
-export const getFakeAmount = (min: number = 1000, max: number = 50000) => parseInt(faker.finance.amount(min, max), 10);
+export const getFakeAmount = (min: number = 1000, max: number = 50000) =>
+  parseInt(faker.finance.amount(min, max), 10);
 
 export const formatAmount = (amount: number) => Dinero({ amount }).toFormat();
 
 export const formatAmountSlider = (amount: number) => Dinero({ amount }).toFormat("$0,0");
 
 export const payAppDifference = curry((sender: User, transaction: Transaction) =>
-  Dinero({ amount: get("balance", sender) }).subtract(Dinero({ amount: get("amount", transaction) }))
+  Dinero({ amount: get("balance", sender) }).subtract(
+    Dinero({ amount: get("amount", transaction) })
+  )
 );
 
 export const payAppAddition = curry((sender: User, transaction: Transaction) =>
@@ -59,7 +77,8 @@ export const hasSufficientFunds = (sender: User, transaction: Transaction) =>
 
 export const isNewTransactionPath = (pathname: string) => pathname.match(/transaction\/new/);
 
-export const hasPathTransactionId = (pathname: string) => pathname.match(/transaction\/(?!new)([a-zA-Z0-9._-]+)/);
+export const hasPathTransactionId = (pathname: string) =>
+  pathname.match(/transaction\/(?!new)([a-zA-Z0-9._-]+)/);
 
 export const pathTransactionId = (pathname: string) => flow(hasPathTransactionId, get(1))(pathname);
 
@@ -69,13 +88,16 @@ export const senderIsCurrentUser = (sender: User, transaction: Transaction) =>
 export const receiverIsCurrentUser = (currentUser: User, transaction: Transaction) =>
   isEqual(get("id", currentUser), get("receiverId", transaction));
 
-export const formatFullName = (user: User) => flow(pick(["firstName", "lastName"]), values, join(" "))(user);
+export const formatFullName = (user: User) =>
+  flow(pick(["firstName", "lastName"]), values, join(" "))(user);
 
-export const isCommentNotification = (notification: NotificationType) => has("commentId")(notification);
+export const isCommentNotification = (notification: NotificationType) =>
+  has("commentId")(notification);
 
 export const isLikeNotification = (notification: NotificationType) => has("likeId")(notification);
 
-export const isPaymentNotification = (notification: NotificationType) => has("status")(notification);
+export const isPaymentNotification = (notification: NotificationType) =>
+  has("status")(notification);
 
 export const isPaymentRequestedNotification = (notification: NotificationType) =>
   flow(get("status"), isEqual(PaymentNotificationStatus.requested))(notification);
@@ -88,11 +110,15 @@ export const isPaymentReceivedNotification = (notification: NotificationType) =>
 
 export const isNewBankAccountPath = (pathname: string) => pathname.match(/bankaccounts\/new/);
 
-export const hasPathBankAccountId = (pathname: string) => pathname.match(/bankaccounts\/(?!new)([a-zA-Z0-9._-]+)/);
+export const hasPathBankAccountId = (pathname: string) =>
+  pathname.match(/bankaccounts\/(?!new)([a-zA-Z0-9._-]+)/);
 
 export const pathBankAccountId = (pathname: string) => flow(hasPathBankAccountId, get(1))(pathname);
 
-export const currentUserLikesTransaction = (currentUser: User, transaction: TransactionResponseItem) =>
+export const currentUserLikesTransaction = (
+  currentUser: User,
+  transaction: TransactionResponseItem
+) =>
   flow(
     find((like) => flow(get("userId"), isEqual(get("id", currentUser)))(like)),
     negate(isEmpty)
@@ -104,19 +130,25 @@ export const hasDateQueryFields = (query: TransactionQueryPayload | TransactionD
 export const getDateQueryFields = (query: TransactionDateRangePayload) =>
   pick(["dateRangeStart", "dateRangeEnd"], query);
 
-export const omitDateQueryFields = (query: TransactionQueryPayload) => omit(["dateRangeStart", "dateRangeEnd"], query);
+export const omitDateQueryFields = (query: TransactionQueryPayload) =>
+  omit(["dateRangeStart", "dateRangeEnd"], query);
 
-export const hasAmountQueryFields = (query: TransactionQueryPayload | TransactionAmountRangePayload) =>
-  has("amountMin", query) && has("amountMax", query);
+export const hasAmountQueryFields = (
+  query: TransactionQueryPayload | TransactionAmountRangePayload
+) => has("amountMin", query) && has("amountMax", query);
 
-export const getAmountQueryFields = (query: TransactionAmountRangePayload) => pick(["amountMin", "amountMax"], query);
+export const getAmountQueryFields = (query: TransactionAmountRangePayload) =>
+  pick(["amountMin", "amountMax"], query);
 
-export const omitAmountQueryFields = (query: TransactionQueryPayload) => omit(["amountMin", "amountMax"], query);
+export const omitAmountQueryFields = (query: TransactionQueryPayload) =>
+  omit(["amountMin", "amountMax"], query);
 
-export const hasPaginationQueryFields = (query: TransactionQueryPayload | TransactionAmountRangePayload) =>
-  has("page", query) && has("limit", query);
+export const hasPaginationQueryFields = (
+  query: TransactionQueryPayload | TransactionAmountRangePayload
+) => has("page", query) && has("limit", query);
 
-export const omitPaginationQueryFields = (query: TransactionQueryPayload) => omit(["page", "limit"], query);
+export const omitPaginationQueryFields = (query: TransactionQueryPayload) =>
+  omit(["page", "limit"], query);
 
 export const getQueryWithoutDateFields = (query: TransactionQueryPayload) =>
   query && hasDateQueryFields(query) ? omitDateQueryFields(query) : query;
@@ -132,9 +164,11 @@ export const getQueryWithoutFilterFields = (query: TransactionQueryPayload) =>
 
 export const padAmountWithZeros = (number: number) => Math.ceil(number * 1000);
 
-export const amountRangeValueText = (value: number) => flow(padAmountWithZeros, formatAmount)(value);
+export const amountRangeValueText = (value: number) =>
+  flow(padAmountWithZeros, formatAmount)(value);
 
-export const amountRangeValueTextLabel = (value: number) => flow(padAmountWithZeros, formatAmountSlider)(value);
+export const amountRangeValueTextLabel = (value: number) =>
+  flow(padAmountWithZeros, formatAmountSlider)(value);
 
 export const formatAmountRangeValues = (amountRangeValues: number[]) =>
   flow(map(padAmountWithZeros), map(formatAmountSlider), join(" - "))(amountRangeValues);

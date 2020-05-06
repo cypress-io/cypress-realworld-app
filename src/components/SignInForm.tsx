@@ -22,7 +22,9 @@ import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 
 const validationSchema = object({
   username: string().required("Username is required"),
-  password: string().min(4, "Password must contain at least 4 characters").required("Enter your password"),
+  password: string()
+    .min(4, "Password must contain at least 4 characters")
+    .required("Enter your password"),
 });
 
 const useStyles = makeStyles((theme) => ({

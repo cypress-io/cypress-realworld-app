@@ -39,7 +39,11 @@ export interface BankAccountFormProps {
   onboarding?: boolean;
 }
 
-const BankAccountForm: React.FC<BankAccountFormProps> = ({ userId, createBankAccount, onboarding }) => {
+const BankAccountForm: React.FC<BankAccountFormProps> = ({
+  userId,
+  createBankAccount,
+  onboarding,
+}) => {
   const history = useHistory();
   const classes = useStyles();
   const initialValues: BankAccountPayload = {

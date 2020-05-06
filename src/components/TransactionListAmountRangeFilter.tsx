@@ -179,7 +179,10 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
           anchor="bottom"
           data-test="amount-range-filter-drawer"
         >
-          <Button data-test="amount-range-filter-drawer-close" onClick={() => handleAmountRangeClose()}>
+          <Button
+            data-test="amount-range-filter-drawer-close"
+            onClick={() => handleAmountRangeClose()}
+          >
             Close
           </Button>
           <AmountRangeFilter />

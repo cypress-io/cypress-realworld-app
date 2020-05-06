@@ -16,7 +16,10 @@ import {
 } from "../../models";
 import shortid from "shortid";
 
-const fakeTransaction = (requestStatus?: TransactionRequestStatus, createdAt?: Date): Transaction => ({
+const fakeTransaction = (
+  requestStatus?: TransactionRequestStatus,
+  createdAt?: Date
+): Transaction => ({
   id: shortid(),
   uuid: faker.random.uuid(),
   source: shortid(),

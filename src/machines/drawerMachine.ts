@@ -38,7 +38,9 @@ export const drawerMachine = Machine(
   {
     guards: {
       shouldOpenDesktop: (context, event, guardMeta) => {
-        return guardMeta.state.history?.context.aboveSmallBreakpoint !== context.aboveSmallBreakpoint;
+        return (
+          guardMeta.state.history?.context.aboveSmallBreakpoint !== context.aboveSmallBreakpoint
+        );
       },
     },
   }

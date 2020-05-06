@@ -16,9 +16,17 @@ declare namespace Cypress {
   interface Chainable {
     window(options?: Partial<Loggable & Timeoutable>): Chainable<CustomWindow>;
 
-    task(event: "filter:testData", arg?: any, options?: Partial<Loggable & Timeoutable>): Chainable<Transaction[]>;
+    task(
+      event: "filter:testData",
+      arg?: any,
+      options?: Partial<Loggable & Timeoutable>
+    ): Chainable<Transaction[]>;
 
-    task(event: "find:testData", arg?: any, options?: Partial<Loggable & Timeoutable>): Chainable<Transaction>;
+    task(
+      event: "find:testData",
+      arg?: any,
+      options?: Partial<Loggable & Timeoutable>
+    ): Chainable<Transaction>;
 
     waitForXstateService(service: string): Chainable<CustomWindow>;
 

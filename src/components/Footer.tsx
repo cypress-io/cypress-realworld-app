@@ -8,7 +8,12 @@ export default function Footer() {
     <Container maxWidth="sm" style={{ marginTop: 50 }}>
       <Typography variant="body2" color="textSecondary" align="center">
         Built by
-        <a style={{ textDecoration: "none" }} target="_blank" rel="noopener noreferrer" href="https://cypress.io">
+        <a
+          style={{ textDecoration: "none" }}
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://cypress.io"
+        >
           <CypressLogo
             style={{
               marginTop: -2,

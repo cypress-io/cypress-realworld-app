@@ -77,7 +77,9 @@ describe("User Sign-up and Login", function () {
     cy.get("#username-helper-text").should("be.visible").and("contain", "Username is required");
 
     cy.getBySel("signin-password").type("abc").find("input").blur();
-    cy.get("#password-helper-text").should("be.visible").and("contain", "Password must contain at least 4 characters");
+    cy.get("#password-helper-text")
+      .should("be.visible")
+      .and("contain", "Password must contain at least 4 characters");
 
     cy.getBySel("signin-submit").should("be.disabled");
   });
@@ -98,7 +100,9 @@ describe("User Sign-up and Login", function () {
     cy.get("#password-helper-text").should("be.visible").and("contain", "Enter your password");
 
     cy.getBySel("signup-confirmPassword").type("DIFFERENT PASSWORD").find("input").blur();
-    cy.get("#confirmPassword-helper-text").should("be.visible").and("contain", "Password does not match");
+    cy.get("#confirmPassword-helper-text")
+      .should("be.visible")
+      .and("contain", "Password does not match");
 
     cy.getBySel("signup-submit").should("be.disabled");
   });

@@ -3,7 +3,10 @@ import { Link as RouterLink, useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Typography, Grid, Avatar, Box, Button } from "@material-ui/core";
 import { Interpreter } from "xstate";
-import { CreateTransactionMachineContext, CreateTransactionMachineEvents } from "../machines/createTransactionMachine";
+import {
+  CreateTransactionMachineContext,
+  CreateTransactionMachineEvents,
+} from "../machines/createTransactionMachine";
 import { useService } from "@xstate/react";
 import { formatAmount } from "../utils/transactionUtils";
 
@@ -16,10 +19,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export interface TransactionCreateStepThreeProps {
-  createTransactionService: Interpreter<CreateTransactionMachineContext, any, CreateTransactionMachineEvents, any>;
+  createTransactionService: Interpreter<
+    CreateTransactionMachineContext,
+    any,
+    CreateTransactionMachineEvents,
+    any
+  >;
 }
 
-const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({ createTransactionService }) => {
+const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
+  createTransactionService,
+}) => {
   const history = useHistory();
   const classes = useStyles();
   const [createTransactionState, sendCreateTransaction] = useService(createTransactionService);
@@ -52,18 +62,31 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
           </Grid>
         </Grid>
       </Box>
-      <Box display="flex" justifyContent="center" width="100%" height="100" style={{ paddingBottom: "5%" }}>
+      <Box
+        display="flex"
+        justifyContent="center"
+        width="100%"
+        height="100"
+        style={{ paddingBottom: "5%" }}
+      >
         <Grid container direction="row" justify="center" alignItems="center">
           <Grid item>
             <Typography component="h2" variant="h6" color="primary" gutterBottom>
               {transactionDetails?.transactionType === "payment" ? "Paid " : "Requested "}
-              {transactionDetails?.amount && formatAmount(parseInt(transactionDetails.amount, 10) * 100)} for{" "}
-              {transactionDetails?.description}
+              {transactionDetails?.amount &&
+                formatAmount(parseInt(transactionDetails.amount, 10) * 100)}{" "}
+              for {transactionDetails?.description}
             </Typography>
           </Grid>
         </Grid>
       </Box>
-      <Box display="flex" justifyContent="center" width="100%" height="100" style={{ paddingBottom: "5%" }}>
+      <Box
+        display="flex"
+        justifyContent="center"
+        width="100%"
+        height="100"
+        style={{ paddingBottom: "5%" }}
+      >
         <Grid container direction="row" justify="space-around" alignItems="center">
           <Grid item>
             <Button

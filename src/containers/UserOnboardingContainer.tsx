@@ -35,7 +35,8 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService, bankAccountsSer
   }, [sendBankAccounts]);
 
   const noBankAccounts =
-    bankAccountsState?.matches("success.withoutData") && isEmpty(bankAccountsState?.context?.results);
+    bankAccountsState?.matches("success.withoutData") &&
+    isEmpty(bankAccountsState?.context?.results);
 
   const dialogIsOpen =
     (userOnboardingState.matches("stepTwo") && !noBankAccounts) ||
@@ -79,7 +80,11 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService, bankAccountsSer
             </>
           )}
           {userOnboardingState.matches("stepTwo") && (
-            <BankAccountForm userId={currentUser?.id!} createBankAccount={createBankAccountWithNextStep} onboarding />
+            <BankAccountForm
+              userId={currentUser?.id!}
+              createBankAccount={createBankAccountWithNextStep}
+              onboarding
+            />
           )}
           {userOnboardingState.matches("stepThree") && (
             <>

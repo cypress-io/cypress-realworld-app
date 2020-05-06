@@ -65,7 +65,10 @@ export interface CommentNotificationPayload extends NotificationPayloadBase {
 
 export type NotificationType = PaymentNotification | LikeNotification | CommentNotification;
 
-export type NotificationPayloadType = PaymentNotificationPayload | LikeNotificationPayload | CommentNotificationPayload;
+export type NotificationPayloadType =
+  | PaymentNotificationPayload
+  | LikeNotificationPayload
+  | CommentNotificationPayload;
 
 export type NotificationResponseItem =
   | PaymentNotificationResponseItem

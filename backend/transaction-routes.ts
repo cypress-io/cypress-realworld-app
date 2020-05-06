@@ -30,11 +30,19 @@ const router = express.Router();
 router.get(
   "/",
   ensureAuthenticated,
-  validateMiddleware([sanitizeTransactionStatus, sanitizeRequestStatus, ...isTransactionQSValidator]),
+  validateMiddleware([
+    sanitizeTransactionStatus,
+    sanitizeRequestStatus,
+    ...isTransactionQSValidator,
+  ]),
   (req, res) => {
     const transactions = getTransactionsForUserForApi(req.user?.id!, req.query);
 
-    const { totalPages, data: paginatedItems } = getPaginatedItems(req.query.page, req.query.limit, transactions);
+    const { totalPages, data: paginatedItems } = getPaginatedItems(
+      req.query.page,
+      req.query.limit,
+      transactions
+    );
 
     res.status(200);
     res.json({
@@ -53,11 +61,19 @@ router.get(
 router.get(
   "/contacts",
   ensureAuthenticated,
-  validateMiddleware([sanitizeTransactionStatus, sanitizeRequestStatus, ...isTransactionQSValidator]),
+  validateMiddleware([
+    sanitizeTransactionStatus,
+    sanitizeRequestStatus,
+    ...isTransactionQSValidator,
+  ]),
   (req, res) => {
     const transactions = getTransactionsForUserContacts(req.user?.id!, req.query);
 
-    const { totalPages, data: paginatedItems } = getPaginatedItems(req.query.page, req.query.limit, transactions);
+    const { totalPages, data: paginatedItems } = getPaginatedItems(
+      req.query.page,
+      req.query.limit,
+      transactions
+    );
 
     res.status(200);
     res.json({
@@ -73,53 +89,63 @@ router.get(
 );
 
 //GET /transactions/public - auth-required
-router.get("/public", ensureAuthenticated, validateMiddleware(isTransactionPublicQSValidator), (req, res) => {
-  const isFirstPage = req.query.page === 1;
+router.get(
+  "/public",
+  ensureAuthenticated,
+  validateMiddleware(isTransactionPublicQSValidator),
+  (req, res) => {
+    const isFirstPage = req.query.page === 1;
 
-  let transactions = !isEmpty(req.query)
-    ? getPublicTransactionsByQuery(req.user?.id!, req.query)
-    : getPublicTransactionsDefaultSort(req.user?.id!);
+    let transactions = !isEmpty(req.query)
+      ? getPublicTransactionsByQuery(req.user?.id!, req.query)
+      : getPublicTransactionsDefaultSort(req.user?.id!);
 
-  const { contactsTransactions, publicTransactions } = transactions;
+    const { contactsTransactions, publicTransactions } = transactions;
 
-  let publicTransactionsWithContacts;
+    let publicTransactionsWithContacts;
 
-  if (isFirstPage) {
-    const firstFiveContacts = slice(0, 5, contactsTransactions);
+    if (isFirstPage) {
+      const firstFiveContacts = slice(0, 5, contactsTransactions);
 
-    publicTransactionsWithContacts = concat(firstFiveContacts, publicTransactions);
+      publicTransactionsWithContacts = concat(firstFiveContacts, publicTransactions);
+    }
+
+    const { totalPages, data: paginatedItems } = getPaginatedItems(
+      req.query.page,
+      req.query.limit,
+      isFirstPage ? publicTransactionsWithContacts : publicTransactions
+    );
+
+    res.status(200);
+    res.json({
+      pageData: {
+        page: res.locals.paginate.page,
+        limit: res.locals.paginate.limit,
+        hasNextPages: res.locals.paginate.hasNextPages(totalPages),
+        totalPages,
+      },
+      results: paginatedItems,
+    });
   }
-
-  const { totalPages, data: paginatedItems } = getPaginatedItems(
-    req.query.page,
-    req.query.limit,
-    isFirstPage ? publicTransactionsWithContacts : publicTransactions
-  );
-
-  res.status(200);
-  res.json({
-    pageData: {
-      page: res.locals.paginate.page,
-      limit: res.locals.paginate.limit,
-      hasNextPages: res.locals.paginate.hasNextPages(totalPages),
-      totalPages,
-    },
-    results: paginatedItems,
-  });
-});
+);
 
 //POST /transactions - scoped-user
-router.post("/", ensureAuthenticated, validateMiddleware(isTransactionPayloadValidator), (req, res) => {
-  const transactionPayload = req.body;
-  const transactionType = transactionPayload.transactionType;
+router.post(
+  "/",
+  ensureAuthenticated,
+  validateMiddleware(isTransactionPayloadValidator),
+  (req, res) => {
+    const transactionPayload = req.body;
+    const transactionType = transactionPayload.transactionType;
 
-  remove("transactionType", transactionPayload);
+    remove("transactionType", transactionPayload);
 
-  const transaction = createTransaction(req.user?.id!, transactionType, transactionPayload);
+    const transaction = createTransaction(req.user?.id!, transactionType, transactionPayload);
 
-  res.status(200);
-  res.json({ transaction });
-});
+    res.status(200);
+    res.json({ transaction });
+  }
+);
 
 //GET /transactions/:transactionId - scoped-user
 router.get(

@@ -29,7 +29,12 @@ type AmountFilterEvent = {
 };
 type DateResetEvent = { type: "DATE_RESET" };
 type AmountResetEvent = { type: "AMOUNT_RESET" };
-type FilterEvents = { type: "NONE" } | DateFilterEvent | AmountFilterEvent | DateResetEvent | AmountResetEvent;
+type FilterEvents =
+  | { type: "NONE" }
+  | DateFilterEvent
+  | AmountFilterEvent
+  | DateResetEvent
+  | AmountResetEvent;
 
 export interface FilterContext {}
 

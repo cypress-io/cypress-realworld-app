@@ -47,7 +47,11 @@ describe("Notifications", () => {
       user = getAllUsers()[0];
       transactions = getTransactionsForUserContacts(user.id);
       transaction = transactions[0];
-      paymentNotification = createPaymentNotification(user.id, transaction.id, PaymentNotificationStatus.received);
+      paymentNotification = createPaymentNotification(
+        user.id,
+        transaction.id,
+        PaymentNotificationStatus.received
+      );
       like = createLike(user.id, transaction.id);
       likeNotification = createLikeNotification(user.id, transaction.id, like.id);
       comment = createComment(user.id, transaction.id, "This is my comment");

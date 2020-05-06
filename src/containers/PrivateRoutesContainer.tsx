@@ -42,7 +42,10 @@ const PrivateRoutesContainer: React.FC<Props> = ({
 
   return (
     <MainLayout notificationsService={notificationsService} authService={authService}>
-      <UserOnboardingContainer authService={authService} bankAccountsService={bankAccountsService} />
+      <UserOnboardingContainer
+        authService={authService}
+        bankAccountsService={bankAccountsService}
+      />
       <Switch>
         <Route exact path={"/(public|contacts|personal)?"}>
           <TransactionsContainer />
@@ -51,10 +54,16 @@ const PrivateRoutesContainer: React.FC<Props> = ({
           <UserSettingsContainer authService={authService} />
         </Route>
         <Route exact path="/notifications">
-          <NotificationsContainer authService={authService} notificationsService={notificationsService} />
+          <NotificationsContainer
+            authService={authService}
+            notificationsService={notificationsService}
+          />
         </Route>
         <Route path="/bankaccounts*">
-          <BankAccountsContainer authService={authService} bankAccountsService={bankAccountsService} />
+          <BankAccountsContainer
+            authService={authService}
+            bankAccountsService={bankAccountsService}
+          />
         </Route>
         <Route exact path="/transaction/new">
           <TransactionCreateContainer authService={authService} snackbarService={snackbarService} />

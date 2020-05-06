@@ -68,7 +68,9 @@ describe("Transactions", () => {
 
   it.skip("should retrieve a list of transactions for a users contacts - status 'incomplete'", () => {
     const userToLookup: User = getAllUsers()[0];
-    const result: Transaction[] = getTransactionsForUserContacts(userToLookup.id, { status: "incomplete" });
+    const result: Transaction[] = getTransactionsForUserContacts(userToLookup.id, {
+      status: "incomplete",
+    });
     expect(result[10]).toMatchObject({ status: "incomplete" });
 
     expect(result.length).toBeGreaterThan(1);
@@ -280,7 +282,9 @@ describe("Transactions", () => {
 
     // Verify Receiver's Updated Pay App Balance
     const updatedReceiver: User = getAllUsers()[1];
-    expect(updatedReceiver.balance).toBe(receiver.balance + firstPaymentAmount + secondPaymentAmount);
+    expect(updatedReceiver.balance).toBe(
+      receiver.balance + firstPaymentAmount + secondPaymentAmount
+    );
   });
 
   it.skip("should create a request and withdrawal (bank transfer) for remaining balance", () => {
