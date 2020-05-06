@@ -228,7 +228,7 @@ const NavDrawer: React.FC<Props> = ({
                 className={classes.amount}
                 data-test="sidenav-user-balance"
               >
-                {currentUser.balance && formatAmount(currentUser.balance)}
+                {formatAmount(currentUser.balance)}
               </Typography>
               <Typography variant="subtitle2" color="inherit" gutterBottom>
                 Account Balance
