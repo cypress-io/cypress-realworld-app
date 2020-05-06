@@ -30,7 +30,7 @@ describe("Notifications", function () {
   });
 
   describe("notifications from user interactions", function () {
-    it("User A likes a transaction of User B; User B gets notification that User A liked transaction ", function () {
+    it.only("User A likes a transaction of User B; User B gets notification that User A liked transaction ", function () {
       cy.task("find:testData", {
         entity: "transactions",
         filterAttrs: { senderId: ctx.userB!.id },
@@ -64,7 +64,7 @@ describe("Notifications", function () {
 
         cy.log("🚩 Marks notification as read");
         cy.getBySelLike("notification-mark-read").first().click({ force: true });
-        cy.wait("@updateNotification");
+        cy.wait("@updateNotification", { timeout: 7000 });
         cy.get("@preDismissedNotificationCount").then((count) => {
           cy.getBySelLike("notification-list-item").should("have.length.lessThan", Number(count));
         });
