@@ -1,22 +1,25 @@
 // check this file using TypeScript if available
 // @ts-check
 
+import { User } from "../../../src/models";
+
 const apiTestData = `${Cypress.env("apiUrl")}/testData`;
 
+type TestDataCtx = {
+  authenticatedUser?: User;
+};
+
 describe("Test Data API", function () {
-  before(function () {
-    cy.task("db:seed");
-    cy.fixture("users").as("users");
-    cy.get("@users").then((user) => (this.currentUser = this.users[0]));
-  });
+  let ctx: TestDataCtx = {};
 
   beforeEach(function () {
-    const { username } = this.currentUser;
-    cy.loginByApi(username);
-  });
-
-  afterEach(function () {
     cy.task("db:seed");
+
+    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+      ctx.authenticatedUser = users[0];
+
+      return cy.loginByApi(ctx.authenticatedUser.username);
+    });
   });
 
   context("GET /testData/:entity", function () {
