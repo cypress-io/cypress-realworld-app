@@ -63,7 +63,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       refreshing: {
         invoke: {
           src: "getUserProfile",
-          onDone: { target: "authorized" },
+          onDone: { target: "authorized", actions: ["setUserProfile"] },
           onError: { target: "unauthorized", actions: "onError" },
         },
       },
@@ -75,11 +75,6 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         },
       },
       authorized: {
-        invoke: {
-          src: "getUserProfile",
-          onDone: { actions: ["setUserProfile"] },
-          onError: { actions: "onError" },
-        },
         on: {
           UPDATE: "updating",
           REFRESH: "refreshing",
