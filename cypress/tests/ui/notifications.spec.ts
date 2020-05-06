@@ -35,6 +35,7 @@ describe("Notifications", function () {
         entity: "transactions",
         filterAttrs: { senderId: ctx.userB!.id },
       }).then((transaction: Transaction) => {
+        cy.wait("@notifications");
         cy.visit(`/transaction/${transaction.id}`);
 
         cy.log("🚩 Renders the notifications badge with count");
@@ -53,7 +54,8 @@ describe("Notifications", function () {
           .its("response.body.results.length")
           .as("preDismissedNotificationCount");
 
-        cy.getBySelLike("notifications-link").click();
+        //cy.getBySelLike("notifications-link").click();
+        cy.visit("/notifications");
 
         cy.getBySelLike("notification-list-item")
           .first()
@@ -64,7 +66,7 @@ describe("Notifications", function () {
         cy.getBySelLike("notification-mark-read").first().click({ force: true });
         cy.wait("@updateNotification");
         cy.get("@preDismissedNotificationCount").then((count) => {
-          cy.getBySelLike("notification-list-item").should("have.length", Number(count));
+          cy.getBySelLike("notification-list-item").should("have.length.lessThan", Number(count));
         });
       });
     });
@@ -146,19 +148,5 @@ describe("Notifications", function () {
     cy.getBySelLike("notifications-link").click();
     cy.getBySel("notification-list").should("not.be.visible");
     cy.getBySel("empty-list-header").should("contain", "No Notifications");
-  });
-
-  it("marks a notification as read; updates notification counter badge", function () {
-    cy.visit("/notifications");
-    cy.wait("@notifications").its("response.body.results.length").as("notificationsCount");
-    cy.getBySelLike("notification-mark-read").first().click({ force: true });
-    cy.wait("@updateNotification");
-    cy.get("@notificationsCount").then((count) => {
-      cy.getBySelLike("notification-list-item").should(
-        "have.length.lessThan",
-        // @ts-ignore
-        count
-      );
-    });
   });
 });
