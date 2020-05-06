@@ -73,6 +73,7 @@ describe("Bank Accounts", function () {
   it("soft deletes a bank account", function () {
     cy.getBySel("sidenav-bankaccounts").click();
     cy.getBySelLike("delete").first().click();
+    cy.wait("@deleteBankAccount");
     cy.getBySelLike("list-item").children().contains("Deleted");
   });
 
