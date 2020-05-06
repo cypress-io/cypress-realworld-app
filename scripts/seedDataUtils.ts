@@ -23,6 +23,7 @@ import {
   intersectionWith,
   compact,
   differenceBy,
+  sampleSize,
 } from "lodash/fp";
 import {
   BankAccount,
@@ -411,7 +412,10 @@ export const createSeedLikes = (
       const randomTransactions = getRandomTransactions(10, transactions);
 
       // get a slice of random transactions
-      const selectedTransactions = randomTransactions.slice(0, likesPerUser);
+      const selectedTransactions = sampleSize(
+        likesPerUser,
+        compact(randomTransactions.slice(0, likesPerUser * 2))
+      );
 
       // iterate over transactions and like
       return selectedTransactions.map((transaction) =>
