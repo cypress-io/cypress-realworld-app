@@ -50,6 +50,8 @@ declare namespace Cypress {
      */
     logoutByXstate(): Chainable<void>;
 
+    switchUser(username: string): Chainable<any>;
+
     /**
      * Create Transaction bypassing UI
      */

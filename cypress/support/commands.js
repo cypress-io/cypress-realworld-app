@@ -167,6 +167,11 @@ Cypress.Commands.add("logoutByXstate", () => {
   });
 });
 
+Cypress.Commands.add("switchUser", (username) => {
+  cy.logoutByXstate();
+  return cy.loginByXstate(username);
+});
+
 Cypress.Commands.add("createTransaction", (payload) => {
   const log = Cypress.log({
     name: "createTransaction",
