@@ -232,7 +232,7 @@ describe("Transaction Feed", function () {
         cy.wait(`@${feed.routeAlias}`)
           .its("response.body")
           .then(({ results, pageData }) => {
-            expect(results).to.have.length.greaterThan(1);
+            expect(results).to.have.length.gte(1);
             expect(pageData.page).to.equal(pageData.totalPages);
             expect(pageData.hasNextPages).to.equal(false);
           });
