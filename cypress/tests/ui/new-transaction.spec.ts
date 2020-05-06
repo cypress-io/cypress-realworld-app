@@ -57,7 +57,7 @@ describe("New Transaction", function () {
     cy.getBySelLike("amount-input").type(payment.amount);
     cy.getBySelLike("description-input").type(payment.description);
     cy.getBySelLike("submit-payment").click();
-    cy.wait("@createTransaction");
+    cy.wait(["@createTransaction", "@getUserProfile"]);
 
     cy.task("find:testData", {
       entity: "users",
