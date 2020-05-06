@@ -27,7 +27,6 @@ describe("Notifications", function () {
 
       cy.loginByXstate(ctx.userA.username);
     });
-    cy.wait("@notifications");
   });
 
   describe("notifications from user interactions", function () {
@@ -129,6 +128,7 @@ describe("Notifications", function () {
   });
 
   it("renders the notifications badge with count", function () {
+    cy.wait("@notifications");
     cy.getBySel("nav-top-notifications-count").should("have.length.gte", 1);
   });
 
@@ -136,6 +136,7 @@ describe("Notifications", function () {
     it("renders a notifications list", function () {
       cy.getBySel("nav-top-notifications-count").click();
 
+      cy.wait("@notifications");
       cy.getBySelLike("notification-list-item").should("contain", "liked");
       cy.getBySelLike("notification-list-item").should("contain", "commented");
       cy.getBySelLike("notification-list-item").should("contain", "requested");
