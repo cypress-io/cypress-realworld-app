@@ -68,7 +68,7 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
     listItemIcon = <LikeIcon />;
     listItemText = `${notification.userFullName} liked a transaction.`;
   }
-  console.log(notification);
+
   if (isPaymentNotification(notification)) {
     if (isPaymentRequestedNotification(notification)) {
       listItemIcon = <PaymentIcon className={classes.red} />;
@@ -76,9 +76,6 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
     } else if (isPaymentReceivedNotification(notification)) {
       listItemIcon = <MonetizationOnIcon className={classes.green} />;
       listItemText = `${notification.userFullName} received payment.`;
-      // } else if (isPaymentPendingNotification(notification)) {
-      //   listItemIcon = <HourglassEmpty className={classes.blue} />;
-      //   listItemText = `${notification.userFullName} received payment.`;
     } else {
       // otherwise, incomplete payment notification
       listItemText = `An error occurred with payment to ${notification.userFullName}.`;

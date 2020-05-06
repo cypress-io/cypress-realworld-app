@@ -31,53 +31,67 @@ describe("Notifications", function () {
 
   describe("notifications from user interactions", function () {
     it("User A likes a transaction of User B; User B gets notification that User A liked transaction ", function () {
-      cy.task("filter:testData", {
+      cy.task("find:testData", {
         entity: "transactions",
         filterAttrs: { senderId: ctx.userB!.id },
-      }).then((transactions: Transaction[]) => {
-        const userBTransaction = transactions[0];
+      }).then((transaction: Transaction) => {
+        cy.visit(`/transaction/${transaction.id}`);
 
-        cy.visit(`/transaction/${userBTransaction.id}`);
+        cy.log("🚩 Renders the notifications badge with count");
+        cy.wait("@notifications")
+          .its("response.body.results.length")
+          .then((notificationCount) => {
+            cy.getBySel("nav-top-notifications-count").should("have.text", `${notificationCount}`);
+          });
 
         cy.getBySelLike("like-button").click();
 
         cy.logoutByXstate();
 
         cy.loginByXstate(ctx.userB!.username);
+        cy.wait("@notifications")
+          .its("response.body.results.length")
+          .as("preDismissedNotificationCount");
 
+        // cy.getBySelLike("notifications-link").click();
         cy.visit("/notifications");
 
         cy.getBySelLike("notification-list-item")
+          .first()
           .should("contain", ctx.userA?.firstName)
           .and("contain", "liked");
+
+        cy.log("🚩 Marks notification as read");
+        cy.getBySelLike("notification-mark-read").first().click({ force: true });
+        cy.wait("@updateNotification");
+        cy.get("@preDismissedNotificationCount").then((count) => {
+          cy.getBySelLike("notification-list-item").should("have.length.lessThan", Number(count));
+        });
       });
     });
 
     it("User A comments on a transaction of User B; User B gets notification that User A commented on their transaction", function () {
-      cy.task("filter:testData", {
+      cy.task("find:testData", {
         entity: "transactions",
         filterAttrs: { senderId: ctx.userB!.id },
-      }).then((transactions: Transaction[]) => {
-        const userBTransaction = transactions[0];
-
-        cy.visit(`/transaction/${userBTransaction.id}`);
+      }).then((transaction: Transaction) => {
+        cy.visit(`/transaction/${transaction.id}`);
 
         cy.getBySelLike("comment-input").type("Thank You!{enter}");
 
         cy.logoutByXstate();
-
         cy.loginByXstate(ctx.userB!.username);
 
-        cy.visit("/notifications");
-
+        cy.getBySelLike("notifications-link").click();
         cy.getBySelLike("notification-list-item")
+          .first()
           .should("contain", ctx.userA?.firstName)
           .and("contain", "commented");
       });
     });
 
     it("User A sends a payment to User B", function () {
-      cy.getBySel("nav-top-new-transaction").click();
+      cy.getBySelLike("new-transaction").click();
 
       const transactionPayload = {
         transactionType: "payment",
@@ -94,9 +108,10 @@ describe("Notifications", function () {
 
       cy.loginByXstate(ctx.userB!.username);
 
-      cy.visit("/notifications");
+      cy.getBySelLike("notifications-link").click();
 
       cy.getBySelLike("notification-list-item")
+        .first()
         .should("contain", ctx.userB?.firstName)
         .and("contain", "received payment");
     });
@@ -119,7 +134,7 @@ describe("Notifications", function () {
 
       cy.loginByXstate(ctx.userC!.username);
 
-      cy.visit("/notifications");
+      cy.getBySelLike("notifications-link").click();
 
       cy.getBySelLike("notification-list-item")
         .should("contain", ctx.userA?.firstName)
@@ -127,46 +142,24 @@ describe("Notifications", function () {
     });
   });
 
-  it("renders the notifications badge with count", function () {
-    cy.wait("@notifications");
-    cy.getBySel("nav-top-notifications-count").should("have.length.gte", 1);
+  it("renders an empty notifications state", function () {
+    cy.route("GET", "/notifications", []).as("notifications");
+    cy.getBySelLike("notifications-link").click();
+    cy.getBySel("notification-list").should("not.be.visible");
+    cy.getBySel("empty-list-header").should("contain", "No Notifications");
   });
 
-  describe("notifications list", function () {
-    it("renders a notifications list", function () {
-      cy.getBySel("nav-top-notifications-count").click();
-
-      cy.wait("@notifications");
-      cy.getBySelLike("notification-list-item").should("contain", "liked");
-      cy.getBySelLike("notification-list-item").should("contain", "commented");
-      cy.getBySelLike("notification-list-item").should("contain", "requested");
-      cy.getBySelLike("notification-list-item").should("contain", "received");
-    });
-
-    it("marks a notification as read; updates notification counter badge", function () {
-      cy.visit("/notifications");
-
-      cy.wait("@notifications").its("response.body.results.length").as("notificationsCount");
-
-      cy.getBySelLike("notification-mark-read").first().click({ force: true });
-
-      cy.wait("@updateNotification");
-
-      // TODO: double check the command log dom snapshots during this assertion
-      cy.get("@notificationsCount").then((count) => {
-        cy.getBySelLike("notification-list-item").should(
-          "have.length.lessThan",
-          // @ts-ignore
-          count
-        );
-      });
-    });
-
-    it("renders an empty notifications state", function () {
-      cy.route("GET", "/notifications", []).as("notifications");
-      cy.getBySel("nav-top-notifications-count").click({ force: true });
-      cy.getBySel("notification-list").should("not.be.visible");
-      cy.getBySel("empty-list-header").should("contain", "No Notifications");
+  it("marks a notification as read; updates notification counter badge", function () {
+    cy.visit("/notifications");
+    cy.wait("@notifications").its("response.body.results.length").as("notificationsCount");
+    cy.getBySelLike("notification-mark-read").first().click({ force: true });
+    cy.wait("@updateNotification");
+    cy.get("@notificationsCount").then((count) => {
+      cy.getBySelLike("notification-list-item").should(
+        "have.length.lessThan",
+        // @ts-ignore
+        count
+      );
     });
   });
 });
