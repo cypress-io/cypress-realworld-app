@@ -42,6 +42,7 @@ import {
   Contact,
   BankTransferType,
   BankTransfer,
+  PaymentNotificationStatus,
 } from "../src/models";
 import { getFakeAmount } from "../src/utils/transactionUtils";
 
@@ -458,14 +459,14 @@ export const createSeedComments = (
 
 export const createFakePaymentNotification = (
   userId: string,
-  transaction: Transaction
+  transaction: Transaction,
+  status: PaymentNotificationStatus
 ): PaymentNotification => ({
   id: shortid(),
   uuid: faker.random.uuid(),
   userId,
   transactionId: transaction.id,
-  // @ts-ignore
-  status: transaction.status,
+  status,
   isRead: false,
   createdAt: faker.date.past(),
   modifiedAt: faker.date.recent(),
@@ -586,16 +587,32 @@ export const createSeedNotifications = (
         transactions
       );
 
-      const paymentNotifications = randomTransactions.map((transaction) =>
-        createFakePaymentNotification(user.id, transaction!)
+      const paymentRequestNotifications = randomTransactions.map(
+        (transaction) =>
+          createFakePaymentNotification(
+            user.id,
+            transaction!,
+            PaymentNotificationStatus.requested
+          )
+      );
+
+      const paymentReceivedNotifications = randomTransactions.map(
+        (transaction) =>
+          createFakePaymentNotification(
+            user.id,
+            transaction!,
+            PaymentNotificationStatus.received
+          )
       );
 
       let allNotifications = [likeNotification, commentNotification];
 
-      // @ts-ignore
-      return concat(
-        allNotifications,
-        paymentNotifications
+      return flattenDeep(
+        // @ts-ignore
+        concat(allNotifications, [
+          paymentRequestNotifications,
+          paymentReceivedNotifications,
+        ])
       ) as NotificationType[];
     })(seedUsers)
   );
