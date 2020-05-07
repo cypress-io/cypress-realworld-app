@@ -1,9 +1,15 @@
-// type definitions for Cypress object "cy"
-// https://on.cypress.io/typescript
 /// <reference types="cypress" />
 
 declare namespace Cypress {
-  import { Transaction } from "../src/models";
+  import {
+    User,
+    BankAccount,
+    Like,
+    Comment,
+    Transaction,
+    BankTransfer,
+    Contact,
+  } from "../src/models";
 
   interface CustomWindow extends Window {
     // TODO: Fix up service types
@@ -13,6 +19,7 @@ declare namespace Cypress {
     contactTransactionService: any;
     personalTransactionService: any;
   }
+
   interface Chainable {
     window(options?: Partial<Loggable & Timeoutable>): Chainable<CustomWindow>;
 
@@ -20,13 +27,25 @@ declare namespace Cypress {
       event: "filter:testData",
       arg?: any,
       options?: Partial<Loggable & Timeoutable>
-    ): Chainable<Transaction[]>;
+    ): Chainable<any[]>;
 
     task(
       event: "find:testData",
       arg?: any,
       options?: Partial<Loggable & Timeoutable>
-    ): Chainable<Transaction>;
+    ): Chainable<any>;
+
+    task(
+      event: "fetchTestData",
+      arg?: any,
+      options?: Partial<Loggable & Timeoutable>
+    ): Chainable<any[]>;
+
+    task(
+      event: "fetchTestData",
+      arg?: any,
+      options?: Partial<Loggable & Timeoutable>
+    ): Chainable<any>;
 
     waitForXstateService(service: string): Chainable<CustomWindow>;
 
@@ -63,7 +82,27 @@ declare namespace Cypress {
 
     getBySel(dataTestAttribute: string, args?: any): Chainable<Element>;
     getBySelLike(dataTestPrefixAttribute: string, args?: any): Chainable<Element>;
-    fetchTestData(entity: string, filterDetails: object): Chainable<any[]>;
+    findTestData(
+      entity: string,
+      query: object,
+      log?: boolean
+    ): Chainable<
+      Transaction | User | BankAccount | Like | Notification | Comment | BankTransfer | Contact
+    >;
+    filterTestData(
+      entity: string,
+      query: object,
+      log?: boolean
+    ): Chainable<
+      | Transaction[]
+      | User[]
+      | BankAccount[]
+      | Like[]
+      | Notification[]
+      | Comment[]
+      | BankTransfer[]
+      | Contact[]
+    >;
     reactComponent(): Chainable<any>;
     setTransactionAmountRange(min: number, max: number): Chainable<any>;
   }

@@ -1,6 +1,6 @@
 const Promise = require("bluebird");
 const axios = require("axios").default;
-const { find, filter } = require("lodash/fp");
+const _ = require("lodash");
 
 require("dotenv").config();
 
@@ -15,12 +15,13 @@ module.exports = (on, config) => {
       // seed database with test data
       return axios.post(`${baseApiUrl}/testData/seed`).then((resp) => resp.data);
     },
+
     // fetch test data from a database (MySQL, PostgreSQL, etc...)
     "filter:testData"({ entity, filterAttrs }) {
       const fetchData = (attrs) => {
         return axios
           .get(`${baseApiUrl}/testData/${entity}`)
-          .then(({ data }) => filter(attrs, data.results));
+          .then(({ data }) => _.filter(data.results, attrs));
       };
 
       if (Array.isArray(filterAttrs)) {
@@ -32,13 +33,24 @@ module.exports = (on, config) => {
       const fetchData = (attrs) => {
         return axios
           .get(`${baseApiUrl}/testData/${entity}`)
-          .then(({ data }) => find(attrs, data.results));
+          .then(({ data }) => _.find(data.results, attrs));
       };
 
       if (Array.isArray(findAttrs)) {
         return Promise.map(findAttrs, fetchData);
       }
       return fetchData(findAttrs);
+    },
+
+    fetchTestData({ operation, entity, query }) {
+      const isBulkQuery = Array.isArray(query);
+      const fetchData = (q) => {
+        return axios
+          .get(`${baseApiUrl}/testData/${entity}`)
+          .then(({ data }) => _[operation](data.results, q));
+      };
+
+      return isBulkQuery ? Promise.map(query, fetchData) : fetchData(query);
     },
   });
 
