@@ -36,6 +36,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
     },
     states: {
       unauthorized: {
+        entry: "resetUser",
         on: {
           LOGIN: "loading",
           SIGNUP: "signup",
@@ -113,6 +114,9 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       },
     },
     actions: {
+      resetUser: assign((ctx: any, event: any) => ({
+        user: undefined,
+      })),
       setUserProfile: assign((ctx: any, event: any) => ({
         user: event.data.user,
       })),
