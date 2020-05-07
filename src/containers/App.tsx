@@ -13,6 +13,13 @@ import SignInForm from "../components/SignInForm";
 import SignUpForm from "../components/SignUpForm";
 import { bankAccountsMachine } from "../machines/bankAccountsMachine";
 
+// @ts-ignore
+if (window.Cypress) {
+  // Expose authService on window for Cypress
+  // @ts-ignore
+  window.authService = authService;
+}
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -22,13 +29,6 @@ const useStyles = makeStyles((theme) => ({
 const App: React.FC = () => {
   const classes = useStyles();
   const [authState] = useService(authService);
-
-  // @ts-ignore
-  if (window.Cypress) {
-    // Expose authService on window for Cypress
-    // @ts-ignore
-    window.authService = authService;
-  }
 
   const [, , notificationsService] = useMachine(notificationsMachine);
 
