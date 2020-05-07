@@ -36,13 +36,12 @@ const TransactionCreateContainer: React.FC<Props> = ({ authService, snackbarServ
   }, [sendUsers]);
 
   const sender = authState?.context?.user;
-  const refreshUser = () => sendAuth("REFRESH");
   const setReceiver = (receiver: User) => {
     sendCreateTransaction("SET_USERS", { sender, receiver });
   };
   const createTransaction = (payload: TransactionPayload) => {
     sendCreateTransaction("CREATE", payload);
-    setTimeout(() => refreshUser(), 1000);
+    sendAuth("REFRESH", { delay: 1000 });
   };
   const userListSearch = debounce(200, (payload: any) => sendUsers("FETCH", payload));
 
