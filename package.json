@@ -53,6 +53,7 @@
     "formik": "2.1.4",
     "fuse.js": "5.2.3",
     "husky": "4.2.5",
+    "json": "^9.0.6",
     "lowdb": "1.0.0",
     "morgan": "1.10.0",
     "nodemon": "2.0.3",
@@ -124,7 +125,8 @@
     "eject": "react-scripts eject",
     "start:server-and-api": "start-test start:api 3001 start:react:ci",
     "start:server-and-api:watch": "start-test start:api:watch 3001 start:react",
-    "prettier": "prettier --write '**/**.{ts,js,tsx}'"
+    "prettier": "prettier --write '**/**.{ts,js,tsx}'",
+    "list:dev:users": "cat data/database.json | json -a users | json -a id username"
   },
   "eslintConfig": {
     "env": {
