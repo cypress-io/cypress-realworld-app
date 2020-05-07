@@ -33,7 +33,7 @@ describe("New Transaction", function () {
     });
   });
 
-  it("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
+  it.only("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
     const payment = {
       amount: "35",
       description: "Sushi dinner 🍣",
@@ -49,24 +49,24 @@ describe("New Transaction", function () {
     cy.getBySelLike("amount-input").type(payment.amount);
     cy.getBySelLike("description-input").type(payment.description);
     cy.getBySelLike("submit-payment").click();
-    cy.wait(["@createTransaction", "@getUserProfile"]);
+    cy.wait(["@createTransaction", "@getUserProfile"]).then(() => {
+      const updatedAccountBalance = Dinero({
+        amount: ctx.user!.balance - parseInt(payment.amount) * 100,
+      }).toFormat();
 
-    const updatedAccountBalance = Dinero({
-      amount: ctx.user!.balance - parseInt(payment.amount) * 100,
-    }).toFormat();
+      cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
 
-    cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
+      cy.getBySel("app-name-logo").find("a").click();
+      cy.getBySelLike("personal-tab").click().should("have.class", "Mui-selected");
+      cy.wait("@personalTransactions");
 
-    cy.getBySel("app-name-logo").find("a").click();
-    cy.getBySelLike("personal-tab").click().should("have.class", "Mui-selected");
-    cy.wait("@personalTransactions");
+      cy.getBySel("transaction-list").first().should("contain", payment.description);
 
-    cy.getBySel("transaction-list").first().should("contain", payment.description);
-
-    cy.findTestData("users", { id: ctx.contact!.id }).then((updatedContact: User) => {
-      expect(updatedContact.balance).to.equal(
-        ctx.contact!.balance + parseInt(payment.amount) * 100
-      );
+      cy.findTestData("users", { id: ctx.contact!.id }).then((updatedContact: User) => {
+        expect(updatedContact.balance).to.equal(
+          ctx.contact!.balance + parseInt(payment.amount) * 100
+        );
+      });
     });
   });
 
