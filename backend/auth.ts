@@ -1,8 +1,9 @@
+import bcrypt from "bcryptjs";
 import passport from "passport";
 import express, { Request, Response } from "express";
-import bcrypt from "bcryptjs";
-import { getUserBy, getUserById } from "./database";
 import { User } from "../src/models/user";
+import { getUserBy, getUserById } from "./database";
+
 const LocalStrategy = require("passport-local").Strategy;
 const router = express.Router();
 
@@ -31,9 +32,6 @@ passport.serializeUser(function (user: User, done) {
 
 passport.deserializeUser(function (id: string, done) {
   const user = getUserById(id);
-  // TODO: Limit fields returned in deserialized user object?
-  //.pick(["id", "firstName", "lastName"])
-
   done(null, user);
 });
 
@@ -41,7 +39,7 @@ passport.deserializeUser(function (id: string, done) {
 router.post(
   "/login",
   passport.authenticate("local", {
-    failureRedirect: "/",
+    failureRedirect: "/signin",
   }),
   (req: Request, res: Response): void => {
     if (req.body.remember) {
@@ -65,7 +63,7 @@ router.post("/logout", (req: Request, res: Response): void => {
 
 router.get("/checkAuth", (req, res) => {
   if (!req.user) {
-    res.status(401).json({ error: "User is unauthorised" });
+    res.status(401).json({ error: "User is unauthorized" });
   } else {
     res.status(200).json({ user: req.user });
   }

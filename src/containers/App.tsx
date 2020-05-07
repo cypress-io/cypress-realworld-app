@@ -47,6 +47,7 @@ const App: React.FC = () => {
 
       {isLoggedIn && (
         <PrivateRoutesContainer
+          isLoggedIn={isLoggedIn}
           notificationsService={notificationsService}
           authService={authService}
           snackbarService={snackbarService}

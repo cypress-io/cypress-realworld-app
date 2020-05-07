@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Switch, Route } from "react-router";
 import { Interpreter } from "xstate";
 import MainLayout from "../components/MainLayout";
+import PrivateRoute from "../components/PrivateRoute";
 import TransactionsContainer from "./TransactionsContainer";
 import UserSettingsContainer from "./UserSettingsContainer";
 import NotificationsContainer from "./NotificationsContainer";
@@ -15,6 +16,7 @@ import { useService } from "@xstate/react";
 import UserOnboardingContainer from "./UserOnboardingContainer";
 
 export interface Props {
+  isLoggedIn: boolean;
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
   notificationsService: Interpreter<DataContext, DataSchema, DataEvents, any>;
   snackbarService: Interpreter<SnackbarContext, SnackbarSchema, SnackbarEvents, any>;
@@ -22,6 +24,7 @@ export interface Props {
 }
 
 const PrivateRoutesContainer: React.FC<Props> = ({
+  isLoggedIn,
   authService,
   notificationsService,
   snackbarService,
@@ -40,30 +43,30 @@ const PrivateRoutesContainer: React.FC<Props> = ({
         bankAccountsService={bankAccountsService}
       />
       <Switch>
-        <Route exact path={"/(public|contacts|personal)?"}>
+        <PrivateRoute isLoggedIn={isLoggedIn} exact path={"/(public|contacts|personal)?"}>
           <TransactionsContainer />
-        </Route>
-        <Route exact path="/user/settings">
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} exact path="/user/settings">
           <UserSettingsContainer authService={authService} />
-        </Route>
-        <Route exact path="/notifications">
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} exact path="/notifications">
           <NotificationsContainer
             authService={authService}
             notificationsService={notificationsService}
           />
-        </Route>
-        <Route path="/bankaccounts*">
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/bankaccounts*">
           <BankAccountsContainer
             authService={authService}
             bankAccountsService={bankAccountsService}
           />
-        </Route>
-        <Route exact path="/transaction/new">
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} exact path="/transaction/new">
           <TransactionCreateContainer authService={authService} snackbarService={snackbarService} />
-        </Route>
-        <Route exact path="/transaction/:transactionId">
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} exact path="/transaction/:transactionId">
           <TransactionDetailContainer authService={authService} />
-        </Route>
+        </PrivateRoute>
       </Switch>
     </MainLayout>
   );

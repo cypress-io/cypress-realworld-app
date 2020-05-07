@@ -109,8 +109,8 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         return resp.data;
       },
       performLogout: async (ctx, event) => {
-        await httpClient.post(`http://localhost:3001/logout`);
         localStorage.removeItem("authState");
+        await httpClient.post(`http://localhost:3001/logout`);
       },
     },
     actions: {
