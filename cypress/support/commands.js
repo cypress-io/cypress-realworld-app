@@ -39,14 +39,15 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
   }
 
   cy.getBySel("signin-submit").click();
-  cy.wait(["@loginUser", "@getUserProfile"]).spread((loginUser, getUserProfile) => {
+  cy.wait("@loginUser").then((loginUser) => {
     log.set({
       consoleProps() {
         return {
           username,
           password,
           rememberUser,
-          userId: getUserProfile.response.body.user.id,
+          // @ts-ignore
+          userId: loginUser.response.body.user.id,
         };
       },
     });
