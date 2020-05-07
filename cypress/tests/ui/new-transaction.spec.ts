@@ -24,7 +24,7 @@ describe("New Transaction", function () {
     cy.route("GET", "/users/search*").as("usersSearch");
     cy.route("PATCH", "/transactions/*").as("updateTransaction");
 
-    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+    cy.database("filter", "users").then((users: User[]) => {
       ctx.allUsers = users;
       ctx.user = users[0];
       ctx.contact = users[1];

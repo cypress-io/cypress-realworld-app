@@ -76,29 +76,8 @@ declare namespace Cypress {
 
     getBySel(dataTestAttribute: string, args?: any): Chainable<Element>;
     getBySelLike(dataTestPrefixAttribute: string, args?: any): Chainable<Element>;
-    database(
-      operation: "find",
-      entity: string,
-      query: object,
-      log?: boolean
-    ): Chainable<
-      Transaction | User | BankAccount | Like | Notification | Comment | BankTransfer | Contact
-    >;
-    database(
-      operation: "filter",
-      entity: string,
-      query: object,
-      log?: boolean
-    ): Chainable<
-      | Transaction[]
-      | User[]
-      | BankAccount[]
-      | Like[]
-      | Notification[]
-      | Comment[]
-      | BankTransfer[]
-      | Contact[]
-    >;
+    database(operation: "find", entity: string, query?: object, log?: boolean): Chainable<any>;
+    database(operation: "filter", entity: string, query?: object, log?: boolean): Chainable<any[]>;
     reactComponent(): Chainable<any>;
     setTransactionAmountRange(min: number, max: number): Chainable<any>;
   }
