@@ -1,12 +1,8 @@
-import { Machine, assign, interpret } from "xstate";
+import { Machine, assign, interpret, State } from "xstate";
 import { omit } from "lodash/fp";
 import { httpClient } from "../utils/asyncUtils";
 import { history } from "../index";
 import { User } from "../models";
-
-const savedAuthState = localStorage.getItem("authState");
-
-const persistedAuthState = savedAuthState && JSON.parse(savedAuthState);
 
 export interface AuthMachineSchema {
   states: {
@@ -35,7 +31,9 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
   {
     id: "authentication",
     initial: "unauthorized",
-    context: persistedAuthState || {},
+    context: {
+      user: undefined,
+    },
     states: {
       unauthorized: {
         on: {
@@ -46,28 +44,28 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       signup: {
         invoke: {
           src: "performSignup",
-          onDone: { target: "unauthorized", actions: ["onSuccess"] },
+          onDone: { target: "unauthorized", actions: "onSuccess" },
           onError: { target: "unauthorized", actions: "onError" },
         },
       },
       loading: {
         invoke: {
           src: "performLogin",
-          onDone: { target: "authorized", actions: ["onSuccess"] },
+          onDone: { target: "authorized", actions: "onSuccess" },
           onError: { target: "unauthorized", actions: "onError" },
         },
       },
       updating: {
         invoke: {
           src: "updateProfile",
-          onDone: { target: "authorized", actions: ["onSuccess"] },
+          onDone: { target: "authorized", actions: "onSuccess" },
           onError: { target: "unauthorized", actions: "onError" },
         },
       },
       refreshing: {
         invoke: {
           src: "getUserProfile",
-          onDone: { target: "authorized", actions: ["setUserProfile"] },
+          onDone: { target: "authorized", actions: "setUserProfile" },
           onError: { target: "unauthorized", actions: "onError" },
         },
       },
@@ -96,14 +94,12 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         return resp.data;
       },
       performLogin: async (ctx, event) => {
-        const payload = omit("type", event);
-        const resp = await httpClient.post(`http://localhost:3001/login`, payload);
+        const resp = await httpClient.post(`http://localhost:3001/login`, event);
         history.push("/");
         return resp.data;
       },
       getUserProfile: async (ctx, event) => {
-        const payload = omit("type", event);
-        const resp = await httpClient.get(`http://localhost:3001/checkAuth`, payload);
+        const resp = await httpClient.get(`http://localhost:3001/checkAuth`);
         return resp.data;
       },
       updateProfile: async (ctx, event: any) => {
@@ -121,6 +117,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         user: event.data.user,
       })),
       onSuccess: assign((ctx: any, event: any) => ({
+        user: event.data.user,
         newLink: event.reverse ? "/" : null,
         errorMessage: null,
       })),
@@ -132,6 +129,21 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
   }
 );
 
-export const authService = interpret(authMachine);
+// @ts-ignore
+const stateDefinition = JSON.parse(localStorage.getItem("authState"));
 
-authService.start();
+let resolvedState;
+if (stateDefinition) {
+  const previousState = State.create(stateDefinition);
+
+  // @ts-ignore
+  resolvedState = authMachine.resolveState(previousState);
+}
+
+export const authService = interpret(authMachine)
+  .onTransition((state) => {
+    if (state.changed) {
+      localStorage.setItem("authState", JSON.stringify(state));
+    }
+  })
+  .start(resolvedState);

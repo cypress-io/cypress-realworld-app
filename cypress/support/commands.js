@@ -64,6 +64,9 @@ Cypress.Commands.add("loginByApi", (username, password = defaultPassword) => {
 });
 
 Cypress.Commands.add("waitForXstateService", (service) => {
+  // Temporary fix for a real world problem
+  cy.wait(100, { log: false });
+
   return cy.window({ log: false }).should((win) => {
     // @ts-ignore
     if (!win[service].initialized) {
@@ -121,20 +124,18 @@ Cypress.Commands.add("loginByXstate", (username, password = defaultPassword) => 
     log.snapshot("before");
   });
 
-  // Temporary fix for a real world problem
-  cy.wait(100, { log: false });
-
   cy.waitForXstateService("authService");
 
   cy.window({ log: false }).then((win) => win.authService.send("LOGIN", { username, password }));
 
-  return cy.wait(["@loginUser", "@getUserProfile"]).spread((loginUser, getUserProfile) => {
+  return cy.wait("@loginUser").then((loginUser) => {
     log.set({
       consoleProps() {
         return {
           username,
           password,
-          userId: getUserProfile.response.body.user.id,
+          // @ts-ignore
+          userId: loginUser.response.body.user.id,
         };
       },
     });
@@ -155,9 +156,6 @@ Cypress.Commands.add("logoutByXstate", () => {
     // @ts-ignore
     autoEnd: false,
   });
-
-  // Temporary fix for a real world problem
-  cy.wait(100, { log: false });
 
   cy.waitForXstateService("authService");
 

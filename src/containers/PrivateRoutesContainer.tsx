@@ -27,18 +27,11 @@ const PrivateRoutesContainer: React.FC<Props> = ({
   snackbarService,
   bankAccountsService,
 }) => {
-  const [, sendAuth] = useService(authService);
   const [, sendNotifications] = useService(notificationsService);
 
   useEffect(() => {
-    sendAuth("REFRESH");
     sendNotifications({ type: "FETCH" });
-    const authSubscription = authService.subscribe((state) => {
-      localStorage.setItem("authState", JSON.stringify(state));
-    });
-
-    return authSubscription.unsubscribe;
-  }, [sendNotifications, authService, sendAuth]);
+  }, [sendNotifications]);
 
   return (
     <MainLayout notificationsService={notificationsService} authService={authService}>
