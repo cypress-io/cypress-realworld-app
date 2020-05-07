@@ -62,11 +62,9 @@ describe("New Transaction", function () {
 
       cy.getBySel("transaction-list").first().should("contain", payment.description);
 
-      cy.findTestData("users", { id: ctx.contact!.id }).then((updatedContact: User) => {
-        expect(updatedContact.balance).to.equal(
-          ctx.contact!.balance + parseInt(payment.amount) * 100
-        );
-      });
+      cy.database("find", "users", { id: ctx.contact!.id })
+        .its("balance")
+        .should("equal", ctx.contact!.balance + parseInt(payment.amount) * 100);
     });
   });
 

@@ -42,7 +42,7 @@ module.exports = (on, config) => {
       return fetchData(findAttrs);
     },
 
-    fetchTestData({ operation, entity, query }) {
+    queryDatabase({ operation, entity, query }) {
       const isBulkQuery = Array.isArray(query);
       const fetchData = (q) => {
         return axios

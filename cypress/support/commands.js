@@ -270,18 +270,30 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
   });
 });
 
-const generateTestDataCommandByOperation = (operation) => (entity, query, log = false) => {
+Cypress.Commands.add("database", (operation, entity, query, logTask = false) => {
   const params = {
     operation,
     entity,
     query,
   };
 
-  return cy.task("fetchTestData", params, { log });
-};
+  const log = Cypress.log({
+    name: "database",
+    displayName: "DATABASE",
+    message: [`🔎 ${operation}ing within ${entity} data`],
+    // @ts-ignore
+    autoEnd: false,
+    consoleProps() {
+      return params;
+    },
+  });
 
-Cypress.Commands.add("findTestData", generateTestDataCommandByOperation("find"));
-Cypress.Commands.add("filterTestData", generateTestDataCommandByOperation("filter"));
+  return cy.task("queryDatabase", params, { log: logTask }).then((data) => {
+    log.snapshot();
+    log.end();
+    return data;
+  });
+});
 
 Cypress.Commands.add("getBySel", (selector, ...args) => cy.get(`[data-test=${selector}]`, ...args));
 Cypress.Commands.add("getBySelLike", (selector, ...args) =>

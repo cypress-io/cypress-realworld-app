@@ -36,13 +36,7 @@ declare namespace Cypress {
     ): Chainable<any>;
 
     task(
-      event: "fetchTestData",
-      arg?: any,
-      options?: Partial<Loggable & Timeoutable>
-    ): Chainable<any[]>;
-
-    task(
-      event: "fetchTestData",
+      event: "queryDatabase",
       arg?: any,
       options?: Partial<Loggable & Timeoutable>
     ): Chainable<any>;
@@ -82,14 +76,16 @@ declare namespace Cypress {
 
     getBySel(dataTestAttribute: string, args?: any): Chainable<Element>;
     getBySelLike(dataTestPrefixAttribute: string, args?: any): Chainable<Element>;
-    findTestData(
+    database(
+      operation: "find",
       entity: string,
       query: object,
       log?: boolean
     ): Chainable<
       Transaction | User | BankAccount | Like | Notification | Comment | BankTransfer | Contact
     >;
-    filterTestData(
+    database(
+      operation: "filter",
       entity: string,
       query: object,
       log?: boolean
