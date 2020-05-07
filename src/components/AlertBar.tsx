@@ -18,7 +18,12 @@ const AlertBar: React.FC<Props> = ({ snackbarService }) => {
       open={snackbarState?.matches("visible")}
       autoHideDuration={3000}
     >
-      <Alert elevation={6} variant="filled" severity={snackbarState?.context.severity}>
+      <Alert
+        data-test={`alert-bar-${snackbarState?.context.severity}`}
+        elevation={6}
+        variant="filled"
+        severity={snackbarState?.context.severity}
+      >
         {snackbarState?.context.message}
       </Alert>
     </Snackbar>
