@@ -49,6 +49,7 @@ router.post(
     } else {
       req.session!.cookie.expires = false;
     }
+    res.send({ user: req.user });
     res.redirect(200, "/");
   }
 );
