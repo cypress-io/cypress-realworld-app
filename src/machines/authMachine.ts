@@ -1,8 +1,12 @@
-import { Machine, assign } from "xstate";
+import { Machine, assign, interpret } from "xstate";
 import { omit } from "lodash/fp";
 import { httpClient } from "../utils/asyncUtils";
 import { history } from "../index";
 import { User } from "../models";
+
+const savedAuthState = localStorage.getItem("authState");
+
+const persistedAuthState = savedAuthState && JSON.parse(savedAuthState);
 
 export interface AuthMachineSchema {
   states: {
@@ -31,7 +35,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
   {
     id: "authentication",
     initial: "unauthorized",
-    context: {},
+    context: persistedAuthState || {},
     states: {
       unauthorized: {
         on: {
@@ -127,3 +131,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
     },
   }
 );
+
+export const authService = interpret(authMachine);
+
+authService.start();

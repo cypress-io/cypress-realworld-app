@@ -1,12 +1,12 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import { useMachine } from "@xstate/react";
+import { useMachine, useService } from "@xstate/react";
 import { makeStyles } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 
 import { snackbarMachine } from "../machines/snackbarMachine";
 import { notificationsMachine } from "../machines/notificationsMachine";
-import { authMachine } from "../machines/authMachine";
+import { authService } from "../machines/authMachine";
 import AlertBar from "../components/AlertBar";
 import PrivateRoutesContainer from "./PrivateRoutesContainer";
 import SignInForm from "../components/SignInForm";
@@ -19,15 +19,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const savedAuthState = localStorage.getItem("authState");
-
-const persistedAuthState = savedAuthState && JSON.parse(savedAuthState);
-
 const App: React.FC = () => {
   const classes = useStyles();
-  const [authState, , authService] = useMachine(authMachine, {
-    state: persistedAuthState,
-  });
+  const [authState] = useService(authService);
 
   // @ts-ignore
   if (window.Cypress) {

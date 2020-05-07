@@ -18,7 +18,7 @@ export interface Props {
 }
 
 const TransactionCreateContainer: React.FC<Props> = ({ authService, snackbarService }) => {
-  const [authState, sendAuth] = useService(authService);
+  const [authState] = useService(authService);
   const [, sendSnackbar] = useService(snackbarService);
 
   const [createTransactionState, sendCreateTransaction, createTransactionService] = useMachine(
@@ -41,7 +41,6 @@ const TransactionCreateContainer: React.FC<Props> = ({ authService, snackbarServ
   };
   const createTransaction = (payload: TransactionPayload) => {
     sendCreateTransaction("CREATE", payload);
-    sendAuth("REFRESH", { delay: 1500 });
   };
   const userListSearch = debounce(200, (payload: any) => sendUsers("FETCH", payload));
 
