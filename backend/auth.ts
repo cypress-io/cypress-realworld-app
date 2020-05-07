@@ -39,7 +39,7 @@ passport.deserializeUser(function (id: string, done) {
 router.post(
   "/login",
   passport.authenticate("local", {
-    failureRedirect: "/signin",
+    failureRedirect: `${process.env.PUBLIC_URL}/signin`,
   }),
   (req: Request, res: Response): void => {
     if (req.body.remember) {
@@ -47,8 +47,8 @@ router.post(
     } else {
       req.session!.cookie.expires = false;
     }
+
     res.send({ user: req.user });
-    res.redirect(200, "/");
   }
 );
 
