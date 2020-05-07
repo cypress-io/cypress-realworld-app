@@ -50,6 +50,7 @@ describe("New Transaction", function () {
     cy.getBySelLike("description-input").type(payment.description);
     cy.getBySelLike("submit-payment").click();
     cy.wait(["@createTransaction", "@getUserProfile"]);
+    cy.getBySel("alert-bar-success").should("be.visible");
 
     const updatedAccountBalance = Dinero({
       amount: ctx.user!.balance - parseInt(payment.amount) * 100,
@@ -83,6 +84,7 @@ describe("New Transaction", function () {
     cy.getBySelLike("description-input").type(request.description);
     cy.getBySelLike("submit-request").click();
     cy.wait("@createTransaction");
+    cy.getBySel("alert-bar-success").should("be.visible");
 
     cy.getBySelLike("return-to-transactions").click();
     cy.getBySelLike("personal-tab").click().should("have.class", "Mui-selected");
