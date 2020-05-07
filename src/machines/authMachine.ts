@@ -25,6 +25,7 @@ export type AuthMachineEvents =
 
 export interface AuthMachineContext {
   user?: User;
+  message?: string;
 }
 
 export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMachineEvents>(
@@ -33,6 +34,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
     initial: "unauthorized",
     context: {
       user: undefined,
+      message: undefined,
     },
     states: {
       unauthorized: {
@@ -95,9 +97,15 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         return resp.data;
       },
       performLogin: async (ctx, event) => {
-        const resp = await httpClient.post(`http://localhost:3001/login`, event);
-        history.push("/");
-        return resp.data;
+        return await httpClient
+          .post(`http://localhost:3001/login`, event)
+          .then(({ data }) => {
+            history.push("/");
+            return data;
+          })
+          .catch((error) => {
+            throw new Error("Username or password is invalid");
+          });
       },
       getUserProfile: async (ctx, event) => {
         const resp = await httpClient.get(`http://localhost:3001/checkAuth`);
@@ -122,13 +130,14 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       })),
       onSuccess: assign((ctx: any, event: any) => ({
         user: event.data.user,
-        newLink: event.reverse ? "/" : null,
-        errorMessage: null,
+        message: undefined,
       })),
-      onError: assign((ctx: any, event: any) => ({
-        newLink: event.reverse ? null : "/signin",
-        errorMessage: event.errorMessage,
-      })),
+      onError: assign((ctx: any, event: any) => {
+        console.log("ON ERROR:", event);
+        return {
+          message: event.message,
+        };
+      }),
     },
   }
 );
