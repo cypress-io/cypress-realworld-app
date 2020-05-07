@@ -19,8 +19,6 @@ type TransactionFeedsCtx = {
 
 describe("Transaction Feed", function () {
   const ctx: TransactionFeedsCtx = {};
-  const isMobile = Cypress.config("viewportWidth") < Cypress.env("mobileViewportWidth");
-  const initialFeedItemCount = isMobile ? 5 : 8;
 
   const feedViews = {
     public: {
@@ -61,7 +59,7 @@ describe("Transaction Feed", function () {
 
   // TODO: temporary placement
   describe("ancillary tests", function () {
-    if (isMobile) {
+    if (Cypress.env("isMobileViewport")) {
       it("defaults side navigation to closed (mobile)", function () {
         cy.getBySel("sidenav-user-balance").should("not.be.visible");
       });

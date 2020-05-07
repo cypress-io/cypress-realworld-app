@@ -12,8 +12,8 @@ describe("Bank Accounts", function () {
     cy.task("db:seed");
 
     cy.server();
-    cy.route("POST", "http://localhost:3001/bankAccounts").as("createBankAccount");
-    cy.route("DELETE", "http://localhost:3001/bankAccounts/*").as("deleteBankAccount");
+    cy.route("POST", "/bankAccounts").as("createBankAccount");
+    cy.route("DELETE", "/bankAccounts/*").as("deleteBankAccount");
 
     cy.task("find:testData", { entity: "users" }).then((user: User) => {
       ctx.user = user;
@@ -23,6 +23,10 @@ describe("Bank Accounts", function () {
   });
 
   it("creates a new bank account", function () {
+    if (Cypress.env("isMobileViewport")) {
+      cy.getBySel("sidenav-open").click();
+    }
+
     cy.getBySel("sidenav-bankaccounts").click();
 
     cy.getBySel("bankaccount-new").click();
@@ -42,7 +46,7 @@ describe("Bank Accounts", function () {
   });
 
   it("should display bank account form errors", function () {
-    cy.getBySel("sidenav-bankaccounts").click();
+    cy.visit("/bankaccounts");
     cy.getBySel("bankaccount-new").click();
 
     cy.getBySelLike("bankName-input").type("The").find("input").clear().blur();
@@ -71,7 +75,7 @@ describe("Bank Accounts", function () {
   });
 
   it("soft deletes a bank account", function () {
-    cy.getBySel("sidenav-bankaccounts").click();
+    cy.visit("/bankaccounts");
     cy.getBySelLike("delete").first().click();
     cy.wait("@deleteBankAccount");
     cy.getBySelLike("list-item").children().contains("Deleted");

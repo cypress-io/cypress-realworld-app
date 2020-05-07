@@ -19,6 +19,9 @@ describe("User Sign-up and Login", function () {
     cy.getCookie("connect.sid").should("have.property", "expiry");
 
     // Logout User
+    if (Cypress.env("isMobileViewport")) {
+      cy.getBySel("sidenav-open").click();
+    }
     cy.getBySel("sidenav-signout").click();
     cy.location("pathname").should("eq", "/");
   });
@@ -66,6 +69,9 @@ describe("User Sign-up and Login", function () {
     cy.getBySel("transaction-list").should("be.visible");
 
     // Logout User
+    if (Cypress.env("isMobileViewport")) {
+      cy.getBySel("sidenav-open").click();
+    }
     cy.getBySel("sidenav-signout").click();
     cy.location("pathname").should("eq", "/");
   });
