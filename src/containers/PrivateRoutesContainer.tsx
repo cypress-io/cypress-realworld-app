@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Switch, Route } from "react-router";
+import { Switch } from "react-router";
 import { Interpreter } from "xstate";
 import MainLayout from "../components/MainLayout";
 import PrivateRoute from "../components/PrivateRoute";
