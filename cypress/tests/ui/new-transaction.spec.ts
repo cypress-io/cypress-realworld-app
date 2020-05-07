@@ -33,7 +33,7 @@ describe("New Transaction", function () {
     });
   });
 
-  it("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
+  it.only("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
     const payment = {
       amount: "35",
       description: "Sushi dinner 🍣",
@@ -67,7 +67,7 @@ describe("New Transaction", function () {
         amount: updatedContact.balance,
       }).toFormat();
 
-      cy.getBySel("sidenav-user-balance", { timeout: 5000 }).should("contain", updatedBalance);
+      cy.getBySel("sidenav-user-balance").should("contain", updatedBalance);
     });
 
     cy.getBySel("app-name-logo").find("a").click();
@@ -133,9 +133,7 @@ describe("New Transaction", function () {
     cy.createTransaction(transactionPayload);
     cy.wait("@createTransaction");
 
-    cy.logoutByXstate();
-
-    cy.loginByXstate(ctx.contact!.username);
+    cy.switchUser(ctx.contact!.username);
 
     const newContactBalance = Dinero({
       amount: ctx.contact!.balance + transactionPayload.amount * 100,
@@ -158,9 +156,7 @@ describe("New Transaction", function () {
     cy.createTransaction(transactionPayload);
     cy.wait("@createTransaction");
 
-    cy.logoutByXstate();
-
-    cy.loginByXstate(ctx.contact!.username);
+    cy.switchUser(ctx.contact!.username);
 
     cy.getBySel("nav-personal-tab").click();
     cy.getBySelLike("transaction-item")
@@ -170,9 +166,8 @@ describe("New Transaction", function () {
     cy.getBySelLike("accept-request").click();
     cy.wait("@updateTransaction").its("status").should("equal", 204);
 
-    cy.logoutByXstate();
+    cy.switchUser(ctx.user!.username);
 
-    cy.loginByXstate(ctx.user!.username);
     cy.getBySel("sidenav-user-balance").should(
       "contain",
       Dinero({

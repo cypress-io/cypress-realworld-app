@@ -45,9 +45,8 @@ describe("Notifications", function () {
 
       cy.getBySelLike("like-button").click();
 
-      cy.logoutByXstate();
+      cy.switchUser(ctx.userB.username);
 
-      cy.loginByXstate(ctx.userB.username);
       cy.wait("@getNotifications")
         .its("response.body.results.length")
         .as("preDismissedNotificationCount");
@@ -80,8 +79,7 @@ describe("Notifications", function () {
 
       cy.getBySelLike("like-button").click();
 
-      cy.logoutByXstate();
-      cy.loginByXstate(ctx.userA.username);
+      cy.switchUser(ctx.userA.username);
 
       cy.getBySelLike("notifications-link").click();
 
@@ -90,11 +88,9 @@ describe("Notifications", function () {
         .should("contain", ctx.userC.firstName)
         .and("contain", "liked");
 
-      cy.logoutByXstate();
-      cy.loginByXstate(ctx.userB.username);
+      cy.switchUser(ctx.userB.username);
 
       cy.getBySelLike("notifications-link").click();
-
       cy.getBySelLike("notification-list-item")
         .first()
         .should("contain", ctx.userC.firstName)
