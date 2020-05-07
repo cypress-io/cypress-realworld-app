@@ -156,6 +156,11 @@ Cypress.Commands.add("logoutByXstate", () => {
     autoEnd: false,
   });
 
+  // Temporary fix for a real world problem
+  cy.wait(100, { log: false });
+
+  cy.waitForXstateService("authService");
+
   cy.window({ log: false }).then((win) => {
     log.snapshot("before");
     win.authService.send("LOGOUT");
