@@ -10,6 +10,8 @@ module.exports = (on, config) => {
   config.env.mobileViewportWidth = process.env.MOBILE_VIEWPORT_WIDTH;
   const baseApiUrl = process.env.BASE_API_URL;
 
+  config.env.isMobileViewport = config.viewportWidth < config.env.mobileViewportWidth;
+
   on("task", {
     "db:seed"() {
       // seed database with test data
