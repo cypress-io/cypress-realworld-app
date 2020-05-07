@@ -73,7 +73,7 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({ userProfile, updateUser
                 id={"user-settings-firstName-input"}
                 type="text"
                 placeholder="First Name"
-                data-test={"user-settings-firstName-input"}
+                inputProps={{ "data-test": "user-settings-firstName-input" }}
                 error={(touched || value !== initialValue) && Boolean(error)}
                 helperText={touched || value !== initialValue ? error : ""}
                 {...field}
@@ -90,7 +90,7 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({ userProfile, updateUser
                 id={"user-settings-lastName-input"}
                 type="text"
                 placeholder="Last Name"
-                data-test={"user-settings-lastName-input"}
+                inputProps={{ "data-test": "user-settings-lastName-input" }}
                 error={(touched || value !== initialValue) && Boolean(error)}
                 helperText={touched || value !== initialValue ? error : ""}
                 {...field}
@@ -107,7 +107,7 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({ userProfile, updateUser
                 id={"user-settings-email-input"}
                 type="text"
                 placeholder="Email"
-                data-test={"user-settings-email-input"}
+                inputProps={{ "data-test": "user-settings-email-input" }}
                 error={(touched || value !== initialValue) && Boolean(error)}
                 helperText={touched || value !== initialValue ? error : ""}
                 {...field}
@@ -124,7 +124,7 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({ userProfile, updateUser
                 id={"user-settings-phoneNumber-input"}
                 type="text"
                 placeholder="Phone Number"
-                data-test={"user-settings-phoneNumber-input"}
+                inputProps={{ "data-test": "user-settings-phoneNumber-input" }}
                 error={(touched || value !== initialValue) && Boolean(error)}
                 helperText={touched || value !== initialValue ? error : ""}
                 {...field}

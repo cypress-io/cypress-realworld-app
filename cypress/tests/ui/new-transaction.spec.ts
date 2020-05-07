@@ -41,7 +41,7 @@ describe("New Transaction", function () {
 
     cy.getBySelLike("new-transaction").click();
 
-    cy.getBySel("user-list-search-input").type(ctx.contact!.firstName);
+    cy.getBySel("user-list-search-input").type(ctx.contact!.firstName, { force: true });
     cy.wait(["@allUsers", "@usersSearch"]);
 
     cy.getBySelLike("user-list-item").contains(ctx.contact!.firstName).click();
@@ -56,7 +56,15 @@ describe("New Transaction", function () {
       amount: ctx.user!.balance - parseInt(payment.amount) * 100,
     }).toFormat();
 
+    if (Cypress.env("isMobileViewport")) {
+      cy.getBySel("sidenav-open").click();
+    }
+
     cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
+
+    if (Cypress.env("isMobileViewport")) {
+      cy.get(".MuiBackdrop-root").click({ force: true });
+    }
 
     cy.getBySel("app-name-logo").find("a").click();
     cy.getBySelLike("personal-tab").click().should("have.class", "Mui-selected");
@@ -78,7 +86,7 @@ describe("New Transaction", function () {
     cy.getBySelLike("new-transaction").click();
     cy.wait("@allUsers");
 
-    cy.getBySelLike("user-list-item").contains(ctx.contact!.firstName).click();
+    cy.getBySelLike("user-list-item").contains(ctx.contact!.firstName).click({ force: true });
 
     cy.getBySelLike("amount-input").type(request.amount);
     cy.getBySelLike("description-input").type(request.description);
@@ -96,7 +104,7 @@ describe("New Transaction", function () {
     cy.getBySelLike("new-transaction").click();
     cy.wait("@allUsers");
 
-    cy.getBySelLike("user-list-item").contains(ctx.contact!.firstName).click();
+    cy.getBySelLike("user-list-item").contains(ctx.contact!.firstName).click({ force: true });
 
     cy.getBySelLike("amount-input").type("43").find("input").clear().blur();
     cy.get("#transaction-create-amount-input-helper-text")
@@ -132,6 +140,10 @@ describe("New Transaction", function () {
       amount: ctx.contact!.balance + transactionPayload.amount * 100,
     }).toFormat();
 
+    if (Cypress.env("isMobileViewport")) {
+      cy.getBySel("sidenav-open").click();
+    }
+
     cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
   });
 
@@ -164,6 +176,10 @@ describe("New Transaction", function () {
       amount: ctx.user!.balance + transactionPayload.amount * 100,
     }).toFormat();
 
+    if (Cypress.env("isMobileViewport")) {
+      cy.getBySel("sidenav-open").click();
+    }
+
     cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
   });
 
@@ -181,7 +197,7 @@ describe("New Transaction", function () {
     cy.wait("@allUsers");
 
     searchAttrs.forEach((attr: keyof User) => {
-      cy.getBySel("user-list-search-input").type(targetUser[attr] as string);
+      cy.getBySel("user-list-search-input").type(targetUser[attr] as string, { force: true });
       cy.wait("@usersSearch");
 
       cy.getBySelLike("user-list-item")
@@ -189,6 +205,7 @@ describe("New Transaction", function () {
         .contains(targetUser[attr] as string);
 
       cy.focused().clear();
+      cy.getBySel("users-list").should("be.empty");
     });
   });
 });
