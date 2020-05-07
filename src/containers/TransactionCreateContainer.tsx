@@ -42,7 +42,7 @@ const TransactionCreateContainer: React.FC<Props> = ({ authService, snackbarServ
   };
   const createTransaction = (payload: TransactionPayload) => {
     sendCreateTransaction("CREATE", payload);
-    refreshUser();
+    setTimeout(() => refreshUser(), 1000);
   };
   const userListSearch = debounce(200, (payload: any) => sendUsers("FETCH", payload));
 
