@@ -41,16 +41,8 @@ describe("New Transaction", function () {
 
     cy.getBySelLike("new-transaction").click();
 
-    // Wait for users to be fetched for contact selection
-    // Not waiting on a dependent network request can lead to flake
-    // Especially for network activity that has to complete before taking action
-    cy.wait("@allUsers");
-
     cy.getBySel("user-list-search-input").type(ctx.contact!.firstName);
-
-    // If the user search request is not awaited this contact list filtering can break
-    // without the test catching it.
-    cy.wait("@usersSearch");
+    cy.wait(["@allUsers", "@usersSearch"]);
 
     cy.getBySelLike("user-list-item").contains(ctx.contact!.firstName).click();
 
@@ -59,22 +51,23 @@ describe("New Transaction", function () {
     cy.getBySelLike("submit-payment").click();
     cy.wait(["@createTransaction", "@getUserProfile"]);
 
-    cy.task("find:testData", {
-      entity: "users",
-      findAttr: { id: ctx.contact!.id },
-    }).then((updatedContact: User) => {
-      const updatedBalance = Dinero({
-        amount: updatedContact.balance,
-      }).toFormat();
+    const updatedAccountBalance = Dinero({
+      amount: ctx.user!.balance - parseInt(payment.amount) * 100,
+    }).toFormat();
 
-      cy.getBySel("sidenav-user-balance").should("contain", updatedBalance);
-    });
+    cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
 
     cy.getBySel("app-name-logo").find("a").click();
-    cy.getBySel("nav-personal-tab").click().should("have.class", "Mui-selected");
+    cy.getBySelLike("personal-tab").click().should("have.class", "Mui-selected");
     cy.wait("@personalTransactions");
 
     cy.getBySel("transaction-list").first().should("contain", payment.description);
+
+    cy.findTestData("users", { id: ctx.contact!.id }).then((updatedContact: User) => {
+      expect(updatedContact.balance).to.equal(
+        ctx.contact!.balance + parseInt(payment.amount) * 100
+      );
+    });
   });
 
   it("navigates to the new transaction form, selects a user and submits a transaction request", function () {
@@ -94,7 +87,7 @@ describe("New Transaction", function () {
     cy.wait("@createTransaction");
 
     cy.getBySelLike("return-to-transactions").click();
-    cy.getBySel("nav-personal-tab").click().should("have.class", "Mui-selected");
+    cy.getBySelLike("personal-tab").click().should("have.class", "Mui-selected");
 
     cy.getBySelLike("transaction-item").should("contain", request.description);
   });
@@ -135,16 +128,14 @@ describe("New Transaction", function () {
 
     cy.switchUser(ctx.contact!.username);
 
-    const newContactBalance = Dinero({
+    const updatedAccountBalance = Dinero({
       amount: ctx.contact!.balance + transactionPayload.amount * 100,
     }).toFormat();
 
-    cy.getBySel("sidenav-user-balance").should("contain", newContactBalance);
+    cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
   });
 
   it("submits a transaction request and accepts the request for the receiver", function () {
-    cy.getBySelLike("new-transaction").click();
-
     const transactionPayload = {
       transactionType: "request",
       amount: 100,
@@ -153,12 +144,13 @@ describe("New Transaction", function () {
       receiver: ctx.contact,
     };
 
+    cy.getBySelLike("new-transaction").click();
     cy.createTransaction(transactionPayload);
     cy.wait("@createTransaction");
 
     cy.switchUser(ctx.contact!.username);
 
-    cy.getBySel("nav-personal-tab").click();
+    cy.getBySelLike("personal-tab").click();
     cy.getBySelLike("transaction-item")
       .contains(transactionPayload.description)
       .click({ force: true });
@@ -168,12 +160,11 @@ describe("New Transaction", function () {
 
     cy.switchUser(ctx.user!.username);
 
-    cy.getBySel("sidenav-user-balance").should(
-      "contain",
-      Dinero({
-        amount: ctx.user!.balance + transactionPayload.amount * 100,
-      }).toFormat()
-    );
+    const updatedAccountBalance = Dinero({
+      amount: ctx.user!.balance + transactionPayload.amount * 100,
+    }).toFormat();
+
+    cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
   });
 
   it("searches for a user by attributes", function () {
@@ -189,7 +180,7 @@ describe("New Transaction", function () {
     cy.getBySelLike("new-transaction").click();
     cy.wait("@allUsers");
 
-    cy.wrap(searchAttrs).each((attr: keyof User) => {
+    searchAttrs.forEach((attr: keyof User) => {
       cy.getBySel("user-list-search-input").type(targetUser[attr] as string);
       cy.wait("@usersSearch");
 
