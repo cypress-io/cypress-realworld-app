@@ -14,8 +14,9 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
   const log = Cypress.log({
     name: "login",
     displayName: "LOGIN",
+    message: [`🔐 Authenticating | ${username}`],
     // @ts-ignore
-    message: `🔐 Authenticating | ${username}`,
+    autoEnd: false,
   });
 
   cy.server();
@@ -50,7 +51,6 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
       },
     });
 
-    // Question: what is the "2" state in between before and after snapshots
     log.snapshot("after");
     log.end();
   });
@@ -109,8 +109,8 @@ Cypress.Commands.add("loginByXstate", (username, password = defaultPassword) => 
   const log = Cypress.log({
     name: "loginbyxstate",
     displayName: "LOGIN BY XSTATE",
+    message: [`🔐 Authenticating | ${username}`],
     // @ts-ignore
-    message: `🔐 Authenticating | ${username}`,
     autoEnd: false,
   });
 
@@ -151,8 +151,8 @@ Cypress.Commands.add("logoutByXstate", () => {
   const log = Cypress.log({
     name: "logoutByXstate",
     displayName: "LOGOUT BY XSTATE",
+    message: [`🔒 Logging out current user`],
     // @ts-ignore
-    message: `🔒 Logging out current user`,
     autoEnd: false,
   });
 
@@ -176,8 +176,8 @@ Cypress.Commands.add("createTransaction", (payload) => {
   const log = Cypress.log({
     name: "createTransaction",
     displayName: "CREATE TRANSACTION",
+    message: [`💸 (${payload.transactionType}): ${payload.sender.id} <> ${payload.receiver.id}`],
     // @ts-ignore
-    message: `💸 (${payload.transactionType}): ${payload.sender.id} <> ${payload.receiver.id}`,
     autoEnd: false,
     consoleProps() {
       return payload;
@@ -208,8 +208,8 @@ Cypress.Commands.add("nextTransactionFeedPage", (service, page) => {
   const log = Cypress.log({
     name: "nextTransactionFeedPage",
     displayName: "NEXT TRANSACTION FEED PAGE",
+    message: [`📃 Fetching page ${page} with ${service}`],
     // @ts-ignore
-    message: `📃 Fetching page ${page} with ${service}`,
     autoEnd: false,
     consoleProps() {
       return {
@@ -236,8 +236,8 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
   const log = Cypress.log({
     name: "pickDateRange",
     displayName: "PICK DATE RANGE",
+    message: [`🗓 ${startDate.toDateString()} to ${endDate.toDateString()}`],
     // @ts-ignore
-    message: `🗓 ${startDate.toDateString()} to ${endDate.toDateString()}`,
     autoEnd: false,
     consoleProps() {
       return {

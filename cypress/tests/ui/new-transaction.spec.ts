@@ -33,7 +33,7 @@ describe("New Transaction", function () {
     });
   });
 
-  it.only("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
+  it("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
     const payment = {
       amount: "35",
       description: "Sushi dinner 🍣",
@@ -49,23 +49,23 @@ describe("New Transaction", function () {
     cy.getBySelLike("amount-input").type(payment.amount);
     cy.getBySelLike("description-input").type(payment.description);
     cy.getBySelLike("submit-payment").click();
-    cy.wait(["@createTransaction", "@getUserProfile"]).then(() => {
-      const updatedAccountBalance = Dinero({
-        amount: ctx.user!.balance - parseInt(payment.amount) * 100,
-      }).toFormat();
+    cy.wait(["@createTransaction", "@getUserProfile"]);
 
-      cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
+    const updatedAccountBalance = Dinero({
+      amount: ctx.user!.balance - parseInt(payment.amount) * 100,
+    }).toFormat();
 
-      cy.getBySel("app-name-logo").find("a").click();
-      cy.getBySelLike("personal-tab").click().should("have.class", "Mui-selected");
-      cy.wait("@personalTransactions");
+    cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
 
-      cy.getBySel("transaction-list").first().should("contain", payment.description);
+    cy.getBySel("app-name-logo").find("a").click();
+    cy.getBySelLike("personal-tab").click().should("have.class", "Mui-selected");
+    cy.wait("@personalTransactions");
 
-      cy.database("find", "users", { id: ctx.contact!.id })
-        .its("balance")
-        .should("equal", ctx.contact!.balance + parseInt(payment.amount) * 100);
-    });
+    cy.getBySel("transaction-list").first().should("contain", payment.description);
+
+    cy.database("find", "users", { id: ctx.contact!.id })
+      .its("balance")
+      .should("equal", ctx.contact!.balance + parseInt(payment.amount) * 100);
   });
 
   it("navigates to the new transaction form, selects a user and submits a transaction request", function () {
