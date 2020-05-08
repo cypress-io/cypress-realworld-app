@@ -10,6 +10,7 @@ workflows:
       #  3. Validate types
       #  4. Run server unit-tests
       - cypress/install:
+          name: "Setup"
           yarn: true
           executor: cypress/browsers-chrome78-ff70
           build: "npm run build"
