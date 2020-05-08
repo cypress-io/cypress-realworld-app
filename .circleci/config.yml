@@ -13,7 +13,7 @@ workflows:
                 name: Check Types
                 command: yarn types
 
-      - server/unit-tests:
+      - unit-tests:
           name: "Server - Unit Tests"
           yarn: true
           requires:
