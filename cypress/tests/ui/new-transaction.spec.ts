@@ -44,7 +44,7 @@ describe("New Transaction", function () {
     cy.getBySel("user-list-search-input").type(ctx.contact!.firstName, { force: true });
     cy.wait(["@allUsers", "@usersSearch"]);
 
-    cy.getBySelLike("user-list-item").contains(ctx.contact!.firstName).click();
+    cy.getBySelLike("user-list-item").contains(ctx.contact!.firstName).click({ force: true });
 
     cy.getBySelLike("amount-input").type(payment.amount);
     cy.getBySelLike("description-input").type(payment.description);
@@ -167,8 +167,11 @@ describe("New Transaction", function () {
     cy.switchUser(ctx.contact!.username);
 
     cy.getBySelLike("personal-tab").click();
+    cy.wait("@personalTransactions");
+
     cy.getBySelLike("transaction-item")
-      .contains(transactionPayload.description)
+      .should("contain", transactionPayload.description)
+      .first()
       .click({ force: true });
 
     cy.getBySelLike("accept-request").click();
