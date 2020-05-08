@@ -19,6 +19,7 @@ import { ReactComponent as PayAppLogo } from "../svgs/pay-app-logo.svg";
 import Footer from "./Footer";
 import { SignInPayload } from "../models";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import Alert from "@material-ui/lab/Alert";
 
 const validationSchema = object({
   username: string().required("Username is required"),
@@ -52,7 +53,7 @@ export interface Props {
 
 const SignInForm: React.FC<Props> = ({ authService }) => {
   const classes = useStyles();
-  const [, sendAuth] = useService(authService);
+  const [authState, sendAuth] = useService(authService);
   const initialValues: SignInPayload = {
     username: "",
     password: "",
@@ -65,6 +66,11 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
+        {authState.context?.message && (
+          <Alert data-test="signin-error" severity="error">
+            {authState.context.message}
+          </Alert>
+        )}
         <div>
           <PayAppLogo className={classes.logo} />
         </div>

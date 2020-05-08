@@ -112,4 +112,12 @@ describe("User Sign-up and Login", function () {
 
     cy.getBySel("signup-submit").should("be.disabled");
   });
+
+  it("should error for an invalid login", function () {
+    cy.login("invalidUserName", "invalidPa$$word");
+
+    cy.getBySel("signin-error")
+      .should("be.visible")
+      .and("have.text", "Username or password is invalid");
+  });
 });
