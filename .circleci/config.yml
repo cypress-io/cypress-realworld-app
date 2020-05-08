@@ -26,7 +26,7 @@ workflows:
       - cypress/run:
           name: "API Tests"
           requires:
-            - cypress/install
+            - Setup
           executor: cypress/browsers-chrome78-ff70
           browser: chrome
           yarn: true
@@ -42,7 +42,7 @@ workflows:
       - cypress/run:
           name: "UI Tests - Chrome"
           requires:
-            - cypress/install
+            - Setup
           executor: cypress/browsers-chrome78-ff70
           browser: chrome
           yarn: true
@@ -58,7 +58,7 @@ workflows:
       - cypress/run:
           name: "UI Tests - Chrome - Mobile"
           requires:
-            - cypress/install
+            - Setup
           executor: cypress/browsers-chrome78-ff70
           browser: chrome
           yarn: true
@@ -75,7 +75,7 @@ workflows:
       - cypress/run:
           name: "UI Tests - Firefox"
           requires:
-            - cypress/install
+            - Setup
           executor: cypress/browsers-chrome78-ff70
           browser: firefox
           yarn: true
@@ -91,7 +91,7 @@ workflows:
       - cypress/run:
           name: "UI Tests - Firefox - Mobile"
           requires:
-            - cypress/install
+            - Setup
           executor: cypress/browsers-chrome78-ff70
           browser: firefox
           yarn: true
