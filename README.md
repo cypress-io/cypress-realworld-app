@@ -31,11 +31,21 @@ yarn install
 yarn dev
 ```
 
+### Tests
+
+| Type | Location                                 |
+| ---- | ---------------------------------------- |
+| api  | [cypress/tests/api](./cypress/tests/api) |
+| ui   | [cypress/tests/ui](./cypress/tests/ui)   |
+| unit | [`src/__tests__`](./src/__tests__)       |
+
 ### Database
 
-The database is located in [data/database.json](./data/database.json) and is [reseeded](./data/dev-seed.json) each time the application is started.
+**The default password for all users is `s3cret`.**
 
-It provides several existing users with the password of `s3cret`.
+The database is located in [data/database.json](./data/database.json) and is [reseeded](./data/dev-seed.json) each time the application is started (via `yarn dev`). [lowdb](https://github.com/typicode/lowdb) is used to interact with the database.
+
+Backend interactions with the database are located in [backend/database.ts](backend/database.ts)
 
 ### Additional NPM Scripts
 
