@@ -25,7 +25,7 @@ A payment application to demonstrate **real-world** usage of [Cypress](https://c
 yarn install
 ```
 
-### Running the App
+### Run the app along with Cypress
 
 ```shell
 yarn dev
