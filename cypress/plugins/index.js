@@ -1,6 +1,6 @@
+const _ = require("lodash");
 const Promise = require("bluebird");
 const axios = require("axios").default;
-const _ = require("lodash");
 
 require("dotenv").config();
 
@@ -8,9 +8,8 @@ module.exports = (on, config) => {
   config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD;
   config.env.paginationPageSize = process.env.PAGINATION_PAGE_SIZE;
   config.env.mobileViewportWidth = process.env.MOBILE_VIEWPORT_WIDTH;
-  const baseApiUrl = process.env.BASE_API_URL;
-
   config.env.isMobileViewport = config.viewportWidth < config.env.mobileViewportWidth;
+  const baseApiUrl = process.env.BASE_API_URL;
 
   on("task", {
     "db:seed"() {
@@ -56,8 +55,6 @@ module.exports = (on, config) => {
     },
   });
 
-  //require("@cypress/code-coverage/task")(on, config);
-  // IMPORTANT to return the config object
-  // with the any changed environment variables
+  require("@cypress/code-coverage/task")(on, config);
   return config;
 };
