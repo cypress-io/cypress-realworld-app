@@ -132,12 +132,9 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         user: event.data.user,
         message: undefined,
       })),
-      onError: assign((ctx: any, event: any) => {
-        console.log("ON ERROR:", event);
-        return {
-          message: event.message,
-        };
-      }),
+      onError: assign((ctx: any, event: any) => ({
+        message: event.data.message,
+      })),
     },
   }
 );
