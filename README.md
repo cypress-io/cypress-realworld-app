@@ -50,6 +50,8 @@ It provides several existing users with the password of `s3cret`.
 | tsnode         | Customized ts-node command to get around react-scripts restrictions  |
 | list:dev:users | Provides id and username for users in the dev database               |
 
+For a complete list of scripts see [package.json](./package.json)
+
 <br />
 <br />
 <br />
