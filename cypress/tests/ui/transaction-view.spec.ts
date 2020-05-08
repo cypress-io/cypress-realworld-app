@@ -1,5 +1,3 @@
-// check this file using TypeScript if available
-// @ts-check
 import { User, Transaction } from "../../../src/models";
 
 type NewTransactionCtx = {
@@ -53,15 +51,19 @@ describe("Transaction View", function () {
   });
 
   it("likes a transaction", function () {
-    cy.getBySelLike("transaction-item").first().click({ force: true });
+    cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
+    cy.wait("@getTransaction");
 
     cy.getBySelLike("like-button").click();
     cy.getBySelLike("like-count").should("contain", 1);
     cy.getBySelLike("like-button").should("be.disabled");
   });
 
-  it("makes a comment on a transaction", function () {
-    cy.getBySelLike("transaction-item").first().click({ force: true });
+  it("comments on a transaction", function () {
+    // Navigating to the transaction view via the UI can be flaky in Firefox
+    // cy.getBySelLike("transaction-item").first().click({ force: true });
+    cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
+    cy.wait("@getTransaction");
 
     const comments = ["Thank you!", "Appreciate it."];
 
