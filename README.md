@@ -15,27 +15,52 @@ A payment application to demonstrate **real-world** usage of [Cypress](https://c
 🚀 Full-stack Express/React application with real-world features and tests  
 👮‍♂️ Local Authentication  
 🔥 Database Seeding with End-to-end Tests  
-💻 CI/CD + [Cypress Dashboard](https://cypress.io/dashboard)
+💻 CI/CD + [Cypress Dashboard](https://dashboard.cypress.io/projects/7s5okt)
 
 ## Getting Started
 
 ### Installation
 
-```
+```shell
 yarn install
 ```
 
-### Running the App
+### Run the app along with Cypress
 
-```
+```shell
 yarn dev
 ```
 
+### Tests
+
+| Type | Location                                 |
+| ---- | ---------------------------------------- |
+| api  | [cypress/tests/api](./cypress/tests/api) |
+| ui   | [cypress/tests/ui](./cypress/tests/ui)   |
+| unit | [`src/__tests__`](./src/__tests__)       |
+
 ### Database
 
-The database is located in [data/database.json](./data/database.json) and is [reseeded](./data/dev-seed.json) each time the application is started.
+**The default password for all users is `s3cret`.**
 
-It provides several existing users with the password of `s3cret`.
+The database is located in [data/database.json](./data/database.json) and is [reseeded](./data/dev-seed.json) each time the application is started (via `yarn dev`). [lowdb](https://github.com/typicode/lowdb) is used to interact with the database.
+
+Backend interactions with the database are located in [backend/database.ts](backend/database.ts)
+
+### Additional NPM Scripts
+
+| Script         | Description                                                          |
+| -------------- | -------------------------------------------------------------------- |
+| start          | Starts backend and frontend                                          |
+| types          | Validates types                                                      |
+| db:seed        | Generates fresh database seeds for json files in /data               |
+| dev:mobile     | Starts backend, frontend and Cypress with mobile-cypress.json config |
+| start:empty    | Starts backend, frontend and Cypress with empty database seed        |
+| start:test     | Starts backend, frontend and Cypress with test database seed         |
+| tsnode         | Customized ts-node command to get around react-scripts restrictions  |
+| list:dev:users | Provides id and username for users in the dev database               |
+
+For a complete list of scripts see [package.json](./package.json)
 
 <br />
 <br />
