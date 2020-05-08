@@ -15,7 +15,7 @@ A payment application to demonstrate **real-world** usage of [Cypress](https://c
 🚀 Full-stack Express/React application with real-world features and tests  
 👮‍♂️ Local Authentication  
 🔥 Database Seeding with End-to-end Tests  
-💻 CI/CD + [Cypress Dashboard](https://cypress.io/dashboard)
+💻 CI/CD + [Cypress Dashboard](https://dashboard.cypress.io/projects/7s5okt)
 
 ## Getting Started
 
