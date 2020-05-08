@@ -57,42 +57,6 @@ describe("Transaction Feed", function () {
     });
   });
 
-  // TODO: temporary placement
-  describe("ancillary tests", function () {
-    if (Cypress.env("isMobileViewport")) {
-      it("defaults side navigation to closed (mobile)", function () {
-        cy.getBySel("sidenav-user-balance").should("not.be.visible");
-      });
-
-      it("shows amount range in drawer on mobile", function () {
-        cy.getBySel("nav-personal-tab").click().should("have.class", "Mui-selected");
-        cy.getBySelLike("filter-amount-range-button").click({ force: true });
-        cy.getBySel("amount-range-filter-drawer").should("be.visible");
-        cy.getBySel("amount-range-filter-drawer-close").click();
-      });
-
-      it("shows date range calendar full screen on mobile", function () {
-        cy.getBySel("nav-personal-tab").click().should("have.class", "Mui-selected");
-
-        cy.getBySelLike("filter-date-range-button").scrollIntoView().click({ force: true });
-
-        cy.getBySel("date-range-filter-drawer").should("be.visible");
-
-        // Potential Cypress Bug:
-        // This is a potential bug with two overlapping fixed elements
-        // https://github.com/cypress-io/cypress/issues/1242
-        // https://github.com/cypress-io/cypress/issues/5959
-        // cy.getBySel("app-name-logo").should("not.be.visible");
-
-        cy.getBySel("date-range-filter-drawer-close").click();
-      });
-    } else {
-      it("defaults side navigation to open (desktop)", function () {
-        cy.getBySel("sidenav-user-balance").should("be.visible");
-      });
-    }
-  });
-
   describe("renders and paginates all transaction feeds", function () {
     it("renders transactions item variations in feed", function () {
       cy.route("/transactions/public*", "fixture:public-transactions").as(
@@ -184,6 +148,7 @@ describe("Transaction Feed", function () {
           .its("response.body.results")
           .should("have.length", Cypress.env("paginationPageSize"));
 
+        // Temporary fix
         if (Cypress.env("isMobileViewport")) {
           cy.wait(10);
         }
