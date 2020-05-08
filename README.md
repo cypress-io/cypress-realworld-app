@@ -21,13 +21,13 @@ A payment application to demonstrate **real-world** usage of [Cypress](https://c
 
 ### Installation
 
-```
+```shell
 yarn install
 ```
 
 ### Running the App
 
-```
+```shell
 yarn dev
 ```
 
