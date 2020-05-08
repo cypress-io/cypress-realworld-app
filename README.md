@@ -37,6 +37,19 @@ The database is located in [data/database.json](./data/database.json) and is [re
 
 It provides several existing users with the password of `s3cret`.
 
+### Additional NPM Scripts
+
+| Script         | Description                                                          |
+| -------------- | -------------------------------------------------------------------- |
+| start          | Starts backend and frontend                                          |
+| types          | Validates types                                                      |
+| db:seed        | Generates fresh database seeds for json files in /data               |
+| dev:mobile     | Starts backend, frontend and Cypress with mobile-cypress.json config |
+| start:empty    | Starts backend, frontend and Cypress with empty database seed        |
+| start:test     | Starts backend, frontend and Cypress with test database seed         |
+| tsnode         | Customized ts-node command to get around react-scripts restrictions  |
+| list:dev:users | Provides id and username for users in the dev database               |
+
 <br />
 <br />
 <br />
