@@ -116,11 +116,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                     id="password"
                     data-test="signin-password"
                     error={touched && value !== initialValue && Boolean(error)}
-                    helperText={
-                      touched && value !== initialValue && touched
-                        ? `${error} - Default: "s3cret"`
-                        : ""
-                    }
+                    helperText={touched && value !== initialValue && touched ? error : ""}
                     {...field}
                   />
                 )}
