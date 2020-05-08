@@ -4,6 +4,11 @@ orbs:
 workflows:
   build:
     jobs:
+      # Setup
+      #  1. Install Cypress
+      #  2. Build application
+      #  3. Validate types
+      #  4. Run server unit-tests
       - cypress/install:
           yarn: true
           executor: cypress/browsers-chrome78-ff70
@@ -12,16 +17,11 @@ workflows:
             - run:
                 name: Check Types
                 command: yarn types
+            - run:
+                name: Unit Tests
+                command: yarn test:unit
 
-      - unit-tests:
-          name: "Server - Unit Tests"
-          yarn: true
-          requires:
-            - cypress/install
-          run:
-            name: Unit Tests
-            command: yarn test:unit
-
+      # Run API tests against backend server
       - cypress/run:
           name: "API Tests"
           requires:
@@ -34,8 +34,10 @@ workflows:
           record: true
           spec: cypress/tests/api/*
           parallel: true
+          parallelism: 4
           group: API
 
+      # Run E2E tests in Chrome
       - cypress/run:
           name: "UI Tests - Chrome"
           requires:
@@ -51,8 +53,9 @@ workflows:
           spec: cypress/tests/ui/*
           group: "UI - Chrome"
 
+      # Run E2E tests in Chrome with mobile device viewport
       - cypress/run:
-          name: "UI Tests - Mobile"
+          name: "UI Tests - Chrome - Mobile"
           requires:
             - cypress/install
           executor: cypress/browsers-chrome78-ff70
@@ -65,8 +68,9 @@ workflows:
           parallelism: 4
           spec: cypress/tests/ui/*
           config-file: mobile-cypress.json
-          group: "UI - Mobile"
+          group: "UI - Chrome - Mobile"
 
+      # Run E2E tests in Firefox
       - cypress/run:
           name: "UI Tests - Firefox"
           requires:
@@ -81,3 +85,20 @@ workflows:
           parallelism: 4
           spec: cypress/tests/ui/*
           group: "UI - Firefox"
+
+      # Run E2E tests in Firefox with mobile device viewport
+      - cypress/run:
+          name: "UI Tests - Firefox - Mobile"
+          requires:
+            - cypress/install
+          executor: cypress/browsers-chrome78-ff70
+          browser: firefox
+          yarn: true
+          start: yarn test:ci
+          wait-on: "http://localhost:3000"
+          record: true
+          parallel: true
+          parallelism: 4
+          spec: cypress/tests/ui/*
+          config-file: mobile-cypress.json
+          group: "UI - Firefox - Mobile"
