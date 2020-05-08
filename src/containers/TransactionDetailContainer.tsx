@@ -15,9 +15,7 @@ export interface Props {
 const TransactionDetailsContainer: React.FC<Props> = ({ authService }) => {
   const { transactionId } = useParams();
   const [authState] = useService(authService);
-  const [transactionDetailState, sendTransactionDetail] = useMachine(
-    transactionDetailMachine
-  );
+  const [transactionDetailState, sendTransactionDetail] = useMachine(transactionDetailMachine);
   useEffect(() => {
     sendTransactionDetail("FETCH", { transactionId });
   }, [sendTransactionDetail, transactionId]);
@@ -28,11 +26,10 @@ const TransactionDetailsContainer: React.FC<Props> = ({ authService }) => {
   const transactionComment = (payload: any) =>
     sendTransactionDetail("CREATE", { entity: "COMMENT", ...payload });
 
-  const transactionUpdate = (payload: any) =>
-    sendTransactionDetail("UPDATE", payload);
+  const transactionUpdate = (payload: any) => sendTransactionDetail("UPDATE", payload);
 
   const transaction = first(transactionDetailState.context?.results);
-  const currentUser = authState.context.user;
+  const currentUser = authState?.context?.user;
 
   return (
     <>

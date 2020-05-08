@@ -1,6 +1,6 @@
 {
   "extends": "../tsconfig.json",
-  "include": ["./*/*.ts", "../src"],
+  "include": ["./*/*.ts", "../src", "../models"],
   "exclude": [],
   "compilerOptions": {
     "isolatedModules": false

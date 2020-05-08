@@ -64,9 +64,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
             spacing={2}
           >
             <Grid item>
-              <TransferMoneyIllustration
-                style={{ height: 200, width: 300, marginBottom: 30 }}
-              />
+              <TransferMoneyIllustration style={{ height: 200, width: 300, marginBottom: 30 }} />
             </Grid>
             <Grid item>
               {showCreateButton && (

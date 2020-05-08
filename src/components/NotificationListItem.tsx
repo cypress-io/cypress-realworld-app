@@ -7,6 +7,7 @@ import CommentIcon from "@material-ui/icons/CommentRounded";
 import IconButton from "@material-ui/core/IconButton";
 import CheckIcon from "@material-ui/icons/Check";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
+// import HourglassEmpty from "@material-ui/icons/HourglassEmpty";
 import { NotificationResponseItem } from "../models";
 import {
   Button,
@@ -22,6 +23,7 @@ import {
   isPaymentNotification,
   isPaymentRequestedNotification,
   isPaymentReceivedNotification,
+  // isPaymentPendingNotification,
 } from "../utils/transactionUtils";
 
 export interface NotificationListItemProps {
@@ -41,6 +43,9 @@ const useStyles = makeStyles({
   },
   red: {
     color: "red",
+  },
+  blue: {
+    color: "blue",
   },
 });
 
@@ -85,9 +90,7 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
         <IconButton
           aria-label="mark as read"
           color="primary"
-          onClick={() =>
-            updateNotification({ id: notification.id, isRead: true })
-          }
+          onClick={() => updateNotification({ id: notification.id, isRead: true })}
           data-test={`notification-mark-read-${notification.id}`}
         >
           <CheckIcon />
@@ -97,9 +100,7 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
         <Button
           color="primary"
           size="small"
-          onClick={() =>
-            updateNotification({ id: notification.id, isRead: true })
-          }
+          onClick={() => updateNotification({ id: notification.id, isRead: true })}
           data-test={`notification-mark-read-${notification.id}`}
         >
           Dismiss

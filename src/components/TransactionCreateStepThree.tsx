@@ -1,14 +1,7 @@
 import React from "react";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Paper,
-  Typography,
-  Grid,
-  Avatar,
-  Box,
-  Button,
-} from "@material-ui/core";
+import { Paper, Typography, Grid, Avatar, Box, Button } from "@material-ui/core";
 import { Interpreter } from "xstate";
 import {
   CreateTransactionMachineContext,
@@ -39,13 +32,10 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
 }) => {
   const history = useHistory();
   const classes = useStyles();
-  const [createTransactionState, sendCreateTransaction] = useService(
-    createTransactionService
-  );
+  const [createTransactionState, sendCreateTransaction] = useService(createTransactionService);
 
   const receiver = createTransactionState?.context?.receiver;
-  const transactionDetails =
-    createTransactionState?.context?.transactionDetails;
+  const transactionDetails = createTransactionState?.context?.transactionDetails;
 
   return (
     <Paper className={classes.paper} elevation={0}>
@@ -57,30 +47,14 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
         height={200}
         style={{ paddingTop: "5%" }}
       >
-        <Grid
-          container
-          direction="row"
-          justify="space-around"
-          alignItems="center"
-          spacing={4}
-        >
+        <Grid container direction="row" justify="space-around" alignItems="center" spacing={4}>
           <Grid item>
-            <Grid
-              container
-              direction="column"
-              justify="flex-start"
-              alignItems="center"
-            >
+            <Grid container direction="column" justify="flex-start" alignItems="center">
               <Grid item>
                 <Avatar src={receiver.avatar} />
               </Grid>
               <Grid item>
-                <Typography
-                  component="h2"
-                  variant="h6"
-                  color="primary"
-                  gutterBottom
-                >
+                <Typography component="h2" variant="h6" color="primary" gutterBottom>
                   {receiver.firstName} {receiver.lastName}
                 </Typography>
               </Grid>
@@ -97,19 +71,10 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
       >
         <Grid container direction="row" justify="center" alignItems="center">
           <Grid item>
-            <Typography
-              component="h2"
-              variant="h6"
-              color="primary"
-              gutterBottom
-            >
-              {transactionDetails?.transactionType === "payment"
-                ? "Paid "
-                : "Requested "}
+            <Typography component="h2" variant="h6" color="primary" gutterBottom>
+              {transactionDetails?.transactionType === "payment" ? "Paid " : "Requested "}
               {transactionDetails?.amount &&
-                formatAmount(
-                  parseInt(transactionDetails.amount, 10) * 100
-                )}{" "}
+                formatAmount(parseInt(transactionDetails.amount, 10) * 100)}{" "}
               for {transactionDetails?.description}
             </Typography>
           </Grid>
@@ -122,12 +87,7 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
         height="100"
         style={{ paddingBottom: "5%" }}
       >
-        <Grid
-          container
-          direction="row"
-          justify="space-around"
-          alignItems="center"
-        >
+        <Grid container direction="row" justify="space-around" alignItems="center">
           <Grid item>
             <Button
               variant="contained"

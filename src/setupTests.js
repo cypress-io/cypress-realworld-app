@@ -1,4 +1,4 @@
-import { seedDatabase } from "./backend/database";
+import { seedDatabase } from "../backend/database";
 
 afterAll(() => {
   seedDatabase();

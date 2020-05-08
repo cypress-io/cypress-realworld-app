@@ -1,13 +1,6 @@
 import React from "react";
 import { format as formatDate } from "date-fns";
-import {
-  Popover,
-  Chip,
-  useTheme,
-  makeStyles,
-  Drawer,
-  Button,
-} from "@material-ui/core";
+import { Popover, Chip, useTheme, makeStyles, Drawer, Button } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import CancelIcon from "@material-ui/icons/Cancel";
 import indigo from "@material-ui/core/colors/indigo";
@@ -44,21 +37,15 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
   const classes = useStyles();
   const theme = useTheme();
   const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
-  const queryHasDateFields =
-    dateRangeFilters && hasDateQueryFields(dateRangeFilters);
+  const queryHasDateFields = dateRangeFilters && hasDateQueryFields(dateRangeFilters);
 
-  const [
-    dateRangeAnchorEl,
-    setDateRangeAnchorEl,
-  ] = React.useState<HTMLDivElement | null>(null);
+  const [dateRangeAnchorEl, setDateRangeAnchorEl] = React.useState<HTMLDivElement | null>(null);
 
   const onCalendarSelect = (e: { eventType: number; start: any; end: any }) => {
     if (e.eventType === 3) {
       filterDateRange({
         dateRangeStart: new Date(e.start.setUTCHours(0, 0, 0, 0)).toISOString(),
-        dateRangeEnd: new Date(
-          e.end.setUTCHours(23, 59, 59, 999)
-        ).toISOString(),
+        dateRangeEnd: new Date(e.end.setUTCHours(23, 59, 59, 999)).toISOString(),
       });
       setDateRangeAnchorEl(null);
     }
@@ -76,15 +63,13 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
   const dateRangeId = dateRangeOpen ? "date-range-popover" : undefined;
 
   const formatButtonDate = (date: string) => {
-    return formatDate(new Date(date), "MMM, D YYYY");
+    return formatDate(new Date(date), "MMM, d yyyy");
   };
 
   const dateRangeLabel = (dateRangeFields: TransactionDateRangePayload) => {
     if (queryHasDateFields) {
       const { dateRangeStart, dateRangeEnd } = dateRangeFields;
-      return `${formatButtonDate(dateRangeStart!)} - ${formatButtonDate(
-        dateRangeEnd!
-      )}`;
+      return `${formatButtonDate(dateRangeStart!)} - ${formatButtonDate(dateRangeEnd!)}`;
     }
     return "";
   };
@@ -108,9 +93,7 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
           variant="outlined"
           onClick={handleDateRangeClick}
           label={`Date: ${dateRangeLabel(dateRangeFilters)}`}
-          deleteIcon={
-            <CancelIcon data-test="transaction-list-filter-date-clear-button" />
-          }
+          deleteIcon={<CancelIcon data-test="transaction-list-filter-date-clear-button" />}
           onDelete={() => {
             resetDateRange();
           }}
@@ -164,10 +147,7 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
           anchor="bottom"
           data-test="date-range-filter-drawer"
         >
-          <Button
-            data-test="date-range-filter-drawer-close"
-            onClick={() => handleDateRangeClose()}
-          >
+          <Button data-test="date-range-filter-drawer-close" onClick={() => handleDateRangeClose()}>
             Close
           </Button>
           <InfiniteCalendar

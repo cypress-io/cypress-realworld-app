@@ -90,18 +90,14 @@ describe("Transaction Utils", () => {
         comments: [],
       };
 
-      expect(
-        currentUserLikesTransaction(currentUser, transactionWithLikes)
-      ).toBe(true);
+      expect(currentUserLikesTransaction(currentUser, transactionWithLikes)).toBe(true);
 
       const otherCurrentUser = {
         ...currentUser,
         id: "ABC123",
       };
 
-      expect(
-        currentUserLikesTransaction(otherCurrentUser, transactionWithLikes)
-      ).toBe(false);
+      expect(currentUserLikesTransaction(otherCurrentUser, transactionWithLikes)).toBe(false);
     });
   });
 

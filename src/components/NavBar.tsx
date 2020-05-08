@@ -76,11 +76,7 @@ interface NavBarProps {
   notificationsService: Interpreter<DataContext, any, DataEvents, any>;
 }
 
-const NavBar: React.FC<NavBarProps> = ({
-  drawerOpen,
-  toggleDrawer,
-  notificationsService,
-}) => {
+const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notificationsService }) => {
   const match = useLocation();
   const classes = useStyles();
   const theme = useTheme();
@@ -90,10 +86,7 @@ const NavBar: React.FC<NavBarProps> = ({
   const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
 
   return (
-    <AppBar
-      position="absolute"
-      className={clsx(classes.appBar, drawerOpen && classes.appBarShift)}
-    >
+    <AppBar position="absolute" className={clsx(classes.appBar, drawerOpen && classes.appBarShift)}>
       <Toolbar className={classes.toolbar}>
         <IconButton
           data-test="sidenav-open"
@@ -112,11 +105,7 @@ const NavBar: React.FC<NavBarProps> = ({
           className={classes.title}
           data-test="app-name-logo"
         >
-          <Link
-            to="/"
-            style={{ color: "#fff", textDecoration: "none" }}
-            component={RouterLink}
-          >
+          <Link to="/" style={{ color: "#fff", textDecoration: "none" }} component={RouterLink}>
             {xsBreakpoint ? (
               <PayAppLogoDollar className={classes.logo} />
             ) : (
@@ -141,9 +130,7 @@ const NavBar: React.FC<NavBarProps> = ({
           data-test="nav-top-notifications-link"
         >
           <Badge
-            badgeContent={
-              allNotifications ? allNotifications.length : undefined
-            }
+            badgeContent={allNotifications ? allNotifications.length : undefined}
             data-test="nav-top-notifications-count"
             classes={{ badge: classes.customBadge }}
           >
@@ -151,8 +138,7 @@ const NavBar: React.FC<NavBarProps> = ({
           </Badge>
         </IconButton>
       </Toolbar>
-      {(match.pathname === "/" ||
-        RegExp("/(?:public|contacts|personal)").test(match.pathname)) && (
+      {(match.pathname === "/" || RegExp("/(?:public|contacts|personal)").test(match.pathname)) && (
         <TransactionNavTabs />
       )}
     </AppBar>

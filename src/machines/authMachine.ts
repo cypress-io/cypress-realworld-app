@@ -1,4 +1,4 @@
-import { Machine, assign } from "xstate";
+import { Machine, assign, interpret, State } from "xstate";
 import { omit } from "lodash/fp";
 import { httpClient } from "../utils/asyncUtils";
 import { history } from "../index";
@@ -25,19 +25,20 @@ export type AuthMachineEvents =
 
 export interface AuthMachineContext {
   user?: User;
+  message?: string;
 }
 
-export const authMachine = Machine<
-  AuthMachineContext,
-  AuthMachineSchema,
-  AuthMachineEvents
->(
+export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMachineEvents>(
   {
     id: "authentication",
     initial: "unauthorized",
-    context: {},
+    context: {
+      user: undefined,
+      message: undefined,
+    },
     states: {
       unauthorized: {
+        entry: "resetUser",
         on: {
           LOGIN: "loading",
           SIGNUP: "signup",
@@ -46,28 +47,28 @@ export const authMachine = Machine<
       signup: {
         invoke: {
           src: "performSignup",
-          onDone: { target: "unauthorized", actions: ["onSuccess"] },
+          onDone: { target: "unauthorized", actions: "onSuccess" },
           onError: { target: "unauthorized", actions: "onError" },
         },
       },
       loading: {
         invoke: {
           src: "performLogin",
-          onDone: { target: "authorized", actions: ["onSuccess"] },
+          onDone: { target: "authorized", actions: "onSuccess" },
           onError: { target: "unauthorized", actions: "onError" },
         },
       },
       updating: {
         invoke: {
           src: "updateProfile",
-          onDone: { target: "authorized", actions: ["onSuccess"] },
+          onDone: { target: "authorized", actions: "onSuccess" },
           onError: { target: "unauthorized", actions: "onError" },
         },
       },
       refreshing: {
         invoke: {
           src: "getUserProfile",
-          onDone: { target: "authorized" },
+          onDone: { target: "authorized", actions: "setUserProfile" },
           onError: { target: "unauthorized", actions: "onError" },
         },
       },
@@ -79,11 +80,6 @@ export const authMachine = Machine<
         },
       },
       authorized: {
-        invoke: {
-          src: "getUserProfile",
-          onDone: { actions: ["setUserProfile"] },
-          onError: { actions: "onError" },
-        },
         on: {
           UPDATE: "updating",
           REFRESH: "refreshing",
@@ -96,55 +92,68 @@ export const authMachine = Machine<
     services: {
       performSignup: async (ctx, event) => {
         const payload = omit("type", event);
-        const resp = await httpClient.post(
-          `http://localhost:3001/users`,
-          payload
-        );
+        const resp = await httpClient.post(`http://localhost:3001/users`, payload);
         history.push("/signin");
         return resp.data;
       },
       performLogin: async (ctx, event) => {
-        const payload = omit("type", event);
-        const resp = await httpClient.post(
-          `http://localhost:3001/login`,
-          payload
-        );
-        history.push("/");
-        return resp.data;
+        return await httpClient
+          .post(`http://localhost:3001/login`, event)
+          .then(({ data }) => {
+            history.push("/");
+            return data;
+          })
+          .catch((error) => {
+            throw new Error("Username or password is invalid");
+          });
       },
       getUserProfile: async (ctx, event) => {
-        const payload = omit("type", event);
-        const resp = await httpClient.get(
-          `http://localhost:3001/checkAuth`,
-          payload
-        );
+        const resp = await httpClient.get(`http://localhost:3001/checkAuth`);
         return resp.data;
       },
       updateProfile: async (ctx, event: any) => {
         const payload = omit("type", event);
-        const resp = await httpClient.patch(
-          `http://localhost:3001/users/${payload.id}`,
-          payload
-        );
+        const resp = await httpClient.patch(`http://localhost:3001/users/${payload.id}`, payload);
         return resp.data;
       },
       performLogout: async (ctx, event) => {
-        await httpClient.post(`http://localhost:3001/logout`);
         localStorage.removeItem("authState");
+        await httpClient.post(`http://localhost:3001/logout`);
       },
     },
     actions: {
+      resetUser: assign((ctx: any, event: any) => ({
+        user: undefined,
+      })),
       setUserProfile: assign((ctx: any, event: any) => ({
         user: event.data.user,
       })),
       onSuccess: assign((ctx: any, event: any) => ({
-        newLink: event.reverse ? "/" : null,
-        errorMessage: null,
+        user: event.data.user,
+        message: undefined,
       })),
       onError: assign((ctx: any, event: any) => ({
-        newLink: event.reverse ? null : "/signin",
-        errorMessage: event.errorMessage,
+        message: event.data.message,
       })),
     },
   }
 );
+
+// @ts-ignore
+const stateDefinition = JSON.parse(localStorage.getItem("authState"));
+
+let resolvedState;
+if (stateDefinition) {
+  const previousState = State.create(stateDefinition);
+
+  // @ts-ignore
+  resolvedState = authMachine.resolveState(previousState);
+}
+
+export const authService = interpret(authMachine)
+  .onTransition((state) => {
+    if (state.changed) {
+      localStorage.setItem("authState", JSON.stringify(state));
+    }
+  })
+  .start(resolvedState);

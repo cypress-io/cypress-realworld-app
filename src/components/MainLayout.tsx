@@ -48,11 +48,7 @@ interface Props {
   notificationsService: Interpreter<DataContext, any, DataEvents, any>;
 }
 
-const MainLayout: React.FC<Props> = ({
-  children,
-  notificationsService,
-  authService,
-}) => {
+const MainLayout: React.FC<Props> = ({ children, notificationsService, authService }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [drawerState, sendDrawer] = useMachine(drawerMachine);
@@ -69,8 +65,7 @@ const MainLayout: React.FC<Props> = ({
     sendDrawer("TOGGLE_MOBILE");
   };
 
-  const openDesktopDrawer = (payload: any) =>
-    sendDrawer("OPEN_DESKTOP", payload);
+  const openDesktopDrawer = (payload: any) => sendDrawer("OPEN_DESKTOP", payload);
   const closeMobileDrawer = () => sendDrawer("CLOSE_MOBILE");
 
   useEffect(() => {

@@ -38,11 +38,7 @@ type FilterEvents =
 
 export interface FilterContext {}
 
-export const transactionFiltersMachine = Machine<
-  FilterContext,
-  FilterSchema,
-  FilterEvents
->(
+export const transactionFiltersMachine = Machine<FilterContext, FilterSchema, FilterEvents>(
   {
     id: "filters",
     type: "parallel",

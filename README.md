@@ -33,7 +33,7 @@ yarn dev
 
 ### Database
 
-The database is located in [src/data/database.json](./src/data/database.json) and is [reseeded](./src/data/dev-seed.json) each time the application is started.
+The database is located in [data/database.json](./data/database.json) and is [reseeded](./data/dev-seed.json) each time the application is started.
 
 It provides several existing users with the password of `s3cret`.
 
@@ -44,4 +44,3 @@ It provides several existing users with the password of `s3cret`.
 <p style='color: "#3f51b5"' align="center">
   <img width="100" style='color: "#3f51b5"' alt="Cypress Logo" src="./src/svgs/cypress-logo.svg" />
 </p>
-

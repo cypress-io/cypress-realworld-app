@@ -34,17 +34,12 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
   const isXsBreakpoint = useMediaQuery(theme.breakpoints.down("xs"));
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const itemCount = pagination.hasNextPages
-    ? transactions.length + 1
-    : transactions.length;
+  const itemCount = pagination.hasNextPages ? transactions.length + 1 : transactions.length;
 
   const loadMoreItems = () =>
-    Promise.resolve("").then(
-      () => pagination.hasNextPages && loadNextPage(pagination.page + 1)
-    );
+    Promise.resolve("").then(() => pagination.hasNextPages && loadNextPage(pagination.page + 1));
 
-  const isItemLoaded = (index: number) =>
-    !pagination.hasNextPages || index < transactions.length;
+  const isItemLoaded = (index: number) => !pagination.hasNextPages || index < transactions.length;
 
   const Item = ({ index, style }: { index: number; style: any }) => {
     if (!isItemLoaded(index)) {
