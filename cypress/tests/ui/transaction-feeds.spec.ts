@@ -184,19 +184,12 @@ describe("Transaction Feed", function () {
           .its("response.body.results")
           .should("have.length", Cypress.env("paginationPageSize"));
 
-        if (Cypress.isBrowser("firefox")) {
+        if (Cypress.env("isMobileViewport")) {
           cy.wait(10);
-          // cy.getBySel("transaction-list").children().scrollTo("bottom");
         }
 
         cy.log("📃 Scroll to next page");
         cy.getBySel("transaction-list").children().scrollTo("bottom");
-
-        // Temporary fix for scroll-caused flake in firefox
-        // if (Cypress.isBrowser("firefox")) {
-        //   cy.wait(10);
-        //   cy.getBySel("transaction-list").children().scrollTo("bottom");
-        // }
 
         cy.wait(`@${feed.routeAlias}`)
           .its("response.body")
