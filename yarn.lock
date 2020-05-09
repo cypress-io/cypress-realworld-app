@@ -2728,10 +2728,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@types/yup@0.28.0":
-  version "0.28.0"
-  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.28.0.tgz#bddd4c7bc3cb23109d87b77d4607f983a9595768"
-  integrity sha512-M11FLKWuwvJo1HjL6oXXl7lXEjpvkW1vK+OA9qFQu1SGDY7Sh36FmvxFd2PoYkrUamKbluWQ+1ZMd+tbgQmwmg==
+"@types/yup@0.28.1":
+  version "0.28.1"
+  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.28.1.tgz#4ab216567c480dbad1e20084988fa2b682002847"
+  integrity sha512-5Xqhu/yZWqtO5ZI83SELkq4vA4LnQzzBPlx0zBH9JgMPTuQk3RoTEotKe8is7ZG2Pk+2DmMhid+2Mn87PgpJgw==
 
 "@typescript-eslint/eslint-plugin@^2.10.0":
   version "2.21.0"
