@@ -76,7 +76,7 @@
     "yup": "0.28.5"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "3.7.0",
+    "@cypress/code-coverage": "3.7.2",
     "@cypress/instrument-cra": "1.1.1",
     "chai-datetime": "^1.6.0",
     "cypress": "4.5.0",
