@@ -170,8 +170,7 @@ describe("New Transaction", function () {
     cy.wait("@personalTransactions");
 
     cy.getBySelLike("transaction-item")
-      .should("contain", transactionPayload.description)
-      .first()
+      .contains(transactionPayload.description)
       .click({ force: true });
 
     cy.getBySelLike("accept-request").click();
