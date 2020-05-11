@@ -52,7 +52,7 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService, bankAccountsSer
   };
 
   return (
-    <Dialog data-test="user-onboarding-dialog" fullScreen={fullScreen} open={true || dialogIsOpen}>
+    <Dialog data-test="user-onboarding-dialog" fullScreen={fullScreen} open={dialogIsOpen}>
       <DialogTitle data-test="user-onboarding-dialog-title">
         {userOnboardingState.matches("stepOne") && "Get Started with Pay App"}
         {userOnboardingState.matches("stepTwo") && "Create Bank Account"}
