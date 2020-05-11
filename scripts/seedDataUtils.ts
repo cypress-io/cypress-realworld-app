@@ -117,7 +117,7 @@ export const createFakeUser = (): User => ({
   username: faker.internet.userName(),
   password: passwordHash,
   email: faker.internet.email(),
-  phoneNumber: faker.phone.phoneNumber(),
+  phoneNumber: faker.phone.phoneNumberFormat(0),
   avatar: faker.internet.avatar(),
   defaultPrivacyLevel: faker.helpers.randomize([
     DefaultPrivacyLevel.public,
