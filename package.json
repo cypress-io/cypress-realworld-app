@@ -41,6 +41,7 @@
     "@xstate/react": "0.8.1",
     "axios": "0.19.2",
     "bcryptjs": "2.4.3",
+    "concurrently": "^5.2.0",
     "cors": "2.8.5",
     "date-fns": "^2.12.0",
     "dinero.js": "1.8.1",
