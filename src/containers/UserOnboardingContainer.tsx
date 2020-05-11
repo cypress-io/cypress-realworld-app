@@ -5,7 +5,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { Box, useTheme, useMediaQuery } from "@material-ui/core";
+import { Box, useTheme, useMediaQuery, Grid } from "@material-ui/core";
 import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import { useService, useMachine } from "@xstate/react";
@@ -52,21 +52,14 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService, bankAccountsSer
   };
 
   return (
-    <Dialog data-test="user-onboarding-dialog" fullScreen={fullScreen} open={dialogIsOpen}>
+    <Dialog data-test="user-onboarding-dialog" fullScreen={fullScreen} open={true || dialogIsOpen}>
       <DialogTitle data-test="user-onboarding-dialog-title">
         {userOnboardingState.matches("stepOne") && "Get Started with Pay App"}
         {userOnboardingState.matches("stepTwo") && "Create Bank Account"}
         {userOnboardingState.matches("stepThree") && "Finished"}
       </DialogTitle>
       <DialogContent data-test="user-onboarding-dialog-content">
-        <Box
-          display="flex"
-          min-height={theme.spacing(36)}
-          width={theme.spacing(68)}
-          height={theme.spacing(36)}
-          alignItems="center"
-          justifyContent="center"
-        >
+        <Box display="flex" alignItems="center" justifyContent="center">
           {userOnboardingState.matches("stepOne") && (
             <>
               <NavigatorIllustration />
@@ -101,19 +94,25 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService, bankAccountsSer
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button
-          style={{ marginRight: "80%" }}
-          onClick={() => sendAuth("LOGOUT")}
-          color="secondary"
-          data-test="user-onboarding-logout"
-        >
-          Logout
-        </Button>
-        {!userOnboardingState.matches("stepTwo") && (
-          <Button onClick={() => nextStep()} color="primary" data-test="user-onboarding-next">
-            {userOnboardingState.matches("stepThree") ? "Take me to Pay App" : "Next"}
-          </Button>
-        )}
+        <Grid container justify="space-between">
+          <Grid item>
+            <Button
+              style={{ paddingRight: "80%" }}
+              onClick={() => sendAuth("LOGOUT")}
+              color="secondary"
+              data-test="user-onboarding-logout"
+            >
+              Logout
+            </Button>
+          </Grid>
+          <Grid item>
+            {!userOnboardingState.matches("stepTwo") && (
+              <Button onClick={() => nextStep()} color="primary" data-test="user-onboarding-next">
+                {userOnboardingState.matches("stepThree") ? "Take me to Pay App" : "Next"}
+              </Button>
+            )}
+          </Grid>
+        </Grid>
       </DialogActions>
     </Dialog>
   );
