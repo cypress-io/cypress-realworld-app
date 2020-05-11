@@ -1,6 +1,8 @@
 {
   "infiniteLoopProtection": true,
   "hardReloadOnChange": false,
-  "startScript": "start:server-and-api",
-  "template": "create-react-app"
+  "template": "node",
+  "container": {
+    "port": 3000
+  }
 }
