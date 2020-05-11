@@ -25,13 +25,19 @@ A payment application to demonstrate **real-world** usage of [Cypress](https://c
 yarn install
 ```
 
-### Run the app along with Cypress
+### Run the app
 
 ```shell
 yarn dev
 ```
 
-### Tests
+### Start Cypress
+
+```shell
+yarn cypress:open
+```
+
+## Tests
 
 | Type | Location                                 |
 | ---- | ---------------------------------------- |
@@ -39,7 +45,7 @@ yarn dev
 | ui   | [cypress/tests/ui](./cypress/tests/ui)   |
 | unit | [`src/__tests__`](./src/__tests__)       |
 
-### Database
+## Database
 
 **The default password for all users is `s3cret`.**
 
