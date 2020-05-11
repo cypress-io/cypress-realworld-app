@@ -5,6 +5,9 @@
   "viewportHeight": 667,
   "viewportWidth": 375,
   "env": {
-    "apiUrl": "http://localhost:3001"
+    "apiUrl": "http://localhost:3001",
+    "codeCoverage": {
+      "url": "http://localhost:3001/__coverage__"
+    }
   }
 }

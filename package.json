@@ -75,8 +75,10 @@
     "yup": "0.28.5"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "3.7.0",
+    "@cypress/code-coverage": "3.7.2",
     "@cypress/instrument-cra": "1.1.1",
+    "@cypress/webpack-preprocessor": "^5.2.0",
+    "babel-loader": "^8.1.0",
     "chai-datetime": "^1.6.0",
     "cypress": "4.5.0",
     "eslint-config-prettier": "6.11.0",
@@ -88,7 +90,7 @@
     "start-server-and-test": "1.11.0"
   },
   "scripts": {
-    "tsnode": "ts-node -O '{\"isolatedModules\": false, \"module\": \"commonjs\" }'",
+    "tsnode": "nyc --silent ts-node -O '{\"isolatedModules\": false, \"module\": \"commonjs\" }'",
     "tsnode:test": "NODE_ENV=test ts-node -O '{\"isolatedModules\": false, \"module\": \"commonjs\" }'",
     "types": "tsc --noEmit",
     "db:seed": "yarn tsnode scripts/generateSeedData",
@@ -176,8 +178,7 @@
   },
   "nyc": {
     "exclude": [
-      "serviceWorker.ts",
-      "backend"
+      "src/models/*.ts"
     ]
   }
 }
