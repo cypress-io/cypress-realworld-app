@@ -61,7 +61,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       updating: {
         invoke: {
           src: "updateProfile",
-          onDone: { target: "authorized", actions: "onSuccess" },
+          onDone: { target: "refreshing" },
           onError: { target: "unauthorized", actions: "onError" },
         },
       },
