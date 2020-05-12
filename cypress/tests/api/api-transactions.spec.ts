@@ -103,19 +103,6 @@ describe("Transactions API", function () {
         expect(response.body.results).length.to.be.greaterThan(1);
       });
     });
-
-    it.skip("gets a list of transactions for users list of contacts - status 'incomplete'", function () {
-      cy.request({
-        method: "GET",
-        url: `${apiTransactions}/contacts`,
-        qs: {
-          status: "incomplete",
-        },
-      }).then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body.results).length.to.be.greaterThan(1);
-      });
-    });
   });
 
   context("GET /transactions/public", function () {

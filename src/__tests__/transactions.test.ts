@@ -66,17 +66,6 @@ describe("Transactions", () => {
     expect(result.length).toBeLessThan(totalTransactions);
   });
 
-  it.skip("should retrieve a list of transactions for a users contacts - status 'incomplete'", () => {
-    const userToLookup: User = getAllUsers()[0];
-    const result: Transaction[] = getTransactionsForUserContacts(userToLookup.id, {
-      status: "incomplete",
-    });
-    expect(result[10]).toMatchObject({ status: "incomplete" });
-
-    expect(result.length).toBeGreaterThan(1);
-    expect(result.length).toBeLessThan(totalTransactions);
-  });
-
   it("should retrieve a list of transactions for a users contacts - between date range", () => {
     const userToLookup: User = getAllUsers()[0];
     const result: Transaction[] = getTransactionsForUserContacts(userToLookup.id, {
