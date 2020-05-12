@@ -44,7 +44,7 @@ describe("Transaction View", function () {
   });
 
   it("transactions navigation tabs are hidden on a transaction view page", function () {
-    cy.getBySelLike("transaction-item").first().parent().invoke("click");
+    cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
 
     cy.location("pathname").should("include", "/transaction");
     cy.getBySel("nav-transaction-tabs").should("not.be.visible");
@@ -60,8 +60,6 @@ describe("Transaction View", function () {
   });
 
   it("comments on a transaction", function () {
-    // Navigating to the transaction view via the UI can be flaky in Firefox
-    // cy.getBySelLike("transaction-item").first().click({ force: true });
     cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
     cy.wait("@getTransaction");
 

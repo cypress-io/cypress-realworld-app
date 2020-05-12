@@ -303,24 +303,3 @@ Cypress.Commands.add("getBySel", (selector, ...args) => cy.get(`[data-test=${sel
 Cypress.Commands.add("getBySelLike", (selector, ...args) =>
   cy.get(`[data-test*=${selector}]`, ...args)
 );
-
-Cypress.Commands.add("clickWithoutScroll", { prevSubject: "element" }, ($el) => {
-  const log = Cypress.log({
-    // @ts-ignore
-    autoEnd: false,
-    consoleProps() {
-      return {
-        Element: $el,
-      };
-    },
-  });
-  log.snapshot("before");
-  return cy
-    .wrap($el, { log: false })
-    .invoke({ log: false }, "click")
-    .then(() => {
-      log.end();
-      log.snapshot("after");
-      return $el;
-    });
-});
