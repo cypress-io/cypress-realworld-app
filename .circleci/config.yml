@@ -1,14 +1,14 @@
 version: 2.1
 orbs:
   cypress: cypress-io/cypress@1.21.0
-  executors:
-    mobile:
-      docker:
-        - image: cypress/browsers-chrome78-ff70
-      environment:
-        # iPhone 6 viewport dimensions
-        CYPRESS_VIEWPORT_WIDTH: 375
-        CYPRESS_VIEWPORT_HEIGHT: 667
+executors:
+  mobile:
+    docker:
+      - image: cypress/browsers-chrome78-ff70
+    environment:
+      # iPhone 6 viewport dimensions
+      CYPRESS_VIEWPORT_WIDTH: 375
+      CYPRESS_VIEWPORT_HEIGHT: 667
 workflows:
   build:
     jobs:
