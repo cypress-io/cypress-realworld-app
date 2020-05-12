@@ -19,11 +19,12 @@ A payment application to demonstrate **real-world** usage of [Cypress](https://c
 
 ## Getting Started
 
-The Cypress Real World App is a full-stack Express/React application with a local JSON database [lowdb].
+The Cypress Real-World App (RWA) is a full-stack Express/React application backed by a local JSON database ([lowdb]).
 
-A prebuilt database is located in [data/database.json](./data/database.json) and **contains a list of Users that can be used to login to the React Application.**
+The app is bundled with [example data](./data/database.json) (`data/database.json`) that contains everything you need to start using the app and run tests out-of-the-box.
 
-**The default password for all users is `s3cret`.**
+> 🚩 **Note**
+> You can login to the app with any of the [example app users](./data/database.json#L2). The default password for all users is `s3cret`.
 
 ### Installation
 
@@ -53,17 +54,18 @@ yarn cypress:open
 
 ## Database
 
-**The default password for all users is `s3cret`.**
+- The local JSON database located in [data/database.json](./data/database.json) and is managed with [lowdb].
 
-The local JSON database located in [data/database.json](./data/database.json) and is managed with [lowdb].
+- The database is [reseeded](./data/dev-seed.json) each time the application is started (via `yarn dev`). Database seeding is done in between each [Cypress End-to-End test](./cypress/tests).
 
-The database is [reseeded](./data/dev-seed.json) each time the application is started (via `yarn dev`). Database seeding is done in between each [Cypress End-to-End test](./cypress/tests).
+- Updates via the React frontend are sent to the [Express][express] server and handled by a set of [database utilities](backend/database.ts)
 
-Updates via the React frontend are sent to the [Express][express] server and handled by a set of [database utilities](backend/database.ts)
+- Generate a new database using `yarn db:seed`.
 
-Generate a new database using `yarn db:seed`.
+- An [empty database seed](./data/empty-seed.json) is provided along with a script (`yarn start:empty`) to view the application without data.
 
-An [empty database seed](./data/empty-seed.json) is provided along with a script (`yarn start:empty`) to view the application without data.
+> 🚩 **Note**
+> You can login to the app with any of the [example app users](./data/database.json#L2). The default password for all users is `s3cret`.
 
 ## Additional NPM Scripts
 
