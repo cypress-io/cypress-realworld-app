@@ -9,6 +9,7 @@ import {
 } from "../../../src/models";
 import { addDays, isWithinInterval, startOfDay } from "date-fns";
 import { startOfDayUTC, endOfDayUTC } from "../../../src/utils/transactionUtils";
+import { isMobile } from "../../support/utils";
 
 const { _ } = Cypress;
 
@@ -149,7 +150,7 @@ describe("Transaction Feed", function () {
           .should("have.length", Cypress.env("paginationPageSize"));
 
         // Temporary fix
-        if (Cypress.env("isMobileViewport")) {
+        if (isMobile()) {
           cy.wait(10);
         }
 
@@ -176,6 +177,15 @@ describe("Transaction Feed", function () {
   });
 
   describe("filters transaction feeds by date range", function () {
+    if (isMobile()) {
+      it("closes date range picker modal", () => {
+        cy.getBySelLike("filter-date-range-button").click({ force: true });
+        cy.get(".Cal__Header__root").should("be.visible");
+        cy.getBySel("date-range-filter-drawer-close").click();
+        cy.get(".Cal__Header__root").should("not.be.visible");
+      });
+    }
+
     _.each(feedViews, (feed, feedName) => {
       it(`filters ${feedName} transaction feed by date range`, function () {
         cy.task("find:testData", {
@@ -253,7 +263,7 @@ describe("Transaction Feed", function () {
       it(`filters ${feedName} transaction feed by amount range`, function () {
         cy.getBySelLike(feed.tab).click({ force: true }).should("have.class", "Mui-selected");
 
-        cy.wait(`@${feed.routeAlias}`);
+        cy.wait(`@${feed.routeAlias}`).its("response.body.results").as("unfilteredResults");
 
         cy.setTransactionAmountRange(dollarAmountRange.min, dollarAmountRange.max);
 
@@ -277,6 +287,16 @@ describe("Transaction Feed", function () {
             expect(amount).to.be.within(rawAmountMin, rawAmountMax);
           });
         });
+
+        cy.getBySelLike("amount-clear-button").click();
+        cy.get("@unfilteredResults").then((unfilteredResults) => {
+          cy.wait(`@${feed.routeAlias}`)
+            .its("response.body.results")
+            .should("deep.equal", unfilteredResults);
+        });
+
+        cy.getBySelLike("amount-range-filter-drawer-close").click();
+        cy.getBySel("amount-range-filter-drawer").should("not.be.visible");
       });
 
       it(`does not show ${feedName} transactions for out of range amount limits`, function () {

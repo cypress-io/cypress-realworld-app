@@ -68,8 +68,11 @@ workflows:
           parallel: true
           parallelism: 4
           spec: cypress/tests/ui/*
-          config-file: mobile-cypress.json
           group: "UI - Chrome - Mobile"
+          environment:
+            # iPhone 6 viewport dimensions
+            CYPRESS_VIEWPORT_WIDTH: 375
+            CYPRESS_VIEWPORT_HEIGHT: 667
 
       # Run E2E tests in Firefox
       - cypress/run:

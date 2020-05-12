@@ -7,21 +7,19 @@ require("dotenv").config();
 module.exports = (on, config) => {
   config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD;
   config.env.paginationPageSize = process.env.PAGINATION_PAGE_SIZE;
-  config.env.mobileViewportWidth = process.env.MOBILE_VIEWPORT_WIDTH;
   config.env.isMobileViewport = config.viewportWidth < config.env.mobileViewportWidth;
-  const baseApiUrl = process.env.BASE_API_URL;
 
   on("task", {
     "db:seed"() {
       // seed database with test data
-      return axios.post(`${baseApiUrl}/testData/seed`).then((resp) => resp.data);
+      return axios.post(`${config.env.apiUrl}/testData/seed`).then((resp) => resp.data);
     },
 
     // fetch test data from a database (MySQL, PostgreSQL, etc...)
     "filter:testData"({ entity, filterAttrs }) {
       const fetchData = (attrs) => {
         return axios
-          .get(`${baseApiUrl}/testData/${entity}`)
+          .get(`${config.env.apiUrl}/testData/${entity}`)
           .then(({ data }) => _.filter(data.results, attrs));
       };
 
@@ -33,7 +31,7 @@ module.exports = (on, config) => {
     "find:testData"({ entity, findAttrs }) {
       const fetchData = (attrs) => {
         return axios
-          .get(`${baseApiUrl}/testData/${entity}`)
+          .get(`${config.env.apiUrl}/testData/${entity}`)
           .then(({ data }) => _.find(data.results, attrs));
       };
 
@@ -47,7 +45,7 @@ module.exports = (on, config) => {
       const isBulkQuery = Array.isArray(query);
       const fetchData = (q) => {
         return axios
-          .get(`${baseApiUrl}/testData/${entity}`)
+          .get(`${config.env.apiUrl}/testData/${entity}`)
           .then(({ data }) => _[operation](data.results, q));
       };
 

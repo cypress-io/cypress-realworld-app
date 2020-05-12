@@ -81,6 +81,15 @@ yarn cypress:open
 
 For a complete list of scripts see [package.json](./package.json)
 
+## Code Coverage Report
+
+The Cypress Real-World App uses the [@cypress/code-coverage]() plugin to generate code coverage reports for the app frontend and backend.
+
+To generate a code coverage report:
+
+1. Run `yarn cypress:run --env coverage=true` and wait for the test run to complete.
+2. Once the test run is complete, you can view the report at `coverage/lcov-report/index.html`.
+
 <br />
 <br />
 <br />

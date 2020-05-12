@@ -1,6 +1,7 @@
 // @ts-check
 import Dinero from "dinero.js";
 import { User } from "../../../src/models";
+import { isMobile } from "../../support/utils";
 
 type NewTransactionTestCtx = {
   allUsers?: User[];
@@ -58,13 +59,13 @@ describe("New Transaction", function () {
       amount: ctx.user!.balance - parseInt(payment.amount) * 100,
     }).toFormat();
 
-    if (Cypress.env("isMobileViewport")) {
+    if (isMobile()) {
       cy.getBySel("sidenav-open").click();
     }
 
     cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
 
-    if (Cypress.env("isMobileViewport")) {
+    if (isMobile()) {
       cy.get(".MuiBackdrop-root").click({ force: true });
     }
 
@@ -144,7 +145,7 @@ describe("New Transaction", function () {
       amount: ctx.contact!.balance + transactionPayload.amount * 100,
     }).toFormat();
 
-    if (Cypress.env("isMobileViewport")) {
+    if (isMobile()) {
       cy.getBySel("sidenav-open").click();
     }
 
@@ -190,7 +191,7 @@ describe("New Transaction", function () {
       amount: ctx.user!.balance + transactionPayload.amount * 100,
     }).toFormat();
 
-    if (Cypress.env("isMobileViewport")) {
+    if (isMobile()) {
       cy.getBySel("sidenav-open").click();
     }
 

@@ -1,5 +1,6 @@
 // @ts-check
 import { User } from "../../../src/models";
+import { isMobile } from "../../support/utils";
 
 describe("User Sign-up and Login", function () {
   beforeEach(function () {
@@ -8,6 +9,11 @@ describe("User Sign-up and Login", function () {
     cy.server();
     cy.route("POST", "/users").as("signup");
     cy.route("POST", "/bankAccounts").as("createBankAccount");
+  });
+
+  it("should redirect unauthenticated user to signin page", function () {
+    cy.visit("/personal");
+    cy.location("pathname").should("equal", "/signin");
   });
 
   it("should remember a user for 30 days after login", function () {
@@ -19,7 +25,7 @@ describe("User Sign-up and Login", function () {
     cy.getCookie("connect.sid").should("have.property", "expiry");
 
     // Logout User
-    if (Cypress.env("isMobileViewport")) {
+    if (isMobile()) {
       cy.getBySel("sidenav-open").click();
     }
     cy.getBySel("sidenav-signout").click();
@@ -69,7 +75,7 @@ describe("User Sign-up and Login", function () {
     cy.getBySel("transaction-list").should("be.visible");
 
     // Logout User
-    if (Cypress.env("isMobileViewport")) {
+    if (isMobile()) {
       cy.getBySel("sidenav-open").click();
     }
     cy.getBySel("sidenav-signout").click();
