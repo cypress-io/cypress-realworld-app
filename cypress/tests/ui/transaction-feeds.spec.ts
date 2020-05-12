@@ -295,8 +295,13 @@ describe("Transaction Feed", function () {
             .should("deep.equal", unfilteredResults);
         });
 
-        cy.getBySelLike("amount-range-filter-drawer-close").click();
-        cy.getBySel("amount-range-filter-drawer").should("not.be.visible");
+        if (isMobile()) {
+          cy.getBySelLike("amount-range-filter-drawer-close").click();
+          cy.getBySel("amount-range-filter-drawer").should("not.be.visible");
+        } else {
+          cy.getBySel("transaction-list-filter-amount-range-button").click();
+          cy.getBySel("transaction-list-filter-amount-range").should("not.be.visible");
+        }
       });
 
       it(`does not show ${feedName} transactions for out of range amount limits`, function () {
