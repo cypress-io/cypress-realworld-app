@@ -13,6 +13,7 @@ function PrivateRoute({ isLoggedIn, children, ...rest }: IPrivateRouteProps) {
         isLoggedIn ? (
           children
         ) : (
+          /* istanbul ignore next */
           <Redirect
             to={{
               pathname: "/signin",

@@ -111,7 +111,7 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
                   </Grid>
                   <Grid item>
                     <Typography data-test="transaction-like-count" className={classes.countText}>
-                      {transaction.likes ? transaction.likes.length : 0}
+                      {transaction.likes.length}
                     </Typography>
                   </Grid>
                   <Grid item>
@@ -119,7 +119,7 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
                   </Grid>
                   <Grid item>
                     <Typography data-test="transaction-comment-count" className={classes.countText}>
-                      {transaction.comments ? transaction.comments.length : 0}
+                      {transaction.comments.length}
                     </Typography>
                   </Grid>
                 </Grid>

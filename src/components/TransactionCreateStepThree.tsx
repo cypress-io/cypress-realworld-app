@@ -103,6 +103,7 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
             <Button
               variant="contained"
               size="small"
+              /* istanbul ignore next */
               onClick={() => {
                 sendCreateTransaction("RESET");
                 history.push("/transaction/new");

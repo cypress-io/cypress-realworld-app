@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { useMachine, useService } from "@xstate/react";
 import { makeStyles } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
@@ -56,11 +56,18 @@ const App: React.FC = () => {
       )}
       {authState.matches("unauthorized") && (
         <Switch>
-          <Route path="/signup">
+          <Route exact path="/signup">
             <SignUpForm authService={authService} />
           </Route>
-          <Route path="/(signin)?">
+          <Route exact path="/signin">
             <SignInForm authService={authService} />
+          </Route>
+          <Route path="/*">
+            <Redirect
+              to={{
+                pathname: "/signin",
+              }}
+            />
           </Route>
         </Switch>
       )}
