@@ -44,7 +44,7 @@ describe("Transaction View", function () {
   });
 
   it("transactions navigation tabs are hidden on a transaction view page", function () {
-    cy.getBySelLike("transaction-item").first().clickWithoutScroll();
+    cy.getBySelLike("transaction-item").first().parent().invoke("click");
 
     cy.location("pathname").should("include", "/transaction");
     cy.getBySel("nav-transaction-tabs").should("not.be.visible");
