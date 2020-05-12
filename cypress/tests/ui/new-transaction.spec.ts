@@ -171,7 +171,7 @@ describe("New Transaction", function () {
 
     cy.getBySelLike("transaction-item")
       .contains(transactionPayload.description)
-      .click({ force: true });
+      .clickWithoutScroll();
 
     cy.getBySelLike("accept-request").click();
     cy.wait("@updateTransaction").its("status").should("equal", 204);
