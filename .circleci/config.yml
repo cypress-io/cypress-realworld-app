@@ -4,7 +4,7 @@ orbs:
 executors:
   mobile:
     docker:
-      - image: cypress/browsers-chrome78-ff70
+      - image: cypress/browsers:node12.13.0-chrome78-ff70
     environment:
       # iPhone 6 viewport dimensions
       CYPRESS_VIEWPORT_WIDTH: 375
