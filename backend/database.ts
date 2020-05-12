@@ -84,22 +84,14 @@ const COMMENT_TABLE = "comments";
 const NOTIFICATION_TABLE = "notifications";
 const BANK_TRANSFER_TABLE = "banktransfers";
 
-let databaseFileName;
-
-if (process.env.NODE_ENV === "test") {
-  databaseFileName = "database.test.json";
-} else {
-  databaseFileName = "database.json";
-}
-
-const databaseFile = path.join(__dirname, "../data", databaseFileName);
+const databaseFile = path.join(__dirname, "../data/database.json");
 const adapter = new FileSync(databaseFile);
 
 const db = low(adapter);
 
 export const seedDatabase = () => {
   const testSeed = JSON.parse(
-    fs.readFileSync(path.join(process.cwd(), "data", "test-seed.json"), "utf-8")
+    fs.readFileSync(path.join(process.cwd(), "data", "database-seed.json"), "utf-8")
   );
 
   // seed database with test data

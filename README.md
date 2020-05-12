@@ -10,14 +10,20 @@ A payment application to demonstrate **real-world** usage of [Cypress](https://c
 
 ## Features
 
-🛠 Built with React, XState, Express, Lowdb, & TypeScript  
+🛠 Built with [React][reactjs], [XState][xstate], [Express][express], [lowdb][lowdb], & [TypeScript][typescript]  
 ⚡️ Zero database dependencies  
-🚀 Full-stack Express/React application with real-world features and tests  
+🚀 Full-stack [Express][express]/[React][reactjs] application with real-world features and tests  
 👮‍♂️ Local Authentication  
 🔥 Database Seeding with End-to-end Tests  
-💻 CI/CD + [Cypress Dashboard](https://dashboard.cypress.io/projects/7s5okt)
+💻 CI/CD + [Cypress Dashboard][cypressdashboard]
 
 ## Getting Started
+
+The Cypress Real World App is a full-stack Express/React application with a local JSON database [lowdb].
+
+A prebuilt database is located in [data/database.json](./data/database.json) and **contains a list of Users that can be used to login to the React Application.**
+
+**The default password for all users is `s3cret`.**
 
 ### Installation
 
@@ -25,13 +31,19 @@ A payment application to demonstrate **real-world** usage of [Cypress](https://c
 yarn install
 ```
 
-### Run the app along with Cypress
+### Run the app
 
 ```shell
 yarn dev
 ```
 
-### Tests
+### Start Cypress
+
+```shell
+yarn cypress:open
+```
+
+## Tests
 
 | Type | Location                                 |
 | ---- | ---------------------------------------- |
@@ -39,26 +51,31 @@ yarn dev
 | ui   | [cypress/tests/ui](./cypress/tests/ui)   |
 | unit | [`src/__tests__`](./src/__tests__)       |
 
-### Database
+## Database
 
 **The default password for all users is `s3cret`.**
 
-The database is located in [data/database.json](./data/database.json) and is [reseeded](./data/dev-seed.json) each time the application is started (via `yarn dev`). [lowdb](https://github.com/typicode/lowdb) is used to interact with the database.
+The local JSON database located in [data/database.json](./data/database.json) and is managed with [lowdb].
 
-Backend interactions with the database are located in [backend/database.ts](backend/database.ts)
+The database is [reseeded](./data/dev-seed.json) each time the application is started (via `yarn dev`). Database seeding is done in between each [Cypress End-to-End test](./cypress/tests).
 
-### Additional NPM Scripts
+Updates via the React frontend are sent to the [Express][express] server and handled by a set of [database utilities](backend/database.ts)
 
-| Script         | Description                                                          |
-| -------------- | -------------------------------------------------------------------- |
-| start          | Starts backend and frontend                                          |
-| types          | Validates types                                                      |
-| db:seed        | Generates fresh database seeds for json files in /data               |
-| dev:mobile     | Starts backend, frontend and Cypress with mobile-cypress.json config |
-| start:empty    | Starts backend, frontend and Cypress with empty database seed        |
-| start:test     | Starts backend, frontend and Cypress with test database seed         |
-| tsnode         | Customized ts-node command to get around react-scripts restrictions  |
-| list:dev:users | Provides id and username for users in the dev database               |
+Generate a new database using `yarn db:seed`.
+
+An [empty database seed](./data/empty-seed.json) is provided along with a script (`yarn start:empty`) to view the application without data.
+
+## Additional NPM Scripts
+
+| Script         | Description                                                         |
+| -------------- | ------------------------------------------------------------------- |
+| dev            | Starts backend in wath mode and frontend                            |
+| start          | Starts backend and frontend                                         |
+| types          | Validates types                                                     |
+| db:seed        | Generates fresh database seeds for json files in /data              |
+| start:empty    | Starts backend, frontend and Cypress with empty database seed       |
+| tsnode         | Customized ts-node command to get around react-scripts restrictions |
+| list:dev:users | Provides id and username for users in the dev database              |
 
 For a complete list of scripts see [package.json](./package.json)
 
@@ -69,3 +86,10 @@ For a complete list of scripts see [package.json](./package.json)
 <p style='color: "#3f51b5"' align="center">
   <img width="100" style='color: "#3f51b5"' alt="Cypress Logo" src="./src/svgs/cypress-logo.svg" />
 </p>
+
+[reactjs]: https://reactjs.org
+[xstate]: https://xstate.js.org
+[express]: https://expressjs.com
+[lowdb]: https://github.com/typicode/lowdb
+[typescript]: https://typescriptlang.org
+[cypressdashboard]: https://dashboard.cypress.io/projects/7s5okt
