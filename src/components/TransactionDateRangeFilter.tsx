@@ -67,11 +67,8 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
   };
 
   const dateRangeLabel = (dateRangeFields: TransactionDateRangePayload) => {
-    if (queryHasDateFields) {
-      const { dateRangeStart, dateRangeEnd } = dateRangeFields;
-      return `${formatButtonDate(dateRangeStart!)} - ${formatButtonDate(dateRangeEnd!)}`;
-    }
-    return "";
+    const { dateRangeStart, dateRangeEnd } = dateRangeFields;
+    return `${formatButtonDate(dateRangeStart!)} - ${formatButtonDate(dateRangeEnd!)}`;
   };
 
   return (

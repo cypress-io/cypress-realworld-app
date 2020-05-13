@@ -28,9 +28,7 @@ const NotificationsContainer: React.FC<Props> = ({ authService, notificationsSer
   const [notificationsState, sendNotifications] = useService(notificationsService);
 
   useEffect(() => {
-    if (authState?.matches("authorized")) {
-      sendNotifications({ type: "FETCH" });
-    }
+    sendNotifications({ type: "FETCH" });
   }, [authState, sendNotifications]);
 
   const updateNotification = (payload: NotificationUpdatePayload) =>
