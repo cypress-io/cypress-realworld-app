@@ -83,7 +83,7 @@ For a complete list of scripts see [package.json](./package.json)
 
 ## Code Coverage Report
 
-The Cypress Real-World App uses the [@cypress/code-coverage]() plugin to generate code coverage reports for the app frontend and backend.
+The Cypress Real-World App uses the [@cypress/code-coverage](https://github.com/cypress-io/code-coverage) plugin to generate code coverage reports for the app frontend and backend.
 
 To generate a code coverage report:
 
