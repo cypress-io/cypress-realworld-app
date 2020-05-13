@@ -139,12 +139,6 @@ export const getAllByObj = (entity: string, query: object) => {
 
   return result;
 };
-export const getByObj = (entity: string, query: object) =>
-  db
-    .get(entity)
-    // @ts-ignore
-    .find(query)
-    .value();
 
 // Search
 export const cleanSearchQuery = (query: string) => query.replace(/[^a-zA-Z0-9]/g, "");
@@ -323,15 +317,10 @@ export const removeBankAccountById = (bankAccountId: string) => {
 export const getBankTransferBy = (key: string, value: any) =>
   getBy(BANK_TRANSFER_TABLE, key, value);
 
-export const getBankTransferById = (id: string) => getBankTransferBy("id", id);
-
 export const getBankTransfersBy = (key: string, value: any) =>
   getAllBy(BANK_TRANSFER_TABLE, key, value);
 
 export const getBankTransfersByUserId = (userId: string) => getBankTransfersBy("userId", userId);
-
-export const getBankTransferByTransactionId = (transactionId: string) =>
-  getBankTransferBy("transactionId", transactionId);
 
 export const createBankTransfer = (bankTransferDetails: BankTransferPayload) => {
   const bankTransfer: BankTransfer = {
@@ -361,9 +350,6 @@ const saveBankTransfer = (bankTransfer: BankTransfer): BankTransfer => {
 export const getTransactionBy = (key: string, value: any) => getBy(TRANSACTION_TABLE, key, value);
 
 export const getTransactionById = (id: string) => getTransactionBy("id", id);
-
-export const getTransactionsBy = (key: string, value: string) =>
-  getAllBy(TRANSACTION_TABLE, key, value);
 
 export const getTransactionsByObj = (query: object) => getAllByObj(TRANSACTION_TABLE, query);
 
@@ -467,8 +453,6 @@ export const transactionsWithinDateRange = curry(
 export const getTransactionsForUserByObj = curry((userId: string, query?: object) =>
   flow(getAllTransactionsForUserByObj(userId), uniqBy("id"))(query)
 );
-
-export const getTransactionsByUserId = (userId: string) => getTransactionsBy("receiverId", userId);
 
 export const getContactIdsForUser = (userId: string): Contact["id"][] =>
   flow(getContactsByUserId, map("contactUserId"))(userId);
@@ -678,6 +662,7 @@ export const createLikes = (userId: string, transactionId: string) => {
 
   const like = createLike(userId, transactionId);
 
+  /* istanbul ignore next */
   if (userId !== senderId || userId !== receiverId) {
     createLikeNotification(senderId, transactionId, like.id);
     createLikeNotification(receiverId, transactionId, like.id);
@@ -727,6 +712,7 @@ export const createComments = (userId: string, transactionId: string, content: s
 
   const comment = createComment(userId, transactionId, content);
 
+  /* istanbul ignore next */
   if (userId !== senderId || userId !== receiverId) {
     createCommentNotification(senderId, transactionId, comment.id);
     createCommentNotification(receiverId, transactionId, comment.id);
@@ -903,7 +889,7 @@ export const getAllContacts = () => db.get(CONTACT_TABLE).value();
 /* istanbul ignore next */
 export const getAllTransactions = () => db.get(TRANSACTION_TABLE).value();
 
-/* istanbul ignore next */
+/* istanbul ignore */
 export const getBankAccountsByUserId = (userId: string) => getBankAccountsBy("userId", userId);
 
 /* istanbul ignore next */
@@ -911,5 +897,16 @@ export const getNotificationById = (id: string): NotificationType => getNotifica
 
 /* istanbul ignore next */
 export const getNotificationsByUserId = (userId: string) => getNotificationsByObj({ userId });
+
+/* istanbul ignore next */
+export const getBankTransferByTransactionId = (transactionId: string) =>
+  getBankTransferBy("transactionId", transactionId);
+
+/* istanbul ignore next */
+export const getTransactionsBy = (key: string, value: string) =>
+  getAllBy(TRANSACTION_TABLE, key, value);
+
+/* istanbul ignore next */
+export const getTransactionsByUserId = (userId: string) => getTransactionsBy("receiverId", userId);
 
 export default db;
