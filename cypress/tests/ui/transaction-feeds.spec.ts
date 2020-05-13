@@ -299,9 +299,9 @@ describe("Transaction Feed", function () {
           cy.getBySelLike("amount-range-filter-drawer-close").click();
           cy.getBySel("amount-range-filter-drawer").should("not.be.visible");
         } else {
-          cy.getBySel("transaction-list-filter-amount-range-button")
-            .scrollIntoView()
-            .click({ force: true });
+          cy.getBySel("transaction-list-filter-amount-clear-button").click();
+          cy.getBySel("main").scrollTo("top");
+          cy.getBySel("transaction-list-filter-date-range-button").click({ force: true });
           cy.getBySel("transaction-list-filter-amount-range").should("not.be.visible");
         }
       });
