@@ -71,7 +71,7 @@ yarn cypress:open
 
 | Script         | Description                                                         |
 | -------------- | ------------------------------------------------------------------- |
-| dev            | Starts backend in wath mode and frontend                            |
+| dev            | Starts backend in watch mode and frontend                           |
 | start          | Starts backend and frontend                                         |
 | types          | Validates types                                                     |
 | db:seed        | Generates fresh database seeds for json files in /data              |
