@@ -26,7 +26,7 @@ describe("User Sign-up and Login", function () {
 
     // Logout User
     if (isMobile()) {
-      cy.getBySel("sidenav-open").click();
+      cy.getBySel("sidenav-toggle").click();
     }
     cy.getBySel("sidenav-signout").click();
     cy.location("pathname").should("eq", "/");
@@ -76,7 +76,7 @@ describe("User Sign-up and Login", function () {
 
     // Logout User
     if (isMobile()) {
-      cy.getBySel("sidenav-open").click();
+      cy.getBySel("sidenav-toggle").click();
     }
     cy.getBySel("sidenav-signout").click();
     cy.location("pathname").should("eq", "/");

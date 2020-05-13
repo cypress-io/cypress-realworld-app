@@ -89,7 +89,7 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
     <AppBar position="absolute" className={clsx(classes.appBar, drawerOpen && classes.appBarShift)}>
       <Toolbar className={classes.toolbar}>
         <IconButton
-          data-test="sidenav-open"
+          data-test="sidenav-toggle"
           edge="start"
           color="inherit"
           aria-label="open drawer"

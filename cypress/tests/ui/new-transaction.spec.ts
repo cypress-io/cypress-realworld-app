@@ -60,7 +60,7 @@ describe("New Transaction", function () {
     }).toFormat();
 
     if (isMobile()) {
-      cy.getBySel("sidenav-open").click();
+      cy.getBySel("sidenav-toggle").click();
     }
 
     cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
@@ -146,7 +146,7 @@ describe("New Transaction", function () {
     }).toFormat();
 
     if (isMobile()) {
-      cy.getBySel("sidenav-open").click();
+      cy.getBySel("sidenav-toggle").click();
     }
 
     cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
@@ -192,7 +192,7 @@ describe("New Transaction", function () {
     }).toFormat();
 
     if (isMobile()) {
-      cy.getBySel("sidenav-open").click();
+      cy.getBySel("sidenav-toggle").click();
     }
 
     cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
