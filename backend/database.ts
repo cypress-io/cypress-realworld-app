@@ -101,10 +101,6 @@ export const seedDatabase = () => {
 
 export const getAllUsers = () => db.get(USER_TABLE).value();
 
-export const getAllContacts = () => db.get(CONTACT_TABLE).value();
-
-export const getAllTransactions = () => db.get(TRANSACTION_TABLE).value();
-
 export const getAllPublicTransactions = () =>
   db
     .get(TRANSACTION_TABLE)
@@ -186,7 +182,6 @@ export const getUserBy = (key: string, value: any) => getBy(USER_TABLE, key, val
 export const getUserId = (user: User): string => user.id;
 export const getUserById = (id: string) => getUserBy("id", id);
 export const getUserByUsername = (username: string) => getUserBy("username", username);
-export const getUsersBy = (key: string, value: any) => getAllBy(USER_TABLE, key, value);
 
 export const createUser = (userDetails: Partial<User>): User => {
   const password = bcrypt.hashSync(userDetails.password!, 10);
@@ -220,13 +215,11 @@ const saveUser = (user: User) => {
 export const updateUserById = (userId: string, edits: Partial<User>) => {
   const user = getUserById(userId);
 
-  if (user) {
-    db.get(USER_TABLE)
-      // @ts-ignore
-      .find(user)
-      .assign(edits)
-      .write();
-  }
+  db.get(USER_TABLE)
+    // @ts-ignore
+    .find(user)
+    .assign(edits)
+    .write();
 };
 
 // Contact
@@ -284,11 +277,6 @@ export const getBankAccountById = (id: string) => getBankAccountBy("id", id);
 
 export const getBankAccountsBy = (key: string, value: any) =>
   getAllBy(BANK_ACCOUNT_TABLE, key, value);
-
-export const getBankAccountsByUserId = (userId: string) => getBankAccountsBy("userId", userId);
-
-export const getActiveBankAccountsByUserId = (userId: string) =>
-  getAllByObj(BANK_ACCOUNT_TABLE, { userId, isDeleted: false });
 
 export const createBankAccount = (bankaccount: BankAccount) => {
   db.get(BANK_ACCOUNT_TABLE)
@@ -505,14 +493,6 @@ export const nonContactPublicTransactions = (userId: string): Transaction[] => {
     getAllPublicTransactions,
     reject((transaction: Transaction) => includes(transaction.id, contactsTransactionIds))
   )(userId);
-  /*
-  TODO: investigate xorBy implementation
-  return xorBy(
-    getAllPublicTransactions,
-    getTransactionsForUserContacts(userId),
-    "id"
-  );
-  */
 };
 
 export const getNonContactPublicTransactionsForApi = (userId: string) =>
@@ -547,16 +527,11 @@ export const resetPayAppBalance = constant(0);
 
 export const debitPayAppBalance = (user: User, transaction: Transaction) => {
   if (hasSufficientFunds(user, transaction)) {
-    flow(
-      getChargeAmount,
-      savePayAppBalance(user)
-      // TODO: generate notification?
-    )(user, transaction);
+    flow(getChargeAmount, savePayAppBalance(user))(user, transaction);
   } else {
     flow(
       getTransferAmount(user),
       createBankTransferWithdrawal(user, transaction),
-      // TODO: generate notification for withdrawal
       resetPayAppBalance,
       savePayAppBalance(user)
     )(transaction);
@@ -564,11 +539,7 @@ export const debitPayAppBalance = (user: User, transaction: Transaction) => {
 };
 
 export const creditPayAppBalance = (user: User, transaction: Transaction) =>
-  flow(
-    getPayAppCreditedAmount,
-    savePayAppBalance(user)
-    // TODO: generate notification?
-  )(user, transaction);
+  flow(getPayAppCreditedAmount, savePayAppBalance(user))(user, transaction);
 
 export const createBankTransferWithdrawal = curry(
   (sender: User, transaction: Transaction, transferAmount: number) =>
@@ -613,11 +584,9 @@ export const createTransaction = (
   if (isPayment(transaction)) {
     debitPayAppBalance(sender, transaction);
     creditPayAppBalance(receiver, transaction);
-    // TODO: update transaction "status"
     updateTransactionById(sender.id, transaction.id, {
       status: TransactionStatus.complete,
     });
-    // TODO: generate notification for transaction - createPaymentNotification(...)
     createPaymentNotification(
       transaction.receiverId,
       transaction.id,
@@ -655,33 +624,31 @@ export const updateTransactionById = (
   const receiver = getUserById(receiverId);
 
   // TODO: if request accepted - createBankTransfer for withdrawal for the difference associated to the transaction
-  if (userId === senderId || userId === receiverId) {
-    // if payment, debit sender's balance for payment amount
-    if (isRequestTransaction(transaction)) {
-      debitPayAppBalance(receiver, transaction);
-      creditPayAppBalance(sender, transaction);
-      edits.status = TransactionStatus.complete;
+  // if payment, debit sender's balance for payment amount
+  if (isRequestTransaction(transaction)) {
+    debitPayAppBalance(receiver, transaction);
+    creditPayAppBalance(sender, transaction);
+    edits.status = TransactionStatus.complete;
 
-      createPaymentNotification(
-        transaction.senderId,
-        transaction.id,
-        PaymentNotificationStatus.received
-      );
-    }
-    // else {
-    //   createPaymentNotification(
-    //     transaction.receiverId,
-    //     transaction.id,
-    //     PaymentNotificationStatus.requested
-    //   );
-    // }
-
-    db.get(TRANSACTION_TABLE)
-      // @ts-ignore
-      .find(transaction)
-      .assign(edits)
-      .write();
+    createPaymentNotification(
+      transaction.senderId,
+      transaction.id,
+      PaymentNotificationStatus.received
+    );
   }
+  // else {
+  //   createPaymentNotification(
+  //     transaction.receiverId,
+  //     transaction.id,
+  //     PaymentNotificationStatus.requested
+  //   );
+  // }
+
+  db.get(TRANSACTION_TABLE)
+    // @ts-ignore
+    .find(transaction)
+    .assign(edits)
+    .write();
 };
 
 // Likes
@@ -788,20 +755,8 @@ export const getNotificationBy = (key: string, value: any): NotificationType =>
 export const getNotificationsByObj = (query: object): Notification[] =>
   getAllByObj(NOTIFICATION_TABLE, query);
 
-export const getNotificationById = (id: string): NotificationType => getNotificationBy("id", id);
-
 export const getUnreadNotificationsByUserId = (userId: string) =>
   flow(getNotificationsByObj, formatNotificationsForApiResponse)({ userId, isRead: false });
-
-export const getNotificationsByUserId = (userId: string) => getNotificationsByObj({ userId });
-
-export const getNotificationsByTransactionId = (transactionId: string) =>
-  getNotificationsByObj({ transactionId });
-
-export const getNotificationsByLikeId = (likeId: string) => getNotificationsByObj({ likeId });
-
-export const getNotificationsByCommentId = (commentId: string) =>
-  getNotificationsByObj({ commentId });
 
 export const createPaymentNotification = (
   userId: string,
@@ -877,6 +832,7 @@ export const createNotifications = (userId: string, notifications: NotificationP
     } else if ("likeId" in item && item.type === NotificationsType.like) {
       return createLikeNotification(userId, item.transactionId, item.likeId);
     } else {
+      /* istanbul ignore next */
       if ("commentId" in item) {
         return createCommentNotification(userId, item.transactionId, item.commentId);
       }
@@ -890,13 +846,11 @@ export const updateNotificationById = (
 ) => {
   const notification = getNotificationBy("id", notificationId);
 
-  if (userId === notification.userId) {
-    db.get(NOTIFICATION_TABLE)
-      // @ts-ignore
-      .find(notification)
-      .assign(edits)
-      .write();
-  }
+  db.get(NOTIFICATION_TABLE)
+    // @ts-ignore
+    .find(notification)
+    .assign(edits)
+    .write();
 };
 
 export const formatNotificationForApiResponse = (
@@ -937,9 +891,25 @@ export const formatNotificationsForApiResponse = (
   );
 
 // dev/test private methods
+/* istanbul ignore next */
 export const getRandomUser = () => {
   const users = getAllUsers();
   return sample(users);
 };
+
+/* istanbul ignore next */
+export const getAllContacts = () => db.get(CONTACT_TABLE).value();
+
+/* istanbul ignore next */
+export const getAllTransactions = () => db.get(TRANSACTION_TABLE).value();
+
+/* istanbul ignore next */
+export const getBankAccountsByUserId = (userId: string) => getBankAccountsBy("userId", userId);
+
+/* istanbul ignore next */
+export const getNotificationById = (id: string): NotificationType => getNotificationBy("id", id);
+
+/* istanbul ignore next */
+export const getNotificationsByUserId = (userId: string) => getNotificationsByObj({ userId });
 
 export default db;

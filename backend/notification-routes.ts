@@ -18,6 +18,7 @@ const router = express.Router();
 
 //GET /notifications/
 router.get("/", ensureAuthenticated, (req, res) => {
+  /* istanbul ignore next */
   const notifications = getUnreadNotificationsByUserId(req.user?.id!);
 
   res.status(200);

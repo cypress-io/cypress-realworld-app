@@ -98,9 +98,9 @@ router.get(
   (req, res) => {
     const isFirstPage = req.query.page === 1;
 
+    /* istanbul ignore next */
     let transactions = !isEmpty(req.query)
-      ? /* istanbul ignore next */
-        getPublicTransactionsByQuery(req.user?.id!, req.query)
+      ? getPublicTransactionsByQuery(req.user?.id!, req.query)
       : /* istanbul ignore next */
         getPublicTransactionsDefaultSort(req.user?.id!);
 
