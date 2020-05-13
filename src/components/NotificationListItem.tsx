@@ -7,7 +7,6 @@ import CommentIcon from "@material-ui/icons/CommentRounded";
 import IconButton from "@material-ui/core/IconButton";
 import CheckIcon from "@material-ui/icons/Check";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
-// import HourglassEmpty from "@material-ui/icons/HourglassEmpty";
 import { NotificationResponseItem } from "../models";
 import {
   Button,
@@ -23,7 +22,6 @@ import {
   isPaymentNotification,
   isPaymentRequestedNotification,
   isPaymentReceivedNotification,
-  // isPaymentPendingNotification,
 } from "../utils/transactionUtils";
 
 export interface NotificationListItemProps {
@@ -76,9 +74,6 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
     } else if (isPaymentReceivedNotification(notification)) {
       listItemIcon = <MonetizationOnIcon className={classes.green} />;
       listItemText = `${notification.userFullName} received payment.`;
-    } else {
-      // otherwise, incomplete payment notification
-      listItemText = `An error occurred with payment to ${notification.userFullName}.`;
     }
   }
 
