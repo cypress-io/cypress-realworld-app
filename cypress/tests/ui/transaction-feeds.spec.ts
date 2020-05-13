@@ -59,10 +59,17 @@ describe("Transaction Feed", function () {
   });
   describe("app layout and responsivness", function () {
     it("toggles the navigation drawer", function () {
-      cy.getBySel("sidenav-toggle").click();
-      cy.getBySel("sidenav-home").should("not.be.visible");
-      cy.getBySel("sidenav-toggle").click();
-      cy.getBySel("sidenav-home").should("be.visible");
+      if (isMobile()) {
+        cy.getBySel("sidenav-home").should("not.be.visible");
+        cy.getBySel("sidenav-toggle").click();
+        cy.getBySel("sidenav-home").should("be.visible");
+        cy.get(".MuiBackdrop-root").click({ force: true });
+        cy.getBySel("sidenav-home").should("not.be.visible");
+      } else {
+        cy.getBySel("sidenav-home").should("be.visible");
+        cy.getBySel("sidenav-toggle").click();
+        cy.getBySel("sidenav-home").should("not.be.visible");
+      }
     });
   });
 
