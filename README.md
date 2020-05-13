@@ -88,7 +88,7 @@ The Cypress Real-World App uses the [@cypress/code-coverage](https://github.com/
 To generate a code coverage report:
 
 1. Run `yarn cypress:run --env coverage=true` and wait for the test run to complete.
-2. Once the test run is complete, you can view the report at `coverage/lcov-report/index.html`.
+2. Once the test run is complete, you can view the report at `coverage/index.html`.
 
 <br />
 <br />
