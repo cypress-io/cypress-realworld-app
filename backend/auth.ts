@@ -50,12 +50,12 @@ router.post("/logout", (req: Request, res: Response): void => {
   res.clearCookie("connect.sid");
   req.logout();
   req.session!.destroy(function (err) {
-    if (err) console.log(err);
     res.redirect("/");
   });
 });
 
 router.get("/checkAuth", (req, res) => {
+  /* istanbul ignore next */
   if (!req.user) {
     res.status(401).json({ error: "User is unauthorized" });
   } else {

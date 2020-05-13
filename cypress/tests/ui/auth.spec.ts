@@ -119,8 +119,18 @@ describe("User Sign-up and Login", function () {
     cy.getBySel("signup-submit").should("be.disabled");
   });
 
-  it("should error for an invalid login", function () {
+  it("should error for an invalid user", function () {
     cy.login("invalidUserName", "invalidPa$$word");
+
+    cy.getBySel("signin-error")
+      .should("be.visible")
+      .and("have.text", "Username or password is invalid");
+  });
+
+  it("should error for an invalid password for existing user", function () {
+    cy.task("find:testData", { entity: "users" }).then((user: User) => {
+      cy.login(user.username, "INVALID");
+    });
 
     cy.getBySel("signin-error")
       .should("be.visible")

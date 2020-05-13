@@ -10,6 +10,7 @@ const router = express.Router();
 
 //GET /bankTransfers (scoped-user)
 router.get("/", ensureAuthenticated, (req, res) => {
+  /* istanbul ignore next */
   const transfers = getBankTransfersByUserId(req.user?.id!);
 
   res.status(200);

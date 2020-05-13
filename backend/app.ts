@@ -61,6 +61,7 @@ app.use("/comments", commentRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/bankTransfers", bankTransferRoutes);
 
+/* istanbul ignore next */
 if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {
   app.use("/testData", testDataRoutes);
 }
