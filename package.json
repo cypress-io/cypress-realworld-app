@@ -110,7 +110,7 @@
     "start:api:watch": "nodemon --exec yarn tsnode --watch 'backend' backend/app.ts",
     "start:server-and-api": "start-test start:api 3001 start:react:ci",
     "start:server-and-api:watch": "start-test start:api:watch 3001 start:react",
-    "start:codesandbox": "NODE_ENV=development concurrently \"yarn:start:react:scripts\" \"yarn:start:api:codesandbox\"",
+    "start:codesandbox": "NODE_ENV=development TSC_COMPILE_ON_ERROR=true concurrently \"yarn:start:react:scripts\" \"yarn:start:api:codesandbox\"",
     "prettier": "prettier --write '**/**.{ts,js,tsx}'",
     "test": "yarn cypress:open",
     "test:ci": "NODE_ENV=test yarn start:server-and-api",
