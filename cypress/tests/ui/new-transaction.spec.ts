@@ -69,6 +69,7 @@ describe("New Transaction", function () {
       cy.get(".MuiBackdrop-root").click({ force: true });
     }
 
+    cy.getBySelLike("create-another-transaction").click();
     cy.getBySel("app-name-logo").find("a").click();
     cy.getBySelLike("personal-tab").click().should("have.class", "Mui-selected");
     cy.wait("@personalTransactions");
