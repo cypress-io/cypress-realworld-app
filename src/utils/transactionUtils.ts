@@ -31,6 +31,7 @@ import {
 export const isRequestTransaction = (transaction: Transaction) =>
   flow(get("requestStatus"), negate(isEmpty))(transaction);
 
+/* istanbul ignore next */
 export const isPendingRequestTransaction = (transaction: Transaction) =>
   flow(get("requestStatus"), isEqual(TransactionRequestStatus.pending))(transaction);
 
@@ -77,6 +78,7 @@ export const getPayAppCreditedAmount = (receiver: User, transaction: Transaction
 export const hasSufficientFunds = (sender: User, transaction: Transaction) =>
   payAppDifference(sender, transaction).isPositive();
 
+/* istanbul ignore next */
 export const receiverIsCurrentUser = (currentUser: User, transaction: Transaction) =>
   isEqual(get("id", currentUser), get("receiverId", transaction));
 
@@ -92,9 +94,11 @@ export const isPaymentNotification = (notification: NotificationType) =>
   has("status")(notification);
 
 export const isPaymentRequestedNotification = (notification: NotificationType) =>
+  /* istanbul ignore next */
   flow(get("status"), isEqual(PaymentNotificationStatus.requested))(notification);
 
 export const isPaymentReceivedNotification = (notification: NotificationType) =>
+  /* istanbul ignore next */
   flow(get("status"), isEqual(PaymentNotificationStatus.received))(notification);
 
 /* istanbul ignore next */
@@ -126,6 +130,7 @@ export const getAmountQueryFields = (query: TransactionAmountRangePayload) =>
 export const omitAmountQueryFields = (query: TransactionQueryPayload) =>
   omit(["amountMin", "amountMax"], query);
 
+/* istanbul ignore next */
 export const hasPaginationQueryFields = (
   query: TransactionQueryPayload | TransactionAmountRangePayload
 ) => has("page", query) && has("limit", query);
@@ -133,9 +138,11 @@ export const hasPaginationQueryFields = (
 export const omitPaginationQueryFields = (query: TransactionQueryPayload) =>
   omit(["page", "limit"], query);
 
+/* istanbul ignore next */
 export const getQueryWithoutDateFields = (query: TransactionQueryPayload) =>
   query && hasDateQueryFields(query) ? omitDateQueryFields(query) : query;
 
+/* istanbul ignore next */
 export const getQueryWithoutAmountFields = (query: TransactionQueryPayload) =>
   query && hasAmountQueryFields(query) ? omitAmountQueryFields(query) : query;
 
