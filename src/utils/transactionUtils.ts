@@ -93,12 +93,12 @@ export const isLikeNotification = (notification: NotificationType) => has("likeI
 export const isPaymentNotification = (notification: NotificationType) =>
   has("status")(notification);
 
+/* istanbul ignore next */
 export const isPaymentRequestedNotification = (notification: NotificationType) =>
-  /* istanbul ignore next */
   flow(get("status"), isEqual(PaymentNotificationStatus.requested))(notification);
 
+/* istanbul ignore next */
 export const isPaymentReceivedNotification = (notification: NotificationType) =>
-  /* istanbul ignore next */
   flow(get("status"), isEqual(PaymentNotificationStatus.received))(notification);
 
 /* istanbul ignore next */
