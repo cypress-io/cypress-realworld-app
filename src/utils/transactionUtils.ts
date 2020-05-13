@@ -97,12 +97,12 @@ export const isPaymentRequestedNotification = (notification: NotificationType) =
 export const isPaymentReceivedNotification = (notification: NotificationType) =>
   flow(get("status"), isEqual(PaymentNotificationStatus.received))(notification);
 
+/* istanbul ignore next */
 export const currentUserLikesTransaction = (
   currentUser: User,
   transaction: TransactionResponseItem
 ) =>
   flow(
-    /* istanbul ignore next */
     find((like) => flow(get("userId"), isEqual(get("id", currentUser)))(like)),
     negate(isEmpty)
   )(transaction.likes);
@@ -151,10 +151,12 @@ export const amountRangeValueText = (value: number) =>
 
 /* istanbul ignore next */
 export const amountRangeValueTextLabel = (value: number) =>
+  /* istanbul ignore next */
   flow(padAmountWithZeros, formatAmountSlider)(value);
 
 /* istanbul ignore next */
 export const formatAmountRangeValues = (amountRangeValues: number[]) =>
+  /* istanbul ignore next */
   flow(map(padAmountWithZeros), map(formatAmountSlider), join(" - "))(amountRangeValues);
 
 export const getPaginatedItems = (page: number, limit: number, items: any) => {

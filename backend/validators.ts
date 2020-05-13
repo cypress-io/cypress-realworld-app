@@ -59,7 +59,7 @@ export const sanitizeTransactionStatus = sanitizeQuery("status").customSanitizer
 
 // default request status to undefined if not provided
 export const sanitizeRequestStatus = sanitizeQuery("requestStatus").customSanitizer((value) => {
-  /* istanbul ignore next */
+  /* istanbul ignore if*/
   if (includes(value, RequestStatusValues)) {
     return value;
   }
