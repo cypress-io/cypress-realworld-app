@@ -14,7 +14,7 @@ describe("User Settings", function () {
     });
 
     if (isMobile()) {
-      cy.getBySel("sidenav-open").click();
+      cy.getBySel("sidenav-toggle").click();
     }
 
     cy.getBySel("sidenav-user-settings").click();

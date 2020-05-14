@@ -25,7 +25,7 @@ describe("Bank Accounts", function () {
 
   it("creates a new bank account", function () {
     if (isMobile()) {
-      cy.getBySel("sidenav-open").click();
+      cy.getBySel("sidenav-toggle").click();
     }
 
     cy.getBySel("sidenav-bankaccounts").click();

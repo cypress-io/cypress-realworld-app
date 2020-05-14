@@ -25,7 +25,7 @@ router.post(
   validateMiddleware([shortIdValidation("contactUserId")]),
   (req, res) => {
     const { contactUserId } = req.body;
-
+    /* istanbul ignore next */
     const contact = createContactForUser(req.user?.id!, contactUserId);
 
     res.status(200);

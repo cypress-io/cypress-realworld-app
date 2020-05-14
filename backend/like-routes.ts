@@ -29,7 +29,7 @@ router.post(
   validateMiddleware([shortIdValidation("transactionId")]),
   (req, res) => {
     const { transactionId } = req.params;
-
+    /* istanbul ignore next */
     createLikes(req.user?.id!, transactionId);
 
     res.sendStatus(200);

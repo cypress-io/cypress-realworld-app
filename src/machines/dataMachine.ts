@@ -119,6 +119,7 @@ export const dataMachine = (machineId: string) =>
         setPageData: assign((ctx: DataContext, event: any) => ({
           pageData: event.data.pageData,
         })),
+        /* istanbul ignore next */
         setMessage: assign((ctx, event: any) => ({
           message: event.message,
         })),

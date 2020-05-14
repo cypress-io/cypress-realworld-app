@@ -16,6 +16,7 @@ const router = express.Router();
 
 //GET /bankAccounts (scoped-user)
 router.get("/", ensureAuthenticated, (req, res) => {
+  /* istanbul ignore next */
   const accounts = getBankAccountsByUserId(req.user?.id!);
 
   res.status(200);
@@ -39,6 +40,7 @@ router.get(
 
 //POST /bankAccounts (scoped-user)
 router.post("/", ensureAuthenticated, validateMiddleware(isBankAccountValidator), (req, res) => {
+  /* istanbul ignore next */
   const account = createBankAccountForUser(req.user?.id!, req.body);
 
   res.status(200);

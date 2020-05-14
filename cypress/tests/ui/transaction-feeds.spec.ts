@@ -57,8 +57,24 @@ describe("Transaction Feed", function () {
       cy.loginByXstate(ctx.user.username);
     });
   });
+  describe("app layout and responsivness", function () {
+    it("toggles the navigation drawer", function () {
+      if (isMobile()) {
+        cy.getBySel("sidenav-home").should("not.be.visible");
+        cy.getBySel("sidenav-toggle").click();
+        cy.getBySel("sidenav-home").should("be.visible");
+        cy.get(".MuiBackdrop-root").click({ force: true });
+        cy.getBySel("sidenav-home").should("not.be.visible");
+      } else {
+        cy.getBySel("sidenav-home").should("be.visible");
+        cy.getBySel("sidenav-toggle").click();
+        cy.getBySel("sidenav-home").should("not.be.visible");
+      }
+    });
+  });
 
   describe("renders and paginates all transaction feeds", function () {
+    it("renders transactions item variations in feed", function () {});
     it("renders transactions item variations in feed", function () {
       cy.route("/transactions/public*", "fixture:public-transactions").as(
         "mockedPublicTransactions"

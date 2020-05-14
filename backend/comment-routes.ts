@@ -31,6 +31,7 @@ router.post(
     const { transactionId } = req.params;
     const { content } = req.body;
 
+    /* istanbul ignore next */
     createComments(req.user?.id!, transactionId, content);
 
     res.sendStatus(200);

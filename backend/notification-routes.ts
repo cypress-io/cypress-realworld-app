@@ -18,6 +18,7 @@ const router = express.Router();
 
 //GET /notifications/
 router.get("/", ensureAuthenticated, (req, res) => {
+  /* istanbul ignore next */
   const notifications = getUnreadNotificationsByUserId(req.user?.id!);
 
   res.status(200);
@@ -31,7 +32,7 @@ router.post(
   validateMiddleware([...isNotificationsBodyValidator]),
   (req, res) => {
     const { items } = req.body;
-
+    /* istanbul ignore next */
     const notifications = createNotifications(req.user?.id!, items);
 
     res.status(200);
@@ -47,7 +48,7 @@ router.patch(
   validateMiddleware([shortIdValidation("notificationId"), ...isNotificationPatchValidator]),
   (req, res) => {
     const { notificationId } = req.params;
-
+    /* istanbul ignore next */
     updateNotificationById(req.user?.id!, notificationId, req.body);
 
     res.sendStatus(204);

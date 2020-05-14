@@ -60,7 +60,7 @@ describe("New Transaction", function () {
     }).toFormat();
 
     if (isMobile()) {
-      cy.getBySel("sidenav-open").click();
+      cy.getBySel("sidenav-toggle").click();
     }
 
     cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
@@ -69,6 +69,7 @@ describe("New Transaction", function () {
       cy.get(".MuiBackdrop-root").click({ force: true });
     }
 
+    cy.getBySelLike("create-another-transaction").click();
     cy.getBySel("app-name-logo").find("a").click();
     cy.getBySelLike("personal-tab").click().should("have.class", "Mui-selected");
     cy.wait("@personalTransactions");
@@ -146,7 +147,7 @@ describe("New Transaction", function () {
     }).toFormat();
 
     if (isMobile()) {
-      cy.getBySel("sidenav-open").click();
+      cy.getBySel("sidenav-toggle").click();
     }
 
     cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
@@ -192,7 +193,7 @@ describe("New Transaction", function () {
     }).toFormat();
 
     if (isMobile()) {
-      cy.getBySel("sidenav-open").click();
+      cy.getBySel("sidenav-toggle").click();
     }
 
     cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
