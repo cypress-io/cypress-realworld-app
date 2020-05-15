@@ -140,7 +140,7 @@
     "prebuild": "yarn types",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+    "coveralls": "cat coverage/lcov.info | coveralls"
   },
   "eslintConfig": {
     "env": {
