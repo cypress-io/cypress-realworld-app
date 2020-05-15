@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { useMachine, useService } from "@xstate/react";
+import { useService, useMachine } from "@xstate/react";
 import { makeStyles } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 
@@ -8,10 +8,10 @@ import { snackbarMachine } from "../machines/snackbarMachine";
 import { notificationsMachine } from "../machines/notificationsMachine";
 import { authService } from "../machines/authMachine";
 import AlertBar from "../components/AlertBar";
-import PrivateRoutesContainer from "./PrivateRoutesContainer";
 import SignInForm from "../components/SignInForm";
 import SignUpForm from "../components/SignUpForm";
 import { bankAccountsMachine } from "../machines/bankAccountsMachine";
+import PrivateRoutesContainer from "./PrivateRoutesContainer";
 
 // @ts-ignore
 if (window.Cypress) {
@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
 const App: React.FC = () => {
   const classes = useStyles();
   const [authState] = useService(authService);
-
   const [, , notificationsService] = useMachine(notificationsMachine);
 
   const [, , snackbarService] = useMachine(snackbarMachine);
@@ -71,7 +70,6 @@ const App: React.FC = () => {
           </Route>
         </Switch>
       )}
-
       <AlertBar snackbarService={snackbarService} />
     </div>
   );
