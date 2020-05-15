@@ -11,7 +11,6 @@
   "bugs": {
     "url": "https://github.com/cypress-io/cypress-realworld-app/issues"
   },
-  "homepage": "https://github.com/cypress-io/cypress-realworld-app#readme",
   "engines": {
     "node": ">=12"
   },
