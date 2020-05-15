@@ -123,7 +123,7 @@
     "start:codesandbox": "NODE_ENV=development TSC_COMPILE_ON_ERROR=true concurrently \"yarn:start:react:scripts\" \"yarn:start:api:codesandbox\"",
     "prettier": "prettier --write '**/**.{ts,js,tsx}'",
     "test": "yarn cypress:open",
-    "test:ci": "NODE_ENV=test CYPRESS_coverage=true yarn start:server-and-api",
+    "test:ci": "NODE_ENV=test yarn start:server-and-api",
     "test:headless": "yarn cypress:run",
     "test:api": "yarn cypress:run --spec 'integration/api/*'",
     "test:unit": "react-scripts test --runInBand",

@@ -2,6 +2,16 @@
   <img style='color: #3f51b5' alt="Cypress Real World App Logo" src="./src/svgs/rwa-logo.svg" />
 </p>
 
+<p align="center">
+  <a href="https://circleci.com/gh/cypress-io/cypress-realworld-app">
+    <img src="https://circleci.com/gh/cypress-io/cypress-realworld-app.svg?style=shield">
+  </a>
+
+  <a href="https://coveralls.io/github/cypress-io/cypress-realworld-app?branch=add-code-cov-service">
+    <img src="https://coveralls.io/repos/github/cypress-io/cypress-realworld-app/badge.svg?branch=add-code-cov-service">
+  </a>
+</p>
+
 A payment application to demonstrate **real-world** usage of [Cypress](https://cypress.io) testing methods, patterns, and workflows.
 
 <p align="center">
