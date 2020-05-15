@@ -90,6 +90,7 @@
     "@cypress/webpack-preprocessor": "5.2.1",
     "babel-loader": "8.1.0",
     "chai-datetime": "1.6.0",
+    "coveralls": "^3.1.0",
     "cypress": "4.5.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-plugin-cypress": "2.10.3",
@@ -138,7 +139,8 @@
     "prestart:empty": "yarn db:seed:empty",
     "prebuild": "yarn types",
     "build": "react-scripts build",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "eslintConfig": {
     "env": {
@@ -183,9 +185,6 @@
   "nyc": {
     "exclude": [
       "src/models/*.ts"
-    ],
-    "reporter": [
-      "html"
     ]
   }
 }
