@@ -1,7 +1,6 @@
 import { isEmpty, omit } from "lodash/fp";
 import { dataMachine } from "./dataMachine";
 import { httpClient } from "../utils/asyncUtils";
-import { interpret } from "xstate";
 
 export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
   services: {
@@ -27,5 +26,3 @@ export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
     },
   },
 });
-
-export const bankAccountsService = interpret(bankAccountsMachine).start();

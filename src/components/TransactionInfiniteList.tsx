@@ -56,7 +56,6 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
   // @ts-ignore
   function rowRenderer({ key, index, style }) {
     const transaction = get(index, transactions);
-    console.log("T:", index, transaction);
 
     if (index < transactions.length) {
       return (

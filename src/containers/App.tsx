@@ -1,25 +1,17 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
-import { useService } from "@xstate/react";
+import { Switch, Route, Redirect } from "react-router-dom";
+import { useService, useMachine } from "@xstate/react";
 import { makeStyles } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 
-import { snackbarService } from "../machines/snackbarMachine";
-import { notificationsService } from "../machines/notificationsMachine";
+import { snackbarMachine } from "../machines/snackbarMachine";
+import { notificationsMachine } from "../machines/notificationsMachine";
 import { authService } from "../machines/authMachine";
 import AlertBar from "../components/AlertBar";
 import SignInForm from "../components/SignInForm";
 import SignUpForm from "../components/SignUpForm";
-import { bankAccountsService } from "../machines/bankAccountsMachine";
-import MainLayout from "../components/MainLayout";
-import UserOnboardingContainer from "./UserOnboardingContainer";
-import PrivateRoute from "../components/PrivateRoute";
-import TransactionsContainer from "./TransactionsContainer";
-import UserSettingsContainer from "./UserSettingsContainer";
-import NotificationsContainer from "./NotificationsContainer";
-import BankAccountsContainer from "./BankAccountsContainer";
-import TransactionCreateContainer from "./TransactionCreateContainer";
-import TransactionDetailContainer from "./TransactionDetailContainer";
+import { bankAccountsMachine } from "../machines/bankAccountsMachine";
+import PrivateRoutesContainer from "./PrivateRoutesContainer";
 
 // @ts-ignore
 if (window.Cypress) {
@@ -37,77 +29,50 @@ const useStyles = makeStyles((theme) => ({
 const App: React.FC = () => {
   const classes = useStyles();
   const [authState] = useService(authService);
+  const [, , notificationsService] = useMachine(notificationsMachine);
+
+  const [, , snackbarService] = useMachine(snackbarMachine);
+
+  const [, , bankAccountsService] = useMachine(bankAccountsMachine);
 
   const isLoggedIn =
     authState.matches("authorized") ||
     authState.matches("refreshing") ||
     authState.matches("updating");
 
-  console.log({ isLoggedIn });
-  // @ts-ignore
-  if (window.Cypress) {
-    // @ts-ignore
-    window.Cypress.log({ message: `App ${isLoggedIn}` });
-  }
-
   return (
     <div className={classes.root}>
       <CssBaseline />
 
-      <Switch>
-        <PrivateRoute isLoggedIn={isLoggedIn} exact path="/user/settings">
-          <MainLayout notificationsService={notificationsService} authService={authService}>
-            <UserSettingsContainer authService={authService} />
-          </MainLayout>
-        </PrivateRoute>
-        <PrivateRoute isLoggedIn={isLoggedIn} exact path="/notifications">
-          <MainLayout notificationsService={notificationsService} authService={authService}>
-            <NotificationsContainer
-              authService={authService}
-              notificationsService={notificationsService}
+      {isLoggedIn && (
+        <PrivateRoutesContainer
+          isLoggedIn={isLoggedIn}
+          notificationsService={notificationsService}
+          authService={authService}
+          snackbarService={snackbarService}
+          bankAccountsService={bankAccountsService}
+        />
+      )}
+      {authState.matches("unauthorized") && (
+        <Switch>
+          <Route exact path="/signup">
+            <SignUpForm authService={authService} />
+          </Route>
+          <Route exact path="/signin">
+            <SignInForm authService={authService} />
+          </Route>
+          <Route path="/*">
+            <Redirect
+              to={{
+                pathname: "/signin",
+              }}
             />
-          </MainLayout>
-        </PrivateRoute>
-        <PrivateRoute isLoggedIn={isLoggedIn} path="/bankaccounts*">
-          <MainLayout notificationsService={notificationsService} authService={authService}>
-            <BankAccountsContainer
-              authService={authService}
-              bankAccountsService={bankAccountsService}
-            />
-          </MainLayout>
-        </PrivateRoute>
-        <PrivateRoute isLoggedIn={isLoggedIn} exact path="/transaction/new">
-          <MainLayout notificationsService={notificationsService} authService={authService}>
-            <TransactionCreateContainer
-              authService={authService}
-              snackbarService={snackbarService}
-            />
-          </MainLayout>
-        </PrivateRoute>
-        <PrivateRoute isLoggedIn={isLoggedIn} exact path="/transaction/:transactionId">
-          <MainLayout notificationsService={notificationsService} authService={authService}>
-            <TransactionDetailContainer authService={authService} />
-          </MainLayout>
-        </PrivateRoute>
-        <Route exact path="/signup">
-          <SignUpForm authService={authService} />
-        </Route>
-        <Route exact path="/signin">
-          <SignInForm authService={authService} />
-        </Route>
-        <PrivateRoute isLoggedIn={isLoggedIn} exact path="/(public|contacts|personal)?">
-          <MainLayout notificationsService={notificationsService} authService={authService}>
-            <UserOnboardingContainer
-              authService={authService}
-              bankAccountsService={bankAccountsService}
-            />
-            <TransactionsContainer />
-          </MainLayout>
-        </PrivateRoute>
-      </Switch>
+          </Route>
+        </Switch>
+      )}
       <AlertBar snackbarService={snackbarService} />
     </div>
   );
 };
 
-export default React.memo(App);
+export default App;

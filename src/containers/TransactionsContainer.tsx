@@ -28,13 +28,6 @@ const TransactionsContainer: React.FC = () => {
     />
   );
 
-  console.log("TransactionsContainer");
-  // @ts-ignore
-  if (window.Cypress) {
-    // @ts-ignore
-    window.Cypress.log({ message: "TransactionsContainer" });
-  }
-
   return (
     <Switch>
       <Route exact path="/contacts">

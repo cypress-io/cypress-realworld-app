@@ -1,7 +1,6 @@
 import { isEmpty, omit } from "lodash/fp";
 import { dataMachine } from "./dataMachine";
 import { httpClient } from "../utils/asyncUtils";
-import { interpret } from "xstate";
 
 export const notificationsMachine = dataMachine("notifications").withConfig({
   services: {
@@ -22,5 +21,3 @@ export const notificationsMachine = dataMachine("notifications").withConfig({
     },
   },
 });
-
-export const notificationsService = interpret(notificationsMachine).start();
