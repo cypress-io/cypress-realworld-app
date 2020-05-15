@@ -13,7 +13,7 @@ import Container from "@material-ui/core/Container";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object, ref } from "yup";
 
-import { ReactComponent as PayAppLogo } from "../svgs/pay-app-logo.svg";
+import { ReactComponent as RWALogo } from "../svgs/rwa-logo.svg";
 import Footer from "./Footer";
 import { SignUpPayload } from "../models";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
@@ -71,7 +71,7 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
       <CssBaseline />
       <div className={classes.paper}>
         <div>
-          <PayAppLogo className={classes.logo} />
+          <RWALogo className={classes.logo} />
         </div>
         <Typography component="h1" variant="h5">
           Sign Up
