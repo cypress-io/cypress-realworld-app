@@ -51,7 +51,7 @@
     "express-validator": "6.4.1",
     "faker": "4.1.0",
     "formik": "2.1.4",
-    "fuse.js": "5.2.3",
+    "fuse.js": "6.0.0",
     "husky": "4.2.5",
     "json": "^9.0.6",
     "lowdb": "1.0.0",
