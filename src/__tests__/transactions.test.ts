@@ -269,7 +269,7 @@ describe("Transactions", () => {
 
     expect(updatedReceiverTransactions.length).toBe(receiverTransactions.length + 2);
 
-    // Verify Receiver's Updated Pay App Balance
+    // Verify Receiver's Updated App Balance
     const updatedReceiver: User = getAllUsers()[1];
     expect(updatedReceiver.balance).toBe(
       receiver.balance + firstPaymentAmount + secondPaymentAmount
@@ -316,7 +316,7 @@ describe("Transactions", () => {
 
     expect(updatedSenderTransactions.length).toBe(receiverTransactions.length + 2);
 
-    // Verify Sender's Updated Pay App Balance
+    // Verify Sender's Updated App Balance
     const updatedSender: User = getAllUsers()[0];
     expect(updatedSender.balance).toBe(sender.balance - requestAmount);
   });

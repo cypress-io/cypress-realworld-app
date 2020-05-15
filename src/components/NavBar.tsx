@@ -16,8 +16,8 @@ import { Interpreter } from "xstate";
 import { DataContext, DataEvents } from "../machines/dataMachine";
 import { useService } from "@xstate/react";
 import TransactionNavTabs from "./TransactionNavTabs";
-import { ReactComponent as PayAppLogo } from "../svgs/pay-app-logo.svg";
-import { ReactComponent as PayAppLogoDollar } from "../svgs/pay-app-logo-dollar.svg";
+import { ReactComponent as RWALogo } from "../svgs/rwa-logo.svg";
+import { ReactComponent as RWALogoIcon } from "../svgs/rwa-icon-logo.svg";
 
 const drawerWidth = 240;
 
@@ -107,9 +107,9 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
         >
           <Link to="/" style={{ color: "#fff", textDecoration: "none" }} component={RouterLink}>
             {xsBreakpoint ? (
-              <PayAppLogoDollar className={classes.logo} />
+              <RWALogoIcon className={classes.logo} />
             ) : (
-              <PayAppLogo className={classes.logo} />
+              <RWALogo className={classes.logo} />
             )}
           </Link>
         </Typography>

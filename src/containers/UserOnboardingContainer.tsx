@@ -54,7 +54,7 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService, bankAccountsSer
   return (
     <Dialog data-test="user-onboarding-dialog" fullScreen={fullScreen} open={dialogIsOpen}>
       <DialogTitle data-test="user-onboarding-dialog-title">
-        {userOnboardingState.matches("stepOne") && "Get Started with Pay App"}
+        {userOnboardingState.matches("stepOne") && "Get Started with Real World App"}
         {userOnboardingState.matches("stepTwo") && "Create Bank Account"}
         {userOnboardingState.matches("stepThree") && "Finished"}
       </DialogTitle>
@@ -65,7 +65,7 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService, bankAccountsSer
               <NavigatorIllustration />
               <br />
               <DialogContentText style={{ paddingLeft: 20 }}>
-                Pay App requires a Bank Account to perform transactions.
+                Real World App requires a Bank Account to perform transactions.
                 <br />
                 <br />
                 Click <b>Next</b> to begin setup of your Bank Account.
@@ -87,7 +87,7 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService, bankAccountsSer
                 You're all set!
                 <br />
                 <br />
-                We're excited to have you aboard Pay App!
+                We're excited to have you aboard the Real World App!
               </DialogContentText>
             </>
           )}
@@ -109,7 +109,7 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService, bankAccountsSer
           <Grid item>
             {!userOnboardingState.matches("stepTwo") && (
               <Button onClick={() => nextStep()} color="primary" data-test="user-onboarding-next">
-                {userOnboardingState.matches("stepThree") ? "Take me to Pay App" : "Next"}
+                {userOnboardingState.matches("stepThree") ? "Done" : "Next"}
               </Button>
             )}
           </Grid>

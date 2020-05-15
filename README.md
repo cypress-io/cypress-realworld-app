@@ -1,11 +1,11 @@
 <p style='color: #3f51b5' align="center">
-  <img style='color: #3f51b5' alt="Pay App Logo" src="./src/svgs/pay-app-logo.svg" />
+  <img style='color: #3f51b5' alt="Cypress Real World App Logo" src="./src/svgs/rwa-logo.svg" />
 </p>
 
 A payment application to demonstrate **real-world** usage of [Cypress](https://cypress.io) testing methods, patterns, and workflows.
 
 <p align="center">
-  <img style='width: 70%' alt="Pay App Desktop" src="./public/img/pay-app-desktop.png" />
+  <img style='width: 70%' alt="Cypress Real World App" src="./public/img/rwa-readme-screenshot.png" />
 </p>
 
 ## Features
