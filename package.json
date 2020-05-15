@@ -1,7 +1,20 @@
 {
-  "name": "pay-app",
-  "version": "0.1.0",
-  "private": true,
+  "name": "cypress-realworld-app",
+  "version": "1.0.0",
+  "description": "A payment application to demonstrate **real-world** usage of Cypress testing methods, patterns, and workflows. For a full reference of our documentation, go to https://docs.cypress.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cypress-io/cypress-realworld-app.git"
+  },
+  "author": "Cypress DX Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cypress-io/cypress-realworld-app/issues"
+  },
+  "homepage": "https://github.com/cypress-io/cypress-realworld-app#readme",
+  "engines": {
+    "node": ">=12"
+  },
   "dependencies": {
     "@babel/cli": "7.8.4",
     "@babel/core": "7.9.6",
