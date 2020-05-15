@@ -115,7 +115,6 @@ workflows:
           parallel: true
           parallelism: 4
           group: API
-          no-workspace: true
           post-steps:
             - store_artifacts:
                 path: coverage
@@ -140,7 +139,6 @@ workflows:
           parallelism: 4
           spec: cypress/tests/ui/*
           group: "UI - Chrome"
-          no-workspace: true
           post-steps:
             - store_artifacts:
                 path: coverage
@@ -165,7 +163,6 @@ workflows:
           parallelism: 4
           spec: cypress/tests/ui/*
           group: "UI - Chrome - Mobile"
-          no-workspace: true
           post-steps:
             - store_artifacts:
                 path: coverage
@@ -190,7 +187,6 @@ workflows:
           parallelism: 4
           spec: cypress/tests/ui/*
           group: "UI - Firefox"
-          no-workspace: true
           post-steps:
             - store_artifacts:
                 path: coverage
@@ -215,7 +211,6 @@ workflows:
           parallelism: 4
           spec: cypress/tests/ui/*
           group: "UI - Firefox - Mobile"
-          no-workspace: true
           post-steps:
             - store_artifacts:
                 path: coverage
