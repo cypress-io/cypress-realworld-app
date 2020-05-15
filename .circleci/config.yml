@@ -9,6 +9,77 @@ executors:
       # iPhone 6 viewport dimensions
       CYPRESS_VIEWPORT_WIDTH: 375
       CYPRESS_VIEWPORT_HEIGHT: 667
+
+commands:
+  save-partial-coverage-report:
+    description: |
+      Saves a single possibly partial coverage report by adding it to the
+      workspace. This way different CircleCI jobs can run parts of the tests
+      and save their results to be merged later.
+    parameters:
+      coverage-filename:
+        type: string
+        default: coverage/coverage-final.json
+        description: |
+          Path to the final coverage JSON file produced by "nyc" tool.
+          Typically called "coverage/coverage-final.json"
+      label:
+        type: string
+        default: default
+        description: |
+          Human name for the coverage file. For example, when saving both Cypress
+          and Jest coverage file, use "cypress" and "jest" to have distinct filenames.
+    steps:
+      # do not crash if the coverage is not found
+      # because a particular CI job might not have any tests to run
+      # producing no coverage.
+      - run: mkdir coverage-part || true
+      - run: touch coverage-part/.placeholder || true
+      # use unique job id to avoid accidentally overwriting coverage file
+      # and in case the build is parallel, use node index too
+      - run: cp <<parameters.coverage-filename>> coverage-part/coverage-<<parameters.label>>-$CIRCLE_WORKFLOW_JOB_ID-index-$CIRCLE_NODE_INDEX.json || true
+      - run: ls -la coverage-part
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            # note that the current folder is "project"
+            # so we need to save the full path correctly
+            # otherwise the files will not be restored in the expected location
+            - "project/coverage-part/*"
+
+  merge-coverage-reports:
+    description: |
+      Merges individual code coverage files using "nyc" tool
+      https://github.com/istanbuljs/nyc.
+      All individual files should be in the folder "coverage-part"
+    steps:
+      - run: ls -la .
+      - run: ls -la coverage-part || true
+      - run: npx nyc merge coverage-part
+      - run: mkdir .nyc_output || true
+      # storing the combined report in ".nyc_output/out.json"
+      # allows other NYC commands to find it right away
+      - run: mv coverage.json .nyc_output/out.json
+      - run: ls -la .nyc_output
+
+jobs:
+  merge-coverage:
+    description: Merges individual code coverage files and sends combined data to Coveralls.io
+    executor: cypress/base-10
+    steps:
+      - attach_workspace:
+          at: ~/
+      - merge-coverage-reports
+      - run:
+          name: generate coverage report
+          command: |
+            npx nyc report \
+              --reporter lcov --reporter text-summary \
+              --report-dir coverage
+      - store_artifacts:
+          path: coverage
+      - run:
+          command: npm run coveralls || true
 workflows:
   build:
     jobs:
@@ -109,3 +180,11 @@ workflows:
           parallelism: 4
           spec: cypress/tests/ui/*
           group: "UI - Firefox - Mobile"
+
+      - merge-coverage:
+          requires:
+            - "API Tests"
+            - "UI Tests - Chrome"
+            - "UI Tests - Chrome - Mobile"
+            - "UI Tests - Firefox"
+            - "UI Tests - Firefox - Mobile"
