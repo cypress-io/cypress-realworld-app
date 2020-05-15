@@ -116,6 +116,14 @@ workflows:
           parallel: true
           parallelism: 4
           group: API
+          post-steps:
+            - store_artifacts:
+                path: coverage
+            # if this machine had no tests to run
+            # there will be no coverage report
+            - run: npx nyc report --reporter=text || true
+            - save-partial-coverage-report:
+                label: e2e
 
       # Run E2E tests in Chrome
       - cypress/run:
@@ -132,6 +140,14 @@ workflows:
           parallelism: 4
           spec: cypress/tests/ui/*
           group: "UI - Chrome"
+          post-steps:
+            - store_artifacts:
+                path: coverage
+            # if this machine had no tests to run
+            # there will be no coverage report
+            - run: npx nyc report --reporter=text || true
+            - save-partial-coverage-report:
+                label: e2e
 
       # Run E2E tests in Chrome with mobile device viewport
       - cypress/run:
@@ -148,6 +164,14 @@ workflows:
           parallelism: 4
           spec: cypress/tests/ui/*
           group: "UI - Chrome - Mobile"
+          post-steps:
+            - store_artifacts:
+                path: coverage
+            # if this machine had no tests to run
+            # there will be no coverage report
+            - run: npx nyc report --reporter=text || true
+            - save-partial-coverage-report:
+                label: e2e
 
       # Run E2E tests in Firefox
       - cypress/run:
@@ -164,6 +188,14 @@ workflows:
           parallelism: 4
           spec: cypress/tests/ui/*
           group: "UI - Firefox"
+          post-steps:
+            - store_artifacts:
+                path: coverage
+            # if this machine had no tests to run
+            # there will be no coverage report
+            - run: npx nyc report --reporter=text || true
+            - save-partial-coverage-report:
+                label: e2e
 
       # Run E2E tests in Firefox with mobile device viewport
       - cypress/run:
@@ -180,8 +212,17 @@ workflows:
           parallelism: 4
           spec: cypress/tests/ui/*
           group: "UI - Firefox - Mobile"
+          post-steps:
+            - store_artifacts:
+                path: coverage
+            # if this machine had no tests to run
+            # there will be no coverage report
+            - run: npx nyc report --reporter=text || true
+            - save-partial-coverage-report:
+                label: e2e
 
       - merge-coverage:
+          name: "Process Code Coverage Reports"
           requires:
             - "API Tests"
             - "UI Tests - Chrome"
