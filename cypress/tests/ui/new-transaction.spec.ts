@@ -177,20 +177,6 @@ describe("New Transaction", function () {
       .should("contain", transactionPayload.description)
       .click({ force: true });
 
-    cy.location("pathname").should("include", "transaction");
-    // The following chain is workaround for an issue with reliably clicking on transaction items.
-    /*cy.wait("@personalTransactions")
-      .its("response.body.results")
-      .then((results) => {
-        const transaction = results[0];
-        cy.getBySelLike("transaction-item")
-          .first()
-          .should("contain", transactionPayload.description);
-
-        cy.visit(`/transaction/${transaction.id}`);
-        cy.getBySelLike("transaction-item").should("contain", transactionPayload.description);
-      });*/
-
     cy.getBySelLike("accept-request").click();
     cy.wait("@updateTransaction").its("status").should("equal", 204);
 
