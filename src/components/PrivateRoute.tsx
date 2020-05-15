@@ -6,6 +6,7 @@ interface IPrivateRouteProps extends RouteProps {
 }
 
 function PrivateRoute({ isLoggedIn, children, ...rest }: IPrivateRouteProps) {
+  console.log("PR isLoggedIn:", isLoggedIn);
   return (
     <Route
       {...rest}

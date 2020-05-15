@@ -36,6 +36,12 @@ const PrivateRoutesContainer: React.FC<Props> = ({
     sendNotifications({ type: "FETCH" });
   }, [sendNotifications]);
 
+  // @ts-ignore
+  if (window.Cypress) {
+    // @ts-ignore
+    window.Cypress.log({ message: `TransactionsContainer ${match.url}` });
+  }
+
   return (
     <MainLayout notificationsService={notificationsService} authService={authService}>
       <UserOnboardingContainer

@@ -1,4 +1,4 @@
-import { Machine, assign } from "xstate";
+import { Machine, assign, interpret } from "xstate";
 
 export interface SnackbarSchema {
   states: {
@@ -50,3 +50,5 @@ export const snackbarMachine = Machine<SnackbarContext, SnackbarSchema, Snackbar
     },
   }
 );
+
+export const snackbarService = interpret(snackbarMachine).start();

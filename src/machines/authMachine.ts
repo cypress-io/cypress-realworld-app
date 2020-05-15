@@ -80,6 +80,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         },
       },
       authorized: {
+        entry: "redirectHomeAfterLogin",
         on: {
           UPDATE: "updating",
           REFRESH: "refreshing",
@@ -100,6 +101,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         return await httpClient
           .post(`http://localhost:3001/login`, event)
           .then(({ data }) => {
+            console.log("HISTORY PUSH");
             history.push("/");
             return data;
           })
@@ -122,6 +124,11 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       },
     },
     actions: {
+      redirectHomeAfterLogin: async (ctx, event) => {
+        if (history.location.pathname === "/signin") {
+          window.location.pathname = "/";
+        }
+      },
       resetUser: assign((ctx: any, event: any) => ({
         user: undefined,
       })),
