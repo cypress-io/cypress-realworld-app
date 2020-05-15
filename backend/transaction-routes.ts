@@ -36,6 +36,7 @@ router.get(
     ...isTransactionQSValidator,
   ]),
   (req, res) => {
+    /* istanbul ignore next */
     const transactions = getTransactionsForUserForApi(req.user?.id!, req.query);
 
     const { totalPages, data: paginatedItems } = getPaginatedItems(
@@ -67,6 +68,7 @@ router.get(
     ...isTransactionQSValidator,
   ]),
   (req, res) => {
+    /* istanbul ignore next */
     const transactions = getTransactionsForUserContacts(req.user?.id!, req.query);
 
     const { totalPages, data: paginatedItems } = getPaginatedItems(
@@ -96,9 +98,11 @@ router.get(
   (req, res) => {
     const isFirstPage = req.query.page === 1;
 
+    /* istanbul ignore next */
     let transactions = !isEmpty(req.query)
       ? getPublicTransactionsByQuery(req.user?.id!, req.query)
-      : getPublicTransactionsDefaultSort(req.user?.id!);
+      : /* istanbul ignore next */
+        getPublicTransactionsDefaultSort(req.user?.id!);
 
     const { contactsTransactions, publicTransactions } = transactions;
 
@@ -140,6 +144,7 @@ router.post(
 
     remove("transactionType", transactionPayload);
 
+    /* istanbul ignore next */
     const transaction = createTransaction(req.user?.id!, transactionType, transactionPayload);
 
     res.status(200);
@@ -170,6 +175,7 @@ router.patch(
   (req, res) => {
     const { transactionId } = req.params;
 
+    /* istanbul ignore next */
     updateTransactionById(req.user?.id!, transactionId, req.body);
 
     res.sendStatus(204);

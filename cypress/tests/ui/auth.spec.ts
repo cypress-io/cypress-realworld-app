@@ -1,5 +1,6 @@
 // @ts-check
 import { User } from "../../../src/models";
+import { isMobile } from "../../support/utils";
 
 describe("User Sign-up and Login", function () {
   beforeEach(function () {
@@ -8,6 +9,11 @@ describe("User Sign-up and Login", function () {
     cy.server();
     cy.route("POST", "/users").as("signup");
     cy.route("POST", "/bankAccounts").as("createBankAccount");
+  });
+
+  it("should redirect unauthenticated user to signin page", function () {
+    cy.visit("/personal");
+    cy.location("pathname").should("equal", "/signin");
   });
 
   it("should remember a user for 30 days after login", function () {
@@ -19,8 +25,8 @@ describe("User Sign-up and Login", function () {
     cy.getCookie("connect.sid").should("have.property", "expiry");
 
     // Logout User
-    if (Cypress.env("isMobileViewport")) {
-      cy.getBySel("sidenav-open").click();
+    if (isMobile()) {
+      cy.getBySel("sidenav-toggle").click();
     }
     cy.getBySel("sidenav-signout").click();
     cy.location("pathname").should("eq", "/");
@@ -69,8 +75,8 @@ describe("User Sign-up and Login", function () {
     cy.getBySel("transaction-list").should("be.visible");
 
     // Logout User
-    if (Cypress.env("isMobileViewport")) {
-      cy.getBySel("sidenav-open").click();
+    if (isMobile()) {
+      cy.getBySel("sidenav-toggle").click();
     }
     cy.getBySel("sidenav-signout").click();
     cy.location("pathname").should("eq", "/");
@@ -113,8 +119,18 @@ describe("User Sign-up and Login", function () {
     cy.getBySel("signup-submit").should("be.disabled");
   });
 
-  it("should error for an invalid login", function () {
+  it("should error for an invalid user", function () {
     cy.login("invalidUserName", "invalidPa$$word");
+
+    cy.getBySel("signin-error")
+      .should("be.visible")
+      .and("have.text", "Username or password is invalid");
+  });
+
+  it("should error for an invalid password for existing user", function () {
+    cy.task("find:testData", { entity: "users" }).then((user: User) => {
+      cy.login(user.username, "INVALID");
+    });
 
     cy.getBySel("signin-error")
       .should("be.visible")

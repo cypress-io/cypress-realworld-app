@@ -1,5 +1,6 @@
 // @ts-check
 import { User } from "../../../src/models";
+import { isMobile } from "../../support/utils";
 
 type BankAccountsTestCtx = {
   user?: User;
@@ -23,8 +24,8 @@ describe("Bank Accounts", function () {
   });
 
   it("creates a new bank account", function () {
-    if (Cypress.env("isMobileViewport")) {
-      cy.getBySel("sidenav-open").click();
+    if (isMobile()) {
+      cy.getBySel("sidenav-toggle").click();
     }
 
     cy.getBySel("sidenav-bankaccounts").click();

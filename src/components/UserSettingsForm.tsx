@@ -57,8 +57,8 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({ userProfile, updateUser
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
         setSubmitting(true);
-
         updateUser({ id: userProfile.id, ...values });
+        setSubmitting(false);
       }}
     >
       {({ isValid, isSubmitting }) => (

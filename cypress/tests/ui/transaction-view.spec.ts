@@ -44,14 +44,14 @@ describe("Transaction View", function () {
   });
 
   it("transactions navigation tabs are hidden on a transaction view page", function () {
-    cy.getBySelLike("transaction-item").first().click({ force: true });
+    cy.getBySelLike("transaction-item").first().click();
 
     cy.location("pathname").should("include", "/transaction");
     cy.getBySel("nav-transaction-tabs").should("not.be.visible");
   });
 
   it("likes a transaction", function () {
-    cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
+    cy.getBySelLike("transaction-item").first().click();
     cy.wait("@getTransaction");
 
     cy.getBySelLike("like-button").click();
@@ -60,9 +60,7 @@ describe("Transaction View", function () {
   });
 
   it("comments on a transaction", function () {
-    // Navigating to the transaction view via the UI can be flaky in Firefox
-    // cy.getBySelLike("transaction-item").first().click({ force: true });
-    cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
+    cy.getBySelLike("transaction-item").first().click();
     cy.wait("@getTransaction");
 
     const comments = ["Thank you!", "Appreciate it."];
@@ -76,7 +74,7 @@ describe("Transaction View", function () {
   });
 
   it("accepts a transaction request", function () {
-    cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
+    cy.getBySelLike("transaction-item").eq(4).click();
     cy.wait("@getTransaction");
 
     cy.getBySelLike("accept-request").click();
@@ -84,7 +82,7 @@ describe("Transaction View", function () {
   });
 
   it("rejects a transaction request", function () {
-    cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
+    cy.getBySelLike("transaction-item").eq(4).click();
     cy.wait("@getTransaction");
 
     cy.getBySelLike("reject-request").click();

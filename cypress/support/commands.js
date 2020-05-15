@@ -265,6 +265,7 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
 
   // Open date range picker
   cy.getBySelLike("filter-date-range-button").click({ force: true });
+  cy.get(".Cal__Header__root").should("be.visible");
 
   // Select date range
   selectDate(startDate);
@@ -272,6 +273,8 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
     log.snapshot("after");
     log.end();
   });
+
+  cy.get(".Cal__Header__root").should("not.be.visible");
 });
 
 Cypress.Commands.add("database", (operation, entity, query, logTask = false) => {

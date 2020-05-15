@@ -60,7 +60,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
       onSubmit={(values, { setSubmitting }) => {
         setSubmitting(true);
 
-        createBankAccount({ userId, ...values });
+        createBankAccount({ ...values, userId });
 
         if (!onboarding) {
           history.push("/bankaccounts");

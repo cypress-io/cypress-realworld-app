@@ -5,7 +5,6 @@ import {
   TransactionRequestStatus,
   DefaultPrivacyLevel,
   NotificationsType,
-  //PaymentNotificationStatus
 } from "../src/models";
 import { includes } from "lodash/fp";
 
@@ -13,9 +12,6 @@ const TransactionStatusValues = Object.values(TransactionStatus);
 const RequestStatusValues = Object.values(TransactionRequestStatus);
 const DefaultPrivacyLevelValues = Object.values(DefaultPrivacyLevel);
 const NotificationsTypeValues = Object.values(NotificationsType);
-/*const PaymentNotificationStatusValues = Object.values(
-  PaymentNotificationStatus
-);*/
 
 // Validators
 
@@ -63,6 +59,7 @@ export const sanitizeTransactionStatus = sanitizeQuery("status").customSanitizer
 
 // default request status to undefined if not provided
 export const sanitizeRequestStatus = sanitizeQuery("requestStatus").customSanitizer((value) => {
+  /* istanbul ignore if*/
   if (includes(value, RequestStatusValues)) {
     return value;
   }
@@ -100,14 +97,6 @@ export const isCommentValidator = body("content").isString().trim();
 export const isNotificationsBodyValidator = [
   body("items.*.type").isIn(NotificationsTypeValues).trim(),
   body("items.*.transactionId").custom(isShortId),
-  // TODO: figure out how to get working
-  /*oneOf([
-    body("items.*.likeId").custom(isShortId),
-    body("items.*.commentId").custom(isShortId),
-    body("items.*.status")
-      .isIn(PaymentNotificationStatusValues)
-      .trim()
-  ])*/
 ];
 
 export const isNotificationPatchValidator = [body("isRead").isBoolean()];

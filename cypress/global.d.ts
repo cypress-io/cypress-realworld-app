@@ -80,5 +80,6 @@ declare namespace Cypress {
     database(operation: "filter", entity: string, query?: object, log?: boolean): Chainable<any[]>;
     reactComponent(): Chainable<any>;
     setTransactionAmountRange(min: number, max: number): Chainable<any>;
+    clickWithoutScroll(): Chainable<Element>;
   }
 }

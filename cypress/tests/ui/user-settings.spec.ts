@@ -1,5 +1,6 @@
 // @ts-check
 import { User } from "../../../src/models";
+import { isMobile } from "../../support/utils";
 
 describe("User Settings", function () {
   beforeEach(function () {
@@ -12,8 +13,8 @@ describe("User Settings", function () {
       cy.loginByXstate(user.username);
     });
 
-    if (Cypress.env("isMobileViewport")) {
-      cy.getBySel("sidenav-open").click();
+    if (isMobile()) {
+      cy.getBySel("sidenav-toggle").click();
     }
 
     cy.getBySel("sidenav-user-settings").click();

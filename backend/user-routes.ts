@@ -32,6 +32,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
   //   - default: scoped user contacts first, then all other users
   //   - "topFirst": contacts with most transactions first
 
+  /* istanbul ignore next */
   const users = removeUserFromResults(req.user?.id!, getAllUsers());
   res.status(200).json({ results: users });
 });
@@ -39,6 +40,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
 router.get("/search", ensureAuthenticated, validateMiddleware([searchValidation]), (req, res) => {
   const { q } = req.query;
 
+  /* istanbul ignore next */
   const users = removeUserFromResults(req.user?.id!, searchUsers(q));
 
   res.status(200).json({ results: users });
@@ -61,6 +63,7 @@ router.get(
     const { userId } = req.params;
 
     // Permission: account owner
+    /* istanbul ignore next */
     if (!isEqual(userId, req.user?.id)) {
       return res.status(401).send({
         error: "Unauthorized",

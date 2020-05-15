@@ -66,17 +66,6 @@ describe("Transactions", () => {
     expect(result.length).toBeLessThan(totalTransactions);
   });
 
-  it.skip("should retrieve a list of transactions for a users contacts - status 'incomplete'", () => {
-    const userToLookup: User = getAllUsers()[0];
-    const result: Transaction[] = getTransactionsForUserContacts(userToLookup.id, {
-      status: "incomplete",
-    });
-    expect(result[10]).toMatchObject({ status: "incomplete" });
-
-    expect(result.length).toBeGreaterThan(1);
-    expect(result.length).toBeLessThan(totalTransactions);
-  });
-
   it("should retrieve a list of transactions for a users contacts - between date range", () => {
     const userToLookup: User = getAllUsers()[0];
     const result: Transaction[] = getTransactionsForUserContacts(userToLookup.id, {
@@ -280,7 +269,7 @@ describe("Transactions", () => {
 
     expect(updatedReceiverTransactions.length).toBe(receiverTransactions.length + 2);
 
-    // Verify Receiver's Updated Pay App Balance
+    // Verify Receiver's Updated App Balance
     const updatedReceiver: User = getAllUsers()[1];
     expect(updatedReceiver.balance).toBe(
       receiver.balance + firstPaymentAmount + secondPaymentAmount
@@ -327,7 +316,7 @@ describe("Transactions", () => {
 
     expect(updatedSenderTransactions.length).toBe(receiverTransactions.length + 2);
 
-    // Verify Sender's Updated Pay App Balance
+    // Verify Sender's Updated App Balance
     const updatedSender: User = getAllUsers()[0];
     expect(updatedSender.balance).toBe(sender.balance - requestAmount);
   });

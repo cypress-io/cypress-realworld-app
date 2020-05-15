@@ -1,6 +1,7 @@
 // @ts-check
 import Dinero from "dinero.js";
 import { User } from "../../../src/models";
+import { isMobile } from "../../support/utils";
 
 type NewTransactionTestCtx = {
   allUsers?: User[];
@@ -58,16 +59,17 @@ describe("New Transaction", function () {
       amount: ctx.user!.balance - parseInt(payment.amount) * 100,
     }).toFormat();
 
-    if (Cypress.env("isMobileViewport")) {
-      cy.getBySel("sidenav-open").click();
+    if (isMobile()) {
+      cy.getBySel("sidenav-toggle").click();
     }
 
     cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
 
-    if (Cypress.env("isMobileViewport")) {
+    if (isMobile()) {
       cy.get(".MuiBackdrop-root").click({ force: true });
     }
 
+    cy.getBySelLike("create-another-transaction").click();
     cy.getBySel("app-name-logo").find("a").click();
     cy.getBySelLike("personal-tab").click().should("have.class", "Mui-selected");
     cy.wait("@personalTransactions");
@@ -144,8 +146,8 @@ describe("New Transaction", function () {
       amount: ctx.contact!.balance + transactionPayload.amount * 100,
     }).toFormat();
 
-    if (Cypress.env("isMobileViewport")) {
-      cy.getBySel("sidenav-open").click();
+    if (isMobile()) {
+      cy.getBySel("sidenav-toggle").click();
     }
 
     cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);
@@ -167,11 +169,12 @@ describe("New Transaction", function () {
     cy.switchUser(ctx.contact!.username);
 
     cy.getBySelLike("personal-tab").click();
+
     cy.wait("@personalTransactions");
 
     cy.getBySelLike("transaction-item")
-      .should("contain", transactionPayload.description)
       .first()
+      .should("contain", transactionPayload.description)
       .click({ force: true });
 
     cy.getBySelLike("accept-request").click();
@@ -183,8 +186,8 @@ describe("New Transaction", function () {
       amount: ctx.user!.balance + transactionPayload.amount * 100,
     }).toFormat();
 
-    if (Cypress.env("isMobileViewport")) {
-      cy.getBySel("sidenav-open").click();
+    if (isMobile()) {
+      cy.getBySel("sidenav-toggle").click();
     }
 
     cy.getBySelLike("user-balance").should("contain", updatedAccountBalance);

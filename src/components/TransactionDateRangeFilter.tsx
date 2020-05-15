@@ -67,11 +67,8 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
   };
 
   const dateRangeLabel = (dateRangeFields: TransactionDateRangePayload) => {
-    if (queryHasDateFields) {
-      const { dateRangeStart, dateRangeEnd } = dateRangeFields;
-      return `${formatButtonDate(dateRangeStart!)} - ${formatButtonDate(dateRangeEnd!)}`;
-    }
-    return "";
+    const { dateRangeStart, dateRangeEnd } = dateRangeFields;
+    return `${formatButtonDate(dateRangeStart!)} - ${formatButtonDate(dateRangeEnd!)}`;
   };
 
   return (
@@ -116,6 +113,7 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
           className={classes.popover}
         >
           <InfiniteCalendar
+            data-test="transaction-list-filter-date-range"
             width={xsBreakpoint ? window.innerWidth : 350}
             height={xsBreakpoint ? window.innerHeight : 300}
             rowHeight={50}
@@ -151,6 +149,7 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
             Close
           </Button>
           <InfiniteCalendar
+            data-test="transaction-list-filter-date-range"
             width={window.innerWidth}
             height={window.innerHeight - 185}
             rowHeight={50}

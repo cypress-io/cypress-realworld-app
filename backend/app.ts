@@ -27,6 +27,12 @@ const corsOption = {
 
 const app = express();
 
+/* istanbul ignore next */
+// @ts-ignore
+if (global.__coverage__) {
+  require("@cypress/code-coverage/middleware/express")(app);
+}
+
 app.use(cors(corsOption));
 app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -55,6 +61,7 @@ app.use("/comments", commentRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/bankTransfers", bankTransferRoutes);
 
+/* istanbul ignore next */
 if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {
   app.use("/testData", testDataRoutes);
 }
