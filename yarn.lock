@@ -2419,10 +2419,10 @@
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
 
-"@types/faker@4.1.11":
-  version "4.1.11"
-  resolved "https://registry.yarnpkg.com/@types/faker/-/faker-4.1.11.tgz#07911f1a39aeeaeec71d8efa0f93ef0eeafd3462"
-  integrity sha512-iL7khABWgMH53FDfQNYtbFDJXjM3G97KswtyVMUP9XBSt9c+33L1TsXI+mx+EgnoOcuSp12qZae6hLCxGcq7yg==
+"@types/faker@4.1.12":
+  version "4.1.12"
+  resolved "https://registry.yarnpkg.com/@types/faker/-/faker-4.1.12.tgz#065d37343677df1aa757c622650bd14666c42602"
+  integrity sha512-0MEyzJrLLs1WaOCx9ULK6FzdCSj2EuxdSP9kvuxxdBEGujZYUOZ4vkPXdgu3dhyg/pOdn7VCatelYX7k0YShlA==
 
 "@types/glob@^7.1.1":
   version "7.1.1"
