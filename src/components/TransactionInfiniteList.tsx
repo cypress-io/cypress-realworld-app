@@ -42,16 +42,8 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
     });
   };
 
-  const isRowLoaded = (params: Index) => {
-    const result = !pagination.hasNextPages || params.index < transactions.length;
-    console.log(`Index: ${params.index} Result: ${result}`);
-    // @ts-ignore
-    if (window.Cypress) {
-      // @ts-ignore
-      window.Cypress.log({ message: `Index: ${params.index} Result: ${result}` });
-    }
-    return result;
-  };
+  const isRowLoaded = (params: Index) =>
+    !pagination.hasNextPages || params.index < transactions.length;
 
   // @ts-ignore
   function rowRenderer({ key, index, style }) {

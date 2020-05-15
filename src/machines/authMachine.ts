@@ -101,7 +101,6 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         return await httpClient
           .post(`http://localhost:3001/login`, event)
           .then(({ data }) => {
-            console.log("HISTORY PUSH");
             history.push("/");
             return data;
           })
