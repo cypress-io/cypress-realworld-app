@@ -3,10 +3,13 @@
 </p>
 
 <p align="center">
+  <a href="https://dashboard.cypress.io/projects/7s5okt">
+    <img src="https://img.shields.io/badge/Cypress-Dashboard-blue">
+  </a>
+
   <a href="https://circleci.com/gh/cypress-io/cypress-realworld-app">
     <img src="https://circleci.com/gh/cypress-io/cypress-realworld-app.svg?style=shield">
   </a>
-
   <a href="https://coveralls.io/github/cypress-io/cypress-realworld-app?branch=add-code-cov-service">
     <img src="https://coveralls.io/repos/github/cypress-io/cypress-realworld-app/badge.svg?branch=add-code-cov-service">
   </a>
