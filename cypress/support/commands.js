@@ -66,7 +66,7 @@ Cypress.Commands.add("loginByApi", (username, password = defaultPassword) => {
 
 Cypress.Commands.add("waitForXstateService", (service) => {
   // Temporary fix for a real world problem
-  cy.wait(100, { log: false });
+  // cy.wait(100, { log: false });
 
   return cy.window({ log: false }).should((win) => {
     // @ts-ignore
