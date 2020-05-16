@@ -89,7 +89,6 @@
     "@cypress/instrument-cra": "1.1.1",
     "@cypress/webpack-preprocessor": "5.2.1",
     "babel-loader": "8.1.0",
-    "chai-datetime": "1.6.0",
     "coveralls": "^3.1.0",
     "cypress": "4.5.0",
     "eslint-config-prettier": "6.11.0",
