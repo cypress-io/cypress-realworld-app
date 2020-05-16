@@ -76,7 +76,8 @@ jobs:
           path: coverage
       - run:
           name: Send Coverage Report to Codecov
-          command: npm run codecov || true
+          command: yarn report-coverage || true
+      - codecov/upload
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 workflows:

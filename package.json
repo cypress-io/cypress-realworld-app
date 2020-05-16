@@ -141,7 +141,8 @@
     "build": "react-scripts build",
     "eject": "react-scripts eject",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
-    "codecov": "nyc report --reporter=text-lcov | codecov --pipe"
+    "codecov": "nyc report --reporter=text-lcov | codecov --pipe",
+    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov"
   },
   "eslintConfig": {
     "env": {
