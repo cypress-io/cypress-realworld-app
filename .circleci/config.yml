@@ -121,12 +121,11 @@ workflows:
           post-steps:
             - codecov/upload:
                 file: coverage/lcov.info
-
-      - report-full-coverage:
-          name: "Report Code Coverage"
-          requires:
-            - "API Tests"
-            - "UI Tests - Chrome"
-            - "UI Tests - Chrome - Mobile"
-            - "UI Tests - Firefox"
-            - "UI Tests - Firefox - Mobile"
+      # - report-full-coverage:
+      #     name: "Report Code Coverage"
+      #     requires:
+      #       - "API Tests"
+      #       - "UI Tests - Chrome"
+      #       - "UI Tests - Chrome - Mobile"
+      #       - "UI Tests - Firefox"
+      #       - "UI Tests - Firefox - Mobile"
