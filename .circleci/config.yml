@@ -76,6 +76,9 @@ jobs:
       - run:
           name: Send Coverage Report to Coveralls
           command: npm run coveralls || true
+      - run:
+          name: Send Coverage Report to Codecov
+          command: npm run codecov || true
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 workflows:
