@@ -116,7 +116,7 @@ workflows:
           requires:
             - Setup
           post-steps:
-- store-coverage-report 
+            - store-coverage-report
 
       # Run E2E tests in Chrome
       - cypress/run:
@@ -134,7 +134,7 @@ workflows:
           requires:
             - Setup
           post-steps:
-            - store-coverage-report 
+            - store-coverage-report
 
       # Run E2E tests in Chrome with mobile device viewport
       - cypress/run:
@@ -153,7 +153,7 @@ workflows:
           requires:
             - Setup
           post-steps:
-            - store-coverage-report 
+            - store-coverage-report
 
       # Run E2E tests in Firefox
       - cypress/run:
@@ -171,7 +171,7 @@ workflows:
           requires:
             - Setup
           post-steps:
-            - store-coverage-report 
+            - store-coverage-report
 
       # Run E2E tests in Firefox with mobile device viewport
       - cypress/run:
@@ -190,7 +190,7 @@ workflows:
           requires:
             - Setup
           post-steps:
-            - store-coverage-report 
+            - store-coverage-report
 
       - report-full-coverage:
           name: "Report Code Coverage"
