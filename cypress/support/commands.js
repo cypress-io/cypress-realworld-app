@@ -2,12 +2,15 @@
 /// <reference path="../global.d.ts" />
 
 import { pick } from "lodash/fp";
-import chaiDatetime from "chai-datetime";
 import { format as formatDate } from "date-fns";
 
-chai.use(chaiDatetime);
+Cypress.Commands.add("getBySel", (selector, ...args) => {
+  return cy.get(`[data-test=${selector}]`, ...args);
+});
 
-const defaultPassword = Cypress.env("defaultPassword");
+Cypress.Commands.add("getBySelLike", (selector, ...args) => {
+  return cy.get(`[data-test*=${selector}]`, ...args);
+});
 
 Cypress.Commands.add("login", (username, password, rememberUser = false) => {
   const signinPath = "/signin";
@@ -57,7 +60,7 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
   });
 });
 
-Cypress.Commands.add("loginByApi", (username, password = defaultPassword) => {
+Cypress.Commands.add("loginByApi", (username, password = Cypress.env("defaultPassword")) => {
   return cy.request("POST", `${Cypress.env("apiUrl")}/login`, {
     username,
     password,
@@ -65,8 +68,8 @@ Cypress.Commands.add("loginByApi", (username, password = defaultPassword) => {
 });
 
 Cypress.Commands.add("waitForXstateService", (service) => {
-  // Temporary fix for a real world problem
-  // cy.wait(100, { log: false });
+  // Temporary Fix: https://github.com/cypress-io/cypress-realworld-app/issues/334
+  cy.wait(100, { log: false });
 
   return cy.window({ log: false }).should((win) => {
     // @ts-ignore
@@ -109,7 +112,7 @@ Cypress.Commands.add("setTransactionAmountRange", (min, max) => {
     .invoke("onChange", null, [min / 10, max / 10]);
 });
 
-Cypress.Commands.add("loginByXstate", (username, password = defaultPassword) => {
+Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("defaultPassword")) => {
   const log = Cypress.log({
     name: "loginbyxstate",
     displayName: "LOGIN BY XSTATE",
@@ -301,8 +304,3 @@ Cypress.Commands.add("database", (operation, entity, query, logTask = false) => 
     return data;
   });
 });
-
-Cypress.Commands.add("getBySel", (selector, ...args) => cy.get(`[data-test=${selector}]`, ...args));
-Cypress.Commands.add("getBySelLike", (selector, ...args) =>
-  cy.get(`[data-test*=${selector}]`, ...args)
-);
