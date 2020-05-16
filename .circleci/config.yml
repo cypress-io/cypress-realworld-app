@@ -1,6 +1,8 @@
 version: 2.1
 orbs:
   cypress: cypress-io/cypress@1.22.0
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Executors ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 executors:
   mobile:
     docker:
@@ -10,6 +12,7 @@ executors:
       CYPRESS_VIEWPORT_WIDTH: 375
       CYPRESS_VIEWPORT_HEIGHT: 667
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 commands:
   save-partial-coverage-report:
     description: |
@@ -67,6 +70,7 @@ commands:
       - run: mv coverage.json .nyc_output/out.json
       - run: ls -la .nyc_output
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Jobs ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 jobs:
   report-full-coverage:
     description: Merges individual code coverage files and sends combined data to Coveralls.io
@@ -76,7 +80,7 @@ jobs:
           at: ~/
       - merge-coverage-reports
       - run:
-          name: generate coverage report
+          name: Generate Coverage Report
           command: |
             npx nyc report \
               --reporter lcov --reporter text-summary \
@@ -84,7 +88,10 @@ jobs:
       - store_artifacts:
           path: coverage
       - run:
+          name: Send Coverage Report to Coveralls
           command: npm run coveralls || true
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 workflows:
   build:
     jobs:
@@ -103,7 +110,7 @@ workflows:
                 name: Check Types
                 command: yarn types
             - run:
-                name: Unit Tests
+                name: Run Unit Tests
                 command: yarn test:unit
 
       # Run API tests against backend server
@@ -147,7 +154,7 @@ workflows:
           name: "UI Tests - Chrome - Mobile"
           requires:
             - Setup
-          executor: mobile
+          executor: cypress/browsers-chrome78-ff70
           browser: chrome
           yarn: true
           start: yarn test:ci
@@ -157,6 +164,7 @@ workflows:
           parallelism: 4
           spec: cypress/tests/ui/*
           group: "UI - Chrome - Mobile"
+          config: "viewportWidth=375,viewportHeight=667"
           post-steps:
             - store-coverage-report
 
@@ -183,7 +191,7 @@ workflows:
           name: "UI Tests - Firefox - Mobile"
           requires:
             - Setup
-          executor: mobile
+          executor: cypress/browsers-chrome78-ff70
           browser: firefox
           yarn: true
           start: yarn test:ci
@@ -193,6 +201,7 @@ workflows:
           parallelism: 4
           spec: cypress/tests/ui/*
           group: "UI - Firefox - Mobile"
+          config: "viewportWidth=375,viewportHeight=667"
           post-steps:
             - store-coverage-report
 
