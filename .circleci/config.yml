@@ -196,7 +196,7 @@ workflows:
           post-steps:
             - store-coverage-report
 
-      - merge-coverage:
+      - report-full-coverage:
           name: "Report Code Coverage"
           requires:
             - "API Tests"
