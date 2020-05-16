@@ -85,7 +85,7 @@
     "yup": "0.28.5"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "3.7.2",
+    "@cypress/code-coverage": "3.7.4",
     "@cypress/instrument-cra": "1.1.1",
     "@cypress/webpack-preprocessor": "5.2.1",
     "babel-loader": "8.1.0",

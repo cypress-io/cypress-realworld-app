@@ -1598,10 +1598,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@cypress/browserify-preprocessor@2.2.3":
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/@cypress/browserify-preprocessor/-/browserify-preprocessor-2.2.3.tgz#73cd0fc91fee90a9fb9a81a675ad52f6f1abddaf"
-  integrity sha512-NjumJpUlWeolsGICIseYblCRYsQDQA01W1ZxPcWZkG1hK01EI1HxMtX7fBnyeg2jY/i1xjrZV27PczmdGKAhXQ==
+"@cypress/browserify-preprocessor@2.2.4":
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/@cypress/browserify-preprocessor/-/browserify-preprocessor-2.2.4.tgz#a2ff5a6a06938f7f1e78eb6de0e492641cf8561c"
+  integrity sha512-kMjkIFe6qka8Tkm9N3BrMB+Nn7WEAHIzEd3gfVoDL17Tr40xyOnKGuMhEkff1scd3RV3bjQxwQ9BQ6kI2nToAQ==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.3.0"
@@ -1622,12 +1622,12 @@
     through2 "^2.0.0"
     watchify "3.11.1"
 
-"@cypress/code-coverage@3.7.2":
-  version "3.7.2"
-  resolved "https://registry.yarnpkg.com/@cypress/code-coverage/-/code-coverage-3.7.2.tgz#6d8371cdce595c77c1c6f8faddaf0724fa15ce32"
-  integrity sha512-DEcM8kcObqwX9LoS2aLU1JYm8MQG66WSjBbt/mtq8IuzXTVEeAwfd8ctDrRs9vaDPGqttqpTdcpumhnwIAC95Q==
+"@cypress/code-coverage@3.7.4":
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/@cypress/code-coverage/-/code-coverage-3.7.4.tgz#c8cd816af47ba6612b559ffb2d0b0709c3e3aef1"
+  integrity sha512-qOiPYzamTQ81mETMzz5A/72MxQWnz93R60TN2v0o2XbUkBws5yxkLSoKjhBdYmunrOttKlZ/H7TY7EQsOwXi1g==
   dependencies:
-    "@cypress/browserify-preprocessor" "2.2.3"
+    "@cypress/browserify-preprocessor" "2.2.4"
     debug "4.1.1"
     execa "4.0.1"
     globby "11.0.0"
