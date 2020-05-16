@@ -2,16 +2,6 @@ version: 2.1
 orbs:
   cypress: cypress-io/cypress@1.22.0
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Executors ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-executors:
-  mobile:
-    docker:
-      - image: cypress/browsers:node12.13.0-chrome78-ff70
-    environment:
-      # iPhone 6 viewport dimensions
-      CYPRESS_VIEWPORT_WIDTH: 375
-      CYPRESS_VIEWPORT_HEIGHT: 667
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 commands:
   save-partial-coverage-report:
@@ -33,13 +23,11 @@ commands:
           Human name for the coverage file. For example, when saving both Cypress
           and Jest coverage file, use "cypress" and "jest" to have distinct filenames.
     steps:
-      # do not crash if the coverage is not found
-      # because a particular CI job might not have any tests to run
-      # producing no coverage.
+      # Ensure coverage report folder exists to protect against failing the build
+      # when trying to merge reports from jobs that produce no reports.
       - run: mkdir coverage-part || true
       - run: touch coverage-part/.placeholder-$CIRCLE_WORKFLOW_JOB_ID-index-$CIRCLE_NODE_INDEX || true
-      # use unique job id to avoid accidentally overwriting coverage file
-      # and in case the build is parallel, use node index too
+      # Ensure partial coverage report files have unique names to not override reports from other machines.
       - run: cp <<parameters.coverage-filename>> coverage-part/coverage-<<parameters.label>>-$CIRCLE_WORKFLOW_JOB_ID-index-$CIRCLE_NODE_INDEX.json || true
       - run: ls -la coverage-part
       - persist_to_workspace:
@@ -65,8 +53,6 @@ commands:
       - run: ls -la coverage-part || true
       - run: npx nyc merge coverage-part
       - run: mkdir .nyc_output || true
-      # storing the combined report in ".nyc_output/out.json"
-      # allows other NYC commands to find it right away
       - run: mv coverage.json .nyc_output/out.json
       - run: ls -la .nyc_output
 
@@ -116,92 +102,92 @@ workflows:
       # Run API tests against backend server
       - cypress/run:
           name: "API Tests"
-          requires:
-            - Setup
-          executor: cypress/browsers-chrome78-ff70
           browser: chrome
+          spec: cypress/tests/api/*
+          executor: cypress/browsers-chrome78-ff70
+          wait-on: "http://localhost:3000"
           yarn: true
           start: yarn test:ci
-          wait-on: "http://localhost:3000"
           record: true
-          spec: cypress/tests/api/*
           parallel: true
           parallelism: 4
           group: API
+          requires:
+            - Setup
           post-steps:
             - store-coverage-report
 
       # Run E2E tests in Chrome
       - cypress/run:
           name: "UI Tests - Chrome"
-          requires:
-            - Setup
-          executor: cypress/browsers-chrome78-ff70
           browser: chrome
+          spec: cypress/tests/ui/*
+          executor: cypress/browsers-chrome78-ff70
+          wait-on: "http://localhost:3000"
           yarn: true
           start: yarn test:ci
-          wait-on: "http://localhost:3000"
           record: true
           parallel: true
           parallelism: 4
-          spec: cypress/tests/ui/*
           group: "UI - Chrome"
+          requires:
+            - Setup
           post-steps:
             - store-coverage-report
 
       # Run E2E tests in Chrome with mobile device viewport
       - cypress/run:
           name: "UI Tests - Chrome - Mobile"
-          requires:
-            - Setup
-          executor: cypress/browsers-chrome78-ff70
           browser: chrome
+          spec: cypress/tests/ui/*
+          config: "viewportWidth=375,viewportHeight=667"
+          executor: cypress/browsers-chrome78-ff70
+          wait-on: "http://localhost:3000"
           yarn: true
           start: yarn test:ci
-          wait-on: "http://localhost:3000"
           record: true
           parallel: true
           parallelism: 4
-          spec: cypress/tests/ui/*
           group: "UI - Chrome - Mobile"
-          config: "viewportWidth=375,viewportHeight=667"
+          requires:
+            - Setup
           post-steps:
             - store-coverage-report
 
       # Run E2E tests in Firefox
       - cypress/run:
           name: "UI Tests - Firefox"
-          requires:
-            - Setup
-          executor: cypress/browsers-chrome78-ff70
           browser: firefox
+          spec: cypress/tests/ui/*
+          executor: cypress/browsers-chrome78-ff70
+          wait-on: "http://localhost:3000"
           yarn: true
           start: yarn test:ci
-          wait-on: "http://localhost:3000"
           record: true
           parallel: true
           parallelism: 4
-          spec: cypress/tests/ui/*
           group: "UI - Firefox"
+          requires:
+            - Setup
           post-steps:
             - store-coverage-report
 
       # Run E2E tests in Firefox with mobile device viewport
       - cypress/run:
           name: "UI Tests - Firefox - Mobile"
-          requires:
-            - Setup
-          executor: cypress/browsers-chrome78-ff70
           browser: firefox
+          spec: cypress/tests/ui/*
+          config: "viewportWidth=375,viewportHeight=667"
+          wait-on: "http://localhost:3000"
+          executor: cypress/browsers-chrome78-ff70
           yarn: true
           start: yarn test:ci
-          wait-on: "http://localhost:3000"
           record: true
           parallel: true
           parallelism: 4
-          spec: cypress/tests/ui/*
           group: "UI - Firefox - Mobile"
-          config: "viewportWidth=375,viewportHeight=667"
+          requires:
+            - Setup
           post-steps:
             - store-coverage-report
 
