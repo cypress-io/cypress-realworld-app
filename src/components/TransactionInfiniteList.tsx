@@ -1,8 +1,8 @@
 import React from "react";
-import InfiniteLoader from "react-window-infinite-loader";
-import { FixedSizeList } from "react-window";
 import { get } from "lodash/fp";
 import { useTheme, makeStyles } from "@material-ui/core/styles";
+import { InfiniteLoader, List, Index } from "react-virtualized";
+import "react-virtualized/styles.css"; // only needs to be imported once
 
 import TransactionItem from "./TransactionItem";
 import { TransactionResponseItem, TransactionPagination } from "../models";
@@ -34,55 +34,49 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
   const isXsBreakpoint = useMediaQuery(theme.breakpoints.down("xs"));
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const itemCount = pagination.hasNextPages
-    ? transactions.length + 1
-    : transactions.length;
+  const itemCount = pagination.hasNextPages ? transactions.length + 1 : transactions.length;
 
-  const loadMoreItems = () =>
-    Promise.resolve("").then(
-      () => pagination.hasNextPages && loadNextPage(pagination.page + 1)
-    );
+  const loadMoreItems = () => {
+    return new Promise((resolve) => {
+      return resolve(pagination.hasNextPages && loadNextPage(pagination.page + 1));
+    });
+  };
 
-  const isItemLoaded = (index: number) =>
-    !pagination.hasNextPages || index < transactions.length;
+  const isRowLoaded = (params: Index) =>
+    !pagination.hasNextPages || params.index < transactions.length;
 
-  const Item = ({ index, style }: { index: number; style: any }) => {
-    if (!isItemLoaded(index)) {
+  // @ts-ignore
+  function rowRenderer({ key, index, style }) {
+    const transaction = get(index, transactions);
+
+    if (index < transactions.length) {
       return (
-        <div data-test="transaction-loading" style={style}>
-          Loading...
-        </div>
-      );
-    } else {
-      const transaction = get(index, transactions);
-      return (
-        <div style={style}>
+        <div key={key} style={style}>
           <TransactionItem transaction={transaction} />
           <Divider variant={isMobile ? "fullWidth" : "inset"} />
         </div>
       );
     }
-  };
+  }
 
   return (
     <InfiniteLoader
-      isItemLoaded={isItemLoaded}
-      loadMoreItems={loadMoreItems}
-      itemCount={itemCount}
+      isRowLoaded={isRowLoaded}
+      loadMoreRows={loadMoreItems}
+      rowCount={itemCount}
       threshold={2}
     >
-      {({ onItemsRendered, ref }) => (
+      {({ onRowsRendered, registerChild }) => (
         <div data-test="transaction-list" className={classes.transactionList}>
-          <FixedSizeList
-            itemCount={itemCount}
-            ref={ref}
-            onItemsRendered={onItemsRendered}
+          <List
+            rowCount={itemCount}
+            ref={registerChild}
+            onRowsRendered={onRowsRendered}
             height={isXsBreakpoint ? theme.spacing(74) : theme.spacing(88)}
-            width={"98%"}
-            itemSize={isXsBreakpoint ? theme.spacing(28) : theme.spacing(16)}
-          >
-            {Item}
-          </FixedSizeList>
+            width={isXsBreakpoint ? theme.spacing(38) : theme.spacing(110)}
+            rowHeight={isXsBreakpoint ? theme.spacing(28) : theme.spacing(16)}
+            rowRenderer={rowRenderer}
+          />
         </div>
       )}
     </InfiniteLoader>

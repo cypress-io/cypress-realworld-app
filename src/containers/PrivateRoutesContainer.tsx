@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import { Switch, Route } from "react-router";
+import { Switch } from "react-router";
 import { Interpreter } from "xstate";
 import MainLayout from "../components/MainLayout";
+import PrivateRoute from "../components/PrivateRoute";
 import TransactionsContainer from "./TransactionsContainer";
 import UserSettingsContainer from "./UserSettingsContainer";
 import NotificationsContainer from "./NotificationsContainer";
@@ -10,82 +11,62 @@ import TransactionCreateContainer from "./TransactionCreateContainer";
 import TransactionDetailContainer from "./TransactionDetailContainer";
 import { DataContext, DataSchema, DataEvents } from "../machines/dataMachine";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
-import {
-  SnackbarContext,
-  SnackbarSchema,
-  SnackbarEvents,
-} from "../machines/snackbarMachine";
+import { SnackbarContext, SnackbarSchema, SnackbarEvents } from "../machines/snackbarMachine";
 import { useService } from "@xstate/react";
 import UserOnboardingContainer from "./UserOnboardingContainer";
 
 export interface Props {
+  isLoggedIn: boolean;
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
   notificationsService: Interpreter<DataContext, DataSchema, DataEvents, any>;
-  snackbarService: Interpreter<
-    SnackbarContext,
-    SnackbarSchema,
-    SnackbarEvents,
-    any
-  >;
+  snackbarService: Interpreter<SnackbarContext, SnackbarSchema, SnackbarEvents, any>;
   bankAccountsService: Interpreter<DataContext, any, DataEvents, any>;
 }
 
 const PrivateRoutesContainer: React.FC<Props> = ({
+  isLoggedIn,
   authService,
   notificationsService,
   snackbarService,
   bankAccountsService,
 }) => {
-  const [, sendAuth] = useService(authService);
   const [, sendNotifications] = useService(notificationsService);
 
   useEffect(() => {
-    sendAuth("REFRESH");
     sendNotifications({ type: "FETCH" });
-    const authSubscription = authService.subscribe((state) => {
-      localStorage.setItem("authState", JSON.stringify(state));
-    });
-
-    return authSubscription.unsubscribe;
-  }, [sendNotifications, authService, sendAuth]);
+  }, [sendNotifications]);
 
   return (
-    <MainLayout
-      notificationsService={notificationsService}
-      authService={authService}
-    >
+    <MainLayout notificationsService={notificationsService} authService={authService}>
       <UserOnboardingContainer
         authService={authService}
         bankAccountsService={bankAccountsService}
       />
       <Switch>
-        <Route exact path={"/(public|contacts|personal)?"}>
+        <PrivateRoute isLoggedIn={isLoggedIn} exact path={"/(public|contacts|personal)?"}>
           <TransactionsContainer />
-        </Route>
-        <Route exact path="/user/settings">
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} exact path="/user/settings">
           <UserSettingsContainer authService={authService} />
-        </Route>
-        <Route exact path="/notifications">
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} exact path="/notifications">
           <NotificationsContainer
             authService={authService}
             notificationsService={notificationsService}
           />
-        </Route>
-        <Route path="/bankaccounts*">
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/bankaccounts*">
           <BankAccountsContainer
             authService={authService}
             bankAccountsService={bankAccountsService}
           />
-        </Route>
-        <Route exact path="/transaction/new">
-          <TransactionCreateContainer
-            authService={authService}
-            snackbarService={snackbarService}
-          />
-        </Route>
-        <Route exact path="/transaction/:transactionId">
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} exact path="/transaction/new">
+          <TransactionCreateContainer authService={authService} snackbarService={snackbarService} />
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} exact path="/transaction/:transactionId">
           <TransactionDetailContainer authService={authService} />
-        </Route>
+        </PrivateRoute>
       </Switch>
     </MainLayout>
   );

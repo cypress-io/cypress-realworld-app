@@ -93,10 +93,7 @@ export const dataMachine = (machineId: string) =>
           states: {
             unknown: {
               on: {
-                "": [
-                  { target: "withData", cond: "hasData" },
-                  { target: "withoutData" },
-                ],
+                "": [{ target: "withData", cond: "hasData" }, { target: "withoutData" }],
               },
             },
             withData: {},
@@ -122,13 +119,13 @@ export const dataMachine = (machineId: string) =>
         setPageData: assign((ctx: DataContext, event: any) => ({
           pageData: event.data.pageData,
         })),
+        /* istanbul ignore next */
         setMessage: assign((ctx, event: any) => ({
           message: event.message,
         })),
       },
       guards: {
-        hasData: (ctx: DataContext, event) =>
-          !!ctx.results && ctx.results.length > 0,
+        hasData: (ctx: DataContext, event) => !!ctx.results && ctx.results.length > 0,
       },
     }
   );

@@ -27,123 +27,81 @@ import {
   map,
   drop,
 } from "lodash/fp";
-import { getUserById } from "../backend/database";
 
 export const isRequestTransaction = (transaction: Transaction) =>
   flow(get("requestStatus"), negate(isEmpty))(transaction);
 
+/* istanbul ignore next */
 export const isPendingRequestTransaction = (transaction: Transaction) =>
-  flow(
-    get("requestStatus"),
-    isEqual(TransactionRequestStatus.pending)
-  )(transaction);
+  flow(get("requestStatus"), isEqual(TransactionRequestStatus.pending))(transaction);
 
+/* istanbul ignore next */
 export const isAcceptedRequestTransaction = (transaction: Transaction) =>
-  flow(
-    get("requestStatus"),
-    isEqual(TransactionRequestStatus.accepted)
-  )(transaction);
+  flow(get("requestStatus"), isEqual(TransactionRequestStatus.accepted))(transaction);
 
+/* istanbul ignore next */
 export const isRejectedRequestTransaction = (transaction: Transaction) =>
-  flow(
-    get("requestStatus"),
-    isEqual(TransactionRequestStatus.rejected)
-  )(transaction);
+  flow(get("requestStatus"), isEqual(TransactionRequestStatus.rejected))(transaction);
 
 export const isPayment = negate(isRequestTransaction);
 
-export const getFakeAmount = () => parseInt(faker.finance.amount(), 10);
+/* istanbul ignore next */
+export const getFakeAmount = (min: number = 1000, max: number = 50000) =>
+  parseInt(faker.finance.amount(min, max), 10);
 
+/* istanbul ignore next */
 export const formatAmount = (amount: number) => Dinero({ amount }).toFormat();
 
-export const formatAmountSlider = (amount: number) =>
-  Dinero({ amount }).toFormat("$0,0");
+/* istanbul ignore next */
+export const formatAmountSlider = (amount: number) => Dinero({ amount }).toFormat("$0,0");
 
-export const payAppDifference = curry(
-  (sender: User, transaction: Transaction) =>
-    Dinero({ amount: get("balance", sender) }).subtract(
-      Dinero({ amount: get("amount", transaction) })
-    )
+export const payAppDifference = curry((sender: User, transaction: Transaction) =>
+  Dinero({ amount: get("balance", sender) }).subtract(
+    Dinero({ amount: get("amount", transaction) })
+  )
 );
 
 export const payAppAddition = curry((sender: User, transaction: Transaction) =>
-  Dinero({ amount: get("balance", sender) }).add(
-    Dinero({ amount: get("amount", transaction) })
-  )
+  Dinero({ amount: get("balance", sender) }).add(Dinero({ amount: get("amount", transaction) }))
 );
 
 export const getChargeAmount = (sender: User, transaction: Transaction) =>
   Math.abs(payAppDifference(sender, transaction).getAmount());
 
-export const getTransferAmount = (sender: User, transaction: Transaction) =>
-  Math.abs(payAppDifference(sender, transaction).getAmount());
+export const getTransferAmount = curry((sender: User, transaction: Transaction) =>
+  Math.abs(payAppDifference(sender, transaction).getAmount())
+);
 
-export const getPayAppCreditedAmount = (
-  receiver: User,
-  transaction: Transaction
-) => Math.abs(payAppAddition(receiver, transaction).getAmount());
-
-export const hasInsufficientFunds = (sender: User, transaction: Transaction) =>
-  payAppDifference(sender, transaction).isNegative();
+export const getPayAppCreditedAmount = (receiver: User, transaction: Transaction) =>
+  Math.abs(payAppAddition(receiver, transaction).getAmount());
 
 export const hasSufficientFunds = (sender: User, transaction: Transaction) =>
   payAppDifference(sender, transaction).isPositive();
 
-export const isNewTransactionPath = (pathname: string) =>
-  pathname.match(/transaction\/new/);
-
-export const hasPathTransactionId = (pathname: string) =>
-  pathname.match(/transaction\/(?!new)([a-zA-Z0-9._-]+)/);
-
-export const pathTransactionId = (pathname: string) =>
-  flow(hasPathTransactionId, get(1))(pathname);
-
-export const senderIsCurrentUser = (sender: User, transaction: Transaction) =>
-  isEqual(get("id", sender), get("senderId", transaction));
-
-export const receiverIsCurrentUser = (
-  currentUser: User,
-  transaction: Transaction
-) => isEqual(get("id", currentUser), get("receiverId", transaction));
+/* istanbul ignore next */
+export const receiverIsCurrentUser = (currentUser: User, transaction: Transaction) =>
+  isEqual(get("id", currentUser), get("receiverId", transaction));
 
 export const formatFullName = (user: User) =>
   flow(pick(["firstName", "lastName"]), values, join(" "))(user);
 
-export const getFullNameForUser = (userId: User["id"]) =>
-  flow(getUserById, formatFullName)(userId);
-
 export const isCommentNotification = (notification: NotificationType) =>
   has("commentId")(notification);
 
-export const isLikeNotification = (notification: NotificationType) =>
-  has("likeId")(notification);
+export const isLikeNotification = (notification: NotificationType) => has("likeId")(notification);
 
 export const isPaymentNotification = (notification: NotificationType) =>
   has("status")(notification);
 
-export const isPaymentRequestedNotification = (
-  notification: NotificationType
-) =>
-  flow(
-    get("status"),
-    isEqual(PaymentNotificationStatus.requested)
-  )(notification);
+/* istanbul ignore next */
+export const isPaymentRequestedNotification = (notification: NotificationType) =>
+  flow(get("status"), isEqual(PaymentNotificationStatus.requested))(notification);
 
+/* istanbul ignore next */
 export const isPaymentReceivedNotification = (notification: NotificationType) =>
-  flow(
-    get("status"),
-    isEqual(PaymentNotificationStatus.received)
-  )(notification);
+  flow(get("status"), isEqual(PaymentNotificationStatus.received))(notification);
 
-export const isNewBankAccountPath = (pathname: string) =>
-  pathname.match(/bankaccounts\/new/);
-
-export const hasPathBankAccountId = (pathname: string) =>
-  pathname.match(/bankaccounts\/(?!new)([a-zA-Z0-9._-]+)/);
-
-export const pathBankAccountId = (pathname: string) =>
-  flow(hasPathBankAccountId, get(1))(pathname);
-
+/* istanbul ignore next */
 export const currentUserLikesTransaction = (
   currentUser: User,
   transaction: TransactionResponseItem
@@ -153,9 +111,8 @@ export const currentUserLikesTransaction = (
     negate(isEmpty)
   )(transaction.likes);
 
-export const hasDateQueryFields = (
-  query: TransactionQueryPayload | TransactionDateRangePayload
-) => has("dateRangeStart", query) && has("dateRangeEnd", query);
+export const hasDateQueryFields = (query: TransactionQueryPayload | TransactionDateRangePayload) =>
+  has("dateRangeStart", query) && has("dateRangeEnd", query);
 
 export const getDateQueryFields = (query: TransactionDateRangePayload) =>
   pick(["dateRangeStart", "dateRangeEnd"], query);
@@ -173,6 +130,7 @@ export const getAmountQueryFields = (query: TransactionAmountRangePayload) =>
 export const omitAmountQueryFields = (query: TransactionQueryPayload) =>
   omit(["amountMin", "amountMax"], query);
 
+/* istanbul ignore next */
 export const hasPaginationQueryFields = (
   query: TransactionQueryPayload | TransactionAmountRangePayload
 ) => has("page", query) && has("limit", query);
@@ -180,40 +138,33 @@ export const hasPaginationQueryFields = (
 export const omitPaginationQueryFields = (query: TransactionQueryPayload) =>
   omit(["page", "limit"], query);
 
+/* istanbul ignore next */
 export const getQueryWithoutDateFields = (query: TransactionQueryPayload) =>
   query && hasDateQueryFields(query) ? omitDateQueryFields(query) : query;
 
+/* istanbul ignore next */
 export const getQueryWithoutAmountFields = (query: TransactionQueryPayload) =>
   query && hasAmountQueryFields(query) ? omitAmountQueryFields(query) : query;
 
-export const getQueryWithoutPaginationFields = (
-  query: TransactionQueryPayload
-) =>
-  query && hasPaginationQueryFields(query)
-    ? omitPaginationQueryFields(query)
-    : query;
-
 export const getQueryWithoutFilterFields = (query: TransactionQueryPayload) =>
-  flow(
-    omitAmountQueryFields,
-    omitDateQueryFields,
-    omitPaginationQueryFields
-  )(query);
+  flow(omitAmountQueryFields, omitDateQueryFields, omitPaginationQueryFields)(query);
 
+/* istanbul ignore next */
 export const padAmountWithZeros = (number: number) => Math.ceil(number * 1000);
 
+/* istanbul ignore next */
 export const amountRangeValueText = (value: number) =>
   flow(padAmountWithZeros, formatAmount)(value);
 
+/* istanbul ignore next */
 export const amountRangeValueTextLabel = (value: number) =>
+  /* istanbul ignore next */
   flow(padAmountWithZeros, formatAmountSlider)(value);
 
+/* istanbul ignore next */
 export const formatAmountRangeValues = (amountRangeValues: number[]) =>
-  flow(
-    map(padAmountWithZeros),
-    map(formatAmountSlider),
-    join(" - ")
-  )(amountRangeValues);
+  /* istanbul ignore next */
+  flow(map(padAmountWithZeros), map(formatAmountSlider), join(" - "))(amountRangeValues);
 
 export const getPaginatedItems = (page: number, limit: number, items: any) => {
   const offset = (page - 1) * limit;
@@ -224,3 +175,13 @@ export const getPaginatedItems = (page: number, limit: number, items: any) => {
     data: pagedItems,
   };
 };
+
+// Custom UTC functions per:
+// https://github.com/date-fns/date-fns/issues/376#issuecomment-544274031
+// not used in application code
+/* istanbul ignore next */
+export const startOfDayUTC = (date: Date) => new Date(new Date(date).setUTCHours(0, 0, 0, 0));
+
+// not used in application code
+/* istanbul ignore next */
+export const endOfDayUTC = (date: Date) => new Date(new Date(date).setUTCHours(23, 59, 59, 999));

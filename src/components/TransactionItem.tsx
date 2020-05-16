@@ -110,16 +110,16 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
                     <LikeIcon className={classes.countIcons} />
                   </Grid>
                   <Grid item>
-                    <Typography className={classes.countText}>
-                      {transaction.likes ? transaction.likes.length : 0}{" "}
+                    <Typography data-test="transaction-like-count" className={classes.countText}>
+                      {transaction.likes.length}
                     </Typography>
                   </Grid>
                   <Grid item>
                     <CommentIcon className={classes.countIcons} />
                   </Grid>
                   <Grid item>
-                    <Typography className={classes.countText}>
-                      {transaction.comments ? transaction.comments.length : 0}{" "}
+                    <Typography data-test="transaction-comment-count" className={classes.countText}>
+                      {transaction.comments.length}
                     </Typography>
                   </Grid>
                 </Grid>

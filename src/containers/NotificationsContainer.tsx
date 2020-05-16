@@ -22,20 +22,13 @@ export interface Props {
   notificationsService: Interpreter<DataContext, DataSchema, DataEvents, any>;
 }
 
-const NotificationsContainer: React.FC<Props> = ({
-  authService,
-  notificationsService,
-}) => {
+const NotificationsContainer: React.FC<Props> = ({ authService, notificationsService }) => {
   const classes = useStyles();
   const [authState] = useService(authService);
-  const [notificationsState, sendNotifications] = useService(
-    notificationsService
-  );
+  const [notificationsState, sendNotifications] = useService(notificationsService);
 
   useEffect(() => {
-    if (authState?.matches("authorized")) {
-      sendNotifications({ type: "FETCH" });
-    }
+    sendNotifications({ type: "FETCH" });
   }, [authState, sendNotifications]);
 
   const updateNotification = (payload: NotificationUpdatePayload) =>

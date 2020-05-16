@@ -29,9 +29,7 @@ const NotificationsList: React.FC<NotificationsListProps> = ({
         </List>
       ) : (
         <EmptyList entity="Notifications">
-          <RemindersIllustration
-            style={{ height: 200, width: 250, marginBottom: 30 }}
-          />
+          <RemindersIllustration style={{ height: 200, width: 250, marginBottom: 30 }} />
         </EmptyList>
       )}
     </>

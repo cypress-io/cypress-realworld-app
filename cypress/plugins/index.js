@@ -1,64 +1,58 @@
-// ***********************************************************
-// This example plugins/index.js can be used to load plugins
-//
-// You can change the location of this file or turn off loading
-// the plugins file with the 'pluginsFile' configuration option.
-//
-// You can read more here:
-// https://on.cypress.io/plugins-guide
-// ***********************************************************
+const _ = require("lodash");
+const Promise = require("bluebird");
+const axios = require("axios").default;
 
-const cypressTypeScriptPreprocessor = require("./cy-ts-preprocessor");
-
-// This function is called when a project is opened or re-opened (e.g. due to
-// the project's config changing)
-const { readFile } = require("fs").promises;
-const path = require("path");
-const low = require("lowdb");
-const FileSync = require("lowdb/adapters/FileSync");
-
-const getDataFile = (filename) =>
-  path.join(__dirname, "../../src/data", filename);
-
-let seedFileName = "test-seed.json";
-let databaseFileName = "database.test.json";
-
-if (process.env.NODE_ENV === "development") {
-  seedFileName = "dev-seed.json";
-  databaseFileName = "database.json";
-}
-
-if (process.env.EMPTY_SEED) {
-  seedFileName = "empty-seed.json";
-}
-
-const databaseFile = getDataFile(databaseFileName);
-const adapter = new FileSync(databaseFile);
-
-let db = low(adapter);
-
-const defaultStructure = {
-  users: [],
-};
+require("dotenv").config();
 
 module.exports = (on, config) => {
-  on("file:preprocessor", cypressTypeScriptPreprocessor);
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
+  config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD;
+  config.env.paginationPageSize = process.env.PAGINATION_PAGE_SIZE;
+  config.env.isMobileViewport = config.viewportWidth < config.env.mobileViewportWidth;
+
   on("task", {
     "db:seed"() {
       // seed database with test data
-      return readFile(getDataFile(seedFileName), "utf-8").then((data) => {
-        db.setState(JSON.parse(data)).write();
-        console.log(`${seedFileName} seeded into ${databaseFileName}`);
-        return null;
-      });
+      return axios.post(`${config.env.apiUrl}/testData/seed`).then((resp) => resp.data);
     },
-    "db:reset"() {
-      // reset database to empty status
-      db.setState(defaultStructure).write();
-      console.log("test database reset");
-      return null;
+
+    // fetch test data from a database (MySQL, PostgreSQL, etc...)
+    "filter:testData"({ entity, filterAttrs }) {
+      const fetchData = (attrs) => {
+        return axios
+          .get(`${config.env.apiUrl}/testData/${entity}`)
+          .then(({ data }) => _.filter(data.results, attrs));
+      };
+
+      if (Array.isArray(filterAttrs)) {
+        return Promise.map(filterAttrs, fetchData);
+      }
+      return fetchData(filterAttrs);
+    },
+    "find:testData"({ entity, findAttrs }) {
+      const fetchData = (attrs) => {
+        return axios
+          .get(`${config.env.apiUrl}/testData/${entity}`)
+          .then(({ data }) => _.find(data.results, attrs));
+      };
+
+      if (Array.isArray(findAttrs)) {
+        return Promise.map(findAttrs, fetchData);
+      }
+      return fetchData(findAttrs);
+    },
+
+    queryDatabase({ operation, entity, query }) {
+      const isBulkQuery = Array.isArray(query);
+      const fetchData = (q) => {
+        return axios
+          .get(`${config.env.apiUrl}/testData/${entity}`)
+          .then(({ data }) => _[operation](data.results, q));
+      };
+
+      return isBulkQuery ? Promise.map(query, fetchData) : fetchData(query);
     },
   });
+
+  require("@cypress/code-coverage/task")(on, config);
+  return config;
 };

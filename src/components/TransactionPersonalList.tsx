@@ -20,8 +20,14 @@ const TransactionPersonalList: React.FC<TransactionPersonalListProps> = ({
   dateRangeFilters,
   amountRangeFilters,
 }) => {
-  const [current, send] = useMachine(personalTransactionsMachine);
+  const [current, send, personalTransactionService] = useMachine(personalTransactionsMachine);
   const { pageData, results } = current.context;
+
+  // @ts-ignore
+  if (window.Cypress) {
+    // @ts-ignore
+    window.personalTransactionService = personalTransactionService;
+  }
 
   useEffect(() => {
     send("FETCH", { ...dateRangeFilters, ...amountRangeFilters });
