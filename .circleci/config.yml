@@ -42,10 +42,15 @@ commands:
       - persist_to_workspace:
           root: ~/
           paths:
-            # note that the current folder is "project"
-            # so we need to save the full path correctly
-            # otherwise the files will not be restored in the expected location
             - "project/coverage-part/*"
+
+  store-coverage-report:
+    steps:
+      - store_artifacts:
+          path: coverage
+      - run: npx nyc report --reporter=text || true
+      - save-partial-coverage-report:
+          label: e2e
 
   merge-coverage-reports:
     description: |
@@ -63,7 +68,7 @@ commands:
       - run: ls -la .nyc_output
 
 jobs:
-  merge-coverage:
+  report-full-coverage:
     description: Merges individual code coverage files and sends combined data to Coveralls.io
     executor: cypress/base-10
     steps:
@@ -117,13 +122,7 @@ workflows:
           parallelism: 4
           group: API
           post-steps:
-            - store_artifacts:
-                path: coverage
-            # if this machine had no tests to run
-            # there will be no coverage report
-            - run: npx nyc report --reporter=text || true
-            - save-partial-coverage-report:
-                label: e2e
+            - store-coverage-report
 
       # Run E2E tests in Chrome
       - cypress/run:
@@ -141,13 +140,7 @@ workflows:
           spec: cypress/tests/ui/*
           group: "UI - Chrome"
           post-steps:
-            - store_artifacts:
-                path: coverage
-            # if this machine had no tests to run
-            # there will be no coverage report
-            - run: npx nyc report --reporter=text || true
-            - save-partial-coverage-report:
-                label: e2e
+            - store-coverage-report
 
       # Run E2E tests in Chrome with mobile device viewport
       - cypress/run:
@@ -165,13 +158,7 @@ workflows:
           spec: cypress/tests/ui/*
           group: "UI - Chrome - Mobile"
           post-steps:
-            - store_artifacts:
-                path: coverage
-            # if this machine had no tests to run
-            # there will be no coverage report
-            - run: npx nyc report --reporter=text || true
-            - save-partial-coverage-report:
-                label: e2e
+            - store-coverage-report
 
       # Run E2E tests in Firefox
       - cypress/run:
@@ -189,13 +176,7 @@ workflows:
           spec: cypress/tests/ui/*
           group: "UI - Firefox"
           post-steps:
-            - store_artifacts:
-                path: coverage
-            # if this machine had no tests to run
-            # there will be no coverage report
-            - run: npx nyc report --reporter=text || true
-            - save-partial-coverage-report:
-                label: e2e
+            - store-coverage-report
 
       # Run E2E tests in Firefox with mobile device viewport
       - cypress/run:
@@ -213,16 +194,10 @@ workflows:
           spec: cypress/tests/ui/*
           group: "UI - Firefox - Mobile"
           post-steps:
-            - store_artifacts:
-                path: coverage
-            # if this machine had no tests to run
-            # there will be no coverage report
-            - run: npx nyc report --reporter=text || true
-            - save-partial-coverage-report:
-                label: e2e
+            - store-coverage-report
 
       - merge-coverage:
-          name: "Process Code Coverage Reports"
+          name: "Report Code Coverage"
           requires:
             - "API Tests"
             - "UI Tests - Chrome"
