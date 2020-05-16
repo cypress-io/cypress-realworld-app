@@ -2530,7 +2530,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-virtualized@^9.21.9":
+"@types/react-virtualized@9.21.9":
   version "9.21.9"
   resolved "https://registry.yarnpkg.com/@types/react-virtualized/-/react-virtualized-9.21.9.tgz#10b57fa5979d008bd38633ad62a7461e14327cc0"
   integrity sha512-W7zTK290hACRANzYllz6hJJkeceYWyofxe5HeZt9gtONErB+y6f1UZNrhWe2wx1vuWQbdyZMKFRv9/nAmiXHew==
@@ -4770,7 +4770,7 @@ cosmiconfig@^6.0.0:
     path-type "^4.0.0"
     yaml "^1.7.2"
 
-coveralls@^3.1.0:
+coveralls@3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/coveralls/-/coveralls-3.1.0.tgz#13c754d5e7a2dd8b44fe5269e21ca394fb4d615b"
   integrity sha512-sHxOu2ELzW8/NC1UP5XVLbZDzO4S3VxfFye3XYCznopHy02YjNkHcj5bKaVw2O7hVaBdBjEdQGpie4II1mWhuQ==
@@ -11857,7 +11857,7 @@ react-transition-group@^4.4.0:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-virtualized@^9.21.2:
+react-virtualized@9.21.2:
   version "9.21.2"
   resolved "https://registry.yarnpkg.com/react-virtualized/-/react-virtualized-9.21.2.tgz#02e6df65c1e020c8dbf574ec4ce971652afca84e"
   integrity sha512-oX7I7KYiUM7lVXQzmhtF4Xg/4UA5duSA+/ZcAvdWlTLFCoFYq1SbauJT5gZK9cZS/wdYR6TPGpX/dqzvTqQeBA==
