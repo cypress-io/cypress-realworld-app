@@ -43,6 +43,7 @@ workflows:
           post-steps:
             - codecov/upload:
                 file: coverage/lcov.info
+                flag: cypress
 
       # Run E2E tests in Chrome
       - cypress/run:
@@ -62,6 +63,7 @@ workflows:
           post-steps:
             - codecov/upload:
                 file: coverage/lcov.info
+                flag: cypress
 
       # Run E2E tests in Chrome with mobile device viewport
       - cypress/run:
@@ -82,6 +84,7 @@ workflows:
           post-steps:
             - codecov/upload:
                 file: coverage/lcov.info
+                flag: cypress
 
       # Run E2E tests in Firefox
       - cypress/run:
@@ -101,6 +104,7 @@ workflows:
           post-steps:
             - codecov/upload:
                 file: coverage/lcov.info
+                flag: cypress
 
       # Run E2E tests in Firefox with mobile device viewport
       - cypress/run:
@@ -121,6 +125,7 @@ workflows:
           post-steps:
             - codecov/upload:
                 file: coverage/lcov.info
+                flag: cypress
       # - report-full-coverage:
       #     name: "Report Code Coverage"
       #     requires:
