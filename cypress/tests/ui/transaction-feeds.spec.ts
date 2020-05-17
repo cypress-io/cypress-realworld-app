@@ -168,7 +168,7 @@ describe("Transaction Feed", function () {
           .its("response.body.results")
           .should("have.length", Cypress.env("paginationPageSize"));
 
-        // Temporary fix
+        // Temporary fix: https://github.com/cypress-io/cypress-realworld-app/issues/338
         if (isMobile()) {
           cy.wait(10);
         }
