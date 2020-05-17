@@ -189,7 +189,7 @@
     "exclude": [
       "src/models/*.ts"
     ],
-    "reporters": [
+    "reporter": [
       "html",
       "json"
     ]
