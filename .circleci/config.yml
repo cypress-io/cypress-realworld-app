@@ -74,9 +74,12 @@ jobs:
               --report-dir coverage-part
       - run: ls -la .
       - run: ls -la coverage-part
-      # - store_artifacts:
-      #     path: coverage
+      - store_artifacts:
+          path: coverage
       - codecov/upload
+      - run:
+          name: Send Coverage Report to Coveralls
+          command: npm run coveralls || true
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 workflows:
@@ -108,10 +111,10 @@ workflows:
           executor: cypress/browsers-chrome78-ff70
           wait-on: "http://localhost:3000"
           yarn: true
-          start: yarn test:ci
+          start: yarn start:test
           record: true
           parallel: true
-          parallelism: 7
+          parallelism: 5
           group: API
           requires:
             - Setup
@@ -126,10 +129,10 @@ workflows:
           executor: cypress/browsers-chrome78-ff70
           wait-on: "http://localhost:3000"
           yarn: true
-          start: yarn test:ci
+          start: yarn start:test
           record: true
           parallel: true
-          parallelism: 7
+          parallelism: 5
           group: "UI - Chrome"
           requires:
             - Setup
@@ -145,10 +148,10 @@ workflows:
           executor: cypress/browsers-chrome78-ff70
           wait-on: "http://localhost:3000"
           yarn: true
-          start: yarn test:ci
+          start: yarn start:test
           record: true
           parallel: true
-          parallelism: 7
+          parallelism: 5
           group: "UI - Chrome - Mobile"
           requires:
             - Setup
@@ -163,7 +166,7 @@ workflows:
       #     executor: cypress/browsers-chrome78-ff70
       #     wait-on: "http://localhost:3000"
       #     yarn: true
-      #     start: yarn test:ci
+      #     start: yarn start:test
       #     record: true
       #     parallel: true
       #     parallelism: 4
@@ -182,7 +185,7 @@ workflows:
       #     wait-on: "http://localhost:3000"
       #     executor: cypress/browsers-chrome78-ff70
       #     yarn: true
-      #     start: yarn test:ci
+      #     start: yarn start:test
       #     record: true
       #     parallel: true
       #     parallelism: 4
