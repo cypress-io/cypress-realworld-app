@@ -85,11 +85,11 @@ export const mainListItems = (
 
 export const secondaryListItems = (signOutPending: Function) => (
   <div>
-    <ListItem button data-test="sidenav-signout">
+    <ListItem button onClick={() => signOutPending()} data-test="sidenav-signout">
       <ListItemIcon>
         <LogoutIcon />
       </ListItemIcon>
-      <ListItemText primary="Logout" onClick={() => signOutPending()} />
+      <ListItemText primary="Logout" />
     </ListItem>
   </div>
 );
