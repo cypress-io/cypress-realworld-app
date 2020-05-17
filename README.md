@@ -113,6 +113,12 @@ To generate a code coverage report:
 1. Run `yarn cypress:run --env coverage=true` and wait for the test run to complete.
 2. Once the test run is complete, you can view the report at `coverage/index.html`.
 
+## License
+
+[![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/cypress-io/cypress/blob/master/LICENSE)
+
+This project is licensed under the terms of the [MIT license](/LICENSE).
+
 ---
 
 <p align="center">
