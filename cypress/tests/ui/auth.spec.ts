@@ -28,7 +28,7 @@ describe("User Sign-up and Login", function () {
       cy.getBySel("sidenav-toggle").click();
     }
     cy.getBySel("sidenav-signout").click();
-    cy.location("pathname").should("eq", "/");
+    cy.location("pathname").should("eq", "/signin");
   });
 
   it("should allow a visitor to sign-up, login, and logout", function () {
@@ -78,7 +78,7 @@ describe("User Sign-up and Login", function () {
       cy.getBySel("sidenav-toggle").click();
     }
     cy.getBySel("sidenav-signout").click();
-    cy.location("pathname").should("eq", "/");
+    cy.location("pathname").should("eq", "/signin");
   });
 
   it("should display login errors", function () {
