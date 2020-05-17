@@ -91,13 +91,13 @@ workflows:
           yarn: true
           executor: cypress/browsers-chrome78-ff70
           build: "npm run build"
-          post-steps:
-            - run:
-                name: Check Types
-                command: yarn types
-            - run:
-                name: Run Unit Tests
-                command: yarn test:unit
+          # post-steps:
+          #   - run:
+          #       name: Check Types
+          #       command: yarn types
+          #   - run:
+          #       name: Run Unit Tests
+          #       command: yarn test:unit
 
       # Run API tests against backend server
       - cypress/run:
@@ -154,42 +154,42 @@ workflows:
           post-steps:
             - store-coverage-report
 
-      # Run E2E tests in Firefox
-      - cypress/run:
-          name: "UI Tests - Firefox"
-          browser: firefox
-          spec: cypress/tests/ui/*
-          executor: cypress/browsers-chrome78-ff70
-          wait-on: "http://localhost:3000"
-          yarn: true
-          start: yarn test:ci
-          record: true
-          parallel: true
-          parallelism: 4
-          group: "UI - Firefox"
-          requires:
-            - Setup
-          post-steps:
-            - store-coverage-report
+      # # Run E2E tests in Firefox
+      # - cypress/run:
+      #     name: "UI Tests - Firefox"
+      #     browser: firefox
+      #     spec: cypress/tests/ui/*
+      #     executor: cypress/browsers-chrome78-ff70
+      #     wait-on: "http://localhost:3000"
+      #     yarn: true
+      #     start: yarn test:ci
+      #     record: true
+      #     parallel: true
+      #     parallelism: 4
+      #     group: "UI - Firefox"
+      #     requires:
+      #       - Setup
+      #     post-steps:
+      #       - store-coverage-report
 
-      # Run E2E tests in Firefox with mobile device viewport
-      - cypress/run:
-          name: "UI Tests - Firefox - Mobile"
-          browser: firefox
-          spec: cypress/tests/ui/*
-          config: "viewportWidth=375,viewportHeight=667"
-          wait-on: "http://localhost:3000"
-          executor: cypress/browsers-chrome78-ff70
-          yarn: true
-          start: yarn test:ci
-          record: true
-          parallel: true
-          parallelism: 4
-          group: "UI - Firefox - Mobile"
-          requires:
-            - Setup
-          post-steps:
-            - store-coverage-report
+      # # Run E2E tests in Firefox with mobile device viewport
+      # - cypress/run:
+      #     name: "UI Tests - Firefox - Mobile"
+      #     browser: firefox
+      #     spec: cypress/tests/ui/*
+      #     config: "viewportWidth=375,viewportHeight=667"
+      #     wait-on: "http://localhost:3000"
+      #     executor: cypress/browsers-chrome78-ff70
+      #     yarn: true
+      #     start: yarn test:ci
+      #     record: true
+      #     parallel: true
+      #     parallelism: 4
+      #     group: "UI - Firefox - Mobile"
+      #     requires:
+      #       - Setup
+      #     post-steps:
+      #       - store-coverage-report
 
       - report-full-coverage:
           name: "Report Code Coverage"
