@@ -3,16 +3,22 @@
 </p>
 
 <p align="center">
+  <a href="https://dashboard.cypress.io/projects/7s5okt">
+    <img src="https://img.shields.io/badge/Cypress-Dashboard-blue">
+  </a>
+
   <a href="https://circleci.com/gh/cypress-io/cypress-realworld-app">
     <img src="https://circleci.com/gh/cypress-io/cypress-realworld-app.svg?style=shield">
   </a>
 
-  <a href="https://coveralls.io/github/cypress-io/cypress-realworld-app?branch=add-code-cov-service">
-    <img src="https://coveralls.io/repos/github/cypress-io/cypress-realworld-app/badge.svg?branch=add-code-cov-service">
+  <a href="https://codecov.io/gh/cypress-io/cypress-realworld-app">
+    <img src="https://codecov.io/gh/cypress-io/cypress-realworld-app/branch/develop/graph/badge.svg" />
   </a>
 </p>
 
-A payment application to demonstrate **real-world** usage of [Cypress](https://cypress.io) testing methods, patterns, and workflows.
+<p align="center">
+A payment application to demonstrate <strong>real-world</strong> usage of <a href="https://cypress.io">Cypress</a> testing methods, patterns, and workflows.
+</p>
 
 <p align="center">
   <img style='width: 70%' alt="Cypress Real World App" src="./public/img/rwa-readme-screenshot.png" />

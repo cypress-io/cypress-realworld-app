@@ -7,7 +7,6 @@ require("dotenv").config();
 module.exports = (on, config) => {
   config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD;
   config.env.paginationPageSize = process.env.PAGINATION_PAGE_SIZE;
-  config.env.isMobileViewport = config.viewportWidth < config.env.mobileViewportWidth;
 
   on("task", {
     "db:seed"() {

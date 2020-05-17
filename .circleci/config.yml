@@ -1,231 +1,128 @@
 version: 2.1
 orbs:
   cypress: cypress-io/cypress@1.22.0
-executors:
-  mobile:
-    docker:
-      - image: cypress/browsers:node12.13.0-chrome78-ff70
-    environment:
-      # iPhone 6 viewport dimensions
-      CYPRESS_VIEWPORT_WIDTH: 375
-      CYPRESS_VIEWPORT_HEIGHT: 667
+  codecov: codecov/codecov@1.0.5
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 commands:
-  save-partial-coverage-report:
+  report-coverage:
     description: |
-      Saves a single possibly partial coverage report by adding it to the
-      workspace. This way different CircleCI jobs can run parts of the tests
-      and save their results to be merged later.
-    parameters:
-      coverage-filename:
-        type: string
-        default: coverage/coverage-final.json
-        description: |
-          Path to the final coverage JSON file produced by "nyc" tool.
-          Typically called "coverage/coverage-final.json"
-      label:
-        type: string
-        default: default
-        description: |
-          Human name for the coverage file. For example, when saving both Cypress
-          and Jest coverage file, use "cypress" and "jest" to have distinct filenames.
+      Store coverage report as an artifact and send it to Codecov service.
     steps:
-      # do not crash if the coverage is not found
-      # because a particular CI job might not have any tests to run
-      # producing no coverage.
-      - run: mkdir coverage-part || true
-      - run: touch coverage-part/.placeholder-$CIRCLE_WORKFLOW_JOB_ID-index-$CIRCLE_NODE_INDEX || true
-      # use unique job id to avoid accidentally overwriting coverage file
-      # and in case the build is parallel, use node index too
-      - run: cp <<parameters.coverage-filename>> coverage-part/coverage-<<parameters.label>>-$CIRCLE_WORKFLOW_JOB_ID-index-$CIRCLE_NODE_INDEX.json || true
-      - run: ls -la coverage-part
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            # note that the current folder is "project"
-            # so we need to save the full path correctly
-            # otherwise the files will not be restored in the expected location
-            - "project/coverage-part/*"
-
-  merge-coverage-reports:
-    description: |
-      Merges individual code coverage files using "nyc" tool
-      https://github.com/istanbuljs/nyc.
-      All individual files should be in the folder "coverage-part"
-    steps:
-      - run: ls -la .
-      - run: ls -la coverage-part || true
-      - run: npx nyc merge coverage-part
-      - run: mkdir .nyc_output || true
-      # storing the combined report in ".nyc_output/out.json"
-      # allows other NYC commands to find it right away
-      - run: mv coverage.json .nyc_output/out.json
-      - run: ls -la .nyc_output
-
-jobs:
-  merge-coverage:
-    description: Merges individual code coverage files and sends combined data to Coveralls.io
-    executor: cypress/base-10
-    steps:
-      - attach_workspace:
-          at: ~/
-      - merge-coverage-reports
-      - run:
-          name: generate coverage report
-          command: |
-            npx nyc report \
-              --reporter lcov --reporter text-summary \
-              --report-dir coverage
       - store_artifacts:
           path: coverage
-      - run:
-          command: npm run coveralls || true
+      - run: npx nyc report --reporter=text || true
+      - codecov/upload:
+          file: coverage/coverage-final.json
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 workflows:
   build:
     jobs:
       # Setup
       #  1. Install Cypress
-      #  2. Build application
-      #  3. Validate types
-      #  4. Run server unit-tests
+      #  2. Validate types
+      #  3. Run server unit-tests
       - cypress/install:
           name: "Setup"
           yarn: true
           executor: cypress/browsers-chrome78-ff70
-          build: "npm run build"
           post-steps:
             - run:
                 name: Check Types
                 command: yarn types
             - run:
-                name: Unit Tests
-                command: yarn test:unit
+                name: Run Unit Tests
+                command: yarn test:unit:ci
 
       # Run API tests against backend server
       - cypress/run:
           name: "API Tests"
+          browser: chrome
+          spec: cypress/tests/api/*
+          executor: cypress/browsers-chrome78-ff70
+          wait-on: "http://localhost:3000"
+          yarn: true
+          start: yarn start:ci
+          record: true
+          parallel: true
+          parallelism: 5
+          group: API
           requires:
             - Setup
-          executor: cypress/browsers-chrome78-ff70
-          browser: chrome
-          yarn: true
-          start: yarn test:ci
-          wait-on: "http://localhost:3000"
-          record: true
-          spec: cypress/tests/api/*
-          parallel: true
-          parallelism: 4
-          group: API
           post-steps:
-            - store_artifacts:
-                path: coverage
-            # if this machine had no tests to run
-            # there will be no coverage report
-            - run: npx nyc report --reporter=text || true
-            - save-partial-coverage-report:
-                label: e2e
+            - report-coverage
 
       # Run E2E tests in Chrome
       - cypress/run:
           name: "UI Tests - Chrome"
-          requires:
-            - Setup
-          executor: cypress/browsers-chrome78-ff70
           browser: chrome
-          yarn: true
-          start: yarn test:ci
+          spec: cypress/tests/ui/*
+          executor: cypress/browsers-chrome78-ff70
           wait-on: "http://localhost:3000"
+          yarn: true
+          start: yarn start:ci
           record: true
           parallel: true
-          parallelism: 4
-          spec: cypress/tests/ui/*
+          parallelism: 5
           group: "UI - Chrome"
+          requires:
+            - Setup
           post-steps:
-            - store_artifacts:
-                path: coverage
-            # if this machine had no tests to run
-            # there will be no coverage report
-            - run: npx nyc report --reporter=text || true
-            - save-partial-coverage-report:
-                label: e2e
+            - report-coverage
 
       # Run E2E tests in Chrome with mobile device viewport
       - cypress/run:
           name: "UI Tests - Chrome - Mobile"
-          requires:
-            - Setup
-          executor: mobile
           browser: chrome
-          yarn: true
-          start: yarn test:ci
+          spec: cypress/tests/ui/*
+          config: "viewportWidth=375,viewportHeight=667"
+          executor: cypress/browsers-chrome78-ff70
           wait-on: "http://localhost:3000"
+          yarn: true
+          start: yarn start:ci
           record: true
           parallel: true
-          parallelism: 4
-          spec: cypress/tests/ui/*
+          parallelism: 5
           group: "UI - Chrome - Mobile"
+          requires:
+            - Setup
           post-steps:
-            - store_artifacts:
-                path: coverage
-            # if this machine had no tests to run
-            # there will be no coverage report
-            - run: npx nyc report --reporter=text || true
-            - save-partial-coverage-report:
-                label: e2e
+            - report-coverage
 
       # Run E2E tests in Firefox
       - cypress/run:
           name: "UI Tests - Firefox"
-          requires:
-            - Setup
-          executor: cypress/browsers-chrome78-ff70
           browser: firefox
-          yarn: true
-          start: yarn test:ci
+          spec: cypress/tests/ui/*
+          executor: cypress/browsers-chrome78-ff70
           wait-on: "http://localhost:3000"
+          yarn: true
+          start: yarn start:ci
           record: true
           parallel: true
           parallelism: 4
-          spec: cypress/tests/ui/*
           group: "UI - Firefox"
+          requires:
+            - Setup
           post-steps:
-            - store_artifacts:
-                path: coverage
-            # if this machine had no tests to run
-            # there will be no coverage report
-            - run: npx nyc report --reporter=text || true
-            - save-partial-coverage-report:
-                label: e2e
+            - report-coverage
 
       # Run E2E tests in Firefox with mobile device viewport
       - cypress/run:
           name: "UI Tests - Firefox - Mobile"
-          requires:
-            - Setup
-          executor: mobile
           browser: firefox
-          yarn: true
-          start: yarn test:ci
+          spec: cypress/tests/ui/*
+          config: "viewportWidth=375,viewportHeight=667"
           wait-on: "http://localhost:3000"
+          executor: cypress/browsers-chrome78-ff70
+          yarn: true
+          start: yarn start:ci
           record: true
           parallel: true
           parallelism: 4
-          spec: cypress/tests/ui/*
           group: "UI - Firefox - Mobile"
-          post-steps:
-            - store_artifacts:
-                path: coverage
-            # if this machine had no tests to run
-            # there will be no coverage report
-            - run: npx nyc report --reporter=text || true
-            - save-partial-coverage-report:
-                label: e2e
-
-      - merge-coverage:
-          name: "Process Code Coverage Reports"
           requires:
-            - "API Tests"
-            - "UI Tests - Chrome"
-            - "UI Tests - Chrome - Mobile"
-            - "UI Tests - Firefox"
-            - "UI Tests - Firefox - Mobile"
+            - Setup
+          post-steps:
+            - report-coverage

@@ -1,4 +1,3 @@
-// @ts-check
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
 

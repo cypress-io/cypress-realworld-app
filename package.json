@@ -89,8 +89,6 @@
     "@cypress/instrument-cra": "1.1.1",
     "@cypress/webpack-preprocessor": "5.2.1",
     "babel-loader": "8.1.0",
-    "chai-datetime": "1.6.0",
-    "coveralls": "3.1.0",
     "cypress": "4.5.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-plugin-cypress": "2.10.3",
@@ -101,17 +99,18 @@
     "start-server-and-test": "1.11.0"
   },
   "scripts": {
-    "start": "NODE_ENV=development concurrently \"yarn:start:react\" \"yarn:start:api\"",
-    "dev": "NODE_ENV=development concurrently \"yarn:start:react\" \"yarn:start:api:watch\"",
+    "start": "NODE_ENV=development concurrently yarn:start:react yarn:start:api",
+    "start:ci": "NODE_ENV=test concurrently yarn:start:react yarn:start:api",
+    "dev": "NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",
     "db:seed": "yarn tsnode scripts/generateSeedData",
     "list:dev:users": "cat data/database.json | json -a users | json -a id username",
     "types": "tsc --noEmit",
     "cypress:open": "cypress open",
-    "cypress:open:mobile": "CYPRESS_VIEWPORT_WIDTH=375 CYPRESS_VIEWPORT_HEIGHT=667 cypress open",
+    "cypress:open:mobile": "cypress open --config viewportWidth=375,viewportHeight=667",
     "cypress:run": "cypress run",
-    "cypress:run:mobile": "CYPRESS_VIEWPORT_WIDTH=375 CYPRESS_VIEWPORT_HEIGHT=667 cypress run",
+    "cypress:run:mobile": "cypress run --config viewportWidth=375,viewportHeight=667",
     "cypress:run:record": "cypress run --record",
-    "start:empty": "NODE_ENV=development EMPTY_SEED=true concurrently \"yarn:start:react\" \"yarn:start:api:watch\"",
+    "start:empty": "NODE_ENV=development EMPTY_SEED=true concurrently yarn:start:react yarn:start:api:watch",
     "start:react": "react-scripts -r @cypress/instrument-cra start",
     "start:react:scripts": "react-scripts start",
     "start:react:ci": "node scripts/testServer.js",
@@ -120,10 +119,9 @@
     "start:api:watch": "nodemon --exec yarn tsnode --watch 'backend' backend/app.ts",
     "start:server-and-api": "start-test start:api 3001 start:react:ci",
     "start:server-and-api:watch": "start-test start:api:watch 3001 start:react",
-    "start:codesandbox": "NODE_ENV=development TSC_COMPILE_ON_ERROR=true concurrently \"yarn:start:react:scripts\" \"yarn:start:api:codesandbox\"",
+    "start:codesandbox": "NODE_ENV=development TSC_COMPILE_ON_ERROR=true concurrently yarn:start:react:scripts yarn:start:api:codesandbox",
     "prettier": "prettier --write '**/**.{ts,js,tsx}'",
     "test": "yarn cypress:open",
-    "test:ci": "NODE_ENV=test yarn start:server-and-api",
     "test:headless": "yarn cypress:run",
     "test:api": "yarn cypress:run --spec 'integration/api/*'",
     "test:unit": "react-scripts test --runInBand",
@@ -139,8 +137,7 @@
     "prestart:empty": "yarn db:seed:empty",
     "prebuild": "yarn types",
     "build": "react-scripts build",
-    "eject": "react-scripts eject",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "env": {
@@ -185,6 +182,10 @@
   "nyc": {
     "exclude": [
       "src/models/*.ts"
+    ],
+    "reporter": [
+      "html",
+      "json"
     ]
   }
 }
