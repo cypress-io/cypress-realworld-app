@@ -71,11 +71,10 @@ jobs:
           command: |
             npx nyc report \
               --reporter lcov --reporter text-summary \
-              --report-dir coverage
+              --report-dir coverage-part
       - store_artifacts:
           path: coverage
-      - codecov/upload:
-          file: coverage-part/coverage.json
+      - codecov/upload
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 workflows:
