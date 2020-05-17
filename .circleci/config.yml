@@ -74,10 +74,8 @@ jobs:
               --report-dir coverage
       - store_artifacts:
           path: coverage
-      - run:
-          name: Send Coverage Report to Codecov
-          command: yarn report-coverage || true
-      - codecov/upload
+      - codecov/upload:
+          file: coverage-part/coverage.json
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 workflows:
