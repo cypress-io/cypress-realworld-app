@@ -15,13 +15,9 @@ coverage:
     backend:
       paths:
         - backend
-      flags:
-        - backend
     frontend:
       paths:
         - src
-      flags:
-        - frontend
 
 comment:
   layout: "reach,diff,flags,tree"
