@@ -6,6 +6,8 @@ orbs:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 commands:
   report-coverage:
+    description: |
+      Store coverage report as an artifact and send it to Codecov service.
     steps:
       - store_artifacts:
           path: coverage
@@ -49,7 +51,7 @@ workflows:
           requires:
             - Setup
           post-steps:
-            - store-coverage-report
+            - report-coverage
 
       # Run E2E tests in Chrome
       - cypress/run:
@@ -67,7 +69,7 @@ workflows:
           requires:
             - Setup
           post-steps:
-            - store-coverage-report
+            - report-coverage
 
       # Run E2E tests in Chrome with mobile device viewport
       - cypress/run:
@@ -86,7 +88,7 @@ workflows:
           requires:
             - Setup
           post-steps:
-            - store-coverage-report
+            - report-coverage
 
       # Run E2E tests in Firefox
       - cypress/run:
@@ -104,7 +106,7 @@ workflows:
           requires:
             - Setup
           post-steps:
-            - store-coverage-report
+            - report-coverage
 
       # Run E2E tests in Firefox with mobile device viewport
       - cypress/run:
@@ -123,4 +125,4 @@ workflows:
           requires:
             - Setup
           post-steps:
-            - store-coverage-report
+            - report-coverage
