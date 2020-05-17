@@ -3,10 +3,8 @@
 </p>
 
 <p align="center">
-  <a href="https://cypress.io" style="font-size: 12px; font-weight: bold; color: inherit">
-    <span style="position: relative; bottom: 5px;">Built by</span>
-    <img width="50" alt="Cypress Logo" src="./src/svgs/cypress-logo.svg" />
-    <span style="position: relative; bottom: 5px;">Team</span>
+  <a href="https://cypress.io">
+    <img width="140" alt="Cypress Logo" src="./src/svgs/built-by-cypress.svg" />
     </a>
 </p>
 
@@ -30,7 +28,7 @@ A payment application to demonstrate <strong>real-world</strong> usage of <a hre
 
 <p align="center">
   <img style='width: 70%' alt="Cypress Real World App" src="./public/img/rwa-readme-screenshot.png" />
-</p>
+</p>****
 
 ---
 
