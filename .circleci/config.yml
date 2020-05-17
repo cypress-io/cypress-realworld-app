@@ -5,81 +5,13 @@ orbs:
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 commands:
-  save-partial-coverage-report:
-    description: |
-      Saves a single possibly partial coverage report by adding it to the
-      workspace. This way different CircleCI jobs can run parts of the tests
-      and save their results to be merged later.
-    parameters:
-      coverage-filename:
-        type: string
-        default: coverage/coverage-final.json
-        description: |
-          Path to the final coverage JSON file produced by "nyc" tool.
-          Typically called "coverage/coverage-final.json"
-      label:
-        type: string
-        default: default
-        description: |
-          Human name for the coverage file. For example, when saving both Cypress
-          and Jest coverage file, use "cypress" and "jest" to have distinct filenames.
-    steps:
-      # Ensure coverage report folder exists to protect against failing the build
-      # when trying to merge reports from jobs that produce no reports.
-      - run: mkdir coverage-part || true
-      - run: touch coverage-part/.placeholder-$CIRCLE_WORKFLOW_JOB_ID-index-$CIRCLE_NODE_INDEX || true
-      # Ensure partial coverage report files have unique names to not override reports from other machines.
-      - run: cp <<parameters.coverage-filename>> coverage-part/coverage-<<parameters.label>>-$CIRCLE_WORKFLOW_JOB_ID-index-$CIRCLE_NODE_INDEX.json || true
-      - run: ls -la coverage-part
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - "project/coverage-part/*"
-
   store-coverage-report:
     steps:
       - store_artifacts:
           path: coverage
       - run: npx nyc report --reporter=text || true
-      - save-partial-coverage-report:
-          label: e2e
-
-  merge-coverage-reports:
-    description: |
-      Merges individual code coverage files using "nyc" tool
-      https://github.com/istanbuljs/nyc.
-      All individual files should be in the folder "coverage-part"
-    steps:
-      - run: ls -la .
-      - run: ls -la coverage-part || true
-      - run: npx nyc merge coverage-part
-      - run: mkdir .nyc_output || true
-      - run: mv coverage.json .nyc_output/out.json
-      - run: ls -la .nyc_output
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Jobs ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-jobs:
-  report-full-coverage:
-    description: Merges individual code coverage files and sends combined data to Coveralls.io
-    executor: cypress/base-10
-    steps:
-      - attach_workspace:
-          at: ~/
-      - merge-coverage-reports
-      - run:
-          name: Generate Coverage Report
-          command: |
-            npx nyc report \
-              --reporter lcov --reporter text-summary --reporter text --reporter json \
-              --report-dir coverage-part
-      - run: ls -la .
-      - run: ls -la coverage-part
-      - store_artifacts:
-          path: coverage
-      - codecov/upload
-      - run:
-          name: Send Coverage Report to Coveralls
-          command: npm run coveralls || true
+      - codecov/upload:
+          file: coverage/coverage-final.json
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 workflows:
@@ -157,7 +89,6 @@ workflows:
             - Setup
           post-steps:
             - store-coverage-report
-
       # # Run E2E tests in Firefox
       # - cypress/run:
       #     name: "UI Tests - Firefox"
@@ -175,7 +106,6 @@ workflows:
       #       - Setup
       #     post-steps:
       #       - store-coverage-report
-
       # # Run E2E tests in Firefox with mobile device viewport
       # - cypress/run:
       #     name: "UI Tests - Firefox - Mobile"
@@ -194,12 +124,11 @@ workflows:
       #       - Setup
       #     post-steps:
       #       - store-coverage-report
-
-      - report-full-coverage:
-          name: "Report Code Coverage"
-          requires:
-            - "API Tests"
-            - "UI Tests - Chrome"
-            - "UI Tests - Chrome - Mobile"
-            # - "UI Tests - Firefox"
-            # - "UI Tests - Firefox - Mobile"
+      # - report-full-coverage:
+      #     name: "Report Code Coverage"
+      #     requires:
+      #       - "API Tests"
+      #       - "UI Tests - Chrome"
+      #       - "UI Tests - Chrome - Mobile"
+      # - "UI Tests - Firefox"
+      # - "UI Tests - Firefox - Mobile"
