@@ -73,7 +73,7 @@ export const mainListItems = (
       onClick={() => showTemporaryDrawer && toggleDrawer()}
       component={RouterLink}
       to="/notifications"
-      data-test="sidenav-auth"
+      data-test="sidenav-notifications"
     >
       <ListItemIcon>
         <NotificationsIcon />
@@ -172,6 +172,7 @@ const NavDrawer: React.FC<Props> = ({
 
   return (
     <Drawer
+      data-test="sidenav"
       variant={showTemporaryDrawer ? "temporary" : "persistent"}
       classes={{
         paper: clsx(classes.drawerPaper, !drawerOpen && classes.drawerPaperClose),
