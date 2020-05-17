@@ -98,8 +98,7 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService, bankAccountsSer
           <Grid item>
             <Button
               style={{ paddingRight: "80%" }}
-              /* istanbul ignore next */
-              onClick={() => sendAuth("LOGOUT")}
+              onClick={/* istanbul ignore next */ () => sendAuth("LOGOUT")}
               color="secondary"
               data-test="user-onboarding-logout"
             >
