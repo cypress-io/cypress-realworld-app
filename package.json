@@ -89,8 +89,6 @@
     "@cypress/instrument-cra": "1.1.1",
     "@cypress/webpack-preprocessor": "5.2.1",
     "babel-loader": "8.1.0",
-    "codecov": "^3.6.5",
-    "coveralls": "^3.1.0",
     "cypress": "4.5.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-plugin-cypress": "2.10.3",
