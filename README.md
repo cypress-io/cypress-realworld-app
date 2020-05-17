@@ -1,5 +1,13 @@
-<p style='color: #3f51b5' align="center">
-  <img style='color: #3f51b5' alt="Cypress Real World App Logo" src="./src/svgs/rwa-logo.svg" />
+<p align="center">
+  <img alt="Cypress Real World App Logo" src="./src/svgs/rwa-logo.svg" />
+</p>
+
+<p align="center">
+  <a href="https://cypress.io" style="font-size: 12px; font-weight: bold; color: inherit">
+    <span style="position: relative; bottom: 5px;">Built by</span>
+    <img width="50" alt="Cypress Logo" src="./src/svgs/cypress-logo.svg" />
+    <span style="position: relative; bottom: 5px;">Team</span>
+    </a>
 </p>
 
 <p align="center">
@@ -23,6 +31,8 @@ A payment application to demonstrate <strong>real-world</strong> usage of <a hre
 <p align="center">
   <img style='width: 70%' alt="Cypress Real World App" src="./public/img/rwa-readme-screenshot.png" />
 </p>
+
+---
 
 ## Features
 
@@ -80,9 +90,6 @@ yarn cypress:open
 
 - An [empty database seed](./data/empty-seed.json) is provided along with a script (`yarn start:empty`) to view the application without data.
 
-> 🚩 **Note**
-> You can login to the app with any of the [example app users](./data/database.json#L2). The default password for all users is `s3cret`.
-
 ## Additional NPM Scripts
 
 | Script         | Description                                                         |
@@ -106,12 +113,10 @@ To generate a code coverage report:
 1. Run `yarn cypress:run --env coverage=true` and wait for the test run to complete.
 2. Once the test run is complete, you can view the report at `coverage/index.html`.
 
-<br />
-<br />
-<br />
-<br />
-<p style='color: "#3f51b5"' align="center">
-  <img width="100" style='color: "#3f51b5"' alt="Cypress Logo" src="./src/svgs/cypress-logo.svg" />
+---
+
+<p align="center">
+  <img width="100" alt="Cypress Logo" src="./src/svgs/cypress-logo.svg" />
 </p>
 
 [reactjs]: https://reactjs.org
