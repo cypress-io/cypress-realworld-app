@@ -1598,10 +1598,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@cypress/browserify-preprocessor@2.2.3":
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/@cypress/browserify-preprocessor/-/browserify-preprocessor-2.2.3.tgz#73cd0fc91fee90a9fb9a81a675ad52f6f1abddaf"
-  integrity sha512-NjumJpUlWeolsGICIseYblCRYsQDQA01W1ZxPcWZkG1hK01EI1HxMtX7fBnyeg2jY/i1xjrZV27PczmdGKAhXQ==
+"@cypress/browserify-preprocessor@2.2.4":
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/@cypress/browserify-preprocessor/-/browserify-preprocessor-2.2.4.tgz#a2ff5a6a06938f7f1e78eb6de0e492641cf8561c"
+  integrity sha512-kMjkIFe6qka8Tkm9N3BrMB+Nn7WEAHIzEd3gfVoDL17Tr40xyOnKGuMhEkff1scd3RV3bjQxwQ9BQ6kI2nToAQ==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.3.0"
@@ -1622,12 +1622,12 @@
     through2 "^2.0.0"
     watchify "3.11.1"
 
-"@cypress/code-coverage@3.7.2":
-  version "3.7.2"
-  resolved "https://registry.yarnpkg.com/@cypress/code-coverage/-/code-coverage-3.7.2.tgz#6d8371cdce595c77c1c6f8faddaf0724fa15ce32"
-  integrity sha512-DEcM8kcObqwX9LoS2aLU1JYm8MQG66WSjBbt/mtq8IuzXTVEeAwfd8ctDrRs9vaDPGqttqpTdcpumhnwIAC95Q==
+"@cypress/code-coverage@3.7.4":
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/@cypress/code-coverage/-/code-coverage-3.7.4.tgz#c8cd816af47ba6612b559ffb2d0b0709c3e3aef1"
+  integrity sha512-qOiPYzamTQ81mETMzz5A/72MxQWnz93R60TN2v0o2XbUkBws5yxkLSoKjhBdYmunrOttKlZ/H7TY7EQsOwXi1g==
   dependencies:
-    "@cypress/browserify-preprocessor" "2.2.3"
+    "@cypress/browserify-preprocessor" "2.2.4"
     debug "4.1.1"
     execa "4.0.1"
     globby "11.0.0"
@@ -2413,10 +2413,10 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.149.tgz#1342d63d948c6062838fbf961012f74d4e638440"
   integrity sha512-ijGqzZt/b7BfzcK9vTrS6MFljQRPn5BFWOx8oE0GYxribu6uV+aA9zZuXI1zc/etK9E8nrgdoF2+LgUw7+9tJQ==
 
-"@types/lodash@4.14.150":
-  version "4.14.150"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.150.tgz#649fe44684c3f1fcb6164d943c5a61977e8cf0bd"
-  integrity sha512-kMNLM5JBcasgYscD9x/Gvr6lTAv2NVgsKtet/hm93qMyf/D1pt+7jeEZklKJKxMVmXjxbRVQQGfqDSfipYCO6w==
+"@types/lodash@4.14.151":
+  version "4.14.151"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.151.tgz#7d58cac32bedb0ec37cb7f99094a167d6176c9d5"
+  integrity sha512-Zst90IcBX5wnwSu7CAS0vvJkTjTELY4ssKbHiTnGcJgi170uiS8yQDdc3v6S77bRqYQIN1App5a1Pc2lceE5/g==
 
 "@types/lowdb@1.0.9":
   version "1.0.9"
@@ -2530,7 +2530,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-virtualized@^9.21.9":
+"@types/react-virtualized@9.21.9":
   version "9.21.9"
   resolved "https://registry.yarnpkg.com/@types/react-virtualized/-/react-virtualized-9.21.9.tgz#10b57fa5979d008bd38633ad62a7461e14327cc0"
   integrity sha512-W7zTK290hACRANzYllz6hJJkeceYWyofxe5HeZt9gtONErB+y6f1UZNrhWe2wx1vuWQbdyZMKFRv9/nAmiXHew==
@@ -5135,20 +5135,15 @@ data-urls@^1.0.0, data-urls@^1.1.0:
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
 
-date-fns@2.12.0:
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.12.0.tgz#01754c8a2f3368fc1119cf4625c3dad8c1845ee6"
-  integrity sha512-qJgn99xxKnFgB1qL4jpxU7Q2t0LOn1p8KMIveef3UZD7kqjT3tpFNNdXJelEHhE+rUgffriXriw/sOSU+cS1Hw==
+date-fns@2.13.0, date-fns@^2.0.1:
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.13.0.tgz#d7b8a0a2d392e8d88a8024d0a46b980bbfdbd708"
+  integrity sha512-xm0c61mevGF7f0XpCGtDTGpzEFC/1fpLXHbmFpxZZQJuvByIK2ozm6cSYuU+nxFYOPh2EuCfzUwlTEFwKG+h5w==
 
 date-fns@^1.27.2:
   version "1.30.1"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.30.1.tgz#2e71bf0b119153dbb4cc4e88d9ea5acfb50dc05c"
   integrity sha512-hBSVCvSmWC+QypYObzwGOd9wqdDpOt+0wl0KbU+R+uuZBS1jN8VsD1ss3irQDknRj5NvxiTF6oj/nDRnN/UQNw==
-
-date-fns@^2.0.1:
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.13.0.tgz#d7b8a0a2d392e8d88a8024d0a46b980bbfdbd708"
-  integrity sha512-xm0c61mevGF7f0XpCGtDTGpzEFC/1fpLXHbmFpxZZQJuvByIK2ozm6cSYuU+nxFYOPh2EuCfzUwlTEFwKG+h5w==
 
 debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.9:
   version "2.6.9"
@@ -11795,7 +11790,7 @@ react-transition-group@^4.4.0:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-virtualized@^9.21.2:
+react-virtualized@9.21.2:
   version "9.21.2"
   resolved "https://registry.yarnpkg.com/react-virtualized/-/react-virtualized-9.21.2.tgz#02e6df65c1e020c8dbf574ec4ce971652afca84e"
   integrity sha512-oX7I7KYiUM7lVXQzmhtF4Xg/4UA5duSA+/ZcAvdWlTLFCoFYq1SbauJT5gZK9cZS/wdYR6TPGpX/dqzvTqQeBA==
