@@ -197,5 +197,5 @@ workflows:
             - "API Tests"
             - "UI Tests - Chrome"
             - "UI Tests - Chrome - Mobile"
-            - "UI Tests - Firefox"
-            - "UI Tests - Firefox - Mobile"
+            # - "UI Tests - Firefox"
+            # - "UI Tests - Firefox - Mobile"
