@@ -52,8 +52,7 @@ describe("Notifications", function () {
         .its("response.body.results.length")
         .as("preDismissedNotificationCount");
 
-      cy.getBySelLike("notifications-link").click();
-      cy.location("pathname").should("equal", "/notifications");
+      cy.visit("/notifications");
 
       cy.getBySelLike("notification-list-item")
         .first()
