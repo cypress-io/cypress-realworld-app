@@ -101,7 +101,7 @@ workflows:
           start: yarn start:ci
           record: true
           parallel: true
-          parallelism: 4
+          parallelism: 5
           group: "UI - Firefox"
           requires:
             - Setup
@@ -120,7 +120,7 @@ workflows:
           start: yarn start:ci
           record: true
           parallel: true
-          parallelism: 4
+          parallelism: 5
           group: "UI - Firefox - Mobile"
           requires:
             - Setup

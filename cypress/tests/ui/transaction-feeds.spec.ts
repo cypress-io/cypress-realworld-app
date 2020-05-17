@@ -57,7 +57,7 @@ describe("Transaction Feed", function () {
       cy.loginByXstate(ctx.user.username);
     });
   });
-  describe("app layout and responsivness", function () {
+  describe("app layout and responsiveness", function () {
     it("toggles the navigation drawer", function () {
       if (isMobile()) {
         cy.getBySel("sidenav-home").should("not.be.visible");
@@ -65,6 +65,9 @@ describe("Transaction Feed", function () {
         cy.getBySel("sidenav-home").should("be.visible");
         cy.get(".MuiBackdrop-root").click({ force: true });
         cy.getBySel("sidenav-home").should("not.be.visible");
+
+        cy.getBySel("sidenav-toggle").click();
+        cy.getBySel("sidenav-home").click().should("not.be.visible");
       } else {
         cy.getBySel("sidenav-home").should("be.visible");
         cy.getBySel("sidenav-toggle").click();
@@ -165,7 +168,7 @@ describe("Transaction Feed", function () {
           .its("response.body.results")
           .should("have.length", Cypress.env("paginationPageSize"));
 
-        // Temporary fix
+        // Temporary fix: https://github.com/cypress-io/cypress-realworld-app/issues/338
         if (isMobile()) {
           cy.wait(10);
         }

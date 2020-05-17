@@ -1,4 +1,5 @@
 import { User, Transaction } from "../../../src/models";
+import { isMobile } from "../../support/utils";
 
 type NotificationsCtx = {
   userA: User;
@@ -51,7 +52,6 @@ describe("Notifications", function () {
         .its("response.body.results.length")
         .as("preDismissedNotificationCount");
 
-      //cy.getBySelLike("notifications-link").click();
       cy.visit("/notifications");
 
       cy.getBySelLike("notification-list-item")
@@ -82,6 +82,7 @@ describe("Notifications", function () {
       cy.switchUser(ctx.userA.username);
 
       cy.getBySelLike("notifications-link").click();
+      cy.location("pathname").should("equal", "/notifications");
 
       cy.getBySelLike("notification-list-item")
         .first()
@@ -196,7 +197,11 @@ describe("Notifications", function () {
 
     cy.loginByXstate(ctx.userA.username);
 
-    cy.getBySelLike("notifications-link").click();
+    if (isMobile()) {
+      cy.getBySel("sidenav-toggle").click();
+    }
+    cy.getBySel("sidenav-notifications").click();
+    cy.location("pathname").should("equal", "/notifications");
     cy.getBySel("notification-list").should("not.be.visible");
     cy.getBySel("empty-list-header").should("contain", "No Notifications");
   });

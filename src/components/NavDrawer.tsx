@@ -73,7 +73,7 @@ export const mainListItems = (
       onClick={() => showTemporaryDrawer && toggleDrawer()}
       component={RouterLink}
       to="/notifications"
-      data-test="sidenav-auth"
+      data-test="sidenav-notifications"
     >
       <ListItemIcon>
         <NotificationsIcon />
@@ -85,11 +85,11 @@ export const mainListItems = (
 
 export const secondaryListItems = (signOutPending: Function) => (
   <div>
-    <ListItem button data-test="sidenav-signout">
+    <ListItem button onClick={() => signOutPending()} data-test="sidenav-signout">
       <ListItemIcon>
         <LogoutIcon />
       </ListItemIcon>
-      <ListItemText primary="Logout" onClick={() => signOutPending()} />
+      <ListItemText primary="Logout" />
     </ListItem>
   </div>
 );
@@ -172,6 +172,7 @@ const NavDrawer: React.FC<Props> = ({
 
   return (
     <Drawer
+      data-test="sidenav"
       variant={showTemporaryDrawer ? "temporary" : "persistent"}
       classes={{
         paper: clsx(classes.drawerPaper, !drawerOpen && classes.drawerPaperClose),
