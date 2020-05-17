@@ -70,10 +70,12 @@ jobs:
           name: Generate Coverage Report
           command: |
             npx nyc report \
-              --reporter lcov --reporter text-summary \
+              --reporter lcov --reporter text-summary --reporter text --reporter json \
               --report-dir coverage-part
-      - store_artifacts:
-          path: coverage
+      - run: ls -la .
+      - run: ls -la coverage-part
+      # - store_artifacts:
+      #     path: coverage
       - codecov/upload
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -109,7 +111,7 @@ workflows:
           start: yarn test:ci
           record: true
           parallel: true
-          parallelism: 4
+          parallelism: 7
           group: API
           requires:
             - Setup
@@ -127,7 +129,7 @@ workflows:
           start: yarn test:ci
           record: true
           parallel: true
-          parallelism: 4
+          parallelism: 7
           group: "UI - Chrome"
           requires:
             - Setup
@@ -146,7 +148,7 @@ workflows:
           start: yarn test:ci
           record: true
           parallel: true
-          parallelism: 4
+          parallelism: 7
           group: "UI - Chrome - Mobile"
           requires:
             - Setup
