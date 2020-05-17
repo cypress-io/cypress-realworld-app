@@ -188,6 +188,10 @@
   "nyc": {
     "exclude": [
       "src/models/*.ts"
+    ],
+    "reporters": [
+      "html",
+      "json"
     ]
   }
 }
