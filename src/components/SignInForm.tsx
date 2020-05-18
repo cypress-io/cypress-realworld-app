@@ -45,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  alertMessage: {
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 export interface Props {
@@ -67,7 +70,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
       <CssBaseline />
       <div className={classes.paper}>
         {authState.context?.message && (
-          <Alert data-test="signin-error" severity="error">
+          <Alert data-test="signin-error" severity="error" className={classes.alertMessage}>
             {authState.context.message}
           </Alert>
         )}
