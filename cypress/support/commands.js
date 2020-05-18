@@ -69,6 +69,11 @@ Cypress.Commands.add("loginByApi", (username, password = Cypress.env("defaultPas
 
 Cypress.Commands.add("waitForXstateService", (service) => {
   return cy.window({ log: false }).should((win) => {
+    Cypress.log({
+      name: "XState Checking Service",
+      message: [service],
+    });
+
     // @ts-ignore
     win.__xstate__ = {
       register: (service) => {
