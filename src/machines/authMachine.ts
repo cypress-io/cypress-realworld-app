@@ -71,6 +71,9 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
           onDone: { target: "authorized", actions: "setUserProfile" },
           onError: { target: "unauthorized", actions: "onError" },
         },
+        on: {
+          LOGOUT: "logout",
+        },
       },
       logout: {
         invoke: {
@@ -108,10 +111,8 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
             throw new Error("Username or password is invalid");
           });
       },
-      getUserProfile: async (ctx, event) => {
-        const resp = await httpClient.get(`http://localhost:3001/checkAuth`);
-        return resp.data;
-      },
+      getUserProfile: async (ctx, event) =>
+        await httpClient.get(`http://localhost:3001/checkAuth`).then(({ data }) => data),
       updateProfile: async (ctx, event: any) => {
         const payload = omit("type", event);
         const resp = await httpClient.patch(`http://localhost:3001/users/${payload.id}`, payload);
@@ -119,7 +120,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       },
       performLogout: async (ctx, event) => {
         localStorage.removeItem("authState");
-        await httpClient.post(`http://localhost:3001/logout`);
+        return await httpClient.post(`http://localhost:3001/logout`);
       },
     },
     actions: {
