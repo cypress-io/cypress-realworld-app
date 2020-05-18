@@ -158,7 +158,7 @@ if (stateDefinition) {
   resolvedState = authMachine.resolveState(previousState);
 }
 
-export const authService = interpret(authMachine)
+export const authService = interpret(authMachine, { devTools: true })
   .onTransition((state) => {
     if (state.changed) {
       localStorage.setItem("authState", JSON.stringify(state));

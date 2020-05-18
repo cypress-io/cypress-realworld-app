@@ -68,14 +68,17 @@ Cypress.Commands.add("loginByApi", (username, password = Cypress.env("defaultPas
 });
 
 Cypress.Commands.add("waitForXstateService", (service) => {
-  // Temporary Fix: https://github.com/cypress-io/cypress-realworld-app/issues/334
-  cy.wait(100, { log: false });
-
   return cy.window({ log: false }).should((win) => {
     // @ts-ignore
-    if (!win[service].initialized) {
-      throw new Error(`${service} is not ready!`);
-    }
+    win.__xstate__ = {
+      register: (service) => {
+        Cypress.log({
+          name: "XState Service Ready",
+          message: [`(${service.machine.id})`],
+        });
+        return;
+      },
+    };
   });
 });
 
