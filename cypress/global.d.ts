@@ -12,7 +12,6 @@ declare namespace Cypress {
   } from "../src/models";
 
   interface CustomWindow extends Window {
-    // TODO: Fix up service types
     authService: any;
     createTransactionService: any;
     publicTransactionService: any;

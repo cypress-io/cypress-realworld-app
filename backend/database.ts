@@ -256,8 +256,6 @@ export const createContactForUser = (userId: string, contactUserId: string) => {
     modifiedAt: new Date(),
   };
 
-  // TODO: check if contact exists
-
   // Write contact record to the database
   const result = createContact(contact);
 
@@ -295,8 +293,6 @@ export const createBankAccountForUser = (userId: string, accountDetails: Partial
     createdAt: new Date(),
     modifiedAt: new Date(),
   };
-
-  // TODO: check if bank account exists
 
   // Write bank account record to the database
   const result = createBankAccount(bankaccount);
@@ -607,7 +603,6 @@ export const updateTransactionById = (
   const sender = getUserById(senderId);
   const receiver = getUserById(receiverId);
 
-  // TODO: if request accepted - createBankTransfer for withdrawal for the difference associated to the transaction
   // if payment, debit sender's balance for payment amount
   if (isRequestTransaction(transaction)) {
     debitPayAppBalance(receiver, transaction);

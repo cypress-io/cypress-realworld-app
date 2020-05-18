@@ -125,7 +125,6 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
     actions: {
       redirectHomeAfterLogin: async (ctx, event) => {
         if (history.location.pathname === "/signin") {
-          // TODO: @kevinold: determine if this is necessary. This statement never runs.
           /* istanbul ignore next */
           window.location.pathname = "/";
         }
