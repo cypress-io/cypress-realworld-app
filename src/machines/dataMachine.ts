@@ -43,6 +43,7 @@ export const dataMachine = (machineId: string) =>
       context: {
         pageData: {},
         results: [],
+        message: undefined,
       },
       states: {
         idle: {

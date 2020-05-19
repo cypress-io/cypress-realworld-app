@@ -81,7 +81,7 @@ describe("Bank Accounts", function () {
     cy.getBySelLike("list-item").children().contains("Deleted");
   });
 
-  // TODO: the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
+  // TODO: [enhancement] the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
   it("renders an empty bank account list state with onboarding modal", function () {
     cy.route("GET", "/bankAccounts", []).as("getBankAccounts");
 
