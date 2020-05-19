@@ -22,15 +22,6 @@
       ]
     },
     {
-      "login": "davidkpiano",
-      "name": "David Khourshid",
-      "avatar_url": "https://avatars2.githubusercontent.com/u/1093738?v=4",
-      "profile": "https://github.com/davidkpiano",
-      "contributions": [
-        "ideas"
-      ]
-    },
-    {
       "login": "amirrustam",
       "name": "Amir Rustamzadeh",
       "avatar_url": "https://avatars0.githubusercontent.com/u/334337?v=4",
@@ -44,6 +35,15 @@
         "bug",
         "maintenance",
         "review"
+      ]
+    },
+    {
+      "login": "davidkpiano",
+      "name": "David Khourshid",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1093738?v=4",
+      "profile": "https://github.com/davidkpiano",
+      "contributions": [
+        "ideas"
       ]
     }
   ],
