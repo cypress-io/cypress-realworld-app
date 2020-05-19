@@ -45,6 +45,17 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "brian-mann",
+      "name": "Brian Mann",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1268976?v=4",
+      "profile": "https://cypress.io",
+      "contributions": [
+        "review",
+        "ideas",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
