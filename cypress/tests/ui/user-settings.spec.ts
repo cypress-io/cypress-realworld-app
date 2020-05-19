@@ -8,7 +8,7 @@ describe("User Settings", function () {
     cy.server();
     cy.route("PATCH", "/users/*").as("updateUser");
 
-    cy.task("find:testData", { entity: "users" }).then((user: User) => {
+    cy.database("find", "users").then((user: User) => {
       cy.loginByXstate(user.username);
     });
 

@@ -15,7 +15,7 @@ describe("Bank Accounts", function () {
     cy.route("POST", "/bankAccounts").as("createBankAccount");
     cy.route("DELETE", "/bankAccounts/*").as("deleteBankAccount");
 
-    cy.task("find:testData", { entity: "users" }).then((user: User) => {
+    cy.database("find", "users").then((user: User) => {
       ctx.user = user;
 
       return cy.loginByXstate(ctx.user.username);

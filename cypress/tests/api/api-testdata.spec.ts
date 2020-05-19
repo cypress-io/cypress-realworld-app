@@ -15,7 +15,7 @@ describe("Test Data API", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+    cy.database("filter", "users").then((users: User[]) => {
       ctx.authenticatedUser = users[0];
 
       return cy.loginByApi(ctx.authenticatedUser.username);

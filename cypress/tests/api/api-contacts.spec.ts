@@ -1,6 +1,3 @@
-// check this file using TypeScript if available
-// @ts-check
-
 import { User, Contact } from "../../../src/models";
 
 const apiContacts = `${Cypress.env("apiUrl")}/contacts`;
@@ -16,16 +13,14 @@ describe("Contacts API", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+    cy.database("filter", "users").then((users: User[]) => {
       ctx.authenticatedUser = users[0];
       ctx.allUsers = users;
 
       return cy.loginByApi(ctx.authenticatedUser.username);
     });
 
-    cy.task("find:testData", {
-      entity: "contacts",
-    }).then((contact: Contact) => {
+    cy.database("find", "contacts").then((contact: Contact) => {
       ctx.contact = contact;
     });
   });

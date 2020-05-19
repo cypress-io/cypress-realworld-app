@@ -1,5 +1,5 @@
-import { User, Transaction } from "../../../src/models";
 import { isMobile } from "../../support/utils";
+import { User, Transaction } from "../../../src/models";
 
 type NotificationsCtx = {
   userA: User;
@@ -18,7 +18,7 @@ describe("Notifications", function () {
     cy.route("POST", "/transactions").as("createTransaction");
     cy.route("PATCH", "/notifications/*").as("updateNotification");
 
-    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+    cy.database("filter", "users").then((users: User[]) => {
       ctx.userA = users[0];
       ctx.userB = users[1];
       ctx.userC = users[2];
@@ -30,12 +30,11 @@ describe("Notifications", function () {
       cy.loginByXstate(ctx.userA.username);
       cy.wait("@getNotifications");
 
-      cy.task("find:testData", {
-        entity: "transactions",
-        findAttrs: { senderId: ctx.userB.id },
-      }).then((transaction: Transaction) => {
-        cy.visit(`/transaction/${transaction.id}`);
-      });
+      cy.database("find", "transactions", { senderId: ctx.userB.id }).then(
+        (transaction: Transaction) => {
+          cy.visit(`/transaction/${transaction.id}`);
+        }
+      );
 
       cy.log("🚩 Renders the notifications badge with count");
       cy.wait("@getNotifications")
@@ -70,9 +69,9 @@ describe("Notifications", function () {
     it("User C likes a transaction between User A and User B; User B and get notifications that User C liked transaction", function () {
       cy.loginByXstate(ctx.userC.username);
 
-      cy.task("find:testData", {
-        entity: "transactions",
-        findAttrs: { senderId: ctx.userB.id, receiverId: ctx.userA.id },
+      cy.database("find", "transactions", {
+        senderId: ctx.userB.id,
+        receiverId: ctx.userA.id,
       }).then((transaction: Transaction) => {
         cy.visit(`/transaction/${transaction.id}`);
       });
@@ -101,12 +100,11 @@ describe("Notifications", function () {
     it("User A comments on a transaction of User B; User B gets notification that User A commented on their transaction", function () {
       cy.loginByXstate(ctx.userA.username);
 
-      cy.task("find:testData", {
-        entity: "transactions",
-        findAttrs: { senderId: ctx.userB.id },
-      }).then((transaction: Transaction) => {
-        cy.visit(`/transaction/${transaction.id}`);
-      });
+      cy.database("find", "transactions", { senderId: ctx.userB.id }).then(
+        (transaction: Transaction) => {
+          cy.visit(`/transaction/${transaction.id}`);
+        }
+      );
 
       cy.getBySelLike("comment-input").type("Thank You{enter}");
 
@@ -122,9 +120,9 @@ describe("Notifications", function () {
     it("User C comments on a transaction between User A and User B; User A and B get notifications that User C commented on their transaction", function () {
       cy.loginByXstate(ctx.userC.username);
 
-      cy.task("find:testData", {
-        entity: "transactions",
-        findAttrs: { senderId: ctx.userB.id, receiverId: ctx.userA.id },
+      cy.database("find", "transactions", {
+        senderId: ctx.userB.id,
+        receiverId: ctx.userA.id,
       }).then((transaction: Transaction) => {
         cy.visit(`/transaction/${transaction.id}`);
       });

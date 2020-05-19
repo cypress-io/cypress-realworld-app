@@ -1,6 +1,3 @@
-// @ts-check
-/// <reference path="../global.d.ts" />
-
 import { pick } from "lodash/fp";
 import { format as formatDate } from "date-fns";
 
@@ -238,7 +235,7 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
     },
   });
 
-  const selectDate = (date) => {
+  const selectDate = (date: Date) => {
     return cy.get(`[data-date='${formatDate(date, "yyyy-MM-dd")}']`).click({ force: true });
   };
 
@@ -266,7 +263,6 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
 
 Cypress.Commands.add("database", (operation, entity, query, logTask = false) => {
   const params = {
-    operation,
     entity,
     query,
   };
@@ -282,7 +278,7 @@ Cypress.Commands.add("database", (operation, entity, query, logTask = false) => 
     },
   });
 
-  return cy.task("queryDatabase", params, { log: logTask }).then((data) => {
+  return cy.task(`${operation}:database`, params, { log: logTask }).then((data) => {
     log.snapshot();
     log.end();
     return data;
