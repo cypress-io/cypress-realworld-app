@@ -77,7 +77,6 @@ describe("Transaction Feed", function () {
   });
 
   describe("renders and paginates all transaction feeds", function () {
-    it("renders transactions item variations in feed", function () {});
     it("renders transactions item variations in feed", function () {
       cy.route("/transactions/public*", "fixture:public-transactions").as(
         "mockedPublicTransactions"
