@@ -22,7 +22,7 @@
   </a>
   
    <a href="#contributors-">
-    <img src="https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat" />
+    <img src="https://img.shields.io/badge/all_contributors-6-green.svg?style=flat" />
   </a>
 </p>
 
