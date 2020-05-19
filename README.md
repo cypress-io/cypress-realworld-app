@@ -1,7 +1,4 @@
 <p align="center">
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
   <img alt="Cypress Real World App Logo" src="./src/svgs/rwa-logo.svg" />
 </p>
 
@@ -22,6 +19,10 @@
 
   <a href="https://codecov.io/gh/cypress-io/cypress-realworld-app">
     <img src="https://codecov.io/gh/cypress-io/cypress-realworld-app/branch/develop/graph/badge.svg" />
+  </a>
+  
+   <a href="#contributors-">
+    <img src="https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat" />
   </a>
 </p>
 
