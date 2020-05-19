@@ -56,6 +56,16 @@
         "ideas",
         "test"
       ]
+    },
+    {
+      "login": "bencodezen",
+      "name": "Ben Hong",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/4836334?v=4",
+      "profile": "http://www.bencodezen.io",
+      "contributions": [
+        "review",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
