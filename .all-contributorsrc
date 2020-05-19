@@ -6,6 +6,13 @@
   "commit": false,
   "contributors": [
     {
+      "login": "kevinold",
+      "name": "Kevin Old",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/21967?v=4",
+      "profile": "http://www.kevinold.com",
+      "contributions": []
+    },
+    {
       "login": "davidkpiano",
       "name": "David Khourshid",
       "avatar_url": "https://avatars2.githubusercontent.com/u/1093738?v=4",
@@ -14,22 +21,6 @@
         "ideas"
       ]
     },
-    {
-      "login": "kevinold",
-      "name": "Kevin Old",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/21967?v=4",
-      "profile": "http://www.kevinold.com",
-      "contributions": [
-        "code",
-        "doc",
-        "infra",
-        "test",
-        "ideas",
-        "bug",
-        "maintenance",
-        "review"
-      ]
-    }
   ],
   "contributorsPerLine": 7,
   "projectName": "cypress-realworld-app",
