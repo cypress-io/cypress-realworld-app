@@ -146,12 +146,12 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="http://www.kevinold.com"><img src="https://avatars0.githubusercontent.com/u/21967?v=4" width="100px;" alt=""/><br /><sub><b>Kevin Old</b></sub></a><br /><a href="https://github.com/cypress-io/cypress-realworld-app/commits?author=kevinold" title="Code">💻</a> <a href="https://github.com/cypress-io/cypress-realworld-app/commits?author=kevinold" title="Documentation">📖</a> <a href="#infra-kevinold" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/cypress-io/cypress-realworld-app/commits?author=kevinold" title="Tests">⚠️</a> <a href="#ideas-kevinold" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/cypress-io/cypress-realworld-app/issues?q=author%3Akevinold" title="Bug reports">🐛</a> <a href="#maintenance-kevinold" title="Maintenance">🚧</a> <a href="https://github.com/cypress-io/cypress-realworld-app/pulls?q=is%3Apr+reviewed-by%3Akevinold" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://github.com/davidkpiano"><img src="https://avatars2.githubusercontent.com/u/1093738?v=4" width="100px;" alt=""/><br /><sub><b>David Khourshid</b></sub></a><br /><a href="#ideas-davidkpiano" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://twitter.com/amirrustam"><img src="https://avatars0.githubusercontent.com/u/334337?v=4" width="100px;" alt=""/><br /><sub><b>Amir Rustamzadeh</b></sub></a><br /><a href="https://github.com/cypress-io/cypress-realworld-app/commits?author=amirrustam" title="Code">💻</a> <a href="https://github.com/cypress-io/cypress-realworld-app/commits?author=amirrustam" title="Documentation">📖</a> <a href="#infra-amirrustam" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/cypress-io/cypress-realworld-app/commits?author=amirrustam" title="Tests">⚠️</a> <a href="#ideas-amirrustam" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/cypress-io/cypress-realworld-app/issues?q=author%3Aamirrustam" title="Bug reports">🐛</a> <a href="#maintenance-amirrustam" title="Maintenance">🚧</a> <a href="https://github.com/cypress-io/cypress-realworld-app/pulls?q=is%3Apr+reviewed-by%3Aamirrustam" title="Reviewed Pull Requests">👀</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
