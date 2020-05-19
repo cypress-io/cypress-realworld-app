@@ -53,7 +53,7 @@
     "bcryptjs": "2.4.3",
     "concurrently": "5.2.0",
     "cors": "2.8.5",
-    "date-fns": "2.13.0",
+    "date-fns": "2.14.0",
     "dinero.js": "1.8.1",
     "dotenv": "8.2.0",
     "express-paginate": "1.0.0",
