@@ -87,7 +87,7 @@
   "devDependencies": {
     "@cypress/code-coverage": "3.7.4",
     "@cypress/instrument-cra": "1.1.1",
-    "@cypress/webpack-preprocessor": "5.2.1",
+    "@cypress/webpack-preprocessor": "5.4.1",
     "babel-loader": "8.1.0",
     "cypress": "4.5.0",
     "eslint-config-prettier": "6.11.0",
