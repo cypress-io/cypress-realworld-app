@@ -1,39 +1,56 @@
 {
-	"files": [
-		"README.md"
-	],
-	"imageSize": 100,
-	"commit": false,
-	"contributors": [{
-			"login": "kevinold",
-			"name": "Kevin Old",
-			"avatar_url": "https://avatars0.githubusercontent.com/u/21967?v=4",
-			"profile": "http://www.kevinold.com",
-			"contributions": [
-				"code",
-				"doc",
-				"infra",
-				"test",
-				"ideas",
-				"bug",
-				"maintenance",
-				"review"
-			]
-		},
-		{
-			"login": "davidkpiano",
-			"name": "David Khourshid",
-			"avatar_url": "https://avatars2.githubusercontent.com/u/1093738?v=4",
-			"profile": "https://github.com/davidkpiano",
-			"contributions": [
-				"ideas"
-			]
-		}
-	],
-	"contributorsPerLine": 7,
-	"projectName": "cypress-realworld-app",
-	"projectOwner": "cypress-io",
-	"repoType": "github",
-	"repoHost": "https://github.com",
-	"skipCi": true
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "kevinold",
+      "name": "Kevin Old",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/21967?v=4",
+      "profile": "http://www.kevinold.com",
+      "contributions": [
+        "code",
+        "doc",
+        "infra",
+        "test",
+        "ideas",
+        "bug",
+        "maintenance",
+        "review"
+      ]
+    },
+    {
+      "login": "amirrustam",
+      "name": "Amir Rustamzadeh",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/334337?v=4",
+      "profile": "https://twitter.com/amirrustam",
+      "contributions": [
+        "code",
+        "doc",
+        "infra",
+        "test",
+        "ideas",
+        "bug",
+        "maintenance",
+        "review"
+      ]
+    },
+    {
+      "login": "davidkpiano",
+      "name": "David Khourshid",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1093738?v=4",
+      "profile": "https://github.com/davidkpiano",
+      "contributions": [
+        "ideas"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "cypress-realworld-app",
+  "projectOwner": "cypress-io",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
 }
