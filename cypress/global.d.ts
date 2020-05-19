@@ -41,8 +41,6 @@ declare namespace Cypress {
       options?: Partial<Loggable & Timeoutable>
     ): Chainable<any>;
 
-    waitForXstateService(service: string): Chainable<CustomWindow>;
-
     /**
      * Logs in using user interface
      */

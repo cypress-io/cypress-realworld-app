@@ -67,15 +67,6 @@ Cypress.Commands.add("loginByApi", (username, password = Cypress.env("defaultPas
   });
 });
 
-Cypress.Commands.add("waitForXstateService", (service) => {
-  return cy.window({ log: false }).should((win) => {
-    // @ts-ignore
-    if (!win[service].initialized) {
-      throw new Error(`${service} is not ready!`);
-    }
-  });
-});
-
 Cypress.Commands.add("reactComponent", { prevSubject: "element" }, ($el) => {
   if ($el.length !== 1) {
     throw new Error(`cy.component() requires element of length 1 but got ${$el.length}`);
@@ -125,8 +116,6 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
     log.snapshot("before");
   });
 
-  cy.waitForXstateService("authService");
-
   cy.window({ log: false }).then((win) => win.authService.send("LOGIN", { username, password }));
 
   return cy.wait("@loginUser").then((loginUser) => {
@@ -157,8 +146,6 @@ Cypress.Commands.add("logoutByXstate", () => {
     // @ts-ignore
     autoEnd: false,
   });
-
-  cy.waitForXstateService("authService");
 
   cy.window({ log: false }).then((win) => {
     log.snapshot("before");
