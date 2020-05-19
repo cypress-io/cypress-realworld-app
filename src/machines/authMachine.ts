@@ -71,6 +71,9 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
           onDone: { target: "authorized", actions: "setUserProfile" },
           onError: { target: "unauthorized", actions: "onError" },
         },
+        on: {
+          LOGOUT: "logout",
+        },
       },
       logout: {
         invoke: {
@@ -119,7 +122,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       },
       performLogout: async (ctx, event) => {
         localStorage.removeItem("authState");
-        await httpClient.post(`http://localhost:3001/logout`);
+        return await httpClient.post(`http://localhost:3001/logout`);
       },
     },
     actions: {
