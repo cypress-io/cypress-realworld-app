@@ -10,7 +10,16 @@
       "name": "Kevin Old",
       "avatar_url": "https://avatars0.githubusercontent.com/u/21967?v=4",
       "profile": "http://www.kevinold.com",
-      "contributions": []
+      "contributions": [
+        "code",
+        "doc",
+        "infra",
+        "test",
+        "ideas",
+        "bug",
+        "maintenance",
+        "review"
+      ]
     },
     {
       "login": "davidkpiano",
