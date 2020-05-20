@@ -3,6 +3,11 @@ orbs:
   cypress: cypress-io/cypress@1.22.0
   codecov: codecov/codecov@1.0.5
 
+executors:
+  with-chrome-and-ff:
+    docker:
+      - image: "cypress/browsers:node12.16.2-chrome81-ff75"
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 commands:
   report-coverage:
@@ -26,7 +31,7 @@ workflows:
       - cypress/install:
           name: "Setup"
           yarn: true
-          executor: cypress/browsers-chrome80-ff74
+          executor: with-chrome-and-firefox
           post-steps:
             - run:
                 name: Check Types
@@ -40,7 +45,7 @@ workflows:
           name: "API Tests"
           browser: chrome
           spec: cypress/tests/api/*
-          executor: cypress/browsers-chrome80-ff74
+          executor: with-chrome-and-firefox
           wait-on: "http://localhost:3000"
           yarn: true
           start: yarn start:ci
@@ -58,7 +63,7 @@ workflows:
           name: "UI Tests - Chrome"
           browser: chrome
           spec: cypress/tests/ui/*
-          executor: cypress/browsers-chrome80-ff74
+          executor: with-chrome-and-firefox
           wait-on: "http://localhost:3000"
           yarn: true
           start: yarn start:ci
@@ -77,7 +82,7 @@ workflows:
           browser: chrome
           spec: cypress/tests/ui/*
           config: "viewportWidth=375,viewportHeight=667"
-          executor: cypress/browsers-chrome80-ff74
+          executor: with-chrome-and-firefox
           wait-on: "http://localhost:3000"
           yarn: true
           start: yarn start:ci
@@ -95,7 +100,7 @@ workflows:
           name: "UI Tests - Firefox"
           browser: firefox
           spec: cypress/tests/ui/*
-          executor: cypress/browsers-chrome80-ff74
+          executor: with-chrome-and-firefox
           wait-on: "http://localhost:3000"
           yarn: true
           start: yarn start:ci
@@ -115,7 +120,7 @@ workflows:
           spec: cypress/tests/ui/*
           config: "viewportWidth=375,viewportHeight=667"
           wait-on: "http://localhost:3000"
-          executor: cypress/browsers-chrome80-ff74
+          executor: with-chrome-and-firefox
           yarn: true
           start: yarn start:ci
           record: true
