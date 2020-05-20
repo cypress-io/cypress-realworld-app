@@ -56,21 +56,43 @@ declare namespace Cypress {
       options?: Partial<Loggable & Timeoutable>
     ): Chainable<any>;
 
+    /**
+     * Find a single entity via database query
+     */
     database(operation: "find", entity: string, query?: object, log?: boolean): Chainable<any>;
+
+    /**
+     * Filter for data entities via database query
+     */
     database(operation: "filter", entity: string, query?: object, log?: boolean): Chainable<any[]>;
 
+    /**
+     * Fetch React component instance associated with received element subject
+     */
     reactComponent(): Chainable<any>;
+
+    /**
+     * Select data range within date range picker component
+     */
     pickDateRange(startDate: Date, endDate: Date): Chainable<void>;
+
+    /**
+     * Select transaction amount range
+     */
     setTransactionAmountRange(min: number, max: number): Chainable<any>;
+
+    /**
+     * Paginate to the next page in transaction infinite-scroll pagination view
+     */
     nextTransactionFeedPage(service: string, page: number): Chainable<any>;
 
     /**
-     * Logs in using user interface
+     * Logs-in user by using UI
      */
     login(username: string, password: string, rememberUser?: boolean): void;
 
     /**
-     * Logs in using API request
+     * Logs-in user by using API request
      */
     loginByApi(username: string, password?: string): Chainable<Response>;
 
@@ -80,7 +102,7 @@ declare namespace Cypress {
     loginByXstate(username: string, password?: string): Chainable<any>;
 
     /**
-     * Logs out bypassing UI by triggering XState login event
+     * Logs out via bypassing UI by triggering XState logout event
      */
     logoutByXstate(): Chainable<void>;
 
@@ -90,7 +112,7 @@ declare namespace Cypress {
     switchUser(username: string): Chainable<any>;
 
     /**
-     * Create Transaction bypassing UI
+     * Create Transaction via bypassing UI and using XState createTransactionService
      */
     createTransaction(payload): Chainable<any>;
   }
