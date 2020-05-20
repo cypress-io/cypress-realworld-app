@@ -26,7 +26,7 @@ workflows:
       - cypress/install:
           name: "Setup"
           yarn: true
-          executor: cypress/browsers-chrome78-ff70
+          executor: cypress/browsers-chrome80-ff74
           post-steps:
             - run:
                 name: Check Types
@@ -40,7 +40,7 @@ workflows:
           name: "API Tests"
           browser: chrome
           spec: cypress/tests/api/*
-          executor: cypress/browsers-chrome78-ff70
+          executor: cypress/browsers-chrome80-ff74
           wait-on: "http://localhost:3000"
           yarn: true
           start: yarn start:ci
@@ -58,7 +58,7 @@ workflows:
           name: "UI Tests - Chrome"
           browser: chrome
           spec: cypress/tests/ui/*
-          executor: cypress/browsers-chrome78-ff70
+          executor: cypress/browsers-chrome80-ff74
           wait-on: "http://localhost:3000"
           yarn: true
           start: yarn start:ci
@@ -77,7 +77,7 @@ workflows:
           browser: chrome
           spec: cypress/tests/ui/*
           config: "viewportWidth=375,viewportHeight=667"
-          executor: cypress/browsers-chrome78-ff70
+          executor: cypress/browsers-chrome80-ff74
           wait-on: "http://localhost:3000"
           yarn: true
           start: yarn start:ci
@@ -95,7 +95,7 @@ workflows:
           name: "UI Tests - Firefox"
           browser: firefox
           spec: cypress/tests/ui/*
-          executor: cypress/browsers-chrome78-ff70
+          executor: cypress/browsers-chrome80-ff74
           wait-on: "http://localhost:3000"
           yarn: true
           start: yarn start:ci
@@ -115,7 +115,7 @@ workflows:
           spec: cypress/tests/ui/*
           config: "viewportWidth=375,viewportHeight=667"
           wait-on: "http://localhost:3000"
-          executor: cypress/browsers-chrome78-ff70
+          executor: cypress/browsers-chrome80-ff74
           yarn: true
           start: yarn start:ci
           record: true
