@@ -1,11 +1,11 @@
 import _ from "lodash";
-import Promise from "bluebird";
 import axios from "axios";
 import dotenv from "dotenv";
+import Promise from "bluebird";
+import codeCoverageTask from "@cypress/code-coverage/task";
 
 dotenv.config();
 
-// @ts-ignore
 export default (on, config) => {
   config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD;
   config.env.paginationPageSize = process.env.PAGINATION_PAGE_SIZE;
@@ -13,19 +13,19 @@ export default (on, config) => {
   const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 
   const queryDatabase = ({ entity, query }, callback) => {
-    const fetchData = (attrs) => {
-      return axios
-        .get(`${testDataApiEndpoint}/${entity}`)
-        .then(({ data }) => callback(data, attrs));
+    const fetchData = async (attrs) => {
+      const { data } = await axios.get(`${testDataApiEndpoint}/${entity}`);
+      return callback(data, attrs);
     };
 
     return Array.isArray(query) ? Promise.map(query, fetchData) : fetchData(query);
   };
 
   on("task", {
-    "db:seed"() {
+    async "db:seed"() {
       // seed database with test data
-      return axios.post(`${testDataApiEndpoint}/seed`).then((resp) => resp.data);
+      const { data } = await axios.post(`${testDataApiEndpoint}/seed`);
+      return data;
     },
 
     // fetch test data from a database (MySQL, PostgreSQL, etc...)
@@ -37,6 +37,6 @@ export default (on, config) => {
     },
   });
 
-  require("@cypress/code-coverage/task")(on, config);
+  codeCoverageTask(on, config);
   return config;
 };
