@@ -4,7 +4,7 @@ orbs:
   codecov: codecov/codecov@1.0.5
 
 executors:
-  with-chrome-and-ff:
+  with-chrome-and-firefox:
     docker:
       - image: "cypress/browsers:node12.16.2-chrome81-ff75"
 
