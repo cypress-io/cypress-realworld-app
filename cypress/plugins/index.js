@@ -2,18 +2,6 @@ import _ from "lodash";
 import Promise from "bluebird";
 import axios from "axios";
 import dotenv from "dotenv";
-import "cypress";
-
-type dbQueryArg = {
-  entity: string;
-  query: object | [object];
-};
-
-type dbQueryCallback = (data: testDataPayload, attrs: any) => any;
-
-type testDataPayload = {
-  results: [];
-};
 
 dotenv.config();
 
@@ -24,8 +12,8 @@ export default (on, config) => {
 
   const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 
-  const queryDatabase = ({ entity, query }: dbQueryArg, callback: dbQueryCallback) => {
-    const fetchData = (attrs: any) => {
+  const queryDatabase = ({ entity, query }, callback) => {
+    const fetchData = (attrs) => {
       return axios
         .get(`${testDataApiEndpoint}/${entity}`)
         .then(({ data }) => callback(data, attrs));
@@ -41,10 +29,10 @@ export default (on, config) => {
     },
 
     // fetch test data from a database (MySQL, PostgreSQL, etc...)
-    "filter:database"(queryPayload: dbQueryArg) {
+    "filter:database"(queryPayload) {
       return queryDatabase(queryPayload, (data, attrs) => _.filter(data.results, attrs));
     },
-    "find:database"(queryPayload: dbQueryArg) {
+    "find:database"(queryPayload) {
       return queryDatabase(queryPayload, (data, attrs) => _.find(data.results, attrs));
     },
   });

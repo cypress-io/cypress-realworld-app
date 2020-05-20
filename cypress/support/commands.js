@@ -1,3 +1,6 @@
+// @ts-check
+///<reference path="../global.d.ts" />
+
 import { pick } from "lodash/fp";
 import { format as formatDate } from "date-fns";
 
@@ -235,7 +238,7 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
     },
   });
 
-  const selectDate = (date: Date) => {
+  const selectDate = (date) => {
     return cy.get(`[data-date='${formatDate(date, "yyyy-MM-dd")}']`).click({ force: true });
   };
 

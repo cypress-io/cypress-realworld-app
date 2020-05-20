@@ -19,6 +19,11 @@ declare namespace Cypress {
     personalTransactionService: any;
   }
 
+  type dbQueryArg = {
+    entity: string;
+    query: object | [object];
+  };
+
   interface Chainable {
     /**
      *  Window object with additional properties used during test.
@@ -33,7 +38,7 @@ declare namespace Cypress {
      */
     task(
       event: "filter:database",
-      arg?: any,
+      arg: dbQueryArg,
       options?: Partial<Loggable & Timeoutable>
     ): Chainable<any[]>;
 
