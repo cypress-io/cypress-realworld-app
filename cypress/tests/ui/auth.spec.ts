@@ -16,7 +16,7 @@ describe("User Sign-up and Login", function () {
   });
 
   it("should remember a user for 30 days after login", function () {
-    cy.task("find:testData", { entity: "users" }).then((user: User) => {
+    cy.database("find", "users").then((user: User) => {
       cy.login(user.username, "s3cret", true);
     });
 
@@ -127,7 +127,7 @@ describe("User Sign-up and Login", function () {
   });
 
   it("should error for an invalid password for existing user", function () {
-    cy.task("find:testData", { entity: "users" }).then((user: User) => {
+    cy.database("find", "users").then((user: User) => {
       cy.login(user.username, "INVALID");
     });
 

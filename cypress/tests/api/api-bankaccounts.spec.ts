@@ -18,14 +18,14 @@ describe("Bank Accounts API", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+    cy.database("filter", "users").then((users: User[]) => {
       ctx.authenticatedUser = users[0];
       ctx.allUsers = users;
 
       return cy.loginByApi(ctx.authenticatedUser.username);
     });
 
-    cy.task("filter:testData", { entity: "bankaccounts" }).then((bankAccounts: BankAccount[]) => {
+    cy.database("filter", "bankaccounts").then((bankAccounts: BankAccount[]) => {
       ctx.bankAccounts = bankAccounts;
     });
   });

@@ -1,57 +1,42 @@
-const _ = require("lodash");
-const Promise = require("bluebird");
-const axios = require("axios").default;
+import _ from "lodash";
+import axios from "axios";
+import dotenv from "dotenv";
+import Promise from "bluebird";
+import codeCoverageTask from "@cypress/code-coverage/task";
 
-require("dotenv").config();
+dotenv.config();
 
-module.exports = (on, config) => {
+export default (on, config) => {
   config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD;
   config.env.paginationPageSize = process.env.PAGINATION_PAGE_SIZE;
 
+  const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
+
+  const queryDatabase = ({ entity, query }, callback) => {
+    const fetchData = async (attrs) => {
+      const { data } = await axios.get(`${testDataApiEndpoint}/${entity}`);
+      return callback(data, attrs);
+    };
+
+    return Array.isArray(query) ? Promise.map(query, fetchData) : fetchData(query);
+  };
+
   on("task", {
-    "db:seed"() {
+    async "db:seed"() {
       // seed database with test data
-      return axios.post(`${config.env.apiUrl}/testData/seed`).then((resp) => resp.data);
+      const { data } = await axios.post(`${testDataApiEndpoint}/seed`);
+      return data;
     },
 
     // fetch test data from a database (MySQL, PostgreSQL, etc...)
-    "filter:testData"({ entity, filterAttrs }) {
-      const fetchData = (attrs) => {
-        return axios
-          .get(`${config.env.apiUrl}/testData/${entity}`)
-          .then(({ data }) => _.filter(data.results, attrs));
-      };
-
-      if (Array.isArray(filterAttrs)) {
-        return Promise.map(filterAttrs, fetchData);
-      }
-      return fetchData(filterAttrs);
+    "filter:database"(queryPayload) {
+      return queryDatabase(queryPayload, (data, attrs) => _.filter(data.results, attrs));
     },
-    "find:testData"({ entity, findAttrs }) {
-      const fetchData = (attrs) => {
-        return axios
-          .get(`${config.env.apiUrl}/testData/${entity}`)
-          .then(({ data }) => _.find(data.results, attrs));
-      };
-
-      if (Array.isArray(findAttrs)) {
-        return Promise.map(findAttrs, fetchData);
-      }
-      return fetchData(findAttrs);
-    },
-
-    queryDatabase({ operation, entity, query }) {
-      const isBulkQuery = Array.isArray(query);
-      const fetchData = (q) => {
-        return axios
-          .get(`${config.env.apiUrl}/testData/${entity}`)
-          .then(({ data }) => _[operation](data.results, q));
-      };
-
-      return isBulkQuery ? Promise.map(query, fetchData) : fetchData(query);
+    "find:database"(queryPayload) {
+      return queryDatabase(queryPayload, (data, attrs) => _.find(data.results, attrs));
     },
   });
 
-  require("@cypress/code-coverage/task")(on, config);
+  codeCoverageTask(on, config);
   return config;
 };

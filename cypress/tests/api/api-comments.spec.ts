@@ -16,15 +16,13 @@ describe("Comments API", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+    cy.database("filter", "users").then((users: User[]) => {
       ctx.authenticatedUser = users[0];
 
       return cy.loginByApi(ctx.authenticatedUser.username);
     });
 
-    cy.task("find:testData", {
-      entity: "comments",
-    }).then((comment: Comment) => {
+    cy.database("find", "comments").then((comment: Comment) => {
       ctx.transactionId = comment.transactionId;
     });
   });

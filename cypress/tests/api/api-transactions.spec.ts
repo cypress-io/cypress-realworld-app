@@ -1,14 +1,10 @@
-// check this file using TypeScript if available
-// @ts-check
-
 import faker from "faker";
-
-import { User, NotificationType, Transaction, BankAccount } from "../../../src/models";
 import { isEqual } from "lodash/fp";
+import { User, NotificationType, Transaction, BankAccount } from "../../../src/models";
 
 type TestTransactionsCtx = {
-  authenticatedUser?: User;
   receiver?: User;
+  authenticatedUser?: User;
   transactionId?: string;
   notificationId?: string;
   bankAccountId?: string;
@@ -26,28 +22,22 @@ describe("Transactions API", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+    cy.database("filter", "users").then((users: User[]) => {
       ctx.authenticatedUser = users[0];
       ctx.receiver = users[1];
 
       return cy.loginByApi(ctx.authenticatedUser.username);
     });
 
-    cy.task("find:testData", {
-      entity: "transactions",
-    }).then((transaction: Transaction) => {
+    cy.database("find", "transactions").then((transaction: Transaction) => {
       ctx.transactionId = transaction.id;
     });
 
-    cy.task("find:testData", {
-      entity: "notifications",
-    }).then((notification: NotificationType) => {
+    cy.database("find", "notifications").then((notification: NotificationType) => {
       ctx.notificationId = notification.id;
     });
 
-    cy.task("find:testData", {
-      entity: "bankaccounts",
-    }).then((bankaccount: BankAccount) => {
+    cy.database("find", "bankaccounts").then((bankaccount: BankAccount) => {
       ctx.bankAccountId = bankaccount.id;
     });
   });

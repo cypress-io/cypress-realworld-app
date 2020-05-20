@@ -1,6 +1,3 @@
-// check this file using TypeScript if available
-// @ts-check
-
 import faker from "faker";
 import { User } from "../../../src/models";
 
@@ -17,7 +14,7 @@ describe("Users API", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+    cy.database("filter", "users").then((users: User[]) => {
       ctx.authenticatedUser = users[0];
       ctx.searchUser = users[1];
 

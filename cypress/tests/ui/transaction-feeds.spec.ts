@@ -50,7 +50,7 @@ describe("Transaction Feed", function () {
     cy.route("/transactions/public*").as(feedViews.public.routeAlias);
     cy.route("/transactions/contacts*").as(feedViews.contacts.routeAlias);
 
-    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+    cy.database("filter", "users").then((users: User[]) => {
       ctx.user = users[0];
       ctx.allUsers = users;
 
@@ -77,7 +77,6 @@ describe("Transaction Feed", function () {
   });
 
   describe("renders and paginates all transaction feeds", function () {
-    it("renders transactions item variations in feed", function () {});
     it("renders transactions item variations in feed", function () {
       cy.route("/transactions/public*", "fixture:public-transactions").as(
         "mockedPublicTransactions"
@@ -207,9 +206,7 @@ describe("Transaction Feed", function () {
 
     _.each(feedViews, (feed, feedName) => {
       it(`filters ${feedName} transaction feed by date range`, function () {
-        cy.task("find:testData", {
-          entity: "transactions",
-        }).then((transaction: Transaction) => {
+        cy.database("find", "transactions").then((transaction: Transaction) => {
           const dateRangeStart = startOfDay(new Date(transaction.createdAt));
           const dateRangeEnd = endOfDayUTC(addDays(dateRangeStart, 1));
 
@@ -345,10 +342,7 @@ describe("Transaction Feed", function () {
 
   describe("Feed Item Visibility", () => {
     it("mine feed only shows personal transactions", function () {
-      cy.task("filter:testData", {
-        entity: "contacts",
-        filterAttrs: { userId: ctx.user!.id },
-      }).then((contacts: Contact[]) => {
+      cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
         cy.visit("/personal");
 
         cy.wait("@personalTransactions")
@@ -361,10 +355,7 @@ describe("Transaction Feed", function () {
     });
 
     it("friends feed only shows contact transactions", function () {
-      cy.task("filter:testData", {
-        entity: "contacts",
-        filterAttrs: { userId: ctx.user!.id },
-      }).then((contacts: Contact[]) => {
+      cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
         const contactIds = contacts.map((contact) => contact.contactUserId);
         cy.visit("/contacts");
 
@@ -382,10 +373,7 @@ describe("Transaction Feed", function () {
     });
 
     it("first five items belong to contacts in public feed", function () {
-      cy.task("filter:testData", {
-        entity: "contacts",
-        filterAttrs: { userId: ctx.user!.id },
-      }).then((contacts: Contact[]) => {
+      cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
         const contactIds = contacts.map((contact) => contact.contactUserId);
 
         cy.wait("@publicTransactions")

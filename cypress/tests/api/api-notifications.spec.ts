@@ -1,6 +1,5 @@
-// check this file using TypeScript if available
-// @ts-check
 import { User, NotificationType, Like, Comment, Transaction } from "../../../src/models";
+
 const apiNotifications = `${Cypress.env("apiUrl")}/notifications`;
 
 type TestNotificationsCtx = {
@@ -17,33 +16,25 @@ describe("Notifications API", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.task("filter:testData", { entity: "users" }).then((users: User[]) => {
+    cy.database("filter", "users").then((users: User[]) => {
       ctx.authenticatedUser = users[0];
 
       return cy.loginByApi(ctx.authenticatedUser.username);
     });
 
-    cy.task("find:testData", {
-      entity: "transactions",
-    }).then((transaction: Transaction) => {
+    cy.database("find", "transactions").then((transaction: Transaction) => {
       ctx.transactionId = transaction.id;
     });
 
-    cy.task("find:testData", {
-      entity: "notifications",
-    }).then((notification: NotificationType) => {
+    cy.database("find", "notifications").then((notification: NotificationType) => {
       ctx.notificationId = notification.id;
     });
 
-    cy.task("find:testData", {
-      entity: "likes",
-    }).then((like: Like) => {
+    cy.database("find", "likes").then((like: Like) => {
       ctx.likeId = like.transactionId;
     });
 
-    cy.task("find:testData", {
-      entity: "comments",
-    }).then((comment: Comment) => {
+    cy.database("find", "comments").then((comment: Comment) => {
       ctx.commentId = comment.transactionId;
     });
   });

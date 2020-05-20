@@ -1,6 +1,3 @@
-// check this file using TypeScript if available
-// @ts-check
-
 import { User } from "../../../src/models";
 
 const apiBankTransfer = `${Cypress.env("apiUrl")}/bankTransfers`;
@@ -15,7 +12,7 @@ describe("Bank Transfer API", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.task("find:testData", { entity: "users" }).then((user: User) => {
+    cy.database("find", "users").then((user: User) => {
       ctx.authenticatedUser = user;
 
       return cy.loginByApi(ctx.authenticatedUser.username);
