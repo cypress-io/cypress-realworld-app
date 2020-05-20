@@ -79,7 +79,7 @@
     "react-virtualized": "9.21.2",
     "shortid": "2.2.15",
     "ts-node": "8.10.1",
-    "typescript": "3.9.2",
+    "typescript": "3.9.3",
     "uuid": "8.0.0",
     "xstate": "4.9.1",
     "yup": "0.28.5"
