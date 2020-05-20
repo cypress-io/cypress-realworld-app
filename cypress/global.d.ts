@@ -1,6 +1,11 @@
 /// <reference types="cypress" />
 
 declare namespace Cypress {
+  import { authService } from "../src/machines/authMachine";
+  import { createTransactionService } from "../src/machines/createTransactionMachine";
+  import { publicTransactionService } from "../src/machines/publicTransactionsMachine";
+  import { contactsTransactionService } from "../src/machines/contactsTransactionsMachine";
+  import { personalTransactionService } from "../src/machines/personalTransactionsMachine";
   import {
     User,
     BankAccount,
@@ -12,11 +17,11 @@ declare namespace Cypress {
   } from "../src/models";
 
   interface CustomWindow extends Window {
-    authService: any;
-    createTransactionService: any;
-    publicTransactionService: any;
-    contactTransactionService: any;
-    personalTransactionService: any;
+    authService: typeof authService;
+    createTransactionService: typeof createTransactionService;
+    publicTransactionService: typeof publicTransactionService;
+    contactTransactionService: typeof contactsTransactionService;
+    personalTransactionService: typeof personalTransactionService;
   }
 
   type dbQueryArg = {
