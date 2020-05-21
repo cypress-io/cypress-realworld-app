@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  cypress: cypress-io/cypress@1.22.0
+  cypress: cypress-io/cypress@1.23.0
   codecov: codecov/codecov@1.0.5
 
 executors:
@@ -65,7 +65,7 @@ workflows:
           spec: cypress/tests/ui/*
           executor: with-chrome-and-firefox
           wait-on: "http://localhost:3000"
-          command: npx percy exec -- cypress run --record
+          command-prefix: npx percy exec --
           yarn: true
           start: yarn start:ci
           record: true
@@ -85,7 +85,7 @@ workflows:
           config: "viewportWidth=375,viewportHeight=667"
           executor: with-chrome-and-firefox
           wait-on: "http://localhost:3000"
-          command: npx percy exec -- cypress run --record
+          command-prefix: npx percy exec --
           yarn: true
           start: yarn start:ci
           record: true
@@ -104,7 +104,7 @@ workflows:
           spec: cypress/tests/ui/*
           executor: with-chrome-and-firefox
           wait-on: "http://localhost:3000"
-          command: npx percy exec -- cypress run --record
+          command-prefix: npx percy exec --
           yarn: true
           start: yarn start:ci
           record: true
@@ -124,7 +124,7 @@ workflows:
           config: "viewportWidth=375,viewportHeight=667"
           executor: with-chrome-and-firefox
           wait-on: "http://localhost:3000"
-          command: npx percy exec -- cypress run --record
+          command-prefix: npx percy exec --
           yarn: true
           start: yarn start:ci
           record: true
