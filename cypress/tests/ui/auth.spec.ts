@@ -13,6 +13,7 @@ describe("User Sign-up and Login", function () {
   it("should redirect unauthenticated user to signin page", function () {
     cy.visit("/personal");
     cy.location("pathname").should("equal", "/signin");
+    cy.percySnapshot();
   });
 
   it("should remember a user for 30 days after login", function () {
