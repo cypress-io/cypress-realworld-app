@@ -14,7 +14,7 @@ const UserListItem: React.FC<UserListItemProps> = ({ user, setReceiver, index })
   return (
     <ListItem data-test={`user-list-item-${user.id}`} onClick={() => setReceiver(user)}>
       <ListItemAvatar>
-        <Avatar src={`https://i.pravatar.cc/100?img=${index}`} />
+        <Avatar src={user.avatar} />
       </ListItemAvatar>
       <ListItemText
         primary={`${user.firstName} ${user.lastName}`}
