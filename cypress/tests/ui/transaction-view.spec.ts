@@ -71,7 +71,7 @@ describe("Transaction View", function () {
   });
 
   it("accepts a transaction request", function () {
-    cy.getBySelLike("transaction-item").eq(4).click();
+    cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
     cy.wait("@getTransaction");
 
     cy.getBySelLike("accept-request").click();
@@ -79,7 +79,7 @@ describe("Transaction View", function () {
   });
 
   it("rejects a transaction request", function () {
-    cy.getBySelLike("transaction-item").eq(4).click();
+    cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
     cy.wait("@getTransaction");
 
     cy.getBySelLike("reject-request").click();
