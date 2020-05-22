@@ -102,6 +102,7 @@ describe("User Sign-up and Login", function () {
       .and("contain", "Password must contain at least 4 characters");
 
     cy.getBySel("signin-submit").should("be.disabled");
+    cy.percySnapshot();
   });
 
   it("should display signup errors", function () {
@@ -125,6 +126,7 @@ describe("User Sign-up and Login", function () {
       .and("contain", "Password does not match");
 
     cy.getBySel("signup-submit").should("be.disabled");
+    cy.percySnapshot();
   });
 
   it("should error for an invalid user", function () {
@@ -133,6 +135,7 @@ describe("User Sign-up and Login", function () {
     cy.getBySel("signin-error")
       .should("be.visible")
       .and("have.text", "Username or password is invalid");
+    cy.percySnapshot();
   });
 
   it("should error for an invalid password for existing user", function () {
@@ -143,5 +146,6 @@ describe("User Sign-up and Login", function () {
     cy.getBySel("signin-error")
       .should("be.visible")
       .and("have.text", "Username or password is invalid");
+    cy.percySnapshot();
   });
 });
