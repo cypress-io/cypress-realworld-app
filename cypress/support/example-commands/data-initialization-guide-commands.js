@@ -1,5 +1,5 @@
 Cypress.Commands.add(
-  "createTransaction",
+  "createExampleTransaction",
   (sender, receiver, transactionType, transactionDetails) => {
     Cypress.log({
       name: "createTransaction",
@@ -10,7 +10,7 @@ Cypress.Commands.add(
     transactionDetails.sender = sender;
     transactionDetails.reciever = receiver;
 
-    return cy.task("db:createTransaction", [sender, transactionType, transactionDetails]);
+    return cy.task("db:createExampleTransaction", [sender, transactionType, transactionDetails]);
   }
 );
 
