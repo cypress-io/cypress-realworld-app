@@ -22,7 +22,7 @@ const tasks = {
       createdAt,
       modifiedAt,
     } = userDetails;
-    const userId = id || shortid();
+    const userId = id ? id : shortid();
 
     // eslint-disable-next-line no-undef
     return sequelize.query(
