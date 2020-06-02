@@ -3,6 +3,7 @@ import axios from "axios";
 import dotenv from "dotenv";
 import Promise from "bluebird";
 import codeCoverageTask from "@cypress/code-coverage/task";
+import dataInitializationTasks from "./example-tasks/data-initialization-tasks";
 
 dotenv.config();
 
@@ -38,5 +39,6 @@ export default (on, config) => {
   });
 
   codeCoverageTask(on, config);
+  dataInitializationTasks(on, config);
   return config;
 };
