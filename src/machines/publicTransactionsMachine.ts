@@ -3,7 +3,7 @@ import axios from "axios";
 import { isEmpty, omit } from "lodash/fp";
 
 // Implement as separate method so that cy.stub can be used from test to mock data
-const fetchData = async (ctx, event: any) => {
+const fetchData = async (ctx: any, event: any) => {
   const payload = omit("type", event);
   const resp = await axios
     .create({ withCredentials: true })

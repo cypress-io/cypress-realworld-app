@@ -130,7 +130,7 @@ export const createFakeUser = (): User => ({
 });
 
 // @ts-ignore
-export const createSeedUsers = (userCount) =>
+export const createSeedUsers = (userCount?) =>
   times(() => createFakeUser(), userCount || userbaseSize);
 
 export const createContact = (userId: User["id"], contactUserId: User["id"]) => ({
