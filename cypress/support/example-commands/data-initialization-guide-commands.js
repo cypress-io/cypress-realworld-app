@@ -14,10 +14,20 @@ Cypress.Commands.add("addLikes", (transaction, users) => {
     name: "addLikes",
     displayName: "ADD LIKES TO TRANSACTION",
     message: [`👩‍💼 Creating Likes for ${transaction.id}`],
+    consoleProps() {
+      return {
+        transaction,
+        users,
+      };
+    },
   });
 
   return cy.wrap(users).each((user) => {
-    return cy.task("db:createLikeForTransaction", [user.id, transaction.id]);
+    Cypress.log({ name: "user", displayName: "users", message: [`${user.id}`] });
+    return cy.task("db:createLikeForTransaction", {
+      userId: user.id,
+      transactionId: transaction.id,
+    });
   });
 });
 
@@ -26,14 +36,19 @@ Cypress.Commands.add("addComments", (transaction, comments) => {
     name: "addComments",
     displayName: "ADD COMMENTS TO TRANSACTION",
     message: [`👩‍💼 Creating Comments for ${transaction.id}`],
+    consoleProps() {
+      return {
+        transaction,
+        comments,
+      };
+    },
   });
 
   return cy.wrap(comments).each((comment) => {
-    return cy.task("db:createCommentForTransaction", [
-      comment.user.id,
-      transaction.id,
-      comment.content,
-    ]);
+    return cy.task("db:createCommentForTransaction", {
+      transactionId: transaction.id,
+      comment,
+    });
   });
 });
 

@@ -1,8 +1,4 @@
-import shortid from "shortid";
-import faker from "faker";
-import bcrypt from "bcryptjs";
-import { times } from "lodash/fp";
-import { User, Transaction, Like, Comment, DefaultPrivacyLevel } from "../../../../src/models";
+import { User, Transaction, Like, Comment } from "../../../../src/models";
 
 type ExampleCtx = {
   users?: User[];
@@ -11,34 +7,6 @@ type ExampleCtx = {
   likes?: Like[];
   comments?: Comment[];
 };
-
-/*
-export const passwordHash = bcrypt.hashSync("s3cret", 10);
-
-export const createFakeUser = (): User => ({
-  id: shortid(),
-  uuid: faker.random.uuid(),
-  firstName: faker.name.firstName(),
-  lastName: faker.name.lastName(),
-  username: faker.internet.userName(),
-  password: passwordHash,
-  email: faker.internet.email(),
-  phoneNumber: faker.phone.phoneNumberFormat(0),
-  avatar: faker.internet.avatar(),
-  defaultPrivacyLevel: faker.helpers.randomize([
-    DefaultPrivacyLevel.public,
-    DefaultPrivacyLevel.private,
-    DefaultPrivacyLevel.contacts,
-  ]),
-  balance: faker.random.number({ min: 10000, max: 200000 }),
-  createdAt: faker.date.past(),
-  modifiedAt: faker.date.recent(),
-});
-
-export const createFakeUsers = (userCount: number) => times(() => createFakeUser(), userCount);
-
-const exampleUsers = createFakeUsers(10);
-*/
 
 describe("User Transaction Tests", function () {
   // Learn more about the Context pattern in the Testing Approach & Organization Guide
@@ -66,26 +34,27 @@ describe("User Transaction Tests", function () {
       receiverId: ctx.users![1].id,
     };
 
-    cy.createExampleTransaction(transactionPayload).then((transaction) => {
-      ctx.transaction = transaction;
-    });
+    cy.createExampleTransaction(transactionPayload)
+      .then((transaction) => {
+        ctx.transaction = transaction;
 
-    // Add likes to the transaction on context for a list of users
-    cy.addLikes(ctx.transaction, [ctx.users![9], ctx.users![7]]).then((likes: Like[]) => {
-      ctx.likes = likes;
-    });
+        // Add likes to the transaction on context for a list of users
+        cy.addLikes(ctx.transaction, [ctx.users![3], ctx.users![4]]);
 
-    // Add comments to the transaction on context for a list of users
-    cy.addComments(ctx.transaction, [{ user: ctx.users![8], content: "thanks for dinner" }]).then(
-      (comments: Comment[]) => {
-        ctx.comments = comments;
-      }
-    );
+        // Add comment to the transaction on context for a list of users
+        cy.addComments(ctx.transaction, [{ user: ctx.users![2], content: "thanks for dinner" }]);
+      })
+      .then(() => {
+        cy.database("filter", "comments").then((transactions: Transaction[]) => {
+          cy.log("T: ", transactions);
+          //expect(transaction.id).should("equal", ctx.transaction!.id);
+        });
+      });
 
     // Login as users[0]
     // ...
 
-    cy.get("[data-test=user-balance]").should("be.greaterThan", 10);
+    //cy.get("[data-test=user-balance]").should("be.greaterThan", 10);
     // ...
   });
 });

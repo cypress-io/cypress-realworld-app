@@ -57,11 +57,11 @@ const tasks = {
     const { senderId, transactionType } = transactionDetails;
     return createTransaction(senderId, transactionType, transactionDetails);
   },
-  "db:createLikeForTransaction"(userId, transactionId) {
+  "db:createLikeForTransaction"({ userId, transactionId }) {
     return createLike(userId, transactionId);
   },
-  "db:createCommentForTransaction"(userId, transactionId, content) {
-    return createComment(userId, transactionId, content);
+  "db:createCommentForTransaction"({ transactionId, comment }) {
+    return createComment(comment.userId, transactionId, comment.content);
   },
 };
 
