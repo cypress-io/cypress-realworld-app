@@ -1,18 +1,13 @@
-Cypress.Commands.add(
-  "createExampleTransaction",
-  (sender, receiver, transactionType, transactionDetails) => {
-    Cypress.log({
-      name: "createTransaction",
-      displayName: "Create Transaction",
-      message: [`💰 ${receiver.id} | ${transactionType}`],
-    });
+Cypress.Commands.add("createExampleTransaction", (transactionDetails) => {
+  const { receiverId, transactionType } = transactionDetails;
+  Cypress.log({
+    name: "createTransaction",
+    displayName: "Create Transaction",
+    message: [`💰 ${receiverId} | ${transactionType}`],
+  });
 
-    transactionDetails.sender = sender;
-    transactionDetails.reciever = receiver;
-
-    return cy.task("db:createExampleTransaction", [sender, transactionType, transactionDetails]);
-  }
-);
+  return cy.task("db:createExampleTransaction", transactionDetails);
+});
 
 Cypress.Commands.add("addLikes", (transaction, users) => {
   Cypress.log({
@@ -39,5 +34,17 @@ Cypress.Commands.add("addComments", (transaction, comments) => {
       transaction.id,
       comment.content,
     ]);
+  });
+});
+
+Cypress.Commands.add("createExampleUsers", (users) => {
+  Cypress.log({
+    name: "createExampleUsers",
+    displayName: "CREATE EXAMPLE USERS",
+    message: [`👩‍💼 Creating Users`],
+  });
+
+  return cy.wrap(users).each((userDetails) => {
+    return cy.task("db:createUser", userDetails);
   });
 });

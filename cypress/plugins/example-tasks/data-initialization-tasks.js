@@ -41,9 +41,6 @@ const tasks = {
       }
     );
   },
-  "db:createUsers"(users) {
-    return Promise.all(users.map((userDetails) => cy.task("db:createUser", userDetails)));
-  },
   "db:getUsers"(userCount) {
     // eslint-disable-next-line no-undef
     return sequelize.query("SELECT * FROM users LIMIT ?;");
@@ -56,8 +53,9 @@ const tasks = {
     // Ruby
     return cy.exec("ruby database.rb —create user");
   },
-  "db:createTransaction"(userId, transactionType, transactionDetails) {
-    return createTransaction(userId, transactionType, transactionDetails);
+  "db:createExampleTransaction"(transactionDetails) {
+    const { senderId, transactionType } = transactionDetails;
+    return createTransaction(senderId, transactionType, transactionDetails);
   },
   "db:createLikeForTransaction"(userId, transactionId) {
     return createLike(userId, transactionId);
