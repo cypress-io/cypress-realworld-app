@@ -20,7 +20,7 @@ describe("User Transaction Tests", function () {
     cy.database("filter", "users").then((users: User[]) => {
       ctx.users = users;
 
-      return cy.loginByApi(ctx.users[0].username);
+      return cy.loginByXstate(ctx.users[0].username);
     });
   });
 
@@ -32,29 +32,23 @@ describe("User Transaction Tests", function () {
       description: "Indian Food",
       senderId: ctx.users![0].id,
       receiverId: ctx.users![1].id,
+      privacyLevel: "contacts",
     };
 
     cy.createExampleTransaction(transactionPayload)
       .then((transaction) => {
-        ctx.transaction = transaction;
-
         // Add likes to the transaction on context for a list of users
-        cy.addLikes(ctx.transaction, [ctx.users![3], ctx.users![4]]);
+        cy.addLikes(transaction, [ctx.users![3], ctx.users![4]]);
 
         // Add comment to the transaction on context for a list of users
-        cy.addComments(ctx.transaction, [{ user: ctx.users![2], content: "thanks for dinner" }]);
+        cy.addComments(transaction, [{ user: ctx.users![2], content: "thanks for dinner" }]);
+
+        ctx.transaction = transaction;
       })
       .then(() => {
-        cy.database("filter", "comments").then((transactions: Transaction[]) => {
-          cy.log("T: ", transactions);
-          //expect(transaction.id).should("equal", ctx.transaction!.id);
-        });
+        cy.visit(`/transaction/${ctx.transaction!.id}`);
+        //cy.get("[data-test=like-count]").should("have.text", "2");
+        //cy.get("[data-test=comment-count]").should("have.text", "1");
       });
-
-    // Login as users[0]
-    // ...
-
-    //cy.get("[data-test=user-balance]").should("be.greaterThan", 10);
-    // ...
   });
 });
