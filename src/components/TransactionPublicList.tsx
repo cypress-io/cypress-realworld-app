@@ -20,14 +20,6 @@ const TransactionPublicList: React.FC<TransactionPublicListProps> = ({
   dateRangeFilters,
   amountRangeFilters,
 }) => {
-  // @ts-ignore
-  if (window.Cypress) {
-    // @ts-ignore
-    window.publicTransactionMachine = publicTransactionsMachine.withContext(
-      // @ts-ignore
-      window.initialPublicTransactionContext
-    );
-  }
   const [current, send, publicTransactionService] = useMachine(publicTransactionsMachine);
   const { pageData, results } = current.context;
 
