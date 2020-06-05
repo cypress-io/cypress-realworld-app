@@ -23,7 +23,6 @@ Cypress.Commands.add("addLikes", (transaction, users) => {
   });
 
   return cy.wrap(users).each((user) => {
-    Cypress.log({ name: "user", displayName: "users", message: [`${user.id}`] });
     return cy.task("db:createLikeForTransaction", {
       userId: user.id,
       transactionId: transaction.id,
