@@ -35,16 +35,18 @@ export interface DataContext {
   message?: string;
 }
 
-export const dataMachine = (machineId: string) =>
+const initialContext: DataContext = {
+  pageData: {},
+  results: [],
+  message: undefined,
+};
+
+export const dataMachine = (machineId: string, context: DataContext = initialContext) =>
   Machine<DataContext, DataSchema, DataEvents>(
     {
       id: machineId,
       initial: "idle",
-      context: {
-        pageData: {},
-        results: [],
-        message: undefined,
-      },
+      context: context,
       states: {
         idle: {
           on: {

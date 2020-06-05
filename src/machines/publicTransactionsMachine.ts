@@ -37,7 +37,18 @@ cy.window().its("fetchPublicTransactions").should("have.callCount", 1);
 cy.window().its("fetchPublicTransactions").should("have.length", 10);
 */
 
-export const publicTransactionsMachine = dataMachine("publicTransactions").withConfig({
+const initialContext =
+  // @ts-ignore
+  window.Cypress && window.initialPublicTransactionContext
+    ? // @ts-ignore
+      // @ts-ignore
+      window.initialPublicTransactionContext
+    : undefined;
+
+export const publicTransactionsMachine = dataMachine(
+  "publicTransactions",
+  initialContext
+).withConfig({
   services: {
     fetchData,
   },
