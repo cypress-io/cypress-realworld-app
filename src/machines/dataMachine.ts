@@ -8,6 +8,7 @@ export interface DataSchema {
     updating: {};
     creating: {};
     deleting: {};
+    testSetContext: {};
     success: {
       states: {
         unknown: {};
@@ -26,6 +27,7 @@ export type DataEvents =
   | { type: "UPDATE" }
   | { type: "CREATE" }
   | { type: "DELETE" }
+  | { type: "TEST_SET_CONTEXT" }
   | SuccessEvent
   | FailureEvent;
 
@@ -54,6 +56,13 @@ export const dataMachine = (machineId: string, context: DataContext = initialCon
             CREATE: "creating",
             UPDATE: "updating",
             DELETE: "deleting",
+            TEST_SET_CONTEXT: "testSetContext",
+          },
+        },
+        testSetContext: {
+          entry: ["testSetContext"],
+          after: {
+            100: "idle",
           },
         },
         loading: {
@@ -91,6 +100,7 @@ export const dataMachine = (machineId: string, context: DataContext = initialCon
             CREATE: "creating",
             UPDATE: "updating",
             DELETE: "deleting",
+            TEST_SET_CONTEXT: "testSetContext",
           },
           initial: "unknown",
           states: {
@@ -126,9 +136,10 @@ export const dataMachine = (machineId: string, context: DataContext = initialCon
         setMessage: /* istanbul ignore next */ assign((ctx, event: any) => ({
           message: event.message,
         })),
+        testSetContext: /* istanbul ignore next */ assign((ctx, event: any) => event),
       },
       guards: {
-        hasData: (ctx: DataContext, event) => !!ctx.results && ctx.results.length > 0,
+        hasData: (ctx: DataContext, event: any) => !!ctx.results && ctx.results.length > 0,
       },
     }
   );
