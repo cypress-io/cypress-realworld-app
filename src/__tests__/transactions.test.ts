@@ -169,7 +169,7 @@ describe("Transactions", () => {
     const edits: Partial<Transaction> = {
       requestStatus: TransactionRequestStatus.rejected,
     };
-    updateTransactionById(user.id, transaction.id, edits);
+    updateTransactionById(transaction.id, edits);
 
     const updatedTransaction = getTransactionById(transaction.id);
     expect(updatedTransaction.requestStatus).toEqual("rejected");
@@ -187,7 +187,7 @@ describe("Transactions", () => {
     const edits: Partial<Transaction> = {
       requestStatus: TransactionRequestStatus.accepted,
     };
-    updateTransactionById(user.id, transaction.id, edits);
+    updateTransactionById(transaction.id, edits);
 
     const updatedTransaction = getTransactionById(transaction.id);
     expect(updatedTransaction.requestStatus).toEqual("accepted");
@@ -303,7 +303,7 @@ describe("Transactions", () => {
     const edits: Partial<Transaction> = {
       requestStatus: TransactionRequestStatus.accepted,
     };
-    updateTransactionById(receiver.id, transaction.id, edits);
+    updateTransactionById(transaction.id, edits);
 
     const updatedTransaction = getTransactionById(transaction.id);
     expect(updatedTransaction.requestStatus).toEqual("accepted");
