@@ -570,7 +570,7 @@ export const createTransaction = (
   if (isPayment(transaction)) {
     debitPayAppBalance(sender, transaction);
     creditPayAppBalance(receiver, transaction);
-    updateTransactionById(sender.id, transaction.id, {
+    updateTransactionById(transaction.id, {
       status: TransactionStatus.complete,
     });
     createPaymentNotification(
