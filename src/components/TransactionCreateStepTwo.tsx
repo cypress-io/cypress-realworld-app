@@ -6,7 +6,6 @@ import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object, number } from "yup";
 import { Paper, Typography, Button, Grid, Container, Avatar, Box } from "@material-ui/core";
 import { User } from "../models";
-import { random } from "lodash/fp";
 
 const validationSchema = object({
   amount: number().required("Please enter a valid amount"),
@@ -92,7 +91,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
       <Box display="flex" height={200} alignItems="center" justifyContent="center">
         <Grid container direction="column" justify="flex-start" alignItems="center">
           <Grid item>
-            <Avatar src={`https://i.pravatar.cc/100?img=${random(3, 50)}`} />
+            <Avatar src={receiver.avatar} />
           </Grid>
           <Grid item>
             <Typography component="h2" variant="h6" color="primary" gutterBottom>

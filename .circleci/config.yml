@@ -119,8 +119,8 @@ workflows:
           browser: firefox
           spec: cypress/tests/ui/*
           config: "viewportWidth=375,viewportHeight=667"
-          wait-on: "http://localhost:3000"
           executor: with-chrome-and-firefox
+          wait-on: "http://localhost:3000"
           yarn: true
           start: yarn start:ci
           record: true

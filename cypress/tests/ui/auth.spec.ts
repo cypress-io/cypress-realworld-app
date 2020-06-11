@@ -41,13 +41,14 @@ describe("User Sign-up and Login", function () {
 
     // Sign-up User
     cy.visit("/");
+
     cy.getBySel("signup").click();
 
     cy.getBySel("signup-first-name").type(userInfo.firstName);
     cy.getBySel("signup-last-name").type(userInfo.lastName);
     cy.getBySel("signup-username").type(userInfo.username);
     cy.getBySel("signup-password").type(userInfo.password);
-    cy.getBySel("signup-confirmPassword").type(userInfo.password);
+    cy.getBySel("signup-confirmPassword").type(userInfo.password);;
     cy.getBySel("signup-submit").click();
     cy.wait("@signup");
 

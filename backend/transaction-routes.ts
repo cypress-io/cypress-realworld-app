@@ -176,7 +176,7 @@ router.patch(
     const { transactionId } = req.params;
 
     /* istanbul ignore next */
-    updateTransactionById(req.user?.id!, transactionId, req.body);
+    updateTransactionById(transactionId, req.body);
 
     res.sendStatus(204);
   }
