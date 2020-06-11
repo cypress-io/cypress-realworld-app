@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
-  cypress: cypress-io/cypress@1.23.0
-  codecov: codecov/codecov@1.0.5
+  cypress: cypress-io/cypress@1.24.0
+  codecov: codecov/codecov@1.1.0
 
 executors:
   with-chrome-and-firefox:
