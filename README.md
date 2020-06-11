@@ -79,6 +79,8 @@ yarn dev
 yarn cypress:open
 ```
 
+> 👉 This project is fixed to Node version v12.16.
+
 ## Tests
 
 | Type | Location                                 |
