@@ -16,8 +16,8 @@ import { Interpreter } from "xstate";
 import { DataContext, DataEvents } from "../machines/dataMachine";
 import { useService } from "@xstate/react";
 import TransactionNavTabs from "./TransactionNavTabs";
-import { ReactComponent as PayAppLogo } from "../svgs/pay-app-logo.svg";
-import { ReactComponent as PayAppLogoDollar } from "../svgs/pay-app-logo-dollar.svg";
+import { ReactComponent as RWALogo } from "../svgs/rwa-logo.svg";
+import { ReactComponent as RWALogoIcon } from "../svgs/rwa-icon-logo.svg";
 
 const drawerWidth = 240;
 
@@ -76,11 +76,7 @@ interface NavBarProps {
   notificationsService: Interpreter<DataContext, any, DataEvents, any>;
 }
 
-const NavBar: React.FC<NavBarProps> = ({
-  drawerOpen,
-  toggleDrawer,
-  notificationsService,
-}) => {
+const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notificationsService }) => {
   const match = useLocation();
   const classes = useStyles();
   const theme = useTheme();
@@ -90,13 +86,10 @@ const NavBar: React.FC<NavBarProps> = ({
   const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
 
   return (
-    <AppBar
-      position="absolute"
-      className={clsx(classes.appBar, drawerOpen && classes.appBarShift)}
-    >
+    <AppBar position="absolute" className={clsx(classes.appBar, drawerOpen && classes.appBarShift)}>
       <Toolbar className={classes.toolbar}>
         <IconButton
-          data-test="sidenav-open"
+          data-test="sidenav-toggle"
           edge="start"
           color="inherit"
           aria-label="open drawer"
@@ -112,15 +105,11 @@ const NavBar: React.FC<NavBarProps> = ({
           className={classes.title}
           data-test="app-name-logo"
         >
-          <Link
-            to="/"
-            style={{ color: "#fff", textDecoration: "none" }}
-            component={RouterLink}
-          >
+          <Link to="/" style={{ color: "#fff", textDecoration: "none" }} component={RouterLink}>
             {xsBreakpoint ? (
-              <PayAppLogoDollar className={classes.logo} />
+              <RWALogoIcon className={classes.logo} />
             ) : (
-              <PayAppLogo className={classes.logo} />
+              <RWALogo className={classes.logo} />
             )}
           </Link>
         </Typography>
@@ -141,9 +130,7 @@ const NavBar: React.FC<NavBarProps> = ({
           data-test="nav-top-notifications-link"
         >
           <Badge
-            badgeContent={
-              allNotifications ? allNotifications.length : undefined
-            }
+            badgeContent={allNotifications ? allNotifications.length : undefined}
             data-test="nav-top-notifications-count"
             classes={{ badge: classes.customBadge }}
           >
@@ -151,8 +138,7 @@ const NavBar: React.FC<NavBarProps> = ({
           </Badge>
         </IconButton>
       </Toolbar>
-      {(match.pathname === "/" ||
-        RegExp("/(?:public|contacts|personal)").test(match.pathname)) && (
+      {(match.pathname === "/" || RegExp("/(?:public|contacts|personal)").test(match.pathname)) && (
         <TransactionNavTabs />
       )}
     </AppBar>

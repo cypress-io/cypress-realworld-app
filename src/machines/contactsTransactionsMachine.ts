@@ -2,9 +2,7 @@ import { dataMachine } from "./dataMachine";
 import axios from "axios";
 import { isEmpty, omit } from "lodash/fp";
 
-export const contactsTransactionsMachine = dataMachine(
-  "contactsTransactions"
-).withConfig({
+export const contactsTransactionsMachine = dataMachine("contactsTransactions").withConfig({
   services: {
     fetchData: async (ctx, event: any) => {
       const payload = omit("type", event);

@@ -10,16 +10,9 @@ export interface UserListItemProps {
   index: Number;
 }
 
-const UserListItem: React.FC<UserListItemProps> = ({
-  user,
-  setReceiver,
-  index,
-}) => {
+const UserListItem: React.FC<UserListItemProps> = ({ user, setReceiver, index }) => {
   return (
-    <ListItem
-      data-test={`user-list-item-${user.id}`}
-      onClick={() => setReceiver(user)}
-    >
+    <ListItem data-test={`user-list-item-${user.id}`} onClick={() => setReceiver(user)}>
       <ListItemAvatar>
         <Avatar src={`https://i.pravatar.cc/100?img=${index}`} />
       </ListItemAvatar>

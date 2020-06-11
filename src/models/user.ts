@@ -29,7 +29,4 @@ export type SignInPayload = Pick<User, "username" | "password"> & {
   remember?: Boolean;
 };
 
-export type SignUpPayload = Pick<
-  User,
-  "username" | "password" | "firstName" | "lastName"
->;
+export type SignUpPayload = Pick<User, "username" | "password" | "firstName" | "lastName">;

@@ -24,9 +24,7 @@ import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 const drawerWidth = 240;
 
 export const mainListItems = (
-  toggleDrawer:
-    | ((event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void)
-    | undefined,
+  toggleDrawer: ((event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void) | undefined,
   showTemporaryDrawer: Boolean
 ) => (
   <div>
@@ -87,15 +85,11 @@ export const mainListItems = (
 
 export const secondaryListItems = (signOutPending: Function) => (
   <div>
-    <ListItem button>
+    <ListItem button data-test="sidenav-signout">
       <ListItemIcon>
         <LogoutIcon />
       </ListItemIcon>
-      <ListItemText
-        primary="Logout"
-        data-test="sidenav-signout"
-        onClick={() => signOutPending()}
-      />
+      <ListItemText primary="Logout" onClick={() => signOutPending()} />
     </ListItem>
   </div>
 );
@@ -174,19 +168,13 @@ const NavDrawer: React.FC<Props> = ({
   const showTemporaryDrawer = useMediaQuery(theme.breakpoints.only("xs"));
 
   const currentUser = authState?.context?.user;
-  const signOutPending = () => {
-    sendAuth("LOGOUT");
-    localStorage.removeItem("authState");
-  };
+  const signOut = () => sendAuth("LOGOUT");
 
   return (
     <Drawer
       variant={showTemporaryDrawer ? "temporary" : "persistent"}
       classes={{
-        paper: clsx(
-          classes.drawerPaper,
-          !drawerOpen && classes.drawerPaperClose
-        ),
+        paper: clsx(classes.drawerPaper, !drawerOpen && classes.drawerPaperClose),
       }}
       open={drawerOpen}
       ModalProps={{
@@ -240,7 +228,7 @@ const NavDrawer: React.FC<Props> = ({
                 className={classes.amount}
                 data-test="sidenav-user-balance"
               >
-                {currentUser.balance && formatAmount(currentUser.balance)}
+                {formatAmount(currentUser.balance)}
               </Typography>
               <Typography variant="subtitle2" color="inherit" gutterBottom>
                 Account Balance
@@ -258,7 +246,7 @@ const NavDrawer: React.FC<Props> = ({
           <Divider />
         </Grid>
         <Grid item>
-          <List>{secondaryListItems(signOutPending)}</List>
+          <List>{secondaryListItems(signOut)}</List>
         </Grid>
       </Grid>
     </Drawer>

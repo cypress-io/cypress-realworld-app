@@ -42,6 +42,9 @@ const useStyles = makeStyles({
   red: {
     color: "red",
   },
+  blue: {
+    color: "blue",
+  },
 });
 
 const NotificationListItem: React.FC<NotificationListItemProps> = ({
@@ -71,9 +74,6 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
     } else if (isPaymentReceivedNotification(notification)) {
       listItemIcon = <MonetizationOnIcon className={classes.green} />;
       listItemText = `${notification.userFullName} received payment.`;
-    } else {
-      // otherwise, incomplete payment notification
-      listItemText = `An error occurred with payment to ${notification.userFullName}.`;
     }
   }
 
@@ -85,9 +85,7 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
         <IconButton
           aria-label="mark as read"
           color="primary"
-          onClick={() =>
-            updateNotification({ id: notification.id, isRead: true })
-          }
+          onClick={() => updateNotification({ id: notification.id, isRead: true })}
           data-test={`notification-mark-read-${notification.id}`}
         >
           <CheckIcon />
@@ -97,9 +95,7 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
         <Button
           color="primary"
           size="small"
-          onClick={() =>
-            updateNotification({ id: notification.id, isRead: true })
-          }
+          onClick={() => updateNotification({ id: notification.id, isRead: true })}
           data-test={`notification-mark-read-${notification.id}`}
         >
           Dismiss

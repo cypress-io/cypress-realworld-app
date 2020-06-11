@@ -31,23 +31,12 @@ const UserSettingsContainer: React.FC<Props> = ({ authService }) => {
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
         User Settings
       </Typography>
-      <Grid
-        container
-        spacing={2}
-        direction="row"
-        justify="flex-start"
-        alignItems="flex-start"
-      >
+      <Grid container spacing={2} direction="row" justify="flex-start" alignItems="flex-start">
         <Grid item>
           <PersonalSettingsIllustration style={{ height: 200, width: 300 }} />
         </Grid>
         <Grid item style={{ width: "50%" }}>
-          {currentUser && (
-            <UserSettingsForm
-              userProfile={currentUser}
-              updateUser={updateUser}
-            />
-          )}
+          {currentUser && <UserSettingsForm userProfile={currentUser} updateUser={updateUser} />}
         </Grid>
       </Grid>
     </Paper>

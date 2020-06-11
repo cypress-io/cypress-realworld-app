@@ -20,8 +20,14 @@ const TransactionPublicList: React.FC<TransactionPublicListProps> = ({
   dateRangeFilters,
   amountRangeFilters,
 }) => {
-  const [current, send] = useMachine(publicTransactionsMachine);
+  const [current, send, publicTransactionService] = useMachine(publicTransactionsMachine);
   const { pageData, results } = current.context;
+
+  // @ts-ignore
+  if (window.Cypress) {
+    // @ts-ignore
+    window.publicTransactionService = publicTransactionService;
+  }
 
   useEffect(() => {
     send("FETCH", { ...dateRangeFilters, ...amountRangeFilters });
@@ -39,6 +45,7 @@ const TransactionPublicList: React.FC<TransactionPublicListProps> = ({
         isLoading={current.matches("loading")}
         loadNextPage={loadNextPage}
         pagination={pageData as TransactionPagination}
+        showCreateButton
       />
     </>
   );

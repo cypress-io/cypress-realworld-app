@@ -10,10 +10,7 @@ export interface BankAccountListProps {
   deleteBankAccount: Function;
 }
 
-const BankAccountList: React.FC<BankAccountListProps> = ({
-  bankAccounts,
-  deleteBankAccount,
-}) => {
+const BankAccountList: React.FC<BankAccountListProps> = ({ bankAccounts, deleteBankAccount }) => {
   return (
     <>
       {bankAccounts?.length > 0 ? (

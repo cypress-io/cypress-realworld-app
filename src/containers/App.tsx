@@ -1,17 +1,24 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
-import { useMachine } from "@xstate/react";
+import { Switch, Route, Redirect } from "react-router-dom";
+import { useService, useMachine } from "@xstate/react";
 import { makeStyles } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 
 import { snackbarMachine } from "../machines/snackbarMachine";
 import { notificationsMachine } from "../machines/notificationsMachine";
-import { authMachine } from "../machines/authMachine";
+import { authService } from "../machines/authMachine";
 import AlertBar from "../components/AlertBar";
-import PrivateRoutesContainer from "./PrivateRoutesContainer";
 import SignInForm from "../components/SignInForm";
 import SignUpForm from "../components/SignUpForm";
 import { bankAccountsMachine } from "../machines/bankAccountsMachine";
+import PrivateRoutesContainer from "./PrivateRoutesContainer";
+
+// @ts-ignore
+if (window.Cypress) {
+  // Expose authService on window for Cypress
+  // @ts-ignore
+  window.authService = authService;
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,15 +26,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const savedAuthState = localStorage.getItem("authState");
-
-const persistedAuthState = savedAuthState && JSON.parse(savedAuthState);
-
 const App: React.FC = () => {
   const classes = useStyles();
-  const [authState, , authService] = useMachine(authMachine, {
-    state: persistedAuthState,
-  });
+  const [authState] = useService(authService);
   const [, , notificationsService] = useMachine(notificationsMachine);
 
   const [, , snackbarService] = useMachine(snackbarMachine);
@@ -45,6 +46,7 @@ const App: React.FC = () => {
 
       {isLoggedIn && (
         <PrivateRoutesContainer
+          isLoggedIn={isLoggedIn}
           notificationsService={notificationsService}
           authService={authService}
           snackbarService={snackbarService}
@@ -53,15 +55,21 @@ const App: React.FC = () => {
       )}
       {authState.matches("unauthorized") && (
         <Switch>
-          <Route path="/signup">
+          <Route exact path="/signup">
             <SignUpForm authService={authService} />
           </Route>
-          <Route path="/(signin)?">
+          <Route exact path="/signin">
             <SignInForm authService={authService} />
+          </Route>
+          <Route path="/*">
+            <Redirect
+              to={{
+                pathname: "/signin",
+              }}
+            />
           </Route>
         </Switch>
       )}
-
       <AlertBar snackbarService={snackbarService} />
     </div>
   );

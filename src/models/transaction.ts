@@ -24,10 +24,27 @@ export interface Transaction {
   senderId: string;
   balanceAtCompletion?: number;
   status: TransactionStatus;
-  requestStatus?: TransactionRequestStatus;
-  requestResolvedAt?: Date;
+  requestStatus?: TransactionRequestStatus | string;
+  requestResolvedAt?: Date | string;
   createdAt: Date;
   modifiedAt: Date;
+}
+
+export interface FakeTransaction {
+  id?: string;
+  uuid?: string;
+  source?: string; // Empty if Payment or Request; Populated with BankAccount ID
+  amount?: number;
+  description?: string;
+  privacyLevel?: DefaultPrivacyLevel;
+  receiverId: string;
+  senderId: string;
+  balanceAtCompletion?: number;
+  status?: TransactionStatus;
+  requestStatus?: TransactionRequestStatus | string;
+  requestResolvedAt?: Date | string;
+  createdAt?: Date;
+  modifiedAt?: Date;
 }
 
 export interface TransactionResponseItem extends Transaction {
@@ -39,10 +56,12 @@ export interface TransactionResponseItem extends Transaction {
   senderAvatar: string;
 }
 
-export type TransactionPayload = Omit<
-  Transaction,
-  "id" | "uuid" | "createdAt" | "modifiedAt"
->;
+export type TransactionScenario = {
+  status: TransactionStatus;
+  requestStatus: TransactionRequestStatus | string;
+};
+
+export type TransactionPayload = Omit<Transaction, "id" | "uuid" | "createdAt" | "modifiedAt">;
 
 export type TransactionCreatePayload = Partial<
   Pick<Transaction, "senderId" | "receiverId" | "description"> & {
@@ -51,10 +70,7 @@ export type TransactionCreatePayload = Partial<
   }
 >;
 
-export type TransactionUpdateActionPayload = Pick<
-  Transaction,
-  "id" | "requestStatus"
->;
+export type TransactionUpdateActionPayload = Pick<Transaction, "id" | "requestStatus">;
 
 type TransactionQueryBase = {
   dateRangeStart?: string;
@@ -76,9 +92,7 @@ export type TransactionAmountRangePayload = Partial<
   Pick<TransactionQueryPayload, "amountMin" | "amountMax">
 >;
 
-export type TransactionPaginationPayload = Partial<
-  Pick<TransactionQueryPayload, "page" | "limit">
->;
+export type TransactionPaginationPayload = Partial<Pick<TransactionQueryPayload, "page" | "limit">>;
 
 export type TransactionClearFiltersPayload = {
   filterType: "date" | "amount";

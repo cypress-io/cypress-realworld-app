@@ -20,9 +20,7 @@ export interface NotificationBase {
   modifiedAt: Date;
 }
 
-export type NotificationUpdatePayload = Partial<
-  Pick<NotificationBase, "id" | "isRead">
->;
+export type NotificationUpdatePayload = Partial<Pick<NotificationBase, "id" | "isRead">>;
 
 export interface PaymentNotification extends NotificationBase {
   status: PaymentNotificationStatus;
@@ -65,10 +63,7 @@ export interface CommentNotificationPayload extends NotificationPayloadBase {
   commentId: string;
 }
 
-export type NotificationType =
-  | PaymentNotification
-  | LikeNotification
-  | CommentNotification;
+export type NotificationType = PaymentNotification | LikeNotification | CommentNotification;
 
 export type NotificationPayloadType =
   | PaymentNotificationPayload

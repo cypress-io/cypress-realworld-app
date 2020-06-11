@@ -15,10 +15,11 @@ import Container from "@material-ui/core/Container";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 
-import { ReactComponent as PayAppLogo } from "../svgs/pay-app-logo.svg";
+import { ReactComponent as RWALogo } from "../svgs/rwa-logo.svg";
 import Footer from "./Footer";
 import { SignInPayload } from "../models";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import Alert from "@material-ui/lab/Alert";
 
 const validationSchema = object({
   username: string().required("Username is required"),
@@ -52,7 +53,7 @@ export interface Props {
 
 const SignInForm: React.FC<Props> = ({ authService }) => {
   const classes = useStyles();
-  const [, sendAuth] = useService(authService);
+  const [authState, sendAuth] = useService(authService);
   const initialValues: SignInPayload = {
     username: "",
     password: "",
@@ -65,8 +66,13 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
+        {authState.context?.message && (
+          <Alert data-test="signin-error" severity="error">
+            {authState.context.message}
+          </Alert>
+        )}
         <div>
-          <PayAppLogo className={classes.logo} />
+          <RWALogo className={classes.logo} />
         </div>
         <Typography component="h1" variant="h5">
           Sign in
@@ -74,16 +80,16 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={async (values, { setSubmitting, setFieldValue }) => {
+          onSubmit={async (values, { setSubmitting }) => {
             setSubmitting(true);
 
             signInPending(values);
           }}
         >
-          {({ isValid, isSubmitting, dirty }) => (
+          {({ isValid, isSubmitting }) => (
             <Form className={classes.form}>
               <Field name="username">
-                {({ field, meta }: FieldProps) => (
+                {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="normal"
@@ -93,14 +99,14 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                     type="text"
                     autoFocus
                     data-test="signin-username"
-                    error={dirty && meta.touched && Boolean(meta.error)}
-                    helperText={dirty && meta.touched ? meta.error : ""}
+                    error={(touched || value !== initialValue) && Boolean(error)}
+                    helperText={touched || value !== initialValue ? error : ""}
                     {...field}
                   />
                 )}
               </Field>
               <Field name="password">
-                {({ field, meta }: FieldProps) => (
+                {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="normal"
@@ -109,8 +115,8 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                     type="password"
                     id="password"
                     data-test="signin-password"
-                    error={dirty && meta.touched && Boolean(meta.error)}
-                    helperText={dirty && meta.touched ? meta.error : ""}
+                    error={touched && value !== initialValue && Boolean(error)}
+                    helperText={touched && value !== initialValue && touched ? error : ""}
                     {...field}
                   />
                 )}
@@ -119,13 +125,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                 control={
                   <Field name={"remember"}>
                     {({ field }: FieldProps) => {
-                      return (
-                        <Checkbox
-                          color="primary"
-                          data-test="signin-remember-me"
-                          {...field}
-                        />
-                      );
+                      return <Checkbox color="primary" data-test="signin-remember-me" {...field} />;
                     }}
                   </Field>
                 }
@@ -147,7 +147,9 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                   {/*<Link to="/forgotpassword">Forgot password?</Link>*/}
                 </Grid>
                 <Grid item>
-                  <Link to="/signup">{"Don't have an account? Sign Up"}</Link>
+                  <Link data-test="signup" to="/signup">
+                    {"Don't have an account? Sign Up"}
+                  </Link>
                 </Grid>
               </Grid>
             </Form>

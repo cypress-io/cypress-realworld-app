@@ -1,9 +1,15 @@
 {
   "baseUrl": "http://localhost:3000",
   "projectId": "7s5okt",
+  "integrationFolder": "cypress/tests",
   "viewportHeight": 1000,
   "viewportWidth": 1280,
   "env": {
-    "apiUrl": "http://localhost:3001"
+    "apiUrl": "http://localhost:3001",
+    "mobileViewportWidthBreakpoint": 414,
+    "coverage": false,
+    "codeCoverage": {
+      "url": "http://localhost:3001/__coverage__"
+    }
   }
 }

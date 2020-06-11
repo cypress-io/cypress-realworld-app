@@ -52,29 +52,11 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
   const classes = useStyles();
   const theme = useTheme();
   const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
-  // TODO use in place of state
-  /*
-  const queryHasAmountFields =
-    transactionFilters && hasAmountQueryFields(transactionFilters);
-
-  const amountRangeValues = (transactionFilters: TransactionQueryPayload) => {
-    if (queryHasAmountFields) {
-      const { amountMin, amountMax } = getAmountQueryFields(transactionFilters);
-      return [amountMin, amountMax] as number[];
-    }
-    return [0, 100] as number[];
-  };
-  */
 
   const initialAmountRange = [0, 100];
-  const [amountRangeValue, setAmountRangeValue] = React.useState<number[]>(
-    initialAmountRange
-  );
+  const [amountRangeValue, setAmountRangeValue] = React.useState<number[]>(initialAmountRange);
 
-  const [
-    amountRangeAnchorEl,
-    setAmountRangeAnchorEl,
-  ] = React.useState<HTMLDivElement | null>(null);
+  const [amountRangeAnchorEl, setAmountRangeAnchorEl] = React.useState<HTMLDivElement | null>(null);
 
   const handleAmountRangeClick = (event: React.MouseEvent<HTMLDivElement>) => {
     setAmountRangeAnchorEl(event.currentTarget);
@@ -84,10 +66,7 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
     setAmountRangeAnchorEl(null);
   };
 
-  const handleAmountRangeChange = (
-    _event: any,
-    amountRange: number | number[]
-  ) => {
+  const handleAmountRangeChange = (_event: any, amountRange: number | number[]) => {
     filterAmountRange({
       amountMin: padAmountWithZeros(first(amountRange as number[]) as number),
       amountMax: padAmountWithZeros(last(amountRange as number[]) as number),
@@ -100,6 +79,7 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
 
   const AmountRangeFilter = () => (
     <Grid
+      data-test="transaction-list-filter-amount-range"
       container
       direction="column"
       justify="flex-start"
@@ -116,10 +96,7 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
           className={classes.amountRangeTitleRow}
         >
           <Grid item className={classes.amountRangeTitle}>
-            <Typography
-              color="textSecondary"
-              data-test="transaction-list-filter-amount-range-text"
-            >
+            <Typography color="textSecondary" data-test="transaction-list-filter-amount-range-text">
               Amount Range: {formatAmountRangeValues(amountRangeValue)}
             </Typography>
           </Grid>
