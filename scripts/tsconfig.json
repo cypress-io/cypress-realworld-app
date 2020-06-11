@@ -3,6 +3,7 @@
   "include": ["./*/*.ts", "../src", "../models"],
   "exclude": [],
   "compilerOptions": {
+    "types": ["node"],
     "isolatedModules": false
   }
 }

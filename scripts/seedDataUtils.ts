@@ -109,25 +109,32 @@ export const getRandomTransactions = (baseCount: number, baseTransactions: Trans
     )
   ).slice(0, baseCount);
 
-export const createFakeUser = (): User => ({
-  id: shortid(),
-  uuid: faker.random.uuid(),
-  firstName: faker.name.firstName(),
-  lastName: faker.name.lastName(),
-  username: faker.internet.userName(),
-  password: passwordHash,
-  email: faker.internet.email(),
-  phoneNumber: faker.phone.phoneNumberFormat(0),
-  avatar: faker.internet.avatar(),
-  defaultPrivacyLevel: faker.helpers.randomize([
-    DefaultPrivacyLevel.public,
-    DefaultPrivacyLevel.private,
-    DefaultPrivacyLevel.contacts,
-  ]),
-  balance: faker.random.number({ min: 10000, max: 200000 }),
-  createdAt: faker.date.past(),
-  modifiedAt: faker.date.recent(),
-});
+export const getUserAvatar = (identifier: string) => {
+  return `https://api.adorable.io/avatars/128/${identifier}.png`;
+};
+
+export const createFakeUser = (): User => {
+  const id = shortid();
+  return {
+    id,
+    uuid: faker.random.uuid(),
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    username: faker.internet.userName(),
+    password: passwordHash,
+    email: faker.internet.email(),
+    phoneNumber: faker.phone.phoneNumberFormat(0),
+    avatar: getUserAvatar(id),
+    defaultPrivacyLevel: faker.helpers.randomize([
+      DefaultPrivacyLevel.public,
+      DefaultPrivacyLevel.private,
+      DefaultPrivacyLevel.contacts,
+    ]),
+    balance: faker.random.number({ min: 10000, max: 200000 }),
+    createdAt: faker.date.past(),
+    modifiedAt: faker.date.recent(),
+  };
+};
 
 // @ts-ignore
 export const createSeedUsers = () => times(() => createFakeUser(), userbaseSize);

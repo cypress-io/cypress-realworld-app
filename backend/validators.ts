@@ -51,6 +51,7 @@ export const isUserValidator = [
 ];
 
 export const sanitizeTransactionStatus = sanitizeQuery("status").customSanitizer((value) => {
+  /* istanbul ignore if*/
   if (includes(value, TransactionStatusValues)) {
     return value;
   }

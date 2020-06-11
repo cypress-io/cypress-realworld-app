@@ -24,14 +24,6 @@ const router = express.Router();
 
 // Routes
 router.get("/", ensureAuthenticated, (req, res) => {
-  // TODO: validate order query param(s)
-
-  // TODO:
-  // Query Params:
-  // order
-  //   - default: scoped user contacts first, then all other users
-  //   - "topFirst": contacts with most transactions first
-
   /* istanbul ignore next */
   const users = removeUserFromResults(req.user?.id!, getAllUsers());
   res.status(200).json({ results: users });

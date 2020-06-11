@@ -1,4 +1,3 @@
-// @ts-check
 import Dinero from "dinero.js";
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
@@ -41,9 +40,10 @@ describe("New Transaction", function () {
     };
 
     cy.getBySelLike("new-transaction").click();
+    cy.wait("@allUsers");
 
     cy.getBySel("user-list-search-input").type(ctx.contact!.firstName, { force: true });
-    cy.wait(["@allUsers", "@usersSearch"]);
+    cy.wait("@usersSearch");
 
     cy.getBySelLike("user-list-item").contains(ctx.contact!.firstName).click({ force: true });
 

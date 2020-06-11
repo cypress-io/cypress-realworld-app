@@ -1,4 +1,3 @@
-// @ts-check
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
 
@@ -16,7 +15,7 @@ describe("Bank Accounts", function () {
     cy.route("POST", "/bankAccounts").as("createBankAccount");
     cy.route("DELETE", "/bankAccounts/*").as("deleteBankAccount");
 
-    cy.task("find:testData", { entity: "users" }).then((user: User) => {
+    cy.database("find", "users").then((user: User) => {
       ctx.user = user;
 
       return cy.loginByXstate(ctx.user.username);
@@ -82,7 +81,7 @@ describe("Bank Accounts", function () {
     cy.getBySelLike("list-item").children().contains("Deleted");
   });
 
-  // TODO: the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
+  // TODO: [enhancement] the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
   it("renders an empty bank account list state with onboarding modal", function () {
     cy.route("GET", "/bankAccounts", []).as("getBankAccounts");
 

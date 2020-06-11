@@ -1,4 +1,3 @@
-// @ts-check
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
 
@@ -17,7 +16,7 @@ describe("User Sign-up and Login", function () {
   });
 
   it("should remember a user for 30 days after login", function () {
-    cy.task("find:testData", { entity: "users" }).then((user: User) => {
+    cy.database("find", "users").then((user: User) => {
       cy.login(user.username, "s3cret", true);
     });
 
@@ -29,7 +28,7 @@ describe("User Sign-up and Login", function () {
       cy.getBySel("sidenav-toggle").click();
     }
     cy.getBySel("sidenav-signout").click();
-    cy.location("pathname").should("eq", "/");
+    cy.location("pathname").should("eq", "/signin");
   });
 
   it("should allow a visitor to sign-up, login, and logout", function () {
@@ -42,13 +41,14 @@ describe("User Sign-up and Login", function () {
 
     // Sign-up User
     cy.visit("/");
+
     cy.getBySel("signup").click();
 
     cy.getBySel("signup-first-name").type(userInfo.firstName);
     cy.getBySel("signup-last-name").type(userInfo.lastName);
     cy.getBySel("signup-username").type(userInfo.username);
     cy.getBySel("signup-password").type(userInfo.password);
-    cy.getBySel("signup-confirmPassword").type(userInfo.password);
+    cy.getBySel("signup-confirmPassword").type(userInfo.password);;
     cy.getBySel("signup-submit").click();
     cy.wait("@signup");
 
@@ -79,7 +79,7 @@ describe("User Sign-up and Login", function () {
       cy.getBySel("sidenav-toggle").click();
     }
     cy.getBySel("sidenav-signout").click();
-    cy.location("pathname").should("eq", "/");
+    cy.location("pathname").should("eq", "/signin");
   });
 
   it("should display login errors", function () {
@@ -128,7 +128,7 @@ describe("User Sign-up and Login", function () {
   });
 
   it("should error for an invalid password for existing user", function () {
-    cy.task("find:testData", { entity: "users" }).then((user: User) => {
+    cy.database("find", "users").then((user: User) => {
       cy.login(user.username, "INVALID");
     });
 

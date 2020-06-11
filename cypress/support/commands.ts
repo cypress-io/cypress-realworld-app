@@ -1,13 +1,16 @@
 // @ts-check
-/// <reference path="../global.d.ts" />
+///<reference path="../global.d.ts" />
 
 import { pick } from "lodash/fp";
-import chaiDatetime from "chai-datetime";
 import { format as formatDate } from "date-fns";
 
-chai.use(chaiDatetime);
+Cypress.Commands.add("getBySel", (selector, ...args) => {
+  return cy.get(`[data-test=${selector}]`, ...args);
+});
 
-const defaultPassword = Cypress.env("defaultPassword");
+Cypress.Commands.add("getBySelLike", (selector, ...args) => {
+  return cy.get(`[data-test*=${selector}]`, ...args);
+});
 
 Cypress.Commands.add("login", (username, password, rememberUser = false) => {
   const signinPath = "/signin";
@@ -57,22 +60,10 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
   });
 });
 
-Cypress.Commands.add("loginByApi", (username, password = defaultPassword) => {
+Cypress.Commands.add("loginByApi", (username, password = Cypress.env("defaultPassword")) => {
   return cy.request("POST", `${Cypress.env("apiUrl")}/login`, {
     username,
     password,
-  });
-});
-
-Cypress.Commands.add("waitForXstateService", (service) => {
-  // Temporary fix for a real world problem
-  cy.wait(100, { log: false });
-
-  return cy.window({ log: false }).should((win) => {
-    // @ts-ignore
-    if (!win[service].initialized) {
-      throw new Error(`${service} is not ready!`);
-    }
   });
 });
 
@@ -109,7 +100,7 @@ Cypress.Commands.add("setTransactionAmountRange", (min, max) => {
     .invoke("onChange", null, [min / 10, max / 10]);
 });
 
-Cypress.Commands.add("loginByXstate", (username, password = defaultPassword) => {
+Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("defaultPassword")) => {
   const log = Cypress.log({
     name: "loginbyxstate",
     displayName: "LOGIN BY XSTATE",
@@ -124,8 +115,6 @@ Cypress.Commands.add("loginByXstate", (username, password = defaultPassword) => 
   cy.visit("/signin", { log: false }).then(() => {
     log.snapshot("before");
   });
-
-  cy.waitForXstateService("authService");
 
   cy.window({ log: false }).then((win) => win.authService.send("LOGIN", { username, password }));
 
@@ -157,8 +146,6 @@ Cypress.Commands.add("logoutByXstate", () => {
     // @ts-ignore
     autoEnd: false,
   });
-
-  cy.waitForXstateService("authService");
 
   cy.window({ log: false }).then((win) => {
     log.snapshot("before");
@@ -279,7 +266,6 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
 
 Cypress.Commands.add("database", (operation, entity, query, logTask = false) => {
   const params = {
-    operation,
     entity,
     query,
   };
@@ -295,14 +281,9 @@ Cypress.Commands.add("database", (operation, entity, query, logTask = false) => 
     },
   });
 
-  return cy.task("queryDatabase", params, { log: logTask }).then((data) => {
+  return cy.task(`${operation}:database`, params, { log: logTask }).then((data) => {
     log.snapshot();
     log.end();
     return data;
   });
 });
-
-Cypress.Commands.add("getBySel", (selector, ...args) => cy.get(`[data-test=${selector}]`, ...args));
-Cypress.Commands.add("getBySelLike", (selector, ...args) =>
-  cy.get(`[data-test*=${selector}]`, ...args)
-);

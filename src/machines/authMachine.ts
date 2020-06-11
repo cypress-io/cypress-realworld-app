@@ -1,7 +1,7 @@
 import { Machine, assign, interpret, State } from "xstate";
 import { omit } from "lodash/fp";
 import { httpClient } from "../utils/asyncUtils";
-import { history } from "../index";
+import { history } from "../utils/historyUtils";
 import { User } from "../models";
 
 export interface AuthMachineSchema {
@@ -71,6 +71,9 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
           onDone: { target: "authorized", actions: "setUserProfile" },
           onError: { target: "unauthorized", actions: "onError" },
         },
+        on: {
+          LOGOUT: "logout",
+        },
       },
       logout: {
         invoke: {
@@ -119,12 +122,13 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       },
       performLogout: async (ctx, event) => {
         localStorage.removeItem("authState");
-        await httpClient.post(`http://localhost:3001/logout`);
+        return await httpClient.post(`http://localhost:3001/logout`);
       },
     },
     actions: {
       redirectHomeAfterLogin: async (ctx, event) => {
         if (history.location.pathname === "/signin") {
+          /* istanbul ignore next */
           window.location.pathname = "/";
         }
       },

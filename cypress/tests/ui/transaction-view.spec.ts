@@ -21,19 +21,16 @@ describe("Transaction View", function () {
     cy.route("GET", "/notifications").as("getNotifications");
     cy.route("GET", "/bankAccounts").as("getBankAccounts");
 
-    cy.task("find:testData", { entity: "users" }).then((user: User) => {
+    cy.database("find", "users").then((user: User) => {
       ctx.authenticatedUser = user;
 
       cy.loginByXstate(ctx.authenticatedUser.username);
 
-      cy.task("find:testData", {
-        entity: "transactions",
-        findAttrs: {
-          receiverId: ctx.authenticatedUser.id,
-          status: "pending",
-          requestStatus: "pending",
-          requestResolvedAt: "",
-        },
+      cy.database("find", "transactions", {
+        receiverId: ctx.authenticatedUser.id,
+        status: "pending",
+        requestStatus: "pending",
+        requestResolvedAt: "",
       }).then((transaction: Transaction) => {
         ctx.transactionRequest = transaction;
       });
@@ -74,7 +71,7 @@ describe("Transaction View", function () {
   });
 
   it("accepts a transaction request", function () {
-    cy.getBySelLike("transaction-item").eq(4).click();
+    cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
     cy.wait("@getTransaction");
 
     cy.getBySelLike("accept-request").click();
@@ -82,7 +79,7 @@ describe("Transaction View", function () {
   });
 
   it("rejects a transaction request", function () {
-    cy.getBySelLike("transaction-item").eq(4).click();
+    cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
     cy.wait("@getTransaction");
 
     cy.getBySelLike("reject-request").click();
@@ -90,13 +87,10 @@ describe("Transaction View", function () {
   });
 
   it("does not display accept/reject buttons on completed request", function () {
-    cy.task("find:testData", {
-      entity: "transactions",
-      findAttrs: {
-        receiverId: ctx.authenticatedUser!.id,
-        status: "complete",
-        requestStatus: "accepted",
-      },
+    cy.database("find", "transactions", {
+      receiverId: ctx.authenticatedUser!.id,
+      status: "complete",
+      requestStatus: "accepted",
     }).then((transactionRequest) => {
       cy.visit(`/transaction/${transactionRequest!.id}`);
 
