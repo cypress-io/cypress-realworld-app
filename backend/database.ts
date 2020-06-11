@@ -514,6 +514,7 @@ export const debitPayAppBalance = (user: User, transaction: Transaction) => {
   if (hasSufficientFunds(user, transaction)) {
     flow(getChargeAmount, savePayAppBalance(user))(user, transaction);
   } else {
+    /* istanbul ignore next */
     flow(
       getTransferAmount(user),
       createBankTransferWithdrawal(user, transaction),
