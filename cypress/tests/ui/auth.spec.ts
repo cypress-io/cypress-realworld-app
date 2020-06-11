@@ -13,7 +13,6 @@ describe("User Sign-up and Login", function () {
   it("should redirect unauthenticated user to signin page", function () {
     cy.visit("/personal");
     cy.location("pathname").should("equal", "/signin");
-    cy.percySnapshot();
   });
 
   it("should remember a user for 30 days after login", function () {
@@ -42,17 +41,14 @@ describe("User Sign-up and Login", function () {
 
     // Sign-up User
     cy.visit("/");
-    cy.percySnapshot();
 
     cy.getBySel("signup").click();
-    cy.percySnapshot();
 
     cy.getBySel("signup-first-name").type(userInfo.firstName);
     cy.getBySel("signup-last-name").type(userInfo.lastName);
     cy.getBySel("signup-username").type(userInfo.username);
     cy.getBySel("signup-password").type(userInfo.password);
-    cy.getBySel("signup-confirmPassword").type(userInfo.password);
-    cy.percySnapshot();
+    cy.getBySel("signup-confirmPassword").type(userInfo.password);;
     cy.getBySel("signup-submit").click();
     cy.wait("@signup");
 
@@ -61,7 +57,6 @@ describe("User Sign-up and Login", function () {
 
     // Onboarding
     cy.getBySel("user-onboarding-dialog").should("be.visible");
-    cy.percySnapshot();
     cy.getBySel("user-onboarding-next").click();
 
     cy.getBySel("user-onboarding-dialog-title").should("contain", "Create Bank Account");
@@ -69,18 +64,15 @@ describe("User Sign-up and Login", function () {
     cy.getBySelLike("bankName-input").type("The Best Bank");
     cy.getBySelLike("accountNumber-input").type("123456789");
     cy.getBySelLike("routingNumber-input").type("987654321");
-    cy.percySnapshot();
     cy.getBySelLike("submit").click();
 
     cy.wait("@createBankAccount");
 
     cy.getBySel("user-onboarding-dialog-title").should("contain", "Finished");
     cy.getBySel("user-onboarding-dialog-content").should("contain", "You're all set!");
-    cy.percySnapshot();
     cy.getBySel("user-onboarding-next").click();
 
     cy.getBySel("transaction-list").should("be.visible");
-    cy.percySnapshot();
 
     // Logout User
     if (isMobile()) {
@@ -102,7 +94,6 @@ describe("User Sign-up and Login", function () {
       .and("contain", "Password must contain at least 4 characters");
 
     cy.getBySel("signin-submit").should("be.disabled");
-    cy.percySnapshot();
   });
 
   it("should display signup errors", function () {
@@ -126,7 +117,6 @@ describe("User Sign-up and Login", function () {
       .and("contain", "Password does not match");
 
     cy.getBySel("signup-submit").should("be.disabled");
-    cy.percySnapshot();
   });
 
   it("should error for an invalid user", function () {
@@ -135,7 +125,6 @@ describe("User Sign-up and Login", function () {
     cy.getBySel("signin-error")
       .should("be.visible")
       .and("have.text", "Username or password is invalid");
-    cy.percySnapshot();
   });
 
   it("should error for an invalid password for existing user", function () {
@@ -146,6 +135,5 @@ describe("User Sign-up and Login", function () {
     cy.getBySel("signin-error")
       .should("be.visible")
       .and("have.text", "Username or password is invalid");
-    cy.percySnapshot();
   });
 });

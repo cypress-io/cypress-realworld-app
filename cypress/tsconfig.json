@@ -3,7 +3,7 @@
   "include": ["./**/*.ts"],
   "exclude": [],
   "compilerOptions": {
-    "types": ["cypress", "@percy/cypress"],
+    "types": ["cypress"],
     "lib": ["es2015", "dom"],
     "isolatedModules": false,
     "allowJs": true,
