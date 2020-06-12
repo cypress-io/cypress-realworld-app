@@ -139,7 +139,7 @@ workflows:
           spec: cypress/tests/ui/*
           executor:
             # executor comes from the "windows" orb
-            name: win/vs2019
+            name: win/default
             shell: bash.exe
           wait-on: "http://localhost:3000"
           yarn: true
