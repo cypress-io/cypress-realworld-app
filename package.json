@@ -101,6 +101,10 @@
     "prettier": "2.0.5",
     "start-server-and-test": "1.11.0"
   },
+  "resolutions": {
+    "@types/express": "4.17.2",
+    "@types/express-serve-static-core": "4.17.2"
+  },
   "scripts": {
     "dev": "NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",
     "start": "NODE_ENV=development concurrently yarn:start:react yarn:start:api",
