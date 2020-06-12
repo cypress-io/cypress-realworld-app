@@ -9,16 +9,6 @@ executors:
     docker:
       - image: "cypress/browsers:node12.16.2-chrome81-ff75"
 
-jobs:
-  windows:
-    description: "UI Tests - Windows"
-    executor: win/default
-    steps:
-      - checkout
-      - run: yarn install --frozen-lockfile
-      - run: yarn types
-      - run: yarn test:unit:ci
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 commands:
   report-coverage:
@@ -143,4 +133,21 @@ workflows:
           post-steps:
             - report-coverage
 
-      - "windows"
+      # Run E2E tests in Windows in Electron
+      - cypress/run:
+          name: "UI Tests - Windows - Electron"
+          spec: cypress/tests/ui/*
+          executor:
+            # executor comes from the "windows" orb
+            name: win/vs2019
+            shell: bash.exe
+          wait-on: "http://localhost:3000"
+          yarn: true
+          start: yarn start:ci
+          record: true
+          parallel: true
+          parallelism: 5
+          group: "UI - Windows - Electron"
+          post-steps:
+            - report-coverage
+          no-workspace: true
