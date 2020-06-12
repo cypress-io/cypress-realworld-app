@@ -156,11 +156,10 @@ windows-workflow: &windows-workflow
               name: Run Unit Tests
               command: yarn test:unit:ci
 
-    # Run E2E tests in Windows in Chrome
+    # Run E2E tests in Windows in Electron
     - cypress/run:
-        name: "UI Tests - Chrome - Windows"
+        name: "UI Tests - Electron - Windows"
         spec: cypress/tests/ui/*
-        browser: chrome
         executor:
           # executor comes from the "windows" orb
           name: win/default
@@ -171,7 +170,7 @@ windows-workflow: &windows-workflow
         record: true
         parallel: true
         parallelism: 5
-        group: "UI - Chrome - Windows"
+        group: "UI - Electron - Windows"
         requires:
           - Setup
         post-steps:
