@@ -148,6 +148,8 @@ workflows:
           parallel: true
           parallelism: 5
           group: "UI - Windows - Electron"
+          requires:
+            - Setup
           post-steps:
             - report-coverage
           no-workspace: true
