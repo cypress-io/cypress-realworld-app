@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://dashboard.cypress.io/projects/7s5okt">
+  <a href="https://dashboard.cypress.io/">
     <img src="https://img.shields.io/badge/Cypress-Dashboard-blue">
   </a>
 
@@ -133,7 +133,7 @@ This project is licensed under the terms of the [MIT license](/LICENSE).
 [express]: https://expressjs.com
 [lowdb]: https://github.com/typicode/lowdb
 [typescript]: https://typescriptlang.org
-[cypressdashboard]: https://dashboard.cypress.io/projects/7s5okt
+[cypressdashboard]: https://dashboard.cypress.io/
 
 ## Contributors ✨
 
