@@ -56,7 +56,7 @@ describe("Notifications", function () {
       cy.wait("@getNotifications");
 
       cy.getBySelLike("notification-list-item")
-        .should("have.length", 8)
+        .should("have.length", 9)
         .first()
         .should("contain", ctx.userA?.firstName)
         .and("contain", "liked");
@@ -121,8 +121,11 @@ describe("Notifications", function () {
       cy.switchUser(ctx.userB.username);
 
       cy.getBySelLike("notifications-link").click();
+
+      cy.wait("@getNotifications");
+
       cy.getBySelLike("notification-list-item")
-        .should("have.length", 8)
+        .should("have.length", 9)
         .first()
         .should("contain", ctx.userA?.firstName)
         .and("contain", "commented");
