@@ -144,6 +144,7 @@ describe("Notifications", function () {
       cy.wait("@getNotifications");
 
       cy.getBySelLike("notification-list-item")
+        .should("have.length", 9)
         .first()
         .should("contain", ctx.userC.firstName)
         .and("contain", "commented");
