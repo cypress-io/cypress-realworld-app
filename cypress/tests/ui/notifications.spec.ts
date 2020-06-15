@@ -43,7 +43,13 @@ describe("Notifications", function () {
           cy.getBySel("nav-top-notifications-count").should("have.text", `${notificationCount}`);
         });
 
+      const likesCountSelector = "[data-test*=transaction-like-count]";
+      cy.contains(likesCountSelector, 0);
       cy.getBySelLike("like-button").click();
+      // a successful "like" should disable the button and increment
+      // the number of likes
+      cy.getBySelLike("like-button").should("be.disabled");
+      cy.contains(likesCountSelector, 1);
 
       cy.switchUser(ctx.userB.username);
 
