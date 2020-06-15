@@ -147,6 +147,9 @@ windows-workflow: &windows-workflow
           shell: bash.exe
         post-steps:
           - run:
+              name: Cypress info
+              command: yarn cypress info
+          - run:
               name: Install Google Chrome
               command: choco install googlechrome
           - run:
