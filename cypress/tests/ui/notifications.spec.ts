@@ -17,6 +17,7 @@ describe("Notifications", function () {
     cy.route("GET", "/notifications").as("getNotifications");
     cy.route("POST", "/transactions").as("createTransaction");
     cy.route("PATCH", "/notifications/*").as("updateNotification");
+    cy.route("POST", "/comments/*").as("postComment");
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.userA = users[0];
@@ -148,6 +149,8 @@ describe("Notifications", function () {
       });
 
       cy.getBySelLike("comment-input").type("Thank You{enter}");
+
+      cy.wait("@postComment");
 
       cy.switchUser(ctx.userA.username);
 
