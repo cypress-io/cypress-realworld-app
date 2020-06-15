@@ -29,7 +29,7 @@ linux-workflow: &linux-workflow
     #  2. Validate types
     #  3. Run server unit-tests
     - cypress/install:
-        name: "Setup"
+        name: "Setup Linux"
         yarn: true
         executor: with-chrome-and-firefox
         post-steps:
@@ -54,7 +54,7 @@ linux-workflow: &linux-workflow
         parallelism: 5
         group: API
         requires:
-          - Setup
+          - Setup Linux
         post-steps:
           - report-coverage
 
@@ -72,7 +72,7 @@ linux-workflow: &linux-workflow
         parallelism: 5
         group: "UI - Chrome"
         requires:
-          - Setup
+          - Setup Linux
         post-steps:
           - report-coverage
 
@@ -91,7 +91,7 @@ linux-workflow: &linux-workflow
         parallelism: 5
         group: "UI - Chrome - Mobile"
         requires:
-          - Setup
+          - Setup Linux
         post-steps:
           - report-coverage
 
@@ -109,7 +109,7 @@ linux-workflow: &linux-workflow
         parallelism: 5
         group: "UI - Firefox"
         requires:
-          - Setup
+          - Setup Linux
         post-steps:
           - report-coverage
 
@@ -128,7 +128,7 @@ linux-workflow: &linux-workflow
         parallelism: 5
         group: "UI - Firefox - Mobile"
         requires:
-          - Setup
+          - Setup Linux
         post-steps:
           - report-coverage
 
@@ -139,7 +139,7 @@ windows-workflow: &windows-workflow
     #  2. Validate types
     #  3. Run server unit-tests
     - cypress/install:
-        name: "Setup"
+        name: "Setup Windows"
         yarn: true
         executor:
           # executor comes from the "windows" orb
@@ -172,7 +172,7 @@ windows-workflow: &windows-workflow
         parallelism: 5
         group: "UI - Electron - Windows"
         requires:
-          - Setup
+          - Setup Windows
         post-steps:
           - report-coverage
         no-workspace: true
