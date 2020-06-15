@@ -91,6 +91,9 @@ describe("Notifications", function () {
       cy.switchUser(ctx.userB.username);
 
       cy.getBySelLike("notifications-link").click();
+
+      cy.wait("@getNotifications");
+
       cy.getBySelLike("notification-list-item")
         .first()
         .should("contain", ctx.userC.firstName)
