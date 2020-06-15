@@ -150,9 +150,6 @@ windows-workflow: &windows-workflow
               name: Cypress info
               command: yarn cypress info
           - run:
-              name: Install Google Chrome
-              command: choco install googlechrome
-          - run:
               name: Check Types
               command: yarn types
           - run:
