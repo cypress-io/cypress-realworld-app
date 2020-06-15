@@ -53,6 +53,8 @@ describe("Notifications", function () {
 
       cy.visit("/notifications");
 
+      cy.wait("@getNotifications");
+
       cy.getBySelLike("notification-list-item")
         .first()
         .should("contain", ctx.userA?.firstName)
