@@ -86,7 +86,11 @@ describe("Notifications", function () {
         cy.visit(`/transaction/${transaction.id}`);
       });
 
+      const likesCountSelector = "[data-test*=transaction-like-count]";
+      cy.contains(likesCountSelector, 0);
       cy.getBySelLike("like-button").click();
+      cy.getBySelLike("like-button").should("be.disabled");
+      cy.contains(likesCountSelector, 1);
 
       cy.switchUser(ctx.userA.username);
 
@@ -97,6 +101,7 @@ describe("Notifications", function () {
       cy.location("pathname").should("equal", "/notifications");
 
       cy.getBySelLike("notification-list-item")
+        .should("have.length", 9)
         .first()
         .should("contain", ctx.userC.firstName)
         .and("contain", "liked");
@@ -124,6 +129,8 @@ describe("Notifications", function () {
       );
 
       cy.getBySelLike("comment-input").type("Thank You{enter}");
+
+      cy.wait("@postComment");
 
       cy.switchUser(ctx.userB.username);
 

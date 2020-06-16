@@ -7,7 +7,7 @@ orbs:
 executors:
   with-chrome-and-firefox:
     docker:
-      - image: "cypress/browsers:node12.16.2-chrome81-ff75"
+      - image: "cypress/browsers:node12.18.0-chrome83-ff77"
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 commands:
@@ -118,7 +118,7 @@ linux-workflow: &linux-workflow
         name: "UI Tests - Firefox - Mobile"
         browser: firefox
         spec: cypress/tests/ui/*
-        config: "viewportWidth=375,viewportHeight=667"
+        config: viewportWidth=375,viewportHeight=667
         executor: with-chrome-and-firefox
         wait-on: "http://localhost:3000"
         yarn: true
