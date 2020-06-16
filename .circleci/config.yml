@@ -100,7 +100,6 @@ linux-workflow: &linux-workflow
         name: "UI Tests - Firefox"
         browser: firefox
         spec: cypress/tests/ui/*
-        config: firefoxGcInterval=null
         executor: with-chrome-and-firefox
         wait-on: "http://localhost:3000"
         yarn: true
@@ -119,7 +118,7 @@ linux-workflow: &linux-workflow
         name: "UI Tests - Firefox - Mobile"
         browser: firefox
         spec: cypress/tests/ui/*
-        config: viewportWidth=375,viewportHeight=667,firefoxGcInterval=null
+        config: viewportWidth=375,viewportHeight=667
         executor: with-chrome-and-firefox
         wait-on: "http://localhost:3000"
         yarn: true
