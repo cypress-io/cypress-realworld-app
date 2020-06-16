@@ -125,6 +125,8 @@ describe("Notifications", function () {
 
       cy.getBySelLike("comment-input").type("Thank You{enter}");
 
+      cy.wait("@postComment");
+
       cy.switchUser(ctx.userB.username);
 
       cy.getBySelLike("notifications-link").click();
