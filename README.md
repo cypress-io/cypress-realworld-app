@@ -44,7 +44,7 @@ A payment application to demonstrate <strong>real-world</strong> usage of <a hre
 
 ## Features
 
-🛠 Built with [React][reactjs], [XState][xstate], [Express][express], [lowdb][lowdb], and [TypeScript][typescript]  
+🛠 Built with [React][reactjs], [XState][xstate], [Express][express], [lowdb][lowdb], [Material-UI][material-ui] and [TypeScript][typescript]  
 ⚡️ Zero database dependencies  
 🚀 Full-stack [Express][express]/[React][reactjs] application with real-world features and tests  
 👮‍♂️ Local Authentication
@@ -134,6 +134,7 @@ This project is licensed under the terms of the [MIT license](/LICENSE).
 [lowdb]: https://github.com/typicode/lowdb
 [typescript]: https://typescriptlang.org
 [cypressdashboard]: https://dashboard.cypress.io/projects/7s5okt/runs
+[material-ui]: https://material-ui.com
 
 ## Contributors ✨
 
