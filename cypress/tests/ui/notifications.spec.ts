@@ -86,7 +86,11 @@ describe("Notifications", function () {
         cy.visit(`/transaction/${transaction.id}`);
       });
 
+      const likesCountSelector = "[data-test*=transaction-like-count]";
+      cy.contains(likesCountSelector, 0);
       cy.getBySelLike("like-button").click();
+      cy.getBySelLike("like-button").should("be.disabled");
+      cy.contains(likesCountSelector, 1);
 
       cy.switchUser(ctx.userA.username);
 
