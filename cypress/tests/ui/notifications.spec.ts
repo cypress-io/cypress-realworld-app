@@ -97,6 +97,7 @@ describe("Notifications", function () {
       cy.location("pathname").should("equal", "/notifications");
 
       cy.getBySelLike("notification-list-item")
+        .should("have.length", 9)
         .first()
         .should("contain", ctx.userC.firstName)
         .and("contain", "liked");
