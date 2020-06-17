@@ -827,7 +827,7 @@ export const formatNotificationsForApiResponse = (
 /* istanbul ignore next */
 export const getRandomUser = () => {
   const users = getAllUsers();
-  return sample(users);
+  return sample(users)!;
 };
 
 /* istanbul ignore next */
