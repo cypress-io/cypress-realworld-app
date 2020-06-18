@@ -45,6 +45,7 @@ import {
   BankTransferType,
   NotificationResponseItem,
   TransactionQueryPayload,
+  DefaultPrivacyLevel,
 } from "../src/models";
 import Fuse from "fuse.js";
 import {
@@ -63,6 +64,7 @@ import {
   isLikeNotification,
   isCommentNotification,
 } from "../src/utils/transactionUtils";
+import { DbSchema } from "../src/models/db-schema";
 
 export type TDatabase = {
   users: User[];
@@ -85,7 +87,7 @@ const NOTIFICATION_TABLE = "notifications";
 const BANK_TRANSFER_TABLE = "banktransfers";
 
 const databaseFile = path.join(__dirname, "../data/database.json");
-const adapter = new FileSync(databaseFile);
+const adapter = new FileSync<DbSchema>(databaseFile);
 
 const db = low(adapter);
 
@@ -102,15 +104,11 @@ export const seedDatabase = () => {
 export const getAllUsers = () => db.get(USER_TABLE).value();
 
 export const getAllPublicTransactions = () =>
-  db
-    .get(TRANSACTION_TABLE)
-    // @ts-ignore
-    .filter({ privacyLevel: "public" })
-    .value();
+  db.get(TRANSACTION_TABLE).filter({ privacyLevel: DefaultPrivacyLevel.public }).value();
 
-export const getAllForEntity = (entity: string) => db.get(entity).value();
+export const getAllForEntity = (entity: keyof DbSchema) => db.get(entity).value();
 
-export const getAllBy = (entity: string, key: string, value: any) => {
+export const getAllBy = (entity: keyof DbSchema, key: string, value: any) => {
   const result = db
     .get(entity)
     // @ts-ignore
@@ -120,7 +118,7 @@ export const getAllBy = (entity: string, key: string, value: any) => {
   return result;
 };
 
-export const getBy = (entity: string, key: string, value: any) => {
+export const getBy = (entity: keyof DbSchema, key: string, value: any) => {
   const result = db
     .get(entity)
     // @ts-ignore
@@ -130,7 +128,7 @@ export const getBy = (entity: string, key: string, value: any) => {
   return result;
 };
 
-export const getAllByObj = (entity: string, query: object) => {
+export const getAllByObj = (entity: keyof DbSchema, query: object) => {
   const result = db
     .get(entity)
     // @ts-ignore
@@ -143,12 +141,12 @@ export const getAllByObj = (entity: string, query: object) => {
 // Search
 export const cleanSearchQuery = (query: string) => query.replace(/[^a-zA-Z0-9]/g, "");
 
-export const setupSearch = curry((items: [], options: {}, query: string) => {
+export const setupSearch = curry((items: object[], options: {}, query: string) => {
   const fuse = new Fuse(items, options);
   return fuse.search(query);
 });
 
-export const performSearch = (items: [], options: {}, query: string) =>
+export const performSearch = (items: object[], options: {}, query: string) =>
   flow(
     cleanSearchQuery,
     setupSearch(items, options),
@@ -200,20 +198,13 @@ export const createUser = (userDetails: Partial<User>): User => {
 };
 
 const saveUser = (user: User) => {
-  db.get(USER_TABLE)
-    // @ts-ignore
-    .push(user)
-    .write();
+  db.get(USER_TABLE).push(user).write();
 };
 
 export const updateUserById = (userId: string, edits: Partial<User>) => {
   const user = getUserById(userId);
 
-  db.get(USER_TABLE)
-    // @ts-ignore
-    .find(user)
-    .assign(edits)
-    .write();
+  db.get(USER_TABLE).find(user).assign(edits).write();
 };
 
 // Contact
@@ -227,10 +218,7 @@ export const getContactsByUsername = (username: string) =>
 export const getContactsByUserId = (userId: string): Contact[] => getContactsBy("userId", userId);
 
 export const createContact = (contact: Contact) => {
-  db.get(CONTACT_TABLE)
-    // @ts-ignore
-    .push(contact)
-    .write();
+  db.get(CONTACT_TABLE).push(contact).write();
 
   // manual lookup after create
   return getContactBy("id", contact.id);
@@ -239,10 +227,7 @@ export const createContact = (contact: Contact) => {
 export const removeContactById = (contactId: string) => {
   const contact = getContactBy("id", contactId);
 
-  db.get(CONTACT_TABLE)
-    // @ts-ignore
-    .remove(contact)
-    .write();
+  db.get(CONTACT_TABLE).remove(contact).write();
 };
 
 export const createContactForUser = (userId: string, contactUserId: string) => {
@@ -271,10 +256,7 @@ export const getBankAccountsBy = (key: string, value: any) =>
   getAllBy(BANK_ACCOUNT_TABLE, key, value);
 
 export const createBankAccount = (bankaccount: BankAccount) => {
-  db.get(BANK_ACCOUNT_TABLE)
-    // @ts-ignore
-    .push(bankaccount)
-    .write();
+  db.get(BANK_ACCOUNT_TABLE).push(bankaccount).write();
 
   // manual lookup after create
   return getBankAccountBy("id", bankaccount.id);
@@ -302,7 +284,6 @@ export const createBankAccountForUser = (userId: string, accountDetails: Partial
 
 export const removeBankAccountById = (bankAccountId: string) => {
   db.get(BANK_ACCOUNT_TABLE)
-    // @ts-ignore
     .find({ id: bankAccountId })
     .assign({ isDeleted: true }) // soft delete
     .write();
@@ -337,10 +318,7 @@ export const createBankTransfer = (bankTransferDetails: BankTransferPayload) => 
 
 /* istanbul ignore next */
 const saveBankTransfer = (bankTransfer: BankTransfer): BankTransfer => {
-  db.get(BANK_TRANSFER_TABLE)
-    // @ts-ignore
-    .push(bankTransfer)
-    .write();
+  db.get(BANK_TRANSFER_TABLE).push(bankTransfer).write();
 
   // manual lookup after banktransfer created
   return getBankTransferBy("id", bankTransfer.id);
@@ -477,7 +455,7 @@ export const nonContactPublicTransactions = (userId: string): Transaction[] => {
   return flow(
     getAllPublicTransactions,
     reject((transaction: Transaction) => includes(transaction.id, contactsTransactionIds))
-  )(userId);
+  )();
 };
 
 export const getNonContactPublicTransactionsForApi = (userId: string) =>
@@ -591,10 +569,7 @@ export const createTransaction = (
 };
 
 const saveTransaction = (transaction: Transaction): Transaction => {
-  db.get(TRANSACTION_TABLE)
-    // @ts-ignore
-    .push(transaction)
-    .write();
+  db.get(TRANSACTION_TABLE).push(transaction).write();
 
   // manual lookup after transaction created
   return getTransactionBy("id", transaction.id);
@@ -619,11 +594,7 @@ export const updateTransactionById = (transactionId: string, edits: Partial<Tran
     );
   }
 
-  db.get(TRANSACTION_TABLE)
-    // @ts-ignore
-    .find(transaction)
-    .assign(edits)
-    .write();
+  db.get(TRANSACTION_TABLE).find(transaction).assign(edits).write();
 };
 
 // Likes
@@ -665,10 +636,7 @@ export const createLikes = (userId: string, transactionId: string) => {
 };
 
 const saveLike = (like: Like): Like => {
-  db.get(LIKE_TABLE)
-    // @ts-ignore
-    .push(like)
-    .write();
+  db.get(LIKE_TABLE).push(like).write();
 
   // manual lookup after like created
   return getLikeById(like.id);
@@ -715,10 +683,7 @@ export const createComments = (userId: string, transactionId: string, content: s
 };
 
 const saveComment = (comment: Comment): Comment => {
-  db.get(COMMENT_TABLE)
-    // @ts-ignore
-    .push(comment)
-    .write();
+  db.get(COMMENT_TABLE).push(comment).write();
 
   // manual lookup after comment created
   return getCommentById(comment.id);
@@ -796,10 +761,7 @@ export const createCommentNotification = (
 };
 
 const saveNotification = (notification: NotificationType) => {
-  db.get(NOTIFICATION_TABLE)
-    // @ts-ignore
-    .push(notification)
-    .write();
+  db.get(NOTIFICATION_TABLE).push(notification).write();
 };
 
 export const createNotifications = (userId: string, notifications: NotificationPayloadType[]) =>
@@ -823,11 +785,7 @@ export const updateNotificationById = (
 ) => {
   const notification = getNotificationBy("id", notificationId);
 
-  db.get(NOTIFICATION_TABLE)
-    // @ts-ignore
-    .find(notification)
-    .assign(edits)
-    .write();
+  db.get(NOTIFICATION_TABLE).find(notification).assign(edits).write();
 };
 
 export const formatNotificationForApiResponse = (
@@ -841,13 +799,11 @@ export const formatNotificationForApiResponse = (
   }
 
   if (isLikeNotification(notification)) {
-    // @ts-ignore
     const like = getLikeById(notification.likeId);
     userFullName = getFullNameForUser(like.userId);
   }
 
   if (isCommentNotification(notification)) {
-    // @ts-ignore
     const comment = getCommentById(notification.commentId);
     userFullName = getFullNameForUser(comment.userId);
   }
@@ -871,7 +827,7 @@ export const formatNotificationsForApiResponse = (
 /* istanbul ignore next */
 export const getRandomUser = () => {
   const users = getAllUsers();
-  return sample(users);
+  return sample(users)!;
 };
 
 /* istanbul ignore next */
