@@ -178,7 +178,149 @@ windows-workflow: &windows-workflow
         no-workspace: true
 
 workflows:
-  linux:
-    <<: *linux-workflow
-  windows:
-    <<: *windows-workflow
+  build:
+    jobs:
+      - cypress/install:
+          name: "Setup Windows"
+          yarn: true
+          executor:
+            # executor comes from the "windows" orb
+            name: win/default
+            shell: bash.exe
+          post-steps:
+            - run:
+                name: Cypress info
+                command: yarn cypress info
+            - run:
+                name: Check Types
+                command: yarn types
+            - run:
+                name: Run Unit Tests
+                command: yarn test:unit:ci
+      - cypress/install:
+          name: "Setup Linux"
+          yarn: true
+          executor: with-chrome-and-firefox
+          post-steps:
+            - run:
+                name: Check Types
+                command: yarn types
+            - run:
+                name: Run Unit Tests
+                command: yarn test:unit:ci
+
+      # Run API tests against backend server
+      - cypress/run:
+          name: "API Tests"
+          browser: chrome
+          spec: cypress/tests/api/*
+          executor: with-chrome-and-firefox
+          wait-on: "http://localhost:3000"
+          yarn: true
+          start: yarn start:ci
+          record: true
+          parallel: true
+          parallelism: 5
+          group: API
+          requires:
+            - Setup Linux
+          post-steps:
+            - report-coverage
+
+      # Run E2E tests in Chrome
+      - cypress/run:
+          name: "UI Tests - Chrome"
+          browser: chrome
+          spec: cypress/tests/ui/*
+          executor: with-chrome-and-firefox
+          wait-on: "http://localhost:3000"
+          yarn: true
+          start: yarn start:ci
+          record: true
+          parallel: true
+          parallelism: 5
+          group: "UI - Chrome"
+          requires:
+            - Setup Linux
+          post-steps:
+            - report-coverage
+
+      # Run E2E tests in Chrome with mobile device viewport
+      - cypress/run:
+          name: "UI Tests - Chrome - Mobile"
+          browser: chrome
+          spec: cypress/tests/ui/*
+          config: "viewportWidth=375,viewportHeight=667"
+          executor: with-chrome-and-firefox
+          wait-on: "http://localhost:3000"
+          yarn: true
+          start: yarn start:ci
+          record: true
+          parallel: true
+          parallelism: 5
+          group: "UI - Chrome - Mobile"
+          requires:
+            - Setup Linux
+          post-steps:
+            - report-coverage
+
+      # Run E2E tests in Firefox
+      - cypress/run:
+          name: "UI Tests - Firefox"
+          browser: firefox
+          spec: cypress/tests/ui/*
+          executor: with-chrome-and-firefox
+          wait-on: "http://localhost:3000"
+          yarn: true
+          start: yarn start:ci
+          record: true
+          parallel: true
+          parallelism: 5
+          group: "UI - Firefox"
+          requires:
+            - Setup Linux
+          post-steps:
+            - report-coverage
+
+      # Run E2E tests in Firefox with mobile device viewport
+      - cypress/run:
+          name: "UI Tests - Firefox - Mobile"
+          browser: firefox
+          spec: cypress/tests/ui/*
+          config: viewportWidth=375,viewportHeight=667
+          executor: with-chrome-and-firefox
+          wait-on: "http://localhost:3000"
+          yarn: true
+          start: yarn start:ci
+          record: true
+          parallel: true
+          parallelism: 5
+          group: "UI - Firefox - Mobile"
+          requires:
+            - Setup Linux
+          post-steps:
+            - report-coverage
+        # Run E2E tests in Windows in Electron
+      - cypress/run:
+          name: "UI Tests - Electron - Windows"
+          spec: cypress/tests/ui/*
+          executor:
+            # executor comes from the "windows" orb
+            name: win/default
+            shell: bash.exe
+          wait-on: "http://localhost:3000"
+          yarn: true
+          start: yarn start:ci
+          record: true
+          parallel: true
+          parallelism: 5
+          group: "UI - Electron - Windows"
+          requires:
+            - Setup Windows
+          post-steps:
+            - report-coverage
+          no-workspace: true
+#  linux:
+#    <<: *linux-workflow
+#  windows:
+#    <<: *windows-workflow
