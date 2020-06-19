@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   cypress: cypress-io/cypress@1.24.0
   codecov: codecov/codecov@1.1.0
-  win: circleci/windows@2.2.0
+  win: circleci/windows@2.4.0
 
 executors:
   with-chrome-and-firefox:
