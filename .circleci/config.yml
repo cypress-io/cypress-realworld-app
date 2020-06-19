@@ -201,6 +201,8 @@ workflows:
           name: "Setup Linux"
           yarn: true
           executor: with-chrome-and-firefox
+          requires:
+            - Setup Windows
           post-steps:
             - run:
                 name: Check Types
