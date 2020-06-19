@@ -28,7 +28,7 @@
     "@types/dinero.js": "1.6.4",
     "@types/express": "4.17.2",
     "@types/express-paginate": "1.0.0",
-    "@types/express-serve-static-core": "4.17.2",
+    "@types/express-serve-static-core": "4.17.7",
     "@types/express-session": "1.17.0",
     "@types/faker": "4.1.12",
     "@types/jest": "26.0.0",
@@ -106,7 +106,7 @@
   "resolutions": {
     "@babel/compat-data": "7.9.0",
     "@types/express": "4.17.2",
-    "@types/express-serve-static-core": "4.17.2"
+    "@types/express-serve-static-core": "4.17.7"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",
