@@ -17,5 +17,19 @@
   "lockFileMaintenance": {
     "enabled": true
   },
-  "masterIssue": true
+  "masterIssue": true,
+  "packageRules": [
+    {
+      "packageNames": ["@babel/compat-data"],
+      "allowedVersions": "7.9.0"
+    },
+    {
+      "packageNames": ["@types/express"],
+      "allowedVersions": "4.17.2"
+    },
+    {
+      "packageNames": ["@types/express-serve-static-core"],
+      "allowedVersions": "4.17.2"
+    }
+  ]
 }
