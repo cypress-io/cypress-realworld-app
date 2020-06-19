@@ -48,7 +48,7 @@
     "@types/uuid": "8.0.0",
     "@types/validator": "13.0.0",
     "@types/webpack-env": "1.15.2",
-    "@types/yup": "0.29.2",
+    "@types/yup": "0.29.3",
     "@xstate/react": "0.8.1",
     "axios": "0.19.2",
     "bcryptjs": "2.4.3",
