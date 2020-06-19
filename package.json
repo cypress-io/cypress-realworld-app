@@ -35,7 +35,7 @@
     "@types/json-server": "0.14.2",
     "@types/lodash": "4.14.155",
     "@types/lowdb": "1.0.9",
-    "@types/morgan": "1.9.0",
+    "@types/morgan": "1.9.1",
     "@types/node": "14.0.13",
     "@types/passport": "1.0.3",
     "@types/react": "16.9.36",
