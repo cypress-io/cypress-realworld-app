@@ -201,6 +201,7 @@ workflows:
           name: "Setup Linux"
           yarn: true
           executor: with-chrome-and-firefox
+          # Require Windows prior to Linux setup so both are recorded to Dashboard
           requires:
             - Setup Windows
           post-steps:
