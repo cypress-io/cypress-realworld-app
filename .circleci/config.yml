@@ -201,9 +201,6 @@ workflows:
           name: "Setup Linux"
           yarn: true
           executor: with-chrome-and-firefox
-          # Require Windows prior to Linux setup so both are recorded to Dashboard
-          requires:
-            - Setup Windows
           post-steps:
             - run:
                 name: Check Types
@@ -224,6 +221,7 @@ workflows:
           record: true
           parallel: true
           parallelism: 5
+          ci-build-id: $CIRCLE_SHA1
           group: API
           requires:
             - Setup Linux
@@ -242,6 +240,7 @@ workflows:
           record: true
           parallel: true
           parallelism: 5
+          ci-build-id: $CIRCLE_SHA1
           group: "UI - Chrome"
           requires:
             - Setup Linux
@@ -261,6 +260,7 @@ workflows:
           record: true
           parallel: true
           parallelism: 5
+          ci-build-id: $CIRCLE_SHA1
           group: "UI - Chrome - Mobile"
           requires:
             - Setup Linux
@@ -279,6 +279,7 @@ workflows:
           record: true
           parallel: true
           parallelism: 5
+          ci-build-id: $CIRCLE_SHA1
           group: "UI - Firefox"
           requires:
             - Setup Linux
@@ -298,6 +299,7 @@ workflows:
           record: true
           parallel: true
           parallelism: 5
+          ci-build-id: $CIRCLE_SHA1
           group: "UI - Firefox - Mobile"
           requires:
             - Setup Linux
@@ -317,6 +319,7 @@ workflows:
           record: true
           parallel: true
           parallelism: 5
+          ci-build-id: $CIRCLE_SHA1
           group: "UI - Electron - Windows"
           requires:
             - Setup Windows
