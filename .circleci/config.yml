@@ -319,7 +319,7 @@ workflows:
           record: true
           parallel: true
           parallelism: 5
-          ci-build-id: ${CIRCLE_SHA1}
+          ci-build-id: $(echo $CIRCLE_SHA1)
           group: "UI - Electron - Windows"
           requires:
             - Setup Windows
