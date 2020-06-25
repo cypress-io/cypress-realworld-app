@@ -60,7 +60,7 @@
     "dotenv": "8.2.0",
     "express-paginate": "1.0.0",
     "express-session": "1.17.1",
-    "express-validator": "6.5.0",
+    "express-validator": "6.6.0",
     "faker": "4.1.0",
     "formik": "2.1.4",
     "fuse.js": "6.2.0",
