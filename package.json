@@ -46,7 +46,7 @@
     "@types/react-virtualized": "9.21.10",
     "@types/shortid": "0.0.29",
     "@types/uuid": "8.0.0",
-    "@types/validator": "13.0.0",
+    "@types/validator": "13.1.0",
     "@types/webpack-env": "1.15.2",
     "@types/yup": "0.29.3",
     "@xstate/react": "0.8.1",
