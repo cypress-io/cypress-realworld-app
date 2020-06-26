@@ -108,15 +108,16 @@ yarn cypress:open
 
 ## Additional NPM Scripts
 
-| Script         | Description                                                         |
-| -------------- | ------------------------------------------------------------------- |
-| dev            | Starts backend in watch mode and frontend                           |
-| start          | Starts backend and frontend                                         |
-| types          | Validates types                                                     |
-| db:seed        | Generates fresh database seeds for json files in /data              |
-| start:empty    | Starts backend, frontend and Cypress with empty database seed       |
-| tsnode         | Customized ts-node command to get around react-scripts restrictions |
-| list:dev:users | Provides id and username for users in the dev database              |
+| Script         | Description                                                                        |
+| -------------- | ---------------------------------------------------------------------------------- |
+| dev            | Starts backend in watch mode and frontend                                          |
+| dev:auth0      | Starts backend in watch mode and frontend; [Uses Auth0 for Authentication](#auth0) |
+| start          | Starts backend and frontend                                                        |
+| types          | Validates types                                                                    |
+| db:seed        | Generates fresh database seeds for json files in /data                             |
+| start:empty    | Starts backend, frontend and Cypress with empty database seed                      |
+| tsnode         | Customized ts-node command to get around react-scripts restrictions                |
+| list:dev:users | Provides id and username for users in the dev database                             |
 
 For a complete list of scripts see [package.json](./package.json)
 
@@ -128,6 +129,20 @@ To generate a code coverage report:
 
 1. Run `yarn cypress:run --env coverage=true` and wait for the test run to complete.
 2. Once the test run is complete, you can view the report at `coverage/index.html`.
+
+## 3rd Party Authentication Providers
+
+Support for 3rd party authentication is available in the application to demonstrate the concept and commands needed for programmatic login.
+
+### Auth0
+
+A guide has been written with detail around adapting the RWA to use Auth0 and to explain the programmatic command used for Cypress tests.
+
+Prerequisites include an Auth0 account and a Tenant configured for use with a SPA. Environment variables from Auth0 are to be placed in the [.env](./.env).
+
+Start the application with `yarn dev:auth0` and run Cypress with `yarn cypress:open`.
+
+The only passing spec on this branch will be the [auth0 spec](./cypress/tests/ui-auth-providers/auth0.spec.ts); all others will fail.
 
 ## License
 

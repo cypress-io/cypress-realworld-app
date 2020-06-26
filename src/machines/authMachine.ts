@@ -1,8 +1,12 @@
+import dotenv from "dotenv";
 import { Machine, assign, interpret, State } from "xstate";
 import { omit } from "lodash/fp";
 import { httpClient } from "../utils/asyncUtils";
 import { history } from "../utils/historyUtils";
 import { User } from "../models";
+
+dotenv.config({ path: ".env.local" });
+dotenv.config();
 
 export interface AuthMachineSchema {
   states: {
@@ -12,6 +16,7 @@ export interface AuthMachineSchema {
     updating: {};
     logout: {};
     refreshing: {};
+    auth0: {};
     authorized: {};
   };
 }
@@ -21,7 +26,8 @@ export type AuthMachineEvents =
   | { type: "LOGOUT" }
   | { type: "UPDATE" }
   | { type: "REFRESH" }
-  | { type: "SIGNUP" };
+  | { type: "SIGNUP" }
+  | { type: "AUTH0" };
 
 export interface AuthMachineContext {
   user?: User;
@@ -42,6 +48,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         on: {
           LOGIN: "loading",
           SIGNUP: "signup",
+          AUTH0: "auth0",
         },
       },
       signup: {
@@ -68,6 +75,16 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       refreshing: {
         invoke: {
           src: "getUserProfile",
+          onDone: { target: "authorized", actions: "setUserProfile" },
+          onError: { target: "unauthorized", actions: "onError" },
+        },
+        on: {
+          LOGOUT: "logout",
+        },
+      },
+      auth0: {
+        invoke: {
+          src: "getAuth0UserProfile",
           onDone: { target: "authorized", actions: "setUserProfile" },
           onError: { target: "unauthorized", actions: "onError" },
         },
@@ -114,6 +131,20 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       getUserProfile: async (ctx, event) => {
         const resp = await httpClient.get(`http://localhost:3001/checkAuth`);
         return resp.data;
+      },
+      getAuth0UserProfile: (ctx, event: any) => {
+        // Map Auth0 User fields to our User Model
+        const user = {
+          id: event.user.sub,
+          email: event.user.email,
+          firstName: event.user.nickname,
+          avatar: event.user.picture,
+        };
+
+        // Set Auth0 Access Token in Local Storage for API calls
+        localStorage.setItem(process.env.REACT_APP_AUTH_TOKEN_NAME!, event.token);
+
+        return Promise.resolve({ user });
       },
       updateProfile: async (ctx, event: any) => {
         const payload = omit("type", event);
