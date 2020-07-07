@@ -1928,10 +1928,10 @@
   dependencies:
     "@types/express" "*"
 
-"@types/dinero.js@1.6.4":
-  version "1.6.4"
-  resolved "https://registry.yarnpkg.com/@types/dinero.js/-/dinero.js-1.6.4.tgz#a7fd5ac19feb379d3750cdfcfb32387dfaa12fb4"
-  integrity sha512-P19gYy1gxXzaqluAnGB8VKCWeNE8GSMuxTBjYSxT/TMd4tuX8hd+RpCMuLhdKZLpxmOCytIX9aHcuzSekMWA8g==
+"@types/dinero.js@1.6.5":
+  version "1.6.5"
+  resolved "https://registry.yarnpkg.com/@types/dinero.js/-/dinero.js-1.6.5.tgz#bde1cb8384f52d73a8bb951d2b66d8a5b59c50df"
+  integrity sha512-mDpUUr/PA68nrtb+ZnOa7kIPkbPVa7yCfB0EsFIWwcZrKYGlbp1F8roAHyQSehYNuaByjiBKU6B9iqPeRgUyiA==
 
 "@types/eslint-visitor-keys@^1.0.0":
   version "1.0.0"
