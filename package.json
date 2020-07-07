@@ -41,7 +41,7 @@
     "@types/react": "16.9.38",
     "@types/react-dom": "16.9.8",
     "@types/react-infinite-calendar": "2.3.4",
-    "@types/react-router": "5.1.7",
+    "@types/react-router": "5.1.8",
     "@types/react-router-dom": "5.1.5",
     "@types/react-virtualized": "9.21.10",
     "@types/shortid": "0.0.29",
