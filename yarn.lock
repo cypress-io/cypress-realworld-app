@@ -12466,10 +12466,10 @@ stack-utils@^1.0.1:
   resolved "https://registry.yarnpkg.com/stack-utils/-/stack-utils-1.0.2.tgz#33eba3897788558bebfc2db059dc158ec36cebb8"
   integrity sha512-MTX+MeG5U994cazkjd/9KNAapsHnibjMLnfXodlkXw76JEea0UiNzrqidzo1emMwk7w5Qhc9jd4Bn9TBb1MFwA==
 
-start-server-and-test@1.11.1:
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/start-server-and-test/-/start-server-and-test-1.11.1.tgz#bc230def8525ea413c218859a23530520dce83b0"
-  integrity sha512-hAtfMKv2NJpdj+2joqWrstTZAHraeFKfDb2l/ANlZYxDzpTh3OJSRfGh5lFo7JtcSu6klk828/viJLiaxA6tOQ==
+start-server-and-test@1.11.2:
+  version "1.11.2"
+  resolved "https://registry.yarnpkg.com/start-server-and-test/-/start-server-and-test-1.11.2.tgz#9144b7b6f25197148f159f261ae80119afbb17d5"
+  integrity sha512-rk1zS5WQvdbc8slE5hPtzfji1dFSnBAfm+vSjToZNrBvozHJvuAG80xE5u8N4tQjg3Ej1Crjc19J++r28HGJgg==
   dependencies:
     bluebird "3.7.2"
     check-more-types "2.24.0"
@@ -12477,7 +12477,7 @@ start-server-and-test@1.11.1:
     execa "3.4.0"
     lazy-ass "1.6.0"
     ps-tree "1.2.0"
-    wait-on "5.0.3"
+    wait-on "5.1.0"
 
 static-extend@^0.1.1:
   version "0.1.2"
@@ -13508,10 +13508,10 @@ w3c-xmlserializer@^1.1.2:
     webidl-conversions "^4.0.2"
     xml-name-validator "^3.0.0"
 
-wait-on@5.0.3:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/wait-on/-/wait-on-5.0.3.tgz#763789f77a548bba318a256211f49fae04dc8065"
-  integrity sha512-0v3rQfJfLNVxZS0UP9lSYYMRUh8M+RgtkiSoPQOi7+QOlbG8XeY2uD0OE+rDeG/cJ35n1xMihuweSbjt1uB17w==
+wait-on@5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/wait-on/-/wait-on-5.1.0.tgz#b697f21c6fea0908b9c7ad6ed56ace4736768b66"
+  integrity sha512-JM0kgaE+V0nCDvSl72iM05W8NDt2E2M56WC5mzR7M+T+k6xjt2yYpyom+xA8RasSunFGzbxIpAXbVzXqtweAnA==
   dependencies:
     "@hapi/joi" "^17.1.1"
     axios "^0.19.2"
