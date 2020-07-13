@@ -24,6 +24,14 @@
       "allowedVersions": "7.9.0"
     },
     {
+      "packageNames": ["babel-loader"],
+      "allowedVersions": "8.0.6"
+    },
+    {
+      "packageNames": ["react-scripts"],
+      "allowedVersions": "3.4.0"
+    },
+    {
       "packageNames": ["@types/express"],
       "allowedVersions": "4.17.2"
     },
