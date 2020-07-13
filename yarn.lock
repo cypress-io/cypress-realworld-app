@@ -5731,10 +5731,10 @@ expect@^24.9.0:
     jest-message-util "^24.9.0"
     jest-regex-util "^24.9.0"
 
-express-paginate@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/express-paginate/-/express-paginate-1.0.0.tgz#b9ebc6b6baec7273eac916cfa55a9b5e4977666b"
-  integrity sha512-M4+ee9YdcRoBltBYBwMcZUH589KeoVy62dBTyaZXlrggnJFGvk3Rgw0XYdL2PXN0BQROrnYskw+QxtoPsdY+AQ==
+express-paginate@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/express-paginate/-/express-paginate-1.0.2.tgz#7d5c0214fe713aef1685daf7ada3ec5203ae1e2e"
+  integrity sha512-z0VTaLrsMe4PJFifjJCC4Q11cwrveSOejicYOgFi6RzqUMPd8kIlK95x/xq6g6k6urCI2Fd3gadj3AZ9AGqguw==
   dependencies:
     lodash.assign "^4.2.0"
     lodash.clone "^4.5.0"

@@ -58,7 +58,7 @@
     "date-fns": "2.14.0",
     "dinero.js": "1.8.1",
     "dotenv": "8.2.0",
-    "express-paginate": "1.0.0",
+    "express-paginate": "1.0.2",
     "express-session": "1.17.1",
     "express-validator": "6.6.0",
     "faker": "4.1.0",
