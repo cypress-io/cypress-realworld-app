@@ -62,7 +62,7 @@
     "express-session": "1.17.1",
     "express-validator": "6.6.0",
     "faker": "4.1.0",
-    "formik": "2.1.4",
+    "formik": "2.1.5",
     "fuse.js": "6.4.0",
     "husky": "4.2.5",
     "json": "9.0.6",
