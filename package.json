@@ -55,7 +55,7 @@
     "concurrently": "5.2.0",
     "cors": "2.8.5",
     "cross-env": "7.0.2",
-    "date-fns": "2.14.0",
+    "date-fns": "2.15.0",
     "dinero.js": "1.8.1",
     "dotenv": "8.2.0",
     "express-paginate": "1.0.2",
