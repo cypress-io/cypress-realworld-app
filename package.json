@@ -31,7 +31,7 @@
     "@types/express-serve-static-core": "4.17.2",
     "@types/express-session": "1.17.0",
     "@types/faker": "4.1.12",
-    "@types/jest": "26.0.4",
+    "@types/jest": "26.0.5",
     "@types/json-server": "0.14.2",
     "@types/lodash": "4.14.157",
     "@types/lowdb": "1.0.9",
