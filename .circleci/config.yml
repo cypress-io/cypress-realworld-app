@@ -181,8 +181,8 @@ workflows:
   build:
     parameters:
       ci-build-id:
-        type: env_var_name
-        default: CIRCLE_SHA1
+        type: string
+        default: "sha-{{ .Environment.CIRCLE_SHA1 }}"
     jobs:
       - cypress/install:
           name: "Setup Windows"
@@ -323,7 +323,7 @@ workflows:
           record: true
           parallel: true
           parallelism: 5
-          ci-build-id: << parameters.ci-build-id >>
+          ci-build-id: <<parameters.ci-build-id>>
           group: "UI - Electron - Windows"
           requires:
             - Setup Windows
