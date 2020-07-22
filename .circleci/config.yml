@@ -179,6 +179,10 @@ windows-workflow: &windows-workflow
 
 workflows:
   build:
+    parameters:
+      ci-build-id:
+        type: env_var_name
+        default: CIRCLE_SHA1
     jobs:
       - cypress/install:
           name: "Setup Windows"
@@ -210,23 +214,23 @@ workflows:
                 command: yarn test:unit:ci
 
       # Run API tests against backend server
-      - cypress/run:
-          name: "API Tests"
-          browser: chrome
-          spec: cypress/tests/api/*
-          executor: with-chrome-and-firefox
-          wait-on: "http://localhost:3000"
-          yarn: true
-          start: yarn start:ci
-          record: true
-          parallel: true
-          parallelism: 5
-          ci-build-id: ${CIRCLE_SHA1}
-          group: API
-          requires:
-            - Setup Linux
-          post-steps:
-            - report-coverage
+      # - cypress/run:
+      #     name: "API Tests"
+      #     browser: chrome
+      #     spec: cypress/tests/api/*
+      #     executor: with-chrome-and-firefox
+      #     wait-on: "http://localhost:3000"
+      #     yarn: true
+      #     start: yarn start:ci
+      #     record: true
+      #     parallel: true
+      #     parallelism: 5
+      #     ci-build-id: ${CIRCLE_SHA1}
+      #     group: API
+      #     requires:
+      #       - Setup Linux
+      #     post-steps:
+      #       - report-coverage
 
       # Run E2E tests in Chrome
       - cypress/run:
@@ -240,7 +244,7 @@ workflows:
           record: true
           parallel: true
           parallelism: 5
-          ci-build-id: ${CIRCLE_SHA1}
+          ci-build-id: << parameters.ci-build-id >>
           group: "UI - Chrome"
           requires:
             - Setup Linux
@@ -248,64 +252,64 @@ workflows:
             - report-coverage
 
       # Run E2E tests in Chrome with mobile device viewport
-      - cypress/run:
-          name: "UI Tests - Chrome - Mobile"
-          browser: chrome
-          spec: cypress/tests/ui/*
-          config: "viewportWidth=375,viewportHeight=667"
-          executor: with-chrome-and-firefox
-          wait-on: "http://localhost:3000"
-          yarn: true
-          start: yarn start:ci
-          record: true
-          parallel: true
-          parallelism: 5
-          ci-build-id: ${CIRCLE_SHA1}
-          group: "UI - Chrome - Mobile"
-          requires:
-            - Setup Linux
-          post-steps:
-            - report-coverage
+      # - cypress/run:
+      #     name: "UI Tests - Chrome - Mobile"
+      #     browser: chrome
+      #     spec: cypress/tests/ui/*
+      #     config: "viewportWidth=375,viewportHeight=667"
+      #     executor: with-chrome-and-firefox
+      #     wait-on: "http://localhost:3000"
+      #     yarn: true
+      #     start: yarn start:ci
+      #     record: true
+      #     parallel: true
+      #     parallelism: 5
+      #     ci-build-id: ${CIRCLE_SHA1}
+      #     group: "UI - Chrome - Mobile"
+      #     requires:
+      #       - Setup Linux
+      #     post-steps:
+      #       - report-coverage
 
       # Run E2E tests in Firefox
-      - cypress/run:
-          name: "UI Tests - Firefox"
-          browser: firefox
-          spec: cypress/tests/ui/*
-          executor: with-chrome-and-firefox
-          wait-on: "http://localhost:3000"
-          yarn: true
-          start: yarn start:ci
-          record: true
-          parallel: true
-          parallelism: 5
-          ci-build-id: ${CIRCLE_SHA1}
-          group: "UI - Firefox"
-          requires:
-            - Setup Linux
-          post-steps:
-            - report-coverage
+      # - cypress/run:
+      #     name: "UI Tests - Firefox"
+      #     browser: firefox
+      #     spec: cypress/tests/ui/*
+      #     executor: with-chrome-and-firefox
+      #     wait-on: "http://localhost:3000"
+      #     yarn: true
+      #     start: yarn start:ci
+      #     record: true
+      #     parallel: true
+      #     parallelism: 5
+      #     ci-build-id: ${CIRCLE_SHA1}
+      #     group: "UI - Firefox"
+      #     requires:
+      #       - Setup Linux
+      #     post-steps:
+      #       - report-coverage
 
       # Run E2E tests in Firefox with mobile device viewport
-      - cypress/run:
-          name: "UI Tests - Firefox - Mobile"
-          browser: firefox
-          spec: cypress/tests/ui/*
-          config: viewportWidth=375,viewportHeight=667
-          executor: with-chrome-and-firefox
-          wait-on: "http://localhost:3000"
-          yarn: true
-          start: yarn start:ci
-          record: true
-          parallel: true
-          parallelism: 5
-          ci-build-id: ${CIRCLE_SHA1}
-          group: "UI - Firefox - Mobile"
-          requires:
-            - Setup Linux
-          post-steps:
-            - report-coverage
-        # Run E2E tests in Windows in Electron
+      # - cypress/run:
+      #     name: "UI Tests - Firefox - Mobile"
+      #     browser: firefox
+      #     spec: cypress/tests/ui/*
+      #     config: viewportWidth=375,viewportHeight=667
+      #     executor: with-chrome-and-firefox
+      #     wait-on: "http://localhost:3000"
+      #     yarn: true
+      #     start: yarn start:ci
+      #     record: true
+      #     parallel: true
+      #     parallelism: 5
+      #     ci-build-id: ${CIRCLE_SHA1}
+      #     group: "UI - Firefox - Mobile"
+      #     requires:
+      #       - Setup Linux
+      #     post-steps:
+      #       - report-coverage
+      # Run E2E tests in Windows in Electron
       - cypress/run:
           name: "UI Tests - Electron - Windows"
           spec: cypress/tests/ui/*
@@ -319,7 +323,7 @@ workflows:
           record: true
           parallel: true
           parallelism: 5
-          ci-build-id: $(echo $CIRCLE_SHA1)
+          ci-build-id: << parameters.ci-build-id >>
           group: "UI - Electron - Windows"
           requires:
             - Setup Windows
