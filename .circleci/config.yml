@@ -179,10 +179,6 @@ windows-workflow: &windows-workflow
 
 workflows:
   build:
-    parameters:
-      ci-build-id:
-        type: string
-        default: $CIRCLE_SHA1
     jobs:
       - cypress/install:
           name: "Setup Windows"
@@ -244,7 +240,7 @@ workflows:
           record: true
           parallel: true
           parallelism: 5
-          ci-build-id: <<parameters.ci-build-id>>
+          ci-build-id: $CIRCLE_SHA1
           group: "UI - Chrome"
           requires:
             - Setup Linux
@@ -323,7 +319,7 @@ workflows:
           record: true
           parallel: true
           parallelism: 5
-          ci-build-id: <<parameters.ci-build-id>>
+          ci-build-id: $CIRCLE_SHA1
           group: "UI - Electron - Windows"
           requires:
             - Setup Windows
