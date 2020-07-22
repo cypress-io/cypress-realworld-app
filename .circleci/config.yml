@@ -182,7 +182,7 @@ workflows:
     parameters:
       ci-build-id:
         type: string
-        default: "sha-{{ .Environment.CIRCLE_SHA1 }}"
+        default: sha-{{ .Environment.CIRCLE_SHA1 }}
     jobs:
       - cypress/install:
           name: "Setup Windows"
