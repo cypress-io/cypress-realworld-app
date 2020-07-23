@@ -18,7 +18,7 @@ type TransactionFeedsCtx = {
   user?: User;
 };
 
-describe("Transaction Feed", function () {
+describe.skip("Transaction Feed", function () {
   const ctx: TransactionFeedsCtx = {};
 
   const feedViews = {
