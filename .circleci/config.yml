@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  cypress: cypress-io/cypress@1.25.0
+  cypress: cypress-io/cypress@1.25.1
   codecov: codecov/codecov@1.1.1
   win: circleci/windows@2.4.0
 
@@ -240,7 +240,7 @@ workflows:
           record: true
           parallel: true
           parallelism: 5
-          ci-build-id: "testing-commit-${CIRCLE_SHA1}"
+          ci-build-id: ${CIRCLE_SHA1}
           group: "UI - Chrome"
           requires:
             - Setup Linux
@@ -319,7 +319,7 @@ workflows:
           record: true
           parallel: true
           parallelism: 5
-          ci-build-id: "testing-commit-${CIRCLE_SHA1}"
+          ci-build-id: ${CIRCLE_SHA1}
           group: "UI - Electron - Windows"
           requires:
             - Setup Windows
