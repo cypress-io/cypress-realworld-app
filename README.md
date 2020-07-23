@@ -9,10 +9,6 @@
 </p>
 
 <p align="center">
-  <a href="https://dashboard.cypress.io/projects/7s5okt/runs">
-    <img src="https://img.shields.io/badge/Cypress-Dashboard-blue">
-  </a>
-
   <a href="https://circleci.com/gh/cypress-io/cypress-realworld-app">
     <img src="https://circleci.com/gh/cypress-io/cypress-realworld-app.svg?style=shield">
   </a>
