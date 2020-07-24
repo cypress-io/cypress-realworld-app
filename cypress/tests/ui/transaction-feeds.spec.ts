@@ -354,7 +354,7 @@ describe("Transaction Feed", function () {
       });
     });
 
-    it("friends feed only shows contact transactions", function () {
+    it.skip("friends feed only shows contact transactions", function () {
       cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
         const contactIds = contacts.map((contact) => contact.contactUserId);
         cy.visit("/contacts");
@@ -372,7 +372,7 @@ describe("Transaction Feed", function () {
       });
     });
 
-    it.skip("first five items belong to contacts in public feed", function () {
+    it("first five items belong to contacts in public feed", function () {
       cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
         const contactIds = contacts.map((contact) => contact.contactUserId);
 
