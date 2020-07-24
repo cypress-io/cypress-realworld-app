@@ -379,9 +379,7 @@ describe("Transaction Feed", function () {
 
       cy.wait("@publicTransactions")
         .its("response.body.results")
-        .then((transactions: TransactionResponseItem[]) => {
-          return transactions.slice(0, 5);
-        })
+        .invoke("slice", 0, 5)
         .each((transaction: Transaction) => {
           const transactionParticipants = [transaction.senderId, transaction.receiverId];
 
