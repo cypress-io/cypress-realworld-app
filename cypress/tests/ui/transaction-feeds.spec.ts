@@ -340,7 +340,7 @@ describe("Transaction Feed", function () {
     });
   });
 
-  describe.skip("Feed Item Visibility", () => {
+  describe("Feed Item Visibility", () => {
     it("mine feed only shows personal transactions", function () {
       cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
         cy.visit("/personal");
