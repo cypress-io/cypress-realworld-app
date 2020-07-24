@@ -372,7 +372,7 @@ describe("Transaction Feed", function () {
         });
     });
 
-    it.skip("first five items belong to contacts in public feed", function () {
+    it("first five items belong to contacts in public feed", function () {
       cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
         ctx.contactIds = contacts.map((contact) => contact.contactUserId);
       });
@@ -380,15 +380,14 @@ describe("Transaction Feed", function () {
       cy.wait("@publicTransactions")
         .its("response.body.results")
         .then((transactions: TransactionResponseItem[]) => {
-          const transactionsOfContacts = transactions.slice(0, 5);
+          return transactions.slice(0, 5);
+        })
+        .each((transaction: Transaction) => {
+          const transactionParticipants = [transaction.senderId, transaction.receiverId];
 
-          transactionsOfContacts.forEach((transaction) => {
-            const transactionParticipants = [transaction.senderId, transaction.receiverId];
-
-            const contactsInTransaction = _.intersection(transactionParticipants, ctx.contactIds!);
-            const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
-            expect(contactsInTransaction, message).to.not.be.empty;
-          });
+          const contactsInTransaction = _.intersection(transactionParticipants, ctx.contactIds!);
+          const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
+          expect(contactsInTransaction, message).to.not.be.empty;
         });
     });
   });
