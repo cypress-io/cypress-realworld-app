@@ -18,7 +18,7 @@ type TransactionFeedsCtx = {
   user?: User;
 };
 
-describe.skip("Transaction Feed", function () {
+describe("Transaction Feed", function () {
   const ctx: TransactionFeedsCtx = {};
 
   const feedViews = {
@@ -340,7 +340,7 @@ describe.skip("Transaction Feed", function () {
     });
   });
 
-  describe("Feed Item Visibility", () => {
+  describe.skip("Feed Item Visibility", () => {
     it("mine feed only shows personal transactions", function () {
       cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
         cy.visit("/personal");
