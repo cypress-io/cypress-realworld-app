@@ -377,8 +377,6 @@ describe("Transaction Feed", function () {
         ctx.contactIds = contacts.map((contact) => contact.contactUserId);
       });
 
-      cy.visit("/public");
-
       cy.wait("@publicTransactions")
         .its("response.body.results")
         .then((transactions: TransactionResponseItem[]) => {
