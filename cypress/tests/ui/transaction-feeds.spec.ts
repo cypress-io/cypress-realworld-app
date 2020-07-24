@@ -16,7 +16,7 @@ const { _ } = Cypress;
 type TransactionFeedsCtx = {
   allUsers?: User[];
   user?: User;
-  contactIds?: Contact["id"][];
+  contactIds?: string[];
 };
 
 describe("Transaction Feed", function () {
@@ -365,7 +365,7 @@ describe("Transaction Feed", function () {
         .each((transaction: Transaction) => {
           const transactionParticipants = [transaction.senderId, transaction.receiverId];
 
-          const contactsInTransaction = _.intersection(contactIds, transactionParticipants);
+          const contactsInTransaction = _.intersection(ctx.contactIds!, transactionParticipants);
 
           const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
           expect(contactsInTransaction, message).to.not.be.empty;
@@ -385,7 +385,7 @@ describe("Transaction Feed", function () {
           transactionsOfContacts.forEach((transaction) => {
             const transactionParticipants = [transaction.senderId, transaction.receiverId];
 
-            const contactsInTransaction = _.intersection(transactionParticipants, ctx.contactIds);
+            const contactsInTransaction = _.intersection(transactionParticipants, ctx.contactIds!);
             const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
             expect(contactsInTransaction, message).to.not.be.empty;
           });
