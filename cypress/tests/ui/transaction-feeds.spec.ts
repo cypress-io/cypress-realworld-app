@@ -16,6 +16,7 @@ const { _ } = Cypress;
 type TransactionFeedsCtx = {
   allUsers?: User[];
   user?: User;
+  contactIds?: Contact["id"][];
 };
 
 describe("Transaction Feed", function () {
@@ -354,7 +355,7 @@ describe("Transaction Feed", function () {
       });
     });
 
-    it.skip("friends feed only shows contact transactions", function () {
+    it("friends feed only shows contact transactions", function () {
       cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
         const contactIds = contacts.map((contact) => contact.contactUserId);
         cy.visit("/contacts");
@@ -374,22 +375,22 @@ describe("Transaction Feed", function () {
 
     it("first five items belong to contacts in public feed", function () {
       cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
-        const contactIds = contacts.map((contact) => contact.contactUserId);
-
-        cy.wait("@publicTransactions")
-          .its("response.body.results")
-          .then((transactions: TransactionResponseItem[]) => {
-            const transactionsOfContacts = transactions.slice(0, 5);
-
-            transactionsOfContacts.forEach((transaction) => {
-              const transactionParticipants = [transaction.senderId, transaction.receiverId];
-
-              const contactsInTransaction = _.intersection(transactionParticipants, contactIds);
-              const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
-              expect(contactsInTransaction, message).to.not.be.empty;
-            });
-          });
+        ctx.contactIds = contacts.map((contact) => contact.contactUserId);
       });
+
+      cy.wait("@publicTransactions")
+        .its("response.body.results")
+        .then((transactions: TransactionResponseItem[]) => {
+          const transactionsOfContacts = transactions.slice(0, 5);
+
+          transactionsOfContacts.forEach((transaction) => {
+            const transactionParticipants = [transaction.senderId, transaction.receiverId];
+
+            const contactsInTransaction = _.intersection(transactionParticipants, ctx.contactIds);
+            const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
+            expect(contactsInTransaction, message).to.not.be.empty;
+          });
+        });
     });
   });
 });
