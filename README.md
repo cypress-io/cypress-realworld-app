@@ -59,6 +59,8 @@ The app is bundled with [example data](./data/database.json) (`data/database.jso
 
 ### Installation
 
+> Node.js version should be >=12.0
+
 ```shell
 yarn install
 ```
