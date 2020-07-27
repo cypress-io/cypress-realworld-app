@@ -342,7 +342,6 @@ describe("Transaction Feed", function () {
   });
 
   describe("Feed Item Visibility", () => {
-    //it("first five items belong to contacts in public feed", { browser: "!firefox" }, function () {
     it("first five items belong to contacts in public feed", function () {
       cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
         ctx.contactIds = contacts.map((contact) => contact.contactUserId);
