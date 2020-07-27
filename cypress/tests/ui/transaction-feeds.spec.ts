@@ -343,6 +343,10 @@ describe("Transaction Feed", function () {
 
   describe("Feed Item Visibility", () => {
     it("mine feed only shows personal transactions", function () {
+      cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
+        ctx.contactIds = contacts.map((contact) => contact.contactUserId);
+      });
+
       cy.visit("/personal");
 
       cy.wait("@personalTransactions")
@@ -354,6 +358,10 @@ describe("Transaction Feed", function () {
     });
 
     it("first five items belong to contacts in public feed", function () {
+      cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
+        ctx.contactIds = contacts.map((contact) => contact.contactUserId);
+      });
+
       cy.wait("@publicTransactions")
         .its("response.body.results")
         .invoke("slice", 0, 5)
