@@ -348,7 +348,6 @@ describe("Transaction Feed", function () {
       });
 
       cy.getBySelLike(feedViews.personal.tab).click();
-      //cy.visit("/personal");
 
       cy.wait("@personalTransactions")
         .its("response.body.results")
