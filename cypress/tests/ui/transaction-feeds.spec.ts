@@ -362,7 +362,6 @@ describe("Transaction Feed", function () {
         ctx.contactIds = contacts.map((contact) => contact.contactUserId);
       });
 
-      cy.task("log", `Before waiting on publicTransactions`);
       cy.wait("@publicTransactions")
         .its("response.body.results")
         .invoke("slice", 0, 5)
