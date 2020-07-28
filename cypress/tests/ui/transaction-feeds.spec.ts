@@ -387,8 +387,6 @@ describe("Transaction Feed", function () {
 
       cy.getBySelLike(feedViews.contacts.tab).click();
 
-      cy.task("log", `After /contacts click`);
-
       cy.wait("@contactsTransactions")
         .its("response.body.results")
         .each((transaction: Transaction) => {
