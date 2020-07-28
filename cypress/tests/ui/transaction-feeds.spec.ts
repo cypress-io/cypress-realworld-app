@@ -362,13 +362,18 @@ describe("Transaction Feed", function () {
         ctx.contactIds = contacts.map((contact) => contact.contactUserId);
       });
 
+      cy.task("log", `Before waiting on publicTransactions`);
       cy.wait("@publicTransactions")
         .its("response.body.results")
         .invoke("slice", 0, 5)
         .each((transaction: Transaction) => {
+          cy.task("log", `Transaction ${transaction.id}`);
           const transactionParticipants = [transaction.senderId, transaction.receiverId];
+          cy.task("log", `Transaction Participants ${transactionParticipants}`);
 
           const contactsInTransaction = _.intersection(transactionParticipants, ctx.contactIds!);
+          cy.task("log", `Contacts in Transaction ${contactsInTransaction}`);
+          cy.task("log", `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`);
           const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
           expect(contactsInTransaction, message).to.not.be.empty;
         });
@@ -378,12 +383,16 @@ describe("Transaction Feed", function () {
       cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
         ctx.contactIds = contacts.map((contact) => contact.contactUserId);
       });
+      cy.task("log", `Before /contacts visit`);
 
       cy.visit("/contacts");
+
+      cy.task("log", `After /contacts visit`);
 
       cy.wait("@contactsTransactions")
         .its("response.body.results")
         .each((transaction: Transaction) => {
+          cy.task("log", `Transaction ${transaction.id}`);
           const transactionParticipants = [transaction.senderId, transaction.receiverId];
 
           const contactsInTransaction = _.intersection(ctx.contactIds!, transactionParticipants);
