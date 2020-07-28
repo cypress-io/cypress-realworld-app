@@ -373,7 +373,6 @@ describe("Transaction Feed", function () {
 
           const contactsInTransaction = _.intersection(transactionParticipants, ctx.contactIds!);
           cy.task("log", `Contacts in Transaction ${contactsInTransaction}`);
-          cy.task("log", `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`);
           const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
           expect(contactsInTransaction, message).to.not.be.empty;
         });
