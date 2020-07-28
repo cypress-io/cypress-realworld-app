@@ -367,7 +367,6 @@ describe("Transaction Feed", function () {
         .its("response.body.results")
         .invoke("slice", 0, 5)
         .each((transaction: Transaction) => {
-          // test comment
           cy.task("log", `Transaction ${transaction.id}`);
           const transactionParticipants = [transaction.senderId, transaction.receiverId];
           cy.task("log", `Transaction Participants ${transactionParticipants}`);
