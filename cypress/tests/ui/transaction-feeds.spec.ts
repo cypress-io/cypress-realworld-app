@@ -367,7 +367,6 @@ describe("Transaction Feed", function () {
         .its("response.body.results")
         .invoke("slice", 0, 5)
         .each((transaction: Transaction) => {
-          cy.task("log", `Transaction ${transaction.id}`);
           const transactionParticipants = [transaction.senderId, transaction.receiverId];
 
           const contactsInTransaction = _.intersection(transactionParticipants, ctx.contactIds!);
