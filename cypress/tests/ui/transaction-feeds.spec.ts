@@ -385,8 +385,6 @@ describe("Transaction Feed", function () {
       });
       cy.task("log", `Before /contacts click`);
 
-      //cy.visit("/contacts");
-
       cy.getBySelLike(feedViews.contacts.tab).click();
 
       cy.task("log", `After /contacts click`);
