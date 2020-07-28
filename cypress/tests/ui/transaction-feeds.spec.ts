@@ -383,7 +383,6 @@ describe("Transaction Feed", function () {
       cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
         ctx.contactIds = contacts.map((contact) => contact.contactUserId);
       });
-      cy.task("log", `Before /contacts click`);
 
       cy.getBySelLike(feedViews.contacts.tab).click();
 
