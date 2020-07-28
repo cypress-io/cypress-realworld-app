@@ -347,7 +347,8 @@ describe("Transaction Feed", function () {
         ctx.contactIds = contacts.map((contact) => contact.contactUserId);
       });
 
-      cy.visit("/personal");
+      cy.getBySelLike(feedViews.personal.tab).click();
+      //cy.visit("/personal");
 
       cy.wait("@personalTransactions")
         .its("response.body.results")
@@ -383,11 +384,13 @@ describe("Transaction Feed", function () {
       cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
         ctx.contactIds = contacts.map((contact) => contact.contactUserId);
       });
-      cy.task("log", `Before /contacts visit`);
+      cy.task("log", `Before /contacts click`);
 
-      cy.visit("/contacts");
+      //cy.visit("/contacts");
 
-      cy.task("log", `After /contacts visit`);
+      cy.getBySelLike(feedViews.contacts.tab).click();
+
+      cy.task("log", `After /contacts click`);
 
       cy.wait("@contactsTransactions")
         .its("response.body.results")
