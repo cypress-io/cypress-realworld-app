@@ -369,7 +369,6 @@ describe("Transaction Feed", function () {
         .each((transaction: Transaction) => {
           cy.task("log", `Transaction ${transaction.id}`);
           const transactionParticipants = [transaction.senderId, transaction.receiverId];
-          cy.task("log", `Transaction Participants ${transactionParticipants}`);
 
           const contactsInTransaction = _.intersection(transactionParticipants, ctx.contactIds!);
           const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
