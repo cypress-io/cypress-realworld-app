@@ -35,6 +35,11 @@ export default (on, config) => {
     "find:database"(queryPayload) {
       return queryDatabase(queryPayload, (data, attrs) => _.find(data.results, attrs));
     },
+    log(message: any) {
+      console.log(message);
+
+      return null;
+    },
   });
 
   codeCoverageTask(on, config);
