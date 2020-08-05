@@ -6582,12 +6582,12 @@ express-session@1.17.1:
     safe-buffer "5.2.0"
     uid-safe "~2.1.5"
 
-express-validator@6.6.0:
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/express-validator/-/express-validator-6.6.0.tgz#46b8327926e9b1752f9823ee0631e534b6ac41e8"
-  integrity sha512-xcephfzFbUssJph/nOSKIdx+I+8GRz5by/8rOIKL6gJikKKKJjnwYH5TG1nIDB6kEalUtZMbOFuSNOp/HHY84Q==
+express-validator@6.6.1:
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/express-validator/-/express-validator-6.6.1.tgz#c53046f615d27fcb78be786e018dcd60bd9c6c5c"
+  integrity sha512-+MrZKJ3eGYXkNF9p9Zf7MS7NkPJFg9MDYATU5c80Cf4F62JdLBIjWxy6481tRC0y1NnC9cgOw8FuN364bWaGhA==
   dependencies:
-    lodash "^4.17.15"
+    lodash "^4.17.19"
     validator "^13.1.1"
 
 express@^4.17.1:
