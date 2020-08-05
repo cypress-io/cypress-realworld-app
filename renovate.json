@@ -13,7 +13,6 @@
   "prHourlyLimit": 1,
   "updateNotScheduled": false,
   "timezone": "America/New_York",
-  "schedule": ["after 10pm", "before 6am"],
   "lockFileMaintenance": {
     "enabled": true
   },
