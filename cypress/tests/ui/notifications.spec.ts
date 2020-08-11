@@ -17,6 +17,7 @@ describe("Notifications", function () {
     cy.route("GET", "/notifications").as("getNotifications");
     cy.route("POST", "/transactions").as("createTransaction");
     cy.route("PATCH", "/notifications/*").as("updateNotification");
+    cy.route("POST", "/comments/*").as("postComment");
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.userA = users[0];
@@ -43,7 +44,13 @@ describe("Notifications", function () {
           cy.getBySel("nav-top-notifications-count").should("have.text", `${notificationCount}`);
         });
 
+      const likesCountSelector = "[data-test*=transaction-like-count]";
+      cy.contains(likesCountSelector, 0);
       cy.getBySelLike("like-button").click();
+      // a successful "like" should disable the button and increment
+      // the number of likes
+      cy.getBySelLike("like-button").should("be.disabled");
+      cy.contains(likesCountSelector, 1);
 
       cy.switchUser(ctx.userB.username);
 
@@ -53,7 +60,10 @@ describe("Notifications", function () {
 
       cy.visit("/notifications");
 
+      cy.wait("@getNotifications");
+
       cy.getBySelLike("notification-list-item")
+        .should("have.length", 9)
         .first()
         .should("contain", ctx.userA?.firstName)
         .and("contain", "liked");
@@ -76,14 +86,22 @@ describe("Notifications", function () {
         cy.visit(`/transaction/${transaction.id}`);
       });
 
+      const likesCountSelector = "[data-test*=transaction-like-count]";
+      cy.contains(likesCountSelector, 0);
       cy.getBySelLike("like-button").click();
+      cy.getBySelLike("like-button").should("be.disabled");
+      cy.contains(likesCountSelector, 1);
 
       cy.switchUser(ctx.userA.username);
 
       cy.getBySelLike("notifications-link").click();
+
+      cy.wait("@getNotifications");
+
       cy.location("pathname").should("equal", "/notifications");
 
       cy.getBySelLike("notification-list-item")
+        .should("have.length", 9)
         .first()
         .should("contain", ctx.userC.firstName)
         .and("contain", "liked");
@@ -91,7 +109,11 @@ describe("Notifications", function () {
       cy.switchUser(ctx.userB.username);
 
       cy.getBySelLike("notifications-link").click();
+
+      cy.wait("@getNotifications");
+
       cy.getBySelLike("notification-list-item")
+        .should("have.length", 9)
         .first()
         .should("contain", ctx.userC.firstName)
         .and("contain", "liked");
@@ -108,10 +130,16 @@ describe("Notifications", function () {
 
       cy.getBySelLike("comment-input").type("Thank You{enter}");
 
+      cy.wait("@postComment");
+
       cy.switchUser(ctx.userB.username);
 
       cy.getBySelLike("notifications-link").click();
+
+      cy.wait("@getNotifications");
+
       cy.getBySelLike("notification-list-item")
+        .should("have.length", 9)
         .first()
         .should("contain", ctx.userA?.firstName)
         .and("contain", "commented");
@@ -129,10 +157,16 @@ describe("Notifications", function () {
 
       cy.getBySelLike("comment-input").type("Thank You{enter}");
 
+      cy.wait("@postComment");
+
       cy.switchUser(ctx.userA.username);
 
       cy.getBySelLike("notifications-link").click();
+
+      cy.wait("@getNotifications");
+
       cy.getBySelLike("notification-list-item")
+        .should("have.length", 9)
         .first()
         .should("contain", ctx.userC.firstName)
         .and("contain", "commented");
@@ -141,6 +175,7 @@ describe("Notifications", function () {
 
       cy.getBySelLike("notifications-link").click();
       cy.getBySelLike("notification-list-item")
+        .should("have.length", 9)
         .first()
         .should("contain", ctx.userC.firstName)
         .and("contain", "commented");

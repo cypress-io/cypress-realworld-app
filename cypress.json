@@ -4,8 +4,7 @@
   "integrationFolder": "cypress/tests",
   "viewportHeight": 1000,
   "viewportWidth": 1280,
-  "pluginsFile": "cypress/plugins/index.ts",
-  "supportFile": "cypress/support/index.ts",
+  "firefoxGcInterval": null,
   "env": {
     "apiUrl": "http://localhost:3001",
     "mobileViewportWidthBreakpoint": 414,

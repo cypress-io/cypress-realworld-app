@@ -9,12 +9,8 @@
 </p>
 
 <p align="center">
-  <a href="https://dashboard.cypress.io/projects/7s5okt">
-    <img src="https://img.shields.io/badge/Cypress-Dashboard-blue">
-  </a>
-
-  <a href="https://circleci.com/gh/cypress-io/cypress-realworld-app">
-    <img src="https://circleci.com/gh/cypress-io/cypress-realworld-app.svg?style=shield">
+   <a href="https://dashboard.cypress.io/projects/7s5okt/runs">
+    <img src="https://img.shields.io/endpoint?url=https://dashboard.cypress.io/badge/detailed/7s5okt/develop&style=flat&logo=cypress" />
   </a>
 
   <a href="https://codecov.io/gh/cypress-io/cypress-realworld-app">
@@ -48,7 +44,7 @@ A payment application to demonstrate <strong>real-world</strong> usage of <a hre
 
 ## Features
 
-🛠 Built with [React][reactjs], [XState][xstate], [Express][express], [lowdb][lowdb], and [TypeScript][typescript]  
+🛠 Built with [React][reactjs], [XState][xstate], [Express][express], [lowdb][lowdb], [Material-UI][material-ui] and [TypeScript][typescript]  
 ⚡️ Zero database dependencies  
 🚀 Full-stack [Express][express]/[React][reactjs] application with real-world features and tests  
 👮‍♂️ Local Authentication
@@ -64,6 +60,12 @@ The app is bundled with [example data](./data/database.json) (`data/database.jso
 > 🚩 **Note**
 >
 > You can login to the app with any of the [example app users](./data/database.json#L2). The default password for all users is `s3cret`.
+
+### Prerequisites
+
+The only requirement for this project is to have [Node.js](https://nodejs.org/en/) **version 12** installed on your machine. Refer to the [.node-version](./.node-version) file for the exact version.
+
+TypeScript will be added as a local dependency to the project, so no need to install it.
 
 ### Installation
 
@@ -132,12 +134,13 @@ To generate a code coverage report:
 
 This project is licensed under the terms of the [MIT license](/LICENSE).
 
-[reactjs]: https://reactjs.org
+[reactjs]: https://reactjs.**org**
 [xstate]: https://xstate.js.org
 [express]: https://expressjs.com
 [lowdb]: https://github.com/typicode/lowdb
 [typescript]: https://typescriptlang.org
-[cypressdashboard]: https://dashboard.cypress.io/projects/7s5okt
+[cypressdashboard]: https://dashboard.cypress.io/projects/7s5okt/runs
+[material-ui]: https://material-ui.com
 
 ## Contributors ✨
 

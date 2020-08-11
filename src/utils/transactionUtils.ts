@@ -8,6 +8,8 @@ import {
   TransactionQueryPayload,
   TransactionDateRangePayload,
   TransactionAmountRangePayload,
+  LikeNotification,
+  CommentNotification,
 } from "../models";
 import faker from "faker";
 import Dinero from "dinero.js";
@@ -85,10 +87,13 @@ export const receiverIsCurrentUser = (currentUser: User, transaction: Transactio
 export const formatFullName = (user: User) =>
   flow(pick(["firstName", "lastName"]), values, join(" "))(user);
 
-export const isCommentNotification = (notification: NotificationType) =>
-  has("commentId")(notification);
+export const isCommentNotification = (
+  notification: NotificationType
+): notification is CommentNotification => has("commentId")(notification);
 
-export const isLikeNotification = (notification: NotificationType) => has("likeId")(notification);
+export const isLikeNotification = (
+  notification: NotificationType
+): notification is LikeNotification => has("likeId")(notification);
 
 export const isPaymentNotification = (notification: NotificationType) =>
   has("status")(notification);

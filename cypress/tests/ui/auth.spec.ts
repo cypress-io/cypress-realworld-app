@@ -42,7 +42,6 @@ describe("User Sign-up and Login", function () {
 
     // Sign-up User
     cy.visit("/");
-    cy.percySnapshot();
 
     cy.getBySel("signup").click();
     cy.percySnapshot();
