@@ -42,15 +42,14 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
   }
 
   cy.getBySel("signin-submit").click();
-  cy.wait("@loginUser").then((loginUser) => {
+  cy.wait("@loginUser").then((loginUser: any) => {
     log.set({
       consoleProps() {
         return {
           username,
           password,
           rememberUser,
-          // @ts-ignore
-          userId: loginUser.response.body.user.id,
+          userId: loginUser.response.body.user?.id,
         };
       },
     });
