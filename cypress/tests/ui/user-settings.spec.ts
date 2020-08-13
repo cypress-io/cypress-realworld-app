@@ -22,6 +22,7 @@ describe("User Settings", function () {
   it("renders the user settings form", function () {
     cy.getBySel("user-settings-form").should("be.visible");
     cy.location("pathname").should("include", "/user/settings");
+    cy.percySnapshot();
   });
 
   it("should display user setting form errors", function () {
@@ -30,22 +31,26 @@ describe("User Settings", function () {
       cy.get(`#user-settings-${field}Name-input-helper-text`)
         .should("be.visible")
         .and("contain", `Enter a ${field} name`);
+      cy.percySnapshot();
     });
 
     cy.getBySelLike("email-input").type("abc").clear().blur();
     cy.get("#user-settings-email-input-helper-text")
       .should("be.visible")
       .and("contain", "Enter an email address");
+    cy.percySnapshot();
 
     cy.getBySelLike("email-input").type("abc@bob.").blur();
     cy.get("#user-settings-email-input-helper-text")
       .should("be.visible")
       .and("contain", "Must contain a valid email address");
+    cy.percySnapshot();
 
     cy.getBySelLike("phoneNumber-input").type("abc").clear().blur();
     cy.get("#user-settings-phoneNumber-input-helper-text")
       .should("be.visible")
       .and("contain", "Enter a phone number");
+    cy.percySnapshot();
 
     cy.getBySelLike("phoneNumber-input").type("615-555-").blur();
     cy.get("#user-settings-phoneNumber-input-helper-text")
@@ -53,6 +58,7 @@ describe("User Settings", function () {
       .and("contain", "Phone number is not valid");
 
     cy.getBySelLike("submit").should("be.disabled");
+    cy.percySnapshot();
   });
 
   it("updates first name, last name, email and phone number", function () {
@@ -62,7 +68,9 @@ describe("User Settings", function () {
     cy.getBySelLike("phoneNumber-input").clear().type("6155551212").blur();
 
     cy.getBySelLike("submit").should("not.be.disabled");
+    cy.percySnapshot();
     cy.getBySelLike("submit").click();
+    cy.percySnapshot();
 
     cy.wait("@updateUser").its("status").should("equal", 204);
   });

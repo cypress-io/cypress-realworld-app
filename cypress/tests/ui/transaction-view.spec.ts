@@ -42,23 +42,28 @@ describe("Transaction View", function () {
 
   it("transactions navigation tabs are hidden on a transaction view page", function () {
     cy.getBySelLike("transaction-item").first().click();
+    cy.percySnapshot();
 
     cy.location("pathname").should("include", "/transaction");
     cy.getBySel("nav-transaction-tabs").should("not.be.visible");
+    cy.percySnapshot();
   });
 
   it("likes a transaction", function () {
     cy.getBySelLike("transaction-item").first().click();
     cy.wait("@getTransaction");
+    cy.percySnapshot();
 
     cy.getBySelLike("like-button").click();
     cy.getBySelLike("like-count").should("contain", 1);
     cy.getBySelLike("like-button").should("be.disabled");
+    cy.percySnapshot();
   });
 
   it("comments on a transaction", function () {
     cy.getBySelLike("transaction-item").first().click();
     cy.wait("@getTransaction");
+    cy.percySnapshot();
 
     const comments = ["Thank you!", "Appreciate it."];
 
@@ -68,22 +73,27 @@ describe("Transaction View", function () {
     });
 
     cy.getBySelLike("comments-list").children().should("have.length", comments.length);
+    cy.percySnapshot();
   });
 
   it("accepts a transaction request", function () {
     cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
     cy.wait("@getTransaction");
+    cy.percySnapshot();
 
     cy.getBySelLike("accept-request").click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
+    cy.percySnapshot();
   });
 
   it("rejects a transaction request", function () {
     cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
     cy.wait("@getTransaction");
+    cy.percySnapshot();
 
     cy.getBySelLike("reject-request").click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
+    cy.percySnapshot();
   });
 
   it("does not display accept/reject buttons on completed request", function () {
@@ -96,6 +106,7 @@ describe("Transaction View", function () {
 
       cy.getBySel("transaction-accept-request").should("not.be.visible");
       cy.getBySel("transaction-reject-request").should("not.be.visible");
+      cy.percySnapshot();
     });
   });
 });
