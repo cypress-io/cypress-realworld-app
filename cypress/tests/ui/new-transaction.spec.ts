@@ -77,6 +77,7 @@ describe("New Transaction", function () {
     cy.getBySel("app-name-logo").find("a").click();
     cy.getBySelLike("personal-tab").click().should("have.class", "Mui-selected");
     cy.wait("@personalTransactions");
+    cy.percySnapshot();
 
     cy.getBySel("transaction-list").first().should("contain", payment.description);
 
@@ -148,8 +149,10 @@ describe("New Transaction", function () {
 
     cy.createTransaction(transactionPayload);
     cy.wait("@createTransaction");
+    cy.percySnapshot();
 
     cy.switchUser(ctx.contact!.username);
+    cy.percySnapshot();
 
     const updatedAccountBalance = Dinero({
       amount: ctx.contact!.balance + transactionPayload.amount * 100,
@@ -175,8 +178,10 @@ describe("New Transaction", function () {
     cy.getBySelLike("new-transaction").click();
     cy.createTransaction(transactionPayload);
     cy.wait("@createTransaction");
+    cy.percySnapshot();
 
     cy.switchUser(ctx.contact!.username);
+    cy.percySnapshot();
 
     cy.getBySelLike("personal-tab").click();
 
@@ -193,6 +198,7 @@ describe("New Transaction", function () {
     cy.percySnapshot();
 
     cy.switchUser(ctx.user!.username);
+    cy.percySnapshot();
 
     const updatedAccountBalance = Dinero({
       amount: ctx.user!.balance + transactionPayload.amount * 100,
