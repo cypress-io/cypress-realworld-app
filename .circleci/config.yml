@@ -20,11 +20,6 @@ commands:
       - run: npx nyc report --reporter=text || true
       - codecov/upload:
           file: coverage/coverage-final.json
-  report-percy:
-    description: |
-      Store percy
-    steps:
-      - run: npx percy finalize
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 linux-workflow: &linux-workflow
@@ -63,7 +58,6 @@ linux-workflow: &linux-workflow
         requires:
           - Setup Linux
         post-steps:
-          - report-percy
           - report-coverage
 
     # Run E2E tests in Chrome
@@ -84,7 +78,6 @@ linux-workflow: &linux-workflow
         requires:
           - Setup Linux
         post-steps:
-          - report-percy
           - report-coverage
 
     # Run E2E tests in Chrome with mobile device viewport
@@ -106,7 +99,6 @@ linux-workflow: &linux-workflow
         requires:
           - Setup Linux
         post-steps:
-          - report-percy
           - report-coverage
 
     # Run E2E tests in Firefox
@@ -127,7 +119,6 @@ linux-workflow: &linux-workflow
         requires:
           - Setup Linux
         post-steps:
-          - report-percy
           - report-coverage
 
     # Run E2E tests in Firefox with mobile device viewport
@@ -149,7 +140,6 @@ linux-workflow: &linux-workflow
         requires:
           - Setup Linux
         post-steps:
-          - report-percy
           - report-coverage
 
 windows-workflow: &windows-workflow
@@ -196,7 +186,6 @@ windows-workflow: &windows-workflow
         requires:
           - Setup Windows
         post-steps:
-          - report-percy
           - report-coverage
         no-workspace: true
 
@@ -205,3 +194,12 @@ workflows:
     <<: *linux-workflow
   windows:
     <<: *windows-workflow
+  finalize-percy:
+    jobs:
+      - finalize:
+          requires:
+            - linux
+            - windows
+          steps:
+            - run:
+              command: npx percy finalize --all
