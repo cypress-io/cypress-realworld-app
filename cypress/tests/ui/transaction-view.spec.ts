@@ -42,7 +42,6 @@ describe("Transaction View", function () {
 
   it("transactions navigation tabs are hidden on a transaction view page", function () {
     cy.getBySelLike("transaction-item").first().click();
-    cy.percySnapshot();
 
     cy.location("pathname").should("include", "/transaction");
     cy.getBySel("nav-transaction-tabs").should("not.be.visible");
@@ -52,7 +51,6 @@ describe("Transaction View", function () {
   it("likes a transaction", function () {
     cy.getBySelLike("transaction-item").first().click();
     cy.wait("@getTransaction");
-    cy.percySnapshot();
 
     cy.getBySelLike("like-button").click();
     cy.getBySelLike("like-count").should("contain", 1);
@@ -63,7 +61,6 @@ describe("Transaction View", function () {
   it("comments on a transaction", function () {
     cy.getBySelLike("transaction-item").first().click();
     cy.wait("@getTransaction");
-    cy.percySnapshot();
 
     const comments = ["Thank you!", "Appreciate it."];
 
@@ -79,7 +76,6 @@ describe("Transaction View", function () {
   it("accepts a transaction request", function () {
     cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
     cy.wait("@getTransaction");
-    cy.percySnapshot();
 
     cy.getBySelLike("accept-request").click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
@@ -89,7 +85,6 @@ describe("Transaction View", function () {
   it("rejects a transaction request", function () {
     cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
     cy.wait("@getTransaction");
-    cy.percySnapshot();
 
     cy.getBySelLike("reject-request").click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
