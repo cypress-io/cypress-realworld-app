@@ -184,6 +184,14 @@
       "last 1 safari version"
     ]
   },
+  "percy": {
+    "snapshot": {
+      "widths": [
+        375,
+        1280
+      ]
+    }
+  },
   "nyc": {
     "exclude": [
       "src/models/*.ts"
