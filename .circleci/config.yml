@@ -175,7 +175,6 @@ windows-workflow: &windows-workflow
           name: win/default
           shell: bash.exe
         wait-on: "http://localhost:3000"
-        command-prefix: npx percy exec --
         yarn: true
         start: yarn start:ci
         record: true
@@ -189,21 +188,21 @@ windows-workflow: &windows-workflow
           - report-coverage
         no-workspace: true
 
-jobs:
-  finalize-percy:
-    executor: with-chrome-and-firefox
-    steps:
-      - run:
-        command: npx percy finalize --all
+# jobs:
+#   finalize-percy:
+#     executor: with-chrome-and-firefox
+#     steps:
+#       - run:
+#         command: npx percy finalize --all
 
 workflows:
   linux:
     <<: *linux-workflow
   windows:
     <<: *windows-workflow
-  finalize-percy:
-    jobs:
-      - finalize-percy:
-          requires:
-            - linux
-            - windows
+  # finalize-percy:
+  #   jobs:
+  #     - finalize-percy:
+  #         requires:
+  #           - linux
+  #           - windows
