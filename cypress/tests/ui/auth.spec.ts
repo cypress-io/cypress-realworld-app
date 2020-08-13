@@ -44,6 +44,7 @@ describe("User Sign-up and Login", function () {
     cy.visit("/");
 
     cy.getBySel("signup").click();
+    cy.getBySel("signup-title").should("be.visible").and("contain", "Sign Up");
     cy.percySnapshot();
 
     cy.getBySel("signup-first-name").type(userInfo.firstName);
