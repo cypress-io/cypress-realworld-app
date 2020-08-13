@@ -60,6 +60,7 @@ linux-workflow: &linux-workflow
           - Setup Linux
         post-steps:
           - report-coverage
+          - percy/finalize_all
 
     # Run E2E tests in Chrome
     - cypress/run:
@@ -80,6 +81,7 @@ linux-workflow: &linux-workflow
           - Setup Linux
         post-steps:
           - report-coverage
+          - percy/finalize_all
 
     # Run E2E tests in Chrome with mobile device viewport
     - cypress/run:
@@ -101,6 +103,7 @@ linux-workflow: &linux-workflow
           - Setup Linux
         post-steps:
           - report-coverage
+          - percy/finalize_all
 
     # Run E2E tests in Firefox
     - cypress/run:
@@ -121,6 +124,7 @@ linux-workflow: &linux-workflow
           - Setup Linux
         post-steps:
           - report-coverage
+          - percy/finalize_all
 
     # Run E2E tests in Firefox with mobile device viewport
     - cypress/run:
@@ -142,6 +146,7 @@ linux-workflow: &linux-workflow
           - Setup Linux
         post-steps:
           - report-coverage
+          - percy/finalize_all
 
 windows-workflow: &windows-workflow
   jobs:
@@ -188,6 +193,7 @@ windows-workflow: &windows-workflow
           - Setup Windows
         post-steps:
           - report-coverage
+          - percy/finalize_all
         no-workspace: true
 
 workflows:
@@ -195,6 +201,3 @@ workflows:
     <<: *linux-workflow
   windows:
     <<: *windows-workflow
-  percy_finalize_all:
-    jobs:
-      - percy/finalize_all
