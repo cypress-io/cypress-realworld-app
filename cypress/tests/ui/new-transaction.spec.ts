@@ -211,7 +211,6 @@ describe("New Transaction", function () {
     cy.percySnapshot("Accept Transaction Request");
 
     cy.switchUser(ctx.user!.username);
-    cy.getBySelLike("sidenav-user-full-name").contains(ctx.user!.firstName);
     cy.percySnapshot("Switch to Sender (User)");
 
     const updatedAccountBalance = Dinero({
