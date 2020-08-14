@@ -38,14 +38,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
 
   return (
     <Paper className={classes.paper} elevation={0}>
-      <Grid
-        container
-        direction="row"
-        justify="flex-start"
-        alignItems="flex-start"
-        spacing={1}
-        tabIndex={0}
-      >
+      <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
         <Grid item>
           <TransactionListDateRangeFilter
             filterDateRange={filterDateRange}
