@@ -2,8 +2,20 @@ import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik, Form, Field, FieldProps } from "formik";
-import { Grid } from "@material-ui/core";
+import { string, object } from "yup";
+import { Button, Grid } from "@material-ui/core";
 import { BankAccountPayload, User } from "../models";
+import { useHistory } from "react-router";
+
+const validationSchema = object({
+  bankName: string().min(5, "Must contain at least 5 characters").required("Enter a bank name"),
+  routingNumber: string()
+    .length(9, "Must contain a valid routing number")
+    .required("Enter a valid bank routing number"),
+  accountNumber: string()
+    .length(9, "Must contain a valid account number")
+    .required("Enter a valid bank account number"),
+});
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -33,6 +45,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
   onboarding,
 }) => {
   const [didSubmit, setDidSubmit] = useState(false);
+  const history = useHistory();
   const classes = useStyles();
   const initialValues: BankAccountPayload = {
     userId,

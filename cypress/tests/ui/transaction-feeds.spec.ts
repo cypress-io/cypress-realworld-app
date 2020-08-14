@@ -230,8 +230,8 @@ describe("Transaction Feed", function () {
                     start: startOfDayUTC(dateRangeStart),
                     end: dateRangeEnd,
                   }),
-                  `transaction created date (${createdAtDate.toISOString()})
-                  is within ${dateRangeStart.toISOString()}
+                  `transaction created date (${createdAtDate.toISOString()}) 
+                  is within ${dateRangeStart.toISOString()} 
                   and ${dateRangeEnd.toISOString()}`
                 ).to.equal(true);
               });
@@ -323,7 +323,7 @@ describe("Transaction Feed", function () {
         }
       });
 
-      it.only(`does not show ${feedName} transactions for out of range amount limits`, function () {
+      it(`does not show ${feedName} transactions for out of range amount limits`, function () {
         cy.getBySelLike(feed.tab).click();
         cy.wait(`@${feed.routeAlias}`);
 
