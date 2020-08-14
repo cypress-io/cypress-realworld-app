@@ -1,21 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik, Form, Field, FieldProps } from "formik";
-import { string, object } from "yup";
-import { Button, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { BankAccountPayload, User } from "../models";
-import { useHistory } from "react-router";
-
-const validationSchema = object({
-  bankName: string().min(5, "Must contain at least 5 characters").required("Enter a bank name"),
-  routingNumber: string()
-    .length(9, "Must contain a valid routing number")
-    .required("Enter a valid bank routing number"),
-  accountNumber: string()
-    .length(9, "Must contain a valid account number")
-    .required("Enter a valid bank account number"),
-});
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -44,7 +32,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
   createBankAccount,
   onboarding,
 }) => {
-  const history = useHistory();
+  const [didSubmit, setDidSubmit] = useState(false);
   const classes = useStyles();
   const initialValues: BankAccountPayload = {
     userId,
@@ -56,26 +44,25 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
-        setSubmitting(true);
+        setDidSubmit(true);
+        // setSubmitting(true);
 
-        createBankAccount({ ...values, userId });
+        // createBankAccount({ ...values, userId });
 
-        if (!onboarding) {
-          history.push("/bankaccounts");
-        }
+        // if (!onboarding) {
+        //   history.push("/bankaccounts");
+        // }
       }}
     >
       {({ isValid, isSubmitting }) => (
-        <Form className={classes.form} data-test="bankaccount-form">
+        <Form className={classes.form} data-test="bankaccount-form" tabIndex={0}>
           <Field name="bankName">
             {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
               <TextField
                 variant="outlined"
                 margin="dense"
                 fullWidth
-                required
                 id={"bankaccount-bankName-input"}
                 type="text"
                 placeholder="Bank Name"
@@ -92,7 +79,6 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
                 variant="outlined"
                 margin="dense"
                 fullWidth
-                required
                 id={"bankaccount-routingNumber-input"}
                 type="text"
                 placeholder="Routing Number"
@@ -109,7 +95,6 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
                 variant="outlined"
                 margin="dense"
                 fullWidth
-                required
                 id={"bankaccount-accountNumber-input"}
                 type="text"
                 placeholder="Account Number"
@@ -122,17 +107,18 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
           </Field>
           <Grid container spacing={2} direction="row" justify="flex-start" alignItems="flex-start">
             <Grid item>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
+              <div
                 color="primary"
                 className={classes.submit}
                 data-test="bankaccount-submit"
-                disabled={!isValid || isSubmitting}
+                onClick={() => setDidSubmit(true)}
               >
                 Save
-              </Button>
+              </div>
+
+              {didSubmit ? <div data-test="submit-worked">Submit worked</div> : <div></div>}
+
+              <div style={{ height: 700 }}></div>
             </Grid>
           </Grid>
         </Form>
