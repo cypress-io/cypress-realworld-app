@@ -153,7 +153,7 @@ describe("New Transaction", function () {
     cy.percySnapshot("Transaction Payment Submitted Notification");
 
     cy.switchUser(ctx.contact!.username);
-    cy.getBySelLike("sidenav-user-full-name").contains(ctx.contact!.firstName);
+    cy.getBySel("sidenav-user-full-name").contains(ctx.contact!.firstName);
     cy.percySnapshot("Switch to Receiver (User)");
 
     const updatedAccountBalance = Dinero({
@@ -184,7 +184,7 @@ describe("New Transaction", function () {
     cy.percySnapshot("Transaction Payment Submitted Notification");
 
     cy.switchUser(ctx.contact!.username);
-    cy.getBySelLike("sidenav-user-full-name").contains(ctx.contact!.firstName);
+    cy.getBySel("sidenav-user-full-name").contains(ctx.contact!.firstName);
     cy.percySnapshot("Switch to Receiver (User)");
 
     cy.getBySelLike("personal-tab").click();
