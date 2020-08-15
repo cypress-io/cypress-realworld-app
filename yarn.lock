@@ -2948,10 +2948,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-infinite-calendar@2.3.4":
-  version "2.3.4"
-  resolved "https://registry.yarnpkg.com/@types/react-infinite-calendar/-/react-infinite-calendar-2.3.4.tgz#2ebbf65057321877f6267fac4c8fd557636d147a"
-  integrity sha512-QJoLwlxdSqwGyFeKIuCk3woVcJXOXXjkU2pvY68L0jtKcpWKASXePnBvX2eF2d39Avau7jIvE+UM6fpo5p+MGg==
+"@types/react-infinite-calendar@2.3.5":
+  version "2.3.5"
+  resolved "https://registry.yarnpkg.com/@types/react-infinite-calendar/-/react-infinite-calendar-2.3.5.tgz#95988c2b3c50a478f16be7ffeb150d3213e52f40"
+  integrity sha512-74mgKnA4UR9A2Vy+lyVcQ0yXjAKXMB+iwOMx9VSQScAur5X8d8cz/I+6JwMYoBTbVBQk6mwY8sa8gi0Sm1iyVw==
   dependencies:
     "@types/react" "*"
 
