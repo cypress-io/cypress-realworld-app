@@ -3073,10 +3073,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@types/yup@0.29.4":
-  version "0.29.4"
-  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.29.4.tgz#f7b1f9978180d5155663c1cd0ecdc41a72c23d81"
-  integrity sha512-OQ7gZRQb7eSbGu5h57tbK67sgX8UH5wbuqPORTFBG7qiBtOkEf1dXAr0QULyHIeRwaGLPYxPXiQru+40ClR6ng==
+"@types/yup@0.29.5":
+  version "0.29.5"
+  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.29.5.tgz#3c870d5a7d6d36f927fa27a8774ec899bae1990d"
+  integrity sha512-meq6eww0Xm2hSa4suRVxDHBI6D1p7Qz9ZWz2D2Lq1tdrxG5Jhl3AhAPAMJ3LwVF5TjWs7bTYYtXMakB85IZOIw==
 
 "@typescript-eslint/eslint-plugin@^2.10.0":
   version "2.34.0"
