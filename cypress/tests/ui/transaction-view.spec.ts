@@ -79,6 +79,7 @@ describe("Transaction View", function () {
 
     cy.getBySelLike("accept-request").click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
+    cy.getBySelLike("accept-request").should("not.be.visible");
     cy.percySnapshot("Transaction Accepted");
   });
 
@@ -88,6 +89,7 @@ describe("Transaction View", function () {
 
     cy.getBySelLike("reject-request").click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
+    cy.getBySelLike("reject-request").should("not.be.visible");
     cy.percySnapshot("Transaction Rejected");
   });
 
