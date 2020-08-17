@@ -209,7 +209,12 @@ const NavDrawer: React.FC<Props> = ({
               >
                 {currentUser.firstName} {head(currentUser.lastName)}
               </Typography>
-              <Typography variant="subtitle2" color="inherit" gutterBottom>
+              <Typography
+                variant="subtitle2"
+                color="inherit"
+                gutterBottom
+                data-test="sidenav-username"
+              >
                 @{currentUser.username}
               </Typography>
             </>

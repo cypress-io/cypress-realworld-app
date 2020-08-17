@@ -3,6 +3,7 @@
 
 import { pick } from "lodash/fp";
 import { format as formatDate } from "date-fns";
+import { isMobile } from "./utils";
 
 Cypress.Commands.add("getBySel", (selector, ...args) => {
   return cy.get(`[data-test=${selector}]`, ...args);
@@ -159,7 +160,16 @@ Cypress.Commands.add("logoutByXstate", () => {
 
 Cypress.Commands.add("switchUser", (username) => {
   cy.logoutByXstate();
-  return cy.loginByXstate(username);
+  return cy.loginByXstate(username).then(() => {
+    if (isMobile()) {
+      cy.getBySel("sidenav-toggle").click();
+      cy.getBySel("sidenav-username").contains(username);
+      cy.getBySel("sidenav-toggle").click({ force: true });
+    } else {
+      cy.getBySel("sidenav-username").contains(username);
+    }
+    cy.percySnapshot(`Switch to User ${username}`);
+  });
 });
 
 Cypress.Commands.add("createTransaction", (payload) => {

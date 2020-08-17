@@ -153,18 +153,6 @@ describe("New Transaction", function () {
     cy.percySnapshot("Transaction Payment Submitted Notification");
 
     cy.switchUser(ctx.contact!.username);
-    /*
-    // Assertion needed
-    // TODO: Discuss moving assertions like this into switchUser
-    if (isMobile()) {
-      cy.getBySel("sidenav-toggle").click();
-      cy.getBySel("sidenav-user-full-name").contains(ctx.contact!.firstName);
-      cy.getBySel("sidenav-toggle").click({ force: true });
-    } else {
-      cy.getBySel("sidenav-user-full-name").contains(ctx.contact!.firstName);
-    }
-    */
-    cy.percySnapshot("Switch to Receiver (User)");
 
     const updatedAccountBalance = Dinero({
       amount: ctx.contact!.balance + transactionPayload.amount * 100,
@@ -194,7 +182,6 @@ describe("New Transaction", function () {
     cy.percySnapshot("Transaction Payment Submitted Notification");
 
     cy.switchUser(ctx.contact!.username);
-    cy.percySnapshot("Switch to Receiver (User)");
 
     cy.getBySelLike("personal-tab").click();
 
@@ -211,7 +198,6 @@ describe("New Transaction", function () {
     cy.percySnapshot("Accept Transaction Request");
 
     cy.switchUser(ctx.user!.username);
-    cy.percySnapshot("Switch to Sender (User)");
 
     const updatedAccountBalance = Dinero({
       amount: ctx.user!.balance + transactionPayload.amount * 100,
