@@ -1,7 +1,40 @@
+import dotenv from "dotenv";
+import { set } from "lodash";
+
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
+import jwt from "express-jwt";
+import jwksRsa from "jwks-rsa";
+
+import awsConfig from "../src/aws-exports";
+
+dotenv.config({ path: ".env.local" });
+dotenv.config();
+
+// Amazon Cognito Validate the JWT Signature
+// https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-verifying-a-jwt.html#amazon-cognito-user-pools-using-tokens-step-2
+const awsCognitoJwtConfig = {
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: `https://cognito-idp.${awsConfig.aws_cognito_region}.amazonaws.com/${awsConfig.aws_user_pools_id}/.well-known/jwks.json`,
+  }),
+
+  issuer: `https://cognito-idp.${awsConfig.aws_cognito_region}.amazonaws.com/${awsConfig.aws_user_pools_id}`,
+  algorithms: ["RS256"],
+};
+
+export const checkJwt = jwt(awsCognitoJwtConfig).unless({ path: ["/testData/*"] });
+
 export const ensureAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   if (req.isAuthenticated()) {
+    // @ts-ignore
+    // Map sub to id on req.user
+    if (req.user?.sub) {
+      // @ts-ignore
+      set(req.user, "id", req.user.sub);
+    }
     return next();
   }
   /* istanbul ignore next */

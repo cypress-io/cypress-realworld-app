@@ -12,6 +12,7 @@ export interface AuthMachineSchema {
     updating: {};
     logout: {};
     refreshing: {};
+    cognito: {};
     authorized: {};
   };
 }
@@ -21,7 +22,8 @@ export type AuthMachineEvents =
   | { type: "LOGOUT" }
   | { type: "UPDATE" }
   | { type: "REFRESH" }
-  | { type: "SIGNUP" };
+  | { type: "SIGNUP" }
+  | { type: "COGNITO" };
 
 export interface AuthMachineContext {
   user?: User;
@@ -42,6 +44,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         on: {
           LOGIN: "loading",
           SIGNUP: "signup",
+          COGNITO: "cognito",
         },
       },
       signup: {
@@ -90,6 +93,16 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
           LOGOUT: "logout",
         },
       },
+      cognito: {
+        invoke: {
+          src: "getCognitoUserProfile",
+          onDone: { target: "authorized", actions: "setUserProfile" },
+          onError: { target: "unauthorized", actions: "onError" },
+        },
+        on: {
+          LOGOUT: "logout",
+        },
+      },
     },
   },
   {
@@ -123,6 +136,21 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       performLogout: async (ctx, event) => {
         localStorage.removeItem("authState");
         return await httpClient.post(`http://localhost:3001/logout`);
+      },
+      getCognitoUserProfile: (ctx, event: any) => {
+        // Map Cognito User fields to our User Model
+        const ourUser = {
+          id: event.user.sub,
+          email: event.user.email,
+        };
+
+        // Set Access Token in Local Storage for API calls
+        localStorage.setItem(
+          process.env.REACT_APP_AUTH_TOKEN_NAME!,
+          event.user.signInUserSession.accessToken.jwtToken
+        );
+
+        return Promise.resolve(ourUser);
       },
     },
     actions: {

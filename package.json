@@ -15,6 +15,7 @@
     "node": ">=12"
   },
   "dependencies": {
+    "@aws-amplify/ui-react": "^0.2.15",
     "@babel/cli": "7.10.5",
     "@babel/core": "7.11.1",
     "@babel/preset-env": "7.11.0",
@@ -51,6 +52,8 @@
     "@types/webpack-env": "1.15.2",
     "@types/yup": "0.29.5",
     "@xstate/react": "0.8.1",
+    "aws-amplify": "3.0.23",
+    "aws-sdk": "2.736.0",
     "axios": "0.19.2",
     "bcryptjs": "2.4.3",
     "concurrently": "5.3.0",
@@ -59,6 +62,7 @@
     "date-fns": "2.15.0",
     "dinero.js": "1.8.1",
     "dotenv": "8.2.0",
+    "express-jwt": "^6.0.0",
     "express-paginate": "1.0.2",
     "express-session": "1.17.1",
     "express-validator": "6.6.1",
@@ -67,6 +71,7 @@
     "fuse.js": "6.4.1",
     "husky": "4.2.5",
     "json": "9.0.6",
+    "jwks-rsa": "^1.9.0",
     "lowdb": "1.0.0",
     "morgan": "1.10.0",
     "ncp": "2.0.0",
@@ -110,6 +115,9 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",
+    "dev:cognito": "cross-env REACT_APP_AWS_COGNITO=true NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",
+    "predev:cognito": "npm run build:aws-exports-es5",
+    "build:aws-exports-es5": "tsc --skipLibCheck --allowJs --lib 'es5' --module 'commonjs' --target 'es5' --moduleResolution 'node' --outDir . src/aws-exports.js; mv aws-exports.js aws-exports-es5.js",
     "start": "cross-env NODE_ENV=development concurrently yarn:start:react yarn:start:api",
     "start:ci": "cross-env NODE_ENV=test concurrently yarn:start:react yarn:start:api",
     "start:react": "react-scripts -r @cypress/instrument-cra start",
