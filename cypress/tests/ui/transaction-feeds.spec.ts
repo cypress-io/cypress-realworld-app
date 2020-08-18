@@ -170,6 +170,7 @@ describe("Transaction Feed", function () {
           .should("have.class", "Mui-selected")
           .contains(feed.tabLabel, { matchCase: false })
           .should("have.css", { "text-transform": "uppercase" });
+        cy.getBySel("list-skeleton").should("not.be.visible");
         cy.percySnapshot(`Paginate ${feedName}`);
 
         cy.wait(`@${feed.routeAlias}`)
