@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
 const ListSkeleton = () => {
   const classes = useStyles();
   return (
-    <div className={classes.root}>
+    <div className={classes.root} data-test="list-skeleton">
       <br />
       <Skeleton />
       <Skeleton animation={false} />
