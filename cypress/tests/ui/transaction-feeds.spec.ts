@@ -62,17 +62,23 @@ describe("Transaction Feed", function () {
     it("toggles the navigation drawer", function () {
       if (isMobile()) {
         cy.getBySel("sidenav-home").should("not.be.visible");
+        cy.percySnapshot("Mobile Initial Side Navigation Not Visible");
         cy.getBySel("sidenav-toggle").click();
         cy.getBySel("sidenav-home").should("be.visible");
+        cy.percySnapshot("Mobile Toggle Side Navigation Visible");
         cy.get(".MuiBackdrop-root").click({ force: true });
         cy.getBySel("sidenav-home").should("not.be.visible");
+        cy.percySnapshot("Mobile Home Link Side Navigation Not Visible");
 
         cy.getBySel("sidenav-toggle").click();
         cy.getBySel("sidenav-home").click().should("not.be.visible");
+        cy.percySnapshot("Mobile Toggle Side Navigation Not Visible");
       } else {
         cy.getBySel("sidenav-home").should("be.visible");
+        cy.percySnapshot("Desktop Side Navigation Visible");
         cy.getBySel("sidenav-toggle").click();
         cy.getBySel("sidenav-home").should("not.be.visible");
+        cy.percySnapshot("Desktop Side Navigation Not Visible");
       }
     });
   });
@@ -153,6 +159,7 @@ describe("Transaction Feed", function () {
               .should("contain", `+${formattedAmount}`)
               .should("have.css", "color", "rgb(76, 175, 80)");
           });
+          cy.percySnapshot("Transaction Item");
         });
     });
 
@@ -163,6 +170,7 @@ describe("Transaction Feed", function () {
           .should("have.class", "Mui-selected")
           .contains(feed.tabLabel, { matchCase: false })
           .should("have.css", { "text-transform": "uppercase" });
+        cy.percySnapshot(`Paginate ${feedName}`);
 
         cy.wait(`@${feed.routeAlias}`)
           .its("response.body.results")
@@ -181,6 +189,7 @@ describe("Transaction Feed", function () {
           .then(({ results, pageData }) => {
             expect(results).have.length(Cypress.env("paginationPageSize"));
             expect(pageData.page).to.equal(2);
+            cy.percySnapshot(`Paginate ${feedName} Next Page`);
             cy.nextTransactionFeedPage(feed.service, pageData.totalPages);
           });
 
@@ -190,6 +199,7 @@ describe("Transaction Feed", function () {
             expect(results).to.have.length.least(1);
             expect(pageData.page).to.equal(pageData.totalPages);
             expect(pageData.hasNextPages).to.equal(false);
+            cy.percySnapshot(`Paginate ${feedName} Last Page`);
           });
       });
     });
@@ -200,8 +210,10 @@ describe("Transaction Feed", function () {
       it("closes date range picker modal", () => {
         cy.getBySelLike("filter-date-range-button").click({ force: true });
         cy.get(".Cal__Header__root").should("be.visible");
+        cy.percySnapshot("Mobile Open Date Range Picker");
         cy.getBySel("date-range-filter-drawer-close").click();
         cy.get(".Cal__Header__root").should("not.be.visible");
+        cy.percySnapshot("Mobile Close Date Range Picker");
       });
     }
 
@@ -222,6 +234,7 @@ describe("Transaction Feed", function () {
             .then((transactions: Transaction[]) => {
               cy.getBySelLike("transaction-item").should("have.length", transactions.length);
 
+              cy.percySnapshot("Date Range Filtered Transactions");
               transactions.forEach(({ createdAt }) => {
                 const createdAtDate = startOfDayUTC(new Date(createdAt));
 
@@ -247,6 +260,7 @@ describe("Transaction Feed", function () {
               .its("response.body.results")
               .should("deep.equal", unfilteredResults);
           });
+          cy.percySnapshot("Unfiltered Transactions");
         });
       });
 
@@ -266,6 +280,7 @@ describe("Transaction Feed", function () {
           .should("have.attr", "href", "/transaction/new")
           .contains("create a transaction", { matchCase: false })
           .should("have.css", { "text-transform": "uppercase" });
+        cy.percySnapshot("No Transactions");
       });
     });
   });
@@ -300,6 +315,7 @@ describe("Transaction Feed", function () {
           expect(urlParams.get("amountMin")).to.equal(`${rawAmountMin}`);
           expect(urlParams.get("amountMax")).to.equal(`${rawAmountMax}`);
 
+          cy.percySnapshot("Amount Range Filtered Transactions");
           transactions.forEach(({ amount }) => {
             expect(amount).to.be.within(rawAmountMin, rawAmountMax);
           });
@@ -310,6 +326,7 @@ describe("Transaction Feed", function () {
           cy.wait(`@${feed.routeAlias}`)
             .its("response.body.results")
             .should("deep.equal", unfilteredResults);
+          cy.percySnapshot("Unfiltered Transactions");
         });
 
         if (isMobile()) {
@@ -337,6 +354,7 @@ describe("Transaction Feed", function () {
           .should("have.attr", "href", "/transaction/new")
           .contains("create a transaction", { matchCase: false })
           .should("have.css", { "text-transform": "uppercase" });
+        cy.percySnapshot("No Transactions");
       });
     });
   });
@@ -355,6 +373,7 @@ describe("Transaction Feed", function () {
           const transactionParticipants = [transaction.senderId, transaction.receiverId];
           expect(transactionParticipants).to.include(ctx.user!.id);
         });
+      cy.percySnapshot("Personal Transactions");
     });
 
     it("first five items belong to contacts in public feed", function () {
@@ -372,6 +391,7 @@ describe("Transaction Feed", function () {
           const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
           expect(contactsInTransaction, message).to.not.be.empty;
         });
+      cy.percySnapshot("First 5 Transaction Items belong to contacts");
     });
 
     it("friends feed only shows contact transactions", function () {
@@ -391,6 +411,7 @@ describe("Transaction Feed", function () {
           const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
           expect(contactsInTransaction, message).to.not.be.empty;
         });
+      cy.percySnapshot("Friends Feed only shows contacts transactions");
     });
   });
 });

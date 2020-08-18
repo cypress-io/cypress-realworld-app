@@ -45,6 +45,7 @@ describe("Transaction View", function () {
 
     cy.location("pathname").should("include", "/transaction");
     cy.getBySel("nav-transaction-tabs").should("not.be.visible");
+    cy.percySnapshot("Transaction Navigation Tabs Hidden");
   });
 
   it("likes a transaction", function () {
@@ -54,6 +55,7 @@ describe("Transaction View", function () {
     cy.getBySelLike("like-button").click();
     cy.getBySelLike("like-count").should("contain", 1);
     cy.getBySelLike("like-button").should("be.disabled");
+    cy.percySnapshot("Transaction after Liked");
   });
 
   it("comments on a transaction", function () {
@@ -68,6 +70,7 @@ describe("Transaction View", function () {
     });
 
     cy.getBySelLike("comments-list").children().should("have.length", comments.length);
+    cy.percySnapshot("Comment on Transaction");
   });
 
   it("accepts a transaction request", function () {
@@ -76,6 +79,8 @@ describe("Transaction View", function () {
 
     cy.getBySelLike("accept-request").click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
+    cy.getBySelLike("accept-request").should("not.be.visible");
+    cy.percySnapshot("Transaction Accepted");
   });
 
   it("rejects a transaction request", function () {
@@ -84,6 +89,8 @@ describe("Transaction View", function () {
 
     cy.getBySelLike("reject-request").click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
+    cy.getBySelLike("reject-request").should("not.be.visible");
+    cy.percySnapshot("Transaction Rejected");
   });
 
   it("does not display accept/reject buttons on completed request", function () {
@@ -96,6 +103,7 @@ describe("Transaction View", function () {
 
       cy.getBySel("transaction-accept-request").should("not.be.visible");
       cy.getBySel("transaction-reject-request").should("not.be.visible");
+      cy.percySnapshot("Transaction Completed (not able to accept or reject)");
     });
   });
 });

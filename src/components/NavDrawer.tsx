@@ -202,10 +202,19 @@ const NavDrawer: React.FC<Props> = ({
         <Grid item>
           {currentUser && (
             <>
-              <Typography variant="subtitle1" color="textPrimary">
+              <Typography
+                variant="subtitle1"
+                color="textPrimary"
+                data-test="sidenav-user-full-name"
+              >
                 {currentUser.firstName} {head(currentUser.lastName)}
               </Typography>
-              <Typography variant="subtitle2" color="inherit" gutterBottom>
+              <Typography
+                variant="subtitle2"
+                color="inherit"
+                gutterBottom
+                data-test="sidenav-username"
+              >
                 @{currentUser.username}
               </Typography>
             </>
