@@ -43,6 +43,7 @@ describe("Notifications", function () {
         .then((notificationCount) => {
           cy.getBySel("nav-top-notifications-count").should("have.text", `${notificationCount}`);
         });
+      cy.percySnapshot("Renders the notifications badge with count");
 
       const likesCountSelector = "[data-test*=transaction-like-count]";
       cy.contains(likesCountSelector, 0);
@@ -51,8 +52,10 @@ describe("Notifications", function () {
       // the number of likes
       cy.getBySelLike("like-button").should("be.disabled");
       cy.contains(likesCountSelector, 1);
+      cy.percySnapshot("Like Count Incremented");
 
       cy.switchUser(ctx.userB.username);
+      cy.percySnapshot("Switch to User B");
 
       cy.wait("@getNotifications")
         .its("response.body.results.length")
@@ -71,9 +74,12 @@ describe("Notifications", function () {
       cy.log("🚩 Marks notification as read");
       cy.getBySelLike("notification-mark-read").first().click({ force: true });
       cy.wait("@updateNotification");
+      cy.percySnapshot("Marks notification as read");
+
       cy.get("@preDismissedNotificationCount").then((count) => {
         cy.getBySelLike("notification-list-item").should("have.length.lessThan", Number(count));
       });
+      cy.percySnapshot("Notification count after notification dismissed");
     });
 
     it("User C likes a transaction between User A and User B; User B and get notifications that User C liked transaction", function () {
@@ -91,8 +97,10 @@ describe("Notifications", function () {
       cy.getBySelLike("like-button").click();
       cy.getBySelLike("like-button").should("be.disabled");
       cy.contains(likesCountSelector, 1);
+      cy.percySnapshot("Like Count Incremented");
 
       cy.switchUser(ctx.userA.username);
+      cy.percySnapshot("Switch to User A");
 
       cy.getBySelLike("notifications-link").click();
 
@@ -105,8 +113,10 @@ describe("Notifications", function () {
         .first()
         .should("contain", ctx.userC.firstName)
         .and("contain", "liked");
+      cy.percySnapshot("User A Notified of User B Like");
 
       cy.switchUser(ctx.userB.username);
+      cy.percySnapshot("Switch to User B");
 
       cy.getBySelLike("notifications-link").click();
 
@@ -117,10 +127,12 @@ describe("Notifications", function () {
         .first()
         .should("contain", ctx.userC.firstName)
         .and("contain", "liked");
+      cy.percySnapshot("User B Notified of User C Like");
     });
 
     it("User A comments on a transaction of User B; User B gets notification that User A commented on their transaction", function () {
       cy.loginByXstate(ctx.userA.username);
+      cy.percySnapshot();
 
       cy.database("find", "transactions", { senderId: ctx.userB.id }).then(
         (transaction: Transaction) => {
@@ -133,6 +145,7 @@ describe("Notifications", function () {
       cy.wait("@postComment");
 
       cy.switchUser(ctx.userB.username);
+      cy.percySnapshot("Switch to User B");
 
       cy.getBySelLike("notifications-link").click();
 
@@ -143,6 +156,7 @@ describe("Notifications", function () {
         .first()
         .should("contain", ctx.userA?.firstName)
         .and("contain", "commented");
+      cy.percySnapshot("User A Notified of User B Comment");
     });
 
     it("User C comments on a transaction between User A and User B; User A and B get notifications that User C commented on their transaction", function () {
@@ -160,6 +174,7 @@ describe("Notifications", function () {
       cy.wait("@postComment");
 
       cy.switchUser(ctx.userA.username);
+      cy.percySnapshot("Switch to User A");
 
       cy.getBySelLike("notifications-link").click();
 
@@ -170,8 +185,10 @@ describe("Notifications", function () {
         .first()
         .should("contain", ctx.userC.firstName)
         .and("contain", "commented");
+      cy.percySnapshot("User A Notified of User C Comment");
 
       cy.switchUser(ctx.userB.username);
+      cy.percySnapshot("Switch to User B");
 
       cy.getBySelLike("notifications-link").click();
       cy.getBySelLike("notification-list-item")
@@ -179,6 +196,7 @@ describe("Notifications", function () {
         .first()
         .should("contain", ctx.userC.firstName)
         .and("contain", "commented");
+      cy.percySnapshot("User B Notified of User C Comment");
     });
 
     it("User A sends a payment to User B", function () {
@@ -195,12 +213,15 @@ describe("Notifications", function () {
       cy.wait("@createTransaction");
 
       cy.switchUser(ctx.userB.username);
+      cy.percySnapshot("Switch to User B");
 
       cy.getBySelLike("notifications-link").click();
+      cy.percySnapshot();
       cy.getBySelLike("notification-list-item")
         .first()
         .should("contain", ctx.userB.firstName)
         .and("contain", "received payment");
+      cy.percySnapshot("User B Notified of Payment");
     });
 
     it("User A sends a payment request to User C", function () {
@@ -217,11 +238,13 @@ describe("Notifications", function () {
       cy.wait("@createTransaction");
 
       cy.switchUser(ctx.userC.username);
+      cy.percySnapshot("Switch to User C");
 
       cy.getBySelLike("notifications-link").click();
       cy.getBySelLike("notification-list-item")
         .should("contain", ctx.userA.firstName)
         .and("contain", "requested payment");
+      cy.percySnapshot("User C Notified of Request from User A");
     });
   });
 
@@ -237,5 +260,6 @@ describe("Notifications", function () {
     cy.location("pathname").should("equal", "/notifications");
     cy.getBySel("notification-list").should("not.be.visible");
     cy.getBySel("empty-list-header").should("contain", "No Notifications");
+    cy.percySnapshot("No Notifications");
   });
 });

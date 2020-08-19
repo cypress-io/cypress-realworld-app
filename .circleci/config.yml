@@ -66,6 +66,7 @@ linux-workflow: &linux-workflow
         spec: cypress/tests/ui/*
         executor: with-chrome-and-firefox
         wait-on: "http://localhost:3000"
+        command-prefix: npx percy exec --
         yarn: true
         start: yarn start:ci
         record: true

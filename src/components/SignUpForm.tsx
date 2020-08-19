@@ -73,7 +73,7 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
         <div>
           <RWALogo className={classes.logo} />
         </div>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" data-test="signup-title">
           Sign Up
         </Typography>
         <Formik

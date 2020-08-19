@@ -21,6 +21,7 @@
     "@material-ui/core": "4.11.0",
     "@material-ui/icons": "4.9.1",
     "@material-ui/lab": "4.0.0-alpha.56",
+    "@percy/cypress": "^2.3.1",
     "@types/bcryptjs": "2.4.2",
     "@types/bluebird": "3.5.32",
     "@types/connect-flash": "0.0.35",
@@ -31,28 +32,28 @@
     "@types/express-serve-static-core": "4.17.2",
     "@types/express-session": "1.17.0",
     "@types/faker": "4.1.12",
-    "@types/jest": "26.0.9",
+    "@types/jest": "26.0.10",
     "@types/json-server": "0.14.2",
     "@types/lodash": "4.14.159",
     "@types/lowdb": "1.0.9",
     "@types/morgan": "1.9.1",
-    "@types/node": "14.0.27",
+    "@types/node": "14.6.0",
     "@types/passport": "1.0.4",
-    "@types/react": "16.9.44",
+    "@types/react": "16.9.46",
     "@types/react-dom": "16.9.8",
-    "@types/react-infinite-calendar": "2.3.4",
+    "@types/react-infinite-calendar": "2.3.5",
     "@types/react-router": "5.1.8",
     "@types/react-router-dom": "5.1.5",
     "@types/react-virtualized": "9.21.10",
     "@types/shortid": "0.0.29",
-    "@types/uuid": "8.0.1",
+    "@types/uuid": "8.3.0",
     "@types/validator": "13.1.0",
     "@types/webpack-env": "1.15.2",
-    "@types/yup": "0.29.4",
+    "@types/yup": "0.29.5",
     "@xstate/react": "0.8.1",
     "axios": "0.19.2",
     "bcryptjs": "2.4.3",
-    "concurrently": "5.2.0",
+    "concurrently": "5.3.0",
     "cors": "2.8.5",
     "cross-env": "7.0.2",
     "date-fns": "2.15.0",
@@ -79,18 +80,17 @@
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
     "react-scripts": "3.4.0",
-    "react-virtualized": "9.21.2",
+    "react-virtualized": "9.22.2",
     "shortid": "2.2.15",
     "ts-node": "8.10.2",
     "typescript": "3.9.7",
     "uuid": "8.3.0",
-    "xstate": "4.11.0",
+    "xstate": "4.12.0",
     "yup": "0.29.3"
   },
   "devDependencies": {
     "@cypress/code-coverage": "3.8.1",
     "@cypress/instrument-cra": "1.3.1",
-    "@cypress/webpack-preprocessor": "5.4.2",
     "@types/connect-history-api-fallback": "1.3.3",
     "@types/http-proxy-middleware": "0.19.3",
     "babel-loader": "8.0.6",
@@ -101,7 +101,7 @@
     "istanbul-lib-coverage": "3.0.0",
     "nyc": "15.1.0",
     "prettier": "2.0.5",
-    "start-server-and-test": "1.11.2"
+    "start-server-and-test": "1.11.3"
   },
   "resolutions": {
     "@babel/compat-data": "7.9.0",
@@ -183,6 +183,15 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "percy": {
+    "version": 1,
+    "snapshot": {
+      "widths": [
+        375,
+        1280
+      ]
+    }
   },
   "nyc": {
     "exclude": [

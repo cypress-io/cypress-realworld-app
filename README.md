@@ -16,6 +16,10 @@
   <a href="https://codecov.io/gh/cypress-io/cypress-realworld-app">
     <img src="https://codecov.io/gh/cypress-io/cypress-realworld-app/branch/develop/graph/badge.svg" />
   </a>
+
+  <a href="https://percy.io/cypress-io/cypress-realworld-app">
+    <img src="https://percy.io/static/images/percy-badge.svg" />
+  </a>
   
    <a href="#contributors-">
     <img src="https://img.shields.io/badge/all_contributors-6-green.svg?style=flat" />
