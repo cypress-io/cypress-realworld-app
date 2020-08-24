@@ -158,8 +158,8 @@ describe("Transaction Feed", function () {
             cy.getBySelLike("amount")
               .should("contain", `+${formattedAmount}`)
               .should("have.css", "color", "rgb(76, 175, 80)");
+            cy.percySnapshot("Transaction Item");
           });
-          cy.percySnapshot("Transaction Item");
         });
     });
 
