@@ -30,7 +30,7 @@ describe("Bank Accounts", function () {
     cy.getBySel("sidenav-bankaccounts").click();
 
     cy.getBySel("bankaccount-new").click();
-    cy.location("pathname").should("be", "/bankaccounts/new");
+    cy.location("pathname").should("eq", "/bankaccounts/new");
     cy.percySnapshot("Display New Bank Account Form");
 
     cy.getBySelLike("bankName-input").type("The Best Bank");
