@@ -3243,10 +3243,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/yup@0.29.5":
-  version "0.29.5"
-  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.29.5.tgz#3c870d5a7d6d36f927fa27a8774ec899bae1990d"
-  integrity sha512-meq6eww0Xm2hSa4suRVxDHBI6D1p7Qz9ZWz2D2Lq1tdrxG5Jhl3AhAPAMJ3LwVF5TjWs7bTYYtXMakB85IZOIw==
+"@types/yup@0.29.6":
+  version "0.29.6"
+  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.29.6.tgz#0920303c0298ac53945e9feb0b4dcad79cc755b2"
+  integrity sha512-YPDo5L5uHyxQ4UkyJST+33stD8Z6IT9fvmKyaPAGxkZ6q19foEi6sQGkmqBvzSyRPdstFEeJiS2rKuTn8rfO5g==
 
 "@typescript-eslint/eslint-plugin@^2.10.0":
   version "2.34.0"
