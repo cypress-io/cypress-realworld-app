@@ -100,7 +100,7 @@
     "eslint-plugin-prettier": "3.1.4",
     "istanbul-lib-coverage": "3.0.0",
     "nyc": "15.1.0",
-    "prettier": "2.1.0",
+    "prettier": "2.1.1",
     "start-server-and-test": "1.11.3"
   },
   "resolutions": {
