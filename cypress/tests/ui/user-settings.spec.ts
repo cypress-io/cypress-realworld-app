@@ -7,6 +7,7 @@ describe("User Settings", function () {
 
     cy.server();
     cy.route("PATCH", "/users/*").as("updateUser");
+    cy.route("GET", "/notifications").as("getNotifications");
 
     cy.database("find", "users").then((user: User) => {
       cy.loginByXstate(user.username);
@@ -20,8 +21,10 @@ describe("User Settings", function () {
   });
 
   it("renders the user settings form", function () {
+    cy.wait("@getNotifications");
     cy.getBySel("user-settings-form").should("be.visible");
     cy.location("pathname").should("include", "/user/settings");
+
     cy.percySnapshot("User Settings Form");
   });
 
