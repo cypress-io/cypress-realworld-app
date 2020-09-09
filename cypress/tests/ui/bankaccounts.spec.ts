@@ -14,6 +14,7 @@ describe("Bank Accounts", function () {
     cy.server();
     cy.route("POST", "/bankAccounts").as("createBankAccount");
     cy.route("DELETE", "/bankAccounts/*").as("deleteBankAccount");
+    cy.route("GET", "/notifications").as("getNotifications");
 
     cy.database("find", "users").then((user: User) => {
       ctx.user = user;
@@ -23,6 +24,7 @@ describe("Bank Accounts", function () {
   });
 
   it("creates a new bank account", function () {
+    cy.wait("@getNotifications");
     if (isMobile()) {
       cy.getBySel("sidenav-toggle").click();
     }
