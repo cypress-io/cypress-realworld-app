@@ -70,6 +70,7 @@ describe("User Settings", function () {
     cy.getBySelLike("submit").click();
 
     cy.wait("@updateUser").its("status").should("equal", 204);
+    cy.getBySel("sidenav-user-full-name").should("contain", "New First Name");
     cy.percySnapshot("User Settings Update Profile");
   });
 });
