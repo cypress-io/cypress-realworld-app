@@ -21,7 +21,7 @@
   "packageRules": [
     {
       "packageNames": ["cypress"],
-      "extends": ["every weekday"]
+      "schedule": ["every weekday"]
     },
     {
       "packageNames": ["@babel/compat-data"],
