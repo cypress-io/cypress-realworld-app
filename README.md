@@ -47,7 +47,7 @@ A payment application to demonstrate <strong>real-world</strong> usage of <a hre
 🛠 Built with [React][reactjs], [XState][xstate], [Express][express], [lowdb][lowdb], [Material-UI][material-ui] and [TypeScript][typescript]  
 ⚡️ Zero database dependencies  
 🚀 Full-stack [Express][express]/[React][reactjs] application with real-world features and tests  
-👮‍♂️ Local Authentication
+👮‍♂️ Local Authentication  
 🔥 Database Seeding with End-to-end Tests  
 💻 CI/CD + [Cypress Dashboard][cypressdashboard]
 
