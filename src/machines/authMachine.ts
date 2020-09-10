@@ -1,8 +1,12 @@
+import dotenv from "dotenv";
 import { Machine, assign, interpret, State } from "xstate";
 import { omit } from "lodash/fp";
 import { httpClient } from "../utils/asyncUtils";
 import { history } from "../utils/historyUtils";
 import { User } from "../models";
+
+dotenv.config({ path: ".env.local" });
+dotenv.config();
 
 export interface AuthMachineSchema {
   states: {
@@ -13,6 +17,7 @@ export interface AuthMachineSchema {
     logout: {};
     refreshing: {};
     authorized: {};
+    okta: {};
   };
 }
 
@@ -21,6 +26,7 @@ export type AuthMachineEvents =
   | { type: "LOGOUT" }
   | { type: "UPDATE" }
   | { type: "REFRESH" }
+  | { type: "OKTA" }
   | { type: "SIGNUP" };
 
 export interface AuthMachineContext {
@@ -41,6 +47,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         entry: "resetUser",
         on: {
           LOGIN: "loading",
+          OKTA: "okta",
           SIGNUP: "signup",
         },
       },
@@ -90,6 +97,16 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
           LOGOUT: "logout",
         },
       },
+      okta: {
+        invoke: {
+          src: "getOktaUserProfile",
+          onDone: { target: "authorized", actions: "setUserProfile" },
+          onError: { target: "unauthorized", actions: "onError" },
+        },
+        on: {
+          LOGOUT: "logout",
+        },
+      },
     },
   },
   {
@@ -110,6 +127,21 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
           .catch((error) => {
             throw new Error("Username or password is invalid");
           });
+      },
+      getOktaUserProfile: (ctx, event: any) => {
+        // Map Okta User fields to our User Model
+        const user = {
+          id: event.user.sub,
+          email: event.user.email,
+          firstName: event.user.given_name,
+          lastName: event.user.family_name,
+          username: event.user.preferred_username,
+        };
+
+        // Set Access Token in Local Storage for API calls
+        localStorage.setItem(process.env.REACT_APP_AUTH_TOKEN_NAME!, event.token);
+
+        return Promise.resolve({ user });
       },
       getUserProfile: async (ctx, event) => {
         const resp = await httpClient.get(`http://localhost:3001/checkAuth`);
