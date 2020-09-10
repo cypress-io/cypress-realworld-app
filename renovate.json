@@ -17,7 +17,12 @@
     "enabled": true
   },
   "masterIssue": true,
+  "schedule": ["every weekend"],
   "packageRules": [
+    {
+      "packageNames": ["cypress"],
+      "schedule": ["every weekday"]
+    },
     {
       "packageNames": ["@babel/compat-data"],
       "allowedVersions": "7.9.0"
