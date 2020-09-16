@@ -101,6 +101,7 @@ describe("Transaction View", function () {
     }).then((transactionRequest) => {
       cy.visit(`/transaction/${transactionRequest!.id}`);
 
+      cy.wait("@getNotifications");
       cy.getBySel("transaction-detail-header").should("be.visible");
       cy.getBySel("transaction-accept-request").should("not.be.visible");
       cy.getBySel("transaction-reject-request").should("not.be.visible");
