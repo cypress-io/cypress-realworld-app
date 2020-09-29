@@ -64,17 +64,66 @@ describe("Bank Accounts", function () {
       .should("be.visible")
       .and("contain", "Must contain at least 5 characters");
 
-    ["routing", "account"].forEach((field) => {
-      cy.getBySelLike(`${field}Number-input`).type("123").find("input").clear().blur();
-      cy.get(`#bankaccount-${field}Number-input-helper-text`)
-        .should("be.visible")
-        .and("contain", `Enter a valid bank ${field} number`);
+    /** Routing number input validations **/
+    // Required field
+    cy.getBySelLike("routingNumber-input").find("input").focus().blur();
+    cy.get(`#bankaccount-routingNumber-input-helper-text`)
+      .should("be.visible")
+      .and("contain", "Enter a valid bank routing number");
 
-      cy.getBySelLike(`${field}Number-input`).type("12345678").find("input").blur();
-      cy.get(`#bankaccount-${field}Number-input-helper-text`)
-        .should("be.visible")
-        .and("contain", `Must contain a valid ${field} number`);
-    });
+    // Min 9 digit
+    cy.getBySelLike("routingNumber-input").type("12345678").find("input").blur();
+    cy.get("#bankaccount-routingNumber-input-helper-text")
+      .should("be.visible")
+      .and("contain", "Must contain a valid routing number");
+    cy.getBySelLike("routingNumber-input").find("input").clear();
+
+    cy.getBySelLike("routingNumber-input").type("123456789").find("input").blur();
+    cy.get("#bankaccount-routingNumber-input-helper-text").should("not.be.visible");
+
+    /** Account number input validations **/
+    // Required field
+    cy.getBySelLike("accountNumber-input").find("input").focus().blur();
+    cy.get(`#bankaccount-accountNumber-input-helper-text`)
+      .should("be.visible")
+      .and("contain", "Enter a valid bank account number");
+
+    // Min 9 digit
+    cy.getBySelLike("accountNumber-input").type("12345678").find("input").blur();
+    cy.get("#bankaccount-accountNumber-input-helper-text")
+      .should("be.visible")
+      .and("contain", "Must contain at least 9 digits");
+    cy.getBySelLike("accountNumber-input").find("input").clear();
+
+    cy.getBySelLike("accountNumber-input").type("123456789").find("input").blur();
+    cy.get("#bankaccount-accountNumber-input-helper-text").should("not.be.visible");
+    cy.getBySelLike("accountNumber-input").find("input").clear();
+
+
+    // Max 12 gdigit
+    cy.getBySelLike("accountNumber-input").type("123456789111").find("input").blur();
+    cy.get("#bankaccount-accountNumber-input-helper-text").should("not.be.visible");
+    cy.getBySelLike("accountNumber-input").find("input").clear();
+
+    cy.getBySelLike("accountNumber-input").type("1234567891111").find("input").blur();
+    cy.get("#bankaccount-accountNumber-input-helper-text")
+      .should("be.visible")
+      .and("contain", "Must contain no more than 12 digits");
+
+    // ["account"].forEach((field) => {
+    //   cy.getBySelLike(`${field}Number-input`).type("123").find("input").clear().blur();
+    //   cy.get(`#bankaccount-${field}Number-input-helper-text`)
+    //     .should("be.visible")
+    //     .and("contain", `Enter a valid bank ${field} number`);
+
+    //   cy.getBySelLike(`${field}Number-input`).type("12345678").find("input").blur();
+    //   cy.get(`#bankaccount-${field}Number-input-helper-text`)
+    //     .should("be.visible")
+    //     .and("contain", `Must contain at least 9 digits`);
+
+    //   cy.getBySelLike(`${field}Number-input`).type("123456789").find("input").blur();
+    //   cy.get(`#bankaccount-${field}Number-input-helper-text`).should("not.be.visible");
+    // });
 
     cy.getBySel("bankaccount-submit").should("be.disabled");
     cy.percySnapshot("Bank Account Form with Errors and Submit button disabled");
