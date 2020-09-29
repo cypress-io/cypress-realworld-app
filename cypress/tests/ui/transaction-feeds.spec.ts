@@ -47,6 +47,7 @@ describe("Transaction Feed", function () {
     cy.task("db:seed");
 
     cy.server();
+    cy.route("GET", "/notifications").as("notifications");
     cy.route("/transactions*").as(feedViews.personal.routeAlias);
     cy.route("/transactions/public*").as(feedViews.public.routeAlias);
     cy.route("/transactions/contacts*").as(feedViews.contacts.routeAlias);
@@ -90,6 +91,7 @@ describe("Transaction Feed", function () {
       );
       cy.visit("/");
 
+      cy.wait("@notifications");
       cy.wait("@mockedPublicTransactions")
         .its("response.body.results")
         .then((transactions) => {
