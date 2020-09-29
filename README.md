@@ -97,7 +97,7 @@ yarn cypress:open
 
 - The local JSON database located in [data/database.json](./data/database.json) and is managed with [lowdb].
 
-- The database is [reseeded](./data/dev-seed.json) each time the application is started (via `yarn dev`). Database seeding is done in between each [Cypress End-to-End test](./cypress/tests).
+- The database is [reseeded](./data/database-seed.json) each time the application is started (via `yarn dev`). Database seeding is done in between each [Cypress End-to-End test](./cypress/tests).
 
 - Updates via the React frontend are sent to the [Express][express] server and handled by a set of [database utilities](backend/database.ts)
 
@@ -134,7 +134,7 @@ To generate a code coverage report:
 
 This project is licensed under the terms of the [MIT license](/LICENSE).
 
-[reactjs]: https://reactjs.**org**
+[reactjs]: https://reactjs.org
 [xstate]: https://xstate.js.org
 [express]: https://expressjs.com
 [lowdb]: https://github.com/typicode/lowdb
