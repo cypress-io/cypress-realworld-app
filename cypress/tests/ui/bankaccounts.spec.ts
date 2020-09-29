@@ -110,21 +110,6 @@ describe("Bank Accounts", function () {
       .should("be.visible")
       .and("contain", "Must contain no more than 12 digits");
 
-    // ["account"].forEach((field) => {
-    //   cy.getBySelLike(`${field}Number-input`).type("123").find("input").clear().blur();
-    //   cy.get(`#bankaccount-${field}Number-input-helper-text`)
-    //     .should("be.visible")
-    //     .and("contain", `Enter a valid bank ${field} number`);
-
-    //   cy.getBySelLike(`${field}Number-input`).type("12345678").find("input").blur();
-    //   cy.get(`#bankaccount-${field}Number-input-helper-text`)
-    //     .should("be.visible")
-    //     .and("contain", `Must contain at least 9 digits`);
-
-    //   cy.getBySelLike(`${field}Number-input`).type("123456789").find("input").blur();
-    //   cy.get(`#bankaccount-${field}Number-input-helper-text`).should("not.be.visible");
-    // });
-
     cy.getBySel("bankaccount-submit").should("be.disabled");
     cy.percySnapshot("Bank Account Form with Errors and Submit button disabled");
   });
