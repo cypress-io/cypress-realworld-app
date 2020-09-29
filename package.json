@@ -128,7 +128,7 @@
     "start:api": "yarn tsnode --files backend/app.ts",
     "start:api:watch": "nodemon --exec yarn tsnode --watch 'backend' backend/app.ts",
     "start:react:proxy-server": "yarn tsnode scripts/testServer.ts",
-    "prettier": "prettier --write '**/**.{ts,js,tsx}'",
+    "prettier": "prettier --write '**/**.{ts,js,tsx}' '*.{json,md,yml}'",
     "tsnode": "nyc --silent ts-node -P tsconfig.tsnode.json",
     "tsnode:not-instrumented": "ts-node -P tsconfig.tsnode.json",
     "db:seed": "yarn tsnode scripts/generateSeedData",
