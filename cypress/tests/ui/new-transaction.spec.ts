@@ -179,7 +179,7 @@ describe("New Transaction", function () {
     cy.createTransaction(transactionPayload);
     cy.wait("@createTransaction");
     cy.getBySel("new-transaction-create-another-transaction").should("be.visible");
-    cy.percySnapshot("Transaction Payment Submitted Notification");
+    cy.percySnapshot("receiver - Transaction Payment Submitted Notification");
 
     cy.switchUser(ctx.contact!.username);
 
