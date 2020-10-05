@@ -61,6 +61,7 @@ describe("Transaction Feed", function () {
   });
   describe("app layout and responsiveness", function () {
     it("toggles the navigation drawer", function () {
+      cy.wait("@notifications");
       if (isMobile()) {
         cy.getBySel("sidenav-home").should("not.be.visible");
         cy.percySnapshot("Mobile Initial Side Navigation Not Visible");
