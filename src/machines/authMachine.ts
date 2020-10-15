@@ -132,6 +132,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         const resp = await httpClient.get(`http://localhost:3001/checkAuth`);
         return resp.data;
       },
+      /* istanbul ignore next */
       getAuth0UserProfile: (ctx, event: any) => {
         // Map Auth0 User fields to our User Model
         /* istanbul ignore next */
