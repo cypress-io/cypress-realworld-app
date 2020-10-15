@@ -16,9 +16,11 @@ const theme = createMuiTheme({
   },
 });
 
+/* istanbul ignore next */
 const onRedirectCallback = (appState: any) => {
   history.replace((appState && appState.returnTo) || window.location.pathname);
 };
+/* istanbul ignore if */
 if (process.env.REACT_APP_AUTH0) {
   ReactDOM.render(
     <Auth0Provider
