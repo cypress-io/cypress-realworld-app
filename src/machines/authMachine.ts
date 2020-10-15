@@ -132,9 +132,9 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         const resp = await httpClient.get(`http://localhost:3001/checkAuth`);
         return resp.data;
       },
-      /* istanbul ignore next */
       getAuth0UserProfile: (ctx, event: any) => {
         // Map Auth0 User fields to our User Model
+        /* istanbul ignore next */
         const user = {
           id: event.user.sub,
           email: event.user.email,
@@ -143,8 +143,10 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         };
 
         // Set Auth0 Access Token in Local Storage for API calls
+        /* istanbul ignore next */
         localStorage.setItem(process.env.REACT_APP_AUTH_TOKEN_NAME!, event.token);
 
+        /* istanbul ignore next */
         return Promise.resolve({ user });
       },
       updateProfile: async (ctx, event: any) => {

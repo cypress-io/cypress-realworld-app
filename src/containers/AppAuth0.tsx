@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+/* istanbul ignore next */
 const AppAuth0: React.FC = () => {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
   const classes = useStyles();
