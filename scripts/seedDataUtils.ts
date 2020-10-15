@@ -110,7 +110,7 @@ export const getRandomTransactions = (baseCount: number, baseTransactions: Trans
   ).slice(0, baseCount);
 
 export const getUserAvatar = (identifier: string) => {
-  return `https://api.adorable.io/avatars/128/${identifier}.png`;
+  return `https://avatars.dicebear.com/api/human/${identifier}.svg`;
 };
 
 export const createFakeUser = (): User => {
