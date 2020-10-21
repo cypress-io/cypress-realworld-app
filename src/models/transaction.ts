@@ -12,13 +12,7 @@ export enum TransactionRequestStatus {
   accepted = "accepted",
   rejected = "rejected",
 }
-export enum Reasons {
-  food = "food",
-  fuel = "fuel",
-  entertaiment = "entertaiment",
-  pet = "pet",
-  shoping = "shoping",
-}
+export type Reasons="Food"|"Sport"|"Sex"|"Other" 
 
 export interface Transaction {
   id: string;
