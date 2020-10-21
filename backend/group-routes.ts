@@ -7,7 +7,7 @@ import {
   createTransaction,
   updateTransactionById,
   getPublicTransactionsDefaultSort,
-  getTransactionByIdForApi,
+  getTransactionsForUserContacts,
   getTransactionsForUserForApi,
   getPublicTransactionsByQuery,
 } from "./database";
@@ -26,18 +26,18 @@ const router = express.Router();
 
 // Routes
 
-//GET /groups - scoped user, auth-required
+//GET /transactions - scoped user, auth-required
 router.get(
   "/",
   ensureAuthenticated,
   validateMiddleware([
-    // sanitizeTransactionStatus, /* ignoring validations for now
-    // sanitizeRequestStatus,
-    // ...isTransactionQSValidator,
+    sanitizeTransactionStatus,
+    sanitizeRequestStatus,
+    ...isTransactionQSValidator,
   ]),
   (req, res) => {
     /* istanbul ignore next */
-    const transactions = getTransactionsForUserForApi(req.user?.id!);
+    const transactions = getTransactionsForUserForApi(req.user?.id!, req.query);
 
     const { totalPages, data: paginatedItems } = getPaginatedItems(
       req.query.page,
@@ -58,37 +58,35 @@ router.get(
   }
 );
 
-//GET /groups/:id - scoped user, auth-required
+//GET /transactions/contacts - scoped user, auth-required
 router.get(
-  "/:groupId",
-//   ensureAuthenticated,
-//   validateMiddleware([
-//     sanitizeTransactionStatus,
-//     sanitizeRequestStatus,
-//     ...isTransactionQSValidator,
-//   ]),
-  (req, res) => {   
+  "/contacts",
+  ensureAuthenticated,
+  validateMiddleware([
+    sanitizeTransactionStatus,
+    sanitizeRequestStatus,
+    ...isTransactionQSValidator,
+  ]),
+  (req, res) => {
     /* istanbul ignore next */
-    const { groupId }  = req.params; // TODO: when we create front - update to req.user?.id!
-    
-    const group = getGroupById(groupId);
+    const transactions = getTransactionsForUserContacts(req.user?.id!, req.query);
 
-    // const { totalPages, data: paginatedItems } = getPaginatedItems(
-    //   req.query.page,
-    //   req.query.limit,
-    //   transactions
-    // );
-    res.status(200);
-    res.json(
-      // pageData: {
-      //   page: res.locals.paginate.page,
-      //   limit: res.locals.paginate.limit,
-      //   hasNextPages: res.locals.paginate.hasNextPages(totalPages),
-      //   totalPages,
-      // },
-      // results: paginatedItems,
-      group
+    const { totalPages, data: paginatedItems } = getPaginatedItems(
+      req.query.page,
+      req.query.limit,
+      transactions
     );
+
+    res.status(200);
+    res.json({
+      pageData: {
+        page: res.locals.paginate.page,
+        limit: res.locals.paginate.limit,
+        hasNextPages: res.locals.paginate.hasNextPages(totalPages),
+        totalPages,
+      },
+      results: paginatedItems,
+    });
   }
 );
 
@@ -154,18 +152,18 @@ router.post(
   }
 );
 
-//GET /transactions/:transactionId - scoped-user
+//GET /groups/:groupId - scoped user
 router.get(
-  "/:transactionId",
+  "/:groupId",
   ensureAuthenticated,
   validateMiddleware([shortIdValidation("transactionId")]),
   (req, res) => {
-    const { transactionId } = req.params;
+    const { groupId }  = req.params; // TODO: when we create front - update to req.user?.id!
 
-    const transaction = getTransactionByIdForApi(transactionId);
+    const group = getGroupById(groupId);
 
     res.status(200);
-    res.json({ transaction });
+    res.json({ group });
   }
 );
 
