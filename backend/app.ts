@@ -17,6 +17,7 @@ import commentRoutes from "./comment-routes";
 import notificationRoutes from "./notification-routes";
 import bankTransferRoutes from "./banktransfer-routes";
 import testDataRoutes from "./testdata-routes";
+import groupRoutes from './group-routes'; //import our group route
 
 require("dotenv").config();
 
@@ -60,6 +61,7 @@ app.use("/likes", likeRoutes);
 app.use("/comments", commentRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/bankTransfers", bankTransferRoutes);
+app.use("/groups", groupRoutes); //use our groups route
 
 /* istanbul ignore next */
 if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {

@@ -10984,5 +10984,35 @@
       "createdAt": "2019-10-10T05:09:20.517Z",
       "modifiedAt": "2020-05-21T12:24:00.749Z"
     }
-  ]
+  ],
+  "groups": [
+    {
+      "id": "ncHDJ74vbKL1",
+      "uuid":"863246b4-42de-4001-a578-33e316a486c5",
+      "name":"Just Us Bro's",
+      "creatorId":"t45AiwidW",
+      "createdAt":"2019-10-10T05:09:20.517Z",
+      "modifiedAt":"2020-05-21T12:24:00.749Z"
+    }
+  ],
+  "groupmembers": [
+    {
+      "id": "kjAS23J23A8j",
+      "uuid": "84632asg-s2hp-4sa1-aey8-t3a3gsads6ca",
+      "userId": "t45AiwidW",
+      "groupId": "ncHDJ74vbKL1",
+      "premmisions": "admin",
+      "createdAt": "2019-10-10T05:09:20.517Z",
+      "modifiedAt": "2019-10-10T05:09:20.517Z"
+    },
+    {
+      "id": "kjAS23J23A8j",
+      "uuid": "14agrasg-sf5p-4af1-asyw-ttr3gsfgf6aa",
+      "userId": "24VniajY1y",
+      "groupId": "ncHDJ74vbKL1",
+      "premmisions": "member",
+      "createdAt": "2019-10-10T05:09:21.517Z",
+      "modifiedAt": "2019-10-10T05:09:21.517Z"
+    }
+  ] 
 }
