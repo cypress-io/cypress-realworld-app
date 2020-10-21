@@ -11,7 +11,7 @@
       "phoneNumber": "625-316-9882",
       "avatar": "https://avatars.dicebear.com/api/human/t45AiwidW.svg",
       "defaultPrivacyLevel": "public",
-      "balance": 168137,
+      "balance": 1402637,
       "createdAt": "2019-08-27T23:47:05.637Z",
       "modifiedAt": "2020-05-21T11:02:22.857Z"
     },
@@ -74,6 +74,17 @@
       "balance": 75369,
       "createdAt": "2020-02-11T21:26:46.510Z",
       "modifiedAt": "2020-05-21T15:15:33.944Z"
+    },
+    {
+      "id": "cRQFMxS7D",
+      "uuid": "31165154-6dee-4e98-96d4-c67546c521fe",
+      "firstName": "bob",
+      "lastName": "bob",
+      "username": "boby",
+      "password": "$2a$10$iLKc3aF6X6lX9yUU0tnWYOlSw8YWesXd.RqBzXP8IICyPGH6S80cC",
+      "balance": 0,
+      "createdAt": "2020-10-21T10:58:33.827Z",
+      "modifiedAt": "2020-10-21T10:58:33.827Z"
     }
   ],
   "contacts": [
@@ -253,6 +264,17 @@
       "isDeleted": false,
       "createdAt": "2019-09-30T14:20:07.043Z",
       "modifiedAt": "2020-05-21T22:40:28.910Z"
+    },
+    {
+      "id": "SoSVrmkuM",
+      "uuid": "353901e8-805c-4b20-b155-c06a455cb47e",
+      "userId": "cRQFMxS7D",
+      "bankName": "goody",
+      "accountNumber": "987654321",
+      "routingNumber": "123456789",
+      "isDeleted": false,
+      "createdAt": "2020-10-21T10:58:57.045Z",
+      "modifiedAt": "2020-10-21T10:58:57.045Z"
     }
   ],
   "transactions": [
@@ -9855,6 +9877,17 @@
       "requestResolvedAt": "",
       "createdAt": "2019-06-27T22:24:04.794Z",
       "modifiedAt": "2020-05-21T04:58:44.494Z"
+    },
+    {
+      "id": "Ki-HJAcaD",
+      "uuid": "cda07d70-c25c-4f43-93d9-fdc4e4d324c8",
+      "amount": 1234500,
+      "description": "good",
+      "receiverId": "t45AiwidW",
+      "senderId": "cRQFMxS7D",
+      "status": "complete",
+      "createdAt": "2020-10-21T10:59:14.053Z",
+      "modifiedAt": "2020-10-21T10:59:14.053Z"
     }
   ],
   "likes": [
@@ -10431,6 +10464,16 @@
       "isRead": false,
       "createdAt": "2019-10-19T20:50:49.292Z",
       "modifiedAt": "2020-05-21T21:00:50.192Z"
+    },
+    {
+      "id": "Xp7mOOelJo",
+      "uuid": "27a6e1c9-ac5f-4916-bfd6-e30250ee96f5",
+      "userId": "t45AiwidW",
+      "transactionId": "Ki-HJAcaD",
+      "status": "received",
+      "isRead": false,
+      "createdAt": "2020-10-21T10:59:14.103Z",
+      "modifiedAt": "2020-10-21T10:59:14.103Z"
     }
   ],
   "banktransfers": [
@@ -10983,6 +11026,16 @@
       "transactionId": "jtdpSmWcsJxk",
       "createdAt": "2019-10-10T05:09:20.517Z",
       "modifiedAt": "2020-05-21T12:24:00.749Z"
+    },
+    {
+      "id": "OuIKUjhNK",
+      "uuid": "a7553369-9b8f-4b1a-ba3c-22324b477b44",
+      "userId": "cRQFMxS7D",
+      "amount": 1234500,
+      "transactionId": "Ki-HJAcaD",
+      "type": "withdrawal",
+      "createdAt": "2020-10-21T10:59:14.069Z",
+      "modifiedAt": "2020-10-21T10:59:14.069Z"
     }
   ]
 }

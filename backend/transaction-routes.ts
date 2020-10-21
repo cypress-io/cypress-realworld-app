@@ -102,7 +102,7 @@ router.get(
     let transactions = !isEmpty(req.query)
       ? getPublicTransactionsByQuery(req.user?.id!, req.query)
       : /* istanbul ignore next */
-        getPublicTransactionsDefaultSort(req.user?.id!);
+      getPublicTransactionsDefaultSort(req.user?.id!);
 
     const { contactsTransactions, publicTransactions } = transactions;
 
@@ -139,6 +139,8 @@ router.post(
   ensureAuthenticated,
   validateMiddleware(isTransactionPayloadValidator),
   (req, res) => {
+    console.log("you r here", req.body);
+
     const transactionPayload = req.body;
     const transactionType = transactionPayload.transactionType;
 

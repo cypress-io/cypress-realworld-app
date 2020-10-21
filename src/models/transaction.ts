@@ -12,6 +12,13 @@ export enum TransactionRequestStatus {
   accepted = "accepted",
   rejected = "rejected",
 }
+export enum Reasons {
+  food = "food",
+  fuel = "fuel",
+  entertaiment = "entertaiment",
+  pet = "pet",
+  shoping = "shoping",
+}
 
 export interface Transaction {
   id: string;
@@ -22,6 +29,7 @@ export interface Transaction {
   privacyLevel: DefaultPrivacyLevel;
   receiverId: string;
   senderId: string;
+  reasonOfPayment?: Reasons;
   balanceAtCompletion?: number;
   status: TransactionStatus;
   requestStatus?: TransactionRequestStatus | string;
