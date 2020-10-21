@@ -45,15 +45,6 @@ router.get(
       transactions
     );
 
-    console.log(({
-      pageData: {
-        page: res.locals.paginate.page,
-        limit: res.locals.paginate.limit,
-        hasNextPages: res.locals.paginate.hasNextPages(totalPages),
-        totalPages,
-      },
-      results: paginatedItems,
-    }));
     res.status(200);
     res.json({
       pageData: {

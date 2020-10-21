@@ -85,8 +85,6 @@ const LIKE_TABLE = "likes";
 const COMMENT_TABLE = "comments";
 const NOTIFICATION_TABLE = "notifications";
 const BANK_TRANSFER_TABLE = "banktransfers";
-const GROUP_TABLE = "groups"; // const variable with the name of out groups table
-const GROUP_MEMBER_TABLE = "groupmembers"; //const variable with the name of our group members table
 
 const databaseFile = path.join(__dirname, "../data/database.json");
 const adapter = new FileSync<DbSchema>(databaseFile);
@@ -326,15 +324,6 @@ const saveBankTransfer = (bankTransfer: BankTransfer): BankTransfer => {
   return getBankTransferBy("id", bankTransfer.id);
 };
 
-// group-members
-
-// export const getGroupMembersByGroupId = ()
-
-// group
-export const getGroupBy = (key: string, value: any) => getBy(GROUP_TABLE, key, value);
-
-export const getGroupById = (id: string) => getGroupBy("id", id);
-
 // Transaction
 
 export const getTransactionBy = (key: string, value: any) => getBy(TRANSACTION_TABLE, key, value);
@@ -440,7 +429,7 @@ export const transactionsWithinDateRange = curry(
   }
 );
 
-export const getTransactionsForUserByObj = curry( (userId: string, query?: object) =>
+export const getTransactionsForUserByObj = curry((userId: string, query?: object) =>
   flow(getAllTransactionsForUserByObj(userId), uniqBy("id"))(query)
 );
 
