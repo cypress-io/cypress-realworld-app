@@ -144,8 +144,26 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                   />
                 )}
               </Field>
-              <Field>
-                <Select></Select>
+              <Field name="reason">
+                {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
+                  <Select
+                    variant="outlined"
+                    margin="dense"
+                    fullWidth
+                    required
+                    id={"transaction-create-description-input"}
+                    type="text"
+                    placeholder="Add a note"
+                    data-test={"transaction-create-description-input"}
+                    error={(touched || value !== initialValue) && Boolean(error)}
+                    
+                    {...field}
+                  ><option aria-label="None" value="" />
+                  <option value={10}>Ten</option>
+                  <option value={20}>Twenty</option>
+                  <option value={30}>Thirty</option>
+        </Select>
+                )}
               </Field>
               <Field name="description">
                 {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
