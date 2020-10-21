@@ -3,7 +3,7 @@
 import express from "express";
 import { remove, isEmpty, slice, concat } from "lodash/fp";
 import {
-  getTransactionsForUserContacts,
+  getGroupById,
   createTransaction,
   updateTransactionById,
   getPublicTransactionsDefaultSort,
@@ -26,18 +26,18 @@ const router = express.Router();
 
 // Routes
 
-//GET /transactions - scoped user, auth-required
+//GET /groups - scoped user, auth-required
 router.get(
   "/",
   ensureAuthenticated,
   validateMiddleware([
-    sanitizeTransactionStatus,
-    sanitizeRequestStatus,
-    ...isTransactionQSValidator,
+    // sanitizeTransactionStatus, /* ignoring validations for now
+    // sanitizeRequestStatus,
+    // ...isTransactionQSValidator,
   ]),
   (req, res) => {
     /* istanbul ignore next */
-    const transactions = getTransactionsForUserForApi(req.user?.id!, req.query);
+    const transactions = getTransactionsForUserForApi(req.user?.id!);
 
     const { totalPages, data: paginatedItems } = getPaginatedItems(
       req.query.page,
@@ -45,15 +45,6 @@ router.get(
       transactions
     );
 
-    console.log(({
-      pageData: {
-        page: res.locals.paginate.page,
-        limit: res.locals.paginate.limit,
-        hasNextPages: res.locals.paginate.hasNextPages(totalPages),
-        totalPages,
-      },
-      results: paginatedItems,
-    }));
     res.status(200);
     res.json({
       pageData: {
@@ -67,35 +58,37 @@ router.get(
   }
 );
 
-//GET /transactions/contacts - scoped user, auth-required
+//GET /groups/:id - scoped user, auth-required
 router.get(
-  "/contacts",
-  ensureAuthenticated,
-  validateMiddleware([
-    sanitizeTransactionStatus,
-    sanitizeRequestStatus,
-    ...isTransactionQSValidator,
-  ]),
-  (req, res) => {
+  "/:groupId",
+//   ensureAuthenticated,
+//   validateMiddleware([
+//     sanitizeTransactionStatus,
+//     sanitizeRequestStatus,
+//     ...isTransactionQSValidator,
+//   ]),
+  (req, res) => {   
     /* istanbul ignore next */
-    const transactions = getTransactionsForUserContacts(req.user?.id!, req.query);
+    const { groupId }  = req.params; // TODO: when we create front - update to req.user?.id!
+    
+    const group = getGroupById(groupId);
 
-    const { totalPages, data: paginatedItems } = getPaginatedItems(
-      req.query.page,
-      req.query.limit,
-      transactions
-    );
-
+    // const { totalPages, data: paginatedItems } = getPaginatedItems(
+    //   req.query.page,
+    //   req.query.limit,
+    //   transactions
+    // );
     res.status(200);
-    res.json({
-      pageData: {
-        page: res.locals.paginate.page,
-        limit: res.locals.paginate.limit,
-        hasNextPages: res.locals.paginate.hasNextPages(totalPages),
-        totalPages,
-      },
-      results: paginatedItems,
-    });
+    res.json(
+      // pageData: {
+      //   page: res.locals.paginate.page,
+      //   limit: res.locals.paginate.limit,
+      //   hasNextPages: res.locals.paginate.hasNextPages(totalPages),
+      //   totalPages,
+      // },
+      // results: paginatedItems,
+      group
+    );
   }
 );
 

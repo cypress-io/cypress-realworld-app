@@ -42,7 +42,7 @@ router.get(
 router.post("/", ensureAuthenticated, validateMiddleware(isBankAccountValidator), (req, res) => {
   /* istanbul ignore next */
   const account = createBankAccountForUser(req.user?.id!, req.body);
-
+  console.log(req.body);
   res.status(200);
   res.json({ account });
 });
