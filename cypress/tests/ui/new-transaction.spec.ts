@@ -234,8 +234,7 @@ describe("New Transaction", function () {
     cy.percySnapshot("Verify Updated Sender Account Balance");
   });
 
-  it("searches for a user by attributes", function () {
-    const targetUser = ctx.allUsers![2];
+  context("searches for a user by attribute", function () {
     const searchAttrs: (keyof User)[] = [
       "firstName",
       "lastName",
@@ -244,24 +243,36 @@ describe("New Transaction", function () {
       "phoneNumber",
     ];
 
-    cy.getBySelLike("new-transaction").click();
-    cy.wait("@allUsers");
+    beforeEach(function () {
+      cy.getBySelLike("new-transaction").click();
+      cy.wait("@allUsers");
+    });
 
     searchAttrs.forEach((attr: keyof User) => {
-      cy.log(`Searching by **${attr}**`);
-      cy.getBySel("user-list-search-input").type(targetUser[attr] as string, { force: true });
-      cy.wait("@usersSearch");
+      it(attr, function () {
+        const targetUser = ctx.allUsers![2];
 
-      cy.getBySelLike("user-list-item")
-        // make sure the list of results is fully updated
-        .should("have.length", 1)
-        .first()
-        .contains(targetUser[attr] as string);
-      cy.percySnapshot(`User List for Search: ${attr} = ${targetUser[attr]}`);
+        cy.log(`Searching by **${attr}**`);
+        cy.getBySel("user-list-search-input").type(targetUser[attr] as string, { force: true });
+        cy.wait("@usersSearch")
+          // make sure the backend returns some results
+          .its("responseBody.results.length")
+          .should("be.gt", 0)
+          .then((resultsN) => {
+            cy.getBySelLike("user-list-item")
+              // make sure the list of results is fully updated
+              // and shows the number of results returned from the backend
+              .should("have.length", resultsN)
+              .first()
+              .contains(targetUser[attr] as string);
+          });
 
-      cy.focused().clear();
-      cy.getBySel("users-list").should("be.empty");
-      cy.percySnapshot("User List Clear Search");
+        cy.percySnapshot(`User List for Search: ${attr} = ${targetUser[attr]}`);
+
+        cy.focused().clear();
+        cy.getBySel("users-list").should("be.empty");
+        cy.percySnapshot("User List Clear Search");
+      });
     });
   });
 });
