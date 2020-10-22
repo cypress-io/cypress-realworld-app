@@ -248,13 +248,16 @@ describe("New Transaction", function () {
     cy.wait("@allUsers");
 
     searchAttrs.forEach((attr: keyof User) => {
+      cy.log(`Searching by **${attr}**`);
       cy.getBySel("user-list-search-input").type(targetUser[attr] as string, { force: true });
       cy.wait("@usersSearch");
 
       cy.getBySelLike("user-list-item")
+        // make sure the list of results is fully updated
+        .should("have.length", 1)
         .first()
         .contains(targetUser[attr] as string);
-      cy.percySnapshot(`User List for Search: ${targetUser[attr]}`);
+      cy.percySnapshot(`User List for Search: ${attr} = ${targetUser[attr]}`);
 
       cy.focused().clear();
       cy.getBySel("users-list").should("be.empty");
