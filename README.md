@@ -129,6 +129,16 @@ To generate a code coverage report:
 1. Run `yarn cypress:run --env coverage=true` and wait for the test run to complete.
 2. Once the test run is complete, you can view the report at `coverage/index.html`.
 
+### Amazon Cognito
+
+A guide has been written with detail around adapting the RWA to use [Amazon Cognito][cognito] as the authentication solution and to explain the programmatic command used for Cypress tests.
+
+Prerequisites include an [Amazon Cognito][cognito] account. Environment variables from [Amazon Cognito][cognito] are provided by the [AWS Amplify CLI][awsamplify].
+
+Start the application with `yarn dev:cognito` and run Cypress with `yarn cypress:open`.
+
+The **only passing spec on this branch** will be the [okta spec](./cypress/tests/ui-auth-providers/cognito.spec.ts); all others will fail.
+
 ## License
 
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/cypress-io/cypress/blob/master/LICENSE)
