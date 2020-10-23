@@ -13,6 +13,7 @@ import Amplify from "aws-amplify";
 import { AmplifyAuthenticator, AmplifySignUp, AmplifySignIn } from "@aws-amplify/ui-react";
 import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components";
 
+// @ts-ignore
 import awsConfig from "../aws-exports";
 
 Amplify.configure(awsConfig);

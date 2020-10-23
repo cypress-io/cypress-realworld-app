@@ -6,6 +6,7 @@ import { validationResult } from "express-validator";
 import jwt from "express-jwt";
 import jwksRsa from "jwks-rsa";
 
+// @ts-ignore
 import awsConfig from "../src/aws-exports";
 
 dotenv.config({ path: ".env.local" });

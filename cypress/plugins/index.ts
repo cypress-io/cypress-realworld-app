@@ -6,6 +6,7 @@ import AWS from "aws-sdk";
 import Amplify, { Auth } from "aws-amplify";
 import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
+// @ts-ignore
 import awsConfig from "../../aws-exports-es5.js";
 
 dotenv.config({ path: ".env.local" });
