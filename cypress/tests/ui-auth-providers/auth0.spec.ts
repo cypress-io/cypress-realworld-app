@@ -7,7 +7,7 @@ describe("Auth0", function () {
     cy.server();
     cy.route("POST", "/bankAccounts").as("createBankAccount");
 
-    cy.loginByAuth0Api(Cypress.env("auth0_username"), Cypress.env("auth0_password"));
+    cy.loginByAuth0Api(Cypress.env("auth_username"), Cypress.env("auth_password"));
   });
 
   it("should allow a visitor to login, onboard and logout", function () {

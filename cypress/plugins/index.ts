@@ -11,8 +11,8 @@ dotenv.config();
 export default (on, config) => {
   config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD;
   config.env.paginationPageSize = process.env.PAGINATION_PAGE_SIZE;
-  config.env.auth0_username = process.env.AUTH_USERNAME;
-  config.env.auth0_password = process.env.AUTH_PASSWORD;
+  config.env.auth_username = process.env.AUTH_USERNAME;
+  config.env.auth_password = process.env.AUTH_PASSWORD;
   config.env.auth0_domain = process.env.REACT_APP_AUTH0_DOMAIN;
   config.env.auth0_audience = process.env.REACT_APP_AUTH0_AUDIENCE;
   config.env.auth0_scope = process.env.REACT_APP_AUTH0_SCOPE;
