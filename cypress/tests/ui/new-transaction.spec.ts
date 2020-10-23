@@ -147,9 +147,32 @@ describe("New Transaction", function () {
       receiver: ctx.contact,
     };
 
+    // first let's grab the current balance from the UI
+    let startBalance: string;
+    if (!isMobile()) {
+      // only check the balance display in desktop resolution
+      // as it is NOT shown on mobile screen
+      cy.get("[data-test=sidenav-user-balance]")
+        .invoke("text")
+        .then((x) => {
+          startBalance = x; // something like "$1,484.81"
+          expect(startBalance).to.match(/\$\d/);
+        });
+    }
+
     cy.createTransaction(transactionPayload);
     cy.wait("@createTransaction");
     cy.getBySel("new-transaction-create-another-transaction").should("be.visible");
+
+    if (!isMobile()) {
+      // make sure the new balance is displayed
+      cy.get("[data-test=sidenav-user-balance]").should(($el) => {
+        // here we only make sure the text has changed
+        // we could also convert the balance to actual number
+        // and confirm the new balance is the start balance - amount
+        expect($el.text()).to.not.equal(startBalance);
+      });
+    }
     cy.percySnapshot("Transaction Payment Submitted Notification");
 
     cy.switchUser(ctx.contact!.username);
@@ -179,7 +202,7 @@ describe("New Transaction", function () {
     cy.createTransaction(transactionPayload);
     cy.wait("@createTransaction");
     cy.getBySel("new-transaction-create-another-transaction").should("be.visible");
-    cy.percySnapshot("Transaction Payment Submitted Notification");
+    cy.percySnapshot("receiver - Transaction Payment Submitted Notification");
 
     cy.switchUser(ctx.contact!.username);
 
