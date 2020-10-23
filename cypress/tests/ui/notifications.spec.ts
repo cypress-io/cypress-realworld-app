@@ -74,7 +74,6 @@ describe("Notifications", function () {
       cy.log("🚩 Marks notification as read");
       cy.getBySelLike("notification-mark-read").first().click({ force: true });
       cy.wait("@updateNotification");
-      cy.percySnapshot("Marks notification as read");
 
       cy.get("@preDismissedNotificationCount").then((count) => {
         cy.getBySelLike("notification-list-item").should("have.length.lessThan", Number(count));

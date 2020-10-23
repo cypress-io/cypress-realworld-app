@@ -91,7 +91,13 @@ const TransactionDetail: React.FC<TransactionProps> = ({
 
   return (
     <Paper className={classes.paper}>
-      <Typography component="h2" variant="h6" color="primary" gutterBottom>
+      <Typography
+        component="h2"
+        variant="h6"
+        color="primary"
+        gutterBottom
+        data-test="transaction-detail-header"
+      >
         Transaction Detail
       </Typography>
       <Grid
