@@ -128,6 +128,16 @@ To generate a code coverage report:
 1. Run `yarn cypress:run --env coverage=true` and wait for the test run to complete.
 2. Once the test run is complete, you can view the report at `coverage/index.html`.
 
+### Okta
+
+A guide has been written with detail around adapting the RWA to use [Okta][okta] and to explain the programmatic command used for Cypress tests.
+
+Prerequisites include an [Okta][okta] account and [application configured for use with a SPA][oktacreateapp]. Environment variables from [Okta][okta] are to be placed in the [.env](./.env).
+
+Start the application with `yarn dev:okta` and run Cypress with `yarn cypress:open`.
+
+The **only passing spec on this branch** will be the [okta spec](./cypress/tests/ui-auth-providers/okta.spec.ts); all others will fail.
+
 ## License
 
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/cypress-io/cypress/blob/master/LICENSE)
@@ -141,6 +151,8 @@ This project is licensed under the terms of the [MIT license](/LICENSE).
 [typescript]: https://typescriptlang.org
 [cypressdashboard]: https://dashboard.cypress.io/projects/7s5okt/runs
 [material-ui]: https://material-ui.com
+[okta]: https://okta.com
+[oktacreateapp]: https://developer.okta.com/docs/guides/sign-into-spa/react/create-okta-application/
 
 ## Contributors ✨
 
