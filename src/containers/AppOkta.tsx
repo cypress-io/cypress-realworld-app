@@ -1,3 +1,4 @@
+/* istanbul ignore next */
 import React, { useEffect } from "react";
 import { useService, useMachine } from "@xstate/react";
 import { makeStyles } from "@material-ui/core/styles";
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+/* istanbul ignore next */
 const AppOkta: React.FC = () => {
   const { authState: oktaAuthState, authService: oktaAuthService } = useOktaAuth();
   const classes = useStyles();

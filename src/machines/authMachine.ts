@@ -128,7 +128,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
             throw new Error("Username or password is invalid");
           });
       },
-      getOktaUserProfile: (ctx, event: any) => {
+      getOktaUserProfile: /* istanbul ignore next */ (ctx, event: any) => {
         // Map Okta User fields to our User Model
         const user = {
           id: event.user.sub,
