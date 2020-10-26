@@ -59,6 +59,7 @@ if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {
 
 app.use(auth);
 
+/* istanbul ignore if */
 if (process.env.REACT_APP_OKTA) {
   app.use(verifyOktaToken);
 }
