@@ -1,4 +1,5 @@
 import _ from "lodash";
+import path from "path";
 import axios from "axios";
 import dotenv from "dotenv";
 import Promise from "bluebird";
@@ -6,8 +7,11 @@ import AWS from "aws-sdk";
 import Amplify, { Auth } from "aws-amplify";
 import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
+
+const awsConfig = require(path.join(__dirname, "../../aws-exports-es5.js"));
+
 // @ts-ignore
-import awsConfig from "../../aws-exports-es5.js";
+//import awsConfig from "../../aws-exports-es5.js";
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
