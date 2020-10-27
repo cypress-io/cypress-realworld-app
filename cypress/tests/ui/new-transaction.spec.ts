@@ -218,6 +218,11 @@ describe("New Transaction", function () {
 
     cy.getBySelLike("accept-request").click();
     cy.wait("@updateTransaction").its("status").should("equal", 204);
+    cy.getBySelLike("transaction-detail-header").should("be.visible");
+    cy.getBySelLike("transaction-amount").should("be.visible");
+    cy.getBySelLike("sender-avatar").should("be.visible");
+    cy.getBySelLike("receiver-avatar").should("be.visible");
+    cy.getBySelLike("transaction-description").should("be.visible");
     cy.percySnapshot("Accept Transaction Request");
 
     cy.switchUser(ctx.user!.username);

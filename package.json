@@ -68,7 +68,7 @@
     "express-validator": "6.6.1",
     "faker": "5.1.0",
     "formik": "2.2.1",
-    "fuse.js": "6.4.1",
+    "fuse.js": "6.4.2",
     "husky": "4.3.0",
     "json": "10.0.0",
     "jwks-rsa": "1.8.1",
