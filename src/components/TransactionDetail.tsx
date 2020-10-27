@@ -109,8 +109,16 @@ const TransactionDetail: React.FC<TransactionProps> = ({
       >
         <Grid item className={classes.headline}>
           <AvatarGroup className={classes.avatarGroup} max={2}>
-            <Avatar className={classes.avatarLarge} src={transaction.senderAvatar} />
-            <Avatar className={classes.avatarLarge} src={transaction.receiverAvatar} />
+            <Avatar
+              data-test="transaction-sender-avatar"
+              className={classes.avatarLarge}
+              src={transaction.senderAvatar}
+            />
+            <Avatar
+              data-test="transaction-receiver-avatar"
+              className={classes.avatarLarge}
+              src={transaction.receiverAvatar}
+            />
           </AvatarGroup>
           <Grid container direction="column" justify="flex-start" alignItems="flex-start">
             <Grid item></Grid>
@@ -118,7 +126,12 @@ const TransactionDetail: React.FC<TransactionProps> = ({
               <TransactionTitle transaction={transaction} />
             </Grid>
             <Grid item>
-              <Typography variant="body2" color="textSecondary" gutterBottom>
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                gutterBottom
+                data-test="transaction-description"
+              >
                 {transaction.description}
               </Typography>
             </Grid>
