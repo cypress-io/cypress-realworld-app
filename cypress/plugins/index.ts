@@ -10,9 +10,6 @@ import codeCoverageTask from "@cypress/code-coverage/task";
 
 const awsConfig = require(path.join(__dirname, "../../aws-exports-es5.js"));
 
-// @ts-ignore
-//import awsConfig from "../../aws-exports-es5.js";
-
 dotenv.config({ path: ".env.local" });
 dotenv.config();
 
