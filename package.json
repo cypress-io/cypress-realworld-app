@@ -116,7 +116,7 @@
   "scripts": {
     "dev": "ls -lah; cross-env NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",
     "dev:cognito": "cross-env REACT_APP_AWS_COGNITO=true NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",
-    "predev:cognito": "cross-env npm run mock:awsexports; npm run build:aws-exports-es5",
+    "predev:cognito": "npm run mock:awsexports && npm run build:aws-exports-es5",
     "mock:awsexports": "echo '// mock aws-exports.js\nconst awsmobile = {\naws_cognito_region:\"\",\naws_user_pools_id:\"\",\n};\nexport default awsmobile;' > src/aws-exports.js",
     "build:aws-exports-es5": "tsc --skipLibCheck --allowJs --lib 'es5' --module 'commonjs' --target 'es5' --moduleResolution 'node' --outDir . src/aws-exports.js; mv aws-exports.js aws-exports-es5.js",
     "start": "cross-env NODE_ENV=development concurrently yarn:start:react yarn:start:api",
