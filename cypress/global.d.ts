@@ -115,5 +115,7 @@ declare namespace Cypress {
      * Create Transaction via bypassing UI and using XState createTransactionService
      */
     createTransaction(payload): Chainable<any>;
+
+    createUser(user: User): Chainable<any>;
   }
 }

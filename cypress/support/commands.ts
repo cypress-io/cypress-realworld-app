@@ -4,6 +4,7 @@
 import { pick } from "lodash/fp";
 import { format as formatDate } from "date-fns";
 import { isMobile } from "./utils";
+import { User } from "../../src/models";
 
 Cypress.Commands.add("getBySel", (selector, ...args) => {
   return cy.get(`[data-test=${selector}]`, ...args);
@@ -297,4 +298,8 @@ Cypress.Commands.add("database", (operation, entity, query, logTask = false) => 
     log.end();
     return data;
   });
+});
+
+Cypress.Commands.add("createUser", (user: User) => {
+  console.log("hi");
 });

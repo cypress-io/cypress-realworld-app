@@ -99,7 +99,6 @@ describe("Bank Accounts", function () {
     cy.get("#bankaccount-accountNumber-input-helper-text").should("not.be.visible");
     cy.getBySelLike("accountNumber-input").find("input").clear();
 
-
     // Max 12 gdigit
     cy.getBySelLike("accountNumber-input").type("123456789111").find("input").blur();
     cy.get("#bankaccount-accountNumber-input-helper-text").should("not.be.visible");
