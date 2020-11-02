@@ -2124,10 +2124,10 @@
     js-yaml "3.14.0"
     nyc "15.1.0"
 
-"@cypress/instrument-cra@1.3.2":
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@cypress/instrument-cra/-/instrument-cra-1.3.2.tgz#3595f6cc478b15d1b56690dc6ee1dcbeca058a83"
-  integrity sha512-KAX/rr3q+GdYbrZaiefGtu5L1CMJ+SMJK6MCh+vjyZKP5I6Ndxs9S3Yazd8Sd8yxAnVoWQijjoW7vqtj23WYdw==
+"@cypress/instrument-cra@1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@cypress/instrument-cra/-/instrument-cra-1.4.0.tgz#c62427b9890e67544e86fd5b927cfdca3ad003d2"
+  integrity sha512-gXf540xL0jcUXkWyrA2Ug9rzs+jRkc9EPhnRi8XfbnRjdF4lvnn108N6x0lgTApMTbbpCDbVuskHGXDmIuD3CQ==
   dependencies:
     babel-plugin-istanbul "6.0.0"
     debug "4.2.0"
