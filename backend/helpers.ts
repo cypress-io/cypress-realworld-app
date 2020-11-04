@@ -33,6 +33,7 @@ export const ensureAuthenticated = (req: Request, res: Response, next: NextFunct
     // @ts-ignore
     // Map sub to id on req.user
     if (req.user?.sub) {
+      /* istanbul ignore next */
       // @ts-ignore
       set(req.user, "id", req.user.sub);
     }

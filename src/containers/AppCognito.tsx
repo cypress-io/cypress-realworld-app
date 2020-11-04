@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AppCognito: React.FC = () => {
+const AppCognito: React.FC = /* istanbul ignore next */ () => {
   const classes = useStyles();
   const [authState] = useService(authService);
   const [, , notificationsService] = useMachine(notificationsMachine);

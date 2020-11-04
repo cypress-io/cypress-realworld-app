@@ -59,6 +59,7 @@ if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {
 
 app.use(auth);
 
+/* istanbul ignore next */
 if (process.env.REACT_APP_AWS_COGNITO) {
   app.use(checkJwt);
 }

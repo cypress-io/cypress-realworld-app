@@ -137,7 +137,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         localStorage.removeItem("authState");
         return await httpClient.post(`http://localhost:3001/logout`);
       },
-      getCognitoUserProfile: (ctx, event: any) => {
+      getCognitoUserProfile: /* istanbul ignore next */ (ctx, event: any) => {
         // Map Cognito User fields to our User Model
         const ourUser = {
           id: event.user.sub,
