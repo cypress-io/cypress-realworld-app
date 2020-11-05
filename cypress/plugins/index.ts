@@ -5,11 +5,15 @@ import Promise from "bluebird";
 import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
 
+dotenv.config({ path: ".env.local" });
 dotenv.config();
 
 export default (on, config) => {
   config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD;
   config.env.paginationPageSize = process.env.PAGINATION_PAGE_SIZE;
+  config.env.googleRefreshToken = process.env.GOOGLE_REFRESH_TOKEN;
+  config.env.googleClientId = process.env.REACT_APP_GOOGLE_CLIENTID;
+  config.env.googleClientSecret = process.env.REACT_APP_GOOGLE_CLIENT_SECRET;
 
   const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 

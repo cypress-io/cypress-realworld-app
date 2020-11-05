@@ -1,7 +1,38 @@
+import dotenv from "dotenv";
+import { set } from "lodash";
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
+import jwt from "express-jwt";
+import jwksRsa from "jwks-rsa";
+
+dotenv.config({ path: ".env.local" });
+dotenv.config();
+
+const googleJwtConfig = {
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: "https://www.googleapis.com/oauth2/v3/certs",
+  }),
+
+  // Validate the audience and the issuer.
+  audience: process.env.REACT_APP_GOOGLE_CLIENTID,
+  issuer: "accounts.google.com",
+  algorithms: ["RS256"],
+};
+
+export const checkJwt = jwt(googleJwtConfig).unless({ path: ["/testData/*"] });
+
 export const ensureAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   if (req.isAuthenticated()) {
+    // @ts-ignore
+    // Map sub to id on req.user
+    if (req.user?.sub) {
+      /* istanbul ignore next */
+      // @ts-ignore
+      set(req.user, "id", req.user.sub);
+    }
     return next();
   }
   /* istanbul ignore next */
