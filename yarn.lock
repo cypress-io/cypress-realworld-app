@@ -2882,10 +2882,10 @@
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
   integrity sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
 
-"@types/connect-flash@0.0.35":
-  version "0.0.35"
-  resolved "https://registry.yarnpkg.com/@types/connect-flash/-/connect-flash-0.0.35.tgz#c1bc38750422dac44b6a656b9dac72da17560fb7"
-  integrity sha512-pwEiJI1gYhH+s6x4+st/TBgf1CPuATADPJi1+2It4Gnckw1pVVdKycRNDyoHwkZGCb/J38vEdOrxnZ4FsOlvWg==
+"@types/connect-flash@0.0.36":
+  version "0.0.36"
+  resolved "https://registry.yarnpkg.com/@types/connect-flash/-/connect-flash-0.0.36.tgz#b07ad6f59d00661618c034d1fcdc56766f82fcc7"
+  integrity sha512-AclFrWyrjYXqJqaBVZhIj5CS/2INVqHgUADuihthX13vIpk8/GrNVEHcIFaeoyJyhfO83agEgPH+z5spSKovGw==
   dependencies:
     "@types/express" "*"
 
