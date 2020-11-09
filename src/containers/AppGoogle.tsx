@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+/* istanbul ignore next */
 const AppGoogle: React.FC = () => {
   const classes = useStyles();
   const [authState] = useService(authService);
