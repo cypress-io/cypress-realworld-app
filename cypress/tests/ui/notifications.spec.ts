@@ -13,11 +13,10 @@ describe("Notifications", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.server();
-    cy.route("GET", "/notifications").as("getNotifications");
-    cy.route("POST", "/transactions").as("createTransaction");
-    cy.route("PATCH", "/notifications/*").as("updateNotification");
-    cy.route("POST", "/comments/*").as("postComment");
+    cy.http("GET", "/notifications").as("getNotifications");
+    cy.http("POST", "/transactions").as("createTransaction");
+    cy.http("PATCH", "/notifications/*").as("updateNotification");
+    cy.http("POST", "/comments/*").as("postComment");
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.userA = users[0];
@@ -248,7 +247,7 @@ describe("Notifications", function () {
   });
 
   it("renders an empty notifications state", function () {
-    cy.route("GET", "/notifications", []).as("notifications");
+    cy.http("GET", "/notifications", []).as("notifications");
 
     cy.loginByXstate(ctx.userA.username);
 

@@ -14,15 +14,14 @@ describe("New Transaction", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.server();
-    cy.route("POST", "/transactions").as("createTransaction");
+    cy.http("POST", "/transactions").as("createTransaction");
 
-    cy.route("GET", "/users").as("allUsers");
-    cy.route("GET", "/notifications").as("notifications");
-    cy.route("GET", "/transactions/public").as("publicTransactions");
-    cy.route("GET", "/transactions").as("personalTransactions");
-    cy.route("GET", "/users/search*").as("usersSearch");
-    cy.route("PATCH", "/transactions/*").as("updateTransaction");
+    cy.http("GET", "/users").as("allUsers");
+    cy.http("GET", "/notifications").as("notifications");
+    cy.http("GET", "/transactions/public").as("publicTransactions");
+    cy.http("GET", "/transactions").as("personalTransactions");
+    cy.http("GET", "/users/search*").as("usersSearch");
+    cy.http("PATCH", "/transactions/*").as("updateTransaction");
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.allUsers = users;

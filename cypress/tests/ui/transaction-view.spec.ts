@@ -11,15 +11,14 @@ describe("Transaction View", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.server();
-    cy.route("GET", "/transactions").as("personalTransactions");
-    cy.route("GET", "/transactions/public").as("publicTransactions");
-    cy.route("GET", "/transactions/*").as("getTransaction");
-    cy.route("PATCH", "/transactions/*").as("updateTransaction");
+    cy.http("GET", "/transactions").as("personalTransactions");
+    cy.http("GET", "/transactions/public").as("publicTransactions");
+    cy.http("GET", "/transactions/*").as("getTransaction");
+    cy.http("PATCH", "/transactions/*").as("updateTransaction");
 
-    cy.route("GET", "/checkAuth").as("userProfile");
-    cy.route("GET", "/notifications").as("getNotifications");
-    cy.route("GET", "/bankAccounts").as("getBankAccounts");
+    cy.http("GET", "/checkAuth").as("userProfile");
+    cy.http("GET", "/notifications").as("getNotifications");
+    cy.http("GET", "/bankAccounts").as("getBankAccounts");
 
     cy.database("find", "users").then((user: User) => {
       ctx.authenticatedUser = user;
