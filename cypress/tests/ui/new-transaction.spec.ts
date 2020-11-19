@@ -21,7 +21,7 @@ describe("New Transaction", function () {
     cy.http("GET", "/transactions/public").as("publicTransactions");
     cy.http("GET", "/transactions").as("personalTransactions");
     cy.http("GET", "/users/search*").as("usersSearch");
-    cy.http("PATCH", "/transactions/*").as("updateTransaction");
+    cy.http("PATCH", "**/transactions/*").as("updateTransaction");
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.allUsers = users;
@@ -39,7 +39,7 @@ describe("New Transaction", function () {
     };
 
     cy.getBySelLike("new-transaction").click();
-    cy.wait("@allUsers");
+    cy.wait("@allUsers"); //.its("response.statusCode").should("be.oneOf", [200, 304]);
 
     cy.getBySel("user-list-search-input").type(ctx.contact!.firstName, { force: true });
     cy.wait("@usersSearch");
@@ -92,7 +92,7 @@ describe("New Transaction", function () {
     };
 
     cy.getBySelLike("new-transaction").click();
-    cy.wait("@allUsers");
+    cy.wait("@allUsers").its("response.statusCode").should("be.oneOf", [200, 304]);
 
     cy.getBySelLike("user-list-item").contains(ctx.contact!.firstName).click({ force: true });
     cy.percySnapshot("User Search First Name Input");

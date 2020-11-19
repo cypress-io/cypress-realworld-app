@@ -46,7 +46,7 @@ describe("Transaction Feed", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.http("GET", "/notifications").as("notifications");
+    cy.http({ method: "GET", url: "http://localhost:3001/notifications" }).as("notifications");
     cy.http("/transactions*").as(feedViews.personal.routeAlias);
     cy.http("/transactions/public*").as(feedViews.public.routeAlias);
     cy.http("/transactions/contacts*").as(feedViews.contacts.routeAlias);
@@ -85,15 +85,25 @@ describe("Transaction Feed", function () {
   });
 
   describe("renders and paginates all transaction feeds", function () {
-    it("renders transactions item variations in feed", function () {
-      cy.http("/transactions/public*", "fixture:public-transactions").as(
-        "mockedPublicTransactions"
-      );
+    it.only("renders transactions item variations in feed", function () {
+      cy.http("GET", "/", (req) => {
+        console.log("page loaded");
+      });
+      cy.http("**/transactions/public*", {
+        headers: {
+          "access-control-allow-origin": window.location.origin,
+          "Access-Control-Allow-Credentials": "true",
+        },
+        fixture: "public-transactions.json",
+      }).as("mockedPublicTransactions");
+
       cy.visit("/");
 
+      //cy.wait("@notifications").its("response.statusCode").should("be.oneOf", [200, 304]);
       cy.wait("@notifications");
       cy.wait("@mockedPublicTransactions")
         .its("response.body.results")
+        .then(JSON.parse)
         .then((transactions) => {
           const getTransactionFromEl = ($el: JQuery<Element>): TransactionResponseItem => {
             const transactionId = $el.data("test").split("transaction-item-")[1];

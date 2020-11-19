@@ -124,17 +124,14 @@ describe("Bank Accounts", function () {
   // TODO: [enhancement] the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
   it("renders an empty bank account list state with onboarding modal", function () {
     // Before: cy.route("GET", "/bankAccounts", []).as("getBankAccounts");
-    cy.http(
-      { method: "GET", url: "/bankAccounts" },
-      {
-        // TODO: automatically handle applying these headers
-        headers: {
-          "access-control-allow-origin": window.location.origin,
-          "Access-Control-Allow-Credentials": "true",
-        },
-        body: { results: [] },
-      }
-    ).as("getBankAccounts");
+    cy.http("GET", "/bankAccounts", {
+      // TODO: automatically handle applying these headers
+      headers: {
+        "access-control-allow-origin": window.location.origin,
+        "Access-Control-Allow-Credentials": "true",
+      },
+      body: { results: [] },
+    }).as("getBankAccounts");
 
     cy.visit("/bankaccounts");
     cy.wait("@getBankAccounts");
