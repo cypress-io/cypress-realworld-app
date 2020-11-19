@@ -12,7 +12,7 @@ describe("Bank Accounts", function () {
     cy.task("db:seed");
 
     cy.http("POST", "/bankAccounts").as("createBankAccount");
-    cy.http("DELETE", "/bankAccounts/*").as("deleteBankAccount");
+    cy.http("DELETE", "**/bankAccounts/*").as("deleteBankAccount");
     cy.http("GET", "/notifications").as("getNotifications");
 
     cy.database("find", "users").then((user: User) => {
