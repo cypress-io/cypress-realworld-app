@@ -99,7 +99,7 @@ describe("Transaction Feed", function () {
 
       cy.visit("/");
 
-      //cy.wait("@notifications").its("response.statusCode").should("be.oneOf", [200, 304]);
+      cy.wait("@notifications");
       cy.wait("@notifications");
       cy.wait("@mockedPublicTransactions")
         .its("response.body.results")
