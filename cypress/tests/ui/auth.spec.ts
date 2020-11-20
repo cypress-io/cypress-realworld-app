@@ -108,7 +108,7 @@ describe("User Sign-up and Login", function () {
     cy.percySnapshot("Sign In Submit Disabled");
   });
 
-  it.only("should display signup errors", function () {
+  it("should display signup errors", function () {
     cy.http("GET", "/signup", (req) => {
       console.log("signup request");
     });
