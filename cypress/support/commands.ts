@@ -170,7 +170,7 @@ Cypress.Commands.add("switchUser", (username) => {
     } else {
       cy.getBySel("sidenav-username").contains(username);
     }
-    cy.getBySel("list-skeleton").should("not.be.visible");
+    cy.getBySel("list-skeleton").should("not.exist");
     cy.getBySelLike("transaction-item").should("have.length.greaterThan", 1);
     cy.percySnapshot(`Switch to User ${username}`);
   });
