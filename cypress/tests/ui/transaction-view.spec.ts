@@ -40,7 +40,7 @@ describe("Transaction View", function () {
     cy.wait("@personalTransactions");
   });
 
-  it.only("transactions navigation tabs are hidden on a transaction view page", function () {
+  it("transactions navigation tabs are hidden on a transaction view page", function () {
     cy.getBySelLike("transaction-item").first().click();
     cy.location("pathname").should("include", "/transaction");
     cy.getBySel("nav-transaction-tabs").should("not.exist");
