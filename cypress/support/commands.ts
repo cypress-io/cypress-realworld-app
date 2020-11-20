@@ -274,7 +274,7 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
     log.end();
   });
 
-  cy.get(".Cal__Header__root").should("not.be.visible");
+  cy.get(".Cal__Header__root").should("not.exist");
 });
 
 Cypress.Commands.add("database", (operation, entity, query, logTask = false) => {
