@@ -5745,9 +5745,10 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=
 
-"cypress@https://cdn.cypress.io/beta/npm/6.0.0/circle-develop-9f3528d1d97530fb5775e51fac7a4a1ff931197b/cypress.tgz":
-  version "6.0.0"
-  resolved "https://cdn.cypress.io/beta/npm/6.0.0/circle-develop-9f3528d1d97530fb5775e51fac7a4a1ff931197b/cypress.tgz#a32f4fcd114cdb94257f06ef5b97e64f78c70ac3"
+cypress@5.6.0:
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-5.6.0.tgz#6781755c3ddfd644ce3179fcd7389176c0c82280"
+  integrity sha512-cs5vG3E2JLldAc16+5yQxaVRLLqMVya5RlrfPWkC72S5xrlHFdw7ovxPb61s4wYweROKTyH01WQc2PFzwwVvyQ==
   dependencies:
     "@cypress/listr-verbose-renderer" "^0.4.1"
     "@cypress/request" "^2.88.5"
