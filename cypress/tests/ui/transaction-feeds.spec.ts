@@ -63,17 +63,17 @@ describe("Transaction Feed", function () {
     it("toggles the navigation drawer", function () {
       cy.wait("@notifications");
       if (isMobile()) {
-        cy.getBySel("sidenav-home").should("not.be.visible");
+        cy.getBySel("sidenav-home").should("not.exist");
         cy.percySnapshot("Mobile Initial Side Navigation Not Visible");
         cy.getBySel("sidenav-toggle").click();
         cy.getBySel("sidenav-home").should("be.visible");
         cy.percySnapshot("Mobile Toggle Side Navigation Visible");
         cy.get(".MuiBackdrop-root").click({ force: true });
-        cy.getBySel("sidenav-home").should("not.be.visible");
+        cy.getBySel("sidenav-home").should("not.exist");
         cy.percySnapshot("Mobile Home Link Side Navigation Not Visible");
 
         cy.getBySel("sidenav-toggle").click();
-        cy.getBySel("sidenav-home").click().should("not.be.visible");
+        cy.getBySel("sidenav-home").click().should("not.exist");
         cy.percySnapshot("Mobile Toggle Side Navigation Not Visible");
       } else {
         cy.getBySel("sidenav-home").should("be.visible");
