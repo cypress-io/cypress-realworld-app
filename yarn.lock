@@ -2111,13 +2111,13 @@
     through2 "^2.0.0"
     watchify "3.11.1"
 
-"@cypress/code-coverage@3.8.3":
-  version "3.8.3"
-  resolved "https://registry.yarnpkg.com/@cypress/code-coverage/-/code-coverage-3.8.3.tgz#4bda76bbf07a01036ad58a60b6f9f86d6cb8c156"
-  integrity sha512-4R9bDS4CivckXaJudL5lKxXtB99LkO2RWE4a5M/P7VXGrXynQQDYbP07O9Jyjw/VjELWBV+xC3AOfYaU+wCHNQ==
+"@cypress/code-coverage@3.8.4":
+  version "3.8.4"
+  resolved "https://registry.yarnpkg.com/@cypress/code-coverage/-/code-coverage-3.8.4.tgz#e523782a5f51166a9f882c9b3ac8b36e4a0415bb"
+  integrity sha512-MI7pEgxUbynJFDbnGpE98G3+eZI5gcJya43x8DtK13Xoz0pFt7HNgFtlDcYtOuUrpRHCsne+kr0Yg96IJHZmgg==
   dependencies:
     "@cypress/browserify-preprocessor" "3.0.1"
-    debug "4.2.0"
+    debug "4.3.1"
     execa "4.1.0"
     globby "11.0.1"
     istanbul-lib-coverage "3.0.0"
@@ -5856,6 +5856,13 @@ debug@4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.2.0.tgz#7f150f93920e94c58f5574c2fd01a3110effe7f1"
   integrity sha512-IX2ncY78vDTjZMFUdmsvIRFY2Cf4FnD0wRs+nQwJU8Lu99/tPFdb0VybiiMTPe3I6rQmwsqQqRBvxU+bZ/I8sg==
+  dependencies:
+    ms "2.1.2"
+
+debug@4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.1.tgz#f0d229c505e0c6d8c49ac553d1b13dc183f6b2ee"
+  integrity sha512-doEwdvm4PCeK4K3RQN2ZC2BYUBaxwLARCqZmMjtF8a51J2Rb0xpVloFRnCODwqjpwnAoao4pelN8l3RJdv3gRQ==
   dependencies:
     ms "2.1.2"
 
