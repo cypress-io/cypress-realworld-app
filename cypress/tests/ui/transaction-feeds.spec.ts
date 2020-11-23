@@ -104,7 +104,6 @@ describe("Transaction Feed", function () {
       //cy.wait("@notifications");
       cy.wait("@mockedPublicTransactions")
         .its("response.body.results")
-        .then(JSON.parse)
         .then((transactions) => {
           const getTransactionFromEl = ($el: JQuery<Element>): TransactionResponseItem => {
             const transactionId = $el.data("test").split("transaction-item-")[1];

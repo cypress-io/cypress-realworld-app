@@ -49,7 +49,7 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
           username,
           password,
           rememberUser,
-          userId: JSON.parse(loginUser.response.body).user.id,
+          userId: loginUser.response.body.user.id,
         };
       },
     });
@@ -125,7 +125,7 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
           username,
           password,
           // @ts-ignore
-          userId: JSON.parse(loginUser.response.body).user.id,
+          userId: loginUser.response.body.user.id,
         };
       },
     });
