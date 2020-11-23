@@ -5,8 +5,8 @@ describe("User Sign-up and Login", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.http("POST", "/users").as("signup");
-    cy.http("POST", "/bankAccounts").as("createBankAccount");
+    cy.intercept("POST", "/users").as("signup");
+    cy.intercept("POST", "/bankAccounts").as("createBankAccount");
   });
 
   it("should redirect unauthenticated user to signin page", function () {
@@ -109,7 +109,7 @@ describe("User Sign-up and Login", function () {
   });
 
   it("should display signup errors", function () {
-    cy.http("GET", "/signup", (req) => {
+    cy.intercept("GET", "/signup", (req) => {
       console.log("signup request");
     });
 

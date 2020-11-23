@@ -46,10 +46,12 @@ describe("Transaction Feed", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.http({ method: "GET", url: "http://localhost:3001/notifications" }).as("notifications");
-    cy.http("GET", "**/transactions*").as(feedViews.personal.routeAlias);
-    cy.http("GET", "http://localhost:3001/transactions/public*").as(feedViews.public.routeAlias); //publicTransactions
-    cy.http("GET", "**/transactions/contacts*").as(feedViews.contacts.routeAlias);
+    cy.intercept({ method: "GET", url: "http://localhost:3001/notifications" }).as("notifications");
+    cy.intercept("GET", "**/transactions*").as(feedViews.personal.routeAlias);
+    cy.intercept("GET", "http://localhost:3001/transactions/public*").as(
+      feedViews.public.routeAlias
+    ); //publicTransactions
+    cy.intercept("GET", "**/transactions/contacts*").as(feedViews.contacts.routeAlias);
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.user = users[0];
@@ -88,7 +90,7 @@ describe("Transaction Feed", function () {
     it("renders transactions item variations in feed", function () {
       // Cannot properly wait for request against endpoint with multiple aliases
       // Bug: Stub response for Public Transactions
-      cy.http("GET", "http://localhost:3001/transactions/public*", {
+      cy.intercept("GET", "http://localhost:3001/transactions/public*", {
         headers: {
           "access-control-allow-origin": window.location.origin,
           "Access-Control-Allow-Credentials": "true",

@@ -11,9 +11,9 @@ describe("Bank Accounts", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.http("POST", "/bankAccounts").as("createBankAccount");
-    cy.http("DELETE", "**/bankAccounts/*").as("deleteBankAccount");
-    cy.http("GET", "/notifications").as("getNotifications");
+    cy.intercept("POST", "/bankAccounts").as("createBankAccount");
+    cy.intercept("DELETE", "**/bankAccounts/*").as("deleteBankAccount");
+    cy.intercept("GET", "/notifications").as("getNotifications");
 
     cy.database("find", "users").then((user: User) => {
       ctx.user = user;
@@ -124,7 +124,7 @@ describe("Bank Accounts", function () {
   // TODO: [enhancement] the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
   it("renders an empty bank account list state with onboarding modal", function () {
     // Before: cy.route("GET", "/bankAccounts", []).as("getBankAccounts");
-    cy.http("GET", "/bankAccounts", {
+    cy.intercept("GET", "/bankAccounts", {
       // TODO: automatically handle applying these headers
       headers: {
         "access-control-allow-origin": window.location.origin,
