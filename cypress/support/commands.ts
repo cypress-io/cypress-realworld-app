@@ -170,7 +170,7 @@ Cypress.Commands.add("switchUser", (username) => {
     } else {
       cy.getBySel("sidenav-username").contains(username);
     }
-    cy.getBySel("list-skeleton").should("not.be.visible");
+    cy.getBySel("list-skeleton").should("not.exist");
     cy.getBySelLike("transaction-item").should("have.length.greaterThan", 1);
     cy.percySnapshot(`Switch to User ${username}`);
   });
@@ -274,7 +274,7 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
     log.end();
   });
 
-  cy.get(".Cal__Header__root").should("not.be.visible");
+  cy.get(".Cal__Header__root").should("not.exist");
 });
 
 Cypress.Commands.add("database", (operation, entity, query, logTask = false) => {
