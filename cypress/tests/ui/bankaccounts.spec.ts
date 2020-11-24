@@ -79,7 +79,7 @@ describe("Bank Accounts", function () {
     cy.getBySelLike("routingNumber-input").find("input").clear();
 
     cy.getBySelLike("routingNumber-input").type("123456789").find("input").blur();
-    cy.get("#bankaccount-routingNumber-input-helper-text").should("not.be.visible");
+    cy.get("#bankaccount-routingNumber-input-helper-text").should("not.exist");
 
     /** Account number input validations **/
     // Required field
@@ -96,13 +96,13 @@ describe("Bank Accounts", function () {
     cy.getBySelLike("accountNumber-input").find("input").clear();
 
     cy.getBySelLike("accountNumber-input").type("123456789").find("input").blur();
-    cy.get("#bankaccount-accountNumber-input-helper-text").should("not.be.visible");
+    cy.get("#bankaccount-accountNumber-input-helper-text").should("not.exist");
     cy.getBySelLike("accountNumber-input").find("input").clear();
 
 
     // Max 12 gdigit
     cy.getBySelLike("accountNumber-input").type("123456789111").find("input").blur();
-    cy.get("#bankaccount-accountNumber-input-helper-text").should("not.be.visible");
+    cy.get("#bankaccount-accountNumber-input-helper-text").should("not.exist");
     cy.getBySelLike("accountNumber-input").find("input").clear();
 
     cy.getBySelLike("accountNumber-input").type("1234567891111").find("input").blur();
@@ -130,7 +130,7 @@ describe("Bank Accounts", function () {
     cy.visit("/bankaccounts");
     cy.wait("@getBankAccounts");
 
-    cy.getBySel("bankaccount-list").should("not.be.visible");
+    cy.getBySel("bankaccount-list").should("not.exist");
     cy.getBySel("empty-list-header").should("contain", "No Bank Accounts");
     cy.getBySel("user-onboarding-dialog").should("be.visible");
     cy.percySnapshot("User Onboarding Dialog is Visible");
