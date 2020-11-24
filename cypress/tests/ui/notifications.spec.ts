@@ -256,7 +256,7 @@ describe("Notifications", function () {
     }
     cy.getBySel("sidenav-notifications").click();
     cy.location("pathname").should("equal", "/notifications");
-    cy.getBySel("notification-list").should("not.be.visible");
+    cy.getBySel("notification-list").should("not.exist");
     cy.getBySel("empty-list-header").should("contain", "No Notifications");
     cy.percySnapshot("No Notifications");
   });

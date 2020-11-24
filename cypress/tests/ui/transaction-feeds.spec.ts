@@ -64,17 +64,17 @@ describe("Transaction Feed", function () {
     it("toggles the navigation drawer", function () {
       cy.wait("@notifications");
       if (isMobile()) {
-        cy.getBySel("sidenav-home").should("not.be.visible");
+        cy.getBySel("sidenav-home").should("not.exist");
         cy.percySnapshot("Mobile Initial Side Navigation Not Visible");
         cy.getBySel("sidenav-toggle").click();
         cy.getBySel("sidenav-home").should("be.visible");
         cy.percySnapshot("Mobile Toggle Side Navigation Visible");
         cy.get(".MuiBackdrop-root").click({ force: true });
-        cy.getBySel("sidenav-home").should("not.be.visible");
+        cy.getBySel("sidenav-home").should("not.exist");
         cy.percySnapshot("Mobile Home Link Side Navigation Not Visible");
 
         cy.getBySel("sidenav-toggle").click();
-        cy.getBySel("sidenav-home").click().should("not.be.visible");
+        cy.getBySel("sidenav-home").click().should("not.exist");
         cy.percySnapshot("Mobile Toggle Side Navigation Not Visible");
       } else {
         cy.getBySel("sidenav-home").should("be.visible");
@@ -182,7 +182,7 @@ describe("Transaction Feed", function () {
           .should("have.class", "Mui-selected")
           .contains(feed.tabLabel, { matchCase: false })
           .should("have.css", { "text-transform": "uppercase" });
-        cy.getBySel("list-skeleton").should("not.be.visible");
+        cy.getBySel("list-skeleton").should("not.exist");
         cy.percySnapshot(`Paginate ${feedName}`);
 
         cy.wait(`@${feed.routeAlias}`)
@@ -225,7 +225,7 @@ describe("Transaction Feed", function () {
         cy.get(".Cal__Header__root").should("be.visible");
         cy.percySnapshot("Mobile Open Date Range Picker");
         cy.getBySel("date-range-filter-drawer-close").click();
-        cy.get(".Cal__Header__root").should("not.be.visible");
+        cy.get(".Cal__Header__root").should("not.exist");
         cy.percySnapshot("Mobile Close Date Range Picker");
       });
     }
@@ -344,7 +344,7 @@ describe("Transaction Feed", function () {
 
         if (isMobile()) {
           cy.getBySelLike("amount-range-filter-drawer-close").click();
-          cy.getBySel("amount-range-filter-drawer").should("not.be.visible");
+          cy.getBySel("amount-range-filter-drawer").should("not.exist");
         } else {
           cy.getBySel("transaction-list-filter-amount-clear-button").click();
           cy.getBySel("main").scrollTo("top");
