@@ -49,7 +49,7 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
           username,
           password,
           rememberUser,
-          userId: loginUser.response.body.user.id,
+          userId: loginUser.response.statusCode !== 401 && loginUser.response.body.user.id,
         };
       },
     });

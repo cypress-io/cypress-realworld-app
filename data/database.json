@@ -11,7 +11,7 @@
       "phoneNumber": "625-316-9882",
       "avatar": "https://avatars.dicebear.com/api/human/t45AiwidW.svg",
       "defaultPrivacyLevel": "public",
-      "balance": 168137,
+      "balance": 165137,
       "createdAt": "2019-08-27T23:47:05.637Z",
       "modifiedAt": "2020-05-21T11:02:22.857Z"
     },
@@ -26,7 +26,7 @@
       "phoneNumber": "537-041-4355",
       "avatar": "https://avatars.dicebear.com/api/human/qywYp6hS0U.svg",
       "defaultPrivacyLevel": "private",
-      "balance": 101805,
+      "balance": 104805,
       "createdAt": "2019-09-09T13:48:45.489Z",
       "modifiedAt": "2020-05-21T02:34:01.483Z"
     },
@@ -9855,6 +9855,18 @@
       "requestResolvedAt": "",
       "createdAt": "2019-06-27T22:24:04.794Z",
       "modifiedAt": "2020-05-21T04:58:44.494Z"
+    },
+    {
+      "id": "7mgFlaxz7",
+      "uuid": "5bd628e5-f1e1-47a9-89a8-2b7f3b9d9b8f",
+      "amount": 3000,
+      "description": "🍕Pizza",
+      "receiverId": "qywYp6hS0U",
+      "senderId": "t45AiwidW",
+      "privacyLevel": "public",
+      "status": "complete",
+      "createdAt": "2020-11-25T18:23:49.037Z",
+      "modifiedAt": "2020-11-25T18:23:49.037Z"
     }
   ],
   "likes": [
@@ -10431,6 +10443,16 @@
       "isRead": false,
       "createdAt": "2019-10-19T20:50:49.292Z",
       "modifiedAt": "2020-05-21T21:00:50.192Z"
+    },
+    {
+      "id": "tUqHhw7BVQ",
+      "uuid": "8106b797-fd7c-47ae-9e82-4825f7d8de4d",
+      "userId": "qywYp6hS0U",
+      "transactionId": "7mgFlaxz7",
+      "status": "received",
+      "isRead": false,
+      "createdAt": "2020-11-25T18:23:49.047Z",
+      "modifiedAt": "2020-11-25T18:23:49.047Z"
     }
   ],
   "banktransfers": [
