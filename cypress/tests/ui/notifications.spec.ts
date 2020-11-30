@@ -55,7 +55,7 @@ describe("Notifications", function () {
       cy.percySnapshot("Like Count Incremented");
 
       cy.switchUser(ctx.userB.username);
-      cy.percySnapshot(`Notifications User Interactions - Switch to User ${ctx.userB.username}`);
+      cy.percySnapshot(`Notifications - User Interactions - Switch to User ${ctx.userB.username}`);
 
       cy.wait("@getNotifications")
         .its("response.body.results.length")
