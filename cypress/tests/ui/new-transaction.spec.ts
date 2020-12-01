@@ -16,11 +16,9 @@ describe("New Transaction", function () {
 
     cy.intercept("POST", "/transactions").as("createTransaction");
 
-    cy.intercept("GET", "/users").as("allUsers");
     cy.intercept("GET", "/notifications").as("notifications");
     cy.intercept("GET", "/transactions/public").as("publicTransactions");
     cy.intercept("GET", "/transactions").as("personalTransactions");
-    cy.intercept("GET", "**/users/search*").as("usersSearch");
     cy.intercept("PATCH", "**/transactions/*").as("updateTransaction");
 
     cy.database("filter", "users").then((users: User[]) => {
@@ -32,7 +30,13 @@ describe("New Transaction", function () {
     });
   });
 
-  it("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
+  it.only("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
+    cy.intercept("GET", "**/users").as("allUsers");
+    cy.intercept({
+      method: "GET",
+      path: "http://localhost:3001/users/search?q=Arely",
+    }).as("usersSearch");
+
     const payment = {
       amount: "35",
       description: "Sushi dinner 🍣",
