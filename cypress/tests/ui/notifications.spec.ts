@@ -55,7 +55,7 @@ describe("Notifications", function () {
       cy.percySnapshot("Like Count Incremented");
 
       cy.switchUser(ctx.userB.username);
-      cy.percySnapshot("Switch to User B");
+      cy.percySnapshot(`Notifications - User Interactions - Switch to User ${ctx.userB.username}`);
 
       cy.wait("@getNotifications")
         .its("response.body.results.length")
@@ -99,7 +99,7 @@ describe("Notifications", function () {
       cy.percySnapshot("Like Count Incremented");
 
       cy.switchUser(ctx.userA.username);
-      cy.percySnapshot("Switch to User A");
+      cy.percySnapshot(`Notifications - Like Transaction - Switch to User ${ctx.userA.username}`);
 
       cy.getBySelLike("notifications-link").click();
 
@@ -115,7 +115,7 @@ describe("Notifications", function () {
       cy.percySnapshot("User A Notified of User B Like");
 
       cy.switchUser(ctx.userB.username);
-      cy.percySnapshot("Switch to User B");
+      cy.percySnapshot(`Notifications - Like Transaction - Switch to User ${ctx.userB.username}`);
 
       cy.getBySelLike("notifications-link").click();
 
@@ -144,7 +144,9 @@ describe("Notifications", function () {
       cy.wait("@postComment");
 
       cy.switchUser(ctx.userB.username);
-      cy.percySnapshot("Switch to User B");
+      cy.percySnapshot(
+        `Notifications - Comment Transaction - Switch to User ${ctx.userB.username}`
+      );
 
       cy.getBySelLike("notifications-link").click();
 
@@ -174,6 +176,9 @@ describe("Notifications", function () {
 
       cy.switchUser(ctx.userA.username);
       cy.percySnapshot("Switch to User A");
+      cy.percySnapshot(
+        `Notifications - Comment Transaction Two Users - Switch to User ${ctx.userA.username}`
+      );
 
       cy.getBySelLike("notifications-link").click();
 
@@ -187,7 +192,9 @@ describe("Notifications", function () {
       cy.percySnapshot("User A Notified of User C Comment");
 
       cy.switchUser(ctx.userB.username);
-      cy.percySnapshot("Switch to User B");
+      cy.percySnapshot(
+        `Notifications - Comment Transaction Two Users - Switch to User ${ctx.userB.username}`
+      );
 
       cy.getBySelLike("notifications-link").click();
       cy.getBySelLike("notification-list-item")
@@ -212,7 +219,7 @@ describe("Notifications", function () {
       cy.wait("@createTransaction");
 
       cy.switchUser(ctx.userB.username);
-      cy.percySnapshot("Switch to User B");
+      cy.percySnapshot(`Notifications - Payment - Switch to User ${ctx.userB.username}`);
 
       cy.getBySelLike("notifications-link").click();
       cy.percySnapshot();
@@ -237,7 +244,7 @@ describe("Notifications", function () {
       cy.wait("@createTransaction");
 
       cy.switchUser(ctx.userC.username);
-      cy.percySnapshot("Switch to User C");
+      cy.percySnapshot(`Notifications - Payment Request - Switch to User ${ctx.userC.username}`);
 
       cy.getBySelLike("notifications-link").click();
       cy.getBySelLike("notification-list-item")
