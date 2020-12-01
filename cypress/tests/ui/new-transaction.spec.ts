@@ -14,12 +14,19 @@ describe("New Transaction", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
+    cy.intercept("GET", "/users").as("allUsers");
+    cy.intercept({
+      method: "GET",
+      pathname: "/users/search",
+      query: { q: /.*/ },
+    }).as("usersSearch");
+
     cy.intercept("POST", "/transactions").as("createTransaction");
 
     cy.intercept("GET", "/notifications").as("notifications");
     cy.intercept("GET", "/transactions/public").as("publicTransactions");
     cy.intercept("GET", "/transactions").as("personalTransactions");
-    cy.intercept("PATCH", "**/transactions/*").as("updateTransaction");
+    cy.intercept("PATCH", /\/transactions.*/).as("updateTransaction");
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.allUsers = users;
@@ -30,13 +37,7 @@ describe("New Transaction", function () {
     });
   });
 
-  it.only("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
-    cy.intercept("GET", "**/users").as("allUsers");
-    cy.intercept({
-      method: "GET",
-      path: "http://localhost:3001/users/search?q=Arely",
-    }).as("usersSearch");
-
+  it("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
     const payment = {
       amount: "35",
       description: "Sushi dinner 🍣",
@@ -220,6 +221,7 @@ describe("New Transaction", function () {
     cy.percySnapshot("Navigate to Transaction Item");
 
     cy.getBySelLike("accept-request").click();
+    // Doesn't work for cy.intercept due to https://github.com/cypress-io/cypress/pull/9097
     cy.wait("@updateTransaction").its("status").should("equal", 204);
     cy.getBySelLike("transaction-detail-header").should("be.visible");
     cy.getBySelLike("transaction-amount").should("be.visible");
