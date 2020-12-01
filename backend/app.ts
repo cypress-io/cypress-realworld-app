@@ -6,6 +6,7 @@ import session from "express-session";
 import bodyParser from "body-parser";
 import cors from "cors";
 import paginate from "express-paginate";
+import nocache from "nocache";
 
 import auth from "./auth";
 import userRoutes from "./user-routes";
@@ -50,6 +51,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(paginate.middleware(+process.env.PAGINATION_PAGE_SIZE!));
+
+/* istanbul ignore next */
+if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {
+  // Temporarily disable cached responses for cy.intercept()
+  // https://github.com/cypress-io/cypress/pull/9097
+  app.use(nocache());
+}
 
 app.use(auth);
 app.use("/users", userRoutes);
