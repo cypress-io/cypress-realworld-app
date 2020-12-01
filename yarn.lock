@@ -3168,14 +3168,7 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
-"@types/react@16.14.1":
-  version "16.14.1"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.1.tgz#da2ecb638385614a5573e16e4aa7daf936dbead5"
-  integrity sha512-32mxrbX62m5b+lMTSzucFKNIr8Eq4T6T3rDVxYzKqyRwyfnPcwZppWW0YXUlPNPUE+r6phBtHXYRgr8ad/Zl9A==
-  dependencies:
-    "@types/prop-types" "*"
-
-"@types/react@^16":
+"@types/react@16.14.1", "@types/react@^16":
   version "16.14.1"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.1.tgz#da2ecb638385614a5573e16e4aa7daf936dbead5"
   integrity sha512-32mxrbX62m5b+lMTSzucFKNIr8Eq4T6T3rDVxYzKqyRwyfnPcwZppWW0YXUlPNPUE+r6phBtHXYRgr8ad/Zl9A==
@@ -5751,10 +5744,10 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=
 
-cypress@6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-6.0.0.tgz#57050773c61e8fe1e5c9871cc034c616fcacded9"
-  integrity sha512-A/w9S15xGxX5UVeAQZacKBqaA0Uqlae9e5WMrehehAdFiLOZj08IgSVZOV8YqA9OH9Z0iBOnmsEkK3NNj43VrA==
+cypress@6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-6.0.1.tgz#86857ca2f527c3723575737deab42fd8f2a209df"
+  integrity sha512-3xtQZ0YM65soLgKQUgn2wg2IbWsM6A2yBg6L4RF31mZHr5LNKdO2/9sgiwxEVMKu2C2m6+IQ75zHP41kZP5rPg==
   dependencies:
     "@cypress/listr-verbose-renderer" "^0.4.1"
     "@cypress/request" "^2.88.5"
@@ -6919,12 +6912,12 @@ express-session@1.17.1:
     safe-buffer "5.2.0"
     uid-safe "~2.1.5"
 
-express-validator@6.6.1:
-  version "6.6.1"
-  resolved "https://registry.yarnpkg.com/express-validator/-/express-validator-6.6.1.tgz#c53046f615d27fcb78be786e018dcd60bd9c6c5c"
-  integrity sha512-+MrZKJ3eGYXkNF9p9Zf7MS7NkPJFg9MDYATU5c80Cf4F62JdLBIjWxy6481tRC0y1NnC9cgOw8FuN364bWaGhA==
+express-validator@6.7.0:
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/express-validator/-/express-validator-6.7.0.tgz#ca315efcc9dfe8d00cbc300f2d0fad1df82d07d6"
+  integrity sha512-sLnTFlyKEvesC2Fyn1TY4Q05cWCZHQQ1ijQOVbBG7hFeTKt4CNzttoF4t6CqrYroKa+2DOzj0E09odPIYDTbRg==
   dependencies:
-    lodash "^4.17.19"
+    lodash "^4.17.20"
     validator "^13.1.1"
 
 express@^4.16.3, express@^4.17.1:
@@ -15534,10 +15527,10 @@ xmlchars@^2.1.1:
   resolved "https://registry.yarnpkg.com/xmlchars/-/xmlchars-2.2.0.tgz#060fe1bcb7f9c76fe2a17db86a9bc3ab894210cb"
   integrity sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==
 
-xstate@4.14.0:
-  version "4.14.0"
-  resolved "https://registry.yarnpkg.com/xstate/-/xstate-4.14.0.tgz#dd9f3f0af4acd04a01b3ad60d3d4c66c51ac1b5d"
-  integrity sha512-nz+T5rlPl0Vu1L9NZdI7JYVq57k/pKpyLwmztqgcj/HqUVsopnMKBP6cQJCb4Op9TC8kffyJSMwHDFthuRpooQ==
+xstate@4.14.1:
+  version "4.14.1"
+  resolved "https://registry.yarnpkg.com/xstate/-/xstate-4.14.1.tgz#8902304944aa78ef5bdfa818ca2ca5fd109a3959"
+  integrity sha512-1LyR5c6wgA41660Cp8Dq5VWRtS75l+KnjysgpgZI9FVLvYl5BF2FmkfT5CAlTIo+CKfj/4IznQYkYfURxuY6WA==
 
 xtend@^4.0.0, xtend@^4.0.1, xtend@^4.0.2, xtend@~4.0.1:
   version "4.0.2"
@@ -15652,10 +15645,10 @@ yn@3.1.1:
   resolved "https://registry.yarnpkg.com/yn/-/yn-3.1.1.tgz#1e87401a09d767c1d5eab26a6e4c185182d2eb50"
   integrity sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==
 
-yup@0.30.0:
-  version "0.30.0"
-  resolved "https://registry.yarnpkg.com/yup/-/yup-0.30.0.tgz#427ee076abb1d7e01e747fb782801f7df252fb76"
-  integrity sha512-GX3vqpC9E+Ow0fmQPgqbEg7UV40XRrN1IOEgKF5v04v6T4ha2vBas/hu0thWgewk8L4wUEBLRO/EnXwYyP+p+A==
+yup@0.31.1:
+  version "0.31.1"
+  resolved "https://registry.yarnpkg.com/yup/-/yup-0.31.1.tgz#0954cb181161f397b804346037a04f8a4b31599e"
+  integrity sha512-Lf6648jDYOWR75IlWkVfwesPyW6oj+50NpxlKvsQlpPsB8eI+ndI7b4S1VrwbmeV9hIZDu1MzrlIL4W+gK1jPw==
   dependencies:
     "@babel/runtime" "^7.10.5"
     lodash "^4.17.20"
