@@ -3,7 +3,27 @@
 
 import { pick } from "lodash/fp";
 import { format as formatDate } from "date-fns";
+import "@percy/cypress";
 import { isMobile } from "./utils";
+
+// custom command to make taking snapshots with full name
+// formed from the test title + suffix easier
+// cy.visualSnapshot() // default full test title
+// cy.visualSnapshot('clicked') // full test title + ' - clicked'
+// also sets the width and height to the current viewport
+Cypress.Commands.add("visualSnapshot", (maybeName) => {
+  // @ts-ignore
+  let snapshotTitle = cy.state("runnable").fullTitle();
+  if (maybeName) {
+    snapshotTitle = snapshotTitle + " - " + maybeName;
+  }
+  cy.percySnapshot(snapshotTitle, {
+    // @ts-ignore
+    widths: [cy.state("viewportWidth")],
+    // @ts-ignore
+    minHeight: cy.state("viewportHeight"),
+  });
+});
 
 Cypress.Commands.add("getBySel", (selector, ...args) => {
   return cy.get(`[data-test=${selector}]`, ...args);
