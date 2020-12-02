@@ -89,7 +89,7 @@ describe("Transaction Feed", function () {
       // Cannot properly wait for request against endpoint with multiple aliases
       // Bug: Unable to stub response for Public Transactions
       // https://github.com/cypress-io/cypress/issues/9262
-      cy.intercept("GET", /\/transactions\/public\/.*/, {
+      cy.intercept("GET", "/transactions/public", {
         headers: {
           "access-control-allow-origin": window.location.origin,
           "Access-Control-Allow-Credentials": "true",
