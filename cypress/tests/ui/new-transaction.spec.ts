@@ -26,7 +26,7 @@ describe("New Transaction", function () {
     cy.intercept("GET", "/notifications").as("notifications");
     cy.intercept("GET", "/transactions/public").as("publicTransactions");
     cy.intercept("GET", "/transactions").as("personalTransactions");
-    cy.intercept("PATCH", /\/transactions.*/).as("updateTransaction");
+    cy.intercept("PATCH", "/transactions").as("updateTransaction");
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.allUsers = users;
@@ -221,8 +221,7 @@ describe("New Transaction", function () {
     cy.percySnapshot("Navigate to Transaction Item");
 
     cy.getBySelLike("accept-request").click();
-    // Doesn't work for cy.intercept due to https://github.com/cypress-io/cypress/pull/9097
-    cy.wait("@updateTransaction").its("status").should("equal", 204);
+    cy.wait("@updateTransaction").its("response.statusCode").should("eq", 204);
     cy.getBySelLike("transaction-detail-header").should("be.visible");
     cy.getBySelLike("transaction-amount").should("be.visible");
     cy.getBySelLike("sender-avatar").should("be.visible");
