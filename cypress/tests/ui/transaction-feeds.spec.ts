@@ -46,12 +46,10 @@ describe("Transaction Feed", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.intercept({ method: "GET", url: "http://localhost:3001/notifications" }).as("notifications");
-    cy.intercept("GET", "**/transactions*").as(feedViews.personal.routeAlias);
-    cy.intercept("GET", "http://localhost:3001/transactions/public*").as(
-      feedViews.public.routeAlias
-    ); //publicTransactions
-    cy.intercept("GET", "**/transactions/contacts*").as(feedViews.contacts.routeAlias);
+    cy.intercept("GET", "/notifications").as("notifications");
+    cy.intercept("GET", "/transactions").as(feedViews.personal.routeAlias);
+    cy.intercept("GET", "/transactions/public").as(feedViews.public.routeAlias);
+    cy.intercept("GET", "/transactions/contacts").as(feedViews.contacts.routeAlias);
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.user = users[0];
@@ -89,8 +87,9 @@ describe("Transaction Feed", function () {
   describe("renders and paginates all transaction feeds", function () {
     it("renders transactions item variations in feed", function () {
       // Cannot properly wait for request against endpoint with multiple aliases
-      // Bug: Stub response for Public Transactions
-      cy.intercept("GET", "http://localhost:3001/transactions/public*", {
+      // Bug: Unable to stub response for Public Transactions
+      // https://github.com/cypress-io/cypress/issues/9262
+      cy.intercept("GET", /\/transactions\/public\/.*/, {
         headers: {
           "access-control-allow-origin": window.location.origin,
           "Access-Control-Allow-Credentials": "true",
@@ -101,7 +100,7 @@ describe("Transaction Feed", function () {
       // Visit page again to trigger call to /transactions/public
       cy.visit("/");
 
-      //cy.wait("@notifications");
+      cy.wait("@notifications");
       cy.wait("@mockedPublicTransactions")
         .its("response.body.results")
         .then((transactions) => {
