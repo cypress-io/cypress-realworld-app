@@ -265,8 +265,8 @@ describe("New Transaction", function () {
         cy.getBySel("user-list-search-input").type(targetUser[attr] as string, { force: true });
         cy.wait("@usersSearch")
           // make sure the backend returns some results
-          .its("responseBody.results.length")
-          .should("be.gt", 0)
+          .its("response.body.results")
+          .should("have.length.gt", 0)
           .then((resultsN) => {
             cy.getBySelLike("user-list-item")
               // make sure the list of results is fully updated
