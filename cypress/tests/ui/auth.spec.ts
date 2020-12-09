@@ -8,8 +8,6 @@ describe("User Sign-up and Login", function () {
     cy.server();
     cy.route("POST", "/users").as("signup");
     cy.route("POST", "/bankAccounts").as("createBankAccount");
-
-    cy.intercept("https://avatars.dicebear.com/api/human", { fixture: "avatar.svg" });
   });
 
   it("should redirect unauthenticated user to signin page", function () {

@@ -15,7 +15,6 @@ describe("Bank Accounts", function () {
     cy.route("POST", "/bankAccounts").as("createBankAccount");
     cy.route("DELETE", "/bankAccounts/*").as("deleteBankAccount");
     cy.route("GET", "/notifications").as("getNotifications");
-    cy.intercept("https://avatars.dicebear.com/api/human", { fixture: "avatar.svg" });
 
     cy.database("find", "users").then((user: User) => {
       ctx.user = user;

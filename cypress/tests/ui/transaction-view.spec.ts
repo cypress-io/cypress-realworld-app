@@ -21,8 +21,6 @@ describe("Transaction View", function () {
     cy.route("GET", "/notifications").as("getNotifications");
     cy.route("GET", "/bankAccounts").as("getBankAccounts");
 
-    cy.intercept("https://avatars.dicebear.com/api/human", { fixture: "avatar.svg" });
-
     cy.database("find", "users").then((user: User) => {
       ctx.authenticatedUser = user;
 

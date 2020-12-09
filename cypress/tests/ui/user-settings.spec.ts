@@ -9,8 +9,6 @@ describe("User Settings", function () {
     cy.route("PATCH", "/users/*").as("updateUser");
     cy.route("GET", "/notifications").as("getNotifications");
 
-    cy.intercept("https://avatars.dicebear.com/api/human", { fixture: "avatar.svg" });
-
     cy.database("find", "users").then((user: User) => {
       cy.loginByXstate(user.username);
     });
