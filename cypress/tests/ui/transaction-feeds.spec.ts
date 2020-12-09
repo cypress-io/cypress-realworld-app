@@ -52,6 +52,8 @@ describe("Transaction Feed", function () {
     cy.route("/transactions/public*").as(feedViews.public.routeAlias);
     cy.route("/transactions/contacts*").as(feedViews.contacts.routeAlias);
 
+    cy.intercept("https://avatars.dicebear.com/api/human", { fixture: "avatar.svg" });
+
     cy.database("filter", "users").then((users: User[]) => {
       ctx.user = users[0];
       ctx.allUsers = users;

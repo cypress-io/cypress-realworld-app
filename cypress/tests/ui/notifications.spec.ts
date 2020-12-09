@@ -19,6 +19,8 @@ describe("Notifications", function () {
     cy.route("PATCH", "/notifications/*").as("updateNotification");
     cy.route("POST", "/comments/*").as("postComment");
 
+    cy.intercept("https://avatars.dicebear.com/api/human", { fixture: "avatar.svg" });
+
     cy.database("filter", "users").then((users: User[]) => {
       ctx.userA = users[0];
       ctx.userB = users[1];

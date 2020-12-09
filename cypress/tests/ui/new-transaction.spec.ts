@@ -23,6 +23,7 @@ describe("New Transaction", function () {
     cy.route("GET", "/transactions").as("personalTransactions");
     cy.route("GET", "/users/search*").as("usersSearch");
     cy.route("PATCH", "/transactions/*").as("updateTransaction");
+    cy.intercept("https://avatars.dicebear.com/api/human", { fixture: "avatar.svg" });
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.allUsers = users;
