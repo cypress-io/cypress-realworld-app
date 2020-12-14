@@ -4,6 +4,8 @@ import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import jwt from "express-jwt";
 import jwksRsa from "jwks-rsa";
+// @ts-ignore
+import OktaJwtVerifier from "@okta/jwt-verifier";
 
 dotenv.config();
 
@@ -21,7 +23,46 @@ const auth0JwtConfig = {
   algorithms: ["RS256"],
 };
 
-export const checkJwt = jwt(auth0JwtConfig).unless({ path: ["/testData/*"] });
+// Okta Validate the JWT Signature
+const oktaJwtVerifier = new OktaJwtVerifier({
+  issuer: `https://${process.env.REACT_APP_OKTA_DOMAIN}/oauth2/default`,
+  clientId: process.env.REACT_APP_OKTA_CLIENTID,
+  assertClaims: {
+    aud: "api://default",
+    cid: process.env.REACT_APP_OKTA_CLIENTID,
+  },
+});
+
+export const checkAuth0Jwt = jwt(auth0JwtConfig).unless({ path: ["/testData/*"] });
+
+/* istanbul ignore next */
+export const verifyOktaToken = (req: Request, res: Response, next: NextFunction) => {
+  const bearerHeader = req.headers["authorization"];
+
+  if (bearerHeader) {
+    const bearer = bearerHeader.split(" ");
+    const bearerToken = bearer[1];
+
+    oktaJwtVerifier
+      .verifyAccessToken(bearerToken, "api://default")
+      .then((jwt: any) => {
+        // the token is valid
+        req.user = {
+          // @ts-ignore
+          sub: jwt.sub,
+        };
+        return next();
+      })
+      .catch((err: any) => {
+        // a validation failed, inspect the error
+        console.log("error", err);
+      });
+  } else {
+    res.status(401).send({
+      error: "Unauthorized",
+    });
+  }
+};
 
 export const ensureAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   if (req.isAuthenticated()) {

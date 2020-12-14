@@ -3,10 +3,14 @@ import ReactDOM from "react-dom";
 import { Router } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { Auth0Provider } from "@auth0/auth0-react";
-import { history } from "./utils/historyUtils";
+/* istanbul ignore next */
+// @ts-ignore
+import { Security } from "@okta/okta-react";
 
 import App from "./containers/App";
 import AppAuth0 from "./containers/AppAuth0";
+import AppOkta from "./containers/AppOkta";
+import { history } from "./utils/historyUtils";
 
 const theme = createMuiTheme({
   palette: {
@@ -20,6 +24,7 @@ const theme = createMuiTheme({
 const onRedirectCallback = (appState: any) => {
   history.replace((appState && appState.returnTo) || window.location.pathname);
 };
+
 /* istanbul ignore if */
 if (process.env.REACT_APP_AUTH0) {
   ReactDOM.render(
@@ -38,6 +43,26 @@ if (process.env.REACT_APP_AUTH0) {
         </ThemeProvider>
       </Router>
     </Auth0Provider>,
+    document.getElementById("root")
+  );
+} else if (process.env.REACT_APP_OKTA) {
+  ReactDOM.render(
+    <Router history={history}>
+      <ThemeProvider theme={theme}>
+        {process.env.REACT_APP_OKTA ? (
+          /* istanbul ignore next */
+          <Security
+            issuer={`https://${process.env.REACT_APP_OKTA_DOMAIN}/oauth2/default`}
+            clientId={process.env.REACT_APP_OKTA_CLIENTID}
+            redirectUri={window.location.origin + "/implicit/callback"}
+          >
+            <AppOkta />
+          </Security>
+        ) : (
+          <App />
+        )}
+      </ThemeProvider>
+    </Router>,
     document.getElementById("root")
   );
 } else {

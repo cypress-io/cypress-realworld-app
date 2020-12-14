@@ -17,7 +17,7 @@ import commentRoutes from "./comment-routes";
 import notificationRoutes from "./notification-routes";
 import bankTransferRoutes from "./banktransfer-routes";
 import testDataRoutes from "./testdata-routes";
-import { checkJwt } from "./helpers";
+import { checkAuth0Jwt, verifyOktaToken } from "./helpers";
 
 require("dotenv").config();
 
@@ -61,8 +61,14 @@ app.use(auth);
 
 /* istanbul ignore if */
 if (process.env.REACT_APP_AUTH0) {
-  app.use(checkJwt);
+  app.use(checkAuth0Jwt);
 }
+
+/* istanbul ignore if */
+if (process.env.REACT_APP_OKTA) {
+  app.use(verifyOktaToken);
+}
+
 app.use("/users", userRoutes);
 app.use("/contacts", contactRoutes);
 app.use("/bankAccounts", bankAccountRoutes);

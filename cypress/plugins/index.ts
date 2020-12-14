@@ -12,12 +12,16 @@ export default (on, config) => {
   config.env.paginationPageSize = process.env.PAGINATION_PAGE_SIZE;
   config.env.auth_username = process.env.AUTH_USERNAME;
   config.env.auth_password = process.env.AUTH_PASSWORD;
+  // Auth0
   config.env.auth0_domain = process.env.REACT_APP_AUTH0_DOMAIN;
   config.env.auth0_audience = process.env.REACT_APP_AUTH0_AUDIENCE;
   config.env.auth0_scope = process.env.REACT_APP_AUTH0_SCOPE;
   config.env.auth0_client_id = process.env.REACT_APP_AUTH0_CLIENTID;
   config.env.auth0_client_secret = process.env.AUTH0_CLIENT_SECRET;
   config.env.auth_token_name = process.env.REACT_APP_AUTH_TOKEN_NAME;
+  // Okta
+  config.env.okta_domain = process.env.REACT_APP_OKTA_DOMAIN;
+  config.env.okta_client_id = process.env.REACT_APP_OKTA_CLIENTID;
 
   const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 

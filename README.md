@@ -143,6 +143,15 @@ Prerequisites include an Auth0 account and a Tenant configured for use with a SP
 Start the application with `yarn dev:auth0` and run Cypress with `yarn cypress:open`.
 
 The only passing spec on this branch will be the [auth0 spec](./cypress/tests/ui-auth-providers/auth0.spec.ts); all others will fail.
+### Okta
+
+A guide has been written with detail around adapting the RWA to use [Okta][okta] and to explain the programmatic command used for Cypress tests.
+
+Prerequisites include an [Okta][okta] account and [application configured for use with a SPA][oktacreateapp]. Environment variables from [Okta][okta] are to be placed in the [.env](./.env).
+
+Start the application with `yarn dev:okta` and run Cypress with `yarn cypress:open`.
+
+The **only passing spec on this branch** will be the [okta spec](./cypress/tests/ui-auth-providers/okta.spec.ts); all others will fail.
 
 ## License
 
@@ -157,6 +166,8 @@ This project is licensed under the terms of the [MIT license](/LICENSE).
 [typescript]: https://typescriptlang.org
 [cypressdashboard]: https://dashboard.cypress.io/projects/7s5okt/runs
 [material-ui]: https://material-ui.com
+[okta]: https://okta.com
+[oktacreateapp]: https://developer.okta.com/docs/guides/sign-into-spa/react/create-okta-application/
 
 ## Contributors ✨
 

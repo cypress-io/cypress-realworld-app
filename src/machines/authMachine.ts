@@ -17,6 +17,7 @@ export interface AuthMachineSchema {
     refreshing: {};
     auth0: {};
     authorized: {};
+    okta: {};
   };
 }
 
@@ -25,8 +26,9 @@ export type AuthMachineEvents =
   | { type: "LOGOUT" }
   | { type: "UPDATE" }
   | { type: "REFRESH" }
-  | { type: "SIGNUP" }
-  | { type: "AUTH0" };
+  | { type: "AUTH0" }
+  | { type: "OKTA" }
+  | { type: "SIGNUP" };
 
 export interface AuthMachineContext {
   user?: User;
@@ -46,6 +48,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         entry: "resetUser",
         on: {
           LOGIN: "loading",
+          OKTA: "okta",
           SIGNUP: "signup",
           AUTH0: "auth0",
         },
@@ -106,6 +109,16 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
           LOGOUT: "logout",
         },
       },
+      okta: {
+        invoke: {
+          src: "getOktaUserProfile",
+          onDone: { target: "authorized", actions: "setUserProfile" },
+          onError: { target: "unauthorized", actions: "onError" },
+        },
+        on: {
+          LOGOUT: "logout",
+        },
+      },
     },
   },
   {
@@ -126,6 +139,21 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
           .catch((error) => {
             throw new Error("Username or password is invalid");
           });
+      },
+      getOktaUserProfile: /* istanbul ignore next */ (ctx, event: any) => {
+        // Map Okta User fields to our User Model
+        const user = {
+          id: event.user.sub,
+          email: event.user.email,
+          firstName: event.user.given_name,
+          lastName: event.user.family_name,
+          username: event.user.preferred_username,
+        };
+
+        // Set Access Token in Local Storage for API calls
+        localStorage.setItem(process.env.REACT_APP_AUTH_TOKEN_NAME!, event.token);
+
+        return Promise.resolve({ user });
       },
       getUserProfile: async (ctx, event) => {
         const resp = await httpClient.get(`http://localhost:3001/checkAuth`);
