@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   cypress: cypress-io/cypress@1.26.0
-  codecov: codecov/codecov@1.1.1
+  codecov: codecov/codecov@1.1.3
   win: circleci/windows@2.4.0
 
 executors:
@@ -155,10 +155,14 @@ windows-workflow: &windows-workflow
           # executor comes from the "windows" orb
           name: win/default
           shell: bash.exe
+          size: large
         post-steps:
           - run:
               name: Cypress info
               command: yarn cypress info
+          - run:
+              name: Cypress cache list
+              command: yarn cypress cache list
           - run:
               name: Check Types
               command: yarn types

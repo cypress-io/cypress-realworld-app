@@ -63,24 +63,24 @@ describe("Transaction Feed", function () {
     it("toggles the navigation drawer", function () {
       cy.wait("@notifications");
       if (isMobile()) {
-        cy.getBySel("sidenav-home").should("not.be.visible");
-        cy.percySnapshot("Mobile Initial Side Navigation Not Visible");
+        cy.getBySel("sidenav-home").should("not.exist");
+        cy.visualSnapshot("Mobile Initial Side Navigation Not Visible");
         cy.getBySel("sidenav-toggle").click();
         cy.getBySel("sidenav-home").should("be.visible");
-        cy.percySnapshot("Mobile Toggle Side Navigation Visible");
+        cy.visualSnapshot("Mobile Toggle Side Navigation Visible");
         cy.get(".MuiBackdrop-root").click({ force: true });
-        cy.getBySel("sidenav-home").should("not.be.visible");
-        cy.percySnapshot("Mobile Home Link Side Navigation Not Visible");
+        cy.getBySel("sidenav-home").should("not.exist");
+        cy.visualSnapshot("Mobile Home Link Side Navigation Not Visible");
 
         cy.getBySel("sidenav-toggle").click();
-        cy.getBySel("sidenav-home").click().should("not.be.visible");
-        cy.percySnapshot("Mobile Toggle Side Navigation Not Visible");
+        cy.getBySel("sidenav-home").click().should("not.exist");
+        cy.visualSnapshot("Mobile Toggle Side Navigation Not Visible");
       } else {
         cy.getBySel("sidenav-home").should("be.visible");
-        cy.percySnapshot("Desktop Side Navigation Visible");
+        cy.visualSnapshot("Desktop Side Navigation Visible");
         cy.getBySel("sidenav-toggle").click();
         cy.getBySel("sidenav-home").should("not.be.visible");
-        cy.percySnapshot("Desktop Side Navigation Not Visible");
+        cy.visualSnapshot("Desktop Side Navigation Not Visible");
       }
     });
   });
@@ -162,7 +162,7 @@ describe("Transaction Feed", function () {
               .should("contain", `+${formattedAmount}`)
               .should("have.css", "color", "rgb(76, 175, 80)");
           });
-          cy.percySnapshot("Transaction Item");
+          cy.visualSnapshot("Transaction Item");
         });
     });
 
@@ -173,8 +173,8 @@ describe("Transaction Feed", function () {
           .should("have.class", "Mui-selected")
           .contains(feed.tabLabel, { matchCase: false })
           .should("have.css", { "text-transform": "uppercase" });
-        cy.getBySel("list-skeleton").should("not.be.visible");
-        cy.percySnapshot(`Paginate ${feedName}`);
+        cy.getBySel("list-skeleton").should("not.exist");
+        cy.visualSnapshot(`Paginate ${feedName}`);
 
         cy.wait(`@${feed.routeAlias}`)
           .its("response.body.results")
@@ -193,7 +193,7 @@ describe("Transaction Feed", function () {
           .then(({ results, pageData }) => {
             expect(results).have.length(Cypress.env("paginationPageSize"));
             expect(pageData.page).to.equal(2);
-            cy.percySnapshot(`Paginate ${feedName} Next Page`);
+            cy.visualSnapshot(`Paginate ${feedName} Next Page`);
             cy.nextTransactionFeedPage(feed.service, pageData.totalPages);
           });
 
@@ -203,7 +203,7 @@ describe("Transaction Feed", function () {
             expect(results).to.have.length.least(1);
             expect(pageData.page).to.equal(pageData.totalPages);
             expect(pageData.hasNextPages).to.equal(false);
-            cy.percySnapshot(`Paginate ${feedName} Last Page`);
+            cy.visualSnapshot(`Paginate ${feedName} Last Page`);
           });
       });
     });
@@ -214,10 +214,10 @@ describe("Transaction Feed", function () {
       it("closes date range picker modal", () => {
         cy.getBySelLike("filter-date-range-button").click({ force: true });
         cy.get(".Cal__Header__root").should("be.visible");
-        cy.percySnapshot("Mobile Open Date Range Picker");
+        cy.visualSnapshot("Mobile Open Date Range Picker");
         cy.getBySel("date-range-filter-drawer-close").click();
-        cy.get(".Cal__Header__root").should("not.be.visible");
-        cy.percySnapshot("Mobile Close Date Range Picker");
+        cy.get(".Cal__Header__root").should("not.exist");
+        cy.visualSnapshot("Mobile Close Date Range Picker");
       });
     }
 
@@ -238,7 +238,7 @@ describe("Transaction Feed", function () {
             .then((transactions: Transaction[]) => {
               cy.getBySelLike("transaction-item").should("have.length", transactions.length);
 
-              cy.percySnapshot("Date Range Filtered Transactions");
+              cy.visualSnapshot("Date Range Filtered Transactions");
               transactions.forEach(({ createdAt }) => {
                 const createdAtDate = startOfDayUTC(new Date(createdAt));
 
@@ -264,7 +264,7 @@ describe("Transaction Feed", function () {
               .its("response.body.results")
               .should("deep.equal", unfilteredResults);
           });
-          cy.percySnapshot("Unfiltered Transactions");
+          cy.visualSnapshot("Unfiltered Transactions");
         });
       });
 
@@ -284,7 +284,7 @@ describe("Transaction Feed", function () {
           .should("have.attr", "href", "/transaction/new")
           .contains("create a transaction", { matchCase: false })
           .should("have.css", { "text-transform": "uppercase" });
-        cy.percySnapshot("No Transactions");
+        cy.visualSnapshot("No Transactions");
       });
     });
   });
@@ -319,7 +319,7 @@ describe("Transaction Feed", function () {
           expect(urlParams.get("amountMin")).to.equal(`${rawAmountMin}`);
           expect(urlParams.get("amountMax")).to.equal(`${rawAmountMax}`);
 
-          cy.percySnapshot("Amount Range Filtered Transactions");
+          cy.visualSnapshot("Amount Range Filtered Transactions");
           transactions.forEach(({ amount }) => {
             expect(amount).to.be.within(rawAmountMin, rawAmountMax);
           });
@@ -330,12 +330,12 @@ describe("Transaction Feed", function () {
           cy.wait(`@${feed.routeAlias}`)
             .its("response.body.results")
             .should("deep.equal", unfilteredResults);
-          cy.percySnapshot("Unfiltered Transactions");
+          cy.visualSnapshot("Unfiltered Transactions");
         });
 
         if (isMobile()) {
           cy.getBySelLike("amount-range-filter-drawer-close").click();
-          cy.getBySel("amount-range-filter-drawer").should("not.be.visible");
+          cy.getBySel("amount-range-filter-drawer").should("not.exist");
         } else {
           cy.getBySel("transaction-list-filter-amount-clear-button").click();
           cy.getBySel("main").scrollTo("top");
@@ -358,7 +358,7 @@ describe("Transaction Feed", function () {
           .should("have.attr", "href", "/transaction/new")
           .contains("create a transaction", { matchCase: false })
           .should("have.css", { "text-transform": "uppercase" });
-        cy.percySnapshot("No Transactions");
+        cy.visualSnapshot("No Transactions");
       });
     });
   });
@@ -377,7 +377,7 @@ describe("Transaction Feed", function () {
           const transactionParticipants = [transaction.senderId, transaction.receiverId];
           expect(transactionParticipants).to.include(ctx.user!.id);
         });
-      cy.percySnapshot("Personal Transactions");
+      cy.visualSnapshot("Personal Transactions");
     });
 
     it("first five items belong to contacts in public feed", function () {
@@ -395,7 +395,7 @@ describe("Transaction Feed", function () {
           const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
           expect(contactsInTransaction, message).to.not.be.empty;
         });
-      cy.percySnapshot("First 5 Transaction Items belong to contacts");
+      cy.visualSnapshot("First 5 Transaction Items belong to contacts");
     });
 
     it("friends feed only shows contact transactions", function () {
@@ -415,7 +415,7 @@ describe("Transaction Feed", function () {
           const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
           expect(contactsInTransaction, message).to.not.be.empty;
         });
-      cy.percySnapshot("Friends Feed only shows contacts transactions");
+      cy.visualSnapshot("Friends Feed only shows contacts transactions");
     });
   });
 });

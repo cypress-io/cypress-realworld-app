@@ -33,12 +33,12 @@ describe("Bank Accounts", function () {
 
     cy.getBySel("bankaccount-new").click();
     cy.location("pathname").should("eq", "/bankaccounts/new");
-    cy.percySnapshot("Display New Bank Account Form");
+    cy.visualSnapshot("Display New Bank Account Form");
 
     cy.getBySelLike("bankName-input").type("The Best Bank");
     cy.getBySelLike("routingNumber-input").type("987654321");
     cy.getBySelLike("accountNumber-input").type("123456789");
-    cy.percySnapshot("Fill out New Bank Account Form");
+    cy.visualSnapshot("Fill out New Bank Account Form");
     cy.getBySelLike("submit").click();
 
     cy.wait("@createBankAccount");
@@ -47,7 +47,7 @@ describe("Bank Accounts", function () {
       .should("have.length", 2)
       .eq(1)
       .should("contain", "The Best Bank");
-    cy.percySnapshot("Bank Account Created");
+    cy.visualSnapshot("Bank Account Created");
   });
 
   it("should display bank account form errors", function () {
@@ -79,7 +79,7 @@ describe("Bank Accounts", function () {
     cy.getBySelLike("routingNumber-input").find("input").clear();
 
     cy.getBySelLike("routingNumber-input").type("123456789").find("input").blur();
-    cy.get("#bankaccount-routingNumber-input-helper-text").should("not.be.visible");
+    cy.get("#bankaccount-routingNumber-input-helper-text").should("not.exist");
 
     /** Account number input validations **/
     // Required field
@@ -96,13 +96,12 @@ describe("Bank Accounts", function () {
     cy.getBySelLike("accountNumber-input").find("input").clear();
 
     cy.getBySelLike("accountNumber-input").type("123456789").find("input").blur();
-    cy.get("#bankaccount-accountNumber-input-helper-text").should("not.be.visible");
+    cy.get("#bankaccount-accountNumber-input-helper-text").should("not.exist");
     cy.getBySelLike("accountNumber-input").find("input").clear();
-
 
     // Max 12 gdigit
     cy.getBySelLike("accountNumber-input").type("123456789111").find("input").blur();
-    cy.get("#bankaccount-accountNumber-input-helper-text").should("not.be.visible");
+    cy.get("#bankaccount-accountNumber-input-helper-text").should("not.exist");
     cy.getBySelLike("accountNumber-input").find("input").clear();
 
     cy.getBySelLike("accountNumber-input").type("1234567891111").find("input").blur();
@@ -111,7 +110,7 @@ describe("Bank Accounts", function () {
       .and("contain", "Must contain no more than 12 digits");
 
     cy.getBySel("bankaccount-submit").should("be.disabled");
-    cy.percySnapshot("Bank Account Form with Errors and Submit button disabled");
+    cy.visualSnapshot("Bank Account Form with Errors and Submit button disabled");
   });
 
   it("soft deletes a bank account", function () {
@@ -120,7 +119,7 @@ describe("Bank Accounts", function () {
 
     cy.wait("@deleteBankAccount");
     cy.getBySelLike("list-item").children().contains("Deleted");
-    cy.percySnapshot("Soft Delete Bank Account");
+    cy.visualSnapshot("Soft Delete Bank Account");
   });
 
   // TODO: [enhancement] the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
@@ -130,9 +129,9 @@ describe("Bank Accounts", function () {
     cy.visit("/bankaccounts");
     cy.wait("@getBankAccounts");
 
-    cy.getBySel("bankaccount-list").should("not.be.visible");
+    cy.getBySel("bankaccount-list").should("not.exist");
     cy.getBySel("empty-list-header").should("contain", "No Bank Accounts");
     cy.getBySel("user-onboarding-dialog").should("be.visible");
-    cy.percySnapshot("User Onboarding Dialog is Visible");
+    cy.visualSnapshot("User Onboarding Dialog is Visible");
   });
 });
