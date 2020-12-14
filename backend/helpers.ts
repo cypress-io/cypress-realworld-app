@@ -9,7 +9,6 @@ import jwksRsa from "jwks-rsa";
 // @ts-ignore
 import awsConfig from "../src/aws-exports";
 
-dotenv.config({ path: ".env.local" });
 dotenv.config();
 
 // Amazon Cognito Validate the JWT Signature

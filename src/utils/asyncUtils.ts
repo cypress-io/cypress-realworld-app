@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import axios from "axios";
 
-dotenv.config({ path: ".env.local" });
 dotenv.config();
 
 const httpClient = axios.create({
