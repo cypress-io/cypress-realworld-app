@@ -5,7 +5,6 @@ import { validationResult } from "express-validator";
 import jwt from "express-jwt";
 import jwksRsa from "jwks-rsa";
 
-dotenv.config({ path: ".env.local" });
 dotenv.config();
 
 const auth0JwtConfig = {

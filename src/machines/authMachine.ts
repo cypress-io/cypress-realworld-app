@@ -5,7 +5,6 @@ import { httpClient } from "../utils/asyncUtils";
 import { history } from "../utils/historyUtils";
 import { User } from "../models";
 
-dotenv.config({ path: ".env.local" });
 dotenv.config();
 
 export interface AuthMachineSchema {
