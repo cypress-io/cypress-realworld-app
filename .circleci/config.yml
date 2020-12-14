@@ -155,10 +155,14 @@ windows-workflow: &windows-workflow
           # executor comes from the "windows" orb
           name: win/default
           shell: bash.exe
+          size: large
         post-steps:
           - run:
               name: Cypress info
               command: yarn cypress info
+          - run:
+              name: Cypress cache list
+              command: yarn cypress cache list
           - run:
               name: Check Types
               command: yarn types
