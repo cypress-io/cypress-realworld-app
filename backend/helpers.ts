@@ -5,7 +5,6 @@ import { validationResult } from "express-validator";
 // @ts-ignore
 import OktaJwtVerifier from "@okta/jwt-verifier";
 
-dotenv.config({ path: ".env.local" });
 dotenv.config();
 
 // Okta Validate the JWT Signature
