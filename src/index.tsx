@@ -46,6 +46,7 @@ if (process.env.REACT_APP_AUTH0) {
     document.getElementById("root")
   );
 } else if (process.env.REACT_APP_OKTA) {
+  /* istanbul ignore next */
   ReactDOM.render(
     <Router history={history}>
       <ThemeProvider theme={theme}>
