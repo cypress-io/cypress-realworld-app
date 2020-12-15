@@ -48,7 +48,7 @@ Cypress.Commands.add("loginByAuth0Api", (username: string, password: string) => 
     };
 
     window.localStorage.setItem(Cypress.env("auth_token_name"), JSON.stringify(item));
-
-    cy.visit("/");
   });
+
+  cy.visit("/");
 });

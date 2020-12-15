@@ -45,8 +45,8 @@ Cypress.Commands.add("loginByOktaApi", (username: string, password: string) => {
         };
 
         window.localStorage.setItem("oktaCypress", JSON.stringify(userItem));
-
-        cy.visit("/");
       });
   });
+
+  cy.visit("/");
 });

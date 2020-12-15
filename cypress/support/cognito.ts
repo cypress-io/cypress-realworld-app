@@ -32,7 +32,7 @@ Cypress.Commands.add("loginByCognitoApi", (username, password) => {
       cognitoResponse.username
     );
     window.localStorage.setItem("amplify-authenticator-authState", "signedIn");
-
-    cy.visit("/");
   });
+
+  cy.visit("/");
 });
