@@ -69,11 +69,19 @@ if (process.env.REACT_APP_AUTH0) {
   );
 } else if (process.env.REACT_APP_AWS_COGNITO) {
   /* istanbul ignore next */
-} else {
   ReactDOM.render(
     <Router history={history}>
       <ThemeProvider theme={theme}>
         <AppCognito />
+      </ThemeProvider>
+    </Router>,
+    document.getElementById("root")
+  );
+} else {
+  ReactDOM.render(
+    <Router history={history}>
+      <ThemeProvider theme={theme}>
+        <App />
       </ThemeProvider>
     </Router>,
     document.getElementById("root")
