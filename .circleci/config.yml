@@ -156,6 +156,11 @@ windows-workflow: &windows-workflow
           name: win/default
           shell: bash.exe
           size: large
+        pre-steps:
+          - run:
+              name: Disabling Windows Defender
+              shell: powershell.exe
+              command: Set-MpPreference -DisableRealtimeMonitoring $true
         post-steps:
           - run:
               name: Cypress info
