@@ -3,24 +3,12 @@ import path from "path";
 import axios from "axios";
 import dotenv from "dotenv";
 import Promise from "bluebird";
-import AWS from "aws-sdk";
-import Amplify, { Auth } from "aws-amplify";
 import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
 
-const awsConfig = require(path.join(__dirname, "../../aws-exports-es5.js"));
-
 dotenv.config();
 
-const { aws_project_region } = awsConfig;
-
-AWS.config.update({ region: aws_project_region });
-Amplify.configure(awsConfig);
-
-const loginCognitoUserByApi = async ({ username, password }) => {
-  global.fetch = require("node-fetch");
-  return await Auth.signIn({ username, password });
-};
+const awsConfig = require(path.join(__dirname, "../../aws-exports-es5.js"));
 
 export default (on, config) => {
   config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD;
@@ -41,6 +29,7 @@ export default (on, config) => {
   // Amazon Cognito
   config.env.cognito_username = process.env.AWS_COGNITO_USERNAME;
   config.env.cognito_password = process.env.AWS_COGNITO_PASSWORD;
+  config.env.awsConfig = awsConfig.default;
 
   const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 
@@ -68,7 +57,6 @@ export default (on, config) => {
     "find:database"(queryPayload) {
       return queryDatabase(queryPayload, (data, attrs) => _.find(data.results, attrs));
     },
-    loginCognitoUserByApi,
   });
 
   codeCoverageTask(on, config);
