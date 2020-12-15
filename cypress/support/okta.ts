@@ -29,7 +29,6 @@ Cypress.Commands.add("loginByOktaApi", (username: string, password: string) => {
     return authClient.token
       .getWithoutPrompt({
         sessionToken: body.sessionToken,
-        responseType: "id_token",
       })
       .then((res: any) => {
         const tokens = res.tokens;
