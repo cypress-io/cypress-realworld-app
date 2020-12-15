@@ -143,6 +143,7 @@ Prerequisites include an Auth0 account and a Tenant configured for use with a SP
 Start the application with `yarn dev:auth0` and run Cypress with `yarn cypress:open`.
 
 The only passing spec on this branch will be the [auth0 spec](./cypress/tests/ui-auth-providers/auth0.spec.ts); all others will fail.
+
 ### Okta
 
 A guide has been written with detail around adapting the RWA to use [Okta][okta] and to explain the programmatic command used for Cypress tests.
@@ -152,6 +153,16 @@ Prerequisites include an [Okta][okta] account and [application configured for us
 Start the application with `yarn dev:okta` and run Cypress with `yarn cypress:open`.
 
 The **only passing spec on this branch** will be the [okta spec](./cypress/tests/ui-auth-providers/okta.spec.ts); all others will fail.
+
+### Amazon Cognito
+
+A guide has been written with detail around adapting the RWA to use [Amazon Cognito][cognito] as the authentication solution and to explain the programmatic command used for Cypress tests.
+
+Prerequisites include an [Amazon Cognito][cognito] account. Environment variables from [Amazon Cognito][cognito] are provided by the [AWS Amplify CLI][awsamplify].
+
+Start the application with `yarn dev:cognito` and run Cypress with `yarn cypress:open`.
+
+The **only passing spec on this branch** will be the [okta spec](./cypress/tests/ui-auth-providers/cognito.spec.ts); all others will fail.
 
 ## License
 

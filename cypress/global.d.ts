@@ -130,5 +130,10 @@ declare namespace Cypress {
      * Create Transaction via bypassing UI and using XState createTransactionService
      */
     createTransaction(payload): Chainable<any>;
+
+    /**
+     * Logs in to AWS Cognito via Amplify Auth API bypassing UI using Cypress Task
+     */
+    loginByCognitoApi(username: string, password: string): Chainable<any>;
   }
 }

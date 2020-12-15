@@ -9,7 +9,11 @@ const httpClient = axios.create({
 
 httpClient.interceptors.request.use((config) => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_AUTH0 || process.env.REACT_APP_OKTA) {
+  if (
+    process.env.REACT_APP_AUTH0 ||
+    process.env.REACT_APP_OKTA ||
+    process.env.REACT_APP_AWS_COGNITO
+  ) {
     const accessToken = localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_NAME!);
     config.headers["Authorization"] = `Bearer ${accessToken}`;
   }

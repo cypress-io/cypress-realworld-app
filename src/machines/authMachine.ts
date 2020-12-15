@@ -15,8 +15,9 @@ export interface AuthMachineSchema {
     updating: {};
     logout: {};
     refreshing: {};
-    auth0: {};
     authorized: {};
+    auth0: {};
+    cognito: {};
     okta: {};
   };
 }
@@ -27,6 +28,7 @@ export type AuthMachineEvents =
   | { type: "UPDATE" }
   | { type: "REFRESH" }
   | { type: "AUTH0" }
+  | { type: "COGNITO" }
   | { type: "OKTA" }
   | { type: "SIGNUP" };
 
@@ -48,9 +50,10 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         entry: "resetUser",
         on: {
           LOGIN: "loading",
-          OKTA: "okta",
           SIGNUP: "signup",
           AUTH0: "auth0",
+          OKTA: "okta",
+          COGNITO: "cognito",
         },
       },
       signup: {
@@ -84,16 +87,6 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
           LOGOUT: "logout",
         },
       },
-      auth0: {
-        invoke: {
-          src: "getAuth0UserProfile",
-          onDone: { target: "authorized", actions: "setUserProfile" },
-          onError: { target: "unauthorized", actions: "onError" },
-        },
-        on: {
-          LOGOUT: "logout",
-        },
-      },
       logout: {
         invoke: {
           src: "performLogout",
@@ -109,9 +102,29 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
           LOGOUT: "logout",
         },
       },
+      auth0: {
+        invoke: {
+          src: "getAuth0UserProfile",
+          onDone: { target: "authorized", actions: "setUserProfile" },
+          onError: { target: "unauthorized", actions: "onError" },
+        },
+        on: {
+          LOGOUT: "logout",
+        },
+      },
       okta: {
         invoke: {
           src: "getOktaUserProfile",
+          onDone: { target: "authorized", actions: "setUserProfile" },
+          onError: { target: "unauthorized", actions: "onError" },
+        },
+        on: {
+          LOGOUT: "logout",
+        },
+      },
+      cognito: {
+        invoke: {
+          src: "getCognitoUserProfile",
           onDone: { target: "authorized", actions: "setUserProfile" },
           onError: { target: "unauthorized", actions: "onError" },
         },
@@ -181,6 +194,21 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       performLogout: async (ctx, event) => {
         localStorage.removeItem("authState");
         return await httpClient.post(`http://localhost:3001/logout`);
+      },
+      getCognitoUserProfile: /* istanbul ignore next */ (ctx, event: any) => {
+        // Map Cognito User fields to our User Model
+        const ourUser = {
+          id: event.user.sub,
+          email: event.user.email,
+        };
+
+        // Set Access Token in Local Storage for API calls
+        localStorage.setItem(
+          process.env.REACT_APP_AUTH_TOKEN_NAME!,
+          event.user.signInUserSession.accessToken.jwtToken
+        );
+
+        return Promise.resolve(ourUser);
       },
     },
     actions: {

@@ -10,6 +10,7 @@ import { Security } from "@okta/okta-react";
 import App from "./containers/App";
 import AppAuth0 from "./containers/AppAuth0";
 import AppOkta from "./containers/AppOkta";
+import AppCognito from "./containers/AppCognito";
 import { history } from "./utils/historyUtils";
 
 const theme = createMuiTheme({
@@ -66,11 +67,13 @@ if (process.env.REACT_APP_AUTH0) {
     </Router>,
     document.getElementById("root")
   );
+} else if (process.env.REACT_APP_AWS_COGNITO) {
+  /* istanbul ignore next */
 } else {
   ReactDOM.render(
     <Router history={history}>
       <ThemeProvider theme={theme}>
-        <App />
+        <AppCognito />
       </ThemeProvider>
     </Router>,
     document.getElementById("root")

@@ -17,7 +17,7 @@ import commentRoutes from "./comment-routes";
 import notificationRoutes from "./notification-routes";
 import bankTransferRoutes from "./banktransfer-routes";
 import testDataRoutes from "./testdata-routes";
-import { checkAuth0Jwt, verifyOktaToken } from "./helpers";
+import { checkAuth0Jwt, verifyOktaToken, checkCognitoJwt } from "./helpers";
 
 require("dotenv").config();
 
@@ -67,6 +67,11 @@ if (process.env.REACT_APP_AUTH0) {
 /* istanbul ignore if */
 if (process.env.REACT_APP_OKTA) {
   app.use(verifyOktaToken);
+}
+
+/* istanbul ignore if */
+if (process.env.REACT_APP_AWS_COGNITO) {
+  app.use(checkCognitoJwt);
 }
 
 app.use("/users", userRoutes);
