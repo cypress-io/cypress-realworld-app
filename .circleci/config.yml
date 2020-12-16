@@ -9,10 +9,6 @@ executors:
     docker:
       - image: "cypress/browsers:node12.14.1-chrome85-ff81"
     resource_class: medium+
-  with-chrome-and-firefox-medium-plus:
-    docker:
-      - image: "cypress/browsers:node12.14.1-chrome85-ff81"
-    resource_class: medium+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 commands:
@@ -109,7 +105,7 @@ linux-workflow: &linux-workflow
         name: "UI Tests - Firefox"
         browser: firefox
         spec: cypress/tests/ui/*
-        executor: with-chrome-and-firefox-medium-plus
+        executor: with-chrome-and-firefox
         wait-on: "http://localhost:3000"
         yarn: true
         start: yarn start:ci
@@ -129,7 +125,7 @@ linux-workflow: &linux-workflow
         browser: firefox
         spec: cypress/tests/ui/*
         config: viewportWidth=375,viewportHeight=667
-        executor: with-chrome-and-firefox-medium-plus
+        executor: with-chrome-and-firefox
         wait-on: "http://localhost:3000"
         yarn: true
         start: yarn start:ci
