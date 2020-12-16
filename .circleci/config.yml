@@ -11,7 +11,7 @@ executors:
   with-chrome-and-firefox-medium-plus:
     docker:
       - image: "cypress/browsers:node12.14.1-chrome85-ff81"
-    resource_class: medium+
+    resource_class: large
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 commands:
