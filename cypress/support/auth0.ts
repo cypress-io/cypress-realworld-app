@@ -23,31 +23,19 @@ Cypress.Commands.add("loginByAuth0Api", (username: string, password: string) => 
       client_secret,
     },
   }).then(({ body }) => {
-    const claims: any = jwt.decode(body.id_token);
-    const { nickname, name, picture, updated_at, email, email_verified, sub, exp } = claims;
+    const user: any = jwt.decode(body.id_token);
 
-    const item = {
-      body: {
-        ...body,
-        decodedToken: {
-          claims,
-          user: {
-            nickname,
-            name,
-            picture,
-            updated_at,
-            email,
-            email_verified,
-            sub,
-          },
-          audience,
-          client_id,
-        },
+    const userItem = {
+      token: body.access_token,
+      user: {
+        sub: user.sub,
+        nickname: user.nickname,
+        picture: user.name,
+        email: user.email,
       },
-      expiresAt: exp,
     };
 
-    window.localStorage.setItem(Cypress.env("auth_token_name"), JSON.stringify(item));
+    window.localStorage.setItem(Cypress.env("auth_token_name"), JSON.stringify(userItem));
   });
 
   cy.visit("/");

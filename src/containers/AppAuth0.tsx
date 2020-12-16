@@ -42,8 +42,8 @@ const AppAuth0: React.FC = () => {
     useEffect(() => {
       const auth0 = JSON.parse(localStorage.getItem("auth0Cypress")!);
       authService.send("AUTH0", {
-        user: auth0.body.decodedToken.user,
-        token: auth0.body.access_token,
+        user: auth0.user,
+        token: auth0.token,
       });
     }, []);
   } else {
