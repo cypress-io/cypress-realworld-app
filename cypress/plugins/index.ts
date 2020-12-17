@@ -13,9 +13,9 @@ const awsConfig = require(path.join(__dirname, "../../aws-exports-es5.js"));
 export default (on, config) => {
   config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD;
   config.env.paginationPageSize = process.env.PAGINATION_PAGE_SIZE;
-  config.env.auth_username = process.env.AUTH_USERNAME;
-  config.env.auth_password = process.env.AUTH_PASSWORD;
   // Auth0
+  config.env.auth0_username = process.env.AUTH0_USERNAME;
+  config.env.auth0_password = process.env.AUTH0_PASSWORD;
   config.env.auth0_domain = process.env.REACT_APP_AUTH0_DOMAIN;
   config.env.auth0_audience = process.env.REACT_APP_AUTH0_AUDIENCE;
   config.env.auth0_scope = process.env.REACT_APP_AUTH0_SCOPE;
@@ -23,6 +23,8 @@ export default (on, config) => {
   config.env.auth0_client_secret = process.env.AUTH0_CLIENT_SECRET;
   config.env.auth_token_name = process.env.REACT_APP_AUTH_TOKEN_NAME;
   // Okta
+  config.env.okta_username = process.env.OKTA_USERNAME;
+  config.env.okta_password = process.env.OKTA_PASSWORD;
   config.env.okta_domain = process.env.REACT_APP_OKTA_DOMAIN;
   config.env.okta_client_id = process.env.REACT_APP_OKTA_CLIENTID;
 

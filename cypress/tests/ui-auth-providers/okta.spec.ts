@@ -8,7 +8,7 @@ if (Cypress.env("okta_client_id")) {
       cy.server();
       cy.route("POST", "/bankAccounts").as("createBankAccount");
 
-      cy.loginByOktaApi(Cypress.env("auth_username"), Cypress.env("auth_password"));
+      cy.loginByOktaApi(Cypress.env("okta_username"), Cypress.env("okta_password"));
     });
 
     it("should allow a visitor to login, onboard and logout", function () {
