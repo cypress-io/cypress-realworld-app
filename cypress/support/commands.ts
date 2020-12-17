@@ -1,10 +1,12 @@
 // @ts-check
 ///<reference path="../global.d.ts" />
 
-import "@percy/cypress";
 import { pick } from "lodash/fp";
 import { format as formatDate } from "date-fns";
 import { isMobile } from "./utils";
+
+// Import Cypress Percy plugin command (https://docs.percy.io/docs/cypress)
+import "@percy/cypress";
 
 // Import commands for third-party auth providers
 import "./auth-provider-commands/cognito";
