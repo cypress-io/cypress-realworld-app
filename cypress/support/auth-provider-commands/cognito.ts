@@ -4,12 +4,18 @@ Amplify.configure(Cypress.env("awsConfig"));
 
 // Amazon Cognito
 Cypress.Commands.add("loginByCognitoApi", (username, password) => {
-  cy.wrap(
-    Auth.signIn({
-      username,
-      password,
-    })
-  ).then((cognitoResponse) => {
+  const log = Cypress.log({
+    displayName: "COGNITO LOGIN",
+    message: [`🔐 Authenticating | ${username}`],
+    // @ts-ignore
+    autoEnd: false,
+  });
+
+  log.snapshot("before");
+
+  const signIn = Auth.signIn({ username, password });
+
+  cy.wrap(signIn, { log: false }).then((cognitoResponse) => {
     const keyPrefixWithUsername = `${cognitoResponse.keyPrefix}.${cognitoResponse.username}`;
     window.localStorage.setItem(
       `${keyPrefixWithUsername}.idToken`,
@@ -31,7 +37,10 @@ Cypress.Commands.add("loginByCognitoApi", (username, password) => {
       `${cognitoResponse.keyPrefix}.LastAuthUser`,
       cognitoResponse.username
     );
+
     window.localStorage.setItem("amplify-authenticator-authState", "signedIn");
+    log.snapshot("after");
+    log.end();
   });
 
   cy.visit("/");
