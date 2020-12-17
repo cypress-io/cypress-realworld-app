@@ -1,14 +1,22 @@
 // @ts-check
-///<reference path="../global.d.ts" />
+///<reference path="../../global.d.ts" />
 
 import * as jwt from "jsonwebtoken";
 
 Cypress.Commands.add("loginByAuth0Api", (username: string, password: string) => {
-  cy.log(`Logging in as ${username}`);
+  const log = Cypress.log({
+    displayName: "AUTH0 LOGIN",
+    message: [`🔐 Authenticating | ${username}`],
+    // @ts-ignore
+    autoEnd: false,
+  });
+
   const client_id = Cypress.env("auth0_client_id");
   const client_secret = Cypress.env("auth0_client_secret");
   const audience = Cypress.env("auth0_audience");
   const scope = Cypress.env("auth0_scope");
+
+  log.snapshot("before");
 
   cy.request({
     method: "POST",
@@ -36,6 +44,9 @@ Cypress.Commands.add("loginByAuth0Api", (username: string, password: string) => 
     };
 
     window.localStorage.setItem(Cypress.env("auth_token_name"), JSON.stringify(userItem));
+
+    log.snapshot("after");
+    log.end();
   });
 
   cy.visit("/");
