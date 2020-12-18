@@ -15,7 +15,7 @@ Cypress.Commands.add("loginByCognitoApi", (username, password) => {
 
   const signIn = Auth.signIn({ username, password });
 
-  cy.wrap(signIn, { log: false }).then((cognitoResponse) => {
+  cy.wrap(signIn, { log: false }).then((cognitoResponse: any) => {
     const keyPrefixWithUsername = `${cognitoResponse.keyPrefix}.${cognitoResponse.username}`;
     window.localStorage.setItem(
       `${keyPrefixWithUsername}.idToken`,
@@ -39,6 +39,7 @@ Cypress.Commands.add("loginByCognitoApi", (username, password) => {
     );
 
     window.localStorage.setItem("amplify-authenticator-authState", "signedIn");
+
     log.snapshot("after");
     log.end();
   });
