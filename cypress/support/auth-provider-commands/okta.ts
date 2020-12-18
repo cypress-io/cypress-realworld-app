@@ -1,12 +1,19 @@
 // @ts-check
-///<reference path="../global.d.ts" />
+///<reference path="../../global.d.ts" />
 
 // @ts-ignore
 import OktaAuth from "@okta/okta-auth-js";
 
 // Okta
 Cypress.Commands.add("loginByOktaApi", (username: string, password: string) => {
-  cy.log(`Logging in as ${username}`);
+  const log = Cypress.log({
+    displayName: "OKTA LOGIN",
+    message: [`🔐 Authenticating | ${username}`],
+    // @ts-ignore
+    autoEnd: false,
+  });
+
+  log.snapshot("before");
 
   cy.request({
     method: "POST",
@@ -30,9 +37,7 @@ Cypress.Commands.add("loginByOktaApi", (username: string, password: string) => {
       .getWithoutPrompt({
         sessionToken: body.sessionToken,
       })
-      .then((res: any) => {
-        const tokens = res.tokens;
-
+      .then(({ tokens }: any) => {
         const userItem = {
           token: tokens.accessToken.value,
           user: {
@@ -45,6 +50,9 @@ Cypress.Commands.add("loginByOktaApi", (username: string, password: string) => {
         };
 
         window.localStorage.setItem("oktaCypress", JSON.stringify(userItem));
+
+        log.snapshot("after");
+        log.end();
       });
   });
 
