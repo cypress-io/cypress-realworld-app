@@ -23,9 +23,12 @@ workflows:
   linux:
     jobs:
       - cypress/install:
+          executor: cypress/base-12-18-3
           yarn: true
 
       - cypress/run:
+          executor: cypress/base-12-18-3
+          install-command: echo 'Already installed'
           yarn: true
           start: yarn start:ci
           wait-on: "http://localhost:3000"
