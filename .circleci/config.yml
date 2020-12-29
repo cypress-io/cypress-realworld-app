@@ -36,3 +36,6 @@ workflows:
             - cypress/install
           post-steps:
             - report-coverage
+          # do not preserve the workspace in this job, since
+          # there are no jobs that follow it
+          no-workspace: true
