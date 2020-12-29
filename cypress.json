@@ -12,8 +12,8 @@
   "env": {
     "apiUrl": "http://localhost:3001",
     "mobileViewportWidthBreakpoint": 414,
-    "coverage": false,
-    "codeCoverage": {
+    "coverage": true,
+    "_codeCoverage": {
       "url": "http://localhost:3001/__coverage__"
     }
   }
