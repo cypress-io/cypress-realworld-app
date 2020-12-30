@@ -12,7 +12,7 @@
     "apiUrl": "http://localhost:3001",
     "mobileViewportWidthBreakpoint": 414,
     "coverage": true,
-    "_codeCoverage": {
+    "codeCoverage": {
       "url": "http://localhost:3001/__coverage__"
     }
   },
