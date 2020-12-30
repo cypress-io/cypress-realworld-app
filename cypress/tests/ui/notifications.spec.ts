@@ -1,5 +1,5 @@
-import { isMobile } from "../support/utils";
-import { User, Transaction } from "../../src/models";
+import { isMobile } from "../../support/utils";
+import { User, Transaction } from "../../../src/models";
 
 type NotificationsCtx = {
   userA: User;

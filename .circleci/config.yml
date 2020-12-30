@@ -27,8 +27,27 @@ workflows:
           yarn: true
 
       - cypress/run:
+          name: API tests
+          executor: cypress/base-12-18-3
+          spec: "cypress/tests/api/*"
+          yarn: true
+          start: yarn start:ci
+          wait-on: "http://localhost:3000"
+          requires:
+            - cypress/install
+          record: true
+          group: api
+          post-steps:
+            - report-coverage
+          # do not preserve the workspace in this job, since
+          # there are no jobs that follow it
+          no-workspace: true
+
+      - cypress/run:
+          name: E2E desktop tests
           executor: cypress/base-12-18-3
           yarn: true
+          spec: "cypress/tests/ui/*"
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           requires:
@@ -37,6 +56,26 @@ workflows:
           parallel: true
           parallelism: 2
           group: e2e
+          post-steps:
+            - report-coverage
+          # do not preserve the workspace in this job, since
+          # there are no jobs that follow it
+          no-workspace: true
+
+      - cypress/run:
+          name: E2E mobile tests
+          executor: cypress/base-12-18-3
+          yarn: true
+          spec: "cypress/tests/ui/*"
+          config: "viewportWidth=375,viewportHeight=667"
+          start: yarn start:ci
+          wait-on: "http://localhost:3000"
+          requires:
+            - cypress/install
+          record: true
+          parallel: true
+          parallelism: 2
+          group: "e2e mobile"
           post-steps:
             - report-coverage
           # do not preserve the workspace in this job, since

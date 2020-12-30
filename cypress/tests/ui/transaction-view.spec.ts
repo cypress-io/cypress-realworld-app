@@ -1,4 +1,4 @@
-import { User, Transaction } from "../../src/models";
+import { User, Transaction } from "../../../src/models";
 
 type NewTransactionCtx = {
   transactionRequest?: Transaction;
