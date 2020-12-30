@@ -121,7 +121,7 @@ export const dataMachine = (machineId: string) =>
           pageData: event.data.pageData,
         })),
 
-        setMessage: /* istanbul ignore next */ assign((ctx, event: any) => ({
+        setMessage: assign((ctx, event: any) => ({
           message: event.message,
         })),
       },
