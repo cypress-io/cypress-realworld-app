@@ -1,6 +1,5 @@
 {
   "baseUrl": "http://localhost:3000",
-  "projectId": "7s5okt",
   "integrationFolder": "cypress/tests",
   "viewportHeight": 1000,
   "viewportWidth": 1280,
@@ -16,5 +15,6 @@
     "_codeCoverage": {
       "url": "http://localhost:3001/__coverage__"
     }
-  }
+  },
+  "projectId": "sz12mc"
 }

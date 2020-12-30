@@ -28,12 +28,13 @@ workflows:
 
       - cypress/run:
           executor: cypress/base-12-18-3
-          install-command: echo 'Already installed'
           yarn: true
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           requires:
             - cypress/install
+          record: true
+          parallel: 2
           post-steps:
             - report-coverage
           # do not preserve the workspace in this job, since
