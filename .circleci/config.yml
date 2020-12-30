@@ -34,7 +34,9 @@ workflows:
           requires:
             - cypress/install
           record: true
-          parallel: 2
+          parallel: true
+          parallelism: 2
+          group: e2e
           post-steps:
             - report-coverage
           # do not preserve the workspace in this job, since
