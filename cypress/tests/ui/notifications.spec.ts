@@ -81,7 +81,7 @@ describe("Notifications", function () {
       cy.visualSnapshot("Notification count after notification dismissed");
     });
 
-    it("User C likes a transaction between User A and User B; User B and get notifications that User C liked transaction", function () {
+    it("User C likes a transaction between User A and User B; User B and A get notifications that User C liked transaction", function () {
       cy.loginByXstate(ctx.userC.username);
 
       cy.database("find", "transactions", {
