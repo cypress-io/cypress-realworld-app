@@ -23,3 +23,4 @@ cypress/videos
 cypress/screenshots
 .nyc_output
 cypress/_tests
+*.mp4
