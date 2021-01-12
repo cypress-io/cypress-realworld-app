@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import Promise from "bluebird";
 import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
+import { toVintageVideo } from "../../code-video";
 
 dotenv.config();
 
@@ -37,6 +38,18 @@ export default (on, config) => {
     "find:database"(queryPayload) {
       return queryDatabase(queryPayload, (data, attrs) => _.find(data.results, attrs));
     },
+  });
+
+  on("after:spec", (spec, results) => {
+    // console.log(spec);
+    // console.log(results);
+
+    if (!results.video) {
+      // nothing to process
+      return;
+    }
+
+    return toVintageVideo(results.video);
   });
 
   codeCoverageTask(on, config);

@@ -16,5 +16,6 @@
       "url": "http://localhost:3001/__coverage__"
     }
   },
-  "projectId": "sz12mc"
+  "projectId": "sz12mc",
+  "experimentalRunEvents": true
 }

@@ -1,77 +1,100 @@
+// @ts-check
 const execa = require("execa");
 const ffmpeg = require("ffmpeg-static");
-const sourceVideo = "./cypress/videos/ui/user-settings.spec.ts.mp4";
-const outputVideo = "out.mp4";
+const fs = require("fs");
+const ffprobe = require("ffprobe");
+const ffprobeStatic = require("ffprobe-static");
+const path = require("path");
 
-// transforms based on https://ottverse.com/create-vintage-videos-using-ffmpeg/
-// execa(ffmpeg, ["-i", sourceVideo, "-filter:v", "fps=fps=10", outputVideo]).then(
+/**
+ * Finds the resolution of the video stream
+ * @param {string} sourceVideo
+ */
+const getVideoResolution = async (sourceVideo) => {
+  const { streams } = await ffprobe(sourceVideo, { path: ffprobeStatic.path });
+  if (!streams) {
+    throw new Error(`Did not find streams in ${sourceVideo}`);
+  }
+  if (!Array.isArray(streams)) {
+    throw new Error(`Did not find streams array in ${sourceVideo}`);
+  }
+  if (streams.length !== 1) {
+    throw new Error(`Expected a single video stream in ${sourceVideo}`);
+  }
+  const stream = streams[0];
+  if (stream.codec_type !== "video") {
+    throw new Error(`Expected video stream, got ${stream.codec_type}`);
+  }
+  return {
+    width: stream.width,
+    height: stream.height,
+  };
+};
 
-// change the colors to look yellowish
-execa(ffmpeg, [
-  "-i",
-  sourceVideo,
-  "-vf",
-  "curves=vintage",
-  "-pix_fmt",
-  "yuv420p",
-  "-acodec",
-  "copy",
-  "-y",
-  "yellow.mp4",
-])
-  .then(() => {
-    // scale the old grain video mask to the output size
-    return execa(ffmpeg, [
-      "-i",
-      "./old-grain.mp4",
-      "-vf",
-      // TODO do not hardcode the video dimensions
-      "scale=1280:720,setsar=1:1",
-      "-pix_fmt",
-      "yuv420p",
-      "-y",
-      "grain.mp4",
-    ]);
-  })
-  .then(() => {
-    // combine scaled old grain video with vintage
-    const params = [
-      "-i",
-      "grain.mp4",
-      "-i",
-      "yellow.mp4",
-      "-filter_complex",
-      // use the first grain video as alpha mask, looping it forever
-      // limit the output by the shortest video which will be the "yellow.mp4"
-      "[0]format=rgba,colorchannelmixer=aa=0.25,loop=-1:32767:0[fg];[1][fg]overlay=shortest=1[out]",
-      "-map",
-      "[out]",
-      "-pix_fmt",
-      "yuv420p",
-      "-acodec",
-      "copy",
-      "-y",
-      outputVideo,
-    ];
-    console.log("about to execute: %s %s", ffmpeg, params.join(" "));
-    return execa(ffmpeg, params);
-  })
-  .then(
-    () => {
-      console.log("done");
-    },
-    (e) => {
-      console.error(e);
-      process.exit(1);
-    }
-  );
+/**
+ * Replaces the given source video with its vintage encoding
+ * @param {string} sourceVideo The input video (will be replaced)
+ */
+const toVintageVideo = async (sourceVideo) => {
+  // transforms based on https://ottverse.com/create-vintage-videos-using-ffmpeg/
+  // execa(ffmpeg, ["-i", sourceVideo, "-filter:v", "fps=fps=10", outputVideo]).then(
 
-// good (copy)
-// Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661),
-// yuvj420p(pc), 1280x720[SAR 1: 1 DAR 16: 9],
-// 130 kb / s, 25 fps, 25 tbr, 12800 tbn, 50 tbc(default )
+  const relativePath = path.relative(process.cwd(), sourceVideo);
+  console.log("📺 Making %s look old school", relativePath);
 
-// bad
-// Stream #0:0(und): Video: h264 (High 4:4:4 Predictive)
-// (avc1 / 0x31637661), yuv444p, 1280x720[SAR 1: 1 DAR 16: 9],
-// 199 kb / s, 25 fps, 25 tbr, 12800 tbn, 50 tbc(default )
+  const { width, height } = await getVideoResolution(sourceVideo);
+
+  // change the colors to look yellowish
+  await execa(ffmpeg, [
+    "-i",
+    sourceVideo,
+    "-vf",
+    "curves=vintage",
+    "-pix_fmt",
+    "yuv420p",
+    "-acodec",
+    "copy",
+    "-y",
+    "yellow.mp4",
+  ]);
+
+  // scale the old grain video mask to the output size
+  await execa(ffmpeg, [
+    "-i",
+    "./old-grain.mp4",
+    "-vf",
+    `scale=${width}:${height},setsar=1:1`,
+    "-pix_fmt",
+    "yuv420p",
+    "-y",
+    "grain.mp4",
+  ]);
+
+  // combine scaled old grain video with vintage
+  const params = [
+    "-i",
+    "grain.mp4",
+    "-i",
+    "yellow.mp4",
+    "-filter_complex",
+    // use the first grain video as alpha mask, looping it forever
+    // limit the output by the shortest video which will be the "yellow.mp4"
+    "[0]format=rgba,colorchannelmixer=aa=0.25,loop=-1:32767:0[fg];[1][fg]overlay=shortest=1[out]",
+    "-map",
+    "[out]",
+    "-pix_fmt",
+    "yuv420p",
+    "-acodec",
+    "copy",
+    "-y",
+    sourceVideo,
+  ];
+  // console.log("about to execute: %s %s", ffmpeg, params.join(" "));
+  await execa(ffmpeg, params);
+
+  fs.unlinkSync("grain.mp4");
+  fs.unlinkSync("yellow.mp4");
+  console.log("finished with %s", sourceVideo);
+};
+
+module.exports = { toVintageVideo, getVideoResolution };
