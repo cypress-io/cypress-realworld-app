@@ -3,14 +3,9 @@ batch:
   fast-fail: true
   build-list:
     - identifier: types_and_unit_tests
-      buildspec: buildspec-matrix.yml
+      buildspec: buildspec-types-unit.yml
       env:
         compute-type: BUILD_GENERAL1_MEDIUM
-        variables:
-          WORKERS:
-            - 1
-            - 2
-            - 3 
     - identifier: api_tests
       buildspec: buildspec-matrix.yml
       env:

@@ -1,0 +1,10 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - yarn install --frozen-lockfile
+  pre_build:
+    commands:
+      - yarn types
+      - yarn test:unit:ci
