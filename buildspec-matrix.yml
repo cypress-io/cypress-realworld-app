@@ -36,6 +36,7 @@ phases:
     runtime-versions:
       nodejs: 10
     commands:
+      - echo $GROUP
       - yarn install --frozen-lockfile
       - yarn add wait-on
       # Update watched files per https://github.com/facebook/create-react-app/issues/7612#issuecomment-565380404
