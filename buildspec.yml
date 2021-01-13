@@ -34,8 +34,9 @@ phases:
     runtime-versions:
       nodejs: 10
     commands:
-      - yarn install
+      - yarn install --frozen-lockfile
+      - yarn install wait-on
   build:
     commands:
-      - yarn start:ci &
+      - yarn start:ci & npx wait-on http://localhost:3000"
       - npx cypress run --record --parallel --browser chrome --ci-build-id $CODEBUILD_INITIATOR
