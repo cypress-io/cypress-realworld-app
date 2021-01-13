@@ -124,7 +124,7 @@
     "test:headless": "yarn cypress:run",
     "test:api": "yarn cypress:run --spec 'integration/api/*'",
     "test:unit": "react-scripts test --runInBand",
-    "test:unit:ci": "react-scripts test --watch false --runInBand",
+    "test:unit:ci": "react-scripts test --watchAll false",
     "start:api": "yarn tsnode --files backend/app.ts",
     "start:api:watch": "nodemon --exec yarn tsnode --watch 'backend' backend/app.ts",
     "start:react:proxy-server": "yarn tsnode scripts/testServer.ts",
