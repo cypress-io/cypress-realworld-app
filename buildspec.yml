@@ -11,7 +11,7 @@ batch:
             - 1
             - 2
             - 3 
-    - identifier: types_and_unit_tests
+    - identifier: api_tests
       buildspec: buildspec-matrix.yml
       env:
         compute-type: BUILD_GENERAL1_MEDIUM
