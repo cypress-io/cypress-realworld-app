@@ -16,9 +16,18 @@ batch:
           - public.ecr.aws/q6t8o9m1/cypress-browsers-node14.7.0-chrome84
           #- aws/codebuild/windows-base:2019-1.0
         variables:
-          WORKERS:
-            - 1
-            - 2
+          NAME:
+            - "API Tests"
+            - "UI Tests - Chrome"
+          SPEC:
+            - "cypress/tests/api/*"
+            - "cypress/tests/ui/*"
+          GROUP:
+            - "API"
+            - "UI - Chrome"
+          #WORKERS:
+            #- 1
+            #- 2
             #- 3
             #- 4
             #- 5
@@ -33,15 +42,6 @@ batch:
             #- 14
             #- 15
             #- 16
-          NAME:
-            - "API Tests"
-            - "UI Tests - Chrome"
-          SPEC:
-            - "cypress/tests/api/*"
-            - "cypress/tests/ui/*"
-          GROUP:
-            - "API"
-            - "UI - Chrome"
 phases:
   install:
     #runtime-versions:
