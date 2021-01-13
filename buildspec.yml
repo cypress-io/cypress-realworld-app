@@ -36,6 +36,7 @@ phases:
     commands:
       - yarn install --frozen-lockfile
       - yarn add wait-on
+      - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
   build:
     commands:
       - yarn start:ci & npx wait-on http://localhost:3000
