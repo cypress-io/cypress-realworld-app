@@ -6,11 +6,11 @@ batch:
       buildspec: buildspec-types-unit.yml
       env:
         compute-type: BUILD_GENERAL1_MEDIUM
-    - identifier: api_tests
-      buildspec: buildspec-matrix.yml
-      env:
-        compute-type: BUILD_GENERAL1_MEDIUM
-        variables:
-          NAME: "API Tests"
-          SPEC: "cypress/tests/api/*"
-          GROUP: "API"
+    #- identifier: api_tests
+    #  buildspec: buildspec-matrix.yml
+    #  env:
+    #    compute-type: BUILD_GENERAL1_MEDIUM
+    #    variables:
+    #      NAME: "API Tests"
+    #      SPEC: "cypress/tests/api/*"
+    #      GROUP: "API"
