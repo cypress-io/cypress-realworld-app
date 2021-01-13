@@ -34,12 +34,8 @@ phases:
     runtime-versions:
       nodejs: 10
     commands:
-      - npm ci
-  pre_build:
-    commands:
-      - npm run cy:verify
-      - npm run cy:info
+      - yarn install
   build:
     commands:
-      - npm run start:ci &
+      - yarn start:ci &
       - npx cypress run --record --parallel --browser chrome --ci-build-id $CODEBUILD_INITIATOR
