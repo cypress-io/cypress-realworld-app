@@ -1,47 +1,21 @@
 version: 0.2
 batch:
-  fast-fail: false
-  build-matrix:
-    static:
-      ignore-failure: false
+  fast-fail: true
+  build-list:
+    - identifier: types_and_unit_tests
+      buildspec: buildspec-matrix.yml
       env:
-        type: LINUX_CONTAINER
-        privileged-mode: true
-    dynamic:
-      env:
-        image:
-          - public.ecr.aws/q6t8o9m1/cypress-browsers-node14.7.0-chrome84
+        compute-type: BUILD_GENERAL1_MEDIUM
         variables:
           WORKERS:
             - 1
             - 2
-            - 3
-            - 4
-            - 5
-            - 6
-            - 7
-            - 8
-            - 9
-            - 10
-            - 11
-            - 12
-            - 13
-            - 14
-            - 15
-            - 16
-phases:
-  install:
-    runtime-versions:
-      nodejs: 10
-    commands:
-      - yarn install --frozen-lockfile
-      - yarn add wait-on
-      # Update watched files per https://github.com/facebook/create-react-app/issues/7612#issuecomment-565380404
-      - echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
-  build:
-    commands:
-      - yarn start:ci & npx wait-on http://localhost:3000
-      - npx cypress run --record --parallel --browser chrome --ci-build-id $CODEBUILD_INITIATOR
-cache:
-  paths:
-    - node_modules/**/*
+            - 3 
+    - identifier: types_and_unit_tests
+      buildspec: buildspec-matrix.yml
+      env:
+        compute-type: BUILD_GENERAL1_MEDIUM
+        variables:
+          NAME: "API Tests"
+          SPEC: cypress/tests/api/*
+          GROUP: API
