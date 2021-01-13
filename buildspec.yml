@@ -35,7 +35,7 @@ phases:
       nodejs: 10
     commands:
       - yarn install --frozen-lockfile
-      - yarn install wait-on
+      - yarn add wait-on
   build:
     commands:
       - yarn start:ci & npx wait-on http://localhost:3000"
