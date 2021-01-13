@@ -1,0 +1,45 @@
+version: 0.2
+batch:
+  fast-fail: false
+  build-matrix:
+    static:
+      ignore-failure: false
+      env:
+        type: LINUX_CONTAINER
+        privileged-mode: true
+    dynamic:
+      env:
+        image:
+          - public.ecr.aws/q6t8o9m1/cypress-browsers-node14.7.0-chrome84
+        variables:
+          WORKERS:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 7
+            - 8
+            - 9
+            - 10
+            - 11
+            - 12
+            - 13
+            - 14
+            - 15
+            - 16
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+    commands:
+      - npm ci
+  pre_build:
+    commands:
+      - npm run cy:verify
+      - npm run cy:info
+  build:
+    commands:
+      - npm run start:ci &
+      - npx cypress run --record --parallel --browser chrome --ci-build-id $CODEBUILD_INITIATOR
