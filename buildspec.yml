@@ -7,7 +7,7 @@ batch:
       env:
         type: LINUX_CONTAINER
         privileged-mode: true
-        compute-type: BUILD_GENERAL1_MEDIUM
+        #compute-type: BUILD_GENERAL1_MEDIUM
     dynamic:
       env:
         compute-type: BUILD_GENERAL1_MEDIUM
