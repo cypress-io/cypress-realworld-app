@@ -17,7 +17,7 @@ batch:
         variables:
           WORKERS:
             - 1
-            #- 2
+            - 2
             #- 3
             #- 4
             #- 5
@@ -51,6 +51,10 @@ phases:
       - yarn add wait-on
       # Update watched files per https://github.com/facebook/create-react-app/issues/7612#issuecomment-565380404
       - echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
+  pre_build:
+    commands:
+      - yarn types
+      - yarn test:unit:ci
   build:
     commands:
       - yarn start:ci & npx wait-on http://localhost:3000
