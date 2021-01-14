@@ -33,10 +33,10 @@ phases:
     commands:
       - echo $CODEBUILD_INITIATOR
       - echo $CY_GROUP_SPEC
-      - CY_GROUP=$(echo $GROUP_SPEC | cut -d'|' -f1)
-      - CY_BROWSER=$(echo $GROUP_SPEC | cut -d'|' -f2)
-      - CY_SPEC=$(echo $GROUP_SPEC | cut -d'|' -f3)
-      - CY_CONFIG=$(echo $GROUP_SPEC | cut -d'|' -f4)
+      - CY_GROUP=$(echo $CY_GROUP_SPEC | cut -d'|' -f1)
+      - CY_BROWSER=$(echo $CY_GROUP_SPEC | cut -d'|' -f2)
+      - CY_SPEC=$(echo $CY_GROUP_SPEC | cut -d'|' -f3)
+      - CY_CONFIG=$(echo $CY_GROUP_SPEC | cut -d'|' -f4)
       - echo $CY_GROUP
       - echo $CY_BROWSER
       - echo $CY_SPEC
