@@ -63,3 +63,4 @@ cache:
   paths:
     - 'node_modules/**/*'
     - '.cache/**/*'
+    - '/root/.cache/**/*'
