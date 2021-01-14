@@ -1,0 +1,48 @@
+version: 0.2
+batch:
+  fast-fail: false
+  build-matrix:
+    static:
+      ignore-failure: false
+      env:
+        type: LINUX_CONTAINER
+        privileged-mode: true
+        compute-type: BUILD_GENERAL1_MEDIUM
+    dynamic:
+      env:
+        compute-type:
+          - BUILD_GENERAL1_MEDIUM
+        image:
+          - public.ecr.aws/q6t8o9m1/cypress-browsers-node14.7.0-chrome84
+        variables:
+          GROUP_SPEC:
+            - "UI - Chrome|cypress/tests/ui/*"
+          WORKERS:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 7
+
+phases:
+  install:
+    commands:
+      - echo $CODEBUILD_INITIATOR
+      - echo $GROUP_SPEC
+      - GROUP="$(cut -d'_' -f1 <<< "$GROUP_SPEC")"
+      - SPEC="$(cut -d'_' -f2 <<< "$GROUP_SPEC")"
+      - echo $GROUP
+      - echo $SPEC
+      - yarn install --frozen-lockfile
+  pre_build:
+    commands:
+      - yarn run build
+  build:
+    commands:
+      - yarn start:ci:codebuild & npx wait-on http://localhost:3000
+      - npx cypress run --record --parallel --browser chrome --ci-build-id $CODEBUILD_INITIATOR --group "$GROUP" --spec "$SPEC"
+cache:
+  paths:
+    - node_modules/**/*
