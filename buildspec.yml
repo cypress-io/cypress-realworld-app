@@ -34,7 +34,6 @@ batch:
 phases:
   install:
     commands:
-      - echo $Execution_ID
       - echo $CODEBUILD_INITIATOR
       - echo $CY_GROUP_SPEC
       - CY_GROUP=$(echo $CY_GROUP_SPEC | cut -d'|' -f1)
@@ -45,9 +44,11 @@ phases:
       - echo $CY_BROWSER
       - echo $CY_SPEC
       - echo $CY_CONFIG
-      - yarn install --frozen-lockfile &> /dev/null
-  build:
+      - yarn install --frozen-lockfile
+  pre_build:
     commands:
       - yarn run build
+  build:
+    commands:
       - yarn start:ci:codebuild & npx wait-on http://localhost:3000
-      - npx cypress run --record --parallel --browser $CY_BROWSER --ci-build-id $Execution_ID --group "$CY_GROUP" --spec "$CY_SPEC" --config "$CY_CONFIG"
+      - npx cypress run --record --parallel --browser $CY_BROWSER --ci-build-id $CODEBUILD_INITIATOR --group "$CY_GROUP" --spec "$CY_SPEC" --config "$CY_CONFIG"
