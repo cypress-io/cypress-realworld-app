@@ -1,7 +1,8 @@
 version: 0.2
 
 env:
-  CYPRESS_CACHE_FOLDER: ~/.cache/Cypress
+  variables:
+    CYPRESS_CACHE_FOLDER: ~/.cache/Cypress
 
 batch:
   fast-fail: false
