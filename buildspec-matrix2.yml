@@ -2,6 +2,11 @@ version: 0.2
 
 batch:
   fast-fail: false
+  build-list:
+    - identifier: TypesAndUnit
+      buildspec: buildspec-types-unit.yml
+      env:
+        image: public.ecr.aws/q6t8o9m1/cypress-browsers-node14.7.0-chrome84
   build-matrix:
     static:
       ignore-failure: false
