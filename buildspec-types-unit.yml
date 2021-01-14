@@ -1,0 +1,13 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - yarn install --frozen-lockfile
+  build:
+    commands:
+      - yarn types
+      - yarn test:unit:ci
+cache:
+  paths:
+    - node_modules/**/ 
