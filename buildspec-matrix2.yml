@@ -45,4 +45,4 @@ phases:
       - npx cypress run --record --parallel --browser chrome --ci-build-id $CODEBUILD_INITIATOR --group "$GROUP" --spec "$SPEC"
 cache:
   paths:
-    - node_modules/**/*
+    - 'node_modules/**/*'
