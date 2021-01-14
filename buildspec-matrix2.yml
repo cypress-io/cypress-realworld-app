@@ -1,8 +1,8 @@
 version: 0.2
 
-env:
-  variables:
-    CYPRESS_CACHE_FOLDER: ~/.cache/Cypress
+# env:
+#   variables:
+#     CYPRESS_CACHE_FOLDER: ~/.cache/Cypress
 
 batch:
   fast-fail: false
@@ -13,8 +13,8 @@ batch:
         type: LINUX_CONTAINER
         privileged-mode: true
         compute-type: BUILD_GENERAL1_MEDIUM
-        variables:
-          CYPRESS_CACHE_FOLDER: ~/.cache/Cypress
+        # variables:
+        #   CYPRESS_CACHE_FOLDER: ~/.cache/Cypress
     dynamic:
       env:
         compute-type:
@@ -40,7 +40,7 @@ batch:
 phases:
   install:
     commands:
-      - echo $CYPRESS_CACHE_FOLDER
+      #- echo $CYPRESS_CACHE_FOLDER
       - echo $CODEBUILD_INITIATOR
       - echo $CY_GROUP_SPEC
       - CY_GROUP=$(echo $CY_GROUP_SPEC | cut -d'|' -f1)
