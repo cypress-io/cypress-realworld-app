@@ -34,6 +34,7 @@ phases:
       # Update watched files per https://github.com/facebook/create-react-app/issues/7612#issuecomment-565380404
       #- echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
       - echo "fs.inotify.max_user_watches=524288" >> /etc/sysctl.conf
+      - sysctl -p
   build:
     commands:
       - yarn start:ci & npx wait-on http://localhost:3000
