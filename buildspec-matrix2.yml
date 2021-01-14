@@ -31,8 +31,8 @@ phases:
     commands:
       - echo $CODEBUILD_INITIATOR
       - echo $GROUP_SPEC
-      - GROUP="$(cut -d'_' -f1 <<< "$GROUP_SPEC")"
-      - SPEC="$(cut -d'_' -f2 <<< "$GROUP_SPEC")"
+      - GROUP=$(cut -d'|' -f1 <<< $GROUP_SPEC)
+      - SPEC=$(cut -d'|' -f2 <<< $GROUP_SPEC)
       - echo $GROUP
       - echo $SPEC
       - yarn install --frozen-lockfile
