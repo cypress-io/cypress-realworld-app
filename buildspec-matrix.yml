@@ -28,6 +28,7 @@ batch:
 phases:
   install:
     commands:
+      - echo $CODEBUILD_INITIATOR
       - echo $SPEC
       - echo $GROUP
       - yarn install --frozen-lockfile
