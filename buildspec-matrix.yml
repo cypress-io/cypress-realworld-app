@@ -32,20 +32,14 @@ batch:
             #- 14
             #- 15
             #- 16
-          NAME:
-            - "API Tests"
-            - "UI Tests - Chrome"
-          SPEC:
-            - "cypress/tests/api/*"
-            - "cypress/tests/ui/*"
-          GROUP:
-            - "API"
-            - "UI - Chrome"
+
 phases:
   install:
     #runtime-versions:
     #  nodejs: 10
     commands:
+      - echo $NAME
+      - echo $SPEC
       - echo $GROUP
       - yarn install --frozen-lockfile
       - yarn add wait-on
