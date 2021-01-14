@@ -1,9 +1,5 @@
 version: 0.2
 
-# env:
-#   variables:
-#     CYPRESS_CACHE_FOLDER: ~/.cache/Cypress
-
 batch:
   fast-fail: false
   build-matrix:
@@ -13,21 +9,19 @@ batch:
         type: LINUX_CONTAINER
         privileged-mode: true
         compute-type: BUILD_GENERAL1_MEDIUM
-        # variables:
-        #   CYPRESS_CACHE_FOLDER: ~/.cache/Cypress
     dynamic:
       env:
         compute-type:
           - BUILD_GENERAL1_MEDIUM
         image:
-          - public.ecr.aws/q6t8o9m1/cypress-browsers-node14.7.0-chrome84
+          - public.ecr.aws/s9l6w2o6/cypress-browsers-node14.15.0-chrome86-ff82
         variables:
           CY_GROUP_SPEC:
             - "UI - Chrome|chrome|cypress/tests/ui/*"
             - "UI - Chrome - Mobile|chrome|cypress/tests/ui/*|viewportWidth=375,viewportHeight=667"
             - "API|chrome|cypress/tests/api/*"
-            #- "UI - Firefox|firefox|cypress/tests/ui/*"
-            #- "UI - Firefox - Mobile|firefox|cypress/tests/ui/*|viewportWidth=375,viewportHeight=667"
+            - "UI - Firefox|firefox|cypress/tests/ui/*"
+            - "UI - Firefox - Mobile|firefox|cypress/tests/ui/*|viewportWidth=375,viewportHeight=667"
           WORKERS:
             - 1
             - 2
@@ -40,7 +34,6 @@ batch:
 phases:
   install:
     commands:
-      #- echo $CYPRESS_CACHE_FOLDER
       - echo $CODEBUILD_INITIATOR
       - echo $CY_GROUP_SPEC
       - CY_GROUP=$(echo $CY_GROUP_SPEC | cut -d'|' -f1)
@@ -59,8 +52,3 @@ phases:
     commands:
       - yarn start:ci:codebuild & npx wait-on http://localhost:3000
       - npx cypress run --record --parallel --browser $CY_BROWSER --ci-build-id $CODEBUILD_INITIATOR --group "$CY_GROUP" --spec "$CY_SPEC" --config "$CY_CONFIG"
-cache:
-  paths:
-    - 'node_modules/**/*'
-    - '.cache/**/*'
-    - '/root/.cache/**/*'
