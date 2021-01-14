@@ -15,8 +15,9 @@ batch:
         image:
           - public.ecr.aws/q6t8o9m1/cypress-browsers-node14.7.0-chrome84
         variables:
-          GROUP_SPEC:
+          CY_GROUP_SPEC:
             - "UI - Chrome|chrome|cypress/tests/ui/*"
+            - "UI - Chrome - Mobile|chrome|cypress/tests/ui/*|viewportWidth=375,viewportHeight=667"
             - "API|chrome|cypress/tests/api/*"
           WORKERS:
             - 1
@@ -31,13 +32,15 @@ phases:
   install:
     commands:
       - echo $CODEBUILD_INITIATOR
-      - echo $GROUP_SPEC
-      - GROUP=$(echo $GROUP_SPEC | cut -d'|' -f1)
-      - BROWSER=$(echo $GROUP_SPEC | cut -d'|' -f2)
-      - SPEC=$(echo $GROUP_SPEC | cut -d'|' -f3)
-      - echo $GROUP
-      - echo $BROWSER
-      - echo $SPEC
+      - echo $CY_GROUP_SPEC
+      - CY_GROUP=$(echo $GROUP_SPEC | cut -d'|' -f1)
+      - CY_BROWSER=$(echo $GROUP_SPEC | cut -d'|' -f2)
+      - CY_SPEC=$(echo $GROUP_SPEC | cut -d'|' -f3)
+      - CY_CONFIG=$(echo $GROUP_SPEC | cut -d'|' -f4)
+      - echo $CY_GROUP
+      - echo $CY_BROWSER
+      - echo $CY_SPEC
+      - echo $CY_CONFIG
       - yarn install --frozen-lockfile
   pre_build:
     commands:
@@ -45,7 +48,7 @@ phases:
   build:
     commands:
       - yarn start:ci:codebuild & npx wait-on http://localhost:3000
-      - npx cypress run --record --parallel --browser $BROWSER --ci-build-id $CODEBUILD_INITIATOR --group "$GROUP" --spec "$SPEC"
+      - npx cypress run --record --parallel --browser $CY_BROWSER --ci-build-id $CODEBUILD_INITIATOR --group "$CY_GROUP" --spec "$CY_SPEC" --config "$CY_CONFIG"
 cache:
   paths:
     - 'node_modules/**/*'
