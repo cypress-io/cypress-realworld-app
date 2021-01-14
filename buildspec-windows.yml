@@ -3,11 +3,9 @@ version: 0.2
 phases:
   install:
     commands:
-      - yarn install --frozen-lockfile &> /dev/null
-  pre_build:
-    commands:
-      - yarn run build
+      - yarn install --frozen-lockfile
   build:
     commands:
+      - yarn run build
       - yarn start:ci:codebuild & npx wait-on http://localhost:3000
       - npx cypress run --record --parallel --ci-build-id $Execution_ID --group "UI - Electron - Windows" --spec cypress/tests/ui/*

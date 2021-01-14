@@ -46,10 +46,8 @@ phases:
       - echo $CY_SPEC
       - echo $CY_CONFIG
       - yarn install --frozen-lockfile &> /dev/null
-  pre_build:
-    commands:
-      - yarn run build
   build:
     commands:
+      - yarn run build
       - yarn start:ci:codebuild & npx wait-on http://localhost:3000
       - npx cypress run --record --parallel --browser $CY_BROWSER --ci-build-id $Execution_ID --group "$CY_GROUP" --spec "$CY_SPEC" --config "$CY_CONFIG"
