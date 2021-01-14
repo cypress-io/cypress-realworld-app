@@ -41,7 +41,7 @@ phases:
       - echo $CY_BROWSER
       - echo $CY_SPEC
       - echo $CY_CONFIG
-      - yarn install --prefer-offline #&> /dev/null
+      - yarn install --frozen-lockfile #&> /dev/null
   pre_build:
     commands:
       - yarn run build
