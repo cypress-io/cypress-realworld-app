@@ -10,7 +10,8 @@ batch:
         compute-type: BUILD_GENERAL1_MEDIUM
     dynamic:
       env:
-        compute-type: BUILD_GENERAL1_MEDIUM
+        compute-type:
+          - BUILD_GENERAL1_MEDIUM
         image:
           - public.ecr.aws/q6t8o9m1/cypress-browsers-node14.7.0-chrome84
           #- aws/codebuild/windows-base:2019-1.0

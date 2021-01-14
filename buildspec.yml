@@ -8,6 +8,8 @@ batch:
     - identifier: API
       buildspec: buildspec-matrix.yml
       env:
+        compute-type: BUILD_GENERAL1_MEDIUM
+        image: public.ecr.aws/q6t8o9m1/cypress-browsers-node14.7.0-chrome84
         variables:
           NAME: "API Tests"
           SPEC: "cypress/tests/api/*"
@@ -15,6 +17,8 @@ batch:
     - identifier: UIChrome
       buildspec: buildspec-matrix.yml
       env:
+        compute-type: BUILD_GENERAL1_MEDIUM
+        image: public.ecr.aws/q6t8o9m1/cypress-browsers-node14.7.0-chrome84
         variables:
           NAME: "UI Tests - Chrome"
           SPEC: "cypress/tests/ui/*"
