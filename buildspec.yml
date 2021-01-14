@@ -1,49 +1,54 @@
 version: 0.2
 
 batch:
-   fast-fail: true
-   build-list:
-    - identifier: TypesAndUnit
-      buildspec: buildspec-types-unit.yml
+  fast-fail: false
+  build-matrix:
+    static:
+      ignore-failure: false
       env:
-        image: public.ecr.aws/q6t8o9m1/cypress-browsers-node14.7.0-chrome84
-
-    - identifier: API
-      buildspec: buildspec-matrix.yml
-      env:
+        type: LINUX_CONTAINER
+        privileged-mode: true
         compute-type: BUILD_GENERAL1_MEDIUM
-        image: public.ecr.aws/q6t8o9m1/cypress-browsers-node14.7.0-chrome84
-        variables:
-          NAME: "API Tests"
-          SPEC: "cypress/tests/api/*"
-          GROUP: "API"
-
-    - identifier: UIChrome
-      buildspec: buildspec-matrix.yml
+    dynamic:
       env:
-        compute-type: BUILD_GENERAL1_MEDIUM
-        image: public.ecr.aws/q6t8o9m1/cypress-browsers-node14.7.0-chrome84
+        compute-type:
+          - BUILD_GENERAL1_MEDIUM
+        image:
+          - public.ecr.aws/s9l6w2o6/cypress-browsers-node14.15.0-chrome86-ff82
         variables:
-          NAME: "UI Tests - Chrome"
-          SPEC: "cypress/tests/ui/*"
-          GROUP: "UI - Chrome"
+          CY_GROUP_SPEC:
+            - "UI - Chrome|chrome|cypress/tests/ui/*"
+            - "UI - Chrome - Mobile|chrome|cypress/tests/ui/*|viewportWidth=375,viewportHeight=667"
+            - "API|chrome|cypress/tests/api/*"
+            - "UI - Firefox|firefox|cypress/tests/ui/*"
+            - "UI - Firefox - Mobile|firefox|cypress/tests/ui/*|viewportWidth=375,viewportHeight=667"
+          WORKERS:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 7
 
-    - identifier: UIChrome2
-      buildspec: buildspec-matrix.yml
-      env:
-        compute-type: BUILD_GENERAL1_MEDIUM
-        image: public.ecr.aws/q6t8o9m1/cypress-browsers-node14.7.0-chrome84
-        variables:
-          NAME: "UI Tests - Chrome"
-          SPEC: "cypress/tests/ui/*"
-          GROUP: "UI - Chrome"
-
-    - identifier: UIChrome3
-      buildspec: buildspec-matrix.yml
-      env:
-        compute-type: BUILD_GENERAL1_MEDIUM
-        image: public.ecr.aws/q6t8o9m1/cypress-browsers-node14.7.0-chrome84
-        variables:
-          NAME: "UI Tests - Chrome"
-          SPEC: "cypress/tests/ui/*"
-          GROUP: "UI - Chrome"
+phases:
+  install:
+    commands:
+      - echo $CODEBUILD_INITIATOR
+      - echo $CY_GROUP_SPEC
+      - CY_GROUP=$(echo $CY_GROUP_SPEC | cut -d'|' -f1)
+      - CY_BROWSER=$(echo $CY_GROUP_SPEC | cut -d'|' -f2)
+      - CY_SPEC=$(echo $CY_GROUP_SPEC | cut -d'|' -f3)
+      - CY_CONFIG=$(echo $CY_GROUP_SPEC | cut -d'|' -f4)
+      - echo $CY_GROUP
+      - echo $CY_BROWSER
+      - echo $CY_SPEC
+      - echo $CY_CONFIG
+      - yarn install --frozen-lockfile &> /dev/null
+  pre_build:
+    commands:
+      - yarn run build
+  build:
+    commands:
+      - yarn start:ci:codebuild & npx wait-on http://localhost:3000
+      - npx cypress run --record --parallel --browser $CY_BROWSER --ci-build-id $CODEBUILD_INITIATOR --group "$CY_GROUP" --spec "$CY_SPEC" --config "$CY_CONFIG"
