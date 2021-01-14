@@ -13,6 +13,8 @@ batch:
         type: LINUX_CONTAINER
         privileged-mode: true
         compute-type: BUILD_GENERAL1_MEDIUM
+        variables:
+          CYPRESS_CACHE_FOLDER: ~/.cache/Cypress
     dynamic:
       env:
         compute-type:
