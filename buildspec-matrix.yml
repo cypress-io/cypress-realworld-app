@@ -32,17 +32,12 @@ phases:
       - echo $SPEC
       - echo $GROUP
       - yarn install --frozen-lockfile
-      - yarn add wait-on
       # Update watched files per https://github.com/facebook/create-react-app/issues/7612#issuecomment-565380404
       #- echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
-  pre_build:
-    commands:
-      - yarn types
-      - yarn test:unit:ci
   build:
     commands:
       - yarn start:ci & npx wait-on http://localhost:3000
-      - npx cypress run --record --parallel --browser chrome --ci-build-id $CODEBUILD_INITIATOR --group $GROUP --spec $SPEC
+      - npx cypress run --record --parallel --browser chrome --ci-build-id $CODEBUILD_INITIATOR --group "$GROUP" --spec "$SPEC"
 cache:
   paths:
     - node_modules/**/*
