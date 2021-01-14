@@ -3,6 +3,10 @@ version: 0.2
 batch:
    fast-fail: true
    build-list:
+    - identifier: TypesAndUnit
+      buildspec: buildspec-types-unit.yml
+      env:
+        image: public.ecr.aws/q6t8o9m1/cypress-browsers-node14.7.0-chrome84
     - identifier: API
       buildspec: buildspec-matrix.yml
       env:
@@ -21,14 +25,3 @@ batch:
           NAME: "UI Tests - Chrome"
           SPEC: "cypress/tests/ui/*"
           GROUP: "UI - Chrome"
-    #- identifier: TypesAndUnit
-    #  buildspec: buildspec-types-unit.yml
-
-phases:
-  install:
-    commands:
-      - yarn install --frozen-lockfile
-  build:
-    commands:
-      - yarn types
-      - yarn test:unit:ci
