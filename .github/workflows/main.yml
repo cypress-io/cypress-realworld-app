@@ -62,13 +62,12 @@ jobs:
       - name: "UI Tests - Chrome"
         uses: cypress-io/github-action@v2
         with:
-          #install: false
           browser: chrome
           record: true
           parallel: true
           group: "UI - Chrome" 
           spec: cypress/tests/ui/*
-          start: yarn start:ci
+          start: yarn start:ci:testServer
           wait-on: "http://localhost:3000"
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
