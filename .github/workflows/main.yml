@@ -14,6 +14,10 @@ jobs:
           runTests: false
       - run: yarn types
       - run: yarn test:unit:ci
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: rwa-install-artifact
+      #     path: .
   tests:
     runs-on: ubuntu-latest
     container: cypress/browsers:node12.14.1-chrome85-ff81
@@ -28,6 +32,11 @@ jobs:
     #     # run copies of the current job in parallel
     #     containers: [1, 2]
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      # - uses: actions/download-artifact@v2
+      #   with:
+      #     name: rwa-install-artifact
       - run: yarn test:unit:ci
       - name: "UI Tests - Chrome"
         uses: cypress-io/github-action@v2
