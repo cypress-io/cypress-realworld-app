@@ -16,6 +16,7 @@ jobs:
       - run: yarn test:unit:ci
   tests:
     runs-on: ubuntu-latest
+    container: cypress/browsers:node12.14.1-chrome85-ff81
     needs: install
     # strategy:
     #   # when one test fails, DO NOT cancel the other
