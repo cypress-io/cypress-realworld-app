@@ -8,6 +8,3 @@ phases:
     commands:
       - yarn types
       - yarn test:unit:ci
-cache:
-  paths:
-    - node_modules/**/ 
