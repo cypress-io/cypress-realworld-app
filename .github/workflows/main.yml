@@ -17,22 +17,17 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     needs: install
-    strategy:
-      # when one test fails, DO NOT cancel the other
-      # containers, because this will kill Cypress processes
-      # leaving the Dashboard hanging ...
-      # https://github.com/cypress-io/github-action/issues/48
-      fail-fast: false
-      matrix:
-        # run copies of the current job in parallel
-        containers: [1, 2]
+    # strategy:
+    #   # when one test fails, DO NOT cancel the other
+    #   # containers, because this will kill Cypress processes
+    #   # leaving the Dashboard hanging ...
+    #   # https://github.com/cypress-io/github-action/issues/48
+    #   fail-fast: false
+    #   matrix:
+    #     # run copies of the current job in parallel
+    #     containers: [1, 2]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Cypress install
-        uses: cypress-io/github-action@v2
-
+      - run: yarn test:unit:ci
       - name: "UI Tests - Chrome"
         uses: cypress-io/github-action@v2
         with:
