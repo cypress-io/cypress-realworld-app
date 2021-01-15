@@ -8,16 +8,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Cypress install
-        uses: cypress-io/github-action@v2
-        with:
-          runTests: false
-      - run: yarn types
-      - run: yarn test:unit:ci
-      # - uses: actions/upload-artifact@v2
-      #   with:
-      #     name: rwa-install-artifact
-      #     path: .
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -29,6 +19,18 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+
+      - name: Cypress install
+        uses: cypress-io/github-action@v2
+        with:
+          runTests: false
+      - run: yarn types
+      - run: yarn test:unit:ci
+      # - run: yarn build
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: rwa-build-artifact
+      #     path: build/
   tests:
     runs-on: ubuntu-latest
     container: cypress/browsers:node12.14.1-chrome85-ff81
@@ -45,9 +47,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
       # - uses: actions/download-artifact@v2
       #   with:
-      #     name: rwa-install-artifact
+      #     name: rwa-build-artifact
       - run: yarn test:unit:ci
       - name: "UI Tests - Chrome"
         uses: cypress-io/github-action@v2
