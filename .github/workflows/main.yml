@@ -42,8 +42,11 @@ jobs:
     #     # run copies of the current job in parallel
     #     containers: [1, 2]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      # - name: Checkout
+      #   uses: actions/checkout@v2
+
+      - name: Display structure of directory
+        run: ls -R
 
       - uses: actions/cache@v2
         id: yarn-cache
@@ -56,7 +59,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: rwa-build-artifact
-      
+
       - name: Display structure of downloaded files
         run: ls -R
 
