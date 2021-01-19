@@ -16,26 +16,16 @@ jobs:
       - run: yarn test:unit:ci
       - run: yarn build
 
-      # - uses: actions/upload-artifact@v2
-      #   with:
-      #     name: rwa-build-artifact
-      #     path: build
-
       - uses: actions/cache@v2
-        id: yarn-cache
+        id: yarn-and-build-cache
         with:
-          path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          path: |
+            build
+            node_modules
+          key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-node_modules-
+            ${{ runner.os }}-node_modules-build
 
-      - uses: actions/cache@v2
-        id: build-cache
-        with:
-          path: build
-          key: ${{ runner.os }}-build-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-build-
   tests:
     runs-on: ubuntu-latest
     container: cypress/browsers:node12.14.1-chrome85-ff81
@@ -57,24 +47,12 @@ jobs:
         run: ls -R
 
       - uses: actions/cache@v2
-        id: yarn-cache
+        id: yarn-and-build-cache
         with:
-          path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
-
-      - uses: actions/cache@v2
-        id: build-cache
-        with:
-          path: build
-          key: ${{ runner.os }}-build-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-build-
-
-      # - uses: actions/download-artifact@v2
-      #   with:
-      #     name: rwa-build-artifact
+          path: |
+            build
+            node_modules
+          key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
 
       - name: Display structure of downloaded files
         run: ls -R
