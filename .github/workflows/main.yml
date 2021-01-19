@@ -220,3 +220,39 @@ jobs:
           # Recommended: pass the GitHub token lets this action correctly
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  ui-windows-tests:
+    runs-on: windows-2019
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        id: yarn-and-build-cache-win
+        with:
+          path: |
+            ~/.cache/Cypress
+            build
+            node_modules
+          key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-build-
+
+      - name: Cypress install
+        uses: cypress-io/github-action@v2
+
+      - name: "UI Tests - Electron - Windows"
+        uses: cypress-io/github-action@v2
+        with:
+          start: yarn start:ci:testServer
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          record: true
+          parallel: true
+          group: "UI - Electron - Windows" 
+          spec: cypress/tests/ui/*
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # Recommended: pass the GitHub token lets this action correctly
+          # determine the unique run id necessary to re-run the checks
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
