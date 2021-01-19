@@ -69,6 +69,7 @@ jobs:
           spec: cypress/tests/ui/*
           start: yarn start:ci:testServer
           wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # Recommended: pass the GitHub token lets this action correctly
