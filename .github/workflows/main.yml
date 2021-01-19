@@ -8,14 +8,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Cypress install
-        uses: cypress-io/github-action@v2
-        with:
-          runTests: false
-      - run: yarn types
-      - run: yarn test:unit:ci
-      - run: yarn build
-
       - uses: actions/cache@v2
         id: yarn-and-build-cache
         with:
@@ -25,6 +17,14 @@ jobs:
           key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-build-
+
+      - name: Cypress install
+        uses: cypress-io/github-action@v2
+        with:
+          runTests: false
+      - run: yarn types
+      - run: yarn test:unit:ci
+      - run: yarn build
 
   tests:
     runs-on: ubuntu-latest
@@ -43,9 +43,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Display structure of directory
-        run: ls -R
-
       - uses: actions/cache@v2
         id: yarn-and-build-cache
         with:
@@ -55,9 +52,6 @@ jobs:
           key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-build-
-
-      - name: Display structure of downloaded files
-        run: ls -R
 
       - name: "UI Tests - Chrome"
         uses: cypress-io/github-action@v2
