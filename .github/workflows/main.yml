@@ -19,7 +19,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: rwa-build-artifact
-          path: build/
+          path: build
 
       - uses: actions/cache@v2
         id: yarn-cache
@@ -56,8 +56,9 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: rwa-build-artifact
-
-      - run: ls -lah build
+      
+      - name: Display structure of downloaded files
+        run: ls -R
 
       - name: "UI Tests - Chrome"
         uses: cypress-io/github-action@v2
