@@ -241,6 +241,8 @@ jobs:
       - name: Cypress install
         uses: cypress-io/github-action@v2
 
+      - run: yarn build
+
       - name: "UI Tests - Electron - Windows"
         uses: cypress-io/github-action@v2
         with:
