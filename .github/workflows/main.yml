@@ -124,7 +124,9 @@ jobs:
 
   ui-firefox-tests:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node12.18.3-chrome87-ff82
+    container:
+      image: cypress/browsers:node12.18.3-chrome87-ff82
+      options: --user 1001
     needs: install
     strategy:
       # when one test fails, DO NOT cancel the other
@@ -171,7 +173,9 @@ jobs:
 
   ui-firefox-mobile-tests:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node12.18.3-chrome87-ff82
+    container:
+      image: cypress/browsers:node12.18.3-chrome87-ff82
+      options: --user 1001
     needs: install
     strategy:
       # when one test fails, DO NOT cancel the other
