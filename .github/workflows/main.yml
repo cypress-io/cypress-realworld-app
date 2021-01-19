@@ -238,14 +238,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node_modules-build-
 
-      - name: Cypress install
-        uses: cypress-io/github-action@v2
-
-      - run: yarn build
-
       - name: "UI Tests - Electron - Windows"
         uses: cypress-io/github-action@v2
         with:
+          build: yarn build
           start: yarn start:ci:testServer
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
