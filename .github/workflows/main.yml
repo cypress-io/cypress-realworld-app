@@ -16,10 +16,10 @@ jobs:
       - run: yarn test:unit:ci
       - run: yarn build
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: rwa-build-artifact
-          path: build
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: rwa-build-artifact
+      #     path: build
 
       - uses: actions/cache@v2
         id: yarn-cache
@@ -28,6 +28,14 @@ jobs:
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-
+
+      - uses: actions/cache@v2
+        id: build-cache
+        with:
+          path: build
+          key: ${{ runner.os }}-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
   tests:
     runs-on: ubuntu-latest
     container: cypress/browsers:node12.14.1-chrome85-ff81
@@ -42,8 +50,8 @@ jobs:
     #     # run copies of the current job in parallel
     #     containers: [1, 2]
     steps:
-      # - name: Checkout
-      #   uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Display structure of directory
         run: ls -R
@@ -56,9 +64,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node_modules-
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/cache@v2
+        id: build-cache
         with:
-          name: rwa-build-artifact
+          path: build
+          key: ${{ runner.os }}-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      # - uses: actions/download-artifact@v2
+      #   with:
+      #     name: rwa-build-artifact
 
       - name: Display structure of downloaded files
         run: ls -R
