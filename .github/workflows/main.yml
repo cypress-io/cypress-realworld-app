@@ -24,7 +24,7 @@ jobs:
             node_modules
           key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-node_modules-build
+            ${{ runner.os }}-node_modules-build-
 
   tests:
     runs-on: ubuntu-latest
@@ -54,7 +54,7 @@ jobs:
             node_modules
           key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-node_modules-build
+            ${{ runner.os }}-node_modules-build-
 
       - name: Display structure of downloaded files
         run: ls -R
