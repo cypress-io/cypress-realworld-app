@@ -48,5 +48,5 @@ phases:
       - yarn run build
   build:
     commands:
-      - yarn start:ci:codebuild & npx wait-on http://localhost:3000
+      - yarn start:ci:testServer & npx wait-on http://localhost:3000
       - npx cypress run --record --parallel --browser $CY_BROWSER --ci-build-id $CODEBUILD_INITIATOR --group "$CY_GROUP" --spec "$CY_SPEC" --config "$CY_CONFIG"
