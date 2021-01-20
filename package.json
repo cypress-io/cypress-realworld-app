@@ -111,8 +111,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",
     "start": "cross-env NODE_ENV=development concurrently yarn:start:react yarn:start:api",
-    "start:ci": "cross-env NODE_ENV=test concurrently yarn:start:react yarn:start:api",
-    "start:ci:testServer": "cross-env NODE_ENV=test concurrently yarn:start:react:proxy-server yarn:start:api",
+    "start:ci": "cross-env NODE_ENV=test concurrently yarn:start:react:proxy-server yarn:start:api",
     "start:react": "react-scripts -r @cypress/instrument-cra start",
     "start:empty": "cross-env NODE_ENV=development EMPTY_SEED=true concurrently yarn:start:react yarn:start:api:watch",
     "list:dev:users": "cat data/database.json | json -a users | json -a id username",

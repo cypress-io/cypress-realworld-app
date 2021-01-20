@@ -85,7 +85,7 @@ jobs:
         with:
           # we have already installed all dependencies above
           install: false
-          start: yarn start:ci:testServer
+          start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           browser: chrome
@@ -133,7 +133,7 @@ jobs:
           # we have already installed all dependencies above
           install: false
           config: "viewportWidth=375,viewportHeight=667"
-          start: yarn start:ci:testServer
+          start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           browser: chrome
@@ -182,7 +182,7 @@ jobs:
         with:
           # we have already installed all dependencies above
           install: false
-          start: yarn start:ci:testServer
+          start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           browser: firefox
@@ -232,7 +232,7 @@ jobs:
           # we have already installed all dependencies above
           install: false
           config: "viewportWidth=375,viewportHeight=667"
-          start: yarn start:ci:testServer
+          start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           browser: firefox 
@@ -278,7 +278,7 @@ jobs:
         with:
           # we have already installed all dependencies above
           install: false
-          start: yarn start:ci:testServer
+          start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           record: true
