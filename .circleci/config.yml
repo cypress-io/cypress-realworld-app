@@ -35,9 +35,11 @@ linux-workflow: &linux-workflow
     #  2. Validate types
     #  3. Run server unit-tests
     - cypress/install:
+        working_directory: /mnt/ramdisk
         name: "Setup Linux"
         yarn: true
         executor: with-chrome-and-firefox
+        build: 'yarn build'
         post-steps:
           - run:
               name: Check Types
@@ -48,13 +50,14 @@ linux-workflow: &linux-workflow
 
     # Run API tests against backend server
     - cypress/run:
+        working_directory: /mnt/ramdisk
         name: "API Tests"
         browser: chrome
         spec: cypress/tests/api/*
         executor: with-chrome-and-firefox
         wait-on: "http://localhost:3000"
         yarn: true
-        start: yarn start:ci
+        start: yarn start:ci:testServer
         record: true
         parallel: true
         parallelism: 5
@@ -67,6 +70,7 @@ linux-workflow: &linux-workflow
 
     # Run E2E tests in Chrome
     - cypress/run:
+        working_directory: /mnt/ramdisk
         name: "UI Tests - Chrome"
         browser: chrome
         spec: cypress/tests/ui/*
@@ -87,6 +91,7 @@ linux-workflow: &linux-workflow
 
     # Run E2E tests in Chrome with mobile device viewport
     - cypress/run:
+        working_directory: /mnt/ramdisk
         name: "UI Tests - Chrome - Mobile"
         browser: chrome
         spec: cypress/tests/ui/*
@@ -107,6 +112,7 @@ linux-workflow: &linux-workflow
 
     # Run E2E tests in Firefox
     - cypress/run:
+        working_directory: /mnt/ramdisk
         name: "UI Tests - Firefox"
         browser: firefox
         spec: cypress/tests/ui/*
@@ -126,6 +132,7 @@ linux-workflow: &linux-workflow
 
     # Run E2E tests in Firefox with mobile device viewport
     - cypress/run:
+        working_directory: /mnt/ramdisk
         name: "UI Tests - Firefox - Mobile"
         browser: firefox
         spec: cypress/tests/ui/*
