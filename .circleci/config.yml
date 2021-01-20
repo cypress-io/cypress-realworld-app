@@ -8,10 +8,12 @@ executors:
   with-chrome-and-firefox:
     docker:
       - image: "cypress/browsers:node12.14.1-chrome85-ff81"
+    working_directory: /mnt/ramdisk
   with-chrome-and-firefox-medium-plus:
     docker:
       - image: "cypress/browsers:node12.14.1-chrome85-ff81"
     resource_class: medium+
+    working_directory: /mnt/ramdisk
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 commands:
