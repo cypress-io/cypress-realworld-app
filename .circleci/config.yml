@@ -53,7 +53,7 @@ linux-workflow: &linux-workflow
         executor: with-chrome-and-firefox
         wait-on: "http://localhost:3000"
         yarn: true
-        start: yarn start:ci:testServer
+        start: yarn start:ci
         record: true
         parallel: true
         parallelism: 5
@@ -73,7 +73,7 @@ linux-workflow: &linux-workflow
         wait-on: "http://localhost:3000"
         command-prefix: npx percy exec --
         yarn: true
-        start: yarn start:ci:testServer
+        start: yarn start:ci
         record: true
         parallel: true
         parallelism: 5
@@ -93,7 +93,7 @@ linux-workflow: &linux-workflow
         executor: with-chrome-and-firefox
         wait-on: "http://localhost:3000"
         yarn: true
-        start: yarn start:ci:testServer
+        start: yarn start:ci
         record: true
         parallel: true
         parallelism: 5
@@ -112,7 +112,7 @@ linux-workflow: &linux-workflow
         executor: with-chrome-and-firefox-medium-plus
         wait-on: "http://localhost:3000"
         yarn: true
-        start: yarn start:ci:testServer
+        start: yarn start:ci
         record: true
         parallel: true
         parallelism: 5
@@ -132,7 +132,7 @@ linux-workflow: &linux-workflow
         executor: with-chrome-and-firefox-medium-plus
         wait-on: "http://localhost:3000"
         yarn: true
-        start: yarn start:ci:testServer
+        start: yarn start:ci
         record: true
         parallel: true
         parallelism: 5
@@ -187,7 +187,7 @@ windows-workflow: &windows-workflow
           shell: bash.exe
         wait-on: "http://localhost:3000"
         yarn: true
-        start: yarn start:ci:testServer
+        start: yarn start:ci
         record: true
         parallel: true
         parallelism: 5
