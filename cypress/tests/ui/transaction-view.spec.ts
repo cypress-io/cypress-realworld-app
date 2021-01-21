@@ -89,6 +89,7 @@ describe("Transaction View", function () {
     cy.getBySelLike("reject-request").click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
     cy.getBySelLike("reject-request").should("not.exist");
+    cy.getBySel("transaction-detail").should("be.visible");
     cy.visualSnapshot("Transaction Rejected");
   });
 
