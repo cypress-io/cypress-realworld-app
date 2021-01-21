@@ -98,8 +98,8 @@ describe("Transaction Feed", function () {
         .then((transactions) => {
           const getTransactionFromEl = ($el: JQuery<Element>): TransactionResponseItem => {
             const transactionId = $el.data("test").split("transaction-item-")[1];
-            return _.find(transactions, {
-              id: transactionId,
+            return _.find(transactions, (transaction) => {
+              return transaction.id === transactionId;
             })!;
           };
 
@@ -308,8 +308,8 @@ describe("Transaction Feed", function () {
           `$${dollarAmountRange.min} - $${dollarAmountRange.max}`
         );
 
+        // @ts-ignore
         cy.wait(`@${feed.routeAlias}`).then(({ response: { body }, url }) => {
-          // @ts-ignore
           const transactions = body.results as TransactionResponseItem[];
           const urlParams = new URLSearchParams(_.last(url.split("?")));
 
