@@ -95,7 +95,7 @@
     "@types/http-proxy-middleware": "0.19.3",
     "babel-loader": "8.0.6",
     "cypress": "6.3.0",
-    "eslint-config-prettier": "6.15.0",
+    "eslint-config-prettier": "7.1.0",
     "eslint-plugin-cypress": "2.11.2",
     "eslint-plugin-prettier": "3.3.1",
     "istanbul-lib-coverage": "3.0.0",
