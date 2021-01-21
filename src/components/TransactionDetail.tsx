@@ -90,7 +90,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
   const classes = useStyles();
 
   return (
-    <Paper className={classes.paper}>
+    <Paper className={classes.paper} data-test="transaction-detail">
       <Typography
         component="h2"
         variant="h6"
