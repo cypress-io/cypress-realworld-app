@@ -44,6 +44,7 @@ describe("Transaction View", function () {
     cy.getBySelLike("transaction-item").first().click();
     cy.location("pathname").should("include", "/transaction");
     cy.getBySel("nav-transaction-tabs").should("not.exist");
+    cy.getBySel("transaction-detail-header").should("be.visible");
     cy.visualSnapshot("Transaction Navigation Tabs Hidden");
   });
 
@@ -79,6 +80,7 @@ describe("Transaction View", function () {
     cy.getBySelLike("accept-request").click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
     cy.getBySelLike("accept-request").should("not.exist");
+    cy.getBySel("transaction-detail-header").should("be.visible");
     cy.visualSnapshot("Transaction Accepted");
   });
 
@@ -89,6 +91,7 @@ describe("Transaction View", function () {
     cy.getBySelLike("reject-request").click();
     cy.wait("@updateTransaction").should("have.property", "status", 204);
     cy.getBySelLike("reject-request").should("not.exist");
+    cy.getBySel("transaction-detail-header").should("be.visible");
     cy.visualSnapshot("Transaction Rejected");
   });
 
@@ -104,6 +107,7 @@ describe("Transaction View", function () {
       cy.getBySel("transaction-detail-header").should("be.visible");
       cy.getBySel("transaction-accept-request").should("not.exist");
       cy.getBySel("transaction-reject-request").should("not.exist");
+      cy.getBySel("transaction-detail-header").should("be.visible");
       cy.visualSnapshot("Transaction Completed (not able to accept or reject)");
     });
   });
