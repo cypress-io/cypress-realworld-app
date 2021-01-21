@@ -62,6 +62,7 @@ describe("User Sign-up and Login", function () {
 
     // Onboarding
     cy.getBySel("user-onboarding-dialog").should("be.visible");
+    cy.getBySel("user-onboarding-dialog-title").should("contain", "Get Started");
     cy.visualSnapshot("User Onboarding Dialog");
     cy.getBySel("user-onboarding-next").click();
 
