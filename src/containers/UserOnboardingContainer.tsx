@@ -47,7 +47,7 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService, bankAccountsSer
   const nextStep = () => sendUserOnboarding("NEXT");
 
   const createBankAccountWithNextStep = (payload: any) => {
-    sendBankAccounts("CREATE", payload);
+    sendBankAccounts({ type: "CREATE", ...payload });
     nextStep();
   };
 

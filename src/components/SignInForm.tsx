@@ -63,7 +63,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
     remember: undefined,
   };
 
-  const signInPending = (payload: SignInPayload) => sendAuth("LOGIN", payload);
+  const signInPending = (payload: SignInPayload) => sendAuth({ type: "LOGIN", ...payload });
 
   return (
     <Container component="main" maxWidth="xs">

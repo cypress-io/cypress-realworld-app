@@ -32,7 +32,7 @@ const NotificationsContainer: React.FC<Props> = ({ authService, notificationsSer
   }, [authState, sendNotifications]);
 
   const updateNotification = (payload: NotificationUpdatePayload) =>
-    sendNotifications("UPDATE", payload);
+    sendNotifications({ type: "UPDATE", ...payload });
 
   return (
     <Paper className={classes.paper}>

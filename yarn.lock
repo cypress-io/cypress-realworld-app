@@ -3562,10 +3562,13 @@
     "@webassemblyjs/wast-parser" "1.8.5"
     "@xtuc/long" "4.2.2"
 
-"@xstate/react@0.8.1":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/@xstate/react/-/react-0.8.1.tgz#df200547cca24c909572b7aef1ddab8bca3a0603"
-  integrity sha512-8voZm4GX3x70lNQVvoGedoObPYapkQIbgMhE+xOQEsm8Ait4Zto6R01SZ6WJD4qvLl8JPV6uq96OcFRdEsVESg==
+"@xstate/react@1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@xstate/react/-/react-1.2.2.tgz#54d32034d40384782ee11145bbbb31b841a5a464"
+  integrity sha512-pXcUtts6EaEUmquzpMZ2yhAZZLAFYxKVaaHnQ8MPWpGuby0B5QMch17Ij59+LGQACQTSE0nDqXrvvBQId6m8qQ==
+  dependencies:
+    use-isomorphic-layout-effect "^1.0.0"
+    use-subscription "^1.3.0"
 
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
@@ -15081,6 +15084,18 @@ url@^0.11.0, url@~0.11.0:
   dependencies:
     punycode "1.3.2"
     querystring "0.2.0"
+
+use-isomorphic-layout-effect@^1.0.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/use-isomorphic-layout-effect/-/use-isomorphic-layout-effect-1.1.1.tgz#7bb6589170cd2987a152042f9084f9effb75c225"
+  integrity sha512-L7Evj8FGcwo/wpbv/qvSfrkHFtOpCzvM5yl2KVyDJoylVuSvzphiiasmjgQPttIGBAy2WKiBNR98q8w7PiNgKQ==
+
+use-subscription@^1.3.0:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/use-subscription/-/use-subscription-1.5.1.tgz#73501107f02fad84c6dd57965beb0b75c68c42d1"
+  integrity sha512-Xv2a1P/yReAjAbhylMfFplFKj9GssgTwN7RlcTxBujFQcloStWNDQdc4g4NRWH9xS4i/FDk04vQBptAXoF3VcA==
+  dependencies:
+    object-assign "^4.1.1"
 
 use@^3.1.0:
   version "3.1.1"
