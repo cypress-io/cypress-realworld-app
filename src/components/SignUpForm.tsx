@@ -64,7 +64,7 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
     confirmPassword: "",
   };
 
-  const signUpPending = (payload: SignUpPayload) => sendAuth("SIGNUP", payload);
+  const signUpPending = (payload: SignUpPayload) => sendAuth({ type: "SIGNUP", ...payload });
 
   return (
     <Container component="main" maxWidth="xs">

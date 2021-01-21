@@ -34,11 +34,11 @@ const BankAccountsContainer: React.FC<Props> = ({ authService, bankAccountsServi
   const currentUser = authState?.context.user;
 
   const createBankAccount = (payload: any) => {
-    sendBankAccounts("CREATE", payload);
+    sendBankAccounts({ type: "CREATE", ...payload });
   };
 
   const deleteBankAccount = (payload: any) => {
-    sendBankAccounts("DELETE", payload);
+    sendBankAccounts({ type: "DELETE", ...payload });
   };
 
   useEffect(() => {
