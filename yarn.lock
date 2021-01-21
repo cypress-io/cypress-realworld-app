@@ -3144,13 +3144,14 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.5.tgz#dcce4430e64b443ba8945f0290fb564ad5bac6dd"
   integrity sha512-7+2BITlgjgDhH0vvwZU/HZJVyk+2XUlvxXe8dFMedNX/aMkaOq++rMAFXc0tM7ij15QaWlbdQASBR9dihi+bDQ==
 
-"@types/json-server@0.14.2":
-  version "0.14.2"
-  resolved "https://registry.yarnpkg.com/@types/json-server/-/json-server-0.14.2.tgz#d66d46a9bd267af3706317d26520995921a0a19f"
-  integrity sha512-WBvNQz9T7NEqMvZBPD93mmt1X2+g0LiD8R9bXGKHsjA+l6r5/nqEkB77i/T6EDBpG1gW/nkCUqr6QsZ+9LtmqA==
+"@types/json-server@0.14.3":
+  version "0.14.3"
+  resolved "https://registry.yarnpkg.com/@types/json-server/-/json-server-0.14.3.tgz#e2a9f63ce2885b992ececd7904c5e7822d10079c"
+  integrity sha512-iy96xly9JpNtr+yIxWURnSHoi4eoJMF/SBIHaJvggcGFRG7qgH6tDwaJq3CNNc2JIouUUcpCvOEuiLxcsjjn2w==
   dependencies:
     "@types/connect" "*"
     "@types/express" "*"
+    "@types/lowdb" "*"
 
 "@types/lodash@*":
   version "4.14.155"
@@ -3167,7 +3168,7 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.165.tgz#74d55d947452e2de0742bad65270433b63a8c30f"
   integrity sha512-tjSSOTHhI5mCHTy/OOXYIhi2Wt1qcbHmuXD1Ha7q70CgI/I71afO4XtLb/cVexki1oVYchpul/TOuu3Arcdxrg==
 
-"@types/lowdb@1.0.9":
+"@types/lowdb@*", "@types/lowdb@1.0.9":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@types/lowdb/-/lowdb-1.0.9.tgz#1f6c27df72dd1c64522cc9a4566796d2dd058d38"
   integrity sha512-LBRG5EPXFOJDoJc9jACstMhtMP+u+UkPYllBeGQXXKiaHc+uzJs9+/Aynb/5KkX33DtrIiKyzNVTPQc/4RcD6A==
