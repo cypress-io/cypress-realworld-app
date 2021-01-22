@@ -1,15 +1,13 @@
 import React, { useEffect } from "react";
 import { useService } from "@xstate/react";
-import { Link as RouterLink, useRouteMatch } from "react-router-dom";
-import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
-import BankAccountList from "../components/BankAccountList";
-import { Grid, Button } from "@material-ui/core";
-import BankAccountForm from "../components/BankAccountForm";
 import { Interpreter } from "xstate";
+import { Link as RouterLink, useRouteMatch } from "react-router-dom";
+import { makeStyles, Grid, Button, Paper, Typography } from "@material-ui/core";
+
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import { DataContext, DataEvents } from "../machines/dataMachine";
+import BankAccountForm from "../components/BankAccountForm";
+import BankAccountList from "../components/BankAccountList";
 
 export interface Props {
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;

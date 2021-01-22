@@ -1,18 +1,24 @@
 import React, { useEffect } from "react";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import { Box, useTheme, useMediaQuery, Grid } from "@material-ui/core";
+import {
+  Button,
+  Box,
+  useTheme,
+  useMediaQuery,
+  Grid,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@material-ui/core";
 import { Interpreter } from "xstate";
-import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
-import { useService, useMachine } from "@xstate/react";
-import { userOnboardingMachine } from "../machines/userOnboardingMachine";
 import { isEmpty } from "lodash/fp";
+import { useService, useMachine } from "@xstate/react";
+
+import { userOnboardingMachine } from "../machines/userOnboardingMachine";
 import BankAccountForm from "../components/BankAccountForm";
 import { DataContext, DataEvents } from "../machines/dataMachine";
+import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import { ReactComponent as NavigatorIllustration } from "../svgs/undraw_navigator_a479.svg";
 import { ReactComponent as PersonalFinance } from "../svgs/undraw_personal_finance_tqcd.svg";
 
