@@ -36,8 +36,11 @@ linux-workflow: &linux-workflow
         name: "Setup Linux"
         yarn: true
         executor: with-chrome-and-firefox
-        build: 'yarn build'
+        build: "yarn build"
         post-steps:
+          - run:
+              name: Print machine info ℹ️
+              command: yarn cypress info
           - run:
               name: Check Types
               command: yarn types
