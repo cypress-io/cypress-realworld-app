@@ -2,14 +2,16 @@ import React from "react";
 import { useService } from "@xstate/react";
 import { Interpreter } from "xstate";
 import { Link } from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
+import {
+  Button,
+  Container,
+  CssBaseline,
+  TextField,
+  Grid,
+  Box,
+  Typography,
+  makeStyles,
+} from "@material-ui/core";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object, ref } from "yup";
 

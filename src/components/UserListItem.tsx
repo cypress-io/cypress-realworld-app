@@ -1,8 +1,7 @@
 import React from "react";
+import { ListItem, ListItemText, ListItemAvatar, Avatar, Grid } from "@material-ui/core";
 
-import ListItem from "@material-ui/core/ListItem";
 import { User } from "../models";
-import { ListItemText, ListItemAvatar, Avatar, Grid } from "@material-ui/core";
 
 export interface UserListItemProps {
   user: User;

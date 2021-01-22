@@ -1,10 +1,7 @@
 import React, { useEffect } from "react";
 import { useMachine } from "@xstate/react";
 import { Interpreter } from "xstate";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import { useMediaQuery, useTheme } from "@material-ui/core";
+import { makeStyles, Container, Grid, useMediaQuery, useTheme } from "@material-ui/core";
 
 import Footer from "./Footer";
 import NavBar from "./NavBar";
