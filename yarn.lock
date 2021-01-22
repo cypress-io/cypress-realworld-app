@@ -49,7 +49,7 @@
     invariant "^2.2.4"
     semver "^5.5.0"
 
-"@babel/core@7.12.10":
+"@babel/core@7.12.10", "@babel/core@^7.12.10":
   version "7.12.10"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.12.10.tgz#b79a2e1b9f70ed3d84bbfb6d8c4ef825f606bccd"
   integrity sha512-eTAlQKq65zHfkHZV0sIVODCPGVgoo1HdBlbSLi9CqOzuZanMv2ihzY+4paiKr1mH+XmYESMAmJ/dpZ68eN6d8w==
@@ -982,6 +982,13 @@
   integrity sha512-b3pWVncLBYoPP60UOTc7NMlbtsHQ6ITim78KQejNHK6WJ2mzV5kCcg4mIWpasAfJEgwVTibwo2e+FU7UEIKQUg==
   dependencies:
     "@babel/helper-plugin-utils" "^7.10.1"
+
+"@babel/plugin-syntax-import-meta@^7.10.4":
+  version "7.10.4"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-import-meta/-/plugin-syntax-import-meta-7.10.4.tgz#ee601348c370fa334d2207be158777496521fd51"
+  integrity sha512-Yqfm+XDx0+Prh3VSeEQCPU81yC+JWZ2pDPFSS4ZdpfZhp4MkFMaDC1UqseovEKwSUpnIL7+vK+Clp7bfh0iD7g==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.10.4"
 
 "@babel/plugin-syntax-json-strings@^7.2.0", "@babel/plugin-syntax-json-strings@^7.8.0":
   version "7.8.3"
@@ -3414,6 +3421,15 @@
     lodash "^4.17.15"
     semver "^7.3.2"
     tsutils "^3.17.1"
+
+"@vitejs/plugin-react-refresh@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@vitejs/plugin-react-refresh/-/plugin-react-refresh-1.1.2.tgz#09343cff21c5e726777d0a8e969824648937a9ca"
+  integrity sha512-iczCmFZRFx2lJTIzwEba63SeIpEiwGTpFdIGxCOJcZAZ5nmCF56gsM8gGYvvRACiUvj8ytZsRE06zdYBhzTvNg==
+  dependencies:
+    "@babel/core" "^7.12.10"
+    "@babel/plugin-syntax-import-meta" "^7.10.4"
+    react-refresh "^0.9.0"
 
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"
@@ -6642,6 +6658,11 @@ es6-symbol@^3.1.1, es6-symbol@~3.1.3:
     d "^1.0.1"
     ext "^1.1.2"
 
+esbuild@^0.8.26:
+  version "0.8.34"
+  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.8.34.tgz#16b4ac58f74c821d2c5a8c2f0585ca96a38ab4e6"
+  integrity sha512-tnr0V1ooakYr1aRLXQLzCn2GVG1kBTW3FWpRyC+NgrR3ntsouVpJOlTOV0BS4YLATx3/c+x3h/uBq9lWJlUAtQ==
+
 escalade@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/escalade/-/escalade-3.1.1.tgz#d8cfdc7000965c5a0174b4a82eaa5c0552742e40"
@@ -8704,6 +8725,13 @@ is-color-stop@^1.0.0:
     rgb-regex "^1.0.1"
     rgba-regex "^1.0.0"
 
+is-core-module@^2.1.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/is-core-module/-/is-core-module-2.2.0.tgz#97037ef3d52224d85163f5597b2b63d9afed981a"
+  integrity sha512-XRAfAdyyY5F5cOXn7hYQDqh2Xmii+DEfIcQGxK/uNwMHhIkPWO0g8msXcbzLe+MpGoR951MlqM/2iIlU4vKDdQ==
+  dependencies:
+    has "^1.0.3"
+
 is-data-descriptor@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/is-data-descriptor/-/is-data-descriptor-0.1.4.tgz#0b5ee648388e2c860282e793f1856fec3f301b56"
@@ -10675,6 +10703,11 @@ nanoid@^2.1.0:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-2.1.11.tgz#ec24b8a758d591561531b4176a01e3ab4f0f0280"
   integrity sha512-s/snB+WGm6uwi0WjsZdaVcuf3KJXlfGl2LcxgwkEwJF0D/BWzVWAZW/XY4bFaiR7s0Jk3FPvlnepg1H1b1UwlA==
 
+nanoid@^3.1.20:
+  version "3.1.20"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.1.20.tgz#badc263c6b1dcf14b71efaa85f6ab4c1d6cfc788"
+  integrity sha512-a1cQNyczgKbLX9jwbS/+d7W8fX/RfgYR7lVWwWOGIPNgK2m0MWvrGF6/m4kk6U3QcFMnZf3RIhL0v2Jgh/0Uxw==
+
 nanomatch@^1.2.9:
   version "1.2.13"
   resolved "https://registry.yarnpkg.com/nanomatch/-/nanomatch-1.2.13.tgz#b87a8aa4fc0de8fe6be88895b38983ff265bd119"
@@ -12372,6 +12405,15 @@ postcss@^7, postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.16, po
     source-map "^0.6.1"
     supports-color "^6.1.0"
 
+postcss@^8.2.1:
+  version "8.2.4"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.2.4.tgz#20a98a39cf303d15129c2865a9ec37eda0031d04"
+  integrity sha512-kRFftRoExRVXZlwUuay9iC824qmXPcQQVzAjbCCgjpXnkdMCJYBu2gTwAaFBzv8ewND6O8xFb3aELmEkh9zTzg==
+  dependencies:
+    colorette "^1.2.1"
+    nanoid "^3.1.20"
+    source-map "^0.6.1"
+
 prelude-ls@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
@@ -12819,6 +12861,11 @@ react-number-format@4.4.1:
   integrity sha512-ZGFMXZ0U7DcmQ3bSZY3FULOA1mfqreT9NIMYZNoa/ouiSgiTQiYA95Uj2KN8ge6BRr+ghA5vraozqWqsHZQw3Q==
   dependencies:
     prop-types "^15.7.2"
+
+react-refresh@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.9.0.tgz#71863337adc3e5c2f8a6bfddd12ae3bfe32aafbf"
+  integrity sha512-Gvzk7OZpiqKSkxsQvO/mbTN1poglhmAV7gR/DdIrRrSMXraRQQlfikRJOr3Nb9GTMPC5kof948Zy6jJZIFtDvQ==
 
 react-router-dom@5.2.0:
   version "5.2.0"
@@ -13388,6 +13435,14 @@ resolve@^1.1.4, resolve@^1.10.0, resolve@^1.12.0, resolve@^1.13.1, resolve@^1.14
   dependencies:
     path-parse "^1.0.6"
 
+resolve@^1.19.0:
+  version "1.19.0"
+  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.19.0.tgz#1af5bf630409734a067cae29318aac7fa29a267c"
+  integrity sha512-rArEXAgsBG4UgRGcynxWIWKFvh/XZCcS8UJdHhwy91zwAvCZIbcs+vAbflgBnNjYMs/i/i+/Ux6IZhML1yPvxg==
+  dependencies:
+    is-core-module "^2.1.0"
+    path-parse "^1.0.6"
+
 responselike@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/responselike/-/responselike-1.0.2.tgz#918720ef3b631c5642be068f15ade5a46f4ba1e7"
@@ -13490,6 +13545,13 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
   dependencies:
     hash-base "^3.0.0"
     inherits "^2.0.1"
+
+rollup@^2.35.1:
+  version "2.38.0"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.38.0.tgz#57942d5a10826cb12ed1f19c261f774efa502d2d"
+  integrity sha512-ay9zDiNitZK/LNE/EM2+v5CZ7drkB2xyDljvb1fQJCGnq43ZWRkhxN145oV8GmoW1YNi4sA/1Jdkr2LfawJoXw==
+  optionalDependencies:
+    fsevents "~2.1.2"
 
 rsvp@^4.8.4:
   version "4.8.5"
@@ -15206,6 +15268,18 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
+
+vite@^2.0.0-beta.36:
+  version "2.0.0-beta.37"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-2.0.0-beta.37.tgz#1e5f835da58a40e7d822c3dab5b6083ce229e48d"
+  integrity sha512-MCEvCv6TOGu64dl/swsUNga1bsXa+sH16gGXXTw2I2v7b5JAFa1KpV4mgYPMsHpFVmWrAhBAQV1PtA3SD9z/mQ==
+  dependencies:
+    esbuild "^0.8.26"
+    postcss "^8.2.1"
+    resolve "^1.19.0"
+    rollup "^2.35.1"
+  optionalDependencies:
+    fsevents "~2.1.2"
 
 vm-browserify@^1.0.0, vm-browserify@^1.0.1:
   version "1.1.2"
