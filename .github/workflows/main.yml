@@ -25,6 +25,9 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           runTests: false
+      # report machine parameters
+      - run: yarn cypress info
+      - run: node -p 'os.cpus()'
       - run: yarn types
       - run: yarn test:unit:ci
       - run: yarn build
@@ -91,7 +94,7 @@ jobs:
           browser: chrome
           record: true
           parallel: true
-          group: "UI - Chrome" 
+          group: "UI - Chrome"
           spec: cypress/tests/ui/*
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -188,7 +191,7 @@ jobs:
           browser: firefox
           record: true
           parallel: true
-          group: "UI - Firefox" 
+          group: "UI - Firefox"
           spec: cypress/tests/ui/*
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -235,7 +238,7 @@ jobs:
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
-          browser: firefox 
+          browser: firefox
           record: true
           parallel: true
           group: "UI - Firefox - Mobile"
@@ -283,7 +286,7 @@ jobs:
           wait-on-timeout: 120
           record: true
           parallel: true
-          group: "UI - Electron - Windows" 
+          group: "UI - Electron - Windows"
           spec: cypress/tests/ui/*
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
