@@ -25,7 +25,9 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           runTests: false
+      # report machine parameters
       - run: yarn cypress info
+      - run: node -p 'os.cpus()'
       - run: yarn types
       - run: yarn test:unit:ci
       - run: yarn build
