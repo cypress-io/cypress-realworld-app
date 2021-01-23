@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const App: React.FC = () => {
+const App = () => {
   const classes = useStyles();
   const [authState] = useService(authService);
   const [, , notificationsService] = useMachine(notificationsMachine);

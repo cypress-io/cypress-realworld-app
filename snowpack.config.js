@@ -1,6 +1,7 @@
 /** @type {import("snowpack").SnowpackUserConfig } */
 
 module.exports = {
+  extends: "@snowpack/app-scripts-react",
   mount: {
     public: { url: "/", static: true },
     src: { url: "/dist" },
@@ -12,14 +13,14 @@ module.exports = {
   ],
   routes: [
     /* Enable an SPA Fallback in development: */
-    // {"match": "routes", "src": ".*", "dest": "/index.html"},
+    //{ match: "routes", src: ".*", dest: "/index.html" },
   ],
   optimize: {
     /* Example: Bundle your final build: */
     // "bundle": true,
   },
   packageOptions: {
-    /* ... */
+    polyfillNode: true,
   },
   devOptions: {
     port: 3000,
@@ -28,5 +29,8 @@ module.exports = {
   },
   buildOptions: {
     /* ... */
+  },
+  alias: {
+    src: "./src",
   },
 };
