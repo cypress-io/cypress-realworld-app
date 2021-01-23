@@ -95,7 +95,7 @@
     "lowdb": "1.0.0",
     "morgan": "1.10.0",
     "ncp": "2.0.0",
-    "nodemon": "2.0.6",
+    "nodemon": "2.0.7",
     "nyc": "15.1.0",
     "passport": "0.4.1",
     "passport-local": "1.0.0",
