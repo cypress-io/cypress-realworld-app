@@ -214,6 +214,7 @@ describe("New Transaction", function () {
       .first()
       .should("contain", transactionPayload.description)
       .click({ force: true });
+    cy.getBySel("transaction-detail-header").should("exist");
     cy.visualSnapshot("Navigate to Transaction Item");
 
     cy.getBySelLike("accept-request").click();
