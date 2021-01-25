@@ -202,6 +202,7 @@ describe("New Transaction", function () {
     cy.createTransaction(transactionPayload);
     cy.wait("@createTransaction");
     cy.getBySel("new-transaction-create-another-transaction").should("be.visible");
+    cy.getBySel("transaction-detail-header").should("exist");
     cy.visualSnapshot("receiver - Transaction Payment Submitted Notification");
 
     cy.switchUser(ctx.contact!.username);
