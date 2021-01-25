@@ -28,7 +28,7 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-infinite-calendar": "2.3.1",
-    "react-number-format": "4.4.1",
+    "react-number-format": "4.4.4",
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
     "react-virtualized": "9.22.3",
