@@ -116,7 +116,7 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",
-    "dev:vite": "NODE_ENV=development vite --debug public",
+    "dev:vite": "NODE_ENV=development vite public --debug",
     "start": "cross-env NODE_ENV=development concurrently yarn:start:react yarn:start:api",
     "start:ci": "cross-env NODE_ENV=test concurrently yarn:start:react:proxy-server yarn:start:api",
     "start:react": "react-scripts -r @cypress/instrument-cra start",
