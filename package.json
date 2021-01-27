@@ -23,8 +23,10 @@
     "clsx": "1.1.1",
     "date-fns": "2.16.1",
     "dinero.js": "1.8.1",
+    "faker": "5.1.0",
     "formik": "2.2.6",
     "history": "4.10.1",
+    "lodash": "^4.17.20",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-infinite-calendar": "2.3.1",
@@ -74,8 +76,6 @@
     "@types/validator": "13.1.1",
     "@types/webpack-env": "1.16.0",
     "@types/yup": "0.29.11",
-    "@types/connect-history-api-fallback": "1.3.3",
-    "@types/http-proxy-middleware": "0.19.3",
     "@vitejs/plugin-react-refresh": "^1.1.2",
     "babel-loader": "8.0.6",
     "bcryptjs": "2.4.3",
@@ -90,7 +90,6 @@
     "express-paginate": "1.0.2",
     "express-session": "1.17.1",
     "express-validator": "6.9.2",
-    "faker": "5.1.0",
     "fuse.js": "6.4.6",
     "husky": "4.3.8",
     "istanbul-lib-coverage": "3.0.0",
@@ -107,7 +106,8 @@
     "start-server-and-test": "1.11.7",
     "ts-node": "9.1.1",
     "typescript": "4.1.3",
-    "vite": "^2.0.0-beta.36"
+    "vite": "^2.0.0-beta.50",
+    "vite-plugin-svgr": "^0.2.0"
   },
   "resolutions": {
     "@babel/compat-data": "7.9.0",
@@ -116,7 +116,7 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",
-    "vite": "NODE_ENV=development vite --debug",
+    "dev:vite": "NODE_ENV=development vite --debug public",
     "start": "cross-env NODE_ENV=development concurrently yarn:start:react yarn:start:api",
     "start:ci": "cross-env NODE_ENV=test concurrently yarn:start:react:proxy-server yarn:start:api",
     "start:react": "react-scripts -r @cypress/instrument-cra start",
