@@ -101,6 +101,8 @@
     "nyc": "15.1.0",
     "passport": "0.4.1",
     "passport-local": "1.0.0",
+    "patch-package": "^6.2.2",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "2.2.1",
     "react-scripts": "3.4.0",
     "start-server-and-test": "1.11.7",
@@ -149,7 +151,8 @@
     "build": "react-scripts build",
     "eject": "react-scripts eject",
     "codesandbox:start:api": "yarn tsnode:not-instrumented --files backend/app.ts",
-    "codesandbox:start": "NODE_ENV=development TSC_COMPILE_ON_ERROR=true concurrently \"react-scripts start\" yarn:start:api:codesandbox"
+    "codesandbox:start": "NODE_ENV=development TSC_COMPILE_ON_ERROR=true concurrently \"react-scripts start\" yarn:start:api:codesandbox",
+    "postinstall": "patch-package"
   },
   "eslintConfig": {
     "env": {
