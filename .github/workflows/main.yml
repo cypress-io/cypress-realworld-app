@@ -1,6 +1,9 @@
 name: Cypress Tests
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - "renovate/**"
 
 jobs:
   install:
