@@ -124,7 +124,7 @@
     "cypress:run:mobile": "cypress run --config viewportWidth=375,viewportHeight=667",
     "test": "yarn cypress:open",
     "test:headless": "yarn cypress:run",
-    "test:api": "yarn cypress:run --spec 'integration/api/*'",
+    "test:api": "yarn cypress:run --spec 'cypress/tests/api/*'",
     "test:unit": "react-scripts test --runInBand",
     "test:unit:ci": "react-scripts test --watchAll false --ci --runInBand",
     "start:api": "yarn tsnode --files backend/app.ts",
