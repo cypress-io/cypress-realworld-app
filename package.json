@@ -149,6 +149,7 @@
     "prestart:empty": "yarn db:seed:empty",
     "prebuild": "yarn types",
     "build": "react-scripts build",
+    "build:vite": "vite build",
     "eject": "react-scripts eject",
     "codesandbox:start:api": "yarn tsnode:not-instrumented --files backend/app.ts",
     "codesandbox:start": "NODE_ENV=development TSC_COMPILE_ON_ERROR=true concurrently \"react-scripts start\" yarn:start:api:codesandbox",
