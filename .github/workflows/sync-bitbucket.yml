@@ -5,7 +5,9 @@ name: Sync Bitbucket over SSH
 
 on:
   push:
-    branches: [ kevin/bitbucket-pipelines-sync ] # master
+    branches:
+      - kevin/bitbucket-pipelines-sync
+      #- develop
 
 # set the BB_REPO variable to the destination bitbucket workspace name
 env:
