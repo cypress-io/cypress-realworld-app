@@ -87,7 +87,7 @@
     "express-paginate": "1.0.2",
     "express-session": "1.17.1",
     "express-validator": "6.9.2",
-    "faker": "5.2.0",
+    "faker": "5.4.0",
     "fuse.js": "6.4.6",
     "husky": "4.3.8",
     "istanbul-lib-coverage": "3.0.0",
