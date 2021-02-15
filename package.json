@@ -60,7 +60,7 @@
     "@types/lowdb": "1.0.9",
     "@types/morgan": "1.9.2",
     "@types/node": "14.14.21",
-    "@types/passport": "1.0.5",
+    "@types/passport": "1.0.6",
     "@types/react": "17.0.0",
     "@types/react-dom": "17.0.0",
     "@types/react-infinite-calendar": "2.3.5",
