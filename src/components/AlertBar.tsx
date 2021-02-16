@@ -3,7 +3,7 @@ import { Snackbar } from "@material-ui/core";
 import { Interpreter } from "xstate";
 import { SnackbarContext, SnackbarSchema, SnackbarEvents } from "../machines/snackbarMachine";
 import { useService } from "@xstate/react";
-import Alert from "@material-ui/lab/Alert";
+import { Alert } from "@material-ui/lab";
 
 interface Props {
   snackbarService: Interpreter<SnackbarContext, SnackbarSchema, SnackbarEvents, any>;

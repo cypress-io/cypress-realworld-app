@@ -1,8 +1,8 @@
 import React from "react";
+import { List } from "@material-ui/core";
 
-import BankAccountItem from "./BankAccountItem";
-import List from "@material-ui/core/List";
 import { BankAccount } from "../models";
+import BankAccountItem from "./BankAccountItem";
 import EmptyList from "./EmptyList";
 
 export interface BankAccountListProps {

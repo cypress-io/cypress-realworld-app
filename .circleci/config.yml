@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
-  cypress: cypress-io/cypress@1.26.0
-  codecov: codecov/codecov@1.1.1
+  cypress: cypress-io/cypress@1.27.0
+  codecov: codecov/codecov@1.1.3
   win: circleci/windows@2.4.0
 
 executors:
@@ -36,7 +36,11 @@ linux-workflow: &linux-workflow
         name: "Setup Linux"
         yarn: true
         executor: with-chrome-and-firefox
+        build: "yarn build"
         post-steps:
+          - run:
+              name: Print machine info ℹ️
+              command: yarn cypress info
           - run:
               name: Check Types
               command: yarn types
@@ -155,10 +159,20 @@ windows-workflow: &windows-workflow
           # executor comes from the "windows" orb
           name: win/default
           shell: bash.exe
+          size: large
+        pre-steps:
+          - run:
+              name: Disabling Windows Defender
+              shell: powershell.exe
+              command: Set-MpPreference -DisableRealtimeMonitoring $true
+        build: yarn build
         post-steps:
           - run:
               name: Cypress info
               command: yarn cypress info
+          - run:
+              name: Cypress cache list
+              command: yarn cypress cache list
           - run:
               name: Check Types
               command: yarn types

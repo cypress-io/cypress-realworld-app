@@ -1,20 +1,27 @@
 import React from "react";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
-import MenuIcon from "@material-ui/icons/Menu";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
-import Link from "@material-ui/core/Link";
-import { Link as RouterLink, useLocation } from "react-router-dom";
-import { Button, useTheme, useMediaQuery } from "@material-ui/core";
 import { Interpreter } from "xstate";
-import { DataContext, DataEvents } from "../machines/dataMachine";
 import { useService } from "@xstate/react";
+import {
+  makeStyles,
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Badge,
+  Button,
+  useTheme,
+  useMediaQuery,
+  Link,
+} from "@material-ui/core";
+import {
+  Menu as MenuIcon,
+  Notifications as NotificationsIcon,
+  AttachMoney as AttachMoneyIcon,
+} from "@material-ui/icons";
+import { Link as RouterLink, useLocation } from "react-router-dom";
+
+import { DataContext, DataEvents } from "../machines/dataMachine";
 import TransactionNavTabs from "./TransactionNavTabs";
 import { ReactComponent as RWALogo } from "../svgs/rwa-logo.svg";
 import { ReactComponent as RWALogoIcon } from "../svgs/rwa-icon-logo.svg";

@@ -1,7 +1,6 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, Typography } from "@material-ui/core";
 import { TransactionResponseItem } from "../models";
-import { Typography } from "@material-ui/core";
 import { isRequestTransaction, formatAmount } from "../utils/transactionUtils";
 
 const useStyles = makeStyles((theme) => ({

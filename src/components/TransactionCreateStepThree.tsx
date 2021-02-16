@@ -1,7 +1,6 @@
 import React from "react";
 import { Link as RouterLink, useHistory } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
-import { Paper, Typography, Grid, Avatar, Box, Button } from "@material-ui/core";
+import { Paper, Typography, Grid, Avatar, Box, Button, makeStyles } from "@material-ui/core";
 import { Interpreter } from "xstate";
 import {
   CreateTransactionMachineContext,

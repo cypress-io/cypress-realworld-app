@@ -429,7 +429,7 @@ export const transactionsWithinDateRange = curry(
   }
 );
 
-export const getTransactionsForUserByObj = curry((userId: string, query?: object) =>
+export const getTransactionsForUserByObj = curry((userId: string, query: object) =>
   flow(getAllTransactionsForUserByObj(userId), uniqBy("id"))(query)
 );
 

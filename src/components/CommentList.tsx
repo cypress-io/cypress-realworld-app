@@ -1,7 +1,7 @@
 import React from "react";
+import { List } from "@material-ui/core";
 
 import CommentListItem from "./CommentListItem";
-import List from "@material-ui/core/List";
 import { Comment } from "../models";
 
 export interface CommentsListProps {

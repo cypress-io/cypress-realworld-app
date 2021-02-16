@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router";
 import {
   ListItem,
   Typography,
@@ -10,12 +11,10 @@ import {
   withStyles,
   Theme,
   createStyles,
+  makeStyles,
 } from "@material-ui/core";
-import LikeIcon from "@material-ui/icons/ThumbUpAltOutlined";
-import CommentIcon from "@material-ui/icons/CommentRounded";
-import { makeStyles } from "@material-ui/core/styles";
+import { ThumbUpAltOutlined as LikeIcon, CommentRounded as CommentIcon } from "@material-ui/icons";
 import { TransactionResponseItem } from "../models";
-import { useHistory } from "react-router";
 import TransactionTitle from "./TransactionTitle";
 import TransactionAmount from "./TransactionAmount";
 
