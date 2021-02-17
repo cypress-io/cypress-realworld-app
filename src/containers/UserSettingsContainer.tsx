@@ -24,7 +24,7 @@ const UserSettingsContainer: React.FC<Props> = ({ authService }) => {
   const [authState, sendAuth] = useService(authService);
 
   const currentUser = authState?.context?.user;
-  const updateUser = (payload: any) => sendAuth("UPDATE", payload);
+  const updateUser = (payload: any) => sendAuth({ type: "UPDATE", ...payload });
 
   return (
     <Paper className={classes.paper}>

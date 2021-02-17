@@ -40,7 +40,7 @@ router.post("/login", passport.authenticate("local"), (req: Request, res: Respon
   if (req.body.remember) {
     req.session!.cookie.maxAge = 24 * 60 * 60 * 1000 * 30; // Expire in 30 days
   } else {
-    req.session!.cookie.expires = false;
+    req.session!.cookie.expires = undefined;
   }
 
   res.send({ user: req.user });

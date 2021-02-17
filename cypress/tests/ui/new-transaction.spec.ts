@@ -83,6 +83,7 @@ describe("New Transaction", function () {
     cy.database("find", "users", { id: ctx.contact!.id })
       .its("balance")
       .should("equal", ctx.contact!.balance + parseInt(payment.amount) * 100);
+    cy.getBySel("alert-bar-success").should("not.exist");
     cy.visualSnapshot("Personal List Validate Transaction in List");
   });
 
@@ -214,6 +215,7 @@ describe("New Transaction", function () {
       .first()
       .should("contain", transactionPayload.description)
       .click({ force: true });
+    cy.getBySel("transaction-detail-header").should("exist");
     cy.visualSnapshot("Navigate to Transaction Item");
 
     cy.getBySelLike("accept-request").click();
