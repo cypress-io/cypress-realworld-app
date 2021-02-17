@@ -161,6 +161,8 @@
     "predev": "yarn db:seed:dev",
     "prestart:empty": "yarn db:seed:empty",
     "prebuild": "yarn types",
+    "prebuild:ci": "yarn predev:cognito:ci",
+    "build:ci": "react-scripts build",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
     "codesandbox:start:api": "yarn tsnode:not-instrumented --files backend/app.ts",

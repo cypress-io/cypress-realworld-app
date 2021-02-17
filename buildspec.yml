@@ -45,7 +45,7 @@ phases:
       - yarn install --frozen-lockfile
   pre_build:
     commands:
-      - yarn run build
+      - yarn build:ci
   build:
     commands:
       - yarn start:ci & npx wait-on http://localhost:3000

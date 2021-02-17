@@ -33,7 +33,7 @@ linux-workflow: &linux-workflow
         name: "Setup Linux"
         yarn: true
         executor: with-chrome-and-firefox
-        build: "yarn build"
+        build: "yarn build:ci"
         post-steps:
           - run:
               name: Print machine info ℹ️
@@ -162,7 +162,7 @@ windows-workflow: &windows-workflow
               name: Disabling Windows Defender
               shell: powershell.exe
               command: Set-MpPreference -DisableRealtimeMonitoring $true
-        build: yarn build
+        build: yarn build:ci
         post-steps:
           - run:
               name: Cypress info
