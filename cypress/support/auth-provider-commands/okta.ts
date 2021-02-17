@@ -2,7 +2,7 @@
 ///<reference path="../../global.d.ts" />
 
 // @ts-ignore
-import OktaAuth from "@okta/okta-auth-js";
+import { OktaAuth } from "@okta/okta-auth-js";
 
 // Okta
 Cypress.Commands.add("loginByOktaApi", (username: string, password: string) => {
