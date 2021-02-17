@@ -23,8 +23,8 @@ import { Link as RouterLink, useLocation } from "react-router-dom";
 
 import { DataContext, DataEvents } from "../machines/dataMachine";
 import TransactionNavTabs from "./TransactionNavTabs";
-import { ReactComponent as RWALogo } from "../svgs/rwa-logo.svg";
-import { ReactComponent as RWALogoIcon } from "../svgs/rwa-icon-logo.svg";
+import RWALogo from "./SvgRwaLogo";
+import RWALogoIcon from "./SvgRwaIconLogo";
 
 const drawerWidth = 240;
 
