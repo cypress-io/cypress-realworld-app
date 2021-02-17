@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 /* istanbul ignore next */
 const AppOkta: React.FC = () => {
-  const { authState: oktaAuthState, authService: oktaAuthService } = useOktaAuth();
+  const { authState: oktaAuthState, oktaAuth: oktaAuthService } = useOktaAuth();
   const classes = useStyles();
   const [authState] = useService(authService);
   const [, , notificationsService] = useMachine(notificationsMachine);
