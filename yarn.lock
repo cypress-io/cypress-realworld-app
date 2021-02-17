@@ -4502,6 +4502,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.11.2":
+  version "7.12.13"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.12.13.tgz#0a21452352b02542db0ffb928ac2d3ca7cb6d66d"
+  integrity sha512-8+3UMPBrjFa/6TtKi/7sehPKqfAm4g6K+YQjyyFOLUTxzOngcRZTlAVY8sc2CORJYqdHQY8gRPHmn+qo15rCBw==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/template@^7.10.1", "@babel/template@^7.4.0", "@babel/template@^7.4.4", "@babel/template@^7.8.3", "@babel/template@^7.8.6":
   version "7.10.1"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.10.1.tgz#e167154a94cb5f14b28dc58f5356d2162f539811"
@@ -5168,6 +5175,13 @@
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@oclif/screen/-/screen-1.0.4.tgz#b740f68609dfae8aa71c3a6cab15d816407ba493"
   integrity sha512-60CHpq+eqnTxLZQ4PGHYNwUX572hgpMHGPtTWMjdTMsAvlm69lZV/4ly6O3sAYkomo4NggGcomrDpBe34rxUqw==
+
+"@okta/okta-react@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@okta/okta-react/-/okta-react-4.1.0.tgz#f450db6d4abe61167663da5d1d4b22c46c8884bb"
+  integrity sha512-Y6JUYeUtoiXUevgrKoi/x/xhLQUoElox9pBdzZqrbfjcizVwGNi5+oPSvSTgtbQ/J73nPI48jALMxj6nYfDDTg==
+  dependencies:
+    "@babel/runtime" "^7.11.2"
 
 "@percy/agent@~0":
   version "0.28.0"
