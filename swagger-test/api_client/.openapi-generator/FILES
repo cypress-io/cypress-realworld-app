@@ -1,0 +1,16 @@
+.gitignore
+.npmignore
+.openapi-generator-ignore
+README.md
+api.ts
+api/bank-accounts-api.ts
+base.ts
+common.ts
+configuration.ts
+git_push.sh
+index.ts
+model/bank-account.ts
+model/index.ts
+model/inline-object.ts
+package.json
+tsconfig.json

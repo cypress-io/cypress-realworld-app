@@ -2,7 +2,8 @@
 // @ts-check
 
 import faker from "faker";
-import { User, BankAccount } from "../../../src/models";
+import { User } from "../../../src/models";
+import { BankAccount } from "cypress-realword-app-api/model"
 
 const apiBankAccounts = `${Cypress.env("apiUrl")}/bankAccounts`;
 

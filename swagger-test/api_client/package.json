@@ -1,0 +1,30 @@
+{
+  "name": "cypress-realword-app-api",
+  "version": "1.0.4-SNAPSHOT.202102171106",
+  "description": "OpenAPI client for cypress-realword-app-api",
+  "author": "OpenAPI-Generator Contributors",
+  "keywords": [
+    "axios",
+    "typescript",
+    "openapi-client",
+    "openapi-generator",
+    "cypress-realword-app-api"
+  ],
+  "license": "Unlicense",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --outDir dist/",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "axios": "^0.21.1"
+  },
+  "devDependencies": {
+    "@types/node": "^12.11.5",
+    "typescript": "^3.6.4"
+  },
+  "publishConfig": {
+    "registry": "http://10.251.21.32:4873"
+  }
+}

@@ -10,7 +10,7 @@ import { authService } from "../machines/authMachine";
 import AlertBar from "../components/AlertBar";
 import SignInForm from "../components/SignInForm";
 import SignUpForm from "../components/SignUpForm";
-import { bankAccountsMachine } from "../machines/bankAccountsMachine";
+import { bankAccountsMachine2 } from "../machines/bankAccountsMachine";
 import PrivateRoutesContainer from "./PrivateRoutesContainer";
 
 // @ts-ignore
@@ -33,7 +33,7 @@ const App: React.FC = () => {
 
   const [, , snackbarService] = useMachine(snackbarMachine);
 
-  const [, , bankAccountsService] = useMachine(bankAccountsMachine);
+  const [, , bankAccountsService] = useMachine(bankAccountsMachine2);
 
   const isLoggedIn =
     authState.matches("authorized") ||
