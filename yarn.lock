@@ -15729,13 +15729,6 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-vite-plugin-svgr@0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/vite-plugin-svgr/-/vite-plugin-svgr-0.2.0.tgz#ea248931897484fc2ebf533d4a9d6acef37ab437"
-  integrity sha512-dVikufkAzzZDE09hsfz0RrNRPlMi5H0aSVa14WWE55tuG3WQT3r/znf/iEW1WJmXqn/Tzz/ON4wMjJztLV0UeQ==
-  dependencies:
-    "@svgr/core" "^5.5.0"
-
 vite@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/vite/-/vite-2.0.1.tgz#348fc5c0de510aa90bd01ecf87df210ce741b38e"
