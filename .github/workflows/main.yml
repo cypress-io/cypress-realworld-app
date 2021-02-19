@@ -257,7 +257,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   ui-windows-tests:
-    timeout-minutes: 15
+    timeout-minutes: 30 
     runs-on: windows-2019
     needs: install-windows
     strategy:
