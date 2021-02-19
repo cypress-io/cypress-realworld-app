@@ -132,6 +132,7 @@ describe("Bank Accounts", function () {
     cy.getBySel("bankaccount-list").should("not.exist");
     cy.getBySel("empty-list-header").should("contain", "No Bank Accounts");
     cy.getBySel("user-onboarding-dialog").should("be.visible");
+    cy.getBySel("nav-top-notifications-count").should("exist");
     cy.visualSnapshot("User Onboarding Dialog is Visible");
   });
 });
