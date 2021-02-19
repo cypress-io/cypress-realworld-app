@@ -59,6 +59,7 @@ jobs:
       - run: yarn build:ci
 
   ui-chrome-tests:
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     container: cypress/browsers:node12.18.3-chrome87-ff82
     needs: install
@@ -106,6 +107,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   ui-chrome-mobile-tests:
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     container: cypress/browsers:node12.18.3-chrome87-ff82
     needs: install
@@ -154,6 +156,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   ui-firefox-tests:
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
       image: cypress/browsers:node12.18.3-chrome87-ff82
@@ -203,6 +206,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   ui-firefox-mobile-tests:
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
       image: cypress/browsers:node12.18.3-chrome87-ff82
@@ -253,6 +257,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   ui-windows-tests:
+    timeout-minutes: 15
     runs-on: windows-2019
     needs: install-windows
     strategy:
