@@ -24,7 +24,7 @@
     "date-fns": "2.17.0",
     "dinero.js": "1.8.1",
     "formik": "2.2.6",
-    "history": "4.10.1",
+    "history": "5.0.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-infinite-calendar": "2.3.1",
