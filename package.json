@@ -35,7 +35,7 @@
     "shortid": "2.2.16",
     "uuid": "8.3.2",
     "xstate": "4.16.2",
-    "yup": "0.32.8"
+    "yup": "0.32.9"
   },
   "devDependencies": {
     "@babel/cli": "7.12.16",
