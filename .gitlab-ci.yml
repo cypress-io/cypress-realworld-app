@@ -29,7 +29,7 @@ install:
     - npx cypress cache path
     - npx cypress cache list
     - yarn test:unit:ci
-    - yarn build
+    - yarn build:ci
 
 api-tests:
   image: cypress/browsers:node12.14.1-chrome85-ff81
