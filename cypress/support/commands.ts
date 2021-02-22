@@ -3,8 +3,15 @@
 
 import { pick } from "lodash/fp";
 import { format as formatDate } from "date-fns";
-import "@percy/cypress";
 import { isMobile } from "./utils";
+
+// Import Cypress Percy plugin command (https://docs.percy.io/docs/cypress)
+import "@percy/cypress";
+
+// Import commands for third-party auth providers
+import "./auth-provider-commands/cognito";
+import "./auth-provider-commands/auth0";
+import "./auth-provider-commands/okta";
 
 // custom command to make taking snapshots with full name
 // formed from the test title + suffix easier
