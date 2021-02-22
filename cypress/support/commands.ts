@@ -127,7 +127,6 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
     name: "loginbyxstate",
     displayName: "LOGIN BY XSTATE",
     message: [`🔐 Authenticating | ${username}`],
-    // @ts-ignore
     autoEnd: false,
   });
 
