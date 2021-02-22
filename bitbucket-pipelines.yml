@@ -57,7 +57,7 @@ pipelines:
         - yarn install --frozen-lockfile
         - yarn types
         - yarn test:unit:ci
-        - yarn build
+        - yarn build:ci
       artifacts:
         - build/**
   - parallel:
