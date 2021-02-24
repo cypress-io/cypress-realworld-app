@@ -43,9 +43,6 @@
     "yup": "0.32.9"
   },
   "devDependencies": {
-    "@babel/cli": "7.12.16",
-    "@babel/core": "7.12.16",
-    "@babel/preset-env": "7.12.16",
     "@cypress/code-coverage": "3.9.2",
     "@cypress/instrument-cra": "1.4.0",
     "@percy/cypress": "2.3.4",
