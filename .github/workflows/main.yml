@@ -33,7 +33,7 @@ jobs:
       - run: node -p 'os.cpus()'
       - run: yarn types
       - run: yarn test:unit:ci
-      - run: yarn build
+      - run: yarn build:ci
 
   install-windows:
     runs-on: windows-2019
@@ -56,7 +56,7 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           runTests: false
-      - run: yarn build
+      - run: yarn build:ci
 
   ui-chrome-tests:
     timeout-minutes: 15
@@ -257,7 +257,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   ui-windows-tests:
-    timeout-minutes: 15
+    timeout-minutes: 40
     runs-on: windows-2019
     needs: install-windows
     strategy:
