@@ -150,6 +150,7 @@
     "tsnode": "nyc --silent ts-node -P tsconfig.tsnode.json",
     "tsnode:not-instrumented": "ts-node -P tsconfig.tsnode.json",
     "db:seed": "yarn tsnode scripts/generateSeedData",
+    "predb:seed:dev": "yarn predev:cognito:ci",
     "db:seed:dev": "ncp ./data/database-seed.json ./data/database.json",
     "db:seed:empty": "ncp ./data/empty-seed.json ./data/database.json",
     "postdb:seed": "yarn db:seed:dev",
