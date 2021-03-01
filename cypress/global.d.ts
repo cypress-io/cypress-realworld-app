@@ -35,6 +35,11 @@ declare namespace Cypress {
      */
     window(options?: Partial<Loggable & Timeoutable>): Chainable<CustomWindow>;
 
+    /**
+     * Custom command to make taking Percy snapshots with full name formed from the test title + suffix easier
+     */
+    visualSnapshot(maybeName?): Chainable<any>;
+
     getBySel(dataTestAttribute: string, args?: any): Chainable<Element>;
     getBySelLike(dataTestPrefixAttribute: string, args?: any): Chainable<Element>;
 
@@ -102,6 +107,11 @@ declare namespace Cypress {
     loginByGoogleApi(): Chainable<Response>;
 
     /**
+     * Logs-in user by using Okta API request
+     */
+    loginByOktaApi(username: string, password?: string): Chainable<Response>;
+
+    /**
      * Logs in bypassing UI by triggering XState login event
      */
     loginByXstate(username: string, password?: string): Chainable<any>;
@@ -112,6 +122,11 @@ declare namespace Cypress {
     logoutByXstate(): Chainable<void>;
 
     /**
+     * Logs in via Auth0 API
+     */
+    loginByAuth0Api(username: string, password?: string): Chainable<any>;
+
+    /**
      * Switch current user by logging out current user and logging as user with specified username
      */
     switchUser(username: string): Chainable<any>;
@@ -120,5 +135,10 @@ declare namespace Cypress {
      * Create Transaction via bypassing UI and using XState createTransactionService
      */
     createTransaction(payload): Chainable<any>;
+
+    /**
+     * Logs in to AWS Cognito via Amplify Auth API bypassing UI using Cypress Task
+     */
+    loginByCognitoApi(username: string, password: string): Chainable<any>;
   }
 }

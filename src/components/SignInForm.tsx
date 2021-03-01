@@ -2,24 +2,26 @@ import React from "react";
 import { Interpreter } from "xstate";
 import { useService } from "@xstate/react";
 import { Link } from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
+import {
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Grid,
+  Box,
+  Typography,
+  makeStyles,
+  Container,
+} from "@material-ui/core";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 
-import { ReactComponent as RWALogo } from "../svgs/rwa-logo.svg";
+import RWALogo from "./SvgRwaLogo";
 import Footer from "./Footer";
 import { SignInPayload } from "../models";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
-import Alert from "@material-ui/lab/Alert";
+import { Alert } from "@material-ui/lab";
 
 const validationSchema = object({
   username: string().required("Username is required"),
@@ -63,7 +65,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
     remember: undefined,
   };
 
-  const signInPending = (payload: SignInPayload) => sendAuth("LOGIN", payload);
+  const signInPending = (payload: SignInPayload) => sendAuth({ type: "LOGIN", ...payload });
 
   return (
     <Container component="main" maxWidth="xs">

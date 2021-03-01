@@ -1,7 +1,7 @@
 import React from "react";
-import Typography from "@material-ui/core/Typography";
-import { ReactComponent as CypressLogo } from "../svgs/cypress-logo.svg";
-import { Container } from "@material-ui/core";
+import { Container, Typography } from "@material-ui/core";
+
+import CypressLogo from "../components/SvgCypressLogo";
 
 export default function Footer() {
   return (

@@ -1,13 +1,12 @@
 import React from "react";
 
-import ListItem from "@material-ui/core/ListItem";
-import LikeIcon from "@material-ui/icons/ThumbUpAltOutlined";
-import PaymentIcon from "@material-ui/icons/Payment";
-import CommentIcon from "@material-ui/icons/CommentRounded";
-import IconButton from "@material-ui/core/IconButton";
-import CheckIcon from "@material-ui/icons/Check";
-import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
-import { NotificationResponseItem } from "../models";
+import {
+  Check as CheckIcon,
+  ThumbUpAltOutlined as LikeIcon,
+  Payment as PaymentIcon,
+  CommentRounded as CommentIcon,
+  MonetizationOn as MonetizationOnIcon,
+} from "@material-ui/icons";
 import {
   Button,
   makeStyles,
@@ -15,6 +14,8 @@ import {
   ListItemText,
   useTheme,
   useMediaQuery,
+  ListItem,
+  IconButton,
 } from "@material-ui/core";
 import {
   isCommentNotification,
@@ -23,6 +24,7 @@ import {
   isPaymentRequestedNotification,
   isPaymentReceivedNotification,
 } from "../utils/transactionUtils";
+import { NotificationResponseItem } from "../models";
 
 export interface NotificationListItemProps {
   notification: NotificationResponseItem;

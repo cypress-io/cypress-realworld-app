@@ -1,12 +1,11 @@
 import React from "react";
 import { get } from "lodash/fp";
-import { useTheme, makeStyles } from "@material-ui/core/styles";
+import { useTheme, makeStyles, useMediaQuery, Divider } from "@material-ui/core";
 import { InfiniteLoader, List, Index } from "react-virtualized";
 import "react-virtualized/styles.css"; // only needs to be imported once
 
 import TransactionItem from "./TransactionItem";
 import { TransactionResponseItem, TransactionPagination } from "../models";
-import { useMediaQuery, Divider } from "@material-ui/core";
 
 export interface TransactionListProps {
   transactions: TransactionResponseItem[];

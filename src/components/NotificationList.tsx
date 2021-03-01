@@ -1,10 +1,10 @@
 import React from "react";
+import { List } from "@material-ui/core";
 
 import NotificationListItem from "./NotificationListItem";
-import List from "@material-ui/core/List";
 import { NotificationResponseItem } from "../models";
 import EmptyList from "./EmptyList";
-import { ReactComponent as RemindersIllustration } from "../svgs/undraw_reminders_697p.svg";
+import RemindersIllustration from "./SvgUndrawReminders697P";
 
 export interface NotificationsListProps {
   notifications: NotificationResponseItem[];

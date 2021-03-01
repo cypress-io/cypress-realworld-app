@@ -1,6 +1,8 @@
 import React from "react";
-import { Box, Typography, Grid } from "@material-ui/core";
-import grey from "@material-ui/core/colors/grey";
+import { Box, Typography, Grid, colors } from "@material-ui/core";
+
+const { grey } = colors;
+
 const EmptyList: React.FC<{ entity: string; children?: React.ReactNode }> = ({
   entity,
   children,

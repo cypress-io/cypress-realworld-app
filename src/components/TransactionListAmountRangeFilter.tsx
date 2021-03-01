@@ -11,7 +11,7 @@ import {
   useMediaQuery,
   Drawer,
 } from "@material-ui/core";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import { ArrowDropDown as ArrowDropDownIcon } from "@material-ui/icons";
 import { TransactionAmountRangePayload } from "../models";
 import {
   formatAmountRangeValues,

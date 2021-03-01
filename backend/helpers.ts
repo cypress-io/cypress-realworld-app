@@ -5,9 +5,36 @@ import { validationResult } from "express-validator";
 import jwt from "express-jwt";
 import jwksRsa from "jwks-rsa";
 
-dotenv.config({ path: ".env.local" });
 dotenv.config();
 
+// @ts-ignore
+import OktaJwtVerifier from "@okta/jwt-verifier";
+// @ts-ignore
+import awsConfig from "../src/aws-exports";
+
+const auth0JwtConfig = {
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: `https://${process.env.REACT_APP_AUTH0_DOMAIN}/.well-known/jwks.json`,
+  }),
+
+  // Validate the audience and the issuer.
+  audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+  issuer: `https://${process.env.REACT_APP_AUTH0_DOMAIN}/`,
+  algorithms: ["RS256"],
+};
+
+// Okta Validate the JWT Signature
+const oktaJwtVerifier = new OktaJwtVerifier({
+  issuer: `https://${process.env.REACT_APP_OKTA_DOMAIN}/oauth2/default`,
+  clientId: process.env.REACT_APP_OKTA_CLIENTID,
+  assertClaims: {
+    aud: "api://default",
+    cid: process.env.REACT_APP_OKTA_CLIENTID,
+  },
+});
 const googleJwtConfig = {
   secret: jwksRsa.expressJwtSecret({
     cache: true,
@@ -22,7 +49,49 @@ const googleJwtConfig = {
   algorithms: ["RS256"],
 };
 
-export const checkJwt = jwt(googleJwtConfig).unless({ path: ["/testData/*"] });
+/* istanbul ignore next */
+export const verifyOktaToken = (req: Request, res: Response, next: NextFunction) => {
+  const bearerHeader = req.headers["authorization"];
+
+  if (bearerHeader) {
+    const bearer = bearerHeader.split(" ");
+    const bearerToken = bearer[1];
+
+    oktaJwtVerifier
+      .verifyAccessToken(bearerToken, "api://default")
+      .then((jwt: any) => {
+        // the token is valid
+        req.user = {
+          // @ts-ignore
+          sub: jwt.sub,
+        };
+        return next();
+      })
+      .catch((err: any) => {
+        // a validation failed, inspect the error
+        console.log("error", err);
+      });
+  } else {
+    res.status(401).send({
+      error: "Unauthorized",
+    });
+  }
+};
+
+// Amazon Cognito Validate the JWT Signature
+// https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-verifying-a-jwt.html#amazon-cognito-user-pools-using-tokens-step-2
+const awsCognitoJwtConfig = {
+  secret: jwksRsa.expressJwtSecret({
+    jwksUri: `https://cognito-idp.${awsConfig.aws_cognito_region}.amazonaws.com/${awsConfig.aws_user_pools_id}/.well-known/jwks.json`,
+  }),
+
+  issuer: `https://cognito-idp.${awsConfig.aws_cognito_region}.amazonaws.com/${awsConfig.aws_user_pools_id}`,
+  algorithms: ["RS256"],
+};
+
+export const checkAuth0Jwt = jwt(auth0JwtConfig).unless({ path: ["/testData/*"] });
+export const checkCognitoJwt = jwt(awsCognitoJwtConfig).unless({ path: ["/testData/*"] });
+export const checkGoogleJwt = jwt(googleJwtConfig).unless({ path: ["/testData/*"] });
 
 export const ensureAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   if (req.isAuthenticated()) {

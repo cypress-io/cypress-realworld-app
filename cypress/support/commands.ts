@@ -5,6 +5,33 @@ import { pick } from "lodash/fp";
 import { format as formatDate } from "date-fns";
 import { isMobile } from "./utils";
 
+// Import Cypress Percy plugin command (https://docs.percy.io/docs/cypress)
+import "@percy/cypress";
+
+// Import commands for third-party auth providers
+import "./auth-provider-commands/cognito";
+import "./auth-provider-commands/auth0";
+import "./auth-provider-commands/okta";
+
+// custom command to make taking snapshots with full name
+// formed from the test title + suffix easier
+// cy.visualSnapshot() // default full test title
+// cy.visualSnapshot('clicked') // full test title + ' - clicked'
+// also sets the width and height to the current viewport
+Cypress.Commands.add("visualSnapshot", (maybeName) => {
+  // @ts-ignore
+  let snapshotTitle = cy.state("runnable").fullTitle();
+  if (maybeName) {
+    snapshotTitle = snapshotTitle + " - " + maybeName;
+  }
+  cy.percySnapshot(snapshotTitle, {
+    // @ts-ignore
+    widths: [cy.state("viewportWidth")],
+    // @ts-ignore
+    minHeight: cy.state("viewportHeight"),
+  });
+});
+
 Cypress.Commands.add("getBySel", (selector, ...args) => {
   return cy.get(`[data-test=${selector}]`, ...args);
 });
@@ -170,9 +197,8 @@ Cypress.Commands.add("switchUser", (username) => {
     } else {
       cy.getBySel("sidenav-username").contains(username);
     }
-    cy.getBySel("list-skeleton").should("not.be.visible");
+    cy.getBySel("list-skeleton").should("not.exist");
     cy.getBySelLike("transaction-item").should("have.length.greaterThan", 1);
-    cy.percySnapshot(`Switch to User ${username}`);
   });
 });
 
@@ -274,7 +300,7 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
     log.end();
   });
 
-  cy.get(".Cal__Header__root").should("not.be.visible");
+  cy.get(".Cal__Header__root").should("not.exist");
 });
 
 Cypress.Commands.add("database", (operation, entity, query, logTask = false) => {

@@ -1,9 +1,7 @@
 import React from "react";
-import { Button, Typography, Grid, Avatar, Paper, IconButton } from "@material-ui/core";
-import AvatarGroup from "@material-ui/lab/AvatarGroup";
-import LikeIcon from "@material-ui/icons/ThumbUpAltOutlined";
-import CommentIcon from "@material-ui/icons/CommentRounded";
-import { makeStyles } from "@material-ui/core/styles";
+import { Button, Typography, Grid, Avatar, Paper, IconButton, makeStyles } from "@material-ui/core";
+import { AvatarGroup } from "@material-ui/lab";
+import { ThumbUpAltOutlined as LikeIcon, CommentRounded as CommentIcon } from "@material-ui/icons";
 import { TransactionResponseItem, TransactionRequestStatus, User } from "../models";
 import CommentForm from "./CommentForm";
 import {
