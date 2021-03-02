@@ -5,12 +5,12 @@ import { validationResult } from "express-validator";
 import jwt from "express-jwt";
 import jwksRsa from "jwks-rsa";
 
-dotenv.config();
-
 // @ts-ignore
 import OktaJwtVerifier from "@okta/jwt-verifier";
 // @ts-ignore
 import awsConfig from "../src/aws-exports";
+
+dotenv.config();
 
 const auth0JwtConfig = {
   secret: jwksRsa.expressJwtSecret({
