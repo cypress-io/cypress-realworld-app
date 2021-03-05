@@ -32,7 +32,7 @@ install:
     - yarn build:ci
 
 api-tests:
-  image: cypress/browsers:node12.14.1-chrome85-ff81
+  image: cypress/browsers:node14.15.0-chrome86-ff82
   stage: test
   parallel: 5
   script:
@@ -40,7 +40,7 @@ api-tests:
     - npx cypress run --record --parallel --browser chrome --group "API" --spec "cypress/tests/api/*"
 
 ui-chrome:
-  image: cypress/browsers:node12.14.1-chrome85-ff81
+  image: cypress/browsers:node14.15.0-chrome86-ff82
   stage: test
   parallel: 5
   script:
@@ -48,7 +48,7 @@ ui-chrome:
     - npx cypress run --record --parallel --browser chrome --group "UI - Chrome" --spec "cypress/tests/ui/*"
 
 ui-chrome-mobile:
-  image: cypress/browsers:node12.14.1-chrome85-ff81
+  image: cypress/browsers:node14.15.0-chrome86-ff82
   stage: test
   parallel: 5
   script:
@@ -56,7 +56,7 @@ ui-chrome-mobile:
     - npx cypress run --record --parallel --browser chrome --group "UI - Chrome - Mobile" --spec "cypress/tests/ui/*" --config "viewportWidth=375,viewportHeight=667"
 
 ui-firefox:
-  image: cypress/browsers:node12.14.1-chrome85-ff81
+  image: cypress/browsers:node14.15.0-chrome86-ff82
   stage: test
   parallel: 5
   script:
@@ -64,7 +64,7 @@ ui-firefox:
     - npx cypress run --record --parallel --browser firefox --group "UI - Firefox" --spec "cypress/tests/ui/*"
 
 ui-firefox-mobile:
-  image: cypress/browsers:node12.14.1-chrome85-ff81
+  image: cypress/browsers:node14.15.0-chrome86-ff82
   stage: test
   parallel: 5
   script:
