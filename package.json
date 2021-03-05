@@ -86,7 +86,7 @@
     "cross-env": "7.0.3",
     "cypress": "6.6.0",
     "dotenv": "8.2.0",
-    "eslint-config-prettier": "8.0.0",
+    "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "2.11.2",
     "eslint-plugin-prettier": "3.3.1",
     "express-jwt": "6.0.0",
