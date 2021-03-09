@@ -34,7 +34,7 @@ linux-workflow: &linux-workflow
         yarn: true
         executor: with-chrome-and-firefox
         build: "yarn build:ci"
-        cache-key: "cache-{{ arch }}-{{ .Branch }}"
+        cache-key: "cache-{{ arch }}-{{ .Branch }}-15333"
         post-steps:
           - run:
               name: Print machine info ℹ️
@@ -68,7 +68,7 @@ linux-workflow: &linux-workflow
     # Run E2E tests in Chrome
     - cypress/run:
         name: "UI Tests - Chrome"
-        cache-key: "cache-{{ arch }}-{{ .Branch }}"
+        cache-key: "cache-{{ arch }}-{{ .Branch }}-15333"
         browser: chrome
         spec: cypress/tests/ui/*
         executor: with-chrome-and-firefox
