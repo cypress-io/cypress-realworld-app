@@ -75,8 +75,8 @@ linux-workflow: &linux-workflow
         yarn: true
         start: yarn start:ci
         record: true
-        parallel: false
-        # parallelism: 5
+        parallel: true
+        parallelism: 5
         ci-build-id: ${CIRCLE_SHA1:0:8}
         group: "UI - Chrome"
         requires:
