@@ -37,7 +37,7 @@ api-tests:
   parallel: 5
   script:
     - yarn start:ci & npx wait-on http://localhost:3000
-    - npx cypress run --config-file cypress-gitlabci.json --record --parallel --browser chrome --group "API" --spec "cypress/tests/api/*"
+    - npx cypress run --record --parallel --browser chrome --group "API" --spec "cypress/tests/api/*"
 
 ui-chrome:
   image: cypress/browsers:node14.15.0-chrome86-ff82
@@ -45,7 +45,7 @@ ui-chrome:
   parallel: 5
   script:
     - yarn start:ci & npx wait-on http://localhost:3000
-    - npx cypress run --config-file cypress-gitlabci.json --record --parallel --browser chrome --group "UI - Chrome" --spec "cypress/tests/ui/*"
+    - npx cypress run --record --parallel --browser chrome --group "UI - Chrome" --spec "cypress/tests/ui/*"
 
 ui-chrome-mobile:
   image: cypress/browsers:node14.15.0-chrome86-ff82
@@ -53,7 +53,7 @@ ui-chrome-mobile:
   parallel: 5
   script:
     - yarn start:ci & npx wait-on http://localhost:3000
-    - npx cypress run --config-file cypress-gitlabci.json --record --parallel --browser chrome --group "UI - Chrome - Mobile" --spec "cypress/tests/ui/*" --config "viewportWidth=375,viewportHeight=667"
+    - npx cypress run --record --parallel --browser chrome --group "UI - Chrome - Mobile" --spec "cypress/tests/ui/*" --config "viewportWidth=375,viewportHeight=667"
 
 ui-firefox:
   image: cypress/browsers:node14.15.0-chrome86-ff82
@@ -61,7 +61,7 @@ ui-firefox:
   parallel: 5
   script:
     - yarn start:ci & npx wait-on http://localhost:3000
-    - npx cypress run --config-file cypress-gitlabci.json --record --parallel --browser firefox --group "UI - Firefox" --spec "cypress/tests/ui/*"
+    - npx cypress run --record --parallel --browser firefox --group "UI - Firefox" --spec "cypress/tests/ui/*"
 
 ui-firefox-mobile:
   image: cypress/browsers:node14.15.0-chrome86-ff82
@@ -69,4 +69,4 @@ ui-firefox-mobile:
   parallel: 5
   script:
     - yarn start:ci & npx wait-on http://localhost:3000
-    - npx cypress run --config-file cypress-gitlabci.json --record --parallel --browser firefox --group "UI - Firefox - Mobile" --spec "cypress/tests/ui/*" --config "viewportWidth=375,viewportHeight=667"
+    - npx cypress run --record --parallel --browser firefox --group "UI - Firefox - Mobile" --spec "cypress/tests/ui/*" --config "viewportWidth=375,viewportHeight=667"

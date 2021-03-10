@@ -32,6 +32,7 @@ jobs:
       - run: yarn cypress info
       - run: node -p 'os.cpus()'
       - run: yarn types
+      - run: yarn test:unit:ci
       - run: yarn build:ci
 
   install-windows:
@@ -91,7 +92,6 @@ jobs:
         with:
           # we have already installed all dependencies above
           install: false
-          config-file: cypress-github-actions.json
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
@@ -140,7 +140,6 @@ jobs:
         with:
           # we have already installed all dependencies above
           install: false
-          config-file: cypress-github-actions.json
           config: "viewportWidth=375,viewportHeight=667"
           start: yarn start:ci
           wait-on: "http://localhost:3000"
@@ -192,7 +191,6 @@ jobs:
         with:
           # we have already installed all dependencies above
           install: false
-          config-file: cypress-github-actions.json
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
@@ -243,7 +241,6 @@ jobs:
         with:
           # we have already installed all dependencies above
           install: false
-          config-file: cypress-github-actions.json
           config: "viewportWidth=375,viewportHeight=667"
           start: yarn start:ci
           wait-on: "http://localhost:3000"
@@ -292,7 +289,6 @@ jobs:
         with:
           # we have already installed all dependencies above
           install: false
-          config-file: cypress-github-actions.json
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120

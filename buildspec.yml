@@ -42,7 +42,6 @@ phases:
       - echo $CY_BROWSER
       - echo $CY_SPEC
       - echo $CY_CONFIG
-      - CYPRESS_PROJECT_ID=zx15dm
       - yarn install --frozen-lockfile
   pre_build:
     commands:
