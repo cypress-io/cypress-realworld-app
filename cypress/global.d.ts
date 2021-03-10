@@ -102,6 +102,11 @@ declare namespace Cypress {
     loginByApi(username: string, password?: string): Chainable<Response>;
 
     /**
+     * Logs-in user by using Google API request
+     */
+    loginByGoogleApi(): Chainable<Response>;
+
+    /**
      * Logs-in user by using Okta API request
      */
     loginByOktaApi(username: string, password?: string): Chainable<Response>;

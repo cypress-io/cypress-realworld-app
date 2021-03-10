@@ -108,18 +108,19 @@ yarn cypress:open
 
 ## Additional NPM Scripts
 
-| Script         | Description                                                                                                                                       |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| dev            | Starts backend in watch mode and frontend                                                                                                         |
-| dev:auth0      | Starts backend in watch mode and frontend; [Uses Auth0 for Authentication](#auth0) > [Read Guide](http://on.cypress.io/auth0)                     |
-| dev:okta       | Starts backend in watch mode and frontend; [Uses Okta for Authentication](#okta) > [Read Guide](http://on.cypress.io/okta)                        |
-| dev:cognito    | Starts backend in watch mode and frontend; [Uses Cognito for Authentication](#amazon-cognito) > [Read Guide](http://on.cypress.io/amazon-cognito) |
-| start          | Starts backend and frontend                                                                                                                       |
-| types          | Validates types                                                                                                                                   |
-| db:seed        | Generates fresh database seeds for json files in /data                                                                                            |
-| start:empty    | Starts backend, frontend and Cypress with empty database seed                                                                                     |
-| tsnode         | Customized ts-node command to get around react-scripts restrictions                                                                               |
-| list:dev:users | Provides id and username for users in the dev database                                                                                            |
+| Script         | Description                                                                                                                                                                       |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| dev            | Starts backend in watch mode and frontend                                                                                                                                         |
+| dev:auth0      | Starts backend in watch mode and frontend; [Uses Auth0 for Authentication](#auth0) > [Read Guide](http://on.cypress.io/auth0)                                                     |
+| dev:okta       | Starts backend in watch mode and frontend; [Uses Okta for Authentication](#okta) > [Read Guide](http://on.cypress.io/okta)                                                        |
+| dev:cognito    | Starts backend in watch mode and frontend; [Uses Cognito for Authentication](#amazon-cognito) > [Read Guide](http://on.cypress.io/amazon-cognito)                                 |
+| dev:google     | Starts backend in watch mode and frontend; [Uses Google for Authentication](#google) > [Read Guide](https://docs.cypress.io/guides/testing-strategies/google-authentication.html) |
+| start          | Starts backend and frontend                                                                                                                                                       |
+| types          | Validates types                                                                                                                                                                   |
+| db:seed        | Generates fresh database seeds for json files in /data                                                                                                                            |
+| start:empty    | Starts backend, frontend and Cypress with empty database seed                                                                                                                     |
+| tsnode         | Customized ts-node command to get around react-scripts restrictions                                                                                                               |
+| list:dev:users | Provides id and username for users in the dev database                                                                                                                            |
 
 For a complete list of scripts see [package.json](./package.json)
 
@@ -165,6 +166,16 @@ Prerequisites include an [Amazon Cognito][cognito] account. Environment variable
 Start the application with `yarn dev:cognito` and run Cypress with `yarn cypress:open`.
 
 The **only passing spec on this branch** will be the [cognito spec](./cypress/tests/ui-auth-providers/cognito.spec.ts); all others will fail.
+
+### Google
+
+A [guide has been written with detail around adapting the RWA](https://docs.cypress.io/guides/testing-strategies/google-authentication.html) to use [Google][google] as the authentication solution and to explain the programmatic command used for Cypress tests.
+
+Prerequisites include an [Google][google] account. Environment variables from [Google][google] are to be placed in the [.env](./.env).
+
+Start the application with `yarn dev:google` and run Cypress with `yarn cypress:open`.
+
+The **only passing spec** when run with `yarn dev:google` will be the [google spec](./cypress/tests/ui-auth-providers/google.spec.ts); all others will fail.
 
 ## License
 

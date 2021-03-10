@@ -1,10 +1,10 @@
 import dotenv from "dotenv";
 import { set } from "lodash";
-
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import jwt from "express-jwt";
 import jwksRsa from "jwks-rsa";
+
 // @ts-ignore
 import OktaJwtVerifier from "@okta/jwt-verifier";
 // @ts-ignore
@@ -35,8 +35,19 @@ const oktaJwtVerifier = new OktaJwtVerifier({
     cid: process.env.REACT_APP_OKTA_CLIENTID,
   },
 });
+const googleJwtConfig = {
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: "https://www.googleapis.com/oauth2/v3/certs",
+  }),
 
-export const checkAuth0Jwt = jwt(auth0JwtConfig).unless({ path: ["/testData/*"] });
+  // Validate the audience and the issuer.
+  audience: process.env.REACT_APP_GOOGLE_CLIENTID,
+  issuer: "accounts.google.com",
+  algorithms: ["RS256"],
+};
 
 /* istanbul ignore next */
 export const verifyOktaToken = (req: Request, res: Response, next: NextFunction) => {
@@ -78,7 +89,9 @@ const awsCognitoJwtConfig = {
   algorithms: ["RS256"],
 };
 
+export const checkAuth0Jwt = jwt(auth0JwtConfig).unless({ path: ["/testData/*"] });
 export const checkCognitoJwt = jwt(awsCognitoJwtConfig).unless({ path: ["/testData/*"] });
+export const checkGoogleJwt = jwt(googleJwtConfig).unless({ path: ["/testData/*"] });
 
 export const ensureAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   if (req.isAuthenticated()) {

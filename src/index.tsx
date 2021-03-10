@@ -9,6 +9,7 @@ import { OktaAuth } from "@okta/okta-auth-js";
 import { Security } from "@okta/okta-react";
 
 import App from "./containers/App";
+import AppGoogle from "./containers/AppGoogle";
 import AppAuth0 from "./containers/AppAuth0";
 import AppOkta from "./containers/AppOkta";
 import AppCognito from "./containers/AppCognito";
@@ -76,6 +77,16 @@ if (process.env.REACT_APP_AUTH0) {
     <Router history={history}>
       <ThemeProvider theme={theme}>
         <AppCognito />
+      </ThemeProvider>
+    </Router>,
+    document.getElementById("root")
+  );
+} else if (process.env.REACT_APP_GOOGLE) {
+  /* istanbul ignore next */
+  ReactDOM.render(
+    <Router history={history}>
+      <ThemeProvider theme={theme}>
+        <AppGoogle />
       </ThemeProvider>
     </Router>,
     document.getElementById("root")

@@ -15,6 +15,7 @@ export interface AuthMachineSchema {
     updating: {};
     logout: {};
     refreshing: {};
+    google: {};
     authorized: {};
     auth0: {};
     cognito: {};
@@ -30,6 +31,7 @@ export type AuthMachineEvents =
   | { type: "AUTH0" }
   | { type: "COGNITO" }
   | { type: "OKTA" }
+  | { type: "GOOGLE" }
   | { type: "SIGNUP" };
 
 export interface AuthMachineContext {
@@ -51,6 +53,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         on: {
           LOGIN: "loading",
           SIGNUP: "signup",
+          GOOGLE: "google",
           AUTH0: "auth0",
           OKTA: "okta",
           COGNITO: "cognito",
@@ -80,6 +83,16 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       refreshing: {
         invoke: {
           src: "getUserProfile",
+          onDone: { target: "authorized", actions: "setUserProfile" },
+          onError: { target: "unauthorized", actions: "onError" },
+        },
+        on: {
+          LOGOUT: "logout",
+        },
+      },
+      google: {
+        invoke: {
+          src: "getGoogleUserProfile",
           onDone: { target: "authorized", actions: "setUserProfile" },
           onError: { target: "unauthorized", actions: "onError" },
         },
@@ -171,6 +184,21 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       getUserProfile: async (ctx, event) => {
         const resp = await httpClient.get(`http://localhost:3001/checkAuth`);
         return resp.data;
+      },
+      getGoogleUserProfile: /* istanbul ignore next */ (ctx, event: any) => {
+        // Map Google User fields to our User Model
+        const user = {
+          id: event.user.googleId,
+          email: event.user.email,
+          firstName: event.user.givenName,
+          lastName: event.user.familyName,
+          avatar: event.user.imageUrl,
+        };
+
+        // Set Google Access Token in Local Storage for API calls
+        localStorage.setItem(process.env.REACT_APP_AUTH_TOKEN_NAME!, event.token);
+
+        return Promise.resolve({ user });
       },
       getAuth0UserProfile: /* istanbul ignore next */ (ctx, event: any) => {
         // Map Auth0 User fields to our User Model

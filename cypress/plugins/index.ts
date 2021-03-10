@@ -6,6 +6,7 @@ import Promise from "bluebird";
 import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
 
+dotenv.config({ path: ".env.local" });
 dotenv.config();
 
 const awsConfig = require(path.join(__dirname, "../../aws-exports-es5.js"));
@@ -32,6 +33,11 @@ export default (on, config) => {
   config.env.cognito_username = process.env.AWS_COGNITO_USERNAME;
   config.env.cognito_password = process.env.AWS_COGNITO_PASSWORD;
   config.env.awsConfig = awsConfig.default;
+
+  // Google
+  config.env.googleRefreshToken = process.env.GOOGLE_REFRESH_TOKEN;
+  config.env.googleClientId = process.env.REACT_APP_GOOGLE_CLIENTID;
+  config.env.googleClientSecret = process.env.REACT_APP_GOOGLE_CLIENT_SECRET;
 
   const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 
