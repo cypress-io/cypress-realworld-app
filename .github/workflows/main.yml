@@ -92,7 +92,7 @@ jobs:
         with:
           # we have already installed all dependencies above
           install: false
-          config: "projectId=tpys4j"
+          config-file: cypress-github-actions.json
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
@@ -141,7 +141,8 @@ jobs:
         with:
           # we have already installed all dependencies above
           install: false
-          config: "projectId=tpys4,jviewportWidth=375,viewportHeight=667"
+          config-file: cypress-github-actions.json
+          config: "viewportWidth=375,viewportHeight=667"
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
@@ -192,7 +193,7 @@ jobs:
         with:
           # we have already installed all dependencies above
           install: false
-          config: "projectId=tpys4j"
+          config-file: cypress-github-actions.json
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
@@ -243,7 +244,8 @@ jobs:
         with:
           # we have already installed all dependencies above
           install: false
-          config: "projectId=tpys4j,viewportWidth=375,viewportHeight=667"
+          config-file: cypress-github-actions.json
+          config: "viewportWidth=375,viewportHeight=667"
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
@@ -291,7 +293,7 @@ jobs:
         with:
           # we have already installed all dependencies above
           install: false
-          config: "projectId=tpys4j"
+          config-file: cypress-github-actions.json
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
