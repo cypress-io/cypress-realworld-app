@@ -4,6 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
+/cypress/screenshots
+/cypress/screenshots
 
 # testing
 /coverage

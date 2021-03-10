@@ -141,6 +141,7 @@
     "test": "yarn cypress:open",
     "test:headless": "yarn cypress:run",
     "test:api": "yarn cypress:run --spec 'cypress/tests/api/*'",
+    "test:demo": "yarn cypress:run --spec 'cypress/tests/demo/cypress-studio.spec.ts'",
     "test:unit": "react-scripts test --runInBand",
     "test:unit:ci": "react-scripts test --watchAll false --ci --runInBand",
     "start:api": "yarn tsnode --files backend/app.ts",
