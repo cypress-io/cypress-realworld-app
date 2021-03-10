@@ -7,7 +7,7 @@ orbs:
 executors:
   with-chrome-and-firefox:
     docker:
-      - image: "cypress/browsers:node12.14.1-chrome85-ff81"
+      - image: "cypress/browsers:node14.15.0-chrome86-ff82"
     resource_class: medium+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
