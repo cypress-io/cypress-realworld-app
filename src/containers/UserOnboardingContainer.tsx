@@ -19,8 +19,8 @@ import { userOnboardingMachine } from "../machines/userOnboardingMachine";
 import BankAccountForm from "../components/BankAccountForm";
 import { DataContext, DataEvents } from "../machines/dataMachine";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
-import { ReactComponent as NavigatorIllustration } from "../svgs/undraw_navigator_a479.svg";
-import { ReactComponent as PersonalFinance } from "../svgs/undraw_personal_finance_tqcd.svg";
+import NavigatorIllustration from "../components/SvgUndrawNavigatorA479";
+import PersonalFinance from "../components/SvgUndrawPersonalFinanceTqcd";
 
 export interface Props {
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;

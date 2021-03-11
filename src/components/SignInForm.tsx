@@ -17,7 +17,7 @@ import {
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 
-import { ReactComponent as RWALogo } from "../svgs/rwa-logo.svg";
+import RWALogo from "./SvgRwaLogo";
 import Footer from "./Footer";
 import { SignInPayload } from "../models";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
