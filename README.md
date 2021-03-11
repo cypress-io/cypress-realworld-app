@@ -80,6 +80,10 @@ yarn install
 yarn dev
 ```
 
+> 🚩 **Note**
+>
+> The app will run on port 3000 (React) and 3001 (Express) by default. Please make sure there are no other applications or services running on both ports.
+
 ### Start Cypress
 
 ```shell
