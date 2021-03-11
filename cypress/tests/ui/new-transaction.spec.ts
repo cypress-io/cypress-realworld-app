@@ -14,11 +14,12 @@ describe("New Transaction", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.intercept("GET", "/users").as("allUsers");
-    cy.intercept({
-      method: "GET",
-      pathname: "/users/search",
-      query: { q: /.*/ },
+    cy.intercept("GET", /users(?!\/)/, (req) => {
+      delete req.headers["if-none-match"];
+    }).as("allUsers");
+
+    cy.intercept("GET", /users\/search/, (req) => {
+      delete req.headers["if-none-match"];
     }).as("usersSearch");
 
     cy.intercept("POST", "/transactions").as("createTransaction");
@@ -269,6 +270,7 @@ describe("New Transaction", function () {
           // make sure the backend returns some results
           .its("response.body.results")
           .should("have.length.gt", 0)
+          .its("length")
           .then((resultsN) => {
             cy.getBySelLike("user-list-item")
               // make sure the list of results is fully updated
