@@ -26,8 +26,11 @@ import resolvers from "./graphql/resolvers";
 
 require("dotenv").config();
 
+const frontendPort = process.env.PORT || 3000;
+const backendPort = process.env.BACKEND_PORT || 3001;
+
 const corsOption = {
-  origin: "http://localhost:3000",
+  origin: `http://localhost:${frontendPort}`,
   credentials: true,
 };
 
@@ -112,4 +115,4 @@ app.use("/bankTransfers", bankTransferRoutes);
 
 app.use(express.static(join(__dirname, "../public")));
 
-app.listen(3001);
+app.listen(backendPort);
