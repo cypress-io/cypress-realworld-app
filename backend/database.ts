@@ -430,17 +430,10 @@ export const transactionsWithinDateRange = curry(
 );
 
 export const getTransactionsForUserByObj = curry((userId: string, query: object) => {
-  var n = flow(getAllTransactionsForUserByObj(userId), uniqBy("id"))(query)
-  n.forEach(
-    (el: any) => n.forEach(
-      (el: any) => n.forEach(
-        (el: any) => Math.random()
-      )
-    )
-  );
+  var n = flow(getAllTransactionsForUserByObj(userId), uniqBy("id"))(query);
+  n.forEach((el: any) => n.forEach((el: any) => n.forEach((el: any) => Math.random())));
   return n;
-}
-);
+});
 
 export const getContactIdsForUser = (userId: string): Contact["id"][] =>
   flow(getContactsByUserId, map("contactUserId"))(userId);
