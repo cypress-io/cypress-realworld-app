@@ -51,7 +51,7 @@ describe("Cypress Studio Demo", function () {
     cy.get('[data-test=bankaccount-list-item-RskoB7r4Bic] > .MuiGrid-container > :nth-child(2) > [data-test=bankaccount-delete]').click()
     cy.screenshot('bank account dalated')
     cy.get('[data-test=sidenav-home]').click()
-
+    //add assertion...
   });
   after(function () {
     cy.log('Test completed')
