@@ -262,7 +262,10 @@ export const createBankAccount = (bankaccount: BankAccount) => {
   return getBankAccountBy("id", bankaccount.id);
 };
 
-export const createBankAccountForUser = (userId: string, accountDetails: Partial<BankAccount>) => {
+export const createBankAccountForUser = (
+  userId: string,
+  accountDetails: Partial<BankAccount>
+) => {
   const accountId = shortid();
   const bankaccount: BankAccount = {
     id: accountId,

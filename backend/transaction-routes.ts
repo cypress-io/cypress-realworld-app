@@ -111,7 +111,10 @@ router.get(
     if (isFirstPage) {
       const firstFiveContacts = slice(0, 5, contactsTransactions);
 
-      publicTransactionsWithContacts = concat(firstFiveContacts, publicTransactions);
+      publicTransactionsWithContacts = concat(
+        firstFiveContacts,
+        publicTransactions
+      );
     }
 
     const { totalPages, data: paginatedItems } = getPaginatedItems(

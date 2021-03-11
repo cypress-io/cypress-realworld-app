@@ -17,7 +17,12 @@ import commentRoutes from "./comment-routes";
 import notificationRoutes from "./notification-routes";
 import bankTransferRoutes from "./banktransfer-routes";
 import testDataRoutes from "./testdata-routes";
-import { checkAuth0Jwt, verifyOktaToken, checkCognitoJwt, checkGoogleJwt } from "./helpers";
+import {
+  checkAuth0Jwt,
+  verifyOktaToken,
+  checkCognitoJwt,
+  checkGoogleJwt,
+} from "./helpers";
 
 require("dotenv").config();
 

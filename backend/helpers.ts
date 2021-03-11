@@ -89,9 +89,15 @@ const awsCognitoJwtConfig = {
   algorithms: ["RS256"],
 };
 
-export const checkAuth0Jwt = jwt(auth0JwtConfig).unless({ path: ["/testData/*"] });
-export const checkCognitoJwt = jwt(awsCognitoJwtConfig).unless({ path: ["/testData/*"] });
-export const checkGoogleJwt = jwt(googleJwtConfig).unless({ path: ["/testData/*"] });
+export const checkAuth0Jwt = jwt(auth0JwtConfig).unless({
+  path: ["/testData/*"],
+});
+export const checkCognitoJwt = jwt(awsCognitoJwtConfig).unless({
+  path: ["/testData/*"],
+});
+export const checkGoogleJwt = jwt(googleJwtConfig).unless({
+  path: ["/testData/*"],
+});
 
 export const ensureAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   if (req.isAuthenticated()) {
