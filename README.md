@@ -83,7 +83,7 @@ yarn dev
 > 🚩 **Note**
 >
 > The app will run on port 3000 (frontend) and 3001 (API backend) by default. Please make sure there are no other applications or services running on both ports.
-> If you want to change the default ports, you can do so by by modifying `PORT` and `BACKEND_PORT` variables in `.env` file.
+> If you want to change the default ports, you can do so by modifying `PORT` and `BACKEND_PORT` variables in `.env` file.
 > However, make sure the modified port numbers in `.env` are not commited into Git since the CI environments still expect the application run on default ports.
 
 ### Start Cypress
