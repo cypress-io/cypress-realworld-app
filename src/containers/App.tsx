@@ -1,78 +1,78 @@
-import React, { useEffect } from "react";
-import { Switch, Route } from "react-router";
-import { connect } from "react-redux";
+import React from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
+import { useService, useMachine } from "@xstate/react";
+import { makeStyles } from "@material-ui/core";
+import { CssBaseline } from "@material-ui/core";
 
-import { bootstrap } from "../actions/app";
-import { IRootReducerState } from "../reducers";
-import PrivateRoute from "./PrivateRoute";
-import TransactionsContainer from "../containers/TransactionsContainer";
-import TransactionDetailContainer from "./TransactionDetailContainer";
-import SignIn from "../containers/SignIn";
-import SignUp from "../containers/SignUp";
-import TransactionCreateContainer from "./TransactionCreateContainer";
-import NotificationsContainer from "./NotificationsContainer";
-import UserSettingsContainer from "./UserSettingsContainer";
-import BankAccountsContainer from "./BankAccountsContainer";
-import BankAccountCreateContainer from "./BankAccountCreateContainer";
+import { snackbarMachine } from "../machines/snackbarMachine";
+import { notificationsMachine } from "../machines/notificationsMachine";
+import { authService } from "../machines/authMachine";
+import AlertBar from "../components/AlertBar";
+import SignInForm from "../components/SignInForm";
+import SignUpForm from "../components/SignUpForm";
+import { bankAccountsMachine } from "../machines/bankAccountsMachine";
+import PrivateRoutesContainer from "./PrivateRoutesContainer";
 
-interface StateProps {
-  isBootstrapped: boolean;
-  isLoggedIn: boolean;
+// @ts-ignore
+if (window.Cypress) {
+  // Expose authService on window for Cypress
+  // @ts-ignore
+  window.authService = authService;
 }
 
-interface DispatchProps {
-  bootstrapApp: () => void;
-}
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+  },
+}));
 
-type Props = StateProps & DispatchProps;
+const App: React.FC = () => {
+  const classes = useStyles();
+  const [authState] = useService(authService);
+  const [, , notificationsService] = useMachine(notificationsMachine);
 
-const App: React.FC<Props> = ({ isBootstrapped, bootstrapApp }) => {
-  useEffect(() => {
-    if (!isBootstrapped) {
-      bootstrapApp();
-    }
-  });
+  const [, , snackbarService] = useMachine(snackbarMachine);
+
+  const [, , bankAccountsService] = useMachine(bankAccountsMachine);
+
+  const isLoggedIn =
+    authState.matches("authorized") ||
+    authState.matches("refreshing") ||
+    authState.matches("updating");
 
   return (
-    <Switch>
-      <PrivateRoute exact path={"/(public|contacts|personal)?"}>
-        <TransactionsContainer />
-      </PrivateRoute>
-      <PrivateRoute exact path="/user/settings">
-        <UserSettingsContainer />
-      </PrivateRoute>
-      <PrivateRoute exact path="/notifications">
-        <NotificationsContainer />
-      </PrivateRoute>
-      <PrivateRoute exact path="/bankaccount/new">
-        <BankAccountCreateContainer />
-      </PrivateRoute>
-      <PrivateRoute exact path="/bankaccounts">
-        <BankAccountsContainer />
-      </PrivateRoute>
-      <PrivateRoute exact path="/transaction/new">
-        <TransactionCreateContainer />
-      </PrivateRoute>
-      <PrivateRoute exact path="/transaction/:transactionId">
-        <TransactionDetailContainer />
-      </PrivateRoute>
-      <Route path="/signin">
-        <SignIn />
-      </Route>
-      <Route path="/signup">
-        <SignUp />
-      </Route>
-    </Switch>
+    <div className={classes.root}>
+      <CssBaseline />
+
+      {isLoggedIn && (
+        <PrivateRoutesContainer
+          isLoggedIn={isLoggedIn}
+          notificationsService={notificationsService}
+          authService={authService}
+          snackbarService={snackbarService}
+          bankAccountsService={bankAccountsService}
+        />
+      )}
+      {authState.matches("unauthorized") && (
+        <Switch>
+          <Route exact path="/signup">
+            <SignUpForm authService={authService} />
+          </Route>
+          <Route exact path="/signin">
+            <SignInForm authService={authService} />
+          </Route>
+          <Route path="/*">
+            <Redirect
+              to={{
+                pathname: "/signin",
+              }}
+            />
+          </Route>
+        </Switch>
+      )}
+      <AlertBar snackbarService={snackbarService} />
+    </div>
   );
 };
 
-const mapStateToProps = (state: IRootReducerState) => ({
-  isBootstrapped: state.app.isBootstrapped,
-  isLoggedIn: state.user.isLoggedIn
-});
-
-const dispatchProps = {
-  bootstrapApp: bootstrap
-};
-
-export default connect(mapStateToProps, dispatchProps)(App);
+export default App;

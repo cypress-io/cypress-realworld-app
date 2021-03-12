@@ -1,7 +1,7 @@
 import React from "react";
+import { List } from "@material-ui/core";
 
 import UserListItem from "./UserListItem";
-import List from "@material-ui/core/List";
 import { User } from "../models";
 
 export interface UsersListProps {
@@ -13,8 +13,8 @@ const UsersList: React.FC<UsersListProps> = ({ users, setReceiver }) => {
   return (
     <List data-test="users-list">
       {users &&
-        users.map((user: User) => (
-          <UserListItem key={user.id} user={user} setReceiver={setReceiver} />
+        users.map((user: User, index: number) => (
+          <UserListItem key={user.id} user={user} setReceiver={setReceiver} index={index} />
         ))}
     </List>
   );

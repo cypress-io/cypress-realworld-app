@@ -1,89 +1,58 @@
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { useMachine, useService } from "@xstate/react";
 import { useParams } from "react-router-dom";
-import MainContainer from "./MainContainer";
 import TransactionDetail from "../components/TransactionDetail";
-import { IRootReducerState } from "../reducers";
-import { TransactionResponseItem, User } from "../models";
-import {
-  transactionsLikePending,
-  transactionsCommentPending,
-  transactionDetailPending,
-  transactionUpdatePending
-} from "../actions/transactions";
+import { Transaction } from "../models";
+import { transactionDetailMachine } from "../machines/transactionDetailMachine";
+import { first } from "lodash/fp";
+import { Interpreter } from "xstate";
+import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 
-export interface StateProps {
-  transaction?: TransactionResponseItem;
-  currentUser: User;
+export interface Props {
+  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
+}
+interface Params {
+  transactionId: string;
 }
 
-export interface DispatchProps {
-  transactionLike: Function;
-  transactionComment: Function;
-  transactionDetail: Function;
-  transactionUpdate: Function;
-}
-
-export type TransactionDetailsContainerProps = StateProps & DispatchProps;
-
-const TransactionDetailsContainer: React.FC<TransactionDetailsContainerProps> = ({
-  transaction,
-  transactionLike,
-  transactionComment,
-  transactionDetail,
-  transactionUpdate,
-  currentUser
-}) => {
-  const { transactionId } = useParams();
-
+const TransactionDetailsContainer: React.FC<Props> = ({ authService }) => {
+  const { transactionId }: Params = useParams();
+  const [authState] = useService(authService);
+  const [transactionDetailState, sendTransactionDetail] = useMachine(transactionDetailMachine);
   useEffect(() => {
-    if (
-      (!transaction && transactionId) ||
-      (transaction && transaction.id !== transactionId)
-    ) {
-      transactionDetail({ transactionId });
-    }
-  }, [transaction, transactionId, transactionDetail]);
+    sendTransactionDetail("FETCH", { transactionId });
+  }, [sendTransactionDetail, transactionId]);
 
-  if (
-    !transaction ||
-    (!transaction && transactionId) ||
-    (transaction && transaction.id !== transactionId)
-  ) {
-    return (
-      <MainContainer>
-        Loading...
-        <br />
-      </MainContainer>
-    );
-  }
+  const transactionLike = (transactionId: Transaction["id"]) =>
+    sendTransactionDetail("CREATE", { entity: "LIKE", transactionId });
+
+  const transactionComment = (payload: any) =>
+    sendTransactionDetail("CREATE", { entity: "COMMENT", ...payload });
+
+  const transactionUpdate = (payload: any) => sendTransactionDetail("UPDATE", payload);
+
+  const transaction = first(transactionDetailState.context?.results);
+  const currentUser = authState?.context?.user;
 
   return (
-    <MainContainer>
-      <TransactionDetail
-        transaction={transaction}
-        transactionLike={transactionLike}
-        transactionComment={transactionComment}
-        transactionUpdate={transactionUpdate}
-        currentUser={currentUser}
-      />
-    </MainContainer>
+    <>
+      {transactionDetailState.matches("idle") && (
+        <div>
+          Loading...
+          <br />
+        </div>
+      )}
+      {currentUser && transactionDetailState.matches("success") && (
+        <TransactionDetail
+          transaction={transaction}
+          transactionLike={transactionLike}
+          transactionComment={transactionComment}
+          transactionUpdate={transactionUpdate}
+          currentUser={currentUser}
+        />
+      )}
+    </>
   );
 };
 
-const mapStateToProps = (state: IRootReducerState) => ({
-  transaction: state.transactions.transactionDetails,
-  currentUser: state.user.profile
-});
-
-const mapDispatchToProps = {
-  transactionLike: transactionsLikePending,
-  transactionComment: transactionsCommentPending,
-  transactionDetail: transactionDetailPending,
-  transactionUpdate: transactionUpdatePending
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TransactionDetailsContainer);
+export default TransactionDetailsContainer;

@@ -1,45 +1,62 @@
 import React from "react";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
-import MenuIcon from "@material-ui/icons/Menu";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
-import Link from "@material-ui/core/Link";
-import { Link as RouterLink } from "react-router-dom";
-import { Button } from "@material-ui/core";
-import { NotificationType } from "../models";
+import { Interpreter } from "xstate";
+import { useService } from "@xstate/react";
+import {
+  makeStyles,
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Badge,
+  Button,
+  useTheme,
+  useMediaQuery,
+  Link,
+} from "@material-ui/core";
+import {
+  Menu as MenuIcon,
+  Notifications as NotificationsIcon,
+  AttachMoney as AttachMoneyIcon,
+} from "@material-ui/icons";
+import { Link as RouterLink, useLocation } from "react-router-dom";
+
+import { DataContext, DataEvents } from "../machines/dataMachine";
+import TransactionNavTabs from "./TransactionNavTabs";
+import RWALogo from "./SvgRwaLogo";
+import RWALogoIcon from "./SvgRwaIconLogo";
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   toolbar: {
-    paddingRight: 24 // keep right padding when drawer closed
+    paddingRight: 24, // keep right padding when drawer closed
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
+      duration: theme.transitions.duration.leavingScreen,
+    }),
   },
   appBarShift: {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   menuButtonHidden: {
-    display: "none"
+    display: "none",
   },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
+    textAlign: "center",
+  },
+  logo: {
+    color: "white",
+    verticalAlign: "bottom",
   },
   newTransactionButton: {
     fontSize: 16,
@@ -51,37 +68,39 @@ const useStyles = makeStyles(theme => ({
     "&:hover": {
       backgroundColor: "#4CAF50",
       borderColor: "#00C853",
-      boxShadow: "none"
-    }
-  }
+      boxShadow: "none",
+    },
+  },
+  customBadge: {
+    backgroundColor: "red",
+    color: "white",
+  },
 }));
 
 interface NavBarProps {
   drawerOpen: boolean;
-  handleDrawerOpen: () => void;
-  allNotifications: NotificationType[];
+  toggleDrawer: Function;
+  notificationsService: Interpreter<DataContext, any, DataEvents, any>;
 }
 
-const NavBar: React.FC<NavBarProps> = ({
-  drawerOpen,
-  handleDrawerOpen,
-  allNotifications
-}) => {
+const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notificationsService }) => {
+  const match = useLocation();
   const classes = useStyles();
+  const theme = useTheme();
+  const [notificationsState] = useService(notificationsService);
+
+  const allNotifications = notificationsState?.context?.results;
+  const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
 
   return (
-    <AppBar
-      position="absolute"
-      className={clsx(classes.appBar, drawerOpen && classes.appBarShift)}
-    >
+    <AppBar position="absolute" className={clsx(classes.appBar, drawerOpen && classes.appBarShift)}>
       <Toolbar className={classes.toolbar}>
         <IconButton
-          data-test="sidenav-open"
+          data-test="sidenav-toggle"
           edge="start"
           color="inherit"
           aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          className={clsx(drawerOpen && classes.menuButtonHidden)}
+          onClick={() => toggleDrawer()}
         >
           <MenuIcon data-test="drawer-icon" />
         </IconButton>
@@ -93,12 +112,12 @@ const NavBar: React.FC<NavBarProps> = ({
           className={classes.title}
           data-test="app-name-logo"
         >
-          <Link
-            to="/"
-            style={{ color: "#fff", textDecoration: "none" }}
-            component={RouterLink}
-          >
-            Pay App
+          <Link to="/" style={{ color: "#fff", textDecoration: "none" }} component={RouterLink}>
+            {xsBreakpoint ? (
+              <RWALogoIcon className={classes.logo} />
+            ) : (
+              <RWALogo className={classes.logo} />
+            )}
           </Link>
         </Typography>
         <Button
@@ -118,16 +137,17 @@ const NavBar: React.FC<NavBarProps> = ({
           data-test="nav-top-notifications-link"
         >
           <Badge
-            badgeContent={
-              allNotifications ? allNotifications.length : undefined
-            }
-            color="secondary"
+            badgeContent={allNotifications ? allNotifications.length : undefined}
             data-test="nav-top-notifications-count"
+            classes={{ badge: classes.customBadge }}
           >
             <NotificationsIcon />
           </Badge>
         </IconButton>
       </Toolbar>
+      {(match.pathname === "/" || RegExp("/(?:public|contacts|personal)").test(match.pathname)) && (
+        <TransactionNavTabs />
+      )}
     </AppBar>
   );
 };

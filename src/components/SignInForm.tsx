@@ -1,122 +1,140 @@
 import React from "react";
+import { Interpreter } from "xstate";
+import { useService } from "@xstate/react";
 import { Link } from "react-router-dom";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
+import {
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Grid,
+  Box,
+  Typography,
+  makeStyles,
+  Container,
+} from "@material-ui/core";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 
-import Copyright from "./Copyright";
-import { User } from "../models";
+import RWALogo from "./SvgRwaLogo";
+import Footer from "./Footer";
+import { SignInPayload } from "../models";
+import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import { Alert } from "@material-ui/lab";
 
 const validationSchema = object({
   username: string().required("Username is required"),
   password: string()
     .min(4, "Password must contain at least 4 characters")
-    .required("Enter your password")
+    .required("Enter your password"),
 });
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+  logo: {
+    color: theme.palette.primary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
+  alertMessage: {
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 export interface Props {
-  signInPending: (payload: Partial<User>) => void;
+  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
 }
 
-const SignInForm: React.FC<Props> = ({ signInPending }) => {
+const SignInForm: React.FC<Props> = ({ authService }) => {
   const classes = useStyles();
-  const initialValues: Partial<User> = { username: "", password: "" };
+  const [authState, sendAuth] = useService(authService);
+  const initialValues: SignInPayload = {
+    username: "",
+    password: "",
+    remember: undefined,
+  };
+
+  const signInPending = (payload: SignInPayload) => sendAuth({ type: "LOGIN", ...payload });
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
+        {authState.context?.message && (
+          <Alert data-test="signin-error" severity="error" className={classes.alertMessage}>
+            {authState.context.message}
+          </Alert>
+        )}
+        <div>
+          <RWALogo className={classes.logo} />
+        </div>
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={async (values, { setSubmitting, setFieldValue }) => {
+          onSubmit={async (values, { setSubmitting }) => {
             setSubmitting(true);
 
             signInPending(values);
-
-            setFieldValue("username", "");
-            setFieldValue("password", "");
-            setSubmitting(false);
           }}
         >
           {({ isValid, isSubmitting }) => (
             <Form className={classes.form}>
               <Field name="username">
-                {({ field, meta }: FieldProps) => (
+                {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
                     id="username"
                     label="Username"
                     type="text"
                     autoFocus
                     data-test="signin-username"
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched ? meta.error : ""}
+                    error={(touched || value !== initialValue) && Boolean(error)}
+                    helperText={touched || value !== initialValue ? error : ""}
                     {...field}
                   />
                 )}
               </Field>
               <Field name="password">
-                {({ field, meta }: FieldProps) => (
+                {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
                     label="Password"
                     type="password"
                     id="password"
                     data-test="signin-password"
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched ? meta.error : ""}
+                    error={touched && value !== initialValue && Boolean(error)}
+                    helperText={touched && value !== initialValue && touched ? error : ""}
                     {...field}
                   />
                 )}
               </Field>
               <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
+                control={
+                  <Field name={"remember"}>
+                    {({ field }: FieldProps) => {
+                      return <Checkbox color="primary" data-test="signin-remember-me" {...field} />;
+                    }}
+                  </Field>
+                }
                 label="Remember me"
-                data-test="signin-remember-me"
               />
               <Button
                 type="submit"
@@ -131,10 +149,12 @@ const SignInForm: React.FC<Props> = ({ signInPending }) => {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link to="/forgotpassword">Forgot password?</Link>
+                  {/*<Link to="/forgotpassword">Forgot password?</Link>*/}
                 </Grid>
                 <Grid item>
-                  <Link to="/signup">{"Don't have an account? Sign Up"}</Link>
+                  <Link data-test="signup" to="/signup">
+                    {"Don't have an account? Sign Up"}
+                  </Link>
                 </Grid>
               </Grid>
             </Form>
@@ -142,7 +162,7 @@ const SignInForm: React.FC<Props> = ({ signInPending }) => {
         </Formik>
       </div>
       <Box mt={8}>
-        <Copyright />
+        <Footer />
       </Box>
     </Container>
   );

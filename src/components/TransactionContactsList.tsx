@@ -4,10 +4,8 @@ import {
   TransactionPagination,
   TransactionResponseItem,
   TransactionDateRangePayload,
-  TransactionAmountRangePayload
+  TransactionAmountRangePayload,
 } from "../models";
-import MainContainer from "../containers/MainContainer";
-import TransactionNavTabs from "./TransactionNavTabs";
 import TransactionList from "./TransactionList";
 import { contactsTransactionsMachine } from "../machines/contactsTransactionsMachine";
 
@@ -20,12 +18,16 @@ export interface TransactionContactListProps {
 const TransactionContactsList: React.FC<TransactionContactListProps> = ({
   filterComponent,
   dateRangeFilters,
-  amountRangeFilters
+  amountRangeFilters,
 }) => {
-  const [current, send] = useMachine(contactsTransactionsMachine, {
-    devTools: true
-  });
+  const [current, send, contactTransactionService] = useMachine(contactsTransactionsMachine);
   const { pageData, results } = current.context;
+
+  // @ts-ignore
+  if (window.Cypress) {
+    // @ts-ignore
+    window.contactTransactionService = contactTransactionService;
+  }
 
   useEffect(() => {
     send("FETCH", { ...dateRangeFilters, ...amountRangeFilters });
@@ -35,18 +37,17 @@ const TransactionContactsList: React.FC<TransactionContactListProps> = ({
     send("FETCH", { page, ...dateRangeFilters, ...amountRangeFilters });
 
   return (
-    <MainContainer>
-      <TransactionNavTabs />
-      {filterComponent}
-      <br />
+    <>
       <TransactionList
+        filterComponent={filterComponent}
         header="Contacts"
         transactions={results as TransactionResponseItem[]}
         isLoading={current.matches("loading")}
         loadNextPage={loadNextPage}
         pagination={pageData as TransactionPagination}
+        showCreateButton
       />
-    </MainContainer>
+    </>
   );
 };
 

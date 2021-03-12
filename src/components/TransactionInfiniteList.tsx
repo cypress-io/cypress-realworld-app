@@ -1,10 +1,11 @@
 import React from "react";
-import InfiniteLoader from "react-window-infinite-loader";
-import { FixedSizeList } from "react-window";
+import { get } from "lodash/fp";
+import { useTheme, makeStyles, useMediaQuery, Divider } from "@material-ui/core";
+import { InfiniteLoader, List, Index } from "react-virtualized";
+import "react-virtualized/styles.css"; // only needs to be imported once
 
 import TransactionItem from "./TransactionItem";
 import { TransactionResponseItem, TransactionPagination } from "../models";
-import { get } from "lodash/fp";
 
 export interface TransactionListProps {
   transactions: TransactionResponseItem[];
@@ -12,59 +13,69 @@ export interface TransactionListProps {
   pagination: TransactionPagination;
 }
 
+const useStyles = makeStyles((theme) => ({
+  transactionList: {
+    width: "100%",
+    minHeight: "80vh",
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
+  },
+}));
+
 const TransactionInfiniteList: React.FC<TransactionListProps> = ({
   transactions,
   loadNextPage,
-  pagination
+  pagination,
 }) => {
-  const itemCount = pagination.hasNextPages
-    ? transactions.length + 1
-    : transactions.length;
+  const classes = useStyles();
+  const theme = useTheme();
+  const isXsBreakpoint = useMediaQuery(theme.breakpoints.down("xs"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const loadMoreItems = () =>
-    Promise.resolve("").then(
-      () => pagination.hasNextPages && loadNextPage(pagination.page + 1)
-    );
+  const itemCount = pagination.hasNextPages ? transactions.length + 1 : transactions.length;
 
-  const isItemLoaded = (index: number) =>
-    !pagination.hasNextPages || index < transactions.length;
+  const loadMoreItems = () => {
+    return new Promise((resolve) => {
+      return resolve(pagination.hasNextPages && loadNextPage(pagination.page + 1));
+    });
+  };
 
-  const Item = ({ index, style }: { index: number; style: any }) => {
-    if (!isItemLoaded(index)) {
+  const isRowLoaded = (params: Index) =>
+    !pagination.hasNextPages || params.index < transactions.length;
+
+  // @ts-ignore
+  function rowRenderer({ key, index, style }) {
+    const transaction = get(index, transactions);
+
+    if (index < transactions.length) {
       return (
-        <div data-test="transaction-loading" style={style}>
-          Loading...
-        </div>
-      );
-    } else {
-      const transaction = get(index, transactions);
-      return (
-        <div style={style}>
-          <TransactionItem transaction={transaction} transactionIndex={index} />
+        <div key={key} style={style}>
+          <TransactionItem transaction={transaction} />
+          <Divider variant={isMobile ? "fullWidth" : "inset"} />
         </div>
       );
     }
-  };
+  }
 
   return (
     <InfiniteLoader
-      isItemLoaded={isItemLoaded}
-      loadMoreItems={loadMoreItems}
-      itemCount={itemCount}
+      isRowLoaded={isRowLoaded}
+      loadMoreRows={loadMoreItems}
+      rowCount={itemCount}
       threshold={2}
     >
-      {({ onItemsRendered, ref }) => (
-        <div data-test="transaction-list">
-          <FixedSizeList
-            itemCount={itemCount}
-            ref={ref}
-            onItemsRendered={onItemsRendered}
-            height={500}
-            width={850}
-            itemSize={198}
-          >
-            {Item}
-          </FixedSizeList>
+      {({ onRowsRendered, registerChild }) => (
+        <div data-test="transaction-list" className={classes.transactionList}>
+          <List
+            rowCount={itemCount}
+            ref={registerChild}
+            onRowsRendered={onRowsRendered}
+            height={isXsBreakpoint ? theme.spacing(74) : theme.spacing(88)}
+            width={isXsBreakpoint ? theme.spacing(38) : theme.spacing(110)}
+            rowHeight={isXsBreakpoint ? theme.spacing(28) : theme.spacing(16)}
+            rowRenderer={rowRenderer}
+          />
         </div>
       )}
     </InfiniteLoader>

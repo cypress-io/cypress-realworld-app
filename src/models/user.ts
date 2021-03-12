@@ -1,7 +1,7 @@
 export enum DefaultPrivacyLevel {
   public = "public",
   private = "private",
-  contacts = "contacts"
+  contacts = "contacts",
 }
 
 export interface User {
@@ -24,3 +24,9 @@ export type UserSettingsPayload = Pick<
   User,
   "firstName" | "lastName" | "email" | "phoneNumber" | "defaultPrivacyLevel"
 >;
+
+export type SignInPayload = Pick<User, "username" | "password"> & {
+  remember?: Boolean;
+};
+
+export type SignUpPayload = Pick<User, "username" | "password" | "firstName" | "lastName">;

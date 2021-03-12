@@ -1,36 +1,45 @@
 import React from "react";
-import clsx from "clsx";
-import { Link as RouterLink } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import HomeIcon from "@material-ui/icons/Home";
-import PersonIcon from "@material-ui/icons/Person";
-import LogoutIcon from "@material-ui/icons/ExitToApp";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
-import { User } from "../models";
-import { Grid, Avatar, Typography } from "@material-ui/core";
-import { formatAmount } from "../utils/transactionUtils";
 import { head } from "lodash/fp";
+import { Interpreter } from "xstate";
+import { useService } from "@xstate/react";
+import clsx from "clsx";
+import {
+  useMediaQuery,
+  useTheme,
+  makeStyles,
+  Drawer,
+  List,
+  Divider,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Grid,
+  Avatar,
+  Typography,
+} from "@material-ui/core";
+import { Link as RouterLink } from "react-router-dom";
+import {
+  Home as HomeIcon,
+  Person as PersonIcon,
+  ExitToApp as LogoutIcon,
+  Notifications as NotificationsIcon,
+  AccountBalance as AccountBalanceIcon,
+} from "@material-ui/icons";
+
+import { formatAmount } from "../utils/transactionUtils";
+import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 
 const drawerWidth = 240;
 
 export const mainListItems = (
-  handleDrawerClose:
-    | ((event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void)
-    | undefined
+  toggleDrawer: ((event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void) | undefined,
+  showTemporaryDrawer: Boolean
 ) => (
   <div>
     <ListItem
       button
-      onClick={handleDrawerClose}
+      // @ts-ignore
+      onClick={() => showTemporaryDrawer && toggleDrawer()}
       component={RouterLink}
       to="/"
       data-test="sidenav-home"
@@ -42,7 +51,8 @@ export const mainListItems = (
     </ListItem>
     <ListItem
       button
-      onClick={handleDrawerClose}
+      // @ts-ignore
+      onClick={() => showTemporaryDrawer && toggleDrawer()}
       component={RouterLink}
       to="/user/settings"
       data-test="sidenav-user-settings"
@@ -54,7 +64,8 @@ export const mainListItems = (
     </ListItem>
     <ListItem
       button
-      onClick={handleDrawerClose}
+      // @ts-ignore
+      onClick={() => showTemporaryDrawer && toggleDrawer()}
       component={RouterLink}
       to="/bankaccounts"
       data-test="sidenav-bankaccounts"
@@ -66,7 +77,8 @@ export const mainListItems = (
     </ListItem>
     <ListItem
       button
-      onClick={handleDrawerClose}
+      // @ts-ignore
+      onClick={() => showTemporaryDrawer && toggleDrawer()}
       component={RouterLink}
       to="/notifications"
       data-test="sidenav-notifications"
@@ -81,29 +93,25 @@ export const mainListItems = (
 
 export const secondaryListItems = (signOutPending: Function) => (
   <div>
-    <ListItem button>
+    <ListItem button onClick={() => signOutPending()} data-test="sidenav-signout">
       <ListItemIcon>
         <LogoutIcon />
       </ListItemIcon>
-      <ListItemText
-        primary="Logout"
-        data-test="sidenav-signout"
-        onClick={() => signOutPending()}
-      />
+      <ListItemText primary="Logout" />
     </ListItem>
   </div>
 );
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   toolbar: {
-    paddingRight: 24 // keep right padding when drawer closed
+    paddingRight: 24, // keep right padding when drawer closed
   },
   toolbarIcon: {
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-end",
     padding: "0 8px",
-    ...theme.mixins.toolbar
+    ...theme.mixins.toolbar,
   },
   drawerPaper: {
     position: "relative",
@@ -111,66 +119,77 @@ const useStyles = makeStyles(theme => ({
     width: drawerWidth,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   drawerPaperClose: {
     marginTop: 50,
     overflowX: "hidden",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
+      duration: theme.transitions.duration.leavingScreen,
     }),
     width: theme.spacing(7),
     [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9)
-    }
+      width: theme.spacing(9),
+    },
   },
   userProfile: {
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   userProfileHidden: {
-    display: "none"
+    display: "none",
   },
   avatar: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   accountBalance: {
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   amount: {
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   accountBalanceHidden: {
-    display: "none"
-  }
+    display: "none",
+  },
+  cypressLogo: {
+    width: "40%",
+  },
 }));
 
 interface Props {
-  signOutPending: () => void;
-  handleDrawerClose: () => void;
+  closeMobileDrawer: () => void;
+  toggleDrawer: () => void;
   drawerOpen: boolean;
-  currentUser: User;
+  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
 }
 
 const NavDrawer: React.FC<Props> = ({
-  signOutPending,
-  handleDrawerClose,
+  toggleDrawer,
+  closeMobileDrawer,
   drawerOpen,
-  currentUser
+  authService,
 }) => {
   const classes = useStyles();
+  const theme = useTheme();
+  const [authState, sendAuth] = useService(authService);
+  const showTemporaryDrawer = useMediaQuery(theme.breakpoints.only("xs"));
+
+  const currentUser = authState?.context?.user;
+  const signOut = () => sendAuth("LOGOUT");
 
   return (
     <Drawer
-      variant="temporary"
+      data-test="sidenav"
+      variant={showTemporaryDrawer ? "temporary" : "persistent"}
       classes={{
-        paper: clsx(
-          classes.drawerPaper,
-          !drawerOpen && classes.drawerPaperClose
-        )
+        paper: clsx(classes.drawerPaper, !drawerOpen && classes.drawerPaperClose),
       }}
       open={drawerOpen}
+      ModalProps={{
+        onBackdropClick: () => closeMobileDrawer(),
+        closeAfterTransition: showTemporaryDrawer,
+      }}
     >
       <Grid
         container
@@ -180,27 +199,36 @@ const NavDrawer: React.FC<Props> = ({
         className={drawerOpen ? classes.userProfile : classes.userProfileHidden}
       >
         <Grid item>
-          <Avatar
-            className={classes.avatar}
-            alt={`${currentUser.firstName} ${currentUser.lastName}`}
-            src={currentUser.avatar}
-          />
+          {currentUser && (
+            <Avatar
+              className={classes.avatar}
+              alt={`${currentUser.firstName} ${currentUser.lastName}`}
+              src={currentUser.avatar}
+            />
+          )}
         </Grid>
         <Grid item>
-          <Typography variant="subtitle1" color="textPrimary">
-            {currentUser.firstName} {head(currentUser.lastName)}
-          </Typography>
-          <Typography variant="subtitle2" color="inherit" gutterBottom>
-            @{currentUser.username}
-          </Typography>
+          {currentUser && (
+            <>
+              <Typography
+                variant="subtitle1"
+                color="textPrimary"
+                data-test="sidenav-user-full-name"
+              >
+                {currentUser.firstName} {head(currentUser.lastName)}
+              </Typography>
+              <Typography
+                variant="subtitle2"
+                color="inherit"
+                gutterBottom
+                data-test="sidenav-username"
+              >
+                @{currentUser.username}
+              </Typography>
+            </>
+          )}
         </Grid>
-        <Grid item>
-          <div className={classes.toolbarIcon}>
-            <IconButton onClick={handleDrawerClose} data-test="sidenav-close">
-              <ChevronLeftIcon />
-            </IconButton>
-          </div>
-        </Grid>
+        <Grid item style={{ width: "30%" }}></Grid>
       </Grid>
       <Grid
         container
@@ -210,23 +238,35 @@ const NavDrawer: React.FC<Props> = ({
         className={drawerOpen ? classes.userProfile : classes.userProfileHidden}
       >
         <Grid item>
-          <Typography
-            variant="h6"
-            color="textPrimary"
-            className={classes.amount}
-            data-test="sidenav-user-balance"
-          >
-            {currentUser.balance && formatAmount(currentUser.balance)}
-          </Typography>
-          <Typography variant="subtitle2" color="inherit" gutterBottom>
-            Account Balance
-          </Typography>
+          {currentUser && (
+            <>
+              <Typography
+                variant="h6"
+                color="textPrimary"
+                className={classes.amount}
+                data-test="sidenav-user-balance"
+              >
+                {currentUser.balance ? formatAmount(currentUser.balance) : formatAmount(0)}
+              </Typography>
+              <Typography variant="subtitle2" color="inherit" gutterBottom>
+                Account Balance
+              </Typography>
+            </>
+          )}
+        </Grid>
+        <Grid item>
+          <Divider />
+        </Grid>
+        <Grid item>
+          <List>{mainListItems(toggleDrawer, showTemporaryDrawer)}</List>
+        </Grid>
+        <Grid item>
+          <Divider />
+        </Grid>
+        <Grid item>
+          <List>{secondaryListItems(signOut)}</List>
         </Grid>
       </Grid>
-      <Divider />
-      <List>{mainListItems(handleDrawerClose)}</List>
-      <Divider />
-      <List>{secondaryListItems(signOutPending)}</List>
     </Drawer>
   );
 };

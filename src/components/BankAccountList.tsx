@@ -1,8 +1,8 @@
 import React from "react";
+import { List } from "@material-ui/core";
 
-import BankAccountItem from "./BankAccountItem";
-import List from "@material-ui/core/List";
 import { BankAccount } from "../models";
+import BankAccountItem from "./BankAccountItem";
 import EmptyList from "./EmptyList";
 
 export interface BankAccountListProps {
@@ -10,13 +10,10 @@ export interface BankAccountListProps {
   deleteBankAccount: Function;
 }
 
-const BankAccountList: React.FC<BankAccountListProps> = ({
-  bankAccounts,
-  deleteBankAccount
-}) => {
+const BankAccountList: React.FC<BankAccountListProps> = ({ bankAccounts, deleteBankAccount }) => {
   return (
     <>
-      {bankAccounts.length > 0 ? (
+      {bankAccounts?.length > 0 ? (
         <List data-test="bankaccount-list">
           {bankAccounts.map((bankAccount: BankAccount) => (
             <BankAccountItem

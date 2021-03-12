@@ -38,11 +38,7 @@ type FilterEvents =
 
 export interface FilterContext {}
 
-export const transactionFiltersMachine = Machine<
-  FilterContext,
-  FilterSchema,
-  FilterEvents
->(
+export const transactionFiltersMachine = Machine<FilterContext, FilterSchema, FilterEvents>(
   {
     id: "filters",
     type: "parallel",
@@ -54,16 +50,16 @@ export const transactionFiltersMachine = Machine<
           none: {
             entry: "resetDateRange",
             on: {
-              DATE_FILTER: "filter"
-            }
+              DATE_FILTER: "filter",
+            },
           },
           filter: {
             entry: "setDateRange",
             on: {
-              DATE_RESET: "none"
-            }
-          }
-        }
+              DATE_RESET: "none",
+            },
+          },
+        },
       },
       amountRange: {
         initial: "none",
@@ -71,38 +67,38 @@ export const transactionFiltersMachine = Machine<
           none: {
             entry: "resetAmountRange",
             on: {
-              AMOUNT_FILTER: "filter"
-            }
+              AMOUNT_FILTER: "filter",
+            },
           },
           filter: {
             entry: "setAmountRange",
             on: {
               AMOUNT_RESET: "none",
-              AMOUNT_FILTER: "filter"
-            }
-          }
-        }
-      }
-    }
+              AMOUNT_FILTER: "filter",
+            },
+          },
+        },
+      },
+    },
   },
   {
     actions: {
       setDateRange: assign((ctx: FilterContext, event: any) => ({
         dateRangeStart: event.dateRangeStart,
-        dateRangeEnd: event.dateRangeEnd
+        dateRangeEnd: event.dateRangeEnd,
       })),
       resetDateRange: assign((ctx: FilterContext, event: any) => ({
         dateRangeStart: undefined,
-        dateRangeEnd: undefined
+        dateRangeEnd: undefined,
       })),
       setAmountRange: assign((ctx: FilterContext, event: any) => ({
         amountMin: event.amountMin,
-        amountMax: event.amountMax
+        amountMax: event.amountMax,
       })),
       resetAmountRange: assign((ctx: FilterContext, event: any) => ({
         amountMin: undefined,
-        amountMax: undefined
-      }))
-    }
+        amountMax: undefined,
+      })),
+    },
   }
 );

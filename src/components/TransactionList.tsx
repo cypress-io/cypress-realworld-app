@@ -1,14 +1,13 @@
-import React from "react";
-import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { ReactNode } from "react";
+import { makeStyles, Paper, Button, ListSubheader, Grid } from "@material-ui/core";
 import { Link as RouterLink } from "react-router-dom";
-import { Button } from "@material-ui/core";
+import { isEmpty } from "lodash/fp";
 
 import SkeletonList from "./SkeletonList";
 import { TransactionResponseItem, TransactionPagination } from "../models";
 import EmptyList from "./EmptyList";
 import TransactionInfiniteList from "./TransactionInfiniteList";
+import TransferMoneyIllustration from "./SvgUndrawTransferMoneyRywa";
 
 export interface TransactionListProps {
   header: string;
@@ -17,15 +16,13 @@ export interface TransactionListProps {
   showCreateButton?: Boolean;
   loadNextPage: Function;
   pagination: TransactionPagination;
+  filterComponent: ReactNode;
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column"
-  }
+    paddingLeft: theme.spacing(1),
+  },
 }));
 
 const TransactionList: React.FC<TransactionListProps> = ({
@@ -34,35 +31,53 @@ const TransactionList: React.FC<TransactionListProps> = ({
   isLoading,
   showCreateButton,
   loadNextPage,
-  pagination
+  pagination,
+  filterComponent,
 }) => {
   const classes = useStyles();
 
+  const showEmptyList = !isLoading && transactions?.length === 0;
+  const showSkeleton = isLoading && isEmpty(pagination);
+
   return (
     <Paper className={classes.paper}>
-      <Typography component="h2" variant="h6" color="primary" gutterBottom>
-        {header}
-      </Typography>
-      {/* isLoading && pagination.page <= 1 && <SkeletonList /> */}
-      {transactions.length > 0 ? (
+      {filterComponent}
+      <ListSubheader component="div">{header}</ListSubheader>
+      {showSkeleton && <SkeletonList />}
+      {transactions.length > 0 && (
         <TransactionInfiniteList
           transactions={transactions}
           loadNextPage={loadNextPage}
           pagination={pagination}
         />
-      ) : (
+      )}
+      {showEmptyList && (
         <EmptyList entity="Transactions">
-          {showCreateButton && (
-            <Button
-              data-test="transaction-list-empty-create-transaction-button"
-              variant="contained"
-              color="primary"
-              component={RouterLink}
-              to="/transaction/new"
-            >
-              Create A Transaction
-            </Button>
-          )}
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            style={{ width: "100%" }}
+            spacing={2}
+          >
+            <Grid item>
+              <TransferMoneyIllustration style={{ height: 200, width: 300, marginBottom: 30 }} />
+            </Grid>
+            <Grid item>
+              {showCreateButton && (
+                <Button
+                  data-test="transaction-list-empty-create-transaction-button"
+                  variant="contained"
+                  color="primary"
+                  component={RouterLink}
+                  to="/transaction/new"
+                >
+                  Create A Transaction
+                </Button>
+              )}
+            </Grid>
+          </Grid>
         </EmptyList>
       )}
     </Paper>

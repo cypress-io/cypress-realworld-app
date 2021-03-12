@@ -1,24 +1,23 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, Typography } from "@material-ui/core";
 import { TransactionResponseItem } from "../models";
-import { Typography } from "@material-ui/core";
 import { isRequestTransaction, formatAmount } from "../utils/transactionUtils";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   amountPositive: {
     fontSize: 24,
     [theme.breakpoints.down("sm")]: {
-      fontSize: theme.typography.body1.fontSize
+      fontSize: theme.typography.body1.fontSize,
     },
-    color: "#4CAF50"
+    color: "#4CAF50",
   },
   amountNegative: {
     fontSize: 24,
     [theme.breakpoints.down("sm")]: {
-      fontSize: theme.typography.body1.fontSize
+      fontSize: theme.typography.body1.fontSize,
     },
-    color: "red"
-  }
+    color: "red",
+  },
 }));
 
 const TransactionAmount: React.FC<{
@@ -28,10 +27,9 @@ const TransactionAmount: React.FC<{
 
   return (
     <Typography
+      data-test={`transaction-amount-${transaction.id}`}
       className={
-        isRequestTransaction(transaction)
-          ? classes.amountPositive
-          : classes.amountNegative
+        isRequestTransaction(transaction) ? classes.amountPositive : classes.amountNegative
       }
       display="inline"
       component="span"

@@ -1,9 +1,10 @@
 import React from "react";
+import { List } from "@material-ui/core";
 
 import NotificationListItem from "./NotificationListItem";
-import List from "@material-ui/core/List";
 import { NotificationResponseItem } from "../models";
 import EmptyList from "./EmptyList";
+import RemindersIllustration from "./SvgUndrawReminders697P";
 
 export interface NotificationsListProps {
   notifications: NotificationResponseItem[];
@@ -12,11 +13,11 @@ export interface NotificationsListProps {
 
 const NotificationsList: React.FC<NotificationsListProps> = ({
   notifications,
-  updateNotification
+  updateNotification,
 }) => {
   return (
     <>
-      {notifications.length > 0 ? (
+      {notifications?.length > 0 ? (
         <List data-test="notifications-list">
           {notifications.map((notification: NotificationResponseItem) => (
             <NotificationListItem
@@ -27,7 +28,9 @@ const NotificationsList: React.FC<NotificationsListProps> = ({
           ))}
         </List>
       ) : (
-        <EmptyList entity="Notifications" />
+        <EmptyList entity="Notifications">
+          <RemindersIllustration style={{ height: 200, width: 250, marginBottom: 30 }} />
+        </EmptyList>
       )}
     </>
   );

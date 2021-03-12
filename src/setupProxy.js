@@ -1,9 +1,11 @@
-const proxy = require("http-proxy-middleware");
+const createProxyMiddleware = require("http-proxy-middleware");
 
-module.exports = function(app) {
+module.exports = function (app) {
   app.use(
-    proxy(["/login", "/callback", "/logout"], {
-      target: `http://localhost:3001`
+    createProxyMiddleware(["/login", "/callback", "/logout", "/checkAuth"], {
+      target: `http://localhost:3001`,
+      changeOrigin: true,
+      logLevel: "debug",
     })
   );
 };

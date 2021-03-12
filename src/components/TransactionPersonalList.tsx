@@ -4,10 +4,8 @@ import {
   TransactionPagination,
   TransactionResponseItem,
   TransactionDateRangePayload,
-  TransactionAmountRangePayload
+  TransactionAmountRangePayload,
 } from "../models";
-import MainContainer from "../containers/MainContainer";
-import TransactionNavTabs from "./TransactionNavTabs";
 import TransactionList from "./TransactionList";
 import { personalTransactionsMachine } from "../machines/personalTransactionsMachine";
 
@@ -20,12 +18,16 @@ export interface TransactionPersonalListProps {
 const TransactionPersonalList: React.FC<TransactionPersonalListProps> = ({
   filterComponent,
   dateRangeFilters,
-  amountRangeFilters
+  amountRangeFilters,
 }) => {
-  const [current, send] = useMachine(personalTransactionsMachine, {
-    devTools: true
-  });
+  const [current, send, personalTransactionService] = useMachine(personalTransactionsMachine);
   const { pageData, results } = current.context;
+
+  // @ts-ignore
+  if (window.Cypress) {
+    // @ts-ignore
+    window.personalTransactionService = personalTransactionService;
+  }
 
   useEffect(() => {
     send("FETCH", { ...dateRangeFilters, ...amountRangeFilters });
@@ -35,11 +37,9 @@ const TransactionPersonalList: React.FC<TransactionPersonalListProps> = ({
     send("FETCH", { page, ...dateRangeFilters, ...amountRangeFilters });
 
   return (
-    <MainContainer>
-      <TransactionNavTabs />
-      {filterComponent}
-      <br />
+    <>
       <TransactionList
+        filterComponent={filterComponent}
         header="Personal"
         transactions={results as TransactionResponseItem[]}
         isLoading={current.matches("loading")}
@@ -47,7 +47,7 @@ const TransactionPersonalList: React.FC<TransactionPersonalListProps> = ({
         pagination={pageData as TransactionPagination}
         showCreateButton={true}
       />
-    </MainContainer>
+    </>
   );
 };
 

@@ -1,55 +1,44 @@
 import React from "react";
-import {
-  Button,
-  Typography,
-  Grid,
-  Avatar,
-  Paper,
-  IconButton
-} from "@material-ui/core";
-import LikeIcon from "@material-ui/icons/ThumbUpAltOutlined";
-import CommentIcon from "@material-ui/icons/CommentRounded";
-import { makeStyles } from "@material-ui/core/styles";
-import {
-  TransactionResponseItem,
-  TransactionRequestStatus,
-  User
-} from "../models";
+import { Button, Typography, Grid, Avatar, Paper, IconButton, makeStyles } from "@material-ui/core";
+import { AvatarGroup } from "@material-ui/lab";
+import { ThumbUpAltOutlined as LikeIcon, CommentRounded as CommentIcon } from "@material-ui/icons";
+import { TransactionResponseItem, TransactionRequestStatus, User } from "../models";
 import CommentForm from "./CommentForm";
 import {
   isPendingRequestTransaction,
   receiverIsCurrentUser,
-  currentUserLikesTransaction
+  currentUserLikesTransaction,
 } from "../utils/transactionUtils";
-import { random } from "lodash/fp";
 import CommentsList from "./CommentList";
 import TransactionTitle from "./TransactionTitle";
 import TransactionAmount from "./TransactionAmount";
 
-const imgNumber = random(3, 50);
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   paperComments: {
     marginTop: theme.spacing(6),
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   avatar: {
-    width: theme.spacing(2)
+    width: theme.spacing(2),
   },
   headline: {
-    marginTop: theme.spacing(4)
+    marginTop: theme.spacing(4),
   },
   avatarLarge: {
     width: theme.spacing(7),
-    height: theme.spacing(7)
+    height: theme.spacing(7),
+  },
+  avatarGroup: {
+    margin: 10,
   },
   redButton: {
     backgrounColor: "red",
@@ -62,8 +51,8 @@ const useStyles = makeStyles(theme => ({
     "&:hover": {
       backgroundColor: "red",
       borderColor: "red",
-      boxShadow: "none"
-    }
+      boxShadow: "none",
+    },
   },
   greenButton: {
     marginRight: theme.spacing(2),
@@ -76,9 +65,9 @@ const useStyles = makeStyles(theme => ({
     "&:hover": {
       backgroundColor: "#4CAF50",
       borderColor: "#00C853",
-      boxShadow: "none"
-    }
-  }
+      boxShadow: "none",
+    },
+  },
 }));
 
 type TransactionProps = {
@@ -94,13 +83,19 @@ const TransactionDetail: React.FC<TransactionProps> = ({
   transactionLike,
   transactionComment,
   transactionUpdate,
-  currentUser
+  currentUser,
 }) => {
   const classes = useStyles();
 
   return (
     <Paper className={classes.paper}>
-      <Typography component="h2" variant="h6" color="primary" gutterBottom>
+      <Typography
+        component="h2"
+        variant="h6"
+        color="primary"
+        gutterBottom
+        data-test="transaction-detail-header"
+      >
         Transaction Detail
       </Typography>
       <Grid
@@ -111,22 +106,30 @@ const TransactionDetail: React.FC<TransactionProps> = ({
         data-test={`transaction-item-${transaction.id}`}
       >
         <Grid item className={classes.headline}>
-          <Avatar
-            className={classes.avatarLarge}
-            src={`https://i.pravatar.cc/300?img=${imgNumber}`}
-          />
-          <Grid
-            container
-            direction="column"
-            justify="flex-start"
-            alignItems="flex-start"
-          >
+          <AvatarGroup className={classes.avatarGroup} max={2}>
+            <Avatar
+              data-test="transaction-sender-avatar"
+              className={classes.avatarLarge}
+              src={transaction.senderAvatar}
+            />
+            <Avatar
+              data-test="transaction-receiver-avatar"
+              className={classes.avatarLarge}
+              src={transaction.receiverAvatar}
+            />
+          </AvatarGroup>
+          <Grid container direction="column" justify="flex-start" alignItems="flex-start">
             <Grid item></Grid>
             <Grid item>
               <TransactionTitle transaction={transaction} />
             </Grid>
             <Grid item>
-              <Typography variant="body2" color="textSecondary" gutterBottom>
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                gutterBottom
+                data-test="transaction-description"
+              >
                 {transaction.description}
               </Typography>
             </Grid>
@@ -136,21 +139,9 @@ const TransactionDetail: React.FC<TransactionProps> = ({
           <TransactionAmount transaction={transaction} />
         </Grid>
       </Grid>
-      <Grid
-        container
-        direction="row"
-        justify="flex-start"
-        alignItems="center"
-        spacing={2}
-      >
+      <Grid container direction="row" justify="flex-start" alignItems="center" spacing={2}>
         <Grid item>
-          <Grid
-            container
-            direction="row"
-            justify="flex-start"
-            alignItems="center"
-            spacing={2}
-          >
+          <Grid container direction="row" justify="flex-start" alignItems="center" spacing={2}>
             <Grid item data-test={`transaction-like-count-${transaction.id}`}>
               {transaction.likes ? transaction.likes.length : 0}{" "}
             </Grid>
@@ -158,9 +149,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
               <IconButton
                 color="primary"
                 disabled={currentUserLikesTransaction(currentUser, transaction)}
-                onClick={() =>
-                  transactionLike({ transactionId: transaction.id })
-                }
+                onClick={() => transactionLike(transaction.id)}
                 data-test={`transaction-like-button-${transaction.id}`}
               >
                 <LikeIcon />
@@ -177,7 +166,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
                       onClick={() =>
                         transactionUpdate({
                           id: transaction.id,
-                          requestStatus: TransactionRequestStatus.accepted
+                          requestStatus: TransactionRequestStatus.accepted,
                         })
                       }
                       data-test={`transaction-accept-request-${transaction.id}`}
@@ -191,7 +180,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
                       onClick={() =>
                         transactionUpdate({
                           id: transaction.id,
-                          requestStatus: TransactionRequestStatus.rejected
+                          requestStatus: TransactionRequestStatus.rejected,
                         })
                       }
                       data-test={`transaction-reject-request-${transaction.id}`}
@@ -205,7 +194,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
           <Grid item>
             <CommentForm
               transactionId={transaction.id}
-              transactionComment={payload => transactionComment(payload)}
+              transactionComment={(payload) => transactionComment(payload)}
             />
           </Grid>
         </Grid>

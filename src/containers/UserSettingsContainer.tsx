@@ -1,57 +1,45 @@
 import React from "react";
-import { connect } from "react-redux";
-import { makeStyles, Paper, Typography } from "@material-ui/core";
-import MainContainer from "./MainContainer";
-import { IRootReducerState } from "../reducers";
-import { User } from "../models";
-import { userUpdatePending } from "../actions/users";
+import { makeStyles, Paper, Typography, Grid } from "@material-ui/core";
 import UserSettingsForm from "../components/UserSettingsForm";
+import { Interpreter } from "xstate";
+import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import { useService } from "@xstate/react";
+import PersonalSettingsIllustration from "../components/SvgUndrawPersonalSettingsKihd";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
-    flexDirection: "column"
-  }
+    flexDirection: "column",
+  },
 }));
 
-export interface StateProps {
-  userProfile: User;
+export interface Props {
+  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
 }
 
-export interface DispatchProps {
-  updateUser: Function;
-}
-
-export type UserSettingsContainerProps = StateProps & DispatchProps;
-
-const UserSettingsContainer: React.FC<UserSettingsContainerProps> = ({
-  userProfile,
-  updateUser
-}) => {
+const UserSettingsContainer: React.FC<Props> = ({ authService }) => {
   const classes = useStyles();
+  const [authState, sendAuth] = useService(authService);
+
+  const currentUser = authState?.context?.user;
+  const updateUser = (payload: any) => sendAuth({ type: "UPDATE", ...payload });
+
   return (
-    <MainContainer>
-      <Paper className={classes.paper}>
-        <Typography component="h2" variant="h6" color="primary" gutterBottom>
-          User Settings
-        </Typography>
-        <UserSettingsForm userProfile={userProfile} updateUser={updateUser} />
-      </Paper>
-    </MainContainer>
+    <Paper className={classes.paper}>
+      <Typography component="h2" variant="h6" color="primary" gutterBottom>
+        User Settings
+      </Typography>
+      <Grid container spacing={2} direction="row" justify="flex-start" alignItems="flex-start">
+        <Grid item>
+          <PersonalSettingsIllustration style={{ height: 200, width: 300 }} />
+        </Grid>
+        <Grid item style={{ width: "50%" }}>
+          {currentUser && <UserSettingsForm userProfile={currentUser} updateUser={updateUser} />}
+        </Grid>
+      </Grid>
+    </Paper>
   );
 };
-
-const mapStateToProps = (state: IRootReducerState) => ({
-  userProfile: state.user.profile
-});
-
-const mapDispatchToProps = {
-  updateUser: userUpdatePending
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UserSettingsContainer);
+export default UserSettingsContainer;

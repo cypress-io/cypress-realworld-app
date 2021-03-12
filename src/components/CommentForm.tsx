@@ -1,24 +1,23 @@
 import React from "react";
-import TextField from "@material-ui/core/TextField";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, TextField } from "@material-ui/core";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 
 const validationSchema = object({
-  content: string()
+  content: string(),
 });
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
-  }
+    marginTop: theme.spacing(1),
+  },
 }));
 
 export interface CommentFormProps {
@@ -26,10 +25,7 @@ export interface CommentFormProps {
   transactionComment: (payload: object) => void;
 }
 
-const CommentForm: React.FC<CommentFormProps> = ({
-  transactionId,
-  transactionComment
-}) => {
+const CommentForm: React.FC<CommentFormProps> = ({ transactionId, transactionComment }) => {
   const classes = useStyles();
   const initialValues = { content: "" };
 
@@ -38,13 +34,9 @@ const CommentForm: React.FC<CommentFormProps> = ({
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values, { setSubmitting, setFieldValue }) => {
+        onSubmit={(values, { setSubmitting }) => {
           setSubmitting(true);
-
           transactionComment({ transactionId, ...values });
-
-          setFieldValue("content", "");
-          setSubmitting(false);
         }}
       >
         {() => (
@@ -58,7 +50,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
                   id={`transaction-comment-input-${transactionId}`}
                   type="text"
                   placeholder="Write a comment..."
-                  data-test={`transaction-comment-input-${transactionId}`}
+                  inputProps={{ "data-test": `transaction-comment-input-${transactionId}` }}
                   error={meta.touched && Boolean(meta.error)}
                   helperText={meta.touched ? meta.error : ""}
                   {...field}

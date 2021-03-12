@@ -1,26 +1,30 @@
 import React from "react";
 
-import ListItem from "@material-ui/core/ListItem";
-import LikeIcon from "@material-ui/icons/ThumbUpAltOutlined";
-import PaymentIcon from "@material-ui/icons/Payment";
-import CommentIcon from "@material-ui/icons/CommentRounded";
-import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
-import { NotificationResponseItem } from "../models";
 import {
-  Card,
-  CardContent,
-  Typography,
-  CardActions,
+  Check as CheckIcon,
+  ThumbUpAltOutlined as LikeIcon,
+  Payment as PaymentIcon,
+  CommentRounded as CommentIcon,
+  MonetizationOn as MonetizationOnIcon,
+} from "@material-ui/icons";
+import {
   Button,
-  makeStyles
+  makeStyles,
+  ListItemIcon,
+  ListItemText,
+  useTheme,
+  useMediaQuery,
+  ListItem,
+  IconButton,
 } from "@material-ui/core";
 import {
   isCommentNotification,
   isLikeNotification,
   isPaymentNotification,
   isPaymentRequestedNotification,
-  isPaymentReceivedNotification
+  isPaymentReceivedNotification,
 } from "../utils/transactionUtils";
+import { NotificationResponseItem } from "../models";
 
 export interface NotificationListItemProps {
   notification: NotificationResponseItem;
@@ -29,26 +33,31 @@ export interface NotificationListItemProps {
 
 const useStyles = makeStyles({
   card: {
-    minWidth: "100%"
+    minWidth: "100%",
   },
   title: {
-    fontSize: 18
+    fontSize: 18,
   },
   green: {
-    color: "#4CAF50"
+    color: "#4CAF50",
   },
   red: {
-    color: "red"
-  }
+    color: "red",
+  },
+  blue: {
+    color: "blue",
+  },
 });
 
 const NotificationListItem: React.FC<NotificationListItemProps> = ({
   notification,
-  updateNotification
+  updateNotification,
 }) => {
   const classes = useStyles();
+  const theme = useTheme();
   let listItemText = undefined;
   let listItemIcon = undefined;
+  const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
 
   if (isCommentNotification(notification)) {
     listItemIcon = <CommentIcon />;
@@ -67,39 +76,33 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
     } else if (isPaymentReceivedNotification(notification)) {
       listItemIcon = <MonetizationOnIcon className={classes.green} />;
       listItemText = `${notification.userFullName} received payment.`;
-    } else {
-      // otherwise, incomplete payment notification
-      listItemText = `An error occurred with payment to ${notification.userFullName}.`;
     }
   }
 
   return (
     <ListItem data-test={`notification-list-item-${notification.id}`}>
-      <Card className={classes.card}>
-        <CardContent>
-          <Typography
-            variant="body2"
-            className={classes.title}
-            color="textSecondary"
-          >
-            {listItemIcon}
-            {"     "}
-            {listItemText}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button
-            color="primary"
-            size="small"
-            onClick={() =>
-              updateNotification({ id: notification.id, isRead: true })
-            }
-            data-test={`notification-mark-read-${notification.id}`}
-          >
-            Mark as read
-          </Button>
-        </CardActions>
-      </Card>
+      <ListItemIcon>{listItemIcon!}</ListItemIcon>
+      <ListItemText primary={listItemText} />
+      {xsBreakpoint && (
+        <IconButton
+          aria-label="mark as read"
+          color="primary"
+          onClick={() => updateNotification({ id: notification.id, isRead: true })}
+          data-test={`notification-mark-read-${notification.id}`}
+        >
+          <CheckIcon />
+        </IconButton>
+      )}
+      {!xsBreakpoint && (
+        <Button
+          color="primary"
+          size="small"
+          onClick={() => updateNotification({ id: notification.id, isRead: true })}
+          data-test={`notification-mark-read-${notification.id}`}
+        >
+          Dismiss
+        </Button>
+      )}
     </ListItem>
   );
 };

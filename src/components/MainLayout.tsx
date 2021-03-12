@@ -1,90 +1,89 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Box from "@material-ui/core/Box";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
+import React, { useEffect } from "react";
+import { useMachine } from "@xstate/react";
+import { Interpreter } from "xstate";
+import { makeStyles, Container, Grid, useMediaQuery, useTheme } from "@material-ui/core";
 
-import Copyright from "../components/Copyright";
+import Footer from "./Footer";
 import NavBar from "./NavBar";
 import NavDrawer from "./NavDrawer";
-import { NotificationType, User } from "../models";
+import { DataContext, DataEvents } from "../machines/dataMachine";
+import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import { drawerMachine } from "../machines/drawerMachine";
 
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex"
+    display: "flex",
   },
   toolbar: {
-    paddingRight: 24 // keep right padding when drawer closed
+    paddingRight: 24, // keep right padding when drawer closed
   },
-  appBarSpacer: theme.mixins.toolbar,
+  appBarSpacer: {
+    minHeight: theme.spacing(13),
+    [theme.breakpoints.up("sm")]: {
+      minHeight: theme.spacing(14),
+    },
+  },
   content: {
     flexGrow: 1,
     height: "100vh",
-    overflow: "auto"
+    overflow: "auto",
   },
   container: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(4)
-  }
+    minHeight: "77vh",
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    [theme.breakpoints.up("sm")]: {
+      paddingTop: theme.spacing(4),
+      padding: theme.spacing(4),
+    },
+  },
 }));
 
 interface Props {
-  signOutPending: () => void;
   children: React.ReactNode;
-  allNotifications: NotificationType[];
-  currentUser: User;
-  snackbar: object;
+  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
+  notificationsService: Interpreter<DataContext, any, DataEvents, any>;
 }
 
-const MainLayout: React.FC<Props> = ({
-  signOutPending,
-  children,
-  allNotifications,
-  currentUser,
-  snackbar
-}) => {
+const MainLayout: React.FC<Props> = ({ children, notificationsService, authService }) => {
   const classes = useStyles();
-  // @ts-ignore
-  const { severity, message } = snackbar;
+  const theme = useTheme();
+  const [drawerState, sendDrawer] = useMachine(drawerMachine);
 
-  // TODO: Move drawer open/close state to MainContainer / Redux
-  const [open, setOpen] = React.useState(false);
-  const handleDrawerOpen = () => {
-    setOpen(true);
+  const aboveSmallBreakpoint = useMediaQuery(theme.breakpoints.up("sm"));
+  const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
+
+  const desktopDrawerOpen = drawerState?.matches({ desktop: "open" });
+  const mobileDrawerOpen = drawerState?.matches({ mobile: "open" });
+  const toggleDesktopDrawer = () => {
+    sendDrawer("TOGGLE_DESKTOP");
   };
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const toggleMobileDrawer = () => {
+    sendDrawer("TOGGLE_MOBILE");
   };
+
+  const openDesktopDrawer = (payload: any) => sendDrawer("OPEN_DESKTOP", payload);
+  const closeMobileDrawer = () => sendDrawer("CLOSE_MOBILE");
+
+  useEffect(() => {
+    if (!desktopDrawerOpen && aboveSmallBreakpoint) {
+      openDesktopDrawer({ aboveSmallBreakpoint });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [aboveSmallBreakpoint, desktopDrawerOpen]);
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      {message && (
-        <Snackbar
-          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-          open={true}
-          autoHideDuration={6000}
-        >
-          <Alert severity={severity}>{message}</Alert>
-        </Snackbar>
-      )}
+    <>
       <NavBar
-        handleDrawerOpen={handleDrawerOpen}
-        drawerOpen={open}
-        allNotifications={allNotifications}
+        toggleDrawer={xsBreakpoint ? toggleMobileDrawer : toggleDesktopDrawer}
+        drawerOpen={xsBreakpoint ? mobileDrawerOpen : desktopDrawerOpen}
+        notificationsService={notificationsService}
       />
       <NavDrawer
-        currentUser={currentUser}
-        handleDrawerClose={handleDrawerClose}
-        drawerOpen={open}
-        signOutPending={signOutPending}
+        toggleDrawer={xsBreakpoint ? toggleMobileDrawer : toggleDesktopDrawer}
+        drawerOpen={xsBreakpoint ? mobileDrawerOpen : desktopDrawerOpen}
+        closeMobileDrawer={closeMobileDrawer}
+        authService={authService}
       />
       <main className={classes.content} data-test="main">
         <div className={classes.appBarSpacer} />
@@ -94,12 +93,12 @@ const MainLayout: React.FC<Props> = ({
               {children}
             </Grid>
           </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
         </Container>
+        <footer>
+          <Footer />
+        </footer>
       </main>
-    </div>
+    </>
   );
 };
 

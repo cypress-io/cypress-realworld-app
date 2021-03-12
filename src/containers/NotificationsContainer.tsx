@@ -1,60 +1,50 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useEffect } from "react";
+import { Interpreter } from "xstate";
+import { useService } from "@xstate/react";
 import { makeStyles, Paper, Typography } from "@material-ui/core";
-import MainContainer from "./MainContainer";
-import { IRootReducerState } from "../reducers";
-import { NotificationResponseItem } from "../models";
+import { NotificationUpdatePayload } from "../models";
 import NotificationList from "../components/NotificationList";
-import { notificationUpdatePending } from "../actions/notifications";
+import { DataContext, DataSchema, DataEvents } from "../machines/dataMachine";
+import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
+    minHeight: "90vh",
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
-    flexDirection: "column"
-  }
+    flexDirection: "column",
+  },
 }));
 
-export interface StateProps {
-  allNotifications: NotificationResponseItem[];
+export interface Props {
+  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
+  notificationsService: Interpreter<DataContext, DataSchema, DataEvents, any>;
 }
 
-export interface DispatchProps {
-  updateNotification: Function;
-}
-
-export type NotificationsContainerProps = StateProps & DispatchProps;
-
-const NotificationsContainer: React.FC<NotificationsContainerProps> = ({
-  allNotifications,
-  updateNotification
-}) => {
+const NotificationsContainer: React.FC<Props> = ({ authService, notificationsService }) => {
   const classes = useStyles();
+  const [authState] = useService(authService);
+  const [notificationsState, sendNotifications] = useService(notificationsService);
+
+  useEffect(() => {
+    sendNotifications({ type: "FETCH" });
+  }, [authState, sendNotifications]);
+
+  const updateNotification = (payload: NotificationUpdatePayload) =>
+    sendNotifications({ type: "UPDATE", ...payload });
+
   return (
-    <MainContainer>
-      <Paper className={classes.paper}>
-        <Typography component="h2" variant="h6" color="primary" gutterBottom>
-          Notifications
-        </Typography>
-        <NotificationList
-          notifications={allNotifications}
-          updateNotification={updateNotification}
-        />
-      </Paper>
-    </MainContainer>
+    <Paper className={classes.paper}>
+      <Typography component="h2" variant="h6" color="primary" gutterBottom>
+        Notifications
+      </Typography>
+      <NotificationList
+        notifications={notificationsState?.context?.results!}
+        updateNotification={updateNotification}
+      />
+    </Paper>
   );
 };
 
-const mapStateToProps = (state: IRootReducerState) => ({
-  allNotifications: state.notifications.all
-});
-
-const mapDispatchToProps = {
-  updateNotification: notificationUpdatePending
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(NotificationsContainer);
+export default NotificationsContainer;
