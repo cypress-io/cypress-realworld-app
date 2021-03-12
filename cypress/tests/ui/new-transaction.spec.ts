@@ -14,13 +14,9 @@ describe("New Transaction", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.intercept("GET", /users(?!\/)/, (req) => {
-      delete req.headers["if-none-match"];
-    }).as("allUsers");
+    cy.intercept("GET", /users(?!\/)/).as("allUsers");
 
-    cy.intercept("GET", /users\/search/, (req) => {
-      delete req.headers["if-none-match"];
-    }).as("usersSearch");
+    cy.intercept("GET", /users\/search/).as("usersSearch");
 
     cy.intercept("POST", "/transactions").as("createTransaction");
 

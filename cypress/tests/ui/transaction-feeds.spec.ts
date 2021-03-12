@@ -46,18 +46,10 @@ describe("Transaction Feed", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.intercept("GET", "/notifications", (req) => {
-      delete req.headers["if-none-match"];
-    }).as("notifications");
-    cy.intercept("GET", "/transactions", (req) => {
-      delete req.headers["if-none-match"];
-    }).as(feedViews.personal.routeAlias);
-    cy.intercept("GET", "/transactions/public", (req) => {
-      delete req.headers["if-none-match"];
-    }).as(feedViews.public.routeAlias);
-    cy.intercept("GET", "/transactions/contacts", (req) => {
-      delete req.headers["if-none-match"];
-    }).as(feedViews.contacts.routeAlias);
+    cy.intercept("GET", "/notifications").as("notifications");
+    cy.intercept("GET", "/transactions").as(feedViews.personal.routeAlias);
+    cy.intercept("GET", "/transactions/public").as(feedViews.public.routeAlias);
+    cy.intercept("GET", "/transactions/contacts").as(feedViews.contacts.routeAlias);
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.user = users[0];
@@ -97,7 +89,7 @@ describe("Transaction Feed", function () {
       // Cannot properly wait for request against endpoint with multiple aliases
       // Bug: Unable to stub response for Public Transactions
       // https://github.com/cypress-io/cypress/issues/9262
-      // Seems to be resolved with https://github.com/cypress-io/cypress/pull/14543
+      // Resolved with https://github.com/cypress-io/cypress/pull/14543
       cy.intercept("GET", "/transactions/public", {
         fixture: "public-transactions.json",
       }).as("mockedPublicTransactions");
