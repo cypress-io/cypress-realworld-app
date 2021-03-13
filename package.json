@@ -17,6 +17,8 @@
   "dependencies": {
     "@auth0/auth0-react": "1.3.0",
     "@aws-amplify/ui-react": "0.2.38",
+    "@cypress/react": "^5.1.0-alpha.1",
+    "@cypress/webpack-dev-server": "^1.0.4",
     "@material-ui/core": "4.11.3",
     "@material-ui/icons": "4.11.2",
     "@material-ui/lab": "4.0.0-alpha.57",
@@ -137,6 +139,7 @@
     "list:dev:users": "cat data/database.json | json -a users | json -a id username",
     "types": "tsc --noEmit",
     "precypress:open": "yarn predev:cognito:ci",
+    "cypress:open:ct": "cross-env NODE_ENV=development cypress open-ct --config-file=./cypress.component.json",
     "cypress:open": "cypress open",
     "cypress:open:mobile": "cypress open --config viewportWidth=375,viewportHeight=667",
     "cypress:run": "cypress run",
