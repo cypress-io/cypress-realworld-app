@@ -47,9 +47,9 @@ describe("Transaction Feed", function () {
     cy.task("db:seed");
 
     cy.intercept("GET", "/notifications").as("notifications");
-    cy.intercept("GET", "/transactions").as(feedViews.personal.routeAlias);
-    cy.intercept("GET", "/transactions/public").as(feedViews.public.routeAlias);
-    cy.intercept("GET", "/transactions/contacts").as(feedViews.contacts.routeAlias);
+    cy.intercept("GET", /transactions(?!\/)/).as(feedViews.personal.routeAlias);
+    cy.intercept("GET", /transactions\/public/).as(feedViews.public.routeAlias);
+    cy.intercept("GET", /transactions\/contacts/).as(feedViews.contacts.routeAlias);
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.user = users[0];
