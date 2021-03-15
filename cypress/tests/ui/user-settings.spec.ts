@@ -5,7 +5,7 @@ describe("User Settings", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.intercept("PATCH", "/users/*").as("updateUser");
+    cy.intercept("PATCH", "/users").as("updateUser");
     cy.intercept("GET", "/notifications").as("getNotifications");
 
     cy.database("find", "users").then((user: User) => {
@@ -68,7 +68,7 @@ describe("User Settings", function () {
     cy.getBySelLike("submit").should("not.be.disabled");
     cy.getBySelLike("submit").click();
 
-    cy.wait("@updateUser").its("status").should("equal", 204);
+    cy.wait("@updateUser").its("response.statusCode").should("equal", 204);
 
     if (isMobile()) {
       cy.getBySel("sidenav-toggle").click();
