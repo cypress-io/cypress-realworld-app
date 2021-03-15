@@ -314,7 +314,7 @@ describe("Transaction Feed", function () {
         );
 
         // @ts-ignore
-        cy.wait(`@${feed.routeAlias}`).then(({ response: { body }, url }) => {
+        cy.wait(`@${feed.routeAlias}`).then(({ response: { body, url } }) => {
           const transactions = body.results as TransactionResponseItem[];
           const urlParams = new URLSearchParams(_.last(url.split("?")));
 
