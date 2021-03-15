@@ -11,8 +11,8 @@ describe("Transaction View", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.intercept("GET", "/transactions").as("personalTransactions");
-    cy.intercept("GET", "/transactions/public").as("publicTransactions");
+    cy.intercept("GET", /transactions(?!\/)/).as("personalTransactions");
+    cy.intercept("GET", /transactions\/public/).as("publicTransactions");
     cy.intercept("GET", "/transactions/*").as("getTransaction");
     cy.intercept("PATCH", "/transactions/*").as("updateTransaction");
 
@@ -77,7 +77,7 @@ describe("Transaction View", function () {
     cy.wait("@getTransaction");
 
     cy.getBySelLike("accept-request").click();
-    cy.wait("@updateTransaction").should("have.property", "status", 204);
+    cy.wait("@updateTransaction").its("response.statusCode").should("equal", 204);
     cy.getBySelLike("accept-request").should("not.exist");
     cy.getBySel("transaction-detail-header").should("be.visible");
     cy.visualSnapshot("Transaction Accepted");
@@ -88,7 +88,7 @@ describe("Transaction View", function () {
     cy.wait("@getTransaction");
 
     cy.getBySelLike("reject-request").click();
-    cy.wait("@updateTransaction").should("have.property", "status", 204);
+    cy.wait("@updateTransaction").its("response.statusCode").should("equal", 204);
     cy.getBySelLike("reject-request").should("not.exist");
     cy.getBySel("transaction-detail-header").should("be.visible");
     cy.visualSnapshot("Transaction Rejected");
