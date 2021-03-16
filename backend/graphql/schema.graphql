@@ -1,0 +1,23 @@
+type Query {
+  listBankAccount: [BankAccount!]
+}
+
+# type Mutation {
+#   createMessage(
+#     title: String!,
+#     content: String!,
+#     author: String!
+#   ): Message
+# }
+
+type BankAccount {
+  _id: ID!
+  uuid: String
+  userId: String
+  bankName: String
+  accountNumber: String
+  routingNumber: String
+  isDeleted: Boolean
+  createdAt: String
+  modifiedAt: String
+}
