@@ -2,13 +2,16 @@ type Query {
   listBankAccount: [BankAccount!]
 }
 
-# type Mutation {
-#   createMessage(
-#     title: String!,
-#     content: String!,
-#     author: String!
-#   ): Message
-# }
+type Mutation {
+  createBankAccount(
+    bankName: String!,
+    accountNumber: String!,
+    routingNumber: String!
+  ): BankAccount
+  deleteBankAccount(
+    id: ID!
+  ): Boolean
+}
 
 type BankAccount {
   _id: ID!
