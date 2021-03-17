@@ -38,7 +38,9 @@ A payment application to demonstrate <strong>real-world</strong> usage of <a hre
 >
 > This application is purely for demonstration and educational purposes. Its setup and configuration resemble typical real-world applications, but it's not a full-fledge production system. Use this app to learn, experiment, tinker, and practice application testing with Cypress.
 >
-> Happy Testing
+> ASCEND Training purpose Start HERE!! VA.1.0
+>
+ >Happy Testing
 
 ---
 
