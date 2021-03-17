@@ -44,6 +44,7 @@ export default (on, config) => {
     return Array.isArray(query) ? Promise.map(query, fetchData) : fetchData(query);
   };
 
+//use on beforeEach to find users on the data base
   on("task", {
     percyHealthCheck,
     async "db:seed"() {
