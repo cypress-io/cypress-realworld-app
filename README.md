@@ -216,6 +216,18 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
 </table>
 
+## Contributors from ASCEND ⚠️ ✅
+
+ASCEND QA testing team for training purpose:
+
+<table>
+  <tr>
+  <td align="center"><img src="  https://avatars.githubusercontent.com/u/19216361?s=460&u=b26a1eeb08ff41e289ba65d78685b9b3fe9e305f&v=4" width="100px;" alt=""/><br /><sub><b>Cesar Roman</b></sub></a></td>
+  <!-- team ascend please add your name and a picture (optional) -->
+  
+  </tr>
+</table>
+
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 
