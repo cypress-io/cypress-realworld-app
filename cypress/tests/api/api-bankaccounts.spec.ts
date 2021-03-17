@@ -5,12 +5,36 @@ import faker from "faker";
 import { User, BankAccount } from "../../../src/models";
 
 const apiBankAccounts = `${Cypress.env("apiUrl")}/bankAccounts`;
+const apiGraphQL = `${Cypress.env("apiUrl")}/graphql`;
 
 type TestBankAccountsCtx = {
   allUsers?: User[];
   authenticatedUser?: User;
   bankAccounts?: BankAccount[];
 };
+/*
+query userBankAccounts {
+  listBankAccount {
+    bankName
+  }
+}
+
+mutation addBA {
+  createBankAccount(
+    bankName:"A new Bank",
+    accountNumber: "12345678901",
+    routingNumber: "123456789"
+  ) {
+    uuid
+    bankName
+    createdAt
+  }
+}
+
+mutation removeBA {
+  deleteBankAccount(id: "RskoB7r4Bic")
+}
+*/
 
 describe("Bank Accounts API", function () {
   let ctx: TestBankAccountsCtx = {};
