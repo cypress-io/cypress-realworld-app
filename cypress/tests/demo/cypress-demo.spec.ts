@@ -1,27 +1,51 @@
 import { User } from "models";
+const usersdemo = require('../../fixtures/usersdemo.json')
 
 describe("Cypress Studio Demo", function () {
   beforeEach(function () {
-    cy.task("db:seed");
+  
+    //cy.task("db:seed");
+    //cy.database("find", "users").then((user: User) => {
+    //cy.login(user.username, "s3cret", true);
+    //});
 
-    cy.database("find", "users").then((user: User) => {
-      cy.login(user.username, "s3cret", true);
-      
-    });
   });
   it("create new payment transaction", function () {
+    usersdemo.forEach((userdemo) => {
+      const signinPath = "/signin";
+      cy.visit(signinPath);
+      cy.get("#username").type(userdemo.username);
+      cy.get("#password").type(userdemo.password);
+      cy.get("[data-test=signin-submit]").click();
+
+      cy.login(userdemo.username, usersdemo.password)
+
     // Extend test with Cypress Studio
-    cy.get('[data-test="nav-top-new-transaction"]').click()
-    cy.get('[data-test="user-list-search-input"]').type('Devon Becker')
-    cy.get('[data-test="user-list-item-tsHF6_D5oQ"]').click()
-    cy.get('#amount').type('500')
-    cy.get('#transaction-create-description-input').type('pago de internet')
-    cy.get('[data-test=transaction-create-submit-payment]').click()
-    cy.screenshot('payment done')
-    cy.get('[data-test="new-transaction-return-to-transactions"]').click()
+    cy.get('[data-test="nav-top-new-transaction"]').click();
+    cy.get('[data-test="user-list-search-input"]').type('Devon Becker');
+    cy.get('[data-test="user-list-item-tsHF6_D5oQ"]').click();
+    cy.get('#amount').type('500');
+    cy.get('#transaction-create-description-input').type('pago de internet');
+    cy.get('[data-test=transaction-create-submit-payment]').click();
+    cy.screenshot('payment done');
+    cy.get('[data-test="new-transaction-return-to-transactions"]').click();
+    cy.get('[data-test=sidenav-signout]').click();
+  });
+
+
+
+
+
+
+
+
+
+
+
+
 
   });
-  it("create new request transaction", function () {
+  it.skip("create new request transaction", function () {
     // Extend test with Cypress Studio
     cy.get('[data-test="nav-top-new-transaction"]').click()
     cy.get('[data-test="user-list-search-input"]').type('Devon Becker')
@@ -33,7 +57,7 @@ describe("Cypress Studio Demo", function () {
     cy.get('[data-test="new-transaction-return-to-transactions"]').click()
 
   });
-  it("create new bank account", function () {
+  it.skip("create new bank account", function () {
     // Extend test with Cypress Studio
     cy.get('[data-test=sidenav-bankaccounts]').click()
     cy.get('[data-test=bankaccount-new]').click()
@@ -45,7 +69,7 @@ describe("Cypress Studio Demo", function () {
     cy.get('[data-test=sidenav-home]').click()
 
   });
-  it("delate a bank account", function () {
+  it.skip("delate a bank account", function () {
     // Extend test with Cypress Studio
     cy.get('[data-test=sidenav-bankaccounts]').click()
     cy.get('[data-test=bankaccount-list-item-RskoB7r4Bic] > .MuiGrid-container > :nth-child(2) > [data-test=bankaccount-delete]').click()
