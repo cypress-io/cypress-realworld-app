@@ -38,7 +38,9 @@ A payment application to demonstrate <strong>real-world</strong> usage of <a hre
 >
 > This application is purely for demonstration and educational purposes. Its setup and configuration resemble typical real-world applications, but it's not a full-fledge production system. Use this app to learn, experiment, tinker, and practice application testing with Cypress.
 >
-> Happy Testing
+> ASCEND Training purpose Start HERE!! VA.1.0
+>
+ >Happy Testing
 
 ---
 
@@ -64,7 +66,7 @@ The app is bundled with [example data](./data/database.json) (`data/database.jso
 
 ### Prerequisites
 
-The only requirement for this project is to have [Node.js](https://nodejs.org/en/) **version 12** installed on your machine. Refer to the [.node-version](./.node-version) file for the exact version.
+The only requirement for this project is to have [Node.js](https://nodejs.org/en/) **version 14** installed on your machine. Refer to the [.node-version](./.node-version) file for the exact version.
 
 TypeScript will be added as a local dependency to the project, so no need to install it.
 
@@ -108,18 +110,19 @@ yarn cypress:open
 
 ## Additional NPM Scripts
 
-| Script         | Description                                                                                                                                       |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| dev            | Starts backend in watch mode and frontend                                                                                                         |
-| dev:auth0      | Starts backend in watch mode and frontend; [Uses Auth0 for Authentication](#auth0) > [Read Guide](http://on.cypress.io/auth0)                     |
-| dev:okta       | Starts backend in watch mode and frontend; [Uses Okta for Authentication](#okta) > [Read Guide](http://on.cypress.io/okta)                        |
-| dev:cognito    | Starts backend in watch mode and frontend; [Uses Cognito for Authentication](#amazon-cognito) > [Read Guide](http://on.cypress.io/amazon-cognito) |
-| start          | Starts backend and frontend                                                                                                                       |
-| types          | Validates types                                                                                                                                   |
-| db:seed        | Generates fresh database seeds for json files in /data                                                                                            |
-| start:empty    | Starts backend, frontend and Cypress with empty database seed                                                                                     |
-| tsnode         | Customized ts-node command to get around react-scripts restrictions                                                                               |
-| list:dev:users | Provides id and username for users in the dev database                                                                                            |
+| Script         | Description                                                                                                                                                                       |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| dev            | Starts backend in watch mode and frontend                                                                                                                                         |
+| dev:auth0      | Starts backend in watch mode and frontend; [Uses Auth0 for Authentication](#auth0) > [Read Guide](http://on.cypress.io/auth0)                                                     |
+| dev:okta       | Starts backend in watch mode and frontend; [Uses Okta for Authentication](#okta) > [Read Guide](http://on.cypress.io/okta)                                                        |
+| dev:cognito    | Starts backend in watch mode and frontend; [Uses Cognito for Authentication](#amazon-cognito) > [Read Guide](http://on.cypress.io/amazon-cognito)                                 |
+| dev:google     | Starts backend in watch mode and frontend; [Uses Google for Authentication](#google) > [Read Guide](https://docs.cypress.io/guides/testing-strategies/google-authentication.html) |
+| start          | Starts backend and frontend                                                                                                                                                       |
+| types          | Validates types                                                                                                                                                                   |
+| db:seed        | Generates fresh database seeds for json files in /data                                                                                                                            |
+| start:empty    | Starts backend, frontend and Cypress with empty database seed                                                                                                                     |
+| tsnode         | Customized ts-node command to get around react-scripts restrictions                                                                                                               |
+| list:dev:users | Provides id and username for users in the dev database                                                                                                                            |
 
 For a complete list of scripts see [package.json](./package.json)
 
@@ -166,6 +169,16 @@ Start the application with `yarn dev:cognito` and run Cypress with `yarn cypress
 
 The **only passing spec on this branch** will be the [cognito spec](./cypress/tests/ui-auth-providers/cognito.spec.ts); all others will fail.
 
+### Google
+
+A [guide has been written with detail around adapting the RWA](https://docs.cypress.io/guides/testing-strategies/google-authentication.html) to use [Google][google] as the authentication solution and to explain the programmatic command used for Cypress tests.
+
+Prerequisites include an [Google][google] account. Environment variables from [Google][google] are to be placed in the [.env](./.env).
+
+Start the application with `yarn dev:google` and run Cypress with `yarn cypress:open`.
+
+The **only passing spec** when run with `yarn dev:google` will be the [google spec](./cypress/tests/ui-auth-providers/google.spec.ts); all others will fail.
+
 ## License
 
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/cypress-io/cypress/blob/master/LICENSE)
@@ -200,6 +213,21 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://glebbahmutov.com/"><img src="https://avatars1.githubusercontent.com/u/2212006?v=4" width="100px;" alt=""/><br /><sub><b>Gleb Bahmutov</b></sub></a></td>
     <td align="center"><a href="http://www.bencodezen.io"><img src="https://avatars0.githubusercontent.com/u/4836334?v=4" width="100px;" alt=""/><br /><sub><b>Ben Hong</b></sub></a></td>
     <td align="center"><a href="https://github.com/davidkpiano"><img src="https://avatars2.githubusercontent.com/u/1093738?v=4" width="100px;" alt=""/><br /><sub><b>David Khourshid</b></sub></a></td>
+  </tr>
+</table>
+
+## Contributors from ASCEND ⚠️ ✅
+
+ASCEND QA testing team for training purpose:
+
+<table>
+  <tr>
+  <td align="center"><img src="https://avatars.githubusercontent.com/u/19216361?s=460&u=b26a1eeb08ff41e289ba65d78685b9b3fe9e305f&v=4" width="100px;" alt=""/><br /><sub><b>Cesar Roman</b></sub></a></td>
+  
+  <!-- Team ASCEND; please add your name and a picture (optional) -->
+  
+  <td align="center"><img src="https://cypress-realworld-app-svgs.s3.amazonaws.com/t45AiwidW.svg" width="100px;" alt=""/><br /><sub><b>Your name</b></sub></a></td>
+
   </tr>
 </table>
 
