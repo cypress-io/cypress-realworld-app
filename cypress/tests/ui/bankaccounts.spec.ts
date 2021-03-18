@@ -16,6 +16,17 @@ describe("Bank Accounts", function () {
     cy.route("DELETE", "/bankAccounts/*").as("deleteBankAccount");
     cy.route("GET", "/notifications").as("getNotifications");
 
+    cy.intercept("POST", "/graphql", (req) => {
+      const { body } = req;
+      if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
+        req.alias = "gqlListBankAccountQuery";
+      }
+
+      if (body.hasOwnProperty("query") && body.query.includes("createBankAccount")) {
+        req.alias = "gqlCreateBankAccountMutation";
+      }
+    });
+
     cy.database("find", "users").then((user: User) => {
       ctx.user = user;
 

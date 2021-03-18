@@ -5,11 +5,27 @@ import { httpClient } from "../utils/asyncUtils";
 export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
   services: {
     fetchData: async (ctx, event: any) => {
-      const payload = omit("type", event);
-      const resp = await httpClient.get(`http://localhost:3001/bankAccounts`, {
-        params: !isEmpty(payload) && event.type === "FETCH" ? payload : undefined,
+      //const payload = omit("type", event);
+      // const resp = await httpClient.get(`http://localhost:3001/bankAccounts`, {
+      //   params: !isEmpty(payload) && event.type === "FETCH" ? payload : undefined,
+      // });
+      const resp = await httpClient.post(`http://localhost:3001/graphql`, {
+        query: `query {
+           listBankAccount {
+            id
+            uuid
+            userId
+            bankName
+            accountNumber
+            routingNumber
+            isDeleted
+            createdAt
+            modifiedAt
+           }
+          }`,
       });
-      return resp.data;
+      console.log(resp.data);
+      return { results: resp.data.listBankAccount, pageData: undefined };
     },
     deleteData: async (ctx, event: any) => {
       const payload = omit("type", event);

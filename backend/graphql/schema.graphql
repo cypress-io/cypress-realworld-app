@@ -14,7 +14,7 @@ type Mutation {
 }
 
 type BankAccount {
-  _id: ID!
+  id: ID!
   uuid: String
   userId: String
   bankName: String
