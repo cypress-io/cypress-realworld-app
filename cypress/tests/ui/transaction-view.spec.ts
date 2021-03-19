@@ -11,8 +11,8 @@ describe("Transaction View", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.intercept("GET", /transactions(?!\/)/).as("personalTransactions");
-    cy.intercept("GET", /transactions\/public/).as("publicTransactions");
+    cy.intercept("GET", "/transactions*").as("personalTransactions");
+    cy.intercept("GET", "/transactions/public*").as("publicTransactions");
     cy.intercept("GET", "/transactions/*").as("getTransaction");
     cy.intercept("PATCH", "/transactions/*").as("updateTransaction");
 
