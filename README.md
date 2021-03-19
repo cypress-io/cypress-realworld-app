@@ -230,6 +230,8 @@ ASCEND QA testing team for training purpose:
 
    <td align="center"><img src="https://avatars.githubusercontent.com/u/79925710?s=400&u=2604918d79354fe536f30ac196e956379d6db147&v=4" width="100px;" alt=""/><br /><sub><b>Sandra Vargas</b></sub></a></td>
 
+   <td align="center"><img src="https://avatars.githubusercontent.com/u/79933213?s=400&u=f60b24c22743543fa8ec9c75aae6eb487a0d5aae&v=4" width="100px;" alt=""/><br /><sub><b>Juan Hernandez</b></sub></a></td>
+
   </tr>
 </table>
 
