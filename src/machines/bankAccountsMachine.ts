@@ -1,14 +1,10 @@
-import { isEmpty, omit } from "lodash/fp";
+import { omit } from "lodash/fp";
 import { dataMachine } from "./dataMachine";
 import { httpClient } from "../utils/asyncUtils";
 
 export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
   services: {
     fetchData: async (ctx, event: any) => {
-      //const payload = omit("type", event);
-      // const resp = await httpClient.get(`http://localhost:3001/bankAccounts`, {
-      //   params: !isEmpty(payload) && event.type === "FETCH" ? payload : undefined,
-      // });
       const resp = await httpClient.post(`http://localhost:3001/graphql`, {
         query: `query {
            listBankAccount {
@@ -24,8 +20,7 @@ export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
            }
           }`,
       });
-      console.log(resp.data);
-      return { results: resp.data.listBankAccount, pageData: undefined };
+      return { results: resp.data.data.listBankAccount, pageData: {} };
     },
     deleteData: async (ctx, event: any) => {
       const payload = omit("type", event);
