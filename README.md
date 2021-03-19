@@ -228,6 +228,8 @@ ASCEND QA testing team for training purpose:
   
   <td align="center"><img src="https://cypress-realworld-app-svgs.s3.amazonaws.com/t45AiwidW.svg" width="100px;" alt=""/><br /><sub><b>Your name</b></sub></a></td>
 
+   <td align="center"><img src="https://avatars.githubusercontent.com/u/79925710?s=400&u=2604918d79354fe536f30ac196e956379d6db147&v=4" width="100px;" alt=""/><br /><sub><b>Sandra Vargas</b></sub></a></td>
+
   </tr>
 </table>
 
