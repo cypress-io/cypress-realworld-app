@@ -4625,10 +4625,10 @@
     date-fns "^1.27.2"
     figures "^1.7.0"
 
-"@cypress/react@^5.1.0-alpha.1":
-  version "5.1.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/@cypress/react/-/react-5.1.0-alpha.1.tgz#ccbbbeb8f9e2ae271cb86c75b761e114e54530ac"
-  integrity sha512-vRi3YPCD30TkjqYp1mu3Tos8xBnxqGJGf1RRkoGQkYYhswKE2PGJgqibnCbTI7BED2HRjt69cw7ZDCJZ1sZ6Dg==
+"@cypress/react@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@cypress/react/-/react-5.2.0.tgz#b86218052676979f13a6e2e4b4457293eb29182f"
+  integrity sha512-wEcJtRpyZPsG5xCMH3ZPDXv7rLcFOWLlxkPsVNDdGAe3Mog/GcbDiqxexzkBTsAEz502H5cgP+HTHCVQNah9pg==
   dependencies:
     "@cypress/webpack-preprocessor" "5.6.0"
     debug "4.3.2"
@@ -8885,10 +8885,10 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=
 
-cypress@6.6.0:
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-6.6.0.tgz#659c64cdb06e51b6be18fdac39d8f192deb54fa0"
-  integrity sha512-+Xx3Zn653LJHUsCb9h1Keql2jlazbr1ROmbY6DFJMmXKLgXP4ez9cE403W93JNGRbZK0Tng3R/oP8mvd9XAPVg==
+cypress@6.8.0:
+  version "6.8.0"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-6.8.0.tgz#8338f39212a8f71e91ff8c017a1b6e22d823d8c1"
+  integrity sha512-W2e9Oqi7DmF48QtOD0LfsOLVq6ef2hcXZvJXI/E3PgFNmZXEVwBefhAxVCW9yTPortjYA2XkM20KyC4HRkOm9w==
   dependencies:
     "@cypress/listr-verbose-renderer" "^0.4.1"
     "@cypress/request" "^2.88.5"
