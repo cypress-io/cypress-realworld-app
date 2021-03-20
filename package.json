@@ -80,7 +80,7 @@
     "@types/webpack-env": "1.16.0",
     "@types/yup": "0.29.11",
     "aws-amplify": "3.0.23",
-    "aws-sdk": "2.853.0",
+    "aws-sdk": "2.868.0",
     "bcryptjs": "2.4.3",
     "concurrently": "6.0.0",
     "cors": "2.8.5",
