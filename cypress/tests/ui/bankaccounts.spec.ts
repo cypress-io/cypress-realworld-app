@@ -16,16 +16,20 @@ describe("Bank Accounts", function () {
     cy.route("DELETE", "/bankAccounts/*").as("deleteBankAccount");
     cy.route("GET", "/notifications").as("getNotifications");
 
+    /*
+    TODO: consolidate all graphql intercepts into top level
     cy.intercept("POST", "/graphql", (req) => {
       const { body } = req;
-      if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
-        req.alias = "gqlListBankAccountQuery";
-      }
+      // if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
+      //   req.alias = "gqlListBankAccountQuery";
+      //   ...
+      // }
 
       if (body.hasOwnProperty("query") && body.query.includes("createBankAccount")) {
         req.alias = "gqlCreateBankAccountMutation";
       }
     });
+    */
 
     cy.database("find", "users").then((user: User) => {
       ctx.user = user;
@@ -135,7 +139,15 @@ describe("Bank Accounts", function () {
 
   // TODO: [enhancement] the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
   it("renders an empty bank account list state with onboarding modal", function () {
-    cy.route("GET", "/bankAccounts", []).as("getBankAccounts");
+    cy.intercept("POST", "/graphql", (req) => {
+      const { body } = req;
+      if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
+        req.alias = "gqlListBankAccountQuery";
+        req.reply((res) => {
+          res.body.data.listBankAccount = [];
+        });
+      }
+    });
 
     cy.visit("/bankaccounts");
     cy.wait("@gqlListBankAccountQuery");
