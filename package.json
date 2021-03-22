@@ -40,7 +40,7 @@
     "react-virtualized": "9.22.3",
     "shortid": "2.2.16",
     "uuid": "8.3.2",
-    "xstate": "4.16.2",
+    "xstate": "4.17.0",
     "yup": "0.32.9"
   },
   "devDependencies": {
