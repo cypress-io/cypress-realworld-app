@@ -138,7 +138,7 @@ describe("Bank Accounts", function () {
     cy.route("GET", "/bankAccounts", []).as("getBankAccounts");
 
     cy.visit("/bankaccounts");
-    cy.wait("@getBankAccounts");
+    cy.wait("@gqlListBankAccountQuery");
 
     cy.getBySel("bankaccount-list").should("not.exist");
     cy.getBySel("empty-list-header").should("contain", "No Bank Accounts");
