@@ -109,7 +109,7 @@
     "passport-local": "1.0.0",
     "prettier": "2.2.1",
     "react-scripts": "4.0.2",
-    "start-server-and-test": "1.12.0",
+    "start-server-and-test": "1.12.1",
     "ts-node": "9.1.1",
     "typescript": "4.2.3"
   },
