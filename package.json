@@ -96,7 +96,7 @@
     "express-validator": "6.10.0",
     "faker": "5.4.0",
     "fuse.js": "6.4.6",
-    "husky": "5.1.2",
+    "husky": "5.2.0",
     "istanbul-lib-coverage": "3.0.0",
     "json": "10.0.0",
     "jwks-rsa": "2.0.1",
