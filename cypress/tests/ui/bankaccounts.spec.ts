@@ -125,11 +125,6 @@ describe("Bank Accounts", function () {
   it("renders an empty bank account list state with onboarding modal", function () {
     // Before: cy.route("GET", "/bankAccounts", []).as("getBankAccounts");
     cy.intercept("GET", "/bankAccounts", {
-      // TODO: automatically handle applying these headers
-      headers: {
-        "access-control-allow-origin": window.location.origin,
-        "Access-Control-Allow-Credentials": "true",
-      },
       body: { results: [] },
     }).as("getBankAccounts");
 
