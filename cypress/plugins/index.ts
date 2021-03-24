@@ -1,4 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
 import _ from "lodash";
 import path from "path";
 import axios from "axios";
@@ -12,11 +11,7 @@ dotenv.config();
 
 const awsConfig = require(path.join(__dirname, "../../aws-exports-es5.js"));
 
-export default (on: (arg0: string, arg1: {
-    percyHealthCheck: any; "db:seed"(): globalThis.Promise<any>;
-    // fetch test data from a database (MySQL, PostgreSQL, etc...)
-    "filter:database"(queryPayload: any): globalThis.Promise<any>; "find:database"(queryPayload: any): globalThis.Promise<any>;
-  }) => void, config: { env: { defaultPassword: string | undefined; paginationPageSize: string | undefined; auth0_username: string | undefined; auth0_password: string | undefined; auth0_domain: string | undefined; auth0_audience: string | undefined; auth0_scope: string | undefined; auth0_client_id: string | undefined; auth0_client_secret: string | undefined; auth_token_name: string | undefined; okta_username: string | undefined; okta_password: string | undefined; okta_domain: string | undefined; okta_client_id: string | undefined; cognito_username: string | undefined; cognito_password: string | undefined; awsConfig: any; googleRefreshToken: string | undefined; googleClientId: string | undefined; googleClientSecret: string | undefined; apiUrl: any; }; }) => {
+export default (on, config) => {
   config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD;
   config.env.paginationPageSize = process.env.PAGINATION_PAGE_SIZE;
   // Auth0
@@ -46,8 +41,8 @@ export default (on: (arg0: string, arg1: {
 
   const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 
-  const queryDatabase = ({ entity, query }: any, callback: { (data: any, attrs: any): string[]; (data: any, attrs: any): unknown; (arg0: any, arg1: any): any; }) => {
-    const fetchData = async (attrs: any) => {
+  const queryDatabase = ({ entity, query }, callback) => {
+    const fetchData = async (attrs) => {
       const { data } = await axios.get(`${testDataApiEndpoint}/${entity}`);
       return callback(data, attrs);
     };
@@ -64,11 +59,11 @@ export default (on: (arg0: string, arg1: {
     },
 
     // fetch test data from a database (MySQL, PostgreSQL, etc...)
-    "filter:database"(queryPayload: { entity: any; query: any; }) {
-      return queryDatabase(queryPayload, (data: { results: string | null | undefined; }, attrs: _.StringIterator<boolean> | undefined) => _.filter(data.results, attrs));
+    "filter:database"(queryPayload) {
+      return queryDatabase(queryPayload, (data, attrs) => _.filter(data.results, attrs));
     },
-    "find:database"(queryPayload: { entity: any; query: any; }) {
-      return queryDatabase(queryPayload, (data: { results: _.List<unknown> | null | undefined; }, attrs: _.ListIteratorTypeGuard<unknown, unknown>) => _.find(data.results, attrs));
+    "find:database"(queryPayload) {
+      return queryDatabase(queryPayload, (data, attrs) => _.find(data.results, attrs));
     },
   });
 
