@@ -123,7 +123,6 @@ describe("Bank Accounts", function () {
 
   // TODO: [enhancement] the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
   it("renders an empty bank account list state with onboarding modal", function () {
-    // Before: cy.route("GET", "/bankAccounts", []).as("getBankAccounts");
     cy.intercept("GET", "/bankAccounts", {
       body: { results: [] },
     }).as("getBankAccounts");
