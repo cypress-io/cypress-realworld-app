@@ -90,9 +90,25 @@ describe("Transaction Feed", function () {
       // Bug: Unable to stub response for Public Transactions
       // https://github.com/cypress-io/cypress/issues/9262
       // Resolved with https://github.com/cypress-io/cypress/pull/14543
-      cy.intercept("GET", "/transactions/public", {
+
+      // object declaration does not include headers from server response -- WORKS
+      cy.intercept("GET", "/transactions/public*", {
+        headers: {
+          "X-Powered-By": "Express",
+          Date: new Date().toString(),
+        },
         fixture: "public-transactions.json",
       }).as("mockedPublicTransactions");
+
+      // req.reply declaration overrides fixture on original server response -- FIXTURE NOT RETURNED
+      /*
+      cy.intercept("GET", "/transactions/public*", (req) => {
+        req.reply((res) => {
+          // sends a fixture body to the original request; response headers are intact
+          res.send({ fixture: "public-transactions.json" });
+        });
+      }).as("mockedPublicTransactions");
+      */
 
       // Visit page again to trigger call to /transactions/public
       cy.visit("/");
