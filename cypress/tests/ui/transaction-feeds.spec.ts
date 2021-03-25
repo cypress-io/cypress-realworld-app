@@ -86,12 +86,6 @@ describe("Transaction Feed", function () {
 
   describe("renders and paginates all transaction feeds", function () {
     it("renders transactions item variations in feed", function () {
-      // Cannot properly wait for request against endpoint with multiple aliases
-      // Bug: Unable to stub response for Public Transactions
-      // https://github.com/cypress-io/cypress/issues/9262
-      // Resolved with https://github.com/cypress-io/cypress/pull/14543
-
-      // object declaration does not include headers from server response -- WORKS
       cy.intercept("GET", "/transactions/public*", {
         headers: {
           "X-Powered-By": "Express",
@@ -99,16 +93,6 @@ describe("Transaction Feed", function () {
         },
         fixture: "public-transactions.json",
       }).as("mockedPublicTransactions");
-
-      // req.reply declaration overrides fixture on original server response -- FIXTURE NOT RETURNED
-      /*
-      cy.intercept("GET", "/transactions/public*", (req) => {
-        req.reply((res) => {
-          // sends a fixture body to the original request; response headers are intact
-          res.send({ fixture: "public-transactions.json" });
-        });
-      }).as("mockedPublicTransactions");
-      */
 
       // Visit page again to trigger call to /transactions/public
       cy.visit("/");
