@@ -1,5 +1,4 @@
-/* eslint-disable */
-// @ts-nocheck
+// @ts-check
 import "@cypress/code-coverage/support";
 import "./commands";
 import { isMobile } from "./utils";

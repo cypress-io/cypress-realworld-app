@@ -6,8 +6,8 @@
   "viewportWidth": 1280,
   "firefoxGcInterval": null,
   "retries": {
-    "runMode": 0,
-    "openMode": 0
+    "runMode": 2,
+    "openMode": 1
   },
   "env": {
     "apiUrl": "http://localhost:3001",

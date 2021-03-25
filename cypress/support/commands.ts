@@ -163,8 +163,6 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
 });
 
 Cypress.Commands.add("logoutByXstate", () => {
-  // Returns 302 redirect to /
-  // Related to https://github.com/cypress-io/cypress/pull/9097?
   cy.intercept("POST", "/logout").as("logoutUser");
 
   const log = Cypress.log({

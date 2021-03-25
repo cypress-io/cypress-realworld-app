@@ -111,9 +111,7 @@ describe("User Sign-up and Login", function () {
   });
 
   it("should display signup errors", function () {
-    cy.intercept("GET", "/signup", (req) => {
-      console.log("signup request");
-    });
+    cy.intercept("GET", "/signup");
 
     cy.visit("/signup");
 
