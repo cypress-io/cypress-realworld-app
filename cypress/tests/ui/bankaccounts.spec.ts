@@ -16,20 +16,16 @@ describe("Bank Accounts", function () {
     cy.route("DELETE", "/bankAccounts/*").as("deleteBankAccount");
     cy.route("GET", "/notifications").as("getNotifications");
 
-    /*
-    TODO: consolidate all graphql intercepts into top level
     cy.intercept("POST", "/graphql", (req) => {
       const { body } = req;
-      // if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
-      //   req.alias = "gqlListBankAccountQuery";
-      //   ...
-      // }
+      if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
+        req.alias = "gqlListBankAccountQuery";
+      }
 
       if (body.hasOwnProperty("query") && body.query.includes("createBankAccount")) {
         req.alias = "gqlCreateBankAccountMutation";
       }
     });
-    */
 
     cy.database("find", "users").then((user: User) => {
       ctx.user = user;
@@ -56,7 +52,7 @@ describe("Bank Accounts", function () {
     cy.visualSnapshot("Fill out New Bank Account Form");
     cy.getBySelLike("submit").click();
 
-    cy.wait("@createBankAccount");
+    cy.wait("@gqlCreateBankAccountMutation");
 
     cy.getBySelLike("bankaccount-list-item")
       .should("have.length", 2)
