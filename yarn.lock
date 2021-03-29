@@ -5168,10 +5168,10 @@
     "@okta/okta-auth-js" "^4.0.0"
     lodash "^4.17.15"
 
-"@okta/jwt-verifier@2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@okta/jwt-verifier/-/jwt-verifier-2.0.1.tgz#8166644ea45b27115278576e45a587080fb14190"
-  integrity sha512-i/tZQveDJrKguRhGVFyUD88zBZxO1vyTPdoQUGNl7UYiZkU2CKYceYj35UBeK9jZwmfScRsy39g4jKosZs0ZOQ==
+"@okta/jwt-verifier@2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@okta/jwt-verifier/-/jwt-verifier-2.1.0.tgz#670594eb0018233d912df3c13439cc2ade3ac87d"
+  integrity sha512-k7ewe0RuA55kNspCpLJb8Vc2VKofcUNeclUGKwqWTiiDV8EdpSPTCSbbcmycKM3L7ucJh/z7x8wuqEpOnVk/Ig==
   dependencies:
     "@okta/configuration-validation" "^1.0.0"
     jwks-rsa "1.12.1"
