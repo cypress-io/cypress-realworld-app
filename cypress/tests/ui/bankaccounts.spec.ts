@@ -11,10 +11,7 @@ describe("Bank Accounts", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.server();
-    cy.route("POST", "/bankAccounts").as("createBankAccount");
-    cy.route("DELETE", "/bankAccounts/*").as("deleteBankAccount");
-    cy.route("GET", "/notifications").as("getNotifications");
+    cy.intercept("GET", "/notifications").as("getNotifications");
 
     cy.intercept("POST", "/graphql", (req) => {
       const { body } = req;
@@ -24,6 +21,10 @@ describe("Bank Accounts", function () {
 
       if (body.hasOwnProperty("query") && body.query.includes("createBankAccount")) {
         req.alias = "gqlCreateBankAccountMutation";
+      }
+
+      if (body.hasOwnProperty("query") && body.query.includes("deleteBankAccount")) {
+        req.alias = "gqlDeleteBankAccountMutation";
       }
     });
 
@@ -124,11 +125,11 @@ describe("Bank Accounts", function () {
     cy.visualSnapshot("Bank Account Form with Errors and Submit button disabled");
   });
 
-  it("soft deletes a bank account", function () {
+  it.only("soft deletes a bank account", function () {
     cy.visit("/bankaccounts");
     cy.getBySelLike("delete").first().click();
 
-    cy.wait("@deleteBankAccount");
+    cy.wait("@gqlDeleteBankAccountMutation");
     cy.getBySelLike("list-item").children().contains("Deleted");
     cy.visualSnapshot("Soft Delete Bank Account");
   });
