@@ -33,7 +33,7 @@ jobs:
       - run: node -p 'os.cpus()'
       - run: yarn types
       - run: yarn test:unit:ci
-      - run: yarn build
+      - run: yarn build:ci
 
   install-windows:
     runs-on: windows-2019
@@ -56,9 +56,10 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           runTests: false
-      - run: yarn build
+      - run: yarn build:ci
 
   ui-chrome-tests:
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     container: cypress/browsers:node12.18.3-chrome87-ff82
     needs: install
@@ -100,12 +101,14 @@ jobs:
           group: "UI - Chrome"
           spec: cypress/tests/ui/*
         env:
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # Recommended: pass the GitHub token lets this action correctly
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   ui-chrome-mobile-tests:
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     container: cypress/browsers:node12.18.3-chrome87-ff82
     needs: install
@@ -148,12 +151,14 @@ jobs:
           group: "UI - Chrome - Mobile"
           spec: cypress/tests/ui/*
         env:
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # Recommended: pass the GitHub token lets this action correctly
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   ui-firefox-tests:
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
       image: cypress/browsers:node12.18.3-chrome87-ff82
@@ -197,12 +202,14 @@ jobs:
           group: "UI - Firefox"
           spec: cypress/tests/ui/*
         env:
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # Recommended: pass the GitHub token lets this action correctly
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   ui-firefox-mobile-tests:
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
       image: cypress/browsers:node12.18.3-chrome87-ff82
@@ -247,12 +254,14 @@ jobs:
           group: "UI - Firefox - Mobile"
           spec: cypress/tests/ui/*
         env:
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # Recommended: pass the GitHub token lets this action correctly
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   ui-windows-tests:
+    timeout-minutes: 40
     runs-on: windows-2019
     needs: install-windows
     strategy:
@@ -292,6 +301,7 @@ jobs:
           group: "UI - Electron - Windows"
           spec: cypress/tests/ui/*
         env:
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # Recommended: pass the GitHub token lets this action correctly
           # determine the unique run id necessary to re-run the checks

@@ -17,6 +17,7 @@ import commentRoutes from "./comment-routes";
 import notificationRoutes from "./notification-routes";
 import bankTransferRoutes from "./banktransfer-routes";
 import testDataRoutes from "./testdata-routes";
+import { checkAuth0Jwt, verifyOktaToken, checkCognitoJwt, checkGoogleJwt } from "./helpers";
 
 require("dotenv").config();
 
@@ -51,7 +52,33 @@ app.use(passport.session());
 
 app.use(paginate.middleware(+process.env.PAGINATION_PAGE_SIZE!));
 
+/* istanbul ignore next */
+if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {
+  app.use("/testData", testDataRoutes);
+}
+
 app.use(auth);
+
+/* istanbul ignore if */
+if (process.env.REACT_APP_AUTH0) {
+  app.use(checkAuth0Jwt);
+}
+
+/* istanbul ignore if */
+if (process.env.REACT_APP_OKTA) {
+  app.use(verifyOktaToken);
+}
+
+/* istanbul ignore if */
+if (process.env.REACT_APP_AWS_COGNITO) {
+  app.use(checkCognitoJwt);
+}
+
+/* istanbul ignore if */
+if (process.env.REACT_APP_GOOGLE) {
+  app.use(checkGoogleJwt);
+}
+
 app.use("/users", userRoutes);
 app.use("/contacts", contactRoutes);
 app.use("/bankAccounts", bankAccountRoutes);
@@ -60,11 +87,6 @@ app.use("/likes", likeRoutes);
 app.use("/comments", commentRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/bankTransfers", bankTransferRoutes);
-
-/* istanbul ignore next */
-if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {
-  app.use("/testData", testDataRoutes);
-}
 
 app.use(express.static(path.join(__dirname, "../public")));
 

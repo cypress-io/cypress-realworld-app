@@ -7,10 +7,7 @@ orbs:
 executors:
   with-chrome-and-firefox:
     docker:
-      - image: "cypress/browsers:node12.14.1-chrome85-ff81"
-  with-chrome-and-firefox-medium-plus:
-    docker:
-      - image: "cypress/browsers:node12.14.1-chrome85-ff81"
+      - image: "cypress/browsers:node14.15.0-chrome86-ff82"
     resource_class: medium+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -36,7 +33,7 @@ linux-workflow: &linux-workflow
         name: "Setup Linux"
         yarn: true
         executor: with-chrome-and-firefox
-        build: "yarn build"
+        build: "yarn build:ci"
         post-steps:
           - run:
               name: Print machine info ℹ️
@@ -112,7 +109,7 @@ linux-workflow: &linux-workflow
         name: "UI Tests - Firefox"
         browser: firefox
         spec: cypress/tests/ui/*
-        executor: with-chrome-and-firefox-medium-plus
+        executor: with-chrome-and-firefox
         wait-on: "http://localhost:3000"
         yarn: true
         start: yarn start:ci
@@ -132,7 +129,7 @@ linux-workflow: &linux-workflow
         browser: firefox
         spec: cypress/tests/ui/*
         config: viewportWidth=375,viewportHeight=667
-        executor: with-chrome-and-firefox-medium-plus
+        executor: with-chrome-and-firefox
         wait-on: "http://localhost:3000"
         yarn: true
         start: yarn start:ci
@@ -165,7 +162,7 @@ windows-workflow: &windows-workflow
               name: Disabling Windows Defender
               shell: powershell.exe
               command: Set-MpPreference -DisableRealtimeMonitoring $true
-        build: yarn build
+        build: yarn build:ci
         post-steps:
           - run:
               name: Cypress info
@@ -201,6 +198,7 @@ windows-workflow: &windows-workflow
         post-steps:
           - report-coverage
         no-workspace: true
+        timeout: 30m
 
 workflows:
   linux:

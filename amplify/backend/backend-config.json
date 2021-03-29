@@ -1,0 +1,10 @@
+{
+	"auth": {
+		"cypressrealworldapp3a466349": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [],
+			"customAuth": false
+		}
+	}
+}
