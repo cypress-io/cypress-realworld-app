@@ -16,7 +16,7 @@ beforeEach(() => {
     cy.intercept({ url: "http://localhost:3001", middleware: true }, (req) => {
       req.on("response", (res) => {
         // Throttle the response to 1 Mbps to simulate a mobile 3G connection
-        res.throttle(1000);
+        res.setThrottle(1000);
       });
     });
   }
