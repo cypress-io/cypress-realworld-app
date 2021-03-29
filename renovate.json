@@ -32,10 +32,6 @@
       "allowedVersions": "8.0.6"
     },
     {
-      "packageNames": ["react-scripts"],
-      "allowedVersions": "3.4.0"
-    },
-    {
       "packageNames": ["@types/express"],
       "allowedVersions": "4.17.2"
     },
