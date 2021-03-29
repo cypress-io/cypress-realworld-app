@@ -1,0 +1,11 @@
+{
+  "projectId": "7s5okt2",
+  "componentFolder": "src/components",
+  "pluginsFile": "src/components/__tests__/plugins.js",
+  "supportFile": false,
+  "testFiles": "**/*.test.*",
+  "viewportHeight": 500,
+  "viewportWidth": 500,
+  "experimentalStudio": true,
+  "experimentalComponentTesting": true
+}
