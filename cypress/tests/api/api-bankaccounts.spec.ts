@@ -12,29 +12,6 @@ type TestBankAccountsCtx = {
   authenticatedUser?: User;
   bankAccounts?: BankAccount[];
 };
-/*
-query userBankAccounts {
-  listBankAccount {
-    bankName
-  }
-}
-
-mutation addBA {
-  createBankAccount(
-    bankName:"A new Bank",
-    accountNumber: "12345678901",
-    routingNumber: "123456789"
-  ) {
-    uuid
-    bankName
-    createdAt
-  }
-}
-
-mutation removeBA {
-  deleteBankAccount(id: "RskoB7r4Bic")
-}
-*/
 
 describe("Bank Accounts API", function () {
   let ctx: TestBankAccountsCtx = {};
@@ -99,9 +76,58 @@ describe("Bank Accounts API", function () {
       });
     });
   });
+
   context("/graphql", function () {
-    //it("gets a list of bank accounts for user", function () {});
-    //it("creates a new bank account", function () {});
+    it("gets a list of bank accounts for user", function () {
+      const { id: userId } = ctx.authenticatedUser!;
+      cy.request("POST", `${apiGraphQL}`, {
+        query: `query {
+           listBankAccount {
+            id
+            uuid
+            userId
+            bankName
+            accountNumber
+            routingNumber
+            isDeleted
+            createdAt
+            modifiedAt
+           }
+          }`,
+      }).then((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.body.data.listBankAccount[0].userId).to.eq(userId);
+      });
+    });
+    it("creates a new bank account", function () {
+      const { id: userId } = ctx.authenticatedUser!;
+      cy.request("POST", `${apiGraphQL}`, {
+        query: `mutation createBankAccount ($bankName: String!, $accountNumber: String!,  $routingNumber: String!) {
+          createBankAccount(
+            bankName: $bankName,
+            accountNumber: $accountNumber,
+            routingNumber: $routingNumber
+          ) {
+            id
+            uuid
+            userId
+            bankName
+            accountNumber
+            routingNumber
+            isDeleted
+            createdAt
+          }
+        }`,
+        variables: {
+          bankName: `${faker.company.companyName()} Bank`,
+          accountNumber: faker.finance.account(10),
+          routingNumber: faker.finance.account(9),
+        },
+      }).then((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.body.data.createBankAccount.userId).to.eq(userId);
+      });
+    });
     //it("deletes a bank account", function () {});
   });
 });
