@@ -1,6 +1,8 @@
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
 
+const apiGraphQL = `${Cypress.env("apiUrl")}/graphql`;
+
 type BankAccountsTestCtx = {
   user?: User;
 };
@@ -13,7 +15,7 @@ describe("Bank Accounts", function () {
 
     cy.intercept("GET", "/notifications").as("getNotifications");
 
-    cy.intercept("POST", "/graphql", (req) => {
+    cy.intercept("POST", apiGraphQL, (req) => {
       const { body } = req;
       if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
         req.alias = "gqlListBankAccountQuery";
@@ -136,7 +138,7 @@ describe("Bank Accounts", function () {
 
   // TODO: [enhancement] the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
   it("renders an empty bank account list state with onboarding modal", function () {
-    cy.intercept("POST", "/graphql", (req) => {
+    cy.intercept("POST", apiGraphQL, (req) => {
       const { body } = req;
       if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
         req.alias = "gqlListBankAccountQuery";
