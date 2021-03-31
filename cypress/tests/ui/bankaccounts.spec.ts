@@ -127,7 +127,7 @@ describe("Bank Accounts", function () {
     cy.visualSnapshot("Bank Account Form with Errors and Submit button disabled");
   });
 
-  it.only("soft deletes a bank account", function () {
+  it("soft deletes a bank account", function () {
     cy.visit("/bankaccounts");
     cy.getBySelLike("delete").first().click();
 
