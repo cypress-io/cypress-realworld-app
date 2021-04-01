@@ -142,7 +142,7 @@ describe("Bank Accounts", function () {
       const { body } = req;
       if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
         req.alias = "gqlListBankAccountQuery";
-        req.reply((res) => {
+        req.continue((res) => {
           res.body.data.listBankAccount = [];
         });
       }
