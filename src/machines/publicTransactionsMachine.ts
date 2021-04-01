@@ -9,6 +9,13 @@ export const publicTransactionsMachine = dataMachine("publicTransactions").withC
       const resp = await httpClient.get(`http://localhost:3001/transactions/public`, {
         params: !isEmpty(payload) ? payload : undefined,
       });
+
+      // in order to introduce flake sometimes we'll throw an error
+      // which represents a potential source of flake when modifying real data
+      if (Math.round(Math.random())) {
+        throw new Error("FLAKE");
+      }
+
       return resp.data;
     },
   },

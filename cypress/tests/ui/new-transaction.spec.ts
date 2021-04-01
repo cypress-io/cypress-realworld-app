@@ -258,7 +258,7 @@ describe("New Transaction", function () {
     // This test is intentionally flaky and demonstrates an example
     // of when an element can become detached from the DOM
     // Learn more: https://www.cypress.io/blog/2020/07/22/do-not-get-too-detached
-    it.only("FLAKE finds user by first name", { retries: 3 }, function () {
+    it("FLAKE finds user by first name", function () {
       const targetUser = ctx.allUsers![2];
       cy.getBySel("user-list-search-input")
         .type(targetUser.firstName as string, { force: true })

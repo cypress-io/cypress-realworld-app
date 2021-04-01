@@ -60,7 +60,9 @@ describe("Transaction View", function () {
     cy.visualSnapshot("Transaction after Liked");
   });
 
-  it("NETWORK FLAKE comments on a transaction", function () {
+  // This test is intentionally flaky since we test for comments in a specific order
+  // but the api response does not guarantee the data in a specific order
+  it("FLAKE comments on a transaction", function () {
     cy.getBySelLike("transaction-item").first().click();
     cy.wait("@getTransaction");
 

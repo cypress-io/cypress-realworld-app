@@ -27,7 +27,8 @@ describe("Notifications", function () {
   });
 
   describe("notifications from user interactions", function () {
-    it("User A likes a transaction of User B; User B gets notification that User A liked transaction ", function () {
+    // this test is flaky since the "like" api has an inconsistent response time
+    it("FLAKE User A likes a transaction of User B; User B gets notification that User A liked transaction ", function () {
       cy.loginByXstate(ctx.userA.username);
       cy.wait("@getNotifications");
 
