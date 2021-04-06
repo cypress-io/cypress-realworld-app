@@ -1,12 +1,20 @@
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
 
+const apiGraphQL = `${Cypress.env("apiUrl")}/graphql`;
+
 describe("User Sign-up and Login", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
     cy.intercept("POST", "/users").as("signup");
-    cy.intercept("POST", "/bankAccounts").as("createBankAccount");
+    cy.intercept("POST", apiGraphQL, (req) => {
+      const { body } = req;
+
+      if (body.hasOwnProperty("query") && body.query.includes("createBankAccount")) {
+        req.alias = "gqlCreateBankAccountMutation";
+      }
+    });
   });
 
   it("should redirect unauthenticated user to signin page", function () {
@@ -74,7 +82,7 @@ describe("User Sign-up and Login", function () {
     cy.visualSnapshot("About to complete User Onboarding");
     cy.getBySelLike("submit").click();
 
-    cy.wait("@createBankAccount");
+    cy.wait("@gqlCreateBankAccountMutation");
 
     cy.getBySel("user-onboarding-dialog-title").should("contain", "Finished");
     cy.getBySel("user-onboarding-dialog-content").should("contain", "You're all set!");
