@@ -13,7 +13,7 @@ describe("Notifications", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.intercept("GET", "/notifications").as("getNotifications");
+    cy.intercept("GET", "/notifications*").as("getNotifications");
     cy.intercept("POST", "/transactions").as("createTransaction");
     cy.intercept("PATCH", "/notifications/*").as("updateNotification");
     cy.intercept("POST", "/comments/*").as("postComment");
