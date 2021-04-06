@@ -61,6 +61,7 @@ describe("Transaction Feed", function () {
   describe("app layout and responsiveness", function () {
     it("toggles the navigation drawer", function () {
       cy.wait("@notifications");
+      cy.wait("@publicTransactions");
       if (isMobile()) {
         cy.getBySel("sidenav-home").should("not.exist");
         cy.visualSnapshot("Mobile Initial Side Navigation Not Visible");
