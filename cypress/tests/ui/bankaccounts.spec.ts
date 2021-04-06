@@ -138,7 +138,6 @@ describe("Bank Accounts", function () {
 
   // TODO: [enhancement] the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
   it("renders an empty bank account list state with onboarding modal", function () {
-<<<<<<< HEAD
     cy.intercept("POST", apiGraphQL, (req) => {
       const { body } = req;
       if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
@@ -148,11 +147,6 @@ describe("Bank Accounts", function () {
         });
       }
     });
-=======
-    cy.intercept("GET", "/bankAccounts", {
-      body: { results: [] },
-    }).as("getBankAccounts");
->>>>>>> develop
 
     cy.visit("/bankaccounts");
     cy.wait("@gqlListBankAccountQuery");
