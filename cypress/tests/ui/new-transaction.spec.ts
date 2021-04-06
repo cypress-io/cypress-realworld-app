@@ -14,7 +14,7 @@ describe("New Transaction", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.intercept("GET", "users*").as("allUsers");
+    cy.intercept("GET", "/users*").as("allUsers");
 
     cy.intercept("GET", "/users/search*").as("usersSearch");
 
@@ -23,7 +23,7 @@ describe("New Transaction", function () {
     cy.intercept("GET", "/notifications").as("notifications");
     cy.intercept("GET", "/transactions/public").as("publicTransactions");
     cy.intercept("GET", "/transactions").as("personalTransactions");
-    cy.intercept("PATCH", "/transactions").as("updateTransaction");
+    cy.intercept("PATCH", "/transactions/*").as("updateTransaction");
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.allUsers = users;
