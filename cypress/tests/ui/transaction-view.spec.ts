@@ -11,15 +11,14 @@ describe("Transaction View", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.server();
-    cy.route("GET", "/transactions").as("personalTransactions");
-    cy.route("GET", "/transactions/public").as("publicTransactions");
-    cy.route("GET", "/transactions/*").as("getTransaction");
-    cy.route("PATCH", "/transactions/*").as("updateTransaction");
+    cy.intercept("GET", "/transactions*").as("personalTransactions");
+    cy.intercept("GET", "/transactions/public*").as("publicTransactions");
+    cy.intercept("GET", "/transactions/*").as("getTransaction");
+    cy.intercept("PATCH", "/transactions/*").as("updateTransaction");
 
-    cy.route("GET", "/checkAuth").as("userProfile");
-    cy.route("GET", "/notifications").as("getNotifications");
-    cy.route("GET", "/bankAccounts").as("getBankAccounts");
+    cy.intercept("GET", "/checkAuth").as("userProfile");
+    cy.intercept("GET", "/notifications").as("getNotifications");
+    cy.intercept("GET", "/bankAccounts").as("getBankAccounts");
 
     cy.database("find", "users").then((user: User) => {
       ctx.authenticatedUser = user;
@@ -78,7 +77,7 @@ describe("Transaction View", function () {
     cy.wait("@getTransaction");
 
     cy.getBySelLike("accept-request").click();
-    cy.wait("@updateTransaction").should("have.property", "status", 204);
+    cy.wait("@updateTransaction").its("response.statusCode").should("equal", 204);
     cy.getBySelLike("accept-request").should("not.exist");
     cy.getBySel("transaction-detail-header").should("be.visible");
     cy.visualSnapshot("Transaction Accepted");
@@ -89,7 +88,7 @@ describe("Transaction View", function () {
     cy.wait("@getTransaction");
 
     cy.getBySelLike("reject-request").click();
-    cy.wait("@updateTransaction").should("have.property", "status", 204);
+    cy.wait("@updateTransaction").its("response.statusCode").should("equal", 204);
     cy.getBySelLike("reject-request").should("not.exist");
     cy.getBySel("transaction-detail-header").should("be.visible");
     cy.visualSnapshot("Transaction Rejected");

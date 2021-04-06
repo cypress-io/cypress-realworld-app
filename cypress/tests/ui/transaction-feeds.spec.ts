@@ -46,11 +46,10 @@ describe("Transaction Feed", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.server();
-    cy.route("GET", "/notifications").as("notifications");
-    cy.route("/transactions*").as(feedViews.personal.routeAlias);
-    cy.route("/transactions/public*").as(feedViews.public.routeAlias);
-    cy.route("/transactions/contacts*").as(feedViews.contacts.routeAlias);
+    cy.intercept("GET", "/notifications").as("notifications");
+    cy.intercept("GET", "/transactions*").as(feedViews.personal.routeAlias);
+    cy.intercept("GET", "/transactions/public*").as(feedViews.public.routeAlias);
+    cy.intercept("GET", "/transactions/contacts*").as(feedViews.contacts.routeAlias);
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.user = users[0];
@@ -62,6 +61,7 @@ describe("Transaction Feed", function () {
   describe("app layout and responsiveness", function () {
     it("toggles the navigation drawer", function () {
       cy.wait("@notifications");
+      cy.wait("@publicTransactions");
       if (isMobile()) {
         cy.getBySel("sidenav-home").should("not.exist");
         cy.visualSnapshot("Mobile Initial Side Navigation Not Visible");
@@ -87,9 +87,15 @@ describe("Transaction Feed", function () {
 
   describe("renders and paginates all transaction feeds", function () {
     it("renders transactions item variations in feed", function () {
-      cy.route("/transactions/public*", "fixture:public-transactions").as(
-        "mockedPublicTransactions"
-      );
+      cy.intercept("GET", "/transactions/public*", {
+        headers: {
+          "X-Powered-By": "Express",
+          Date: new Date().toString(),
+        },
+        fixture: "public-transactions.json",
+      }).as("mockedPublicTransactions");
+
+      // Visit page again to trigger call to /transactions/public
       cy.visit("/");
 
       cy.wait("@notifications");
@@ -309,7 +315,7 @@ describe("Transaction Feed", function () {
         );
 
         // @ts-ignore
-        cy.wait(`@${feed.routeAlias}`).then(({ response: { body }, url }) => {
+        cy.wait(`@${feed.routeAlias}`).then(({ response: { body, url } }) => {
           const transactions = body.results as TransactionResponseItem[];
           const urlParams = new URLSearchParams(_.last(url.split("?")));
 

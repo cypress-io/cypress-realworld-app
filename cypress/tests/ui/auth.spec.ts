@@ -5,9 +5,8 @@ describe("User Sign-up and Login", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.server();
-    cy.route("POST", "/users").as("signup");
-    cy.route("POST", "/bankAccounts").as("createBankAccount");
+    cy.intercept("POST", "/users").as("signup");
+    cy.intercept("POST", "/bankAccounts").as("createBankAccount");
   });
 
   it("should redirect unauthenticated user to signin page", function () {
@@ -112,6 +111,8 @@ describe("User Sign-up and Login", function () {
   });
 
   it("should display signup errors", function () {
+    cy.intercept("GET", "/signup");
+
     cy.visit("/signup");
 
     cy.getBySel("signup-first-name").type("First").find("input").clear().blur();
