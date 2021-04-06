@@ -14,15 +14,16 @@ describe("New Transaction", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.server();
-    cy.route("POST", "/transactions").as("createTransaction");
+    cy.intercept("GET", "/users*").as("allUsers");
 
-    cy.route("GET", "/users").as("allUsers");
-    cy.route("GET", "/notifications").as("notifications");
-    cy.route("GET", "/transactions/public").as("publicTransactions");
-    cy.route("GET", "/transactions").as("personalTransactions");
-    cy.route("GET", "/users/search*").as("usersSearch");
-    cy.route("PATCH", "/transactions/*").as("updateTransaction");
+    cy.intercept("GET", "/users/search*").as("usersSearch");
+
+    cy.intercept("POST", "/transactions").as("createTransaction");
+
+    cy.intercept("GET", "/notifications").as("notifications");
+    cy.intercept("GET", "/transactions/public").as("publicTransactions");
+    cy.intercept("GET", "/transactions").as("personalTransactions");
+    cy.intercept("PATCH", "/transactions/*").as("updateTransaction");
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.allUsers = users;
@@ -219,7 +220,7 @@ describe("New Transaction", function () {
     cy.visualSnapshot("Navigate to Transaction Item");
 
     cy.getBySelLike("accept-request").click();
-    cy.wait("@updateTransaction").its("status").should("equal", 204);
+    cy.wait("@updateTransaction").its("response.statusCode").should("eq", 204);
     cy.getBySelLike("transaction-detail-header").should("be.visible");
     cy.getBySelLike("transaction-amount").should("be.visible");
     cy.getBySelLike("sender-avatar").should("be.visible");
@@ -263,8 +264,9 @@ describe("New Transaction", function () {
         cy.getBySel("user-list-search-input").type(targetUser[attr] as string, { force: true });
         cy.wait("@usersSearch")
           // make sure the backend returns some results
-          .its("responseBody.results.length")
-          .should("be.gt", 0)
+          .its("response.body.results")
+          .should("have.length.gt", 0)
+          .its("length")
           .then((resultsN) => {
             cy.getBySelLike("user-list-item")
               // make sure the list of results is fully updated
