@@ -33,7 +33,12 @@ Cypress.Commands.add("visualSnapshot", (maybeName) => {
 });
 
 Cypress.Commands.add("getBySel", (selector, ...args) => {
-  return cy.get(`[data-test=${selector}]`, ...args);
+    Cypress.log({
+        name: "getBySel",
+        message: selector
+    });
+
+    return cy.get(`[data-test=${selector}]`, {log: false});
 });
 
 Cypress.Commands.add("getBySelLike", (selector, ...args) => {

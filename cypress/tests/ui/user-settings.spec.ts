@@ -19,7 +19,7 @@ describe("User Settings", function () {
     cy.getBySel("sidenav-user-settings").click();
   });
 
-  it("renders the user settings form", function () {
+  it.only("renders the user settings form", function () {
     cy.wait("@getNotifications");
     cy.getBySel("user-settings-form").should("be.visible");
     cy.location("pathname").should("include", "/user/settings");
