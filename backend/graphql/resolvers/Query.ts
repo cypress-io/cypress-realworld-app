@@ -6,6 +6,7 @@ const Query = {
       const accounts = getBankAccountsByUserId(ctx.user.id!);
 
       return accounts;
+      /* istanbul ignore next */
     } catch (err) {
       throw new Error(err);
     }
