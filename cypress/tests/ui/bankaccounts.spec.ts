@@ -1,6 +1,8 @@
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
 
+const apiGraphQL = `${Cypress.env("apiUrl")}/graphql`;
+
 type BankAccountsTestCtx = {
   user?: User;
 };
@@ -11,9 +13,22 @@ describe("Bank Accounts", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.intercept("POST", "/bankAccounts").as("createBankAccount");
-    cy.intercept("DELETE", "**/bankAccounts/*").as("deleteBankAccount");
     cy.intercept("GET", "/notifications").as("getNotifications");
+
+    cy.intercept("POST", apiGraphQL, (req) => {
+      const { body } = req;
+      if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
+        req.alias = "gqlListBankAccountQuery";
+      }
+
+      if (body.hasOwnProperty("query") && body.query.includes("createBankAccount")) {
+        req.alias = "gqlCreateBankAccountMutation";
+      }
+
+      if (body.hasOwnProperty("query") && body.query.includes("deleteBankAccount")) {
+        req.alias = "gqlDeleteBankAccountMutation";
+      }
+    });
 
     cy.database("find", "users").then((user: User) => {
       ctx.user = user;
@@ -40,7 +55,7 @@ describe("Bank Accounts", function () {
     cy.visualSnapshot("Fill out New Bank Account Form");
     cy.getBySelLike("submit").click();
 
-    cy.wait("@createBankAccount");
+    cy.wait("@gqlCreateBankAccountMutation");
 
     cy.getBySelLike("bankaccount-list-item")
       .should("have.length", 2)
@@ -116,19 +131,25 @@ describe("Bank Accounts", function () {
     cy.visit("/bankaccounts");
     cy.getBySelLike("delete").first().click();
 
-    cy.wait("@deleteBankAccount");
+    cy.wait("@gqlDeleteBankAccountMutation");
     cy.getBySelLike("list-item").children().contains("Deleted");
     cy.visualSnapshot("Soft Delete Bank Account");
   });
 
   // TODO: [enhancement] the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
   it("renders an empty bank account list state with onboarding modal", function () {
-    cy.intercept("GET", "/bankAccounts", {
-      body: { results: [] },
-    }).as("getBankAccounts");
+    cy.intercept("POST", apiGraphQL, (req) => {
+      const { body } = req;
+      if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
+        req.alias = "gqlListBankAccountQuery";
+        req.continue((res) => {
+          res.body.data.listBankAccount = [];
+        });
+      }
+    });
 
     cy.visit("/bankaccounts");
-    cy.wait("@getBankAccounts");
+    cy.wait("@gqlListBankAccountQuery");
 
     cy.getBySel("bankaccount-list").should("not.exist");
     cy.getBySel("empty-list-header").should("contain", "No Bank Accounts");
