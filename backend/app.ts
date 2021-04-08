@@ -71,14 +71,6 @@ if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {
   app.use("/testData", testDataRoutes);
 }
 
-app.use(
-  "/graphql",
-  graphqlHTTP({
-    schema: schemaWithResolvers,
-    graphiql: true,
-  })
-);
-
 app.use(auth);
 
 /* istanbul ignore if */
@@ -100,6 +92,14 @@ if (process.env.REACT_APP_AWS_COGNITO) {
 if (process.env.REACT_APP_GOOGLE) {
   app.use(checkGoogleJwt);
 }
+
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema: schemaWithResolvers,
+    graphiql: true,
+  })
+);
 
 app.use("/users", userRoutes);
 app.use("/contacts", contactRoutes);
