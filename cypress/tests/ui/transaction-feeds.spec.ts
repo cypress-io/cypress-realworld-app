@@ -386,7 +386,9 @@ describe("Transaction Feed", function () {
       cy.visualSnapshot("Personal Transactions");
     });
 
-    it("first five items belong to contacts in public feed", function () {
+    // this test will occasionally flake when
+    // our application data layer does not properly set the loaded data
+    it("FLAKE first five items belong to contacts in public feed", function () {
       cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
         ctx.contactIds = contacts.map((contact) => contact.contactUserId);
       });
@@ -394,12 +396,16 @@ describe("Transaction Feed", function () {
       cy.wait("@publicTransactions")
         .its("response.body.results")
         .invoke("slice", 0, 5)
-        .each((transaction: Transaction) => {
+        .each((transaction: Transaction, i) => {
           const transactionParticipants = [transaction.senderId, transaction.receiverId];
 
           const contactsInTransaction = _.intersection(transactionParticipants, ctx.contactIds!);
           const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
           expect(contactsInTransaction, message).to.not.be.empty;
+
+          contactsInTransaction.forEach((contact) => {
+            cy.getBySelLike("transaction-item").eq(i).should("contain", contact);
+          });
         });
       cy.visualSnapshot("First 5 Transaction Items belong to contacts");
     });
