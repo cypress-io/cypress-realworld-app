@@ -15779,10 +15779,10 @@ react-native-get-random-values@^1.4.0:
   dependencies:
     fast-base64-decode "^1.0.0"
 
-react-number-format@4.5.2:
-  version "4.5.2"
-  resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-4.5.2.tgz#5363e2a97ddb0e08fa2b7dd24b8319b6fb83519a"
-  integrity sha512-5pE0q6Q3pw0phFPpKWjyqRPCaajroggB8L43goMQzBEFyAi7LF+OpZH+uB9Wxg+rTOt/Ydi5H5Q2O5pmHvGzrg==
+react-number-format@4.5.5:
+  version "4.5.5"
+  resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-4.5.5.tgz#563807ee142a03857111115806d39767bc698797"
+  integrity sha512-3NGqgSbMUwRwgJ4852RH24UFkW89yx/e0P78Hwmf3TajLMKCOJ7DPJCcl/6z+2+HpJ8AG7je/J8na3ykWx8acg==
   dependencies:
     prop-types "^15.7.2"
 
