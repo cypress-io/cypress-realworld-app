@@ -102,7 +102,7 @@
     "husky": "6.0.0",
     "istanbul-lib-coverage": "3.0.0",
     "json": "10.0.0",
-    "jwks-rsa": "2.0.2",
+    "jwks-rsa": "2.0.3",
     "lowdb": "1.0.0",
     "morgan": "1.10.0",
     "ncp": "2.0.0",
