@@ -200,5 +200,3 @@ windows-workflow: &windows-workflow
 workflows:
   linux:
     <<: *linux-workflow
-  windows:
-    <<: *windows-workflow
