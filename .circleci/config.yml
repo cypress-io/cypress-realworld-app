@@ -1,7 +1,6 @@
 version: 2.1
 orbs:
   cypress: cypress-io/cypress@1.27.0
-  codecov: codecov/codecov@1.1.3
   win: circleci/windows@2.4.0
 
 executors:
@@ -19,8 +18,6 @@ commands:
       - store_artifacts:
           path: coverage
       - run: npx nyc report --reporter=text || true
-      - codecov/upload:
-          file: coverage/coverage-final.json
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 linux-workflow: &linux-workflow
