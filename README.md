@@ -80,11 +80,41 @@ yarn install
 yarn dev
 ```
 
+> 🚩 **Note**
+>
+> The app will run on port `3000` (frontend) and `3001` (API backend) by default. Please make sure there are no other applications or services running on both ports.
+> If you want to change the default ports, you can do so by modifying `PORT` and `BACKEND_PORT` variables in `.env` file.
+> However, make sure the modified port numbers in `.env` are not commited into Git since the CI environments still expect the application run on default ports.
+
 ### Start Cypress
 
 ```shell
 yarn cypress:open
 ```
+
+> 🚩 **Note**
+>
+> If you have changed the default ports, then you need to update Cypress configuration file (`cypress.json`) locally.
+> There are three properties that you need to update in `cypress.json`: `baseUrl`, `apiUrl`, and `url`.
+> The port number in `baseUrl` corresponds to `PORT` variable in `.env` file. Similarly, the port number in `apiUrl` and `url` correspond to `BACKEND_PORT`.
+> For example, if you have changed `PORT` to `13000` and `BACKEND_PORT` to `13001` in `.env` file, then your `cypress.json` should look similar to the following snippet:
+>
+> ```json
+> {
+>   "baseUrl": "http://localhost:13000",
+>   /* Omitted for brevity */
+>   "env": {
+>     "apiUrl": "http://localhost:13001",
+>     /* Omitted for brevity */
+>     "codeCoverage": {
+>       "url": "http://localhost:13001/__coverage__"
+>     }
+>   },
+>   "experimentalStudio": true
+> }
+> ```
+>
+> Avoid committing the modified `cypress.json` into Git since the CI environments still expect the application run on default ports.
 
 ## Tests
 
