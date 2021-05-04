@@ -427,6 +427,7 @@ describe("Transaction Feed", function () {
           const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
           expect(contactsInTransaction, message).to.not.be.empty;
         });
+      cy.getBySel("list-skeleton").should("not.exist");
       cy.visualSnapshot("Friends Feed only shows contacts transactions");
     });
   });
