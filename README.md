@@ -195,6 +195,7 @@ This project is licensed under the terms of the [MIT license](/LICENSE).
 [oktacreateapp]: https://developer.okta.com/docs/guides/sign-into-spa/react/create-okta-application/
 [cognito]: https://aws.amazon.com/cognito
 [awsamplify]: https://amplify.aws
+[google]: https://google.com
 
 ## Contributors ✨
 
