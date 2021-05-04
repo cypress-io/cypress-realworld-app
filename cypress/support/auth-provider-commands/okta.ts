@@ -4,6 +4,10 @@
 // @ts-ignore
 import { OktaAuth } from "@okta/okta-auth-js";
 
+require("dotenv").config();
+
+const frontendPort = process.env.PORT || 3000;
+
 // Okta
 Cypress.Commands.add("loginByOktaApi", (username: string, password: string) => {
   const log = Cypress.log({
@@ -27,7 +31,7 @@ Cypress.Commands.add("loginByOktaApi", (username: string, password: string) => {
     const config = {
       issuer: `https://${Cypress.env("okta_domain")}/oauth2/default`,
       clientId: Cypress.env("okta_client_id"),
-      redirectUri: "http://localhost:3000/implicit/callback",
+      redirectUri: `http://localhost:${frontendPort}/implicit/callback`,
       scope: ["openid", "email", "profile"],
     };
 

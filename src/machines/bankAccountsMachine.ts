@@ -2,10 +2,14 @@ import { omit } from "lodash/fp";
 import { dataMachine } from "./dataMachine";
 import { httpClient } from "../utils/asyncUtils";
 
+require("dotenv").config();
+
+const backendPort = process.env.BACKEND_PORT || 3001;
+
 export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
   services: {
     fetchData: async (ctx, event: any) => {
-      const resp = await httpClient.post(`http://localhost:3001/graphql`, {
+      const resp = await httpClient.post(`http://localhost:${backendPort}/graphql`, {
         query: `query {
            listBankAccount {
             id
@@ -24,7 +28,7 @@ export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
     },
     deleteData: async (ctx, event: any) => {
       const payload = omit("type", event);
-      const resp = await httpClient.post(`http://localhost:3001/graphql`, {
+      const resp = await httpClient.post(`http://localhost:${backendPort}/graphql`, {
         query: `mutation deleteBankAccount ($id: ID!) {
           deleteBankAccount(id: $id)
         }`,
@@ -34,7 +38,7 @@ export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
     },
     createData: async (ctx, event: any) => {
       const payload = omit("type", event);
-      const resp = await httpClient.post(`http://localhost:3001/graphql`, {
+      const resp = await httpClient.post(`http://localhost:${backendPort}/graphql`, {
         query: `mutation createBankAccount ($bankName: String!, $accountNumber: String!,  $routingNumber: String!) {
           createBankAccount(
             bankName: $bankName,
