@@ -1,6 +1,6 @@
 const createProxyMiddleware = require("http-proxy-middleware");
 
-const { backendPort } = require("utils/portUtils");
+const { backendPort } = require("./utils/portUtils");
 
 module.exports = function (app) {
   app.use(
