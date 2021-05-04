@@ -1,8 +1,6 @@
 const createProxyMiddleware = require("http-proxy-middleware");
 
-require("dotenv").config();
-
-const backendPort = process.env.BACKEND_PORT || 3001;
+const { backendPort } = require("utils/portUtils");
 
 module.exports = function (app) {
   app.use(

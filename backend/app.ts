@@ -23,11 +23,9 @@ import bankTransferRoutes from "./banktransfer-routes";
 import testDataRoutes from "./testdata-routes";
 import { checkAuth0Jwt, verifyOktaToken, checkCognitoJwt, checkGoogleJwt } from "./helpers";
 import resolvers from "./graphql/resolvers";
+import { frontendPort, backendPort } from "../src/utils/portUtils";
 
 require("dotenv").config();
-
-const frontendPort = process.env.PORT || 3000;
-const backendPort = process.env.BACKEND_PORT || 3001;
 
 const corsOption = {
   origin: `http://localhost:${frontendPort}`,

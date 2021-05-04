@@ -1,10 +1,7 @@
 import { omit, flow, first, isEmpty } from "lodash/fp";
 import { dataMachine } from "./dataMachine";
 import { httpClient } from "../utils/asyncUtils";
-
-require("dotenv").config();
-
-const backendPort = process.env.BACKEND_PORT || 3001;
+import { backendPort } from "../utils/portUtils";
 
 export const transactionDetailMachine = dataMachine("transactionData").withConfig({
   services: {
