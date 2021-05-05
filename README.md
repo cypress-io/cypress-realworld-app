@@ -83,7 +83,7 @@ yarn dev
 > 🚩 **Note**
 >
 > The app will run on port `3000` (frontend) and `3001` (API backend) by default. Please make sure there are no other applications or services running on both ports.
-> If you want to change the default ports, you can do so by modifying `PORT` and `BACKEND_PORT` variables in `.env` file.
+> If you want to change the default ports, you can do so by modifying `REACT_APP_PORT` and `REACT_APP_BACKEND_PORT` variables in `.env` file.
 > However, make sure the modified port numbers in `.env` are not commited into Git since the CI environments still expect the application run on default ports.
 
 ### Start Cypress
@@ -96,8 +96,8 @@ yarn cypress:open
 >
 > If you have changed the default ports, then you need to update Cypress configuration file (`cypress.json`) locally.
 > There are three properties that you need to update in `cypress.json`: `baseUrl`, `apiUrl`, and `url`.
-> The port number in `baseUrl` corresponds to `PORT` variable in `.env` file. Similarly, the port number in `apiUrl` and `url` correspond to `BACKEND_PORT`.
-> For example, if you have changed `PORT` to `13000` and `BACKEND_PORT` to `13001` in `.env` file, then your `cypress.json` should look similar to the following snippet:
+> The port number in `baseUrl` corresponds to `REACT_APP_PORT` variable in `.env` file. Similarly, the port number in `apiUrl` and `url` correspond to `REACT_APP_BACKEND_PORT`.
+> For example, if you have changed `REACT_APP_PORT` to `13000` and `REACT_APP_BACKEND_PORT` to `13001` in `.env` file, then your `cypress.json` should look similar to the following snippet:
 >
 > ```json
 > {
@@ -248,6 +248,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 
-<!-- ALL-CONTRIBUTORS-LIST:END   -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!!
