@@ -4,9 +4,7 @@
 // @ts-ignore
 import { OktaAuth } from "@okta/okta-auth-js";
 
-require("dotenv").config();
-
-const frontendPort = process.env.PORT || 3000;
+import { frontendPort } from "../../../src/utils/portUtils";
 
 // Okta
 Cypress.Commands.add("loginByOktaApi", (username: string, password: string) => {
