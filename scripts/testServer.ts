@@ -2,11 +2,9 @@ import path from "path";
 import express from "express";
 import history from "connect-history-api-fallback";
 import setupProxy from "../src/setupProxy";
-
-require("dotenv").config();
+import { frontendPort } from "../src/utils/portUtils";
 
 const app = express();
-const frontendPort = process.env.PORT || 3000;
 
 setupProxy(app);
 

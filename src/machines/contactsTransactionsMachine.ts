@@ -1,10 +1,7 @@
+import { isEmpty, omit } from "lodash/fp";
 import { dataMachine } from "./dataMachine";
 import { httpClient } from "../utils/asyncUtils";
-import { isEmpty, omit } from "lodash/fp";
-
-require("dotenv").config();
-
-const backendPort = process.env.BACKEND_PORT || 3001;
+import { backendPort } from "../utils/portUtils";
 
 export const contactsTransactionsMachine = dataMachine("contactsTransactions").withConfig({
   services: {

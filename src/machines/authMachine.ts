@@ -4,11 +4,9 @@ import { omit } from "lodash/fp";
 import { httpClient } from "../utils/asyncUtils";
 import { history } from "../utils/historyUtils";
 import { User } from "../models";
+import { backendPort } from "../utils/portUtils";
 
 dotenv.config();
-
-const backendPort = process.env.BACKEND_PORT || 3001;
-
 export interface AuthMachineSchema {
   states: {
     unauthorized: {};
