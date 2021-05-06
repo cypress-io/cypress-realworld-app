@@ -47,6 +47,7 @@
   "devDependencies": {
     "@cypress/code-coverage": "^3.9.4",
     "@cypress/instrument-cra": "1.4.0",
+    "@percy/cli": "1.0.0-beta.48",
     "@percy/cypress": "3.1.0",
     "@types/bcryptjs": "2.4.2",
     "@types/bluebird": "3.5.33",
@@ -213,11 +214,14 @@
     ]
   },
   "percy": {
-    "version": 1,
+    "version": 2,
     "snapshot": {
       "widths": [
         1280
       ]
+    },
+    "discovery": {
+      "disableCache": true
     }
   },
   "nyc": {
