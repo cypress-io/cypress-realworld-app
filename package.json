@@ -80,7 +80,7 @@
     "@types/validator": "13.1.3",
     "@types/webpack-env": "1.16.0",
     "@types/yup": "0.29.11",
-    "aws-sdk": "2.884.0",
+    "aws-sdk": "2.897.0",
     "bcryptjs": "2.4.3",
     "concurrently": "6.0.1",
     "cors": "2.8.5",
