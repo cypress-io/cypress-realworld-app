@@ -101,7 +101,7 @@ describe("Transaction Utils", () => {
     });
   });
 
-  test("gets query without date range fields", () => {
+  test("gets query with and without date range fields", () => {
     expect(
       getQueryWithoutDateFields({
         dateRangeStart: new Date().toString(),
@@ -116,7 +116,7 @@ describe("Transaction Utils", () => {
     ).toMatchObject({ status: "incomplete" });
   });
 
-  test("gets query without amount range fields", () => {
+  test("gets query with and without amount range fields", () => {
     expect(
       getQueryWithoutAmountFields({
         amountMin: 5,
@@ -131,7 +131,7 @@ describe("Transaction Utils", () => {
     ).toMatchObject({ status: "incomplete" });
   });
 
-  test("gets query without date and amount range fields", () => {
+  test("gets query with and without date and amount range fields", () => {
     const query = {
       amountMin: 5,
       amountMax: 10,
@@ -142,5 +142,10 @@ describe("Transaction Utils", () => {
     expect(getQueryWithoutFilterFields(query)).toMatchObject({
       requestStatus: "pending",
     });
+    expect(
+      getQueryWithoutFilterFields({
+        status: TransactionStatus.incomplete,
+      })
+    ).toMatchObject({ status: "incomplete" });
   });
 });
