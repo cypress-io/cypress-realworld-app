@@ -23,11 +23,12 @@ import bankTransferRoutes from "./banktransfer-routes";
 import testDataRoutes from "./testdata-routes";
 import { checkAuth0Jwt, verifyOktaToken, checkCognitoJwt, checkGoogleJwt } from "./helpers";
 import resolvers from "./graphql/resolvers";
+import { frontendPort, backendPort } from "../src/utils/portUtils";
 
 require("dotenv").config();
 
 const corsOption = {
-  origin: "http://localhost:3000",
+  origin: `http://localhost:${frontendPort}`,
   credentials: true,
 };
 
@@ -112,4 +113,4 @@ app.use("/bankTransfers", bankTransferRoutes);
 
 app.use(express.static(join(__dirname, "../public")));
 
-app.listen(3001);
+app.listen(backendPort);

@@ -42,7 +42,7 @@ jobs:
         run: git push origin ${{ steps.gen-names.outputs.branch_name }}
         if: ${{ steps.check-conflict.outputs.merge_conflict }}
       - name: Create Pull Request
-        uses: actions/github-script@v3
+        uses: actions/github-script@v4
         with:
           script: |
             const pull = await github.pulls.create({
