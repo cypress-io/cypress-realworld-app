@@ -3627,7 +3627,7 @@
     through2 "^2.0.0"
     watchify "3.11.1"
 
-"@cypress/code-coverage@^3.9.4":
+"@cypress/code-coverage@3.9.4":
   version "3.9.4"
   resolved "https://registry.yarnpkg.com/@cypress/code-coverage/-/code-coverage-3.9.4.tgz#1e82b7061d7b136a99b464e2730d4cf40167bac9"
   integrity sha512-mFUl1MmfqeQe08eONKnAv9uWXRVW2RprqaYf3lJkI5tEhEAP+I9zB+cmjQWKe15vfmadKxqaLStVNYLM0rpYGA==
@@ -9643,7 +9643,7 @@ expect@^26.6.0, expect@^26.6.2:
     jest-message-util "^26.6.2"
     jest-regex-util "^26.0.0"
 
-express-graphql@^0.12.0:
+express-graphql@0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/express-graphql/-/express-graphql-0.12.0.tgz#58deabc309909ca2c9fe2f83f5fbe94429aa23df"
   integrity sha512-DwYaJQy0amdy3pgNtiTDuGGM2BLdj+YO2SgbKoLliCfuHv3VVTt7vNG/ZqK2hRYjtYHE2t2KB705EU94mE64zg==
@@ -10565,7 +10565,7 @@ graphql-tag@^2.12.0:
   dependencies:
     tslib "^2.1.0"
 
-graphql-tools@^7.0.4:
+graphql-tools@7.0.4:
   version "7.0.4"
   resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-7.0.4.tgz#2ab8ee2afe1eb066f79fe8d0d643822d119d4ae3"
   integrity sha512-9tEqKSAprMQMCB8WzwQKudzTVl6a3nANR4rLL9VJbgGn+ULjZTxeW0lMA8gKfds5Cu4EtD/Esc8QRbEf3seY6g==
@@ -10619,7 +10619,7 @@ graphql@14.0.0:
   dependencies:
     iterall "^1.2.2"
 
-graphql@^15.5.0:
+graphql@15.5.0:
   version "15.5.0"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-15.5.0.tgz#39d19494dbe69d1ea719915b578bf920344a69d5"
   integrity sha512-OmaM7y0kaK31NKG31q4YbD2beNYa6jBBKtMFT6gLYJljHLJr42IqJ8KX08u3Li/0ifzTU5HjmoOOrwa5BRLeDA==
