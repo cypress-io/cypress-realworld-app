@@ -185,6 +185,7 @@ Cypress.Commands.add("logoutByXstate", () => {
 
 Cypress.Commands.add("switchUser", (username) => {
   cy.logoutByXstate();
+  cy.location("pathname").should("equal", "/signin");
   return cy.loginByXstate(username).then(() => {
     if (isMobile()) {
       cy.getBySel("sidenav-toggle").click();
