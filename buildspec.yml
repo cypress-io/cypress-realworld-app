@@ -32,10 +32,10 @@ batch:
 phases:
   install:
     commands:
-      - COMMIT_INFO_BRANCH="$(git symbolic-ref HEAD --short 2>/dev/null)"
-      - COMMIT_INFO_MESSAGE="$(git log -1 --pretty=%B)"
-      - COMMIT_INFO_EMAIL="$(git log -1 --pretty=%ae)"
-      - COMMIT_INFO_AUTHOR="$(git log -1 --pretty=%an)"
+      - export COMMIT_INFO_BRANCH="$(git symbolic-ref HEAD --short 2>/dev/null)"
+      - export COMMIT_INFO_MESSAGE="$(git log -1 --pretty=%B)"
+      - export COMMIT_INFO_EMAIL="$(git log -1 --pretty=%ae)"
+      - export COMMIT_INFO_AUTHOR="$(git log -1 --pretty=%an)"
       - echo $COMMIT_INFO_BRANCH
       - echo $COMMIT_INFO_MESSAGE
       - echo $COMMIT_INFO_EMAIL
