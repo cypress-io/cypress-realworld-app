@@ -32,7 +32,7 @@ batch:
 phases:
   install:
     commands:
-      - git show -s --pretty=%B
+      #- git show -s --pretty=%B
       - COMMIT_INFO_BRANCH=(git rev-parse --abbrev-ref HEAD)
       - COMMIT_INFO_MESSAGE=(git show -s --pretty=%B)
       - COMMIT_INFO_EMAIL=(git show -s --pretty=%ae)
