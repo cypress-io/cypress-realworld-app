@@ -16,8 +16,8 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "1.5.0",
-    "@aws-amplify/ui-react": "1.0.7",
-    "@material-ui/core": "4.11.4",
+    "@aws-amplify/ui-react": "1.1.0",
+    "@material-ui/core": "4.11.3",
     "@material-ui/icons": "4.11.2",
     "@material-ui/lab": "4.0.0-alpha.58",
     "@okta/jwt-verifier": "2.1.0",
