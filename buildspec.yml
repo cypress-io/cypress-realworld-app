@@ -33,6 +33,14 @@ phases:
   install:
     commands:
       - git show -s --pretty=%B
+      - COMMIT_INFO_BRANCH=(git rev-parse --abbrev-ref HEAD)
+      - COMMIT_INFO_MESSAGE=(git show -s --pretty=%B)
+      - COMMIT_INFO_EMAIL=(git show -s --pretty=%ae)
+      - COMMIT_INFO_AUTHOR=(git show -s --pretty=%an)
+      - echo $COMMIT_INFO_BRANCH
+      - echo $COMMIT_INFO_MESSAGE
+      - echo $COMMIT_INFO_EMAIL
+      - echo $COMMIT_INFO_AUTHOR
       - echo $CODEBUILD_INITIATOR
       - echo $CY_GROUP_SPEC
       - CY_GROUP=$(echo $CY_GROUP_SPEC | cut -d'|' -f1)
