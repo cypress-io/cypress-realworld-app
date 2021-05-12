@@ -32,7 +32,7 @@ batch:
 phases:
   install:
     commands:
-      - export COMMIT_INFO_BRANCH="$(git symbolic-ref HEAD --short 2>/dev/null)"
+      - export COMMIT_INFO_BRANCH="$(git rev-parse HEAD | xargs git name-rev | cut -d' ' -f2 | sed 's/remotes\/origin\///g')"
       - export COMMIT_INFO_MESSAGE="$(git log -1 --pretty=%B)"
       - export COMMIT_INFO_EMAIL="$(git log -1 --pretty=%ae)"
       - export COMMIT_INFO_AUTHOR="$(git log -1 --pretty=%an)"
