@@ -32,17 +32,17 @@ batch:
 phases:
   install:
     commands:
-      # - COMMIT_INFO_BRANCH=$(git symbolic-ref HEAD --short 2>/dev/null)
-      # - COMMIT_INFO_MESSAGE=$(git log -1 --pretty=%B)
-      # - COMMIT_INFO_EMAIL=$(git log -1 --pretty=%ae)
-      # - COMMIT_INFO_AUTHOR=$(git log -1 --pretty=%an)
-      # - echo $COMMIT_INFO_BRANCH
-      # - echo $COMMIT_INFO_MESSAGE
-      # - echo $COMMIT_INFO_EMAIL
-      # - echo $COMMIT_INFO_AUTHOR
-      - echo Installing codebuild-extras...
-      - curl -fsSL https://raw.githubusercontent.com/thii/aws-codebuild-extras/fd64ace08a309109058c461e6997807e7473fc61/install >> extras.sh
-      - . ./extras.sh
+      - COMMIT_INFO_BRANCH="$(git symbolic-ref HEAD --short 2>/dev/null)"
+      - COMMIT_INFO_MESSAGE="$(git log -1 --pretty=%B)"
+      - COMMIT_INFO_EMAIL="$(git log -1 --pretty=%ae)"
+      - COMMIT_INFO_AUTHOR="$(git log -1 --pretty=%an)"
+      - echo $COMMIT_INFO_BRANCH
+      - echo $COMMIT_INFO_MESSAGE
+      - echo $COMMIT_INFO_EMAIL
+      - echo $COMMIT_INFO_AUTHOR
+      # - echo Installing codebuild-extras...
+      # - curl -fsSL https://raw.githubusercontent.com/thii/aws-codebuild-extras/fd64ace08a309109058c461e6997807e7473fc61/install >> extras.sh
+      # - . ./extras.sh
       - echo $CODEBUILD_INITIATOR
       - echo $CY_GROUP_SPEC
       - CY_GROUP=$(echo $CY_GROUP_SPEC | cut -d'|' -f1)
