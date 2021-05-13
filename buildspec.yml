@@ -32,6 +32,8 @@ batch:
 phases:
   install:
     commands:
+      # Set COMMIT_INFO variables to send Git specifics to Cypress Dashboard when recording
+      # https://docs.cypress.io/guides/continuous-integration/introduction#Git-information
       - export COMMIT_INFO_BRANCH="$(git rev-parse HEAD | xargs git name-rev | cut -d' ' -f2 | sed 's/remotes\/origin\///g')"
       - export COMMIT_INFO_MESSAGE="$(git log -1 --pretty=%B)"
       - export COMMIT_INFO_EMAIL="$(git log -1 --pretty=%ae)"
@@ -44,9 +46,6 @@ phases:
       - echo $COMMIT_INFO_AUTHOR
       - echo $COMMIT_INFO_SHA
       - echo $COMMIT_INFO_REMOTE
-      # - echo Installing codebuild-extras...
-      # - curl -fsSL https://raw.githubusercontent.com/thii/aws-codebuild-extras/fd64ace08a309109058c461e6997807e7473fc61/install >> extras.sh
-      # - . ./extras.sh
       - echo $CODEBUILD_INITIATOR
       - echo $CY_GROUP_SPEC
       - CY_GROUP=$(echo $CY_GROUP_SPEC | cut -d'|' -f1)
