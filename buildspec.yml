@@ -36,10 +36,12 @@ phases:
       - export COMMIT_INFO_MESSAGE="$(git log -1 --pretty=%B)"
       - export COMMIT_INFO_EMAIL="$(git log -1 --pretty=%ae)"
       - export COMMIT_INFO_AUTHOR="$(git log -1 --pretty=%an)"
+      - export COMMIT_INFO_SHA="$(git log -1 --pretty=%H)"
       - echo $COMMIT_INFO_BRANCH
       - echo $COMMIT_INFO_MESSAGE
       - echo $COMMIT_INFO_EMAIL
       - echo $COMMIT_INFO_AUTHOR
+      - echo $COMMIT_INFO_SHA
       # - echo Installing codebuild-extras...
       # - curl -fsSL https://raw.githubusercontent.com/thii/aws-codebuild-extras/fd64ace08a309109058c461e6997807e7473fc61/install >> extras.sh
       # - . ./extras.sh
