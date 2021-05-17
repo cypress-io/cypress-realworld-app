@@ -82,7 +82,7 @@ describe("Bank Accounts API", function () {
       const { id: userId } = ctx.authenticatedUser!;
       cy.request("POST", `${apiGraphQL}`, {
         query: `query {
-           listBankAccount {
+           ListBankAccount {
             id
             uuid
             userId
@@ -96,14 +96,14 @@ describe("Bank Accounts API", function () {
           }`,
       }).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.data.listBankAccount[0].userId).to.eq(userId);
+        expect(response.body.data.ListBankAccount[0].userId).to.eq(userId);
       });
     });
     it("creates a new bank account", function () {
       const { id: userId } = ctx.authenticatedUser!;
       cy.request("POST", `${apiGraphQL}`, {
-        query: `mutation createBankAccount ($bankName: String!, $accountNumber: String!,  $routingNumber: String!) {
-          createBankAccount(
+        query: `mutation CreateBankAccount ($bankName: String!, $accountNumber: String!,  $routingNumber: String!) {
+          CreateBankAccount(
             bankName: $bankName,
             accountNumber: $accountNumber,
             routingNumber: $routingNumber
@@ -125,14 +125,14 @@ describe("Bank Accounts API", function () {
         },
       }).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.data.createBankAccount.userId).to.eq(userId);
+        expect(response.body.data.CreateBankAccount.userId).to.eq(userId);
       });
     });
     it("deletes a bank account", function () {
       const { id: bankAccountId } = ctx.bankAccounts![0];
       cy.request("POST", `${apiGraphQL}`, {
-        query: `mutation deleteBankAccount ($id: ID!) {
-          deleteBankAccount(id: $id)
+        query: `mutation DeleteBankAccount ($id: ID!) {
+          DeleteBankAccount(id: $id)
         }`,
         variables: { id: bankAccountId },
       }).then((response) => {

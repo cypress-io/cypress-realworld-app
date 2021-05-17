@@ -6,7 +6,7 @@ if (Cypress.env("auth0_client_id")) {
       cy.task("db:seed");
 
       cy.server();
-      cy.route("POST", "/bankAccounts").as("createBankAccount");
+      cy.route("POST", "/bankAccounts").as("CreateBankAccount");
 
       cy.loginByAuth0Api(Cypress.env("auth0_username"), Cypress.env("auth0_password"));
     });
@@ -25,7 +25,7 @@ if (Cypress.env("auth0_client_id")) {
       cy.getBySelLike("routingNumber-input").type("987654321");
       cy.getBySelLike("submit").click();
 
-      cy.wait("@createBankAccount");
+      cy.wait("@CreateBankAccount");
 
       cy.getBySel("user-onboarding-dialog-title").should("contain", "Finished");
       cy.getBySel("user-onboarding-dialog-content").should("contain", "You're all set!");

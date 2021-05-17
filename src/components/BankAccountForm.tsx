@@ -34,13 +34,13 @@ const useStyles = makeStyles((theme) => ({
 
 export interface BankAccountFormProps {
   userId: User["id"];
-  createBankAccount: Function;
+  CreateBankAccount: Function;
   onboarding?: boolean;
 }
 
 const BankAccountForm: React.FC<BankAccountFormProps> = ({
   userId,
-  createBankAccount,
+  CreateBankAccount,
   onboarding,
 }) => {
   const history = useHistory();
@@ -59,7 +59,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
       onSubmit={(values, { setSubmitting }) => {
         setSubmitting(true);
 
-        createBankAccount({ ...values, userId });
+        CreateBankAccount({ ...values, userId });
 
         if (!onboarding) {
           history.push("/bankaccounts");
