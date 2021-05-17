@@ -8,7 +8,7 @@ export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
     fetchData: async (ctx, event: any) => {
       const resp = await httpClient.post(`http://localhost:${backendPort}/graphql`, {
         query: `query {
-           listBankAccount {
+           ListBankAccount {
             id
             uuid
             userId
@@ -21,7 +21,7 @@ export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
            }
           }`,
       });
-      return { results: resp.data.data.listBankAccount, pageData: {} };
+      return { results: resp.data.data.ListBankAccount, pageData: {} };
     },
     deleteData: async (ctx, event: any) => {
       const payload = omit("type", event);

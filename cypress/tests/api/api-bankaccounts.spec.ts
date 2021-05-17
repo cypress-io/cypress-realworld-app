@@ -82,7 +82,7 @@ describe("Bank Accounts API", function () {
       const { id: userId } = ctx.authenticatedUser!;
       cy.request("POST", `${apiGraphQL}`, {
         query: `query {
-           listBankAccount {
+           ListBankAccount {
             id
             uuid
             userId
@@ -96,7 +96,7 @@ describe("Bank Accounts API", function () {
           }`,
       }).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.data.listBankAccount[0].userId).to.eq(userId);
+        expect(response.body.data.ListBankAccount[0].userId).to.eq(userId);
       });
     });
     it("creates a new bank account", function () {

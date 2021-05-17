@@ -1,7 +1,7 @@
 import { getBankAccountsByUserId } from "../../database";
 
 const Query = {
-  listBankAccount(obj: any, args: any, ctx: any) {
+  ListBankAccount(obj: any, args: any, ctx: any) {
     /* istanbul ignore next */
     try {
       const accounts = getBankAccountsByUserId(ctx.user.id!);
