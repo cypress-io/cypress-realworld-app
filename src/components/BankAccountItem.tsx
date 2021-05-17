@@ -5,12 +5,12 @@ import { BankAccount } from "../models";
 
 export interface BankAccountListItemProps {
   bankAccount: BankAccount;
-  deleteBankAccount: Function;
+  sendDeleteBankAccount: Function;
 }
 
 const BankAccountListItem: React.FC<BankAccountListItemProps> = ({
   bankAccount,
-  deleteBankAccount,
+  sendDeleteBankAccount,
 }) => {
   return (
     <ListItem data-test={`bankaccount-list-item-${bankAccount.id}`}>
@@ -28,7 +28,7 @@ const BankAccountListItem: React.FC<BankAccountListItemProps> = ({
               size="large"
               data-test="bankaccount-delete"
               onClick={() => {
-                deleteBankAccount({ id: bankAccount.id });
+                sendDeleteBankAccount({ id: bankAccount.id });
               }}
             >
               Delete

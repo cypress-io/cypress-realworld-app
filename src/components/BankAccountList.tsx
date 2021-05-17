@@ -7,10 +7,13 @@ import EmptyList from "./EmptyList";
 
 export interface BankAccountListProps {
   bankAccounts: BankAccount[];
-  deleteBankAccount: Function;
+  sendDeleteBankAccount: Function;
 }
 
-const BankAccountList: React.FC<BankAccountListProps> = ({ bankAccounts, deleteBankAccount }) => {
+const BankAccountList: React.FC<BankAccountListProps> = ({
+  bankAccounts,
+  sendDeleteBankAccount,
+}) => {
   return (
     <>
       {bankAccounts?.length > 0 ? (
@@ -19,7 +22,7 @@ const BankAccountList: React.FC<BankAccountListProps> = ({ bankAccounts, deleteB
             <BankAccountItem
               key={bankAccount.id}
               bankAccount={bankAccount}
-              deleteBankAccount={deleteBankAccount}
+              sendDeleteBankAccount={sendDeleteBankAccount}
             />
           ))}
         </List>

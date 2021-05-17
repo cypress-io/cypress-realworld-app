@@ -81,7 +81,7 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService, bankAccountsSer
           {userOnboardingState.matches("stepTwo") && (
             <BankAccountForm
               userId={currentUser?.id!}
-              createBankAccount={createBankAccountWithNextStep}
+              sendCreateBankAccount={createBankAccountWithNextStep}
               onboarding
             />
           )}
