@@ -4,7 +4,7 @@ type Query {
 
 type Mutation {
   CreateBankAccount(bankName: String!, accountNumber: String!, routingNumber: String!): BankAccount
-  deleteBankAccount(id: ID!): Boolean
+  DeleteBankAccount(id: ID!): Boolean
 }
 
 type BankAccount {

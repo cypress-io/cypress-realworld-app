@@ -131,8 +131,8 @@ describe("Bank Accounts API", function () {
     it("deletes a bank account", function () {
       const { id: bankAccountId } = ctx.bankAccounts![0];
       cy.request("POST", `${apiGraphQL}`, {
-        query: `mutation deleteBankAccount ($id: ID!) {
-          deleteBankAccount(id: $id)
+        query: `mutation DeleteBankAccount ($id: ID!) {
+          DeleteBankAccount(id: $id)
         }`,
         variables: { id: bankAccountId },
       }).then((response) => {

@@ -25,7 +25,7 @@ describe("Bank Accounts", function () {
         req.alias = "gqlCreateBankAccountMutation";
       }
 
-      if (body.hasOwnProperty("query") && body.query.includes("deleteBankAccount")) {
+      if (body.hasOwnProperty("query") && body.query.includes("DeleteBankAccount")) {
         req.alias = "gqlDeleteBankAccountMutation";
       }
     });

@@ -26,8 +26,8 @@ export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
     deleteData: async (ctx, event: any) => {
       const payload = omit("type", event);
       const resp = await httpClient.post(`http://localhost:${backendPort}/graphql`, {
-        query: `mutation deleteBankAccount ($id: ID!) {
-          deleteBankAccount(id: $id)
+        query: `mutation DeleteBankAccount ($id: ID!) {
+          DeleteBankAccount(id: $id)
         }`,
         variables: payload,
       });

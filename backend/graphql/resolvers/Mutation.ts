@@ -5,7 +5,7 @@ const Mutation = {
     const account = createBankAccountForUser(ctx.user.id!, args);
     return account;
   },
-  deleteBankAccount: (obj: any, args: any, ctx: any) => {
+  DeleteBankAccount: (obj: any, args: any, ctx: any) => {
     removeBankAccountById(args.id);
     return true;
   },
