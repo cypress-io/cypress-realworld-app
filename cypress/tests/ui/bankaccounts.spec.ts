@@ -45,6 +45,8 @@ describe("Bank Accounts", function () {
 
     cy.getBySel("sidenav-bankaccounts").click();
 
+    cy.wait("@gqlListBankAccountQuery");
+
     cy.getBySel("bankaccount-new").click();
     cy.location("pathname").should("eq", "/bankaccounts/new");
     cy.visualSnapshot("Display New Bank Account Form");
