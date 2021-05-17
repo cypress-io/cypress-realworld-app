@@ -14,6 +14,10 @@ describe("User Sign-up and Login", function () {
       if (body.hasOwnProperty("query") && body.query.includes("CreateBankAccount")) {
         req.alias = "gqlCreateBankAccountMutation";
       }
+
+      if (body.hasOwnProperty("query") && body.query.includes("ListBankAccount")) {
+        req.alias = "gqlListBankAccountQuery";
+      }
     });
   });
 
@@ -66,6 +70,8 @@ describe("User Sign-up and Login", function () {
 
     // Login User
     cy.login(userInfo.username, userInfo.password);
+
+    cy.wait("@gqlListBankAccountQuery");
 
     // Onboarding
     cy.getBySel("user-onboarding-dialog").should("be.visible");
