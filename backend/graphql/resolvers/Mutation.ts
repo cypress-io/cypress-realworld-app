@@ -1,7 +1,7 @@
 import { createBankAccountForUser, removeBankAccountById } from "../../database";
 
 const Mutation = {
-  createBankAccount: (obj: any, args: any, ctx: any) => {
+  CreateBankAccount: (obj: any, args: any, ctx: any) => {
     const account = createBankAccountForUser(ctx.user.id!, args);
     return account;
   },

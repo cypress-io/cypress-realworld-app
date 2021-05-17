@@ -36,8 +36,8 @@ export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
     createData: async (ctx, event: any) => {
       const payload = omit("type", event);
       const resp = await httpClient.post(`http://localhost:${backendPort}/graphql`, {
-        query: `mutation createBankAccount ($bankName: String!, $accountNumber: String!,  $routingNumber: String!) {
-          createBankAccount(
+        query: `mutation CreateBankAccount ($bankName: String!, $accountNumber: String!,  $routingNumber: String!) {
+          CreateBankAccount(
             bankName: $bankName,
             accountNumber: $accountNumber,
             routingNumber: $routingNumber

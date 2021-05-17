@@ -102,8 +102,8 @@ describe("Bank Accounts API", function () {
     it("creates a new bank account", function () {
       const { id: userId } = ctx.authenticatedUser!;
       cy.request("POST", `${apiGraphQL}`, {
-        query: `mutation createBankAccount ($bankName: String!, $accountNumber: String!,  $routingNumber: String!) {
-          createBankAccount(
+        query: `mutation CreateBankAccount ($bankName: String!, $accountNumber: String!,  $routingNumber: String!) {
+          CreateBankAccount(
             bankName: $bankName,
             accountNumber: $accountNumber,
             routingNumber: $routingNumber
@@ -125,7 +125,7 @@ describe("Bank Accounts API", function () {
         },
       }).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.data.createBankAccount.userId).to.eq(userId);
+        expect(response.body.data.CreateBankAccount.userId).to.eq(userId);
       });
     });
     it("deletes a bank account", function () {
