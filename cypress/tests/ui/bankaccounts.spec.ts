@@ -28,6 +28,9 @@ describe("Bank Accounts", function () {
       if (body.hasOwnProperty("query") && body.query.includes("DeleteBankAccount")) {
         req.alias = "gqlDeleteBankAccountMutation";
       }
+
+      // Check the return of every graphql call to be 200 to prevent flake
+      req.reply((res) => expect(res.statusCode).to.equal(200));
     });
 
     cy.database("find", "users").then((user: User) => {
