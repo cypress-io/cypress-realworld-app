@@ -19,7 +19,7 @@ describe("User Sign-up and Login", function () {
         req.alias = "gqlListBankAccountQuery";
       }
 
-      // check the return of every graphql call to be 200 to prevent flake
+      // Check the return of every graphql call to be 200 to prevent flake
       req.reply((res) => expect(res.statusCode).to.equal(200));
     });
   });
