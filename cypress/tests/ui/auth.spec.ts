@@ -18,6 +18,9 @@ describe("User Sign-up and Login", function () {
       if (body.hasOwnProperty("query") && body.query.includes("ListBankAccount")) {
         req.alias = "gqlListBankAccountQuery";
       }
+
+      // check the return of every graphql call to be 200 to prevent flake
+      req.reply((res) => expect(res.statusCode).to.equal(200));
     });
   });
 
