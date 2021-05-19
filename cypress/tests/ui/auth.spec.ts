@@ -74,7 +74,7 @@ describe("User Sign-up and Login", function () {
     // Login User
     cy.login(userInfo.username, userInfo.password);
 
-    cy.wait("@gqlListBankAccountQuery");
+    //cy.wait("@gqlListBankAccountQuery");
 
     // Onboarding
     cy.getBySel("user-onboarding-dialog").should("be.visible");
