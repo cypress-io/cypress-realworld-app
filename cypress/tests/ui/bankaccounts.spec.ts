@@ -30,7 +30,10 @@ describe("Bank Accounts", function () {
       }
 
       // Check the return of every graphql call to be 200 to prevent flake
-      //req.reply((res) => expect(res.statusCode).to.equal(200));
+      req.reply((res) => {
+        console.log("GQL RES:", res);
+        expect(res.statusCode).to.equal(200);
+      });
     });
 
     cy.database("find", "users").then((user: User) => {
