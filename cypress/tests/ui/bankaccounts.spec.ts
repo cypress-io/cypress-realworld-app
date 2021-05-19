@@ -17,15 +17,15 @@ describe("Bank Accounts", function () {
 
     cy.intercept("POST", apiGraphQL, (req) => {
       const { body } = req;
-      if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
+      if (body.hasOwnProperty("query") && body.query.includes("ListBankAccount")) {
         req.alias = "gqlListBankAccountQuery";
       }
 
-      if (body.hasOwnProperty("query") && body.query.includes("createBankAccount")) {
+      if (body.hasOwnProperty("query") && body.query.includes("CreateBankAccount")) {
         req.alias = "gqlCreateBankAccountMutation";
       }
 
-      if (body.hasOwnProperty("query") && body.query.includes("deleteBankAccount")) {
+      if (body.hasOwnProperty("query") && body.query.includes("DeleteBankAccount")) {
         req.alias = "gqlDeleteBankAccountMutation";
       }
     });
@@ -140,7 +140,7 @@ describe("Bank Accounts", function () {
   it("renders an empty bank account list state with onboarding modal", function () {
     cy.intercept("POST", apiGraphQL, (req) => {
       const { body } = req;
-      if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
+      if (body.hasOwnProperty("query") && body.query.includes("ListBankAccount")) {
         req.alias = "gqlListBankAccountQuery";
         req.continue((res) => {
           res.body.data.listBankAccount = [];

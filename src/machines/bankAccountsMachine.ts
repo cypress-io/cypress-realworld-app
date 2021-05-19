@@ -7,7 +7,7 @@ export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
   services: {
     fetchData: async (ctx, event: any) => {
       const resp = await httpClient.post(`http://localhost:${backendPort}/graphql`, {
-        query: `query {
+        query: `query ListBankAccount {
            listBankAccount {
             id
             uuid
@@ -21,12 +21,12 @@ export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
            }
           }`,
       });
-      return { results: resp.data.data.listBankAccount, pageData: {} };
+      return { results: resp.data.data.ListBankAccount, pageData: {} };
     },
     deleteData: async (ctx, event: any) => {
       const payload = omit("type", event);
       const resp = await httpClient.post(`http://localhost:${backendPort}/graphql`, {
-        query: `mutation deleteBankAccount ($id: ID!) {
+        query: `mutation DeleteBankAccount ($id: ID!) {
           deleteBankAccount(id: $id)
         }`,
         variables: payload,
@@ -36,7 +36,7 @@ export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
     createData: async (ctx, event: any) => {
       const payload = omit("type", event);
       const resp = await httpClient.post(`http://localhost:${backendPort}/graphql`, {
-        query: `mutation createBankAccount ($bankName: String!, $accountNumber: String!,  $routingNumber: String!) {
+        query: `mutation CreateBankAccount ($bankName: String!, $accountNumber: String!,  $routingNumber: String!) {
           createBankAccount(
             bankName: $bankName,
             accountNumber: $accountNumber,
