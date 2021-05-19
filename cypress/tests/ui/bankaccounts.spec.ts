@@ -42,7 +42,6 @@ describe("Bank Accounts", function () {
 
   it("creates a new bank account", function () {
     cy.wait("@getNotifications");
-    cy.wait("@gqlListBankAccountQuery");
     if (isMobile()) {
       cy.getBySel("sidenav-toggle").click();
     }
