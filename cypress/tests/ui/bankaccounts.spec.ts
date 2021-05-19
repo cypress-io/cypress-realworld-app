@@ -42,13 +42,12 @@ describe("Bank Accounts", function () {
 
   it("creates a new bank account", function () {
     cy.wait("@getNotifications");
+    cy.wait("@gqlListBankAccountQuery");
     if (isMobile()) {
       cy.getBySel("sidenav-toggle").click();
     }
 
     cy.getBySel("sidenav-bankaccounts").click();
-
-    cy.wait("@gqlListBankAccountQuery");
 
     cy.getBySel("bankaccount-new").click();
     cy.location("pathname").should("eq", "/bankaccounts/new");
