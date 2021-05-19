@@ -38,7 +38,7 @@ export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
     createData: async (ctx, event: any) => {
       const payload = omit("type", event);
       const resp = await httpClient.post(`http://localhost:${backendPort}/graphql`, {
-        operationName: "CeleteBankAccount",
+        operationName: "CreateBankAccount",
         query: `mutation CreateBankAccount ($bankName: String!, $accountNumber: String!,  $routingNumber: String!) {
           createBankAccount(
             bankName: $bankName,
