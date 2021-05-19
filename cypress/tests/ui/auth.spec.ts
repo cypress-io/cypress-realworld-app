@@ -11,7 +11,10 @@ describe("User Sign-up and Login", function () {
     cy.intercept("POST", apiGraphQL, (req) => {
       const { body } = req;
 
-      if (body.operationName.includes("CreateBankAccount")) {
+      if (
+        body.hasOwnProperty("operationName") &&
+        body.operationName.includes("CreateBankAccount")
+      ) {
         req.alias = "gqlCreateBankAccountMutation";
       }
     });

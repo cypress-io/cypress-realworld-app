@@ -17,15 +17,21 @@ describe("Bank Accounts", function () {
 
     cy.intercept("POST", apiGraphQL, (req) => {
       const { body } = req;
-      if (body.operationName.includes("ListBankAccount")) {
+      if (body.hasOwnProperty("operationName") && body.operationName.includes("ListBankAccount")) {
         req.alias = "gqlListBankAccountQuery";
       }
 
-      if (body.operationName.includes("CreateBankAccount")) {
+      if (
+        body.hasOwnProperty("operationName") &&
+        body.operationName.includes("CreateBankAccount")
+      ) {
         req.alias = "gqlCreateBankAccountMutation";
       }
 
-      if (body.operationName.includes("DeleteBankAccount")) {
+      if (
+        body.hasOwnProperty("operationName") &&
+        body.operationName.includes("DeleteBankAccount")
+      ) {
         req.alias = "gqlDeleteBankAccountMutation";
       }
     });
