@@ -8,20 +8,6 @@ describe("User Sign-up and Login", function () {
     cy.task("db:seed");
 
     cy.intercept("POST", "/users").as("signup");
-    cy.intercept("POST", apiGraphQL, (req) => {
-      const { body } = req;
-
-      if (body.hasOwnProperty("query") && body.query.includes("CreateBankAccount")) {
-        req.alias = "gqlCreateBankAccountMutation";
-      }
-
-      if (body.hasOwnProperty("query") && body.query.includes("ListBankAccount")) {
-        req.alias = "gqlListBankAccountQuery";
-      }
-
-      // Check the return of every graphql call to be 200 to prevent flake
-      //req.reply((res) => expect(res.statusCode).to.equal(200));
-    });
   });
 
   it("should redirect unauthenticated user to signin page", function () {
@@ -48,6 +34,20 @@ describe("User Sign-up and Login", function () {
   });
 
   it("should allow a visitor to sign-up, login, and logout", function () {
+    cy.intercept("POST", apiGraphQL, (req) => {
+      const { body } = req;
+
+      if (body.hasOwnProperty("query") && body.query.includes("CreateBankAccount")) {
+        req.alias = "gqlCreateBankAccountMutation";
+      }
+
+      if (body.hasOwnProperty("query") && body.query.includes("ListBankAccount")) {
+        req.alias = "gqlListBankAccountQuery";
+      }
+
+      // Check the return of every graphql call to be 200 to prevent flake
+      req.reply((res) => expect(res.statusCode).to.equal(200));
+    });
     const userInfo = {
       firstName: "Bob",
       lastName: "Ross",
