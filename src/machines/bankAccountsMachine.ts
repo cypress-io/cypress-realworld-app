@@ -21,7 +21,7 @@ export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
            }
           }`,
       });
-      return { results: resp.data.data.ListBankAccount, pageData: {} };
+      return { results: resp.data.data.listBankAccount, pageData: {} };
     },
     deleteData: async (ctx, event: any) => {
       const payload = omit("type", event);
