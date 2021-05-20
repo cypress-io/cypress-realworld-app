@@ -28,8 +28,6 @@ describe("Bank Accounts", function () {
       if (body.hasOwnProperty("operationName") && body.operationName === "DeleteBankAccount") {
         req.alias = "gqlDeleteBankAccountMutation";
       }
-
-      cy.log("REQ alias:", req.alias);
     });
 
     cy.database("find", "users").then((user: User) => {
