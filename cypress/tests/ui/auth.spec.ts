@@ -14,6 +14,10 @@ describe("User Sign-up and Login", function () {
       if (body.hasOwnProperty("operationName") && body.operationName === "CreateBankAccount") {
         req.alias = "gqlCreateBankAccountMutation";
       }
+
+      req.reply((res) => {
+        expect(res.body.errors[0].message).to.equal("");
+      });
     });
   });
 
