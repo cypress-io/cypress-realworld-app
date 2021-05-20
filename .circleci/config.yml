@@ -83,6 +83,7 @@ linux-workflow: &linux-workflow
           - Setup Linux
         post-steps:
           - report-coverage
+        debug: 'cypress:net-stubbing*'
 
     # Run E2E tests in Chrome with mobile device viewport
     - cypress/run:
