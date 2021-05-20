@@ -8,7 +8,7 @@ on:
 jobs:
   install:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node12.18.3-chrome87-ff82
+    container: cypress/browsers:node14.15.0-chrome86-ff82
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -61,7 +61,7 @@ jobs:
   ui-chrome-tests:
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    container: cypress/browsers:node12.18.3-chrome87-ff82
+    container: cypress/browsers:node14.15.0-chrome86-ff82
     needs: install
     strategy:
       # when one test fails, DO NOT cancel the other
@@ -110,7 +110,7 @@ jobs:
   ui-chrome-mobile-tests:
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    container: cypress/browsers:node12.18.3-chrome87-ff82
+    container: cypress/browsers:node14.15.0-chrome86-ff82
     needs: install
     strategy:
       # when one test fails, DO NOT cancel the other
@@ -161,7 +161,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node12.18.3-chrome87-ff82
+      image: cypress/browsers:node14.15.0-chrome86-ff82
       options: --user 1001
     needs: install
     strategy:
@@ -212,7 +212,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node12.18.3-chrome87-ff82
+      image: cypress/browsers:node14.15.0-chrome86-ff82
       options: --user 1001
     needs: install
     strategy:
