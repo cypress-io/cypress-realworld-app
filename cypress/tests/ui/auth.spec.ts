@@ -11,8 +11,8 @@ describe("User Sign-up and Login", function () {
     cy.intercept("POST", apiGraphQL, (req) => {
       const { body } = req;
 
-      if (body.hasOwnProperty("operationName") && body.operationName === "CreateBankAccount") {
-        req.alias = "gqlCreateBankAccountMutation";
+      if (body.hasOwnProperty("query") && body.query.includes("createBankAccount")) {
+        req.alias = "gqlcreateBankAccountMutation";
       }
 
       req.reply((res) => {
@@ -89,7 +89,7 @@ describe("User Sign-up and Login", function () {
     cy.visualSnapshot("About to complete User Onboarding");
     cy.getBySelLike("submit").click();
 
-    cy.wait("@gqlCreateBankAccountMutation");
+    cy.wait("@gqlcreateBankAccountMutation");
 
     cy.getBySel("user-onboarding-dialog-title").should("contain", "Finished");
     cy.getBySel("user-onboarding-dialog-content").should("contain", "You're all set!");

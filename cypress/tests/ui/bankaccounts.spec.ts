@@ -17,16 +17,16 @@ describe("Bank Accounts", function () {
 
     cy.intercept("POST", apiGraphQL, (req) => {
       const { body } = req;
-      if (body.hasOwnProperty("operationName") && body.operationName === "ListBankAccount") {
-        req.alias = "gqlListBankAccountQuery";
+      if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
+        req.alias = "gqllistBankAccountQuery";
       }
 
-      if (body.hasOwnProperty("operationName") && body.operationName === "CreateBankAccount") {
-        req.alias = "gqlCreateBankAccountMutation";
+      if (body.hasOwnProperty("query") && body.query.includes("createBankAccount")) {
+        req.alias = "gqlcreateBankAccountMutation";
       }
 
-      if (body.hasOwnProperty("operationName") && body.operationName === "DeleteBankAccount") {
-        req.alias = "gqlDeleteBankAccountMutation";
+      if (body.hasOwnProperty("query") && body.query.includes("deleteBankAccount")) {
+        req.alias = "gqldeleteBankAccountMutation";
       }
 
       req.reply((res) => {
@@ -62,7 +62,7 @@ describe("Bank Accounts", function () {
     cy.visualSnapshot("Fill out New Bank Account Form");
     cy.getBySelLike("submit").click();
 
-    cy.wait("@gqlCreateBankAccountMutation");
+    cy.wait("@gqlcreateBankAccountMutation");
 
     cy.getBySelLike("bankaccount-list-item")
       .should("have.length", 2)
@@ -138,7 +138,7 @@ describe("Bank Accounts", function () {
     cy.visit("/bankaccounts");
     cy.getBySelLike("delete").first().click();
 
-    cy.wait("@gqlDeleteBankAccountMutation");
+    cy.wait("@gqldeleteBankAccountMutation");
     cy.getBySelLike("list-item").children().contains("Deleted");
     cy.visualSnapshot("Soft Delete Bank Account");
   });
@@ -147,8 +147,8 @@ describe("Bank Accounts", function () {
   it("renders an empty bank account list state with onboarding modal", function () {
     cy.intercept("POST", apiGraphQL, (req) => {
       const { body } = req;
-      if (body.hasOwnProperty("operationName") && body.operationName === "ListBankAccount") {
-        req.alias = "gqlListBankAccountQuery";
+      if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
+        req.alias = "gqllistBankAccountQuery";
         req.continue((res) => {
           res.body.data.listBankAccount = [];
         });
@@ -156,7 +156,7 @@ describe("Bank Accounts", function () {
     });
 
     cy.visit("/bankaccounts");
-    cy.wait("@gqlListBankAccountQuery");
+    cy.wait("@gqllistBankAccountQuery");
 
     cy.getBySel("bankaccount-list").should("not.exist");
     cy.getBySel("empty-list-header").should("contain", "No Bank Accounts");
