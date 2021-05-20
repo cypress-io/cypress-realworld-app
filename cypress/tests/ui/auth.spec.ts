@@ -16,7 +16,10 @@ describe("User Sign-up and Login", function () {
       }
 
       req.reply((res) => {
-        expect(res.body.errors[0].message).to.equal("");
+        if (res.body.hasOwnProperty("errors")) {
+          // @ts-ignore
+          expect(res.body.errors[0].message).to.be.empty;
+        }
       });
     });
   });
