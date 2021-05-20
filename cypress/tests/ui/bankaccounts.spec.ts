@@ -29,6 +29,8 @@ describe("Bank Accounts", function () {
         req.alias = "gqldeleteBankAccountMutation";
       }
 
+      expect(body.hasOwnProperty("operationName")).to.exist;
+
       req.reply((res) => {
         if (res.body.hasOwnProperty("errors")) {
           // @ts-ignore
