@@ -1,5 +1,6 @@
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
+import { hasQuery, aliasQuery, aliasMutation } from "../../utils/graphql-test-utils";
 
 const apiGraphQL = `${Cypress.env("apiUrl")}/graphql`;
 
@@ -17,17 +18,9 @@ describe("Bank Accounts", function () {
 
     cy.intercept("POST", apiGraphQL, (req) => {
       const { body } = req;
-      if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
-        req.alias = "gqlListBankAccountQuery";
-      }
-
-      if (body.hasOwnProperty("query") && body.query.includes("createBankAccount")) {
-        req.alias = "gqlCreateBankAccountMutation";
-      }
-
-      if (body.hasOwnProperty("query") && body.query.includes("deleteBankAccount")) {
-        req.alias = "gqlDeleteBankAccountMutation";
-      }
+      aliasQuery(req, 'listBankAccount')
+      aliasQuery(req, 'createBankAccount')
+      aliasMutation(req, 'deleteBankAccount')
     });
 
     cy.database("find", "users").then((user: User) => {
@@ -139,8 +132,7 @@ describe("Bank Accounts", function () {
   // TODO: [enhancement] the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
   it("renders an empty bank account list state with onboarding modal", function () {
     cy.intercept("POST", apiGraphQL, (req) => {
-      const { body } = req;
-      if (body.hasOwnProperty("query") && body.query.includes("listBankAccount")) {
+      if (hasQuery("listBankAcount")) {
         req.alias = "gqlListBankAccountQuery";
         req.continue((res) => {
           res.body.data.listBankAccount = [];
