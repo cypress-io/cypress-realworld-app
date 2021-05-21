@@ -77,8 +77,6 @@ jobs:
       - name: "UI Tests - Chrome"
         uses: cypress-io/github-action@v2
         with:
-          # we have already installed all dependencies above
-          install: false
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
@@ -121,8 +119,6 @@ jobs:
       - name: "UI Tests - Chrome - Mobile"
         uses: cypress-io/github-action@v2
         with:
-          # we have already installed all dependencies above
-          install: false
           config: "viewportWidth=375,viewportHeight=667"
           start: yarn start:ci
           wait-on: "http://localhost:3000"
@@ -168,8 +164,6 @@ jobs:
       - name: "UI Tests - Firefox"
         uses: cypress-io/github-action@v2
         with:
-          # we have already installed all dependencies above
-          install: false
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
@@ -214,8 +208,6 @@ jobs:
       - name: "UI Tests - Firefox - Mobile"
         uses: cypress-io/github-action@v2
         with:
-          # we have already installed all dependencies above
-          install: false
           config: "viewportWidth=375,viewportHeight=667"
           start: yarn start:ci
           wait-on: "http://localhost:3000"
@@ -258,8 +250,6 @@ jobs:
       - name: "UI Tests - Electron - Windows"
         uses: cypress-io/github-action@v2
         with:
-          # we have already installed all dependencies above
-          install: false
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
