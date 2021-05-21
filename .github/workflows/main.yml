@@ -13,16 +13,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # - uses: actions/cache@v2
-      #   id: yarn-and-build-cache
-      #   with:
-      #     path: |
-      #       ~/.cache/Cypress
-      #       build
-      #       node_modules
-      #     key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-node_modules-build-
+      - uses: actions/cache@v2
+        id: yarn-and-build-cache
+        with:
+          path: |
+            ~/.cache/Cypress
+            build
+          key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-build-
 
       - name: Cypress install
         uses: cypress-io/github-action@v2
@@ -41,16 +40,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # - uses: actions/cache@v2
-      #   id: yarn-and-build-cache-win
-      #   with:
-      #     path: |
-      #       ~/.cache/Cypress
-      #       build
-      #       node_modules
-      #     key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-node_modules-build-
+      - uses: actions/cache@v2
+        id: yarn-and-build-cache-win
+        with:
+          path: |
+            ~/.cache/Cypress
+            build
+          key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-build-
 
       - name: Cypress install
         uses: cypress-io/github-action@v2
@@ -76,16 +74,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # - uses: actions/cache@v2
-      #   id: yarn-and-build-cache
-      #   with:
-      #     path: |
-      #       ~/.cache/Cypress
-      #       build
-      #       node_modules
-      #     key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-node_modules-build-
+      - uses: actions/cache@v2
+        id: yarn-and-build-cache
+        with:
+          path: |
+            ~/.cache/Cypress
+            build
+          key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-build-
 
       - name: "UI Tests - Chrome"
         uses: cypress-io/github-action@v2
@@ -125,16 +122,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # - uses: actions/cache@v2
-      #   id: yarn-and-build-cache
-      #   with:
-      #     path: |
-      #       ~/.cache/Cypress
-      #       build
-      #       node_modules
-      #     key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-node_modules-build-
+      - uses: actions/cache@v2
+        id: yarn-and-build-cache
+        with:
+          path: |
+            ~/.cache/Cypress
+            build
+          key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-build-
 
       - name: "UI Tests - Chrome - Mobile"
         uses: cypress-io/github-action@v2
@@ -177,16 +173,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # - uses: actions/cache@v2
-      #   id: yarn-and-build-cache
-      #   with:
-      #     path: |
-      #       ~/.cache/Cypress
-      #       build
-      #       node_modules
-      #     key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-node_modules-build-
+      - uses: actions/cache@v2
+        id: yarn-and-build-cache
+        with:
+          path: |
+            ~/.cache/Cypress
+            build
+          key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-build-
 
       - name: "UI Tests - Firefox"
         uses: cypress-io/github-action@v2
@@ -228,16 +223,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # - uses: actions/cache@v2
-      #   id: yarn-and-build-cache
-      #   with:
-      #     path: |
-      #       ~/.cache/Cypress
-      #       build
-      #       node_modules
-      #     key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-node_modules-build-
+      - uses: actions/cache@v2
+        id: yarn-and-build-cache
+        with:
+          path: |
+            ~/.cache/Cypress
+            build
+          key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-build-
 
       - name: "UI Tests - Firefox - Mobile"
         uses: cypress-io/github-action@v2
@@ -283,7 +277,6 @@ jobs:
           path: |
             ~/.cache/Cypress
             build
-            node_modules
           key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-build-
