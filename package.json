@@ -85,7 +85,7 @@
     "concurrently": "6.1.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-    "cypress": "7.2.0",
+    "cypress": "7.3.0",
     "dotenv": "8.6.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-cypress": "2.11.3",
