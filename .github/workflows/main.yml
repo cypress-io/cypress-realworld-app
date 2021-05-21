@@ -13,17 +13,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - uses: actions/cache@v2
-        id: yarn-and-build-cache
-        with:
-          path: |
-            ~/.cache/Cypress
-            build
-            node_modules
-          key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-build-
-
       - name: Cypress install
         uses: cypress-io/github-action@v2
         with:
@@ -35,28 +24,31 @@ jobs:
       - run: yarn test:unit:ci
       - run: yarn build:ci
 
+      - name: Save build folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          if-no-files-found: error
+          path: build
+
   install-windows:
     runs-on: windows-2019
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - uses: actions/cache@v2
-        id: yarn-and-build-cache-win
-        with:
-          path: |
-            ~/.cache/Cypress
-            build
-            node_modules
-          key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-build-
-
       - name: Cypress install
         uses: cypress-io/github-action@v2
         with:
           runTests: false
       - run: yarn build:ci
+
+      - name: Save build folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          if-no-files-found: error
+          path: build
 
   ui-chrome-tests:
     timeout-minutes: 15
@@ -76,22 +68,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - uses: actions/cache@v2
-        id: yarn-and-build-cache
+      - name: Download the build folders
+        uses: actions/download-artifact@v2
         with:
-          path: |
-            ~/.cache/Cypress
-            build
-            node_modules
-          key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-build-
+          name: build
+          path: build
 
       - name: "UI Tests - Chrome"
         uses: cypress-io/github-action@v2
         with:
-          # we have already installed all dependencies above
-          install: false
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
@@ -125,22 +110,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - uses: actions/cache@v2
-        id: yarn-and-build-cache
+      - name: Download the build folders
+        uses: actions/download-artifact@v2
         with:
-          path: |
-            ~/.cache/Cypress
-            build
-            node_modules
-          key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-build-
+          name: build
+          path: build
 
       - name: "UI Tests - Chrome - Mobile"
         uses: cypress-io/github-action@v2
         with:
-          # we have already installed all dependencies above
-          install: false
           config: "viewportWidth=375,viewportHeight=667"
           start: yarn start:ci
           wait-on: "http://localhost:3000"
@@ -177,22 +155,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - uses: actions/cache@v2
-        id: yarn-and-build-cache
+      - name: Download the build folders
+        uses: actions/download-artifact@v2
         with:
-          path: |
-            ~/.cache/Cypress
-            build
-            node_modules
-          key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-build-
+          name: build
+          path: build
 
       - name: "UI Tests - Firefox"
         uses: cypress-io/github-action@v2
         with:
-          # we have already installed all dependencies above
-          install: false
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
@@ -228,22 +199,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - uses: actions/cache@v2
-        id: yarn-and-build-cache
+      - name: Download the build folders
+        uses: actions/download-artifact@v2
         with:
-          path: |
-            ~/.cache/Cypress
-            build
-            node_modules
-          key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-build-
+          name: build
+          path: build
 
       - name: "UI Tests - Firefox - Mobile"
         uses: cypress-io/github-action@v2
         with:
-          # we have already installed all dependencies above
-          install: false
           config: "viewportWidth=375,viewportHeight=667"
           start: yarn start:ci
           wait-on: "http://localhost:3000"
@@ -277,22 +241,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - uses: actions/cache@v2
-        id: yarn-and-build-cache-win
+      - name: Download the build folders
+        uses: actions/download-artifact@v2
         with:
-          path: |
-            ~/.cache/Cypress
-            build
-            node_modules
-          key: ${{ runner.os }}-node_modules-build-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-build-
+          name: build
+          path: build
 
       - name: "UI Tests - Electron - Windows"
         uses: cypress-io/github-action@v2
         with:
-          # we have already installed all dependencies above
-          install: false
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
