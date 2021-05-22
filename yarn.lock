@@ -5072,10 +5072,17 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.165.tgz#74d55d947452e2de0742bad65270433b63a8c30f"
   integrity sha512-tjSSOTHhI5mCHTy/OOXYIhi2Wt1qcbHmuXD1Ha7q70CgI/I71afO4XtLb/cVexki1oVYchpul/TOuu3Arcdxrg==
 
-"@types/lowdb@*", "@types/lowdb@1.0.9":
+"@types/lowdb@*":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@types/lowdb/-/lowdb-1.0.9.tgz#1f6c27df72dd1c64522cc9a4566796d2dd058d38"
   integrity sha512-LBRG5EPXFOJDoJc9jACstMhtMP+u+UkPYllBeGQXXKiaHc+uzJs9+/Aynb/5KkX33DtrIiKyzNVTPQc/4RcD6A==
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lowdb@1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@types/lowdb/-/lowdb-1.0.10.tgz#6f9916d85fb535b3ed2dbf24c4347b3af9b11a72"
+  integrity sha512-DmmY+UZAAc2cs4pYnr7WOp9tFYrDeQ2cKSC5JuAQ2ai40IctBT/ef+Qm2ulLOfqR7POqR+5hnAouU7hojCoMCg==
   dependencies:
     "@types/lodash" "*"
 

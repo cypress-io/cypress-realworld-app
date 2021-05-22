@@ -65,7 +65,7 @@
     "@types/jsonwebtoken": "8.5.1",
     "@types/jwt-decode": "2.2.1",
     "@types/lodash": "4.14.168",
-    "@types/lowdb": "1.0.9",
+    "@types/lowdb": "1.0.10",
     "@types/morgan": "1.9.2",
     "@types/node": "14.14.44",
     "@types/passport": "1.0.6",
