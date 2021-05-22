@@ -58,7 +58,7 @@
     "@types/express-paginate": "1.0.0",
     "@types/express-serve-static-core": "4.17.2",
     "@types/express-session": "1.17.3",
-    "@types/faker": "5.5.4",
+    "@types/faker": "5.5.5",
     "@types/http-proxy-middleware": "0.19.3",
     "@types/jest": "26.0.23",
     "@types/json-server": "0.14.3",
