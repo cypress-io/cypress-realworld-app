@@ -15,12 +15,17 @@ commands:
   report-coverage:
     description: |
       Store coverage report as an artifact and send it to Codecov service.
+    parameters:
+      using_windows:
+        type: boolean
+        default: true
     steps:
       - store_artifacts:
           path: coverage
       - run: npx nyc report --reporter=text || true
       - codecov/upload:
           file: coverage/coverage-final.json
+          using_windows: << parameters.using_windows >>
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 linux-workflow: &linux-workflow
@@ -196,7 +201,8 @@ windows-workflow: &windows-workflow
         requires:
           - Setup Windows
         post-steps:
-          - report-coverage
+          - report-coverage:
+              using_windows: true
         no-workspace: true
         timeout: 30m
 
