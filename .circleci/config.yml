@@ -18,7 +18,7 @@ commands:
     parameters:
       using_windows:
         type: boolean
-        default: true
+        default: false
     steps:
       - store_artifacts:
           path: coverage
