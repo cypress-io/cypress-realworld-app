@@ -264,6 +264,7 @@ describe("Transaction Feed", function () {
           cy.getBySelLike("filter-date-clear-button").click({
             force: true,
           });
+          cy.getBySelLike("filter-date-range-button").should("contain", "ALL");
 
           cy.get("@unfilteredResults").then((unfilteredResults) => {
             cy.wait(`@${feed.routeAlias}`)
