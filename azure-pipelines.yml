@@ -1,19 +1,45 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+jobs:
+  # Example job that runs end-to-end tests using Cypress test runner
+  #   https://www.cypress.io/
 
-trigger:
-- develop
+  # Job names can contain alphanumeric characters and '_', cannot start with a number
+  - job: Cypress_e2e_tests
+    pool:
+      vmImage: "ubuntu-latest"
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "12.x"
+          displayName: "Install Node.js"
 
-pool:
-  vmImage: ubuntu-latest
+      # NPM modules and Cypress binary should be cached
+      # otherwise the install will be too slow
+      # https://docs.microsoft.com/en-us/azure/devops/pipelines/caching/?view=azure-devops
+      # since the username / user home directory are not available via system variables
+      # (there is even an open question about it)
+      # https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops
+      # just use "/home/vsts" for now
+      - task: CacheBeta@1
+        inputs:
+          key: npm | $(Agent.OS) | package-lock.json
+          path: /home/vsts/.npm
+          restoreKeys: npm | $(Agent.OS) | package-lock.json
+        displayName: Cache NPM packages
+      - task: CacheBeta@1
+        inputs:
+          key: cypress | $(Agent.OS) | package-lock.json
+          path: /home/vsts/.cache/Cypress
+          restoreKeys: cypress | $(Agent.OS) | package-lock.json
+        displayName: Cache Cypress binary
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+      - script: npm ci
+        displayName: "Install NPM dependencies"
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+      - script: npm run cy:verify
+        displayName: "Cypress verify"
+
+      # The next command starts the server and runs Cypress end-to-end tests against it.
+      # The test artifacts (video, screenshots, test output) will be uploaded to Cypress dashboard
+      # To record on Cypress dashboard we need to set CYPRESS_RECORD_KEY environment variable
+      - script: npm run test:ci:record:windows
+        displayName: "Run Cypress tests"
