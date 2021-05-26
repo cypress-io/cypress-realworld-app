@@ -160,7 +160,7 @@ windows-workflow: &windows-workflow
         executor:
           # executor comes from the "windows" orb
           name: win/default
-          shell: bash.exe
+          shell: powershell.exe
           size: large
         pre-steps:
           - run:
@@ -189,7 +189,7 @@ windows-workflow: &windows-workflow
         executor:
           # executor comes from the "windows" orb
           name: win/default
-          shell: bash.exe
+          shell: powershell.exe
         wait-on: "http://localhost:3000"
         yarn: true
         start: yarn start:ci
