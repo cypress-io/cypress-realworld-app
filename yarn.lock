@@ -4495,10 +4495,10 @@
     jwks-rsa "1.12.1"
     njwt "^1.0.0"
 
-"@okta/okta-auth-js@4.9.0":
-  version "4.9.0"
-  resolved "https://registry.yarnpkg.com/@okta/okta-auth-js/-/okta-auth-js-4.9.0.tgz#4e2f9605298ae8306244f4d88200632d2e1d16e7"
-  integrity sha512-AAdTOFl+t/ygrxlBO2sJcgCaSGlpVaKplXyTLhYYI5r5aJ30VRTWkVW0q8sAnfEIr1T3yrhXq8T0qbWPBTAV/w==
+"@okta/okta-auth-js@4.9.2":
+  version "4.9.2"
+  resolved "https://registry.yarnpkg.com/@okta/okta-auth-js/-/okta-auth-js-4.9.2.tgz#95ee2ade7dd81d10707db5a555fd5f51b2969b5d"
+  integrity sha512-YgNN4IUK3haaMUD0ahBHlCU8OV4btY2pvuEG2+hcWPhhOZrdfkW68Gl0Q3mYOb1wi9wrKnnznbKfG/kjOz8i2Q==
   dependencies:
     "@babel/runtime" "^7.12.5"
     Base64 "1.1.0"
