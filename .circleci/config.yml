@@ -15,10 +15,6 @@ commands:
   report-coverage:
     description: |
       Store coverage report as an artifact and send it to Codecov service.
-    parameters:
-      using_windows:
-        type: boolean
-        default: false
     steps:
       - store_artifacts:
           path: coverage
