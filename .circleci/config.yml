@@ -196,8 +196,7 @@ windows-workflow: &windows-workflow
         requires:
           - Setup Windows
         post-steps:
-          - report-coverage:
-              using_windows: true
+          - report-coverage
         no-workspace: true
         timeout: 30m
 
