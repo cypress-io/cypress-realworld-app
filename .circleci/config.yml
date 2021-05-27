@@ -21,7 +21,6 @@ commands:
       - run: npx nyc report --reporter=text || true
       - codecov/upload:
           file: coverage/coverage-final.json
-          using_windows: << parameters.using_windows >>
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 linux-workflow: &linux-workflow
