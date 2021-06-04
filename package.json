@@ -93,7 +93,7 @@
     "express-graphql": "0.12.0",
     "express-jwt": "6.0.0",
     "express-paginate": "1.0.2",
-    "express-session": "1.17.1",
+    "express-session": "1.17.2",
     "express-validator": "6.11.1",
     "faker": "5.5.3",
     "fuse.js": "6.4.6",
