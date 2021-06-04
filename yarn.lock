@@ -12520,10 +12520,10 @@ json5@^2.1.0, json5@^2.1.2:
   dependencies:
     minimist "^1.2.5"
 
-json@10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/json/-/json-10.0.0.tgz#c49a939d4abc7067cc225419d5dd17ab7bf2f66c"
-  integrity sha512-iK7tAZtpoghibjdB1ncCWykeBMmke3JThUe+rnkD4qkZaglOIQ70Pw7r5UJ4lyUT+7gnw7ehmmLUHDuhqzQD+g==
+json@11.0.0:
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/json/-/json-11.0.0.tgz#2e84493134e2f42c131165aa22a124df38b3a3ee"
+  integrity sha512-N/ITv3Yw9Za8cGxuQqSqrq6RHnlaHWZkAFavcfpH/R52522c26EbihMxnY7A1chxfXJ4d+cEFIsyTgfi9GihrA==
 
 jsonfile@^4.0.0:
   version "4.0.0"
