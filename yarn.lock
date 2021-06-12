@@ -4497,7 +4497,7 @@
     jwks-rsa "1.12.1"
     njwt "^1.0.0"
 
-"@okta/okta-auth-js@4.9.2":
+"@okta/okta-auth-js@4.9.2", "@okta/okta-auth-js@^4.8.0":
   version "4.9.2"
   resolved "https://registry.yarnpkg.com/@okta/okta-auth-js/-/okta-auth-js-4.9.2.tgz#95ee2ade7dd81d10707db5a555fd5f51b2969b5d"
   integrity sha512-YgNN4IUK3haaMUD0ahBHlCU8OV4btY2pvuEG2+hcWPhhOZrdfkW68Gl0Q3mYOb1wi9wrKnnznbKfG/kjOz8i2Q==
@@ -4533,12 +4533,13 @@
     webcrypto-shim "^0.1.5"
     xhr2 "0.1.3"
 
-"@okta/okta-react@4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@okta/okta-react/-/okta-react-4.1.0.tgz#f450db6d4abe61167663da5d1d4b22c46c8884bb"
-  integrity sha512-Y6JUYeUtoiXUevgrKoi/x/xhLQUoElox9pBdzZqrbfjcizVwGNi5+oPSvSTgtbQ/J73nPI48jALMxj6nYfDDTg==
+"@okta/okta-react@5.1.2":
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@okta/okta-react/-/okta-react-5.1.2.tgz#d618406d7e588f62e2ace11ac0f2418649af446e"
+  integrity sha512-t1SOm5zyfep2kgkdYje2q3c9cQmpiJrGNDEBESQ9GgljdgWKvEkOWl6N9iS8eq+O0w22bbuV+tqFbY/ClJGFOA==
   dependencies:
     "@babel/runtime" "^7.11.2"
+    "@okta/okta-auth-js" "^4.8.0"
 
 "@panva/asn1.js@^1.0.0":
   version "1.0.0"
