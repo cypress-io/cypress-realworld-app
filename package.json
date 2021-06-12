@@ -103,7 +103,7 @@
     "istanbul-lib-coverage": "3.0.0",
     "json": "11.0.0",
     "jwks-rsa": "2.0.3",
-    "lowdb": "1.0.0",
+    "lowdb": "2.1.0",
     "morgan": "1.10.0",
     "ncp": "2.0.0",
     "nodemon": "2.0.7",
