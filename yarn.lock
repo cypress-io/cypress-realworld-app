@@ -4922,10 +4922,10 @@
   resolved "https://registry.yarnpkg.com/@types/cors/-/cors-2.8.10.tgz#61cc8469849e5bcdd0c7044122265c39cec10cf4"
   integrity sha512-C7srjHiVG3Ey1nR6d511dtDkCEjxuN9W1HWAEjGq8kpcwmNM6JJkpC0xvabM7BXTG2wDq8Eu33iH9aQKa7IvLQ==
 
-"@types/dinero.js@1.6.5":
-  version "1.6.5"
-  resolved "https://registry.yarnpkg.com/@types/dinero.js/-/dinero.js-1.6.5.tgz#bde1cb8384f52d73a8bb951d2b66d8a5b59c50df"
-  integrity sha512-mDpUUr/PA68nrtb+ZnOa7kIPkbPVa7yCfB0EsFIWwcZrKYGlbp1F8roAHyQSehYNuaByjiBKU6B9iqPeRgUyiA==
+"@types/dinero.js@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@types/dinero.js/-/dinero.js-1.8.0.tgz#2ae41fc15c92dec3e66bdd9d694ae7252d7796ba"
+  integrity sha512-TMrK/Px4ep4nst8Mwq9Z4/dd4W9NvFdHRx5xAQwiWjzcHcus//kgA21bWaj0UhCHzyprwh19g5Mk2341UXjP0A==
 
 "@types/eslint@^7.2.6":
   version "7.2.6"
