@@ -5088,10 +5088,10 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
 
-"@types/jsonwebtoken@8.5.1":
-  version "8.5.1"
-  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-8.5.1.tgz#56958cb2d80f6d74352bd2e501a018e2506a8a84"
-  integrity sha512-rNAPdomlIUX0i0cg2+I+Q1wOUr531zHBQ+cV/28PJ39bSPKjahatZZ2LMuhiguETkCgLVzfruw/ZvNMNkKoSzw==
+"@types/jsonwebtoken@8.5.2":
+  version "8.5.2"
+  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-8.5.2.tgz#eb71c717b3b8681bb85fbd2950c9c4c5d4506748"
+  integrity sha512-X8BOCkp+WJVNYCYIBugREtVZa4Y09Or9HDx6xqRZem5F8jJV8FuJgNessXyMuv9+U8pjnvdezASwU28uw+1scw==
   dependencies:
     "@types/node" "*"
 

@@ -62,7 +62,7 @@
     "@types/http-proxy-middleware": "0.19.3",
     "@types/jest": "26.0.23",
     "@types/json-server": "0.14.3",
-    "@types/jsonwebtoken": "8.5.1",
+    "@types/jsonwebtoken": "8.5.2",
     "@types/jwt-decode": "2.2.1",
     "@types/lodash": "4.14.170",
     "@types/lowdb": "1.0.10",
