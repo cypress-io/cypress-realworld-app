@@ -55,6 +55,7 @@ const AppCognito: React.FC = /* istanbul ignore next */ () => {
         console.log("AppCognito authService.onEvent done.invoke.performLogout");
         await Auth.signOut();
       }
+    });
   }, []);
 
   const isLoggedIn =
