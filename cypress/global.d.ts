@@ -129,7 +129,7 @@ declare namespace Cypress {
     /**
      * Switch current user by logging out current user and logging as user with specified username
      */
-    switchUser(username: string): Chainable<any>;
+    switchUserByXstate(username: string): Chainable<any>;
 
     /**
      * Create Transaction via bypassing UI and using XState createTransactionService

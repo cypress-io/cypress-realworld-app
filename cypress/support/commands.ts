@@ -183,7 +183,7 @@ Cypress.Commands.add("logoutByXstate", () => {
   });
 });
 
-Cypress.Commands.add("switchUser", (username) => {
+Cypress.Commands.add("switchUserByXstate", (username) => {
   cy.logoutByXstate();
   cy.location("pathname").should("equal", "/signin");
   return cy.loginByXstate(username).then(() => {
