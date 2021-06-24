@@ -29,6 +29,10 @@ declare namespace Cypress {
     query: object | [object];
   };
 
+  type LoginOptions = {
+    rememberUser: boolean;
+  };
+
   interface Chainable {
     /**
      *  Window object with additional properties used during test.
@@ -94,7 +98,7 @@ declare namespace Cypress {
     /**
      * Logs-in user by using UI
      */
-    login(username: string, password: string, rememberUser?: boolean): void;
+    login(username: string, password: string, loginOptions?: LoginOptions): void;
 
     /**
      * Logs-in user by using API request
@@ -129,7 +133,7 @@ declare namespace Cypress {
     /**
      * Switch current user by logging out current user and logging as user with specified username
      */
-    switchUser(username: string): Chainable<any>;
+    switchUserByXstate(username: string): Chainable<any>;
 
     /**
      * Create Transaction via bypassing UI and using XState createTransactionService

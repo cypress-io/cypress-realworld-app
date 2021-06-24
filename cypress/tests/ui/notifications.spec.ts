@@ -54,7 +54,7 @@ describe("Notifications", function () {
       cy.contains(likesCountSelector, 1);
       cy.visualSnapshot("Like Count Incremented");
 
-      cy.switchUser(ctx.userB.username);
+      cy.switchUserByXstate(ctx.userB.username);
       cy.visualSnapshot(`Switch to User ${ctx.userB.username}`);
 
       cy.wait("@getNotifications")
@@ -98,7 +98,7 @@ describe("Notifications", function () {
       cy.contains(likesCountSelector, 1);
       cy.visualSnapshot("Like Count Incremented");
 
-      cy.switchUser(ctx.userA.username);
+      cy.switchUserByXstate(ctx.userA.username);
       cy.visualSnapshot(`Switch to User ${ctx.userA.username}`);
 
       cy.getBySelLike("notifications-link").click();
@@ -114,7 +114,7 @@ describe("Notifications", function () {
         .and("contain", "liked");
       cy.visualSnapshot("User A Notified of User B Like");
 
-      cy.switchUser(ctx.userB.username);
+      cy.switchUserByXstate(ctx.userB.username);
       cy.visualSnapshot(`Switch to User ${ctx.userB.username}`);
 
       cy.getBySelLike("notifications-link").click();
@@ -143,7 +143,7 @@ describe("Notifications", function () {
 
       cy.wait("@postComment");
 
-      cy.switchUser(ctx.userB.username);
+      cy.switchUserByXstate(ctx.userB.username);
       cy.visualSnapshot(`Switch to User ${ctx.userB.username}`);
 
       cy.getBySelLike("notifications-link").click();
@@ -172,7 +172,7 @@ describe("Notifications", function () {
 
       cy.wait("@postComment");
 
-      cy.switchUser(ctx.userA.username);
+      cy.switchUserByXstate(ctx.userA.username);
       cy.visualSnapshot("Switch to User A");
       cy.visualSnapshot(`Switch to User ${ctx.userA.username}`);
 
@@ -187,7 +187,7 @@ describe("Notifications", function () {
         .and("contain", "commented");
       cy.visualSnapshot("User A Notified of User C Comment");
 
-      cy.switchUser(ctx.userB.username);
+      cy.switchUserByXstate(ctx.userB.username);
       cy.visualSnapshot(`Switch to User ${ctx.userB.username}`);
 
       cy.getBySelLike("notifications-link").click();
@@ -212,7 +212,7 @@ describe("Notifications", function () {
       });
       cy.wait("@createTransaction");
 
-      cy.switchUser(ctx.userB.username);
+      cy.switchUserByXstate(ctx.userB.username);
       cy.visualSnapshot(`Switch to User ${ctx.userB.username}`);
 
       cy.getBySelLike("notifications-link").click();
@@ -238,7 +238,7 @@ describe("Notifications", function () {
       });
       cy.wait("@createTransaction");
 
-      cy.switchUser(ctx.userC.username);
+      cy.switchUserByXstate(ctx.userC.username);
       cy.visualSnapshot(`Switch to User ${ctx.userC.username}`);
 
       cy.getBySelLike("notifications-link").click();
