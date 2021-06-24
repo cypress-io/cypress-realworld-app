@@ -25,14 +25,14 @@ describe("User Sign-up and Login", function () {
 
   it("should redirect to the home page after login", function () {
     cy.database("find", "users").then((user: User) => {
-      cy.login(user.username, "s3cret", true);
+      cy.login(user.username, "s3cret", { rememberUser: true });
     });
     cy.location("pathname").should("equal", "/");
   });
 
   it("should remember a user for 30 days after login", function () {
     cy.database("find", "users").then((user: User) => {
-      cy.login(user.username, "s3cret", true);
+      cy.login(user.username, "s3cret", { rememberUser: true });
     });
 
     // Verify Session Cookie
