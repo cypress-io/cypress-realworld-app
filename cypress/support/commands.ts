@@ -162,8 +162,6 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
 });
 
 Cypress.Commands.add("logoutByXstate", () => {
-  cy.intercept("POST", "/logout").as("logoutUser");
-
   const log = Cypress.log({
     name: "logoutByXstate",
     displayName: "LOGOUT BY XSTATE",
@@ -177,15 +175,17 @@ Cypress.Commands.add("logoutByXstate", () => {
     win.authService.send("LOGOUT");
   });
 
-  return cy.wait("@logoutUser").then(() => {
-    log.snapshot("after");
-    log.end();
-  });
+  return cy
+    .location("pathname")
+    .should("equal", "/signin")
+    .then(() => {
+      log.snapshot("after");
+      log.end();
+    });
 });
 
 Cypress.Commands.add("switchUserByXstate", (username) => {
   cy.logoutByXstate();
-  cy.location("pathname").should("equal", "/signin");
   return cy.loginByXstate(username).then(() => {
     if (isMobile()) {
       cy.getBySel("sidenav-toggle").click();
