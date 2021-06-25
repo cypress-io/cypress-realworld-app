@@ -4,7 +4,8 @@ import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object, mixed } from "yup";
 import { User, DefaultPrivacyLevel, UserSettingsPayload } from "../models";
 
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 const DefaultPrivacyLevelValues = Object.values(DefaultPrivacyLevel);
 
