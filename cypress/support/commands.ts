@@ -40,51 +40,68 @@ Cypress.Commands.add("getBySelLike", (selector, ...args) => {
   return cy.get(`[data-test*=${selector}]`, ...args);
 });
 
-Cypress.Commands.add("login", (username, password, { rememberUser = false } = {}) => {
-  const signinPath = "/signin";
-  const log = Cypress.log({
-    name: "login",
-    displayName: "LOGIN",
-    message: [`🔐 Authenticating | ${username}`],
-    // @ts-ignore
-    autoEnd: false,
-  });
+Cypress.Commands.add(
+  "login",
+  (username, password, { rememberUser = false, cacheSession = true } = {}) => {
+    cy.intercept("POST", "/login").as("loginUser");
+    cy.intercept("GET", "checkAuth").as("getUserProfile");
 
-  cy.intercept("POST", "/login").as("loginUser");
-  cy.intercept("GET", "checkAuth").as("getUserProfile");
+    const login = () => {
+      const signinPath = "/signin";
+      const log = Cypress.log({
+        name: "login",
+        displayName: "LOGIN",
+        message: [`🔐 Authenticating | ${username}`],
+        // @ts-ignore
+        autoEnd: false,
+      });
 
-  cy.location("pathname", { log: false }).then((currentPath) => {
-    if (currentPath !== signinPath) {
-      cy.visit(signinPath);
+      cy.location("pathname", { log: false }).then((currentPath) => {
+        if (currentPath !== signinPath) {
+          cy.visit(signinPath);
+        }
+      });
+
+      log.snapshot("before");
+
+      cy.getBySel("signin-username").type(username);
+      cy.getBySel("signin-password").type(password);
+
+      if (rememberUser) {
+        cy.getBySel("signin-remember-me").find("input").check();
+      }
+
+      cy.getBySel("signin-submit").click();
+      cy.wait("@loginUser").then((loginUser: any) => {
+        log.set({
+          consoleProps() {
+            return {
+              username,
+              password,
+              rememberUser,
+              userId: loginUser.response.statusCode !== 401 && loginUser.response.body.user.id,
+            };
+          },
+        });
+
+        log.snapshot("after");
+        log.end();
+      });
+    };
+
+    if (cacheSession) {
+      cy.session([username, password, rememberUser], login, {
+        validate() {
+          cy.visit("/personal");
+          cy.location("pathname").should("equal", "/personal");
+        },
+      });
+      cy.visit("/");
+    } else {
+      login();
     }
-  });
-
-  log.snapshot("before");
-
-  cy.getBySel("signin-username").type(username);
-  cy.getBySel("signin-password").type(password);
-
-  if (rememberUser) {
-    cy.getBySel("signin-remember-me").find("input").check();
   }
-
-  cy.getBySel("signin-submit").click();
-  cy.wait("@loginUser").then((loginUser: any) => {
-    log.set({
-      consoleProps() {
-        return {
-          username,
-          password,
-          rememberUser,
-          userId: loginUser.response.statusCode !== 401 && loginUser.response.body.user.id,
-        };
-      },
-    });
-
-    log.snapshot("after");
-    log.end();
-  });
-});
+);
 
 Cypress.Commands.add("loginByApi", (username, password = Cypress.env("defaultPassword")) => {
   return cy.request("POST", `${Cypress.env("apiUrl")}/login`, {

@@ -30,7 +30,8 @@ declare namespace Cypress {
   };
 
   type LoginOptions = {
-    rememberUser: boolean;
+    rememberUser?: boolean;
+    cacheSession?: boolean;
   };
 
   interface Chainable {
