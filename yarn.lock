@@ -3648,17 +3648,17 @@
     through2 "^2.0.0"
     watchify "3.11.1"
 
-"@cypress/code-coverage@3.9.6":
-  version "3.9.6"
-  resolved "https://registry.yarnpkg.com/@cypress/code-coverage/-/code-coverage-3.9.6.tgz#b9fc90f43edbdda1e73c8a2ba8e0846696ed2de9"
-  integrity sha512-rp7+DfUcwZE6Q9gmEC9d/1g3aUiYMdDXRwhCqloNuVHPWnZQ4Waluf2q8kTmc7Vzwx6s/MmsdpyitDsIWKmdGw==
+"@cypress/code-coverage@3.9.7":
+  version "3.9.7"
+  resolved "https://registry.yarnpkg.com/@cypress/code-coverage/-/code-coverage-3.9.7.tgz#21beb171985f6344c205f06d592b684461c9af0d"
+  integrity sha512-2oWdlth15NVMYswrLlrU1c5gLrNFCMHp+hXk7py6VH92YI66/TTsCHEipqu/Uu9j6s/KT/kkbA5tKYabsZ8YIQ==
   dependencies:
     "@cypress/browserify-preprocessor" "3.0.1"
     chalk "4.1.1"
     dayjs "1.10.5"
     debug "4.3.1"
     execa "4.1.0"
-    globby "11.0.3"
+    globby "11.0.4"
     istanbul-lib-coverage "3.0.0"
     js-yaml "3.14.1"
     nyc "15.1.0"
@@ -10516,6 +10516,18 @@ globby@11.0.3:
   version "11.0.3"
   resolved "https://registry.yarnpkg.com/globby/-/globby-11.0.3.tgz#9b1f0cb523e171dd1ad8c7b2a9fb4b644b9593cb"
   integrity sha512-ffdmosjA807y7+lA1NM0jELARVmYul/715xiILEjo3hBLPTcirgQNnXECn5g3mtR8TOLCVbkfua1Hpen25/Xcg==
+  dependencies:
+    array-union "^2.1.0"
+    dir-glob "^3.0.1"
+    fast-glob "^3.1.1"
+    ignore "^5.1.4"
+    merge2 "^1.3.0"
+    slash "^3.0.0"
+
+globby@11.0.4:
+  version "11.0.4"
+  resolved "https://registry.yarnpkg.com/globby/-/globby-11.0.4.tgz#2cbaff77c2f2a62e71e9b2813a67b97a3a3001a5"
+  integrity sha512-9O4MVG9ioZJ08ffbcyVYyLOJLk5JQ688pJ4eMGLpdWLHq/Wr1D9BlriLQyL0E+jbkuePVZXYFj47QM/v093wHg==
   dependencies:
     array-union "^2.1.0"
     dir-glob "^3.0.1"
