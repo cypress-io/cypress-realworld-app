@@ -384,6 +384,7 @@ describe("Transaction Feed", function () {
           const transactionParticipants = [transaction.senderId, transaction.receiverId];
           expect(transactionParticipants).to.include(ctx.user!.id);
         });
+      cy.getBySel("list-skeleton").should("not.exist");
       cy.visualSnapshot("Personal Transactions");
     });
 
@@ -402,6 +403,7 @@ describe("Transaction Feed", function () {
           const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
           expect(contactsInTransaction, message).to.not.be.empty;
         });
+      cy.getBySel("list-skeleton").should("not.exist");
       cy.visualSnapshot("First 5 Transaction Items belong to contacts");
     });
 
