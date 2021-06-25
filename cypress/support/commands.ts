@@ -42,7 +42,10 @@ Cypress.Commands.add("getBySelLike", (selector, ...args) => {
 
 Cypress.Commands.add(
   "login",
-  (username, password, { rememberUser = false, cacheSession = true } = {}) => {
+  (
+    username,
+    { password = Cypress.env("defaultPassword"), rememberUser = false, cacheSession = true } = {}
+  ) => {
     cy.intercept("POST", "/login").as("loginUser");
     cy.intercept("GET", "checkAuth").as("getUserProfile");
 

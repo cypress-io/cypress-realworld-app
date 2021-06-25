@@ -25,14 +25,14 @@ describe("User Sign-up and Login", function () {
 
   it("should redirect to the home page after login", function () {
     cy.database("find", "users").then((user: User) => {
-      cy.login(user.username, "s3cret", { rememberUser: true, cacheSession: false });
+      cy.login(user.username, { password: "s3cret", rememberUser: true, cacheSession: false });
     });
     cy.location("pathname").should("equal", "/");
   });
 
   it("should remember a user for 30 days after login", function () {
     cy.database("find", "users").then((user: User) => {
-      cy.login(user.username, "s3cret", { rememberUser: true, cacheSession: false });
+      cy.login(user.username, { password: "s3cret", rememberUser: true, cacheSession: false });
     });
 
     // Verify Session Cookie
@@ -72,7 +72,7 @@ describe("User Sign-up and Login", function () {
     cy.wait("@signup");
 
     // Login User
-    cy.login(userInfo.username, userInfo.password, { cacheSession: false });
+    cy.login(userInfo.username, { password: userInfo.password, cacheSession: false });
 
     // Onboarding
     cy.getBySel("user-onboarding-dialog").should("be.visible");
@@ -153,7 +153,7 @@ describe("User Sign-up and Login", function () {
   });
 
   it("should error for an invalid user", function () {
-    cy.login("invalidUserName", "invalidPa$$word", { cacheSession: false });
+    cy.login("invalidUserName", { password: "invalidPa$$word", cacheSession: false });
 
     cy.getBySel("signin-error")
       .should("be.visible")
@@ -163,7 +163,7 @@ describe("User Sign-up and Login", function () {
 
   it("should error for an invalid password for existing user", function () {
     cy.database("find", "users").then((user: User) => {
-      cy.login(user.username, "INVALID", { cacheSession: false });
+      cy.login(user.username, { password: "INVALID", cacheSession: false });
     });
 
     cy.getBySel("signin-error")

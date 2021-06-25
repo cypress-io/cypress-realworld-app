@@ -30,6 +30,7 @@ declare namespace Cypress {
   };
 
   type LoginOptions = {
+    password?: string;
     rememberUser?: boolean;
     cacheSession?: boolean;
   };
@@ -99,7 +100,7 @@ declare namespace Cypress {
     /**
      * Logs-in user by using UI
      */
-    login(username: string, password: string, loginOptions?: LoginOptions): void;
+    login(username: string, loginOptions?: LoginOptions): void;
 
     /**
      * Logs-in user by using API request
