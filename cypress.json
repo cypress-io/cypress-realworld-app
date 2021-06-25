@@ -17,5 +17,6 @@
       "url": "http://localhost:3001/__coverage__"
     }
   },
-  "experimentalStudio": true
+  "experimentalStudio": true,
+  "experimentalSessionSupport": true
 }
