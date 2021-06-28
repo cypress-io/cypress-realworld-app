@@ -59,6 +59,9 @@ phases:
       - yarn install --frozen-lockfile
   pre_build:
     commands:
+      - yarn types
+      - yarn lint
+      - yarn test:unit:ci
       - yarn build:ci
   build:
     commands:

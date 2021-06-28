@@ -137,6 +137,7 @@
     "prestart:ci": "yarn predev:cognito:ci",
     "start:react": "react-scripts -r @cypress/instrument-cra start",
     "start:empty": "cross-env NODE_ENV=development EMPTY_SEED=true concurrently yarn:start:react yarn:start:api:watch",
+    "lint": "eslint && prettier --check \"**/**.{ts,js,tsx}\" \"*.{json,md,yml}\"",
     "list:dev:users": "cat data/database.json | json -a users | json -a id username",
     "types": "tsc --noEmit",
     "precypress:open": "yarn predev:cognito:ci",
