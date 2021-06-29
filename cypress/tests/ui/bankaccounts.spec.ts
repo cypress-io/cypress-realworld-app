@@ -66,6 +66,7 @@ describe("Bank Accounts", function () {
   });
 
   it("should display bank account form errors", function () {
+    cy.wait("@getNotifications");
     cy.visit("/bankaccounts");
     cy.getBySel("bankaccount-new").click();
 
@@ -129,6 +130,7 @@ describe("Bank Accounts", function () {
   });
 
   it("soft deletes a bank account", function () {
+    cy.wait("@getNotifications");
     cy.visit("/bankaccounts");
     cy.getBySelLike("delete").first().click();
 
@@ -139,6 +141,7 @@ describe("Bank Accounts", function () {
 
   // TODO: [enhancement] the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
   it("renders an empty bank account list state with onboarding modal", function () {
+    cy.wait("@getNotifications");
     cy.intercept("POST", apiGraphQL, (req) => {
       const { body } = req;
       if (body.hasOwnProperty("operationName") && body.operationName === "ListBankAccount") {
