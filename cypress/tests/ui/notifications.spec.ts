@@ -70,6 +70,8 @@ describe("Notifications", function () {
         .should("contain", ctx.userA?.firstName)
         .and("contain", "liked");
 
+      cy.getBySel("notifications-header").should("be.visible");
+
       cy.log("🚩 Marks notification as read");
       cy.getBySelLike("notification-mark-read").first().click({ force: true });
       cy.wait("@updateNotification");
