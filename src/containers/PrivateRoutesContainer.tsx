@@ -34,9 +34,11 @@ const PrivateRoutesContainer: React.FC<Props> = ({
   const [, sendAuth] = useService(authService);
 
   useEffect(() => {
-    sendNotifications({ type: "FETCH" });
-
-    sendAuth({ type: "REFRESH" });
+    async function fetchData() {
+      await sendAuth({ type: "REFRESH" });
+      await sendNotifications({ type: "FETCH" });
+    }
+    fetchData();
   }, [sendNotifications, sendAuth]);
 
   return (
