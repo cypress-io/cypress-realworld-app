@@ -95,6 +95,8 @@ describe("Transaction Feed", function () {
         fixture: "public-transactions.json",
       }).as("mockedPublicTransactions");
 
+      cy.wait("@notifications");
+
       // Visit page again to trigger call to /transactions/public
       cy.visit("/");
 
