@@ -99,6 +99,7 @@ describe("Transaction Feed", function () {
       cy.visit("/");
 
       cy.wait("@notifications");
+      cy.contains("Public");
       cy.wait("@mockedPublicTransactions")
         .its("response.body.results")
         .then((transactions) => {
