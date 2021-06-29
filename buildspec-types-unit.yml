@@ -7,4 +7,5 @@ phases:
   build:
     commands:
       - yarn types
+      - yarn lint
       - yarn test:unit:ci

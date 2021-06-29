@@ -42,6 +42,9 @@ linux-workflow: &linux-workflow
               name: Check Types
               command: yarn types
           - run:
+              name: Lint Files
+              command: yarn lint
+          - run:
               name: Run Unit Tests
               command: yarn test:unit:ci
 
@@ -173,6 +176,9 @@ windows-workflow: &windows-workflow
           - run:
               name: Check Types
               command: yarn types
+          - run:
+              name: Lint Files
+              command: yarn lint
           - run:
               name: Run Unit Tests
               command: yarn test:unit:ci
