@@ -28,6 +28,8 @@ install:
     # check Cypress binary path and cached versions
     - npx cypress cache path
     - npx cypress cache list
+    - yarn types
+    - yarn lint
     - yarn test:unit:ci
     - yarn build:ci
 
