@@ -30,7 +30,9 @@ declare namespace Cypress {
   };
 
   type LoginOptions = {
-    rememberUser: boolean;
+    password?: string;
+    rememberUser?: boolean;
+    cacheSession?: boolean;
   };
 
   interface Chainable {
@@ -98,7 +100,7 @@ declare namespace Cypress {
     /**
      * Logs-in user by using UI
      */
-    login(username: string, password: string, loginOptions?: LoginOptions): void;
+    login(username: string, loginOptions?: LoginOptions): void;
 
     /**
      * Logs-in user by using API request
