@@ -256,6 +256,20 @@ describe("New Transaction", function () {
       cy.wait("@allUsers");
     });
 
+    // This test is intentionally flaky and demonstrates an example
+    // of when an element can become detached from the DOM
+    // Learn more: https://www.cypress.io/blog/2020/07/22/do-not-get-too-detached
+    it("FLAKE finds user by first name", function () {
+      const targetUser = ctx.allUsers![2];
+      cy.getBySel("user-list-search-input")
+        .type(targetUser.firstName as string, { force: true })
+        .blur();
+      cy.get(".MuiStepper-root").click();
+      cy.getBySelLike("user-list-item")
+        .first()
+        .should("contain", targetUser.firstName as string);
+    });
+
     searchAttrs.forEach((attr: keyof User) => {
       it(attr, function () {
         const targetUser = ctx.allUsers![2];

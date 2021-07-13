@@ -32,7 +32,12 @@ router.post(
     /* istanbul ignore next */
     createLikes(req.user?.id!, transactionId);
 
-    res.sendStatus(200);
+    // INTENTIONAL FLAKE
+    // create an arbitrary delay on the server side to simulate slow or inconsistent response time
+    const delay = Math.random() * 5500;
+    setTimeout(() => {
+      res.sendStatus(200);
+    }, delay);
   }
 );
 
