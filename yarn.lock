@@ -5326,10 +5326,10 @@
   resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-8.3.1.tgz#1a32969cf8f0364b3d8c8af9cc3555b7805df14f"
   integrity sha512-Y2mHTRAbqfFkpjldbkHGY8JIzRN6XqYRliG8/24FcHm2D2PwW24fl5xMRTVGdrb7iMrwCaIEbLWerGIkXuFWVg==
 
-"@types/validator@13.1.3":
-  version "13.1.3"
-  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.1.3.tgz#366b394aa3fbeed2392bf0a20ded606fa4a3d35e"
-  integrity sha512-DaOWN1zf7j+8nHhqXhIgNmS+ltAC53NXqGxYuBhWqWgqolRhddKzfZU814lkHQSTG0IUfQxU7Cg0gb8fFWo2mA==
+"@types/validator@13.6.3":
+  version "13.6.3"
+  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.6.3.tgz#31ca2e997bf13a0fffca30a25747d5b9f7dbb7de"
+  integrity sha512-fWG42pMJOL4jKsDDZZREnXLjc3UE0R8LOJfARWYg6U966rxDT7TYejYzLnUF5cvSObGg34nd0+H2wHHU5Omdfw==
 
 "@types/webpack-env@1.16.2":
   version "1.16.2"
