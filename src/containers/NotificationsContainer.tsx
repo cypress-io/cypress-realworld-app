@@ -36,7 +36,13 @@ const NotificationsContainer: React.FC<Props> = ({ authService, notificationsSer
 
   return (
     <Paper className={classes.paper}>
-      <Typography component="h2" variant="h6" color="primary" gutterBottom>
+      <Typography
+        component="h2"
+        variant="h6"
+        color="primary"
+        gutterBottom
+        data-test="notifications-header"
+      >
         Notifications
       </Typography>
       <NotificationList

@@ -35,6 +35,7 @@ describe("New Transaction", function () {
   });
 
   it("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
+    cy.intercept("GET", "/checkAuth").as("getUserProfile");
     const payment = {
       amount: "35",
       description: "Sushi dinner 🍣",

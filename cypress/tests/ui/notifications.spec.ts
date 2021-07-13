@@ -70,8 +70,10 @@ describe("Notifications", function () {
         .should("contain", ctx.userA?.firstName)
         .and("contain", "liked");
 
+      cy.getBySel("notifications-header").should("be.visible");
+
       cy.log("🚩 Marks notification as read");
-      cy.getBySelLike("notification-mark-read").first().click({ force: true });
+      cy.getBySelLike("notification-mark-read").first().click({ force: true }).should("not.exist");
       cy.wait("@updateNotification");
 
       cy.get("@preDismissedNotificationCount").then((count) => {
@@ -82,6 +84,7 @@ describe("Notifications", function () {
 
     it("User C likes a transaction between User A and User B; User A and User B get notifications that User C liked transaction", function () {
       cy.loginByXstate(ctx.userC.username);
+      cy.wait("@getNotifications");
 
       cy.database("find", "transactions", {
         senderId: ctx.userB.id,
@@ -130,6 +133,7 @@ describe("Notifications", function () {
 
     it("User A comments on a transaction of User B; User B gets notification that User A commented on their transaction", function () {
       cy.loginByXstate(ctx.userA.username);
+      cy.wait("@getNotifications");
       cy.visualSnapshot();
 
       cy.database("find", "transactions", { senderId: ctx.userB.id }).then(
@@ -159,6 +163,7 @@ describe("Notifications", function () {
 
     it("User C comments on a transaction between User A and User B; User A and B get notifications that User C commented on their transaction", function () {
       cy.loginByXstate(ctx.userC.username);
+      cy.wait("@getNotifications");
 
       cy.database("find", "transactions", {
         senderId: ctx.userB.id,
@@ -200,6 +205,7 @@ describe("Notifications", function () {
 
     it("User A sends a payment to User B", function () {
       cy.loginByXstate(ctx.userA.username);
+      cy.wait("@getNotifications");
 
       cy.getBySelLike("new-transaction").click();
       cy.createTransaction({
@@ -226,6 +232,7 @@ describe("Notifications", function () {
 
     it("User A sends a payment request to User C", function () {
       cy.loginByXstate(ctx.userA.username);
+      cy.wait("@getNotifications");
 
       cy.getBySelLike("new-transaction").click();
       cy.createTransaction({

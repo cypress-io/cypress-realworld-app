@@ -31,10 +31,15 @@ const PrivateRoutesContainer: React.FC<Props> = ({
   bankAccountsService,
 }) => {
   const [, sendNotifications] = useService(notificationsService);
+  const [, sendAuth] = useService(authService);
 
   useEffect(() => {
-    sendNotifications({ type: "FETCH" });
-  }, [sendNotifications]);
+    async function fetchData() {
+      await sendAuth({ type: "REFRESH" });
+      await sendNotifications({ type: "FETCH" });
+    }
+    fetchData();
+  }, [sendNotifications, sendAuth]);
 
   return (
     <MainLayout notificationsService={notificationsService} authService={authService}>
