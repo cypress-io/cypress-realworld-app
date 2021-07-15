@@ -1,14 +1,7 @@
-import { isMobile } from "../../support/utils";
-import { User, Transaction } from "../../../src/models";
-
-type NotificationsCtx = {
-  userA: User;
-  userB: User;
-  userC: User;
-};
+const { isMobile } = require("../../support/utils");
 
 describe("Notifications", function () {
-  const ctx = {} as NotificationsCtx;
+  const ctx = {};
 
   beforeEach(function () {
     cy.task("db:seed");
@@ -18,7 +11,7 @@ describe("Notifications", function () {
     cy.intercept("PATCH", "/notifications/*").as("updateNotification");
     cy.intercept("POST", "/comments/*").as("postComment");
 
-    cy.database("filter", "users").then((users: User[]) => {
+    cy.database("filter", "users").then((users) => {
       ctx.userA = users[0];
       ctx.userB = users[1];
       ctx.userC = users[2];
@@ -30,11 +23,9 @@ describe("Notifications", function () {
       cy.loginByXstate(ctx.userA.username);
       cy.wait("@getNotifications");
 
-      cy.database("find", "transactions", { senderId: ctx.userB.id }).then(
-        (transaction: Transaction) => {
-          cy.visit(`/transaction/${transaction.id}`);
-        }
-      );
+      cy.database("find", "transactions", { senderId: ctx.userB.id }).then((transaction) => {
+        cy.visit(`/transaction/${transaction.id}`);
+      });
 
       cy.log("🚩 Renders the notifications badge with count");
       cy.wait("@getNotifications")
@@ -86,7 +77,7 @@ describe("Notifications", function () {
       cy.database("find", "transactions", {
         senderId: ctx.userB.id,
         receiverId: ctx.userA.id,
-      }).then((transaction: Transaction) => {
+      }).then((transaction) => {
         cy.visit(`/transaction/${transaction.id}`);
       });
 
@@ -132,11 +123,9 @@ describe("Notifications", function () {
       cy.loginByXstate(ctx.userA.username);
       cy.visualSnapshot();
 
-      cy.database("find", "transactions", { senderId: ctx.userB.id }).then(
-        (transaction: Transaction) => {
-          cy.visit(`/transaction/${transaction.id}`);
-        }
-      );
+      cy.database("find", "transactions", { senderId: ctx.userB.id }).then((transaction) => {
+        cy.visit(`/transaction/${transaction.id}`);
+      });
 
       cy.getBySelLike("comment-input").type("Thank You{enter}");
 
@@ -163,7 +152,7 @@ describe("Notifications", function () {
       cy.database("find", "transactions", {
         senderId: ctx.userB.id,
         receiverId: ctx.userA.id,
-      }).then((transaction: Transaction) => {
+      }).then((transaction) => {
         cy.visit(`/transaction/${transaction.id}`);
       });
 

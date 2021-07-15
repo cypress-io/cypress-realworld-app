@@ -1,5 +1,4 @@
-import { User } from "../../../src/models";
-import { isMobile } from "../../support/utils";
+const { isMobile } = require("../../support/utils");
 
 describe("User Settings", function () {
   beforeEach(function () {
@@ -8,7 +7,7 @@ describe("User Settings", function () {
     cy.intercept("PATCH", "/users/*").as("updateUser");
     cy.intercept("GET", "/notifications*").as("getNotifications");
 
-    cy.database("find", "users").then((user: User) => {
+    cy.database("find", "users").then((user) => {
       cy.loginByXstate(user.username);
     });
 

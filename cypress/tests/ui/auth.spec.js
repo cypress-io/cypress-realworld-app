@@ -1,5 +1,4 @@
-import { User } from "../../../src/models";
-import { isMobile } from "../../support/utils";
+const { isMobile } = require("../../support/utils");
 
 const apiGraphQL = `${Cypress.env("apiUrl")}/graphql`;
 
@@ -24,14 +23,14 @@ describe("User Sign-up and Login", function () {
   });
 
   it("should redirect to the home page after login", function () {
-    cy.database("find", "users").then((user: User) => {
+    cy.database("find", "users").then((user) => {
       cy.login(user.username, "s3cret", { rememberUser: true });
     });
     cy.location("pathname").should("equal", "/");
   });
 
   it("should remember a user for 30 days after login", function () {
-    cy.database("find", "users").then((user: User) => {
+    cy.database("find", "users").then((user) => {
       cy.login(user.username, "s3cret", { rememberUser: true });
     });
 
@@ -162,7 +161,7 @@ describe("User Sign-up and Login", function () {
   });
 
   it("should error for an invalid password for existing user", function () {
-    cy.database("find", "users").then((user: User) => {
+    cy.database("find", "users").then((user) => {
       cy.login(user.username, "INVALID");
     });
 

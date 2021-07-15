@@ -1,14 +1,9 @@
-import { User } from "../../../src/models";
-import { isMobile } from "../../support/utils";
+const { isMobile } = require("../../support/utils");
 
 const apiGraphQL = `${Cypress.env("apiUrl")}/graphql`;
 
-type BankAccountsTestCtx = {
-  user?: User;
-};
-
 describe("Bank Accounts", function () {
-  const ctx: BankAccountsTestCtx = {};
+  const ctx = {};
 
   beforeEach(function () {
     cy.task("db:seed");
@@ -31,7 +26,7 @@ describe("Bank Accounts", function () {
       }
     });
 
-    cy.database("find", "users").then((user: User) => {
+    cy.database("find", "users").then((user) => {
       ctx.user = user;
 
       return cy.loginByXstate(ctx.user.username);

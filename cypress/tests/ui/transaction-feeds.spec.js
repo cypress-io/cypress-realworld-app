@@ -1,26 +1,12 @@
-import Dinero from "dinero.js";
-import {
-  User,
-  Transaction,
-  TransactionRequestStatus,
-  TransactionResponseItem,
-  Contact,
-  TransactionStatus,
-} from "../../../src/models";
-import { addDays, isWithinInterval, startOfDay } from "date-fns";
-import { startOfDayUTC, endOfDayUTC } from "../../../src/utils/transactionUtils";
-import { isMobile } from "../../support/utils";
+const Dinero = require("dinero.js").default;
+const { addDays, isWithinInterval, startOfDay } = require("date-fns");
+const { isMobile } = require("../../support/utils");
+const { startOfDayUTC, endOfDayUTC } = require("../../../src/utils/transactionUtils");
 
 const { _ } = Cypress;
 
-type TransactionFeedsCtx = {
-  allUsers?: User[];
-  user?: User;
-  contactIds?: string[];
-};
-
 describe("Transaction Feed", function () {
-  const ctx: TransactionFeedsCtx = {};
+  const ctx = {};
 
   const feedViews = {
     public: {
@@ -51,7 +37,7 @@ describe("Transaction Feed", function () {
     cy.intercept("GET", "/transactions/public*").as(feedViews.public.routeAlias);
     cy.intercept("GET", "/transactions/contacts*").as(feedViews.contacts.routeAlias);
 
-    cy.database("filter", "users").then((users: User[]) => {
+    cy.database("filter", "users").then((users) => {
       ctx.user = users[0];
       ctx.allUsers = users;
 
@@ -102,11 +88,11 @@ describe("Transaction Feed", function () {
       cy.wait("@mockedPublicTransactions")
         .its("response.body.results")
         .then((transactions) => {
-          const getTransactionFromEl = ($el: JQuery<Element>): TransactionResponseItem => {
+          const getTransactionFromEl = ($el) => {
             const transactionId = $el.data("test").split("transaction-item-")[1];
             return _.find(transactions, (transaction) => {
               return transaction.id === transactionId;
-            })!;
+            });
           };
 
           cy.log("🚩Testing a paid payment transaction item");
@@ -116,9 +102,7 @@ describe("Transaction Feed", function () {
               amount: transaction.amount,
             }).toFormat();
 
-            expect([TransactionStatus.pending, TransactionStatus.complete]).to.include(
-              transaction.status
-            );
+            expect(["pending", "complete"]).to.include(transaction.status);
 
             expect(transaction.requestStatus).to.be.empty;
 
@@ -140,9 +124,9 @@ describe("Transaction Feed", function () {
               amount: transaction.amount,
             }).toFormat();
 
-            expect(TransactionStatus.complete).to.equal(transaction.status);
+            expect("complete").to.equal(transaction.status);
 
-            expect(transaction.requestStatus).to.equal(TransactionRequestStatus.accepted);
+            expect(transaction.requestStatus).to.equal("accepted");
 
             cy.getBySelLike("amount")
               .should("contain", `+${formattedAmount}`)
@@ -156,13 +140,8 @@ describe("Transaction Feed", function () {
               amount: transaction.amount,
             }).toFormat();
 
-            expect([TransactionStatus.pending, TransactionStatus.complete]).to.include(
-              transaction.status
-            );
-            expect([
-              TransactionRequestStatus.pending,
-              TransactionRequestStatus.rejected,
-            ]).to.include(transaction.requestStatus);
+            expect(["pending", "complete"]).to.include(transaction.status);
+            expect(["pending", "rejected"]).to.include(transaction.requestStatus);
 
             cy.getBySelLike("amount")
               .should("contain", `+${formattedAmount}`)
@@ -229,7 +208,7 @@ describe("Transaction Feed", function () {
 
     _.each(feedViews, (feed, feedName) => {
       it(`filters ${feedName} transaction feed by date range`, function () {
-        cy.database("find", "transactions").then((transaction: Transaction) => {
+        cy.database("find", "transactions").then((transaction) => {
           const dateRangeStart = startOfDay(new Date(transaction.createdAt));
           const dateRangeEnd = endOfDayUTC(addDays(dateRangeStart, 1));
 
@@ -241,7 +220,7 @@ describe("Transaction Feed", function () {
 
           cy.wait(`@${feed.routeAlias}`)
             .its("response.body.results")
-            .then((transactions: Transaction[]) => {
+            .then((transactions) => {
               cy.getBySelLike("transaction-item").should("have.length", transactions.length);
 
               cy.visualSnapshot("Date Range Filtered Transactions");
@@ -317,7 +296,7 @@ describe("Transaction Feed", function () {
 
         // @ts-ignore
         cy.wait(`@${feed.routeAlias}`).then(({ response: { body, url } }) => {
-          const transactions = body.results as TransactionResponseItem[];
+          const transactions = body.results;
           const urlParams = new URLSearchParams(_.last(url.split("?")));
 
           const rawAmountMin = dollarAmountRange.min * 100;
@@ -372,7 +351,7 @@ describe("Transaction Feed", function () {
 
   describe("Feed Item Visibility", () => {
     it("mine feed only shows personal transactions", function () {
-      cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
+      cy.database("filter", "contacts", { userId: ctx.user.id }).then((contacts) => {
         ctx.contactIds = contacts.map((contact) => contact.contactUserId);
       });
 
@@ -380,27 +359,27 @@ describe("Transaction Feed", function () {
 
       cy.wait("@personalTransactions")
         .its("response.body.results")
-        .each((transaction: Transaction) => {
+        .each((transaction) => {
           const transactionParticipants = [transaction.senderId, transaction.receiverId];
-          expect(transactionParticipants).to.include(ctx.user!.id);
+          expect(transactionParticipants).to.include(ctx.user.id);
         });
       cy.getBySel("list-skeleton").should("not.exist");
       cy.visualSnapshot("Personal Transactions");
     });
 
     it("first five items belong to contacts in public feed", function () {
-      cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
+      cy.database("filter", "contacts", { userId: ctx.user.id }).then((contacts) => {
         ctx.contactIds = contacts.map((contact) => contact.contactUserId);
       });
 
       cy.wait("@publicTransactions")
         .its("response.body.results")
         .invoke("slice", 0, 5)
-        .each((transaction: Transaction) => {
+        .each((transaction) => {
           const transactionParticipants = [transaction.senderId, transaction.receiverId];
 
-          const contactsInTransaction = _.intersection(transactionParticipants, ctx.contactIds!);
-          const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
+          const contactsInTransaction = _.intersection(transactionParticipants, ctx.contactIds);
+          const message = `"${contactsInTransaction}" are contacts of ${ctx.user.id}`;
           expect(contactsInTransaction, message).to.not.be.empty;
         });
       cy.getBySel("list-skeleton").should("not.exist");
@@ -408,7 +387,7 @@ describe("Transaction Feed", function () {
     });
 
     it("friends feed only shows contact transactions", function () {
-      cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
+      cy.database("filter", "contacts", { userId: ctx.user.id }).then((contacts) => {
         ctx.contactIds = contacts.map((contact) => contact.contactUserId);
       });
 
@@ -416,12 +395,12 @@ describe("Transaction Feed", function () {
 
       cy.wait("@contactsTransactions")
         .its("response.body.results")
-        .each((transaction: Transaction) => {
+        .each((transaction) => {
           const transactionParticipants = [transaction.senderId, transaction.receiverId];
 
-          const contactsInTransaction = _.intersection(ctx.contactIds!, transactionParticipants);
+          const contactsInTransaction = _.intersection(ctx.contactIds, transactionParticipants);
 
-          const message = `"${contactsInTransaction}" are contacts of ${ctx.user!.id}`;
+          const message = `"${contactsInTransaction}" are contacts of ${ctx.user.id}`;
           expect(contactsInTransaction, message).to.not.be.empty;
         });
       cy.getBySel("list-skeleton").should("not.exist");

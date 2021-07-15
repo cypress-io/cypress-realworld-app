@@ -1,10 +1,10 @@
-import _ from "lodash";
-import path from "path";
-import axios from "axios";
-import dotenv from "dotenv";
-import Promise from "bluebird";
-import { percyHealthCheck } from "@percy/cypress/task";
-import codeCoverageTask from "@cypress/code-coverage/task";
+const _ = require("lodash");
+const path = require("path");
+const axios = require("axios");
+const dotenv = require("dotenv");
+const Promise = require("bluebird");
+const { percyHealthCheck } = require("@percy/cypress/task");
+const codeCoverageTask = require("@cypress/code-coverage/task");
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();

@@ -1,12 +1,5 @@
-import { User, Transaction } from "../../../src/models";
-
-type NewTransactionCtx = {
-  transactionRequest?: Transaction;
-  authenticatedUser?: User;
-};
-
 describe("Transaction View", function () {
-  const ctx: NewTransactionCtx = {};
+  const ctx = {};
 
   beforeEach(function () {
     cy.task("db:seed");
@@ -20,7 +13,7 @@ describe("Transaction View", function () {
     cy.intercept("GET", "/notifications").as("getNotifications");
     cy.intercept("GET", "/bankAccounts").as("getBankAccounts");
 
-    cy.database("find", "users").then((user: User) => {
+    cy.database("find", "users").then((user) => {
       ctx.authenticatedUser = user;
 
       cy.loginByXstate(ctx.authenticatedUser.username);
@@ -30,7 +23,7 @@ describe("Transaction View", function () {
         status: "pending",
         requestStatus: "pending",
         requestResolvedAt: "",
-      }).then((transaction: Transaction) => {
+      }).then((transaction) => {
         ctx.transactionRequest = transaction;
       });
     });
@@ -73,7 +66,7 @@ describe("Transaction View", function () {
   });
 
   it("accepts a transaction request", function () {
-    cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
+    cy.visit(`/transaction/${ctx.transactionRequest.id}`);
     cy.wait("@getTransaction");
 
     cy.getBySelLike("accept-request").click();
@@ -84,7 +77,7 @@ describe("Transaction View", function () {
   });
 
   it("rejects a transaction request", function () {
-    cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
+    cy.visit(`/transaction/${ctx.transactionRequest.id}`);
     cy.wait("@getTransaction");
 
     cy.getBySelLike("reject-request").click();
@@ -96,11 +89,11 @@ describe("Transaction View", function () {
 
   it("does not display accept/reject buttons on completed request", function () {
     cy.database("find", "transactions", {
-      receiverId: ctx.authenticatedUser!.id,
+      receiverId: ctx.authenticatedUser.id,
       status: "complete",
       requestStatus: "accepted",
     }).then((transactionRequest) => {
-      cy.visit(`/transaction/${transactionRequest!.id}`);
+      cy.visit(`/transaction/${transactionRequest.id}`);
 
       cy.wait("@getNotifications");
       cy.getBySel("nav-top-notifications-count").should("be.visible");
