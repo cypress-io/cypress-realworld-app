@@ -1,7 +1,7 @@
-// @ts-check
-import "@cypress/code-coverage/support";
-import "./commands";
-import { isMobile } from "./utils";
+require("@cypress/code-coverage/support");
+require("./commands");
+
+const isMobile = require("./utils").isMobile;
 
 beforeEach(() => {
   // cy.intercept middleware to remove 'if-none-match' headers from all requests
