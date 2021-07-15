@@ -1,17 +1,9 @@
-// @ts-check
-///<reference path="../global.d.ts" />
-
-import { pick } from "lodash/fp";
-import { format as formatDate } from "date-fns";
-import { isMobile } from "./utils";
+const { pick } = require("lodash/fp");
+const formatDate = require("date-fns").format;
+const isMobile = require("./utils").isMobile;
 
 // Import Cypress Percy plugin command (https://docs.percy.io/docs/cypress)
-import "@percy/cypress";
-
-// Import commands for third-party auth providers
-import "./auth-provider-commands/cognito";
-import "./auth-provider-commands/auth0";
-import "./auth-provider-commands/okta";
+require("@percy/cypress");
 
 // custom command to make taking snapshots with full name
 // formed from the test title + suffix easier
@@ -69,7 +61,7 @@ Cypress.Commands.add("login", (username, password, { rememberUser = false } = {}
   }
 
   cy.getBySel("signin-submit").click();
-  cy.wait("@loginUser").then((loginUser: any) => {
+  cy.wait("@loginUser").then((loginUser) => {
     log.set({
       consoleProps() {
         return {
@@ -274,7 +266,7 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
     },
   });
 
-  const selectDate = (date: number) => {
+  const selectDate = (date) => {
     return cy.get(`[data-date='${formatDate(date, "yyyy-MM-dd")}']`).click({ force: true });
   };
 
