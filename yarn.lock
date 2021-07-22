@@ -3715,6 +3715,25 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
+"@dinero.js/calculator-number@2.0.0-alpha.6":
+  version "2.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@dinero.js/calculator-number/-/calculator-number-2.0.0-alpha.6.tgz#9ed3d733a7914b283e41be05005d2d6512145032"
+  integrity sha512-+nTAemUcZMYvwYQ4s8xn3SlIQPJtz6UD97rs9BMAK4vXTihFIrxlDDiJIXwUgFsSJ/SfNLaVgYAEVNhCratO/w==
+  dependencies:
+    "@dinero.js/core" "2.0.0-alpha.6"
+
+"@dinero.js/core@2.0.0-alpha.6":
+  version "2.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@dinero.js/core/-/core-2.0.0-alpha.6.tgz#d8554033125a9bbc72a3ca98a68363c8b339d293"
+  integrity sha512-AJxNGi9a9+y1Ow2RR4KAGpWxhrrIgtHFkAQOVJOaWT2Js7TcAEWPgyubE4RBKSN0lgS2sMkeB8FfUbaO7Sphdw==
+  dependencies:
+    "@dinero.js/currencies" "2.0.0-alpha.6"
+
+"@dinero.js/currencies@2.0.0-alpha.6":
+  version "2.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@dinero.js/currencies/-/currencies-2.0.0-alpha.6.tgz#4dc9aea3b32e9eab8cc8bb3a0b3102e9ad876a89"
+  integrity sha512-MLvmLF7B82ntGT3y/qxWga7VTUi/bmfj0e8RxcpphkmzT2qBtmn0fabqf+bSkpLn5Xbnz2yOXo8LAJHul94XpA==
+
 "@emotion/hash@^0.8.0":
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/@emotion/hash/-/hash-0.8.0.tgz#bbbff68978fefdbe68ccb533bc8cbe1d1afb5413"
@@ -8732,10 +8751,14 @@ dijkstrajs@^1.0.1:
   resolved "https://registry.yarnpkg.com/dijkstrajs/-/dijkstrajs-1.0.1.tgz#d3cd81221e3ea40742cfcde556d4e99e98ddc71b"
   integrity sha1-082BIh4+pAdCz83lVtTpnpjdxxs=
 
-dinero.js@1.8.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/dinero.js/-/dinero.js-1.8.1.tgz#775a647629b4195af9d02f46e9b7fa1fd81e906d"
-  integrity sha512-AQ09MDKonkGUrhBZZFx4tPTVcVJuHJ0VEA73LvcBoBB2eQSi1DbapeXj4wnUUpx1hVnPdyev1xPNnNMGy/Au0g==
+dinero.js@2.0.0-alpha.6:
+  version "2.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/dinero.js/-/dinero.js-2.0.0-alpha.6.tgz#eb22e2e7a6e8d7796838b9ad60f0d5a23db1add4"
+  integrity sha512-rKU2w5AATj7SlPCIAErjuC5iGBW+dM/jes1Sl0loOWlBFIEUbBCcAvk9wLM1/Wg87YbktWdEd+sgTdPxLrA0NA==
+  dependencies:
+    "@dinero.js/calculator-number" "2.0.0-alpha.6"
+    "@dinero.js/core" "2.0.0-alpha.6"
+    "@dinero.js/currencies" "2.0.0-alpha.6"
 
 dir-glob@^3.0.1:
   version "3.0.1"

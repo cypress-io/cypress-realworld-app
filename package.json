@@ -28,7 +28,7 @@
     "axios": "0.21.1",
     "clsx": "1.1.1",
     "date-fns": "2.22.1",
-    "dinero.js": "1.8.1",
+    "dinero.js": "2.0.0-alpha.6",
     "formik": "2.2.9",
     "history": "4.10.1",
     "react": "17.0.2",
