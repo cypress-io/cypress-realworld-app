@@ -1,4 +1,3 @@
-import Dinero from "dinero.js";
 import {
   User,
   Transaction,
@@ -8,7 +7,7 @@ import {
   TransactionStatus,
 } from "../../../src/models";
 import { addDays, isWithinInterval, startOfDay } from "date-fns";
-import { startOfDayUTC, endOfDayUTC } from "../../../src/utils/transactionUtils";
+import { startOfDayUTC, endOfDayUTC, dineroUSD, format } from "../../../src/utils/transactionUtils";
 import { isMobile } from "../../support/utils";
 
 const { _ } = Cypress;
@@ -112,9 +111,7 @@ describe("Transaction Feed", function () {
           cy.log("🚩Testing a paid payment transaction item");
           cy.contains("[data-test*='transaction-item']", "paid").within(($el) => {
             const transaction = getTransactionFromEl($el);
-            const formattedAmount = Dinero({
-              amount: transaction.amount,
-            }).toFormat();
+            const formattedAmount = format(dineroUSD(transaction.amount));
 
             expect([TransactionStatus.pending, TransactionStatus.complete]).to.include(
               transaction.status
@@ -136,9 +133,7 @@ describe("Transaction Feed", function () {
           cy.log("🚩Testing a charged payment transaction item");
           cy.contains("[data-test*='transaction-item']", "charged").within(($el) => {
             const transaction = getTransactionFromEl($el);
-            const formattedAmount = Dinero({
-              amount: transaction.amount,
-            }).toFormat();
+            const formattedAmount = format(dineroUSD(transaction.amount));
 
             expect(TransactionStatus.complete).to.equal(transaction.status);
 
@@ -152,9 +147,7 @@ describe("Transaction Feed", function () {
           cy.log("🚩Testing a requested payment transaction item");
           cy.contains("[data-test*='transaction-item']", "requested").within(($el) => {
             const transaction = getTransactionFromEl($el);
-            const formattedAmount = Dinero({
-              amount: transaction.amount,
-            }).toFormat();
+            const formattedAmount = format(dineroUSD(transaction.amount));
 
             expect([TransactionStatus.pending, TransactionStatus.complete]).to.include(
               transaction.status

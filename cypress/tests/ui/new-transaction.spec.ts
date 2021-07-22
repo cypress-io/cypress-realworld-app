@@ -1,4 +1,4 @@
-import Dinero from "dinero.js";
+import { dineroUSD, format } from "utils/transactionUtils";
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
 
@@ -59,9 +59,9 @@ describe("New Transaction", function () {
       .should("be.visible")
       .and("have.text", "Transaction Submitted!");
 
-    const updatedAccountBalance = Dinero({
-      amount: ctx.user!.balance - parseInt(payment.amount) * 100,
-    }).toFormat();
+    const updatedAccountBalance = format(
+      dineroUSD(ctx.user!.balance - parseInt(payment.amount) * 100)
+    );
 
     if (isMobile()) {
       cy.getBySel("sidenav-toggle").click();
@@ -179,9 +179,9 @@ describe("New Transaction", function () {
 
     cy.switchUserByXstate(ctx.contact!.username);
 
-    const updatedAccountBalance = Dinero({
-      amount: ctx.contact!.balance + transactionPayload.amount * 100,
-    }).toFormat();
+    const updatedAccountBalance = format(
+      dineroUSD(ctx.contact!.balance + transactionPayload.amount * 100)
+    );
 
     if (isMobile()) {
       cy.getBySel("sidenav-toggle").click();
@@ -230,9 +230,9 @@ describe("New Transaction", function () {
 
     cy.switchUserByXstate(ctx.user!.username);
 
-    const updatedAccountBalance = Dinero({
-      amount: ctx.user!.balance + transactionPayload.amount * 100,
-    }).toFormat();
+    const updatedAccountBalance = format(
+      dineroUSD(ctx.user!.balance + transactionPayload.amount * 100)
+    );
 
     if (isMobile()) {
       cy.getBySel("sidenav-toggle").click();
