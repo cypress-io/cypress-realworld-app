@@ -94,7 +94,7 @@
     "express-jwt": "6.0.0",
     "express-paginate": "1.0.2",
     "express-session": "1.17.2",
-    "express-validator": "6.11.1",
+    "express-validator": "6.12.1",
     "faker": "5.5.3",
     "fuse.js": "6.4.6",
     "graphql": "15.5.1",
