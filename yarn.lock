@@ -4508,20 +4508,11 @@
   resolved "https://registry.yarnpkg.com/@oclif/screen/-/screen-1.0.4.tgz#b740f68609dfae8aa71c3a6cab15d816407ba493"
   integrity sha512-60CHpq+eqnTxLZQ4PGHYNwUX572hgpMHGPtTWMjdTMsAvlm69lZV/4ly6O3sAYkomo4NggGcomrDpBe34rxUqw==
 
-"@okta/configuration-validation@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@okta/configuration-validation/-/configuration-validation-1.0.0.tgz#18d6220d139e7f5f3d203e11849e1ee61ca3cea1"
-  integrity sha512-CQaBdqP9fyYd2KwIgwwhWDivWx+Lwj7rtyXUbTlAHywKRwnEyNln7zUG6UaBBSRNK63I+W3A3GgPWO0gCpo1FA==
+"@okta/jwt-verifier@2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@okta/jwt-verifier/-/jwt-verifier-2.3.0.tgz#d5d99d80a92a6e1d0a95a113231b21618a5c2ffe"
+  integrity sha512-OBACc3vwozPYrTiLmokYDls5MlqMHHne38qU7Rxy3jB0/qXxgS8EdjVvEpZsrB66u8YmTliCRQnMV01rdsjO3w==
   dependencies:
-    "@okta/okta-auth-js" "^4.0.0"
-    lodash "^4.17.15"
-
-"@okta/jwt-verifier@2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@okta/jwt-verifier/-/jwt-verifier-2.1.0.tgz#670594eb0018233d912df3c13439cc2ade3ac87d"
-  integrity sha512-k7ewe0RuA55kNspCpLJb8Vc2VKofcUNeclUGKwqWTiiDV8EdpSPTCSbbcmycKM3L7ucJh/z7x8wuqEpOnVk/Ig==
-  dependencies:
-    "@okta/configuration-validation" "^1.0.0"
     jwks-rsa "1.12.1"
     njwt "^1.0.0"
 
@@ -4541,23 +4532,6 @@
     text-encoding "^0.7.0"
     tiny-emitter "1.1.0"
     tsd "^0.14.0"
-    webcrypto-shim "^0.1.5"
-    xhr2 "0.1.3"
-
-"@okta/okta-auth-js@^4.0.0":
-  version "4.7.1"
-  resolved "https://registry.yarnpkg.com/@okta/okta-auth-js/-/okta-auth-js-4.7.1.tgz#774d9f53e9486fb13deb775b3bb70f0d746f3a65"
-  integrity sha512-N/E5Gtu9tQNThr6xRORxV9UedivAiNjHnyqAEHRZ5rWK3KY0A3GpP0aYjv/jxKk1F4O4aiACT/u+L35ssz1Yig==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    Base64 "0.3.0"
-    core-js "^3.6.5"
-    cross-fetch "^3.0.6"
-    js-cookie "2.2.0"
-    node-cache "^4.2.0"
-    p-cancelable "^2.0.0"
-    text-encoding "^0.7.0"
-    tiny-emitter "1.1.0"
     webcrypto-shim "^0.1.5"
     xhr2 "0.1.3"
 
@@ -5721,11 +5695,6 @@
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
-
-Base64@0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/Base64/-/Base64-0.3.0.tgz#6da261a4e80d4fa0f5c684254e5bccd16bbdce9f"
-  integrity sha1-baJhpOgNT6D1xoQlTlvM0Wu9zp8=
 
 Base64@1.1.0:
   version "1.1.0"
@@ -12371,11 +12340,6 @@ jose@^2.0.5:
   dependencies:
     "@panva/asn1.js" "^1.0.0"
 
-js-cookie@2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-2.2.0.tgz#1b2c279a6eece380a12168b92485265b35b1effb"
-  integrity sha1-Gywnmm7s44ChIWi5JIUmWzWx7/s=
-
 js-cookie@2.2.1, js-cookie@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-2.2.1.tgz#69e106dc5d5806894562902aa5baec3744e9b2b8"
@@ -13717,14 +13681,6 @@ no-case@^3.0.4:
   dependencies:
     lower-case "^2.0.2"
     tslib "^2.0.3"
-
-node-cache@^4.2.0:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/node-cache/-/node-cache-4.2.1.tgz#efd8474dee4edec4138cdded580f5516500f7334"
-  integrity sha512-BOb67bWg2dTyax5kdef5WfU3X8xu4wPg+zHzkvls0Q/QpYycIFRLEEIdAx9Wma43DxG6Qzn4illdZoYseKWa4A==
-  dependencies:
-    clone "2.x"
-    lodash "^4.17.15"
 
 node-cache@^5.1.2:
   version "5.1.2"
