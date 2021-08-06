@@ -20,7 +20,7 @@ cache:
 
 # Install NPM dependencies and Cypress
 install:
-  image: cypress/browsers:node14.15.0-chrome86-ff82
+  image: cypress/browsers:node14.17.0-chrome88-ff89
   stage: build
 
   script:
