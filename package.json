@@ -23,7 +23,7 @@
     "@okta/jwt-verifier": "2.3.0",
     "@okta/okta-auth-js": "4.9.2",
     "@okta/okta-react": "4.1.0",
-    "@xstate/react": "1.3.3",
+    "@xstate/react": "1.5.1",
     "aws-amplify": "4.2.2",
     "axios": "0.21.1",
     "clsx": "1.1.1",
