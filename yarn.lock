@@ -4535,10 +4535,10 @@
     webcrypto-shim "^0.1.5"
     xhr2 "0.1.3"
 
-"@okta/okta-react@4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@okta/okta-react/-/okta-react-4.1.0.tgz#f450db6d4abe61167663da5d1d4b22c46c8884bb"
-  integrity sha512-Y6JUYeUtoiXUevgrKoi/x/xhLQUoElox9pBdzZqrbfjcizVwGNi5+oPSvSTgtbQ/J73nPI48jALMxj6nYfDDTg==
+"@okta/okta-react@6.1.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@okta/okta-react/-/okta-react-6.1.0.tgz#ed100fe915c2e95f9bbde9530633c1e7e0791272"
+  integrity sha512-8Xy16fVvoGC+qzUVTwELrAYnLekhM7E04vRBRxH74KTAgQZCA4Rle8eimmcPOcxfMwNzbGR5XISQJ4UpeY1mHw==
   dependencies:
     "@babel/runtime" "^7.11.2"
 
