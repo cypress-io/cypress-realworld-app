@@ -5124,10 +5124,10 @@
   dependencies:
     "@types/lodash" "*"
 
-"@types/lowdb@1.0.10":
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/@types/lowdb/-/lowdb-1.0.10.tgz#6f9916d85fb535b3ed2dbf24c4347b3af9b11a72"
-  integrity sha512-DmmY+UZAAc2cs4pYnr7WOp9tFYrDeQ2cKSC5JuAQ2ai40IctBT/ef+Qm2ulLOfqR7POqR+5hnAouU7hojCoMCg==
+"@types/lowdb@1.0.11":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@types/lowdb/-/lowdb-1.0.11.tgz#d8336a635ea0dbd48a7f6f62fb9fccc5ec358ae3"
+  integrity sha512-h99VMxvTuz+VsXUVCCJo4dsps4vbkXwvU71TpmxDoiBU24bJ0VBygIHgmMm+UPoQIFihmV6euRik4z8J7XDJWg==
   dependencies:
     "@types/lodash" "*"
 
