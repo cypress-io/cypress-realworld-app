@@ -151,6 +151,7 @@ describe("Bank Accounts", function () {
     });
 
     cy.visit("/bankaccounts");
+    cy.wait("@getNotifications");
     cy.wait("@gqlListBankAccountQuery");
 
     cy.getBySel("bankaccount-list").should("not.exist");
