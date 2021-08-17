@@ -4955,10 +4955,10 @@
     "@types/express" "*"
     "@types/express-unless" "*"
 
-"@types/express-paginate@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@types/express-paginate/-/express-paginate-1.0.0.tgz#84b8ba6345286fe7d3fd0d552884ec919d37a5e3"
-  integrity sha512-SvZd4+/IJO/0fuCmMKmdZaI76UZFlRTaUc/BbrNCB4bdkU/xX6wsh4Cxwgo9I9ooUUIJfmwLmo6xUXLnETuUlQ==
+"@types/express-paginate@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/express-paginate/-/express-paginate-1.0.1.tgz#632c924de6e0a1314f9d1bcf4b035b7431e9734c"
+  integrity sha512-+3G3AQVN2fhNiGQMOjnjGCEwSGf5IyB4NMlVMtAwZbRkFQulbUBgcuuexduK2llVdCzan60tDyNs00SIkW6rhA==
   dependencies:
     "@types/express" "*"
 
