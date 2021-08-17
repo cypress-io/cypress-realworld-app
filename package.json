@@ -55,7 +55,7 @@
     "@types/cors": "2.8.10",
     "@types/dinero.js": "1.8.0",
     "@types/express": "4.17.2",
-    "@types/express-paginate": "1.0.0",
+    "@types/express-paginate": "1.0.1",
     "@types/express-serve-static-core": "4.17.2",
     "@types/express-session": "1.17.3",
     "@types/faker": "5.5.8",
