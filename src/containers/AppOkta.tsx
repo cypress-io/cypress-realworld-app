@@ -51,7 +51,7 @@ const AppOkta: React.FC = () => {
   } else {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
-      if (oktaAuthState.isAuthenticated) {
+      if (oktaAuthState?.isAuthenticated) {
         oktaAuthService.getUser().then((user: any) => {
           authService.send("OKTA", { user, token: oktaAuthState.accessToken });
         });
