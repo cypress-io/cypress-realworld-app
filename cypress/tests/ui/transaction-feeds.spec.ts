@@ -270,8 +270,8 @@ describe("Transaction Feed", function () {
             cy.wait(`@${feed.routeAlias}`)
               .its("response.body.results")
               .should("deep.equal", unfilteredResults);
+            cy.visualSnapshot("Unfiltered Transactions");
           });
-          cy.visualSnapshot("Unfiltered Transactions");
         });
       });
 
