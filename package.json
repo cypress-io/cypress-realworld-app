@@ -35,7 +35,7 @@
     "react-dom": "17.0.2",
     "react-google-login": "5.2.2",
     "react-infinite-calendar": "2.3.1",
-    "react-number-format": "4.6.3",
+    "react-number-format": "4.7.3",
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
     "react-virtualized": "9.22.3",
