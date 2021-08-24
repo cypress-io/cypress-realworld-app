@@ -19,7 +19,7 @@
     "@aws-amplify/ui-react": "1.2.8",
     "@graphql-tools/graphql-file-loader": "^7.0.6",
     "@graphql-tools/load": "^7.1.9",
-    "@material-ui/core": "4.11.3",
+    "@material-ui/core": "4.12.3",
     "@material-ui/icons": "4.11.2",
     "@material-ui/lab": "4.0.0-alpha.60",
     "@okta/jwt-verifier": "2.3.0",
