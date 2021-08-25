@@ -17,6 +17,8 @@
   "dependencies": {
     "@auth0/auth0-react": "1.5.0",
     "@aws-amplify/ui-react": "1.2.8",
+    "@graphql-tools/graphql-file-loader": "^7.0.6",
+    "@graphql-tools/load": "^7.1.9",
     "@material-ui/core": "4.12.3",
     "@material-ui/icons": "4.11.2",
     "@material-ui/lab": "4.0.0-alpha.60",
@@ -99,7 +101,7 @@
     "faker": "5.5.3",
     "fuse.js": "6.4.6",
     "graphql": "15.5.1",
-    "graphql-tools": "7.0.5",
+    "graphql-tools": "8.1.0",
     "husky": "6.0.0",
     "istanbul-lib-coverage": "3.0.0",
     "json": "11.0.0",
