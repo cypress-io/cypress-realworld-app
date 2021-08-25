@@ -244,7 +244,6 @@ describe("Transaction Feed", function () {
             .then((transactions: Transaction[]) => {
               cy.getBySelLike("transaction-item").should("have.length", transactions.length);
 
-              cy.visualSnapshot("Date Range Filtered Transactions");
               transactions.forEach(({ createdAt }) => {
                 const createdAtDate = startOfDayUTC(new Date(createdAt));
 
@@ -258,6 +257,8 @@ describe("Transaction Feed", function () {
                   and ${dateRangeEnd.toISOString()}`
                 ).to.equal(true);
               });
+
+              cy.visualSnapshot("Date Range Filtered Transactions");
             });
 
           cy.log("Clearing date range filter. Data set should revert");
