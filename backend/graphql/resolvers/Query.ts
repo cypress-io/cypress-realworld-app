@@ -8,7 +8,7 @@ const Query = {
 
       return accounts;
       /* istanbul ignore next */
-    } catch (err) {
+    } catch (err: any) {
       /* istanbul ignore next */
       throw new Error(err);
     }
