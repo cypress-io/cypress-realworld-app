@@ -132,7 +132,7 @@ describe("Notifications", function () {
       cy.loginByXstate(ctx.userA.username);
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(3000);
-      cy.visualSnapshot("User A logged in");
+      cy.visualSnapshot();
 
       cy.database("find", "transactions", { senderId: ctx.userB.id }).then(
         (transaction: Transaction) => {
