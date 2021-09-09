@@ -143,25 +143,23 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
   });
 
   cy.window({ log: false }).then((win) => win.authService.send("LOGIN", { username, password }));
+  cy.location("pathname").should("equal", "/");
 
-  return cy
-    .location("pathname")
-    .should("equal", "/")
-    .then(() => {
-      log.set({
-        consoleProps() {
-          return {
-            username,
-            password,
-            // @ts-ignore
-            userId: loginUser.response.body.user.id,
-          };
-        },
-      });
-
-      log.snapshot("after");
-      log.end();
+  return cy.wait("@loginUser").then((loginUser) => {
+    log.set({
+      consoleProps() {
+        return {
+          username,
+          password,
+          // @ts-ignore
+          userId: loginUser.response.body.user.id,
+        };
+      },
     });
+
+    log.snapshot("after");
+    log.end();
+  });
 });
 
 Cypress.Commands.add("logoutByXstate", () => {
