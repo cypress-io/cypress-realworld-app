@@ -143,9 +143,11 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
   });
 
   cy.window({ log: false }).then((win) => win.authService.send("LOGIN", { username, password }));
-  cy.location("pathname").should("equal", "/");
 
   return cy.wait("@loginUser").then((loginUser) => {
+    cy.location("pathname").should("equal", "/");
+    cy.getBySel("list-skeleton").should("not.exist");
+
     log.set({
       consoleProps() {
         return {
