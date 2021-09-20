@@ -27,7 +27,7 @@
     "@okta/okta-react": "4.1.0",
     "@xstate/react": "1.5.1",
     "aws-amplify": "4.2.2",
-    "axios": "0.21.1",
+    "axios": "0.21.2",
     "clsx": "1.1.1",
     "date-fns": "2.23.0",
     "dinero.js": "1.9.0",
