@@ -130,7 +130,7 @@ describe("Notifications", function () {
 
     it("User A comments on a transaction of User B; User B gets notification that User A commented on their transaction", function () {
       cy.loginByXstate(ctx.userA.username);
-      cy.visualSnapshot();
+      cy.visualSnapshot("Logged in as user A");
 
       cy.database("find", "transactions", { senderId: ctx.userB.id }).then(
         (transaction: Transaction) => {
