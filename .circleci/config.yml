@@ -1,13 +1,14 @@
 version: 2.1
 orbs:
-  cypress: cypress-io/cypress@1.26.0
-  codecov: codecov/codecov@1.1.1
-  win: circleci/windows@2.4.0
+  cypress: cypress-io/cypress@1.28.0
+  codecov: codecov/codecov@1.2.3 #
+  win: circleci/windows@2.4.1
 
 executors:
   with-chrome-and-firefox:
     docker:
-      - image: "cypress/browsers:node12.18.0-chrome83-ff77"
+      - image: "cypress/browsers:node14.17.0-chrome88-ff89"
+    resource_class: medium+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 commands:
@@ -32,10 +33,17 @@ linux-workflow: &linux-workflow
         name: "Setup Linux"
         yarn: true
         executor: with-chrome-and-firefox
+        build: "yarn build:ci"
         post-steps:
+          - run:
+              name: Print machine info ℹ️
+              command: yarn cypress info
           - run:
               name: Check Types
               command: yarn types
+          - run:
+              name: Lint Files
+              command: yarn lint
           - run:
               name: Run Unit Tests
               command: yarn test:unit:ci
@@ -151,13 +159,26 @@ windows-workflow: &windows-workflow
           # executor comes from the "windows" orb
           name: win/default
           shell: bash.exe
+          size: large
+        pre-steps:
+          - run:
+              name: Disabling Windows Defender
+              shell: powershell.exe
+              command: Set-MpPreference -DisableRealtimeMonitoring $true
+        build: yarn build:ci
         post-steps:
           - run:
               name: Cypress info
               command: yarn cypress info
           - run:
+              name: Cypress cache list
+              command: yarn cypress cache list
+          - run:
               name: Check Types
               command: yarn types
+          - run:
+              name: Lint Files
+              command: yarn lint
           - run:
               name: Run Unit Tests
               command: yarn test:unit:ci
@@ -183,6 +204,7 @@ windows-workflow: &windows-workflow
         post-steps:
           - report-coverage
         no-workspace: true
+        timeout: 30m
 
 workflows:
   linux:

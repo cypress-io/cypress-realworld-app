@@ -110,7 +110,7 @@ export const getRandomTransactions = (baseCount: number, baseTransactions: Trans
   ).slice(0, baseCount);
 
 export const getUserAvatar = (identifier: string) => {
-  return `https://api.adorable.io/avatars/128/${identifier}.png`;
+  return `https://avatars.dicebear.com/api/human/${identifier}.svg`;
 };
 
 export const createFakeUser = (): User => {
@@ -178,21 +178,19 @@ export const createSeedContacts = (seedUsers: User[]) => {
 };
 
 export const createSeedBankAccounts = (seedUsers: User[]) =>
-  map(
-    (user: User): BankAccount => {
-      return {
-        id: shortid(),
-        uuid: faker.random.uuid(),
-        userId: user.id,
-        bankName: `${faker.company.companyName()} Bank`,
-        accountNumber: faker.finance.account(10),
-        routingNumber: faker.finance.account(9),
-        isDeleted: false,
-        createdAt: faker.date.past(),
-        modifiedAt: faker.date.recent(),
-      };
-    }
-  )(seedUsers);
+  map((user: User): BankAccount => {
+    return {
+      id: shortid(),
+      uuid: faker.random.uuid(),
+      userId: user.id,
+      bankName: `${faker.company.companyName()} Bank`,
+      accountNumber: faker.finance.account(10),
+      routingNumber: faker.finance.account(9),
+      isDeleted: false,
+      createdAt: faker.date.past(),
+      modifiedAt: faker.date.recent(),
+    };
+  })(seedUsers);
 
 // Transactions
 

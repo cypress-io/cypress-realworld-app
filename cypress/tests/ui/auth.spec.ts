@@ -1,24 +1,38 @@
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
 
+const apiGraphQL = `${Cypress.env("apiUrl")}/graphql`;
+
 describe("User Sign-up and Login", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.server();
-    cy.route("POST", "/users").as("signup");
-    cy.route("POST", "/bankAccounts").as("createBankAccount");
+    cy.intercept("POST", "/users").as("signup");
+    cy.intercept("POST", apiGraphQL, (req) => {
+      const { body } = req;
+
+      if (body.hasOwnProperty("operationName") && body.operationName === "CreateBankAccount") {
+        req.alias = "gqlCreateBankAccountMutation";
+      }
+    });
   });
 
   it("should redirect unauthenticated user to signin page", function () {
     cy.visit("/personal");
     cy.location("pathname").should("equal", "/signin");
-    cy.percySnapshot("Redirect to SignIn");
+    cy.visualSnapshot("Redirect to SignIn");
+  });
+
+  it("should redirect to the home page after login", function () {
+    cy.database("find", "users").then((user: User) => {
+      cy.login(user.username, "s3cret", { rememberUser: true });
+    });
+    cy.location("pathname").should("equal", "/");
   });
 
   it("should remember a user for 30 days after login", function () {
     cy.database("find", "users").then((user: User) => {
-      cy.login(user.username, "s3cret", true);
+      cy.login(user.username, "s3cret", { rememberUser: true });
     });
 
     // Verify Session Cookie
@@ -30,7 +44,7 @@ describe("User Sign-up and Login", function () {
     }
     cy.getBySel("sidenav-signout").click();
     cy.location("pathname").should("eq", "/signin");
-    cy.percySnapshot("Redirect to SignIn");
+    cy.visualSnapshot("Redirect to SignIn");
   });
 
   it("should allow a visitor to sign-up, login, and logout", function () {
@@ -46,14 +60,14 @@ describe("User Sign-up and Login", function () {
 
     cy.getBySel("signup").click();
     cy.getBySel("signup-title").should("be.visible").and("contain", "Sign Up");
-    cy.percySnapshot("Sign Up Title");
+    cy.visualSnapshot("Sign Up Title");
 
     cy.getBySel("signup-first-name").type(userInfo.firstName);
     cy.getBySel("signup-last-name").type(userInfo.lastName);
     cy.getBySel("signup-username").type(userInfo.username);
     cy.getBySel("signup-password").type(userInfo.password);
     cy.getBySel("signup-confirmPassword").type(userInfo.password);
-    cy.percySnapshot("About to Sign Up");
+    cy.visualSnapshot("About to Sign Up");
     cy.getBySel("signup-submit").click();
     cy.wait("@signup");
 
@@ -62,7 +76,9 @@ describe("User Sign-up and Login", function () {
 
     // Onboarding
     cy.getBySel("user-onboarding-dialog").should("be.visible");
-    cy.percySnapshot("User Onboarding Dialog");
+    cy.getBySel("list-skeleton").should("not.exist");
+    cy.getBySel("nav-top-notifications-count").should("exist");
+    cy.visualSnapshot("User Onboarding Dialog");
     cy.getBySel("user-onboarding-next").click();
 
     cy.getBySel("user-onboarding-dialog-title").should("contain", "Create Bank Account");
@@ -70,18 +86,18 @@ describe("User Sign-up and Login", function () {
     cy.getBySelLike("bankName-input").type("The Best Bank");
     cy.getBySelLike("accountNumber-input").type("123456789");
     cy.getBySelLike("routingNumber-input").type("987654321");
-    cy.percySnapshot("About to complete User Onboarding");
+    cy.visualSnapshot("About to complete User Onboarding");
     cy.getBySelLike("submit").click();
 
-    cy.wait("@createBankAccount");
+    cy.wait("@gqlCreateBankAccountMutation");
 
     cy.getBySel("user-onboarding-dialog-title").should("contain", "Finished");
     cy.getBySel("user-onboarding-dialog-content").should("contain", "You're all set!");
-    cy.percySnapshot("Finished User Onboarding");
+    cy.visualSnapshot("Finished User Onboarding");
     cy.getBySel("user-onboarding-next").click();
 
     cy.getBySel("transaction-list").should("be.visible");
-    cy.percySnapshot("Transaction List is visible after User Onboarding");
+    cy.visualSnapshot("Transaction List is visible after User Onboarding");
 
     // Logout User
     if (isMobile()) {
@@ -89,7 +105,7 @@ describe("User Sign-up and Login", function () {
     }
     cy.getBySel("sidenav-signout").click();
     cy.location("pathname").should("eq", "/signin");
-    cy.percySnapshot("Redirect to SignIn");
+    cy.visualSnapshot("Redirect to SignIn");
   });
 
   it("should display login errors", function () {
@@ -97,19 +113,21 @@ describe("User Sign-up and Login", function () {
 
     cy.getBySel("signin-username").type("User").find("input").clear().blur();
     cy.get("#username-helper-text").should("be.visible").and("contain", "Username is required");
-    cy.percySnapshot("Display Username is Required Error");
+    cy.visualSnapshot("Display Username is Required Error");
 
     cy.getBySel("signin-password").type("abc").find("input").blur();
     cy.get("#password-helper-text")
       .should("be.visible")
       .and("contain", "Password must contain at least 4 characters");
-    cy.percySnapshot("Display Password Error");
+    cy.visualSnapshot("Display Password Error");
 
     cy.getBySel("signin-submit").should("be.disabled");
-    cy.percySnapshot("Sign In Submit Disabled");
+    cy.visualSnapshot("Sign In Submit Disabled");
   });
 
   it("should display signup errors", function () {
+    cy.intercept("GET", "/signup");
+
     cy.visit("/signup");
 
     cy.getBySel("signup-first-name").type("First").find("input").clear().blur();
@@ -128,10 +146,10 @@ describe("User Sign-up and Login", function () {
     cy.get("#confirmPassword-helper-text")
       .should("be.visible")
       .and("contain", "Password does not match");
-    cy.percySnapshot("Display Sign Up Required Errors");
+    cy.visualSnapshot("Display Sign Up Required Errors");
 
     cy.getBySel("signup-submit").should("be.disabled");
-    cy.percySnapshot("Sign Up Submit Disabled");
+    cy.visualSnapshot("Sign Up Submit Disabled");
   });
 
   it("should error for an invalid user", function () {
@@ -140,7 +158,7 @@ describe("User Sign-up and Login", function () {
     cy.getBySel("signin-error")
       .should("be.visible")
       .and("have.text", "Username or password is invalid");
-    cy.percySnapshot("Sign In, Invalid Username and Password, Username or Password is Invalid");
+    cy.visualSnapshot("Sign In, Invalid Username and Password, Username or Password is Invalid");
   });
 
   it("should error for an invalid password for existing user", function () {
@@ -151,6 +169,6 @@ describe("User Sign-up and Login", function () {
     cy.getBySel("signin-error")
       .should("be.visible")
       .and("have.text", "Username or password is invalid");
-    cy.percySnapshot("Sign In, Invalid Username, Username or Password is Invalid");
+    cy.visualSnapshot("Sign In, Invalid Username, Username or Password is Invalid");
   });
 });

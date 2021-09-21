@@ -4,7 +4,7 @@ import UserSettingsForm from "../components/UserSettingsForm";
 import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import { useService } from "@xstate/react";
-import { ReactComponent as PersonalSettingsIllustration } from "../svgs/undraw_personal_settings_kihd.svg";
+import PersonalSettingsIllustration from "../components/SvgUndrawPersonalSettingsKihd";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -24,7 +24,7 @@ const UserSettingsContainer: React.FC<Props> = ({ authService }) => {
   const [authState, sendAuth] = useService(authService);
 
   const currentUser = authState?.context?.user;
-  const updateUser = (payload: any) => sendAuth("UPDATE", payload);
+  const updateUser = (payload: any) => sendAuth({ type: "UPDATE", ...payload });
 
   return (
     <Paper className={classes.paper}>

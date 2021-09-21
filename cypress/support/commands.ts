@@ -5,6 +5,33 @@ import { pick } from "lodash/fp";
 import { format as formatDate } from "date-fns";
 import { isMobile } from "./utils";
 
+// Import Cypress Percy plugin command (https://docs.percy.io/docs/cypress)
+import "@percy/cypress";
+
+// Import commands for third-party auth providers
+import "./auth-provider-commands/cognito";
+import "./auth-provider-commands/auth0";
+import "./auth-provider-commands/okta";
+
+// custom command to make taking snapshots with full name
+// formed from the test title + suffix easier
+// cy.visualSnapshot() // default full test title
+// cy.visualSnapshot('clicked') // full test title + ' - clicked'
+// also sets the width and height to the current viewport
+Cypress.Commands.add("visualSnapshot", (maybeName) => {
+  // @ts-ignore
+  let snapshotTitle = cy.state("runnable").fullTitle();
+  if (maybeName) {
+    snapshotTitle = snapshotTitle + " - " + maybeName;
+  }
+  cy.percySnapshot(snapshotTitle, {
+    // @ts-ignore
+    widths: [cy.state("viewportWidth")],
+    // @ts-ignore
+    minHeight: cy.state("viewportHeight"),
+  });
+});
+
 Cypress.Commands.add("getBySel", (selector, ...args) => {
   return cy.get(`[data-test=${selector}]`, ...args);
 });
@@ -13,7 +40,7 @@ Cypress.Commands.add("getBySelLike", (selector, ...args) => {
   return cy.get(`[data-test*=${selector}]`, ...args);
 });
 
-Cypress.Commands.add("login", (username, password, rememberUser = false) => {
+Cypress.Commands.add("login", (username, password, { rememberUser = false } = {}) => {
   const signinPath = "/signin";
   const log = Cypress.log({
     name: "login",
@@ -23,9 +50,8 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
     autoEnd: false,
   });
 
-  cy.server();
-  cy.route("POST", "/login").as("loginUser");
-  cy.route("GET", "checkAuth").as("getUserProfile");
+  cy.intercept("POST", "/login").as("loginUser");
+  cy.intercept("GET", "checkAuth").as("getUserProfile");
 
   cy.location("pathname", { log: false }).then((currentPath) => {
     if (currentPath !== signinPath) {
@@ -50,7 +76,7 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
           username,
           password,
           rememberUser,
-          userId: loginUser.response.body.user?.id,
+          userId: loginUser.response.statusCode !== 401 && loginUser.response.body.user.id,
         };
       },
     });
@@ -71,7 +97,9 @@ Cypress.Commands.add("reactComponent", { prevSubject: "element" }, ($el) => {
   if ($el.length !== 1) {
     throw new Error(`cy.component() requires element of length 1 but got ${$el.length}`);
   }
-  const key = Object.keys($el.get(0)).find((key) => key.startsWith("__reactInternalInstance$"));
+  // Query for key starting with __reactInternalInstance$ for React v16.x
+  //
+  const key = Object.keys($el.get(0)).find((key) => key.startsWith("__reactFiber$"));
 
   // @ts-ignore
   const domFiber = $el.prop(key);
@@ -105,20 +133,18 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
     name: "loginbyxstate",
     displayName: "LOGIN BY XSTATE",
     message: [`🔐 Authenticating | ${username}`],
-    // @ts-ignore
     autoEnd: false,
   });
 
-  cy.server();
-  cy.route("POST", "/login").as("loginUser");
-  cy.route("GET", "/checkAuth").as("getUserProfile");
+  cy.intercept("POST", "/login").as("loginUser");
+  cy.intercept("GET", "/checkAuth").as("getUserProfile");
   cy.visit("/signin", { log: false }).then(() => {
     log.snapshot("before");
   });
 
   cy.window({ log: false }).then((win) => win.authService.send("LOGIN", { username, password }));
 
-  return cy.wait("@loginUser").then((loginUser) => {
+  cy.wait("@loginUser").then((loginUser) => {
     log.set({
       consoleProps() {
         return {
@@ -129,16 +155,18 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
         };
       },
     });
-
-    log.snapshot("after");
-    log.end();
   });
+
+  return cy
+    .getBySel("list-skeleton")
+    .should("not.exist")
+    .then(() => {
+      log.snapshot("after");
+      log.end();
+    });
 });
 
 Cypress.Commands.add("logoutByXstate", () => {
-  cy.server();
-  cy.route("POST", "/logout").as("logoutUser");
-
   const log = Cypress.log({
     name: "logoutByXstate",
     displayName: "LOGOUT BY XSTATE",
@@ -152,13 +180,16 @@ Cypress.Commands.add("logoutByXstate", () => {
     win.authService.send("LOGOUT");
   });
 
-  return cy.wait("@logoutUser").then(() => {
-    log.snapshot("after");
-    log.end();
-  });
+  return cy
+    .location("pathname")
+    .should("equal", "/signin")
+    .then(() => {
+      log.snapshot("after");
+      log.end();
+    });
 });
 
-Cypress.Commands.add("switchUser", (username) => {
+Cypress.Commands.add("switchUserByXstate", (username) => {
   cy.logoutByXstate();
   return cy.loginByXstate(username).then(() => {
     if (isMobile()) {
@@ -168,8 +199,8 @@ Cypress.Commands.add("switchUser", (username) => {
     } else {
       cy.getBySel("sidenav-username").contains(username);
     }
-    cy.getBySel("list-skeleton").should("not.be.visible");
-    cy.percySnapshot(`Switch to User ${username}`);
+    cy.getBySel("list-skeleton").should("not.exist");
+    cy.getBySelLike("transaction-item").should("have.length.greaterThan", 1);
   });
 });
 
@@ -271,7 +302,7 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
     log.end();
   });
 
-  cy.get(".Cal__Header__root").should("not.be.visible");
+  cy.get(".Cal__Header__root").should("not.exist");
 });
 
 Cypress.Commands.add("database", (operation, entity, query, logTask = false) => {
@@ -295,5 +326,44 @@ Cypress.Commands.add("database", (operation, entity, query, logTask = false) => 
     log.snapshot();
     log.end();
     return data;
+  });
+});
+
+Cypress.Commands.add("loginByGoogleApi", () => {
+  cy.log("Logging in to Google");
+
+  cy.request({
+    method: "POST",
+    url: "https://www.googleapis.com/oauth2/v4/token",
+    body: {
+      grant_type: "refresh_token",
+      client_id: Cypress.env("googleClientId"),
+      client_secret: Cypress.env("googleClientSecret"),
+      refresh_token: Cypress.env("googleRefreshToken"),
+    },
+  }).then(({ body }) => {
+    const { access_token, id_token } = body;
+
+    cy.request({
+      method: "GET",
+      url: "https://www.googleapis.com/oauth2/v3/userinfo",
+      headers: { Authorization: `Bearer ${access_token}` },
+    }).then(({ body }) => {
+      cy.log(body);
+      const userItem = {
+        token: id_token,
+        user: {
+          googleId: body.sub,
+          email: body.email,
+          givenName: body.given_name,
+          familyName: body.family_name,
+          imageUrl: body.picture,
+        },
+      };
+
+      window.localStorage.setItem("googleCypress", JSON.stringify(userItem));
+
+      cy.visit("/");
+    });
   });
 });

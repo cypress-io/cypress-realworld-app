@@ -1,12 +1,11 @@
 import React from "react";
-import TextField from "@material-ui/core/TextField";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, TextField, Button, Grid } from "@material-ui/core";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object, mixed } from "yup";
-import { Button, Grid } from "@material-ui/core";
 import { User, DefaultPrivacyLevel, UserSettingsPayload } from "../models";
 
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 const DefaultPrivacyLevelValues = Object.values(DefaultPrivacyLevel);
 

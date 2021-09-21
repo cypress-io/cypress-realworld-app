@@ -11,15 +11,14 @@ describe("Transaction View", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.server();
-    cy.route("GET", "/transactions").as("personalTransactions");
-    cy.route("GET", "/transactions/public").as("publicTransactions");
-    cy.route("GET", "/transactions/*").as("getTransaction");
-    cy.route("PATCH", "/transactions/*").as("updateTransaction");
+    cy.intercept("GET", "/transactions*").as("personalTransactions");
+    cy.intercept("GET", "/transactions/public*").as("publicTransactions");
+    cy.intercept("GET", "/transactions/*").as("getTransaction");
+    cy.intercept("PATCH", "/transactions/*").as("updateTransaction");
 
-    cy.route("GET", "/checkAuth").as("userProfile");
-    cy.route("GET", "/notifications").as("getNotifications");
-    cy.route("GET", "/bankAccounts").as("getBankAccounts");
+    cy.intercept("GET", "/checkAuth").as("userProfile");
+    cy.intercept("GET", "/notifications").as("getNotifications");
+    cy.intercept("GET", "/bankAccounts").as("getBankAccounts");
 
     cy.database("find", "users").then((user: User) => {
       ctx.authenticatedUser = user;
@@ -42,10 +41,10 @@ describe("Transaction View", function () {
 
   it("transactions navigation tabs are hidden on a transaction view page", function () {
     cy.getBySelLike("transaction-item").first().click();
-
     cy.location("pathname").should("include", "/transaction");
-    cy.getBySel("nav-transaction-tabs").should("not.be.visible");
-    cy.percySnapshot("Transaction Navigation Tabs Hidden");
+    cy.getBySel("nav-transaction-tabs").should("not.exist");
+    cy.getBySel("transaction-detail-header").should("be.visible");
+    cy.visualSnapshot("Transaction Navigation Tabs Hidden");
   });
 
   it("likes a transaction", function () {
@@ -55,7 +54,7 @@ describe("Transaction View", function () {
     cy.getBySelLike("like-button").click();
     cy.getBySelLike("like-count").should("contain", 1);
     cy.getBySelLike("like-button").should("be.disabled");
-    cy.percySnapshot("Transaction after Liked");
+    cy.visualSnapshot("Transaction after Liked");
   });
 
   it("comments on a transaction", function () {
@@ -70,7 +69,7 @@ describe("Transaction View", function () {
     });
 
     cy.getBySelLike("comments-list").children().should("have.length", comments.length);
-    cy.percySnapshot("Comment on Transaction");
+    cy.visualSnapshot("Comment on Transaction");
   });
 
   it("accepts a transaction request", function () {
@@ -78,9 +77,10 @@ describe("Transaction View", function () {
     cy.wait("@getTransaction");
 
     cy.getBySelLike("accept-request").click();
-    cy.wait("@updateTransaction").should("have.property", "status", 204);
-    cy.getBySelLike("accept-request").should("not.be.visible");
-    cy.percySnapshot("Transaction Accepted");
+    cy.wait("@updateTransaction").its("response.statusCode").should("equal", 204);
+    cy.getBySelLike("accept-request").should("not.exist");
+    cy.getBySel("transaction-detail-header").should("be.visible");
+    cy.visualSnapshot("Transaction Accepted");
   });
 
   it("rejects a transaction request", function () {
@@ -88,9 +88,10 @@ describe("Transaction View", function () {
     cy.wait("@getTransaction");
 
     cy.getBySelLike("reject-request").click();
-    cy.wait("@updateTransaction").should("have.property", "status", 204);
-    cy.getBySelLike("reject-request").should("not.be.visible");
-    cy.percySnapshot("Transaction Rejected");
+    cy.wait("@updateTransaction").its("response.statusCode").should("equal", 204);
+    cy.getBySelLike("reject-request").should("not.exist");
+    cy.getBySel("transaction-detail-header").should("be.visible");
+    cy.visualSnapshot("Transaction Rejected");
   });
 
   it("does not display accept/reject buttons on completed request", function () {
@@ -101,10 +102,13 @@ describe("Transaction View", function () {
     }).then((transactionRequest) => {
       cy.visit(`/transaction/${transactionRequest!.id}`);
 
+      cy.wait("@getNotifications");
+      cy.getBySel("nav-top-notifications-count").should("be.visible");
       cy.getBySel("transaction-detail-header").should("be.visible");
-      cy.getBySel("transaction-accept-request").should("not.be.visible");
-      cy.getBySel("transaction-reject-request").should("not.be.visible");
-      cy.percySnapshot("Transaction Completed (not able to accept or reject)");
+      cy.getBySel("transaction-accept-request").should("not.exist");
+      cy.getBySel("transaction-reject-request").should("not.exist");
+      cy.getBySel("transaction-detail-header").should("be.visible");
+      cy.visualSnapshot("Transaction Completed (not able to accept or reject)");
     });
   });
 });

@@ -1,15 +1,23 @@
 import React from "react";
 import { format as formatDate } from "date-fns";
-import { Popover, Chip, useTheme, makeStyles, Drawer, Button } from "@material-ui/core";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import CancelIcon from "@material-ui/icons/Cancel";
-import indigo from "@material-ui/core/colors/indigo";
+import {
+  Popover,
+  Chip,
+  useTheme,
+  makeStyles,
+  Drawer,
+  Button,
+  useMediaQuery,
+  colors,
+} from "@material-ui/core";
+import { ArrowDropDown as ArrowDropDownIcon, Cancel as CancelIcon } from "@material-ui/icons";
 import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+
 import "react-infinite-calendar/styles.css";
 import { TransactionDateRangePayload } from "../models";
 import { hasDateQueryFields } from "../utils/transactionUtils";
 
+const { indigo } = colors;
 const CalendarWithRange = withRange(Calendar);
 
 export type TransactionListDateRangeFilterProps = {

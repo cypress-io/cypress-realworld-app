@@ -5,6 +5,7 @@ import faker from "faker";
 import { User, BankAccount } from "../../../src/models";
 
 const apiBankAccounts = `${Cypress.env("apiUrl")}/bankAccounts`;
+const apiGraphQL = `${Cypress.env("apiUrl")}/graphql`;
 
 type TestBankAccountsCtx = {
   allUsers?: User[];
@@ -71,6 +72,70 @@ describe("Bank Accounts API", function () {
     it("deletes a bank account", function () {
       const { id: bankAccountId } = ctx.bankAccounts![0];
       cy.request("DELETE", `${apiBankAccounts}/${bankAccountId}`).then((response) => {
+        expect(response.status).to.eq(200);
+      });
+    });
+  });
+
+  context("/graphql", function () {
+    it("gets a list of bank accounts for user", function () {
+      const { id: userId } = ctx.authenticatedUser!;
+      cy.request("POST", `${apiGraphQL}`, {
+        query: `query {
+           listBankAccount {
+            id
+            uuid
+            userId
+            bankName
+            accountNumber
+            routingNumber
+            isDeleted
+            createdAt
+            modifiedAt
+           }
+          }`,
+      }).then((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.body.data.listBankAccount[0].userId).to.eq(userId);
+      });
+    });
+    it("creates a new bank account", function () {
+      const { id: userId } = ctx.authenticatedUser!;
+      cy.request("POST", `${apiGraphQL}`, {
+        query: `mutation createBankAccount ($bankName: String!, $accountNumber: String!,  $routingNumber: String!) {
+          createBankAccount(
+            bankName: $bankName,
+            accountNumber: $accountNumber,
+            routingNumber: $routingNumber
+          ) {
+            id
+            uuid
+            userId
+            bankName
+            accountNumber
+            routingNumber
+            isDeleted
+            createdAt
+          }
+        }`,
+        variables: {
+          bankName: `${faker.company.companyName()} Bank`,
+          accountNumber: faker.finance.account(10),
+          routingNumber: faker.finance.account(9),
+        },
+      }).then((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.body.data.createBankAccount.userId).to.eq(userId);
+      });
+    });
+    it("deletes a bank account", function () {
+      const { id: bankAccountId } = ctx.bankAccounts![0];
+      cy.request("POST", `${apiGraphQL}`, {
+        query: `mutation deleteBankAccount ($id: ID!) {
+          deleteBankAccount(id: $id)
+        }`,
+        variables: { id: bankAccountId },
+      }).then((response) => {
         expect(response.status).to.eq(200);
       });
     });

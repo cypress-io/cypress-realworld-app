@@ -21,9 +21,8 @@ const TransactionCreateContainer: React.FC<Props> = ({ authService, snackbarServ
   const [authState] = useService(authService);
   const [, sendSnackbar] = useService(snackbarService);
 
-  const [createTransactionState, sendCreateTransaction, createTransactionService] = useMachine(
-    createTransactionMachine
-  );
+  const [createTransactionState, sendCreateTransaction, createTransactionService] =
+    useMachine(createTransactionMachine);
 
   // Expose createTransactionService on window for Cypress
   // @ts-ignore
@@ -37,14 +36,15 @@ const TransactionCreateContainer: React.FC<Props> = ({ authService, snackbarServ
 
   const sender = authState?.context?.user;
   const setReceiver = (receiver: User) => {
-    sendCreateTransaction("SET_USERS", { sender, receiver });
+    // @ts-ignore
+    sendCreateTransaction({ type: "SET_USERS", sender, receiver });
   };
   const createTransaction = (payload: TransactionPayload) => {
     sendCreateTransaction("CREATE", payload);
   };
-  const userListSearch = debounce(200, (payload: any) => sendUsers("FETCH", payload));
+  const userListSearch = debounce(200, (payload: any) => sendUsers({ type: "FETCH", ...payload }));
 
-  const showSnackbar = (payload: SnackbarContext) => sendSnackbar("SHOW", payload);
+  const showSnackbar = (payload: SnackbarContext) => sendSnackbar({ type: "SHOW", ...payload });
 
   let activeStep;
   if (createTransactionState.matches("stepTwo")) {

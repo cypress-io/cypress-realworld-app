@@ -1,0 +1,74 @@
+# Install Cypress, then run all tests (in parallel)
+stages:
+  - build
+  - test
+
+# Set environment variables for folders in "cache" job settings for npm modules and Cypress binary
+variables:
+  npm_config_cache: "$CI_PROJECT_DIR/.npm"
+  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
+
+# Cache using branch name
+# https://gitlab.com/help/ci/caching/index.md
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .cache/*
+    - cache/Cypress
+    - node_modules
+    - build
+
+# Install NPM dependencies and Cypress
+install:
+  image: cypress/browsers:node14.17.0-chrome88-ff89
+  stage: build
+
+  script:
+    - yarn install --frozen-lockfile
+    # check Cypress binary path and cached versions
+    - npx cypress cache path
+    - npx cypress cache list
+    - yarn types
+    - yarn lint
+    - yarn test:unit:ci
+    - yarn build:ci
+
+api-tests:
+  image: cypress/browsers:node14.17.0-chrome88-ff89
+  stage: test
+  parallel: 5
+  script:
+    - yarn start:ci & npx wait-on http://localhost:3000
+    - npx cypress run --record --parallel --browser chrome --group "API" --spec "cypress/tests/api/*"
+
+ui-chrome:
+  image: cypress/browsers:node14.17.0-chrome88-ff89
+  stage: test
+  parallel: 5
+  script:
+    - yarn start:ci & npx wait-on http://localhost:3000
+    - npx cypress run --record --parallel --browser chrome --group "UI - Chrome" --spec "cypress/tests/ui/*"
+
+ui-chrome-mobile:
+  image: cypress/browsers:node14.17.0-chrome88-ff89
+  stage: test
+  parallel: 5
+  script:
+    - yarn start:ci & npx wait-on http://localhost:3000
+    - npx cypress run --record --parallel --browser chrome --group "UI - Chrome - Mobile" --spec "cypress/tests/ui/*" --config "viewportWidth=375,viewportHeight=667"
+
+ui-firefox:
+  image: cypress/browsers:node14.17.0-chrome88-ff89
+  stage: test
+  parallel: 5
+  script:
+    - yarn start:ci & npx wait-on http://localhost:3000
+    - npx cypress run --record --parallel --browser firefox --group "UI - Firefox" --spec "cypress/tests/ui/*"
+
+ui-firefox-mobile:
+  image: cypress/browsers:node14.17.0-chrome88-ff89
+  stage: test
+  parallel: 5
+  script:
+    - yarn start:ci & npx wait-on http://localhost:3000
+    - npx cypress run --record --parallel --browser firefox --group "UI - Firefox - Mobile" --spec "cypress/tests/ui/*" --config "viewportWidth=375,viewportHeight=667"

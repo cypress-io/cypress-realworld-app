@@ -1,7 +1,7 @@
 import React from "react";
+import { List } from "@material-ui/core";
 
 import UserListItem from "./UserListItem";
-import List from "@material-ui/core/List";
 import { User } from "../models";
 
 export interface UsersListProps {

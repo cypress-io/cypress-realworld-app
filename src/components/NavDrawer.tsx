@@ -3,21 +3,29 @@ import { head } from "lodash/fp";
 import { Interpreter } from "xstate";
 import { useService } from "@xstate/react";
 import clsx from "clsx";
-import { useMediaQuery, useTheme } from "@material-ui/core";
+import {
+  useMediaQuery,
+  useTheme,
+  makeStyles,
+  Drawer,
+  List,
+  Divider,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Grid,
+  Avatar,
+  Typography,
+} from "@material-ui/core";
 import { Link as RouterLink } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import HomeIcon from "@material-ui/icons/Home";
-import PersonIcon from "@material-ui/icons/Person";
-import LogoutIcon from "@material-ui/icons/ExitToApp";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
-import { Grid, Avatar, Typography } from "@material-ui/core";
+import {
+  Home as HomeIcon,
+  Person as PersonIcon,
+  ExitToApp as LogoutIcon,
+  Notifications as NotificationsIcon,
+  AccountBalance as AccountBalanceIcon,
+} from "@material-ui/icons";
+
 import { formatAmount } from "../utils/transactionUtils";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 
@@ -238,7 +246,7 @@ const NavDrawer: React.FC<Props> = ({
                 className={classes.amount}
                 data-test="sidenav-user-balance"
               >
-                {formatAmount(currentUser.balance)}
+                {currentUser.balance ? formatAmount(currentUser.balance) : formatAmount(0)}
               </Typography>
               <Typography variant="subtitle2" color="inherit" gutterBottom>
                 Account Balance

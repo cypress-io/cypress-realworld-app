@@ -1,0 +1,26 @@
+type Query {
+  listBankAccount: [BankAccount!]
+}
+
+type Mutation {
+  createBankAccount(
+    bankName: String!,
+    accountNumber: String!,
+    routingNumber: String!
+  ): BankAccount
+  deleteBankAccount(
+    id: ID!
+  ): Boolean
+}
+
+type BankAccount {
+  id: ID!
+  uuid: String
+  userId: String
+  bankName: String
+  accountNumber: String
+  routingNumber: String
+  isDeleted: Boolean
+  createdAt: String
+  modifiedAt: String
+}

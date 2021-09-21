@@ -1,15 +1,13 @@
 import React, { ReactNode } from "react";
-import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, Paper, Button, ListSubheader, Grid } from "@material-ui/core";
 import { Link as RouterLink } from "react-router-dom";
-import { Button, ListSubheader, Grid } from "@material-ui/core";
 import { isEmpty } from "lodash/fp";
 
 import SkeletonList from "./SkeletonList";
 import { TransactionResponseItem, TransactionPagination } from "../models";
 import EmptyList from "./EmptyList";
 import TransactionInfiniteList from "./TransactionInfiniteList";
-import { ReactComponent as TransferMoneyIllustration } from "../svgs/undraw_transfer_money_rywa.svg";
+import TransferMoneyIllustration from "./SvgUndrawTransferMoneyRywa";
 
 export interface TransactionListProps {
   header: string;

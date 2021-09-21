@@ -21,7 +21,7 @@ const fakeTransaction = (
   createdAt?: Date
 ): Transaction => ({
   id: shortid(),
-  uuid: faker.random.uuid(),
+  uuid: faker.datatype.uuid(),
   source: shortid(),
   amount: getFakeAmount(),
   description: "food",
@@ -57,7 +57,7 @@ describe("Transaction Utils", () => {
 
       const currentUser = {
         id: "9IUK0xpw",
-        uuid: faker.random.uuid(),
+        uuid: faker.datatype.uuid(),
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
         username: faker.internet.userName(),
@@ -66,7 +66,7 @@ describe("Transaction Utils", () => {
         phoneNumber: faker.phone.phoneNumber(),
         avatar: faker.internet.avatar(),
         defaultPrivacyLevel: DefaultPrivacyLevel.public,
-        balance: faker.random.number(),
+        balance: faker.datatype.number(),
         createdAt: faker.date.past(),
         modifiedAt: faker.date.recent(),
       };
@@ -101,7 +101,7 @@ describe("Transaction Utils", () => {
     });
   });
 
-  test("gets query without date range fields", () => {
+  test("gets query with and without date range fields", () => {
     expect(
       getQueryWithoutDateFields({
         dateRangeStart: new Date().toString(),
@@ -116,7 +116,7 @@ describe("Transaction Utils", () => {
     ).toMatchObject({ status: "incomplete" });
   });
 
-  test("gets query without amount range fields", () => {
+  test("gets query with and without amount range fields", () => {
     expect(
       getQueryWithoutAmountFields({
         amountMin: 5,
@@ -131,7 +131,7 @@ describe("Transaction Utils", () => {
     ).toMatchObject({ status: "incomplete" });
   });
 
-  test("gets query without date and amount range fields", () => {
+  test("gets query with and without date and amount range fields", () => {
     const query = {
       amountMin: 5,
       amountMax: 10,
@@ -142,5 +142,10 @@ describe("Transaction Utils", () => {
     expect(getQueryWithoutFilterFields(query)).toMatchObject({
       requestStatus: "pending",
     });
+    expect(
+      getQueryWithoutFilterFields({
+        status: TransactionStatus.incomplete,
+      })
+    ).toMatchObject({ status: "incomplete" });
   });
 });
