@@ -283,13 +283,10 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
     return cy.get(`[data-date='${formatDate(date, "yyyy-MM-dd")}']`).click({ force: true });
   };
 
+  log.snapshot("before");
   // Focus initial viewable date picker range around target start date
-  // @ts-ignore: Cypress expects wrapped variable to be a jQuery type
-  cy.wrap(startDate.getTime()).then((now) => {
-    log.snapshot("before");
-    // @ts-ignore
-    cy.clock(now, ["Date"]);
-  });
+  // @ts-ignore
+  cy.clock(startDate.getTime(), ["Date"]);
 
   // Open date range picker
   cy.getBySelLike("filter-date-range-button").click({ force: true });
