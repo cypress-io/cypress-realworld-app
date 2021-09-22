@@ -334,12 +334,6 @@ describe("Transaction Feed", function () {
         });
 
         cy.getBySelLike("amount-clear-button").click();
-        cy.get("@unfilteredResults").then((unfilteredResults) => {
-          cy.wait(`@${feed.routeAlias}`)
-            .its("response.body.results")
-            .should("deep.equal", unfilteredResults);
-          cy.visualSnapshot("Unfiltered Transactions");
-        });
 
         if (isMobile()) {
           cy.getBySelLike("amount-range-filter-drawer-close").click();
@@ -350,6 +344,13 @@ describe("Transaction Feed", function () {
           cy.getBySel("transaction-list-filter-date-range-button").click({ force: true });
           cy.getBySel("transaction-list-filter-amount-range").should("not.be.visible");
         }
+
+        cy.get("@unfilteredResults").then((unfilteredResults) => {
+          cy.wait(`@${feed.routeAlias}`)
+            .its("response.body.results")
+            .should("deep.equal", unfilteredResults);
+          cy.visualSnapshot("Unfiltered Transactions");
+        });
       });
 
       it(`does not show ${feedName} transactions for out of range amount limits`, function () {
