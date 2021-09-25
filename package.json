@@ -103,7 +103,7 @@
     "graphql": "15.6.0",
     "graphql-tools": "8.2.0",
     "husky": "6.0.0",
-    "istanbul-lib-coverage": "3.0.0",
+    "istanbul-lib-coverage": "3.0.1",
     "json": "11.0.0",
     "jwks-rsa": "2.0.3",
     "lowdb": "1.0.0",
