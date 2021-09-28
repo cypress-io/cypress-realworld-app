@@ -125,7 +125,6 @@
     "@types/express-serve-static-core": "4.17.2"
   },
   "scripts": {
-    "preinstall": "cross-env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true",
     "dev": "cross-env NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",
     "dev:auth0": "cross-env REACT_APP_AUTH0=true NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",
     "dev:okta": "cross-env REACT_APP_OKTA=true NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",
