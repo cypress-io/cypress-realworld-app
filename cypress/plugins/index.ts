@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 import _ from "lodash";
 import path from "path";
 import axios from "axios";
@@ -11,11 +13,11 @@ dotenv.config();
 
 const awsConfig = require(path.join(__dirname, "../../aws-exports-es5.js"));
 
+/**
+ * @type {Cypress.PluginConfig}
+ */
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (on, config) => {
-  if (config.testingType === "component") {
-    require("@cypress/react/plugins/react-scripts")(on, config);
-  }
-
   config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD;
   config.env.paginationPageSize = process.env.PAGINATION_PAGE_SIZE;
   // Auth0
@@ -71,6 +73,9 @@ export default (on, config) => {
     },
   });
 
-  codeCoverageTask(on, config);
+  if (config.testingType === "component") {
+    require("@cypress/react/plugins/react-scripts")(on, config);
+    codeCoverageTask(on, config);
+  }
   return config;
 };
