@@ -38,9 +38,9 @@ linux-workflow: &linux-workflow
           - run:
               name: Print machine info ℹ️
               command: yarn cypress info
-          #- run:
-          #    name: Check Types
-          #    command: yarn types
+          - run:
+              name: Check Types
+              command: yarn types
           - run:
               name: Lint Files
               command: yarn lint
