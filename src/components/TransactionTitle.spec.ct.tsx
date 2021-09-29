@@ -3,15 +3,9 @@ import { mount } from "@cypress/react";
 import TransactionTitle from "./TransactionTitle";
 
 it("Transaction Title", () => {
-  const testTransaction = {
-    id: 1,
-    likes: [],
-    comments: [],
-    receiverName: "Kevin",
-    receiverAvatar: "",
-    senderName: "Amir",
-    senderAvatar: "",
-  };
-  mount(<TransactionTitle transaction={testTransaction} />);
-  cy.get("[data-test*=transaction-sender]").should("contain", testTransaction.senderName);
+  cy.fixture("public-transactions.json").then((transactions) => {
+    const transaction = transactions.results[0];
+    mount(<TransactionTitle transaction={transaction} />);
+    cy.get("[data-test*=transaction-sender]").should("contain", transaction.senderName);
+  });
 });
