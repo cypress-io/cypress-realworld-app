@@ -55,8 +55,7 @@ export default (on, config) => {
     percyHealthCheck,
     async "db:seed"() {
       // seed database with test data
-      const { data } = await axios.post(`${testDataApiEndpoint}/seed`);
-      return data;
+      await axios.post(`${testDataApiEndpoint}/seed`);
     },
 
     // fetch test data from a database (MySQL, PostgreSQL, etc...)
