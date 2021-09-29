@@ -56,6 +56,7 @@ export default (on, config) => {
     async "db:seed"() {
       // seed database with test data
       await axios.post(`${testDataApiEndpoint}/seed`);
+      return null;
     },
 
     // fetch test data from a database (MySQL, PostgreSQL, etc...)
