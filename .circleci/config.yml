@@ -47,6 +47,9 @@ linux-workflow: &linux-workflow
           - run:
               name: Run Unit Tests
               command: yarn test:unit:ci
+          - run:
+              name: Run Component Tests
+              command: yarn test:component:ci
 
     # Run API tests against backend server
     - cypress/run:
