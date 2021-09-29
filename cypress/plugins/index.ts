@@ -11,6 +11,7 @@ dotenv.config();
 
 const awsConfig = require(path.join(__dirname, "../../aws-exports-es5.js"));
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (on, config) => {
   config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD;
   config.env.paginationPageSize = process.env.PAGINATION_PAGE_SIZE;
