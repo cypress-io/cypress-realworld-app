@@ -1,7 +1,4 @@
-import dotenv from "dotenv";
 import axios from "axios";
-
-dotenv.config();
 
 const httpClient = axios.create({
   withCredentials: true,
@@ -10,12 +7,12 @@ const httpClient = axios.create({
 httpClient.interceptors.request.use((config) => {
   /* istanbul ignore if */
   if (
-    process.env.REACT_APP_AUTH0 ||
-    process.env.REACT_APP_OKTA ||
-    process.env.REACT_APP_AWS_COGNITO ||
-    process.env.REACT_APP_GOOGLE
+    import.meta.env.VITE_AUTH0 ||
+    import.meta.env.VITE_OKTA ||
+    import.meta.env.VITE_AWS_COGNITO ||
+    import.meta.env.VITE_GOOGLE
   ) {
-    const accessToken = localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_NAME!);
+    const accessToken = localStorage.getItem(import.meta.env.VITE_AUTH_TOKEN_NAME!);
     config.headers["Authorization"] = `Bearer ${accessToken}`;
   }
   return config;

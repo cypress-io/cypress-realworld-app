@@ -75,22 +75,22 @@ if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {
 app.use(auth);
 
 /* istanbul ignore if */
-if (process.env.REACT_APP_AUTH0) {
+if (process.env.VITE_AUTH0) {
   app.use(checkAuth0Jwt);
 }
 
 /* istanbul ignore if */
-if (process.env.REACT_APP_OKTA) {
+if (process.env.VITE_OKTA) {
   app.use(verifyOktaToken);
 }
 
 /* istanbul ignore if */
-if (process.env.REACT_APP_AWS_COGNITO) {
+if (process.env.VITE_AWS_COGNITO) {
   app.use(checkCognitoJwt);
 }
 
 /* istanbul ignore if */
-if (process.env.REACT_APP_GOOGLE) {
+if (process.env.VITE_GOOGLE) {
   app.use(checkGoogleJwt);
 }
 

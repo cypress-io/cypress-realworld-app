@@ -5,8 +5,8 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { Auth0Provider } from "@auth0/auth0-react";
 /* istanbul ignore next */
 // @ts-ignore
-import { OktaAuth } from "@okta/okta-auth-js";
-import { Security } from "@okta/okta-react";
+//import { OktaAuth } from "@okta/okta-auth-js";
+//import { Security } from "@okta/okta-react";
 
 import App from "./containers/App";
 import AppGoogle from "./containers/AppGoogle";
@@ -29,14 +29,14 @@ const onRedirectCallback = (appState: any) => {
 };
 
 /* istanbul ignore if */
-if (process.env.REACT_APP_AUTH0) {
+if (import.meta.env.VITE_AUTH0) {
   ReactDOM.render(
     <Auth0Provider
-      domain={process.env.REACT_APP_AUTH0_DOMAIN!}
-      clientId={process.env.REACT_APP_AUTH0_CLIENTID!}
+      domain={import.meta.env.VITE_AUTH0_DOMAIN!}
+      clientId={import.meta.env.VITE_AUTH0_CLIENTID!}
       redirectUri={window.location.origin}
-      audience={process.env.REACT_APP_AUTH0_AUDIENCE}
-      scope={process.env.REACT_APP_AUTH0_SCOPE}
+      audience={import.meta.env.VITE_AUTH0_AUDIENCE}
+      scope={import.meta.env.VITE_AUTH0_SCOPE}
       onRedirectCallback={onRedirectCallback}
       cacheLocation="localstorage"
     >
@@ -48,19 +48,17 @@ if (process.env.REACT_APP_AUTH0) {
     </Auth0Provider>,
     document.getElementById("root")
   );
-} else if (process.env.REACT_APP_OKTA) {
+  /*} else if (import.meta.env.VITE_OKTA) {
   const oktaAuth = new OktaAuth({
-    issuer: `https://${process.env.REACT_APP_OKTA_DOMAIN}/oauth2/default`,
-    clientId: process.env.REACT_APP_OKTA_CLIENTID,
+    issuer: `https://${import.meta.env.VITE_OKTA_DOMAIN}/oauth2/default`,
+    clientId: import.meta.env.VITE_OKTA_CLIENTID,
     redirectUri: window.location.origin + "/implicit/callback",
   });
 
-  /* istanbul ignore next */
   ReactDOM.render(
     <Router history={history}>
       <ThemeProvider theme={theme}>
-        {process.env.REACT_APP_OKTA ? (
-          /* istanbul ignore next */
+        {import.meta.env.VITE_OKTA ? (
           <Security oktaAuth={oktaAuth}>
             <AppOkta />
           </Security>
@@ -71,7 +69,8 @@ if (process.env.REACT_APP_AUTH0) {
     </Router>,
     document.getElementById("root")
   );
-} else if (process.env.REACT_APP_AWS_COGNITO) {
+  */
+} else if (import.meta.env.VITE_AWS_COGNITO) {
   /* istanbul ignore next */
   ReactDOM.render(
     <Router history={history}>
@@ -81,7 +80,7 @@ if (process.env.REACT_APP_AUTH0) {
     </Router>,
     document.getElementById("root")
   );
-} else if (process.env.REACT_APP_GOOGLE) {
+} else if (import.meta.env.VITE_GOOGLE) {
   /* istanbul ignore next */
   ReactDOM.render(
     <Router history={history}>

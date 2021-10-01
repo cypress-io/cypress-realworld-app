@@ -17,17 +17,17 @@ export default (on, config) => {
   // Auth0
   config.env.auth0_username = process.env.AUTH0_USERNAME;
   config.env.auth0_password = process.env.AUTH0_PASSWORD;
-  config.env.auth0_domain = process.env.REACT_APP_AUTH0_DOMAIN;
-  config.env.auth0_audience = process.env.REACT_APP_AUTH0_AUDIENCE;
-  config.env.auth0_scope = process.env.REACT_APP_AUTH0_SCOPE;
-  config.env.auth0_client_id = process.env.REACT_APP_AUTH0_CLIENTID;
+  config.env.auth0_domain = process.env.VITE_AUTH0_DOMAIN;
+  config.env.auth0_audience = process.env.VITE_AUTH0_AUDIENCE;
+  config.env.auth0_scope = process.env.VITE_AUTH0_SCOPE;
+  config.env.auth0_client_id = process.env.VITE_AUTH0_CLIENTID;
   config.env.auth0_client_secret = process.env.AUTH0_CLIENT_SECRET;
-  config.env.auth_token_name = process.env.REACT_APP_AUTH_TOKEN_NAME;
+  config.env.auth_token_name = process.env.VITE_AUTH_TOKEN_NAME;
   // Okta
   config.env.okta_username = process.env.OKTA_USERNAME;
   config.env.okta_password = process.env.OKTA_PASSWORD;
-  config.env.okta_domain = process.env.REACT_APP_OKTA_DOMAIN;
-  config.env.okta_client_id = process.env.REACT_APP_OKTA_CLIENTID;
+  config.env.okta_domain = process.env.VITE_OKTA_DOMAIN;
+  config.env.okta_client_id = process.env.VITE_OKTA_CLIENTID;
 
   // Amazon Cognito
   config.env.cognito_username = process.env.AWS_COGNITO_USERNAME;
@@ -36,8 +36,8 @@ export default (on, config) => {
 
   // Google
   config.env.googleRefreshToken = process.env.GOOGLE_REFRESH_TOKEN;
-  config.env.googleClientId = process.env.REACT_APP_GOOGLE_CLIENTID;
-  config.env.googleClientSecret = process.env.REACT_APP_GOOGLE_CLIENT_SECRET;
+  config.env.googleClientId = process.env.VITE_GOOGLE_CLIENTID;
+  config.env.googleClientSecret = process.env.VITE_GOOGLE_CLIENT_SECRET;
 
   const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 
