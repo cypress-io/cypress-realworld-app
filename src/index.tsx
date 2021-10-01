@@ -69,9 +69,7 @@ if (import.meta.env.VITE_AUTH0) {
     </Router>,
     document.getElementById("root")
   );
-  */
 } else if (import.meta.env.VITE_AWS_COGNITO) {
-  /* istanbul ignore next */
   ReactDOM.render(
     <Router history={history}>
       <ThemeProvider theme={theme}>
@@ -80,6 +78,7 @@ if (import.meta.env.VITE_AUTH0) {
     </Router>,
     document.getElementById("root")
   );
+  */
 } else if (import.meta.env.VITE_GOOGLE) {
   /* istanbul ignore next */
   ReactDOM.render(
