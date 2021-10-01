@@ -114,3 +114,5 @@ app.use("/bankTransfers", bankTransferRoutes);
 app.use(express.static(join(__dirname, "../public")));
 
 app.listen(backendPort);
+
+export { app };
