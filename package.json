@@ -44,7 +44,7 @@
     "shortid": "2.2.16",
     "uuid": "8.3.2",
     "xstate": "4.25.0",
-    "yup": "0.32.9"
+    "yup": "0.32.11"
   },
   "devDependencies": {
     "@cypress/code-coverage": "3.9.11",
@@ -84,7 +84,7 @@
     "@types/yup": "0.29.13",
     "aws-sdk": "2.968.0",
     "bcryptjs": "2.4.3",
-    "concurrently": "6.2.1",
+    "concurrently": "6.3.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "cypress": "8.5.0",
@@ -105,7 +105,7 @@
     "husky": "6.0.0",
     "istanbul-lib-coverage": "3.0.1",
     "json": "11.0.0",
-    "jwks-rsa": "2.0.4",
+    "jwks-rsa": "2.0.5",
     "lowdb": "1.0.0",
     "morgan": "1.10.0",
     "ncp": "2.0.0",
