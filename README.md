@@ -36,9 +36,9 @@ A payment application to demonstrate <strong>real-world</strong> usage of <a hre
 
 > 💬 **Note from maintainers**
 >
-> This application is purely for demonstration and educational purposes. Its setup and configuration resemble typical real-world applications, but it's not a full-fledge production system. Use this app to learn, experiment, tinker, and practice application testing with Cypress.
+> This application is purely for demonstration and educational purposes. Its setup and configuration resemble typical real-world applications, but it's not a full-fledged production system. Use this app to learn, experiment, tinker, and practice application testing with Cypress.
 >
-> Happy Testing
+> Happy Testing!
 
 ---
 
@@ -84,7 +84,7 @@ yarn dev
 >
 > The app will run on port `3000` (frontend) and `3001` (API backend) by default. Please make sure there are no other applications or services running on both ports.
 > If you want to change the default ports, you can do so by modifying `REACT_APP_PORT` and `REACT_APP_BACKEND_PORT` variables in `.env` file.
-> However, make sure the modified port numbers in `.env` are not commited into Git since the CI environments still expect the application run on default ports.
+> However, make sure the modified port numbers in `.env` are not commited into Git since the CI environments still expect the application to run on the default ports.
 
 ### Start Cypress
 
@@ -114,7 +114,7 @@ yarn cypress:open
 > }
 > ```
 >
-> Avoid committing the modified `cypress.json` into Git since the CI environments still expect the application run on default ports.
+> Avoid committing the modified `cypress.json` into Git since the CI environments still expect the application to be run on default ports.
 
 ## Tests
 
@@ -126,7 +126,7 @@ yarn cypress:open
 
 ## Database
 
-- The local JSON database located in [data/database.json](./data/database.json) and is managed with [lowdb].
+- The local JSON database is located in [data/database.json](./data/database.json) and is managed with [lowdb].
 
 - The database is [reseeded](./data/database-seed.json) each time the application is started (via `yarn dev`). Database seeding is done in between each [Cypress End-to-End test](./cypress/tests).
 
