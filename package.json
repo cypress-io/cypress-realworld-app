@@ -100,7 +100,7 @@
     "express-validator": "6.13.0",
     "faker": "5.5.3",
     "fuse.js": "6.4.6",
-    "graphql": "15.6.1",
+    "graphql": "16.0.0",
     "graphql-tools": "8.2.0",
     "husky": "6.0.0",
     "istanbul-lib-coverage": "3.2.0",
