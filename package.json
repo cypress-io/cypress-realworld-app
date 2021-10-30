@@ -69,7 +69,7 @@
     "@types/lodash": "4.14.175",
     "@types/lowdb": "1.0.11",
     "@types/morgan": "1.9.3",
-    "@types/node": "14.17.27",
+    "@types/node": "16.11.6",
     "@types/passport": "1.0.7",
     "@types/react": "17.0.30",
     "@types/react-dom": "17.0.9",
