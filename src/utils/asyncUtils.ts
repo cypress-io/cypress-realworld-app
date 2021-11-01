@@ -16,6 +16,7 @@ httpClient.interceptors.request.use((config) => {
     process.env.REACT_APP_GOOGLE
   ) {
     const accessToken = localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_NAME!);
+    // @ts-ignore
     config.headers["Authorization"] = `Bearer ${accessToken}`;
   }
   return config;

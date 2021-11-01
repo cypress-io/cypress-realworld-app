@@ -12,6 +12,7 @@ export const transactionDetailMachine = dataMachine("transactionData").withConfi
       const resp = await httpClient.get(
         `http://localhost:${backendPort}/transactions/${transactionId}`
       );
+      // @ts-ignore
       return { results: [resp.data.transaction] };
     },
     createData: async (ctx, event: any) => {
