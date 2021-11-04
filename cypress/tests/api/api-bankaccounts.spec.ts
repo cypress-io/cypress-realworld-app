@@ -13,7 +13,7 @@ type TestBankAccountsCtx = {
   bankAccounts?: BankAccount[];
 };
 
-describe("Bank Accounts API", function () {
+describe("Bank Accounts API ", function () {
   let ctx: TestBankAccountsCtx = {};
 
   beforeEach(function () {
