@@ -3422,10 +3422,10 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.2.tgz#30aa825f11d438671d585bd44e7fd564535fc210"
   integrity sha512-82cpyJyKRoQoRi+14ibCeGPu0CwypgtBAdBhq1WfvagpCZNKqwXbKwXllYSMG91DhmG4jt9gN8eP6lGOtozuaw==
 
-"@graphql-tools/graphql-file-loader@7.3.2":
-  version "7.3.2"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.3.2.tgz#b35a67bfc38455edb6c6062ff1fc1613dee0fb71"
-  integrity sha512-4vzHdPIYo25bleMeZNZf1IV6Betd5COERn+fTGQDBS98ONDU2d/kXe4lD1N2bBNp5bwrd1Sd5TeDgHPYXKB8kQ==
+"@graphql-tools/graphql-file-loader@7.3.3":
+  version "7.3.3"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.3.3.tgz#7cee2f84f08dc13fa756820b510248b857583d36"
+  integrity sha512-6kUJZiNpYKVhum9E5wfl5PyLLupEDYdH7c8l6oMrk6c7EPEVs6iSUyB7yQoWrtJccJLULBW2CRQ5IHp5JYK0mA==
   dependencies:
     "@graphql-tools/import" "^6.5.7"
     "@graphql-tools/utils" "^8.5.1"
