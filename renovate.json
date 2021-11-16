@@ -10,6 +10,8 @@
   "minor": {
     "automerge": false
   },
+
+  "prConcurrentLimit": 50,
   "prHourlyLimit": 1,
   "updateNotScheduled": false,
   "timezone": "America/New_York",
