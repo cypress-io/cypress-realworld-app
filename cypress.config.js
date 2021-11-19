@@ -14,8 +14,6 @@ module.exports = defineConfig({
   baseUrl: "http://localhost:3000",
   projectId: "7s5okt",
   integrationFolder: "cypress/tests",
-  viewportHeight: 1000,
-  viewportWidth: 1280,
   env: {
     apiUrl: "http://localhost:3001",
     mobileViewportWidthBreakpoint: 414,
@@ -27,6 +25,8 @@ module.exports = defineConfig({
     paginationPageSize: process.env.PAGINATION_PAGE_SIZE,
   },
   e2e: {
+    viewportHeight: 1000,
+    viewportWidth: 1280,
     setupNodeEvents(on, config) {
       const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 
