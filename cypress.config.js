@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import Promise from "bluebird";
 import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
-const { defineConfig } = require("/Users/amir/Development/cypress/cli/lib/cypress.js");
+import { defineConfig } from "cypress";
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
