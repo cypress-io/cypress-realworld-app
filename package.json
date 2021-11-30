@@ -29,7 +29,7 @@
     "aws-amplify": "4.3.8",
     "axios": "0.24.0",
     "clsx": "1.1.1",
-    "date-fns": "2.25.0",
+    "date-fns": "2.26.0",
     "dinero.js": "1.9.1",
     "formik": "2.2.9",
     "history": "4.10.1",
