@@ -47,7 +47,7 @@
     "yup": "0.32.11"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "3.9.11",
+    "@cypress/code-coverage": "3.9.12",
     "@cypress/instrument-cra": "1.4.0",
     "@percy/cypress": "2.3.4",
     "@types/bcryptjs": "2.4.2",
