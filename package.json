@@ -25,7 +25,7 @@
     "@okta/jwt-verifier": "2.3.0",
     "@okta/okta-auth-js": "4.9.2",
     "@okta/okta-react": "4.1.0",
-    "@xstate/react": "1.6.2",
+    "@xstate/react": "1.6.3",
     "aws-amplify": "4.3.10",
     "axios": "0.24.0",
     "clsx": "1.1.1",
@@ -43,7 +43,7 @@
     "react-virtualized": "9.22.3",
     "shortid": "2.2.16",
     "uuid": "8.3.2",
-    "xstate": "4.26.0",
+    "xstate": "4.26.1",
     "yup": "0.32.11"
   },
   "devDependencies": {
