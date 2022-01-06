@@ -1,11 +1,10 @@
 import _ from "lodash";
-import path from "path";
 import axios from "axios";
 import dotenv from "dotenv";
 import Promise from "bluebird";
 import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
-import { defineConfig } from "cypress";
+import { defineConfig } from "../cypress/node_modules/cypress";
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
@@ -25,6 +24,8 @@ module.exports = defineConfig({
     paginationPageSize: process.env.PAGINATION_PAGE_SIZE,
   },
   e2e: {
+    specPattern: "cypress/tests/**/*.spec.{js,jsx,ts,tsx}",
+    supportFile: "cypress/support/e2e.ts",
     viewportHeight: 1000,
     viewportWidth: 1280,
     setupNodeEvents(on, config) {
