@@ -5,6 +5,7 @@ import Promise from "bluebird";
 import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
 import { defineConfig } from "../cypress/node_modules/cypress";
+const { devServer } = require("@cypress/react/plugins/react-scripts");
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
@@ -22,6 +23,11 @@ module.exports = defineConfig({
     },
     defaultPassword: process.env.SEED_DEFAULT_USER_PASSWORD,
     paginationPageSize: process.env.PAGINATION_PAGE_SIZE,
+  },
+  component: {
+    devServer,
+    specPattern: "src/**/*.ct.{js,jsx,ts,tsx}",
+    supportFile: "cypress/support/component.ts",
   },
   e2e: {
     specPattern: "cypress/tests/**/*.spec.{js,jsx,ts,tsx}",
