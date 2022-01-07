@@ -26,7 +26,7 @@ module.exports = defineConfig({
   },
   component: {
     devServer,
-    specPattern: "src/**/*.ct.{js,jsx,ts,tsx}",
+    specPattern: "src/**/*.cy.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/component.ts",
   },
   e2e: {
