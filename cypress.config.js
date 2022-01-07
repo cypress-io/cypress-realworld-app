@@ -1,3 +1,4 @@
+import path from "path";
 import _ from "lodash";
 import axios from "axios";
 import dotenv from "dotenv";
@@ -9,6 +10,8 @@ const { devServer } = require("@cypress/react/plugins/react-scripts");
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
+
+const awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
 
 module.exports = defineConfig({
   baseUrl: "http://localhost:3000",
@@ -23,6 +26,32 @@ module.exports = defineConfig({
     },
     defaultPassword: process.env.SEED_DEFAULT_USER_PASSWORD,
     paginationPageSize: process.env.PAGINATION_PAGE_SIZE,
+
+    // Auth0
+    auth0_username: process.env.AUTH0_USERNAME,
+    auth0_password: process.env.AUTH0_PASSWORD,
+    auth0_domain: process.env.REACT_APP_AUTH0_DOMAIN,
+    auth0_audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+    auth0_scope: process.env.REACT_APP_AUTH0_SCOPE,
+    auth0_client_id: process.env.REACT_APP_AUTH0_CLIENTID,
+    auth0_client_secret: process.env.AUTH0_CLIENT_SECRET,
+    auth_token_name: process.env.REACT_APP_AUTH_TOKEN_NAME,
+
+    // Okta
+    okta_username: process.env.OKTA_USERNAME,
+    okta_password: process.env.OKTA_PASSWORD,
+    okta_domain: process.env.REACT_APP_OKTA_DOMAIN,
+    okta_client_id: process.env.REACT_APP_OKTA_CLIENTID,
+
+    // Amazon Cognito
+    cognito_username: process.env.AWS_COGNITO_USERNAME,
+    cognito_password: process.env.AWS_COGNITO_PASSWORD,
+    awsConfig: awsConfig.default,
+
+    // Google
+    googleRefreshToken: process.env.GOOGLE_REFRESH_TOKEN,
+    googleClientId: process.env.REACT_APP_GOOGLE_CLIENTID,
+    googleClientSecret: process.env.REACT_APP_GOOGLE_CLIENT_SECRET,
   },
   component: {
     devServer,
