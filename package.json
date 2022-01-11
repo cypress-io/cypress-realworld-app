@@ -150,7 +150,7 @@
     "cypress:open": "cypress open",
     "cypress:open:mobile": "cypress open --config viewportWidth=375,viewportHeight=667",
     "cypress:run": "cypress run",
-    "cypress:run:component": "cypress run --component",
+    "cypress:run:component": "cypress run --component --record",
     "cypress:run:mobile": "cypress run --config viewportWidth=375,viewportHeight=667",
     "test": "yarn cypress:open",
     "test:headless": "yarn cypress:run",
