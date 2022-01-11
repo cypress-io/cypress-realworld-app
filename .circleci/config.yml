@@ -9,6 +9,9 @@ executors:
     docker:
       - image: "cypress/browsers:node14.17.0-chrome88-ff89"
     resource_class: medium+
+    environment:
+      PERCY_TOKEN:
+      CYPRESS_coverage: false
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 commands:
