@@ -8,7 +8,7 @@ on:
 jobs:
   install:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node16.13.0-chrome95-ff94
+    container: cypress/browsers:node14.17.0-chrome88-ff89
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -19,7 +19,6 @@ jobs:
           runTests: false
       # report machine parameters
       - run: yarn cypress info
-      - run: node --version
       - run: node -p 'os.cpus()'
       - run: yarn types
       - run: yarn lint
@@ -61,7 +60,7 @@ jobs:
   ui-chrome-tests:
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    container: cypress/browsers:node16.13.0-chrome95-ff94
+    container: cypress/browsers:node14.17.0-chrome88-ff89
     needs: install
     strategy:
       # when one test fails, DO NOT cancel the other
@@ -104,7 +103,7 @@ jobs:
   ui-chrome-mobile-tests:
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    container: cypress/browsers:node16.13.0-chrome95-ff94
+    container: cypress/browsers:node14.17.0-chrome88-ff89
     needs: install
     strategy:
       # when one test fails, DO NOT cancel the other
@@ -149,7 +148,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node16.13.0-chrome95-ff94
+      image: cypress/browsers:node14.17.0-chrome88-ff89
       options: --user 1001
     needs: install
     strategy:
@@ -194,7 +193,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node16.13.0-chrome95-ff94
+      image: cypress/browsers:node14.17.0-chrome88-ff89
       options: --user 1001
     needs: install
     strategy:
