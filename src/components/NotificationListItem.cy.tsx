@@ -16,7 +16,7 @@ describe("Notification List Item", () => {
       modifiedAt: new Date(),
     };
 
-    const updateNotification = cy.spy();
+    const updateNotification = cy.spy().as("updateNotificationSpy");
 
     mount(
       <NotificationListItem notification={notification} updateNotification={updateNotification} />
@@ -89,5 +89,32 @@ describe("Notification List Item", () => {
     );
 
     cy.contains(`${notification.userFullName} commented on a transaction.`);
+  });
+
+  it("the isRead button calls the update notification function with the correct data when clicked.", () => {
+    const notification = {
+      userFullName: "Kaylin Homenick",
+      id: "95qRwfJnSORQ",
+      uuid: "0b5a0f25-c56b-4434-ba4d-21f133d8964f",
+      userId: "t45AiwidW",
+      transactionId: "xAsSYDsiEGSj",
+      status: PaymentNotificationStatus.received,
+      isRead: false,
+      createdAt: new Date(),
+      modifiedAt: new Date(),
+    };
+
+    const updateNotification = cy.spy().as("updateNotificationSpy");
+
+    mount(
+      <NotificationListItem notification={notification} updateNotification={updateNotification} />
+    );
+
+    cy.contains(`${notification.userFullName} received payment.`);
+    cy.get("button").click();
+    cy.get("@updateNotificationSpy").should("be.calledWith", {
+      id: notification.id,
+      isRead: true,
+    });
   });
 });
