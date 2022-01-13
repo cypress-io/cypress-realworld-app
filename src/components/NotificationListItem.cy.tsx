@@ -16,7 +16,7 @@ describe("Notification List Item", () => {
       modifiedAt: new Date(),
     };
 
-    const updateNotification = cy.spy().as("updateNotificationSpy");
+    const updateNotification = cy.spy();
 
     mount(
       <NotificationListItem notification={notification} updateNotification={updateNotification} />
