@@ -53,6 +53,7 @@ describe("Transaction Date Range Filter", () => {
       />
     );
 
+    // @ts-ignore
     cy.pickDateRange(dateRangeStart, dateRangeEnd);
   });
 });
