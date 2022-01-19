@@ -6,6 +6,7 @@ import Promise from "bluebird";
 import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
 import { defineConfig } from "cypress";
+import "@cypress/instrument-cra";
 const { devServer } = require("@cypress/react/plugins/react-scripts");
 
 dotenv.config({ path: ".env.local" });
@@ -16,13 +17,13 @@ const awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
 module.exports = defineConfig({
   baseUrl: "http://localhost:3000",
   projectId: "7s5okt",
-  integrationFolder: "cypress/tests",
   env: {
     apiUrl: "http://localhost:3001",
     mobileViewportWidthBreakpoint: 414,
     coverage: false,
     codeCoverage: {
       url: "http://localhost:3001/__coverage__",
+      exclude: "cypress/**/*.*",
     },
     defaultPassword: process.env.SEED_DEFAULT_USER_PASSWORD,
     paginationPageSize: process.env.PAGINATION_PAGE_SIZE,
@@ -57,6 +58,10 @@ module.exports = defineConfig({
     devServer,
     specPattern: "src/**/*.cy.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/component.ts",
+    setupNodeEvents(on, config) {
+      codeCoverageTask(on, config);
+      return config;
+    },
   },
   e2e: {
     specPattern: "cypress/tests/**/*.spec.{js,jsx,ts,tsx}",
