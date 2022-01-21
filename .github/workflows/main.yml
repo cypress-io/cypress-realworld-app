@@ -111,6 +111,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEBUG: "cypress:server:args"
           CYPRESS_USER_NODE_PATH: "/__e/node16/bin/node"
+          NODE_VERSION: "16.13.0"
 
   ui-chrome-mobile-tests:
     timeout-minutes: 15
