@@ -73,7 +73,6 @@ jobs:
         # run copies of the current job in parallel
         containers: [1, 2, 3, 4, 5]
     steps:
-      - run: node --version
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -82,6 +81,12 @@ jobs:
         with:
           name: build
           path: build
+
+      - name: Cypress info
+        run: npx cypress info
+
+      - name: Node info
+        run: node -v
 
       - name: "UI Tests - Chrome"
         uses: cypress-io/github-action@v2
