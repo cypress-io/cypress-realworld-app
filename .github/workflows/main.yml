@@ -7,7 +7,7 @@ on:
 
 jobs:
   install:
-    runs-on: ubuntu-latest # v16
+    runs-on: ubuntu-latest
     container: cypress/browsers:node16.13.0-chrome95-ff94
     steps:
       - name: Checkout
@@ -110,8 +110,6 @@ jobs:
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEBUG: "cypress:server:args"
-          CYPRESS_USER_NODE_PATH: "/__e/node16/bin/node"
-          NODE_VERSION: "16.13.0"
 
   ui-chrome-mobile-tests:
     timeout-minutes: 15
