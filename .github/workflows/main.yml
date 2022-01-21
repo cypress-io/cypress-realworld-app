@@ -19,6 +19,7 @@ jobs:
           runTests: false
       # report machine parameters
       - run: yarn cypress info
+      - run: node --version
       - run: node -p 'os.cpus()'
       - run: yarn types
       - run: yarn lint
@@ -72,6 +73,7 @@ jobs:
         # run copies of the current job in parallel
         containers: [1, 2, 3, 4, 5]
     steps:
+      - run: node --version
       - name: Checkout
         uses: actions/checkout@v2
 
