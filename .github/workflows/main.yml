@@ -7,7 +7,7 @@ on:
 
 jobs:
   install:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # v16
     container: cypress/browsers:node16.13.0-chrome95-ff94
     steps:
       - name: Checkout
@@ -87,6 +87,9 @@ jobs:
 
       - name: Node info
         run: node -v
+
+      - name: __e Dir
+        run: ls /__e
 
       - name: "UI Tests - Chrome"
         uses: cypress-io/github-action@v2
