@@ -110,6 +110,7 @@ jobs:
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEBUG: "cypress:server:args"
+          CYPRESS_USER_NODE_PATH: "/__e/node16/bin/node"
 
   ui-chrome-mobile-tests:
     timeout-minutes: 15
