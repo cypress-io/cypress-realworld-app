@@ -15,7 +15,7 @@
     "node": ">=12"
   },
   "dependencies": {
-    "@auth0/auth0-react": "1.8.0",
+    "@auth0/auth0-react": "1.9.0",
     "@aws-amplify/ui-react": "1.2.26",
     "@graphql-tools/graphql-file-loader": "7.3.3",
     "@graphql-tools/load": "7.4.1",
