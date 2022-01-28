@@ -14,7 +14,7 @@ dotenv.config();
 const awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
 
 module.exports = defineConfig({
-  nodeVersion: "system",
+  //nodeVersion: "system",
   baseUrl: "http://localhost:3000",
   projectId: "7s5okt",
   integrationFolder: "cypress/tests",
