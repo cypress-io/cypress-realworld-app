@@ -15,7 +15,6 @@ const awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
 
 module.exports = defineConfig({
   //nodeVersion: "system",
-  baseUrl: "http://localhost:3000",
   projectId: "7s5okt",
   integrationFolder: "cypress/tests",
   env: {
@@ -60,6 +59,7 @@ module.exports = defineConfig({
     supportFile: "cypress/support/component.ts",
   },
   e2e: {
+    baseUrl: "http://localhost:3000",
     specPattern: "cypress/tests/**/*.spec.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/e2e.ts",
     viewportHeight: 1000,
