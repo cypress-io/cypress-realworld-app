@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import _ from "lodash";
 import path from "path";
 import axios from "axios";
@@ -6,10 +8,11 @@ import Promise from "bluebird";
 import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
 
-dotenv.config({ path: ".env.local" });
-dotenv.config();
+//dotenv.config({ path: ".env.local" });
+//dotenv.config();
 
-const awsConfig = require(path.join(__dirname, "../../aws-exports-es5.js"));
+//const awsConfig = require(path.join(__dirname, "../../aws-exports-es5.js"));
+const awsConfig = {};
 
 export default (on, config) => {
   config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD;
