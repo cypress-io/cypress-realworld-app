@@ -15,7 +15,7 @@ dotenv.config();
 const awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
 
 module.exports = defineConfig({
-  baseUrl: "http://localhost:3000",
+  //nodeVersion: "system",
   projectId: "7s5okt",
   env: {
     apiUrl: "http://localhost:3001",
@@ -64,6 +64,7 @@ module.exports = defineConfig({
     },
   },
   e2e: {
+    baseUrl: "http://localhost:3000",
     specPattern: "cypress/tests/**/*.spec.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/e2e.ts",
     viewportHeight: 1000,
