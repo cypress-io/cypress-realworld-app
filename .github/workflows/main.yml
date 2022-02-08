@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: cypress/browsers:node16.13.0-chrome95-ff94
-      options: --user 1001
+      options: --user node
     steps:
       - name: Checkout
         uses: actions/checkout@v2
