@@ -156,7 +156,7 @@
     "test:api": "yarn cypress:run --spec 'cypress/tests/api/*'",
     "test:unit": "react-scripts test --runInBand",
     "test:unit:ci": "react-scripts test --watchAll false --ci --runInBand",
-    "test:component:ci": "yarn cypress:run:component --record --group Component",
+    "test:component:ci": "yarn cypress:run:component --record --group Component --parallel",
     "start:api": "yarn tsnode --files backend/app.ts",
     "start:api:watch": "nodemon --exec yarn tsnode --watch 'backend' backend/app.ts",
     "start:react:proxy-server": "yarn tsnode scripts/testServer.ts",
