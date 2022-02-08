@@ -11,10 +11,9 @@ const { devServer } = require("@cypress/react/plugins/react-scripts");
 dotenv.config({ path: ".env.local" });
 dotenv.config();
 
-const awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
+// const awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
 
 module.exports = defineConfig({
-  //nodeVersion: "system",
   projectId: "7s5okt",
   integrationFolder: "cypress/tests",
   env: {
