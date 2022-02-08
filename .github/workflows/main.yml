@@ -61,6 +61,34 @@ jobs:
           if-no-files-found: error
           path: build
 
+  component-tests:
+    runs-on: ubuntu-latest
+    container: cypress/browsers:node16.13.0-chrome95-ff94
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Download the build folders
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: build
+
+      - name: "Component Tests"
+        uses: cypress-io/github-action@v3
+        with:
+          start: yarn cypress:run:component
+          browser: chrome
+          record: true
+          group: "Component"
+          spec: src/components/*
+          config-file: cypress.config.js
+        env:
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   ui-chrome-tests:
     timeout-minutes: 15
     runs-on: ubuntu-latest
@@ -84,15 +112,6 @@ jobs:
         with:
           name: build
           path: build
-
-      - name: Cypress info
-        run: npx cypress info
-
-      - name: Node info
-        run: node -v
-
-      - name: __e Dir
-        run: ls /__e
 
       - name: "UI Tests - Chrome"
         uses: cypress-io/github-action@v3
