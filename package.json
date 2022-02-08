@@ -47,7 +47,7 @@
     "yup": "0.32.11"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "git+https://github.com/cypress-io/code-coverage.git#v10-compat",
+    "@cypress/code-coverage": "^3.10.0-dev.1",
     "@cypress/instrument-cra": "1.4.0",
     "@cypress/react": "^5.10.0",
     "@cypress/webpack-dev-server": "^1.6.0",
@@ -89,7 +89,7 @@
     "concurrently": "6.3.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-    "cypress": "https://cdn.cypress.io/beta/npm/10.0.0/circle-10.0-release-0e544287f6bd5753fec9d8d2b30b15e37154269c/cypress.tgz",
+    "cypress": " https://cdn.cypress.io/beta/npm/10.0.0/linux-x64/circle-10.0-release-4299af8a0c07c2e691aa2916d96c95869391a585/cypress.tgz",
     "dotenv": "10.0.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-cypress": "2.12.1",
