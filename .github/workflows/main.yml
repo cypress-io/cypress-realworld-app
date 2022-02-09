@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Cypress install
-        uses: cypress-io/github-action@v3
+        uses: cypress-io/github-action@UDX-109-update-for-v10
         with:
           runTests: false
       # report machine parameters
@@ -55,14 +55,14 @@ jobs:
         uses: cypress-io/github-action@UDX-109-update-for-v10
         with:
           start: yarn cypress:run:component
+          component: true
           # wait-on: "http://localhost:3000"
           # wait-on-timeout: 120
-          browser: chrome
+          # browser: chrome
           # record: true
           # parallel: true
-          group: "Component"
+          # group: "Component"
           # spec: cypress/tests/ui/*
-          config-file: cypress.config.js
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
