@@ -19,7 +19,7 @@ export default defineConfig({
   experimentalStudio: true,
   e2e: {
     setupNodeEvents(on, config) {
-      return require("./cypress/plugins/index.ts")(on, config);
+      return require("./cypress/plugins/index.ts").default(on, config);
     },
     baseUrl: "http://localhost:3000",
     specPattern: "cypress/tests/**/*.cy.{js,jsx,ts,tsx}",
