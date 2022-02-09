@@ -15,6 +15,7 @@ dotenv.config();
 const awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
 
 module.exports = defineConfig({
+  //nodeVersion: "system",
   projectId: "7s5okt",
   env: {
     apiUrl: "http://localhost:3001",
