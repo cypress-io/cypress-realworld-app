@@ -59,7 +59,7 @@ jobs:
           # wait-on: "http://localhost:3000"
           # wait-on-timeout: 120
           # browser: chrome
-          # record: true
+          record: true
           # parallel: true
           # group: "Component"
           # spec: cypress/tests/ui/*
