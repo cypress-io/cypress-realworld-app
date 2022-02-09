@@ -54,8 +54,9 @@ jobs:
       - name: "Component Tests - Chrome"
         uses: cypress-io/github-action@UDX-109-update-for-v10
         with:
-          start: yarn cypress:run:component
-          component: true
+          install: false
+          command: yarn cypress run --component
+          # component: true
           # wait-on: "http://localhost:3000"
           # wait-on-timeout: 120
           # browser: chrome
