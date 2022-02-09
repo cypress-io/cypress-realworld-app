@@ -52,7 +52,7 @@ jobs:
           path: build
 
       - name: "Component Tests - Chrome"
-        uses: cypress-io/github-action@v3
+        uses: cypress-io/github-action@UDX-109-update-for-v10
         with:
           start: yarn cypress:run:component
           # wait-on: "http://localhost:3000"
