@@ -11,7 +11,7 @@ const { devServer } = require("@cypress/react/plugins/react-scripts");
 dotenv.config({ path: ".env.local" });
 dotenv.config();
 
-const awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
+// const awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
 
 module.exports = defineConfig({
   //nodeVersion: "system",
@@ -46,7 +46,7 @@ module.exports = defineConfig({
     // Amazon Cognito
     cognito_username: process.env.AWS_COGNITO_USERNAME,
     cognito_password: process.env.AWS_COGNITO_PASSWORD,
-    awsConfig: awsConfig.default,
+    // awsConfig: awsConfig.default,
 
     // Google
     googleRefreshToken: process.env.GOOGLE_REFRESH_TOKEN,
