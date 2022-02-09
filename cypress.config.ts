@@ -1,4 +1,5 @@
 import { defineConfig } from "cypress";
+import pluginFileFunction from "./cypress/plugins/index";
 
 export default defineConfig({
   projectId: "7s5okt",
@@ -18,9 +19,7 @@ export default defineConfig({
   },
   experimentalStudio: true,
   e2e: {
-    setupNodeEvents(on, config) {
-      return require("./cypress/plugins/index.ts").default(on, config);
-    },
+    setupNodeEvents: pluginFileFunction,
     baseUrl: "http://localhost:3000",
     specPattern: "cypress/tests/**/*.cy.{js,jsx,ts,tsx}",
   },
