@@ -8430,9 +8430,9 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=
 
-"cypress@https://cdn.cypress.io/beta/npm/10.0.0/linux-x64/circle-10.0-release-4299af8a0c07c2e691aa2916d96c95869391a585/cypress.tgz":
+"cypress@https://cdn.cypress.io/beta/npm/10.0.0/linux-x64/circle-10.0-release-2abb54ddcb59d6e8b8613ac71f498010d8d3edb6/cypress.tgz":
   version "10.0.0"
-  resolved "https://cdn.cypress.io/beta/npm/10.0.0/linux-x64/circle-10.0-release-4299af8a0c07c2e691aa2916d96c95869391a585/cypress.tgz#4fd213d78c350408601f6c845bf45fbbbfaa6e22"
+  resolved "https://cdn.cypress.io/beta/npm/10.0.0/linux-x64/circle-10.0-release-2abb54ddcb59d6e8b8613ac71f498010d8d3edb6/cypress.tgz#8441b88d901410f7f33607f9d5c14cc179ffd7e2"
   dependencies:
     "@cypress/request" "^2.88.10"
     "@cypress/xvfb" "^1.2.4"
