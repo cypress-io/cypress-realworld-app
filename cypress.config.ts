@@ -1,4 +1,5 @@
 import { defineConfig } from "cypress";
+import { devServer } from "@cypress/react/plugins/react-scripts";
 import pluginFileFunction from "./cypress/plugins/index";
 
 export default defineConfig({
@@ -22,5 +23,10 @@ export default defineConfig({
     setupNodeEvents: pluginFileFunction,
     baseUrl: "http://localhost:3000",
     specPattern: "cypress/tests/**/*.cy.{js,jsx,ts,tsx}",
+  },
+  // Component testing, TypeScript, Create React App, Webpack
+  component: {
+    devServer,
+    devServerConfig: {},
   },
 });
