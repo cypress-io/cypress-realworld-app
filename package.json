@@ -89,7 +89,7 @@
     "concurrently": "6.3.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-    "cypress": "https://cdn.cypress.io/beta/npm/10.0.0/linux-x64/circle-10.0-release-063225ecfc301e22b836f1e3312eff21228e0bf4/cypress.tgz",
+    "cypress": "https://cdn.cypress.io/beta/npm/10.0.0/linux-x64/circle-10.0-release-2abb54ddcb59d6e8b8613ac71f498010d8d3edb6/cypress.tgz",
     "dotenv": "10.0.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-cypress": "2.12.1",
