@@ -47,7 +47,7 @@
     "yup": "0.32.11"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "3.9.11",
+    "@cypress/code-coverage": "^3.10.0-dev.1",
     "@cypress/instrument-cra": "1.4.0",
     "@cypress/react": "^5.10.0",
     "@cypress/webpack-dev-server": "^1.6.0",
