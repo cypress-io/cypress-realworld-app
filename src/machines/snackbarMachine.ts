@@ -9,8 +9,14 @@ export interface SnackbarSchema {
 
 export type SnackbarEvents = { type: "SHOW" } | { type: "HIDE" };
 
+export enum Severities {
+  success = "success",
+  info = "info",
+  warning = "warning",
+  error = "error",
+}
 export interface SnackbarContext {
-  severity?: "success" | "info" | "warning" | "error";
+  severity?: Severities;
   message?: string;
 }
 
