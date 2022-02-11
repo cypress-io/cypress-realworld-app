@@ -48,6 +48,24 @@ linux-workflow: &linux-workflow
               name: Run Unit Tests
               command: yarn test:unit:ci
 
+    # Run Cypress Component tests
+    - cypress/run:
+        name: "Cypress Component Tests"
+        command: yarn test:component:ci
+        executor: with-chrome-and-firefox
+        wait-on: "http://localhost:3000"
+        yarn: true
+        start: yarn start:ci
+        record: true
+        parallel: true
+        parallelism: 5
+        ci-build-id: ${CIRCLE_SHA1:0:8}
+        group: Component
+        requires:
+          - Setup Linux
+        post-steps:
+          - report-coverage
+
     # Run API tests against backend server
     - cypress/run:
         name: "API Tests"
