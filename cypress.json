@@ -16,5 +16,9 @@
       "url": "http://localhost:3001/__coverage__"
     }
   },
-  "experimentalStudio": true
+  "experimentalStudio": true,
+  "component": {
+    "testFiles": "**/*.cy.{js,ts,jsx,tsx}",
+    "componentFolder": "src"
+  }
 }
