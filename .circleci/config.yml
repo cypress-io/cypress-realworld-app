@@ -64,6 +64,7 @@ linux-workflow: &linux-workflow
         parallelism: 5
         ci-build-id: ${CIRCLE_SHA1:0:8}
         group: Component
+        browser: chrome
         requires:
           - Setup Linux
         post-steps:
