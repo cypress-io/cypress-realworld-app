@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  cypress: cypress/cypress@dev:1.30.0
+  cypress: cypress-io/cypress@dev:1.30.0
   codecov: codecov/codecov@1.2.3 #
   win: circleci/windows@2.4.1
 
