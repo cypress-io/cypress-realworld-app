@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  cypress: cypress-io/cypress@1.28.0
+  cypress: cypress/cypress@dev:1.30.0
   codecov: codecov/codecov@1.2.3 #
   win: circleci/windows@2.4.1
 
@@ -54,16 +54,17 @@ linux-workflow: &linux-workflow
     # Run Cypress Component tests
     - cypress/run:
         name: "Cypress Component Tests"
-        command: yarn test:component:ci
         executor: with-chrome-and-firefox
-        wait-on: "http://localhost:3000"
         yarn: true
-        start: yarn start:ci
-        record: true
-        parallel: true
-        parallelism: 5
-        ci-build-id: ${CIRCLE_SHA1:0:8}
-        group: Component
+        component: true
+        # command: yarn test:component:ci
+        # wait-on: "http://localhost:3000"
+        # start: yarn start:ci
+        # record: true
+        # parallel: true
+        # parallelism: 5
+        # ci-build-id: ${CIRCLE_SHA1:0:8}
+        # group: Component
         requires:
           - Setup Linux
         post-steps:
