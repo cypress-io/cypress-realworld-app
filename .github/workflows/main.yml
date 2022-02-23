@@ -36,7 +36,9 @@ jobs:
   ui-chrome-tests:
     timeout-minutes: 15
     runs-on: ubuntu-20.04
-    container: cypress/included:9.5.0
+    container:
+      image: cypress/included:9.5.0
+      options: --user 1001
     needs: install
     strategy:
       fail-fast: false
