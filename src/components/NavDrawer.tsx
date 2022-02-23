@@ -1,7 +1,7 @@
 import React from "react";
 import { head } from "lodash/fp";
 import { Interpreter } from "xstate";
-import { useService } from "@xstate/react";
+import { useActor } from "@xstate/react";
 import clsx from "clsx";
 import {
   useMediaQuery,
@@ -172,7 +172,7 @@ const NavDrawer: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [authState, sendAuth] = useService(authService);
+  const [authState, sendAuth] = useActor(authService);
   const showTemporaryDrawer = useMediaQuery(theme.breakpoints.only("xs"));
 
   const currentUser = authState?.context?.user;

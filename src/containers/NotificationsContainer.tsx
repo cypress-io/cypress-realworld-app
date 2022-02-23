@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Interpreter } from "xstate";
-import { useService } from "@xstate/react";
+import { useActor } from "@xstate/react";
 import { makeStyles, Paper, Typography } from "@material-ui/core";
 import { NotificationUpdatePayload } from "../models";
 import NotificationList from "../components/NotificationList";
@@ -24,8 +24,8 @@ export interface Props {
 
 const NotificationsContainer: React.FC<Props> = ({ authService, notificationsService }) => {
   const classes = useStyles();
-  const [authState] = useService(authService);
-  const [notificationsState, sendNotifications] = useService(notificationsService);
+  const [authState] = useActor(authService);
+  const [notificationsState, sendNotifications] = useActor(notificationsService);
 
   useEffect(() => {
     sendNotifications({ type: "FETCH" });
