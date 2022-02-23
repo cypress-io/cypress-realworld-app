@@ -35,18 +35,13 @@ jobs:
 
   ui-chrome-tests:
     timeout-minutes: 15
-    runs-on: ubuntu-latest
-    container: cypress/browsers:node14.17.0-chrome88-ff89
+    runs-on: ubuntu-20.04
+    container: cypress/included:9.5.0
     needs: install
     strategy:
-      # when one test fails, DO NOT cancel the other
-      # containers, because this will kill Cypress processes
-      # leaving the Dashboard hanging ...
-      # https://github.com/cypress-io/github-action/issues/48
       fail-fast: false
       matrix:
-        # run copies of the current job in parallel
-        containers: [1, 2, 3, 4, 5]
+        containers: [1, 2, 3, 4]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -60,6 +55,7 @@ jobs:
       - name: "UI Tests - Chrome"
         uses: cypress-io/github-action@v2
         with:
+          install: false
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
@@ -68,9 +64,11 @@ jobs:
           parallel: true
           group: "UI - Chrome"
           spec: cypress/tests/ui/*
+          command: yarn test:regression
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # Recommended: pass the GitHub token lets this action correctly
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_INSTALL_BINARY: 0
