@@ -61,9 +61,9 @@ jobs:
           browser: chrome
           record: true
           parallel: true
-          group: "UI - Chrome"
+          group: "specs/regression"
           spec: cypress/tests/ui/*
-          command: yarn test:regression
+          tag: regression
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
