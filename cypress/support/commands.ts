@@ -9,7 +9,6 @@ import { isMobile } from "./utils";
 import "@percy/cypress";
 
 // Import commands for third-party auth providers
-import "./auth-provider-commands/cognito";
 import "./auth-provider-commands/auth0";
 import "./auth-provider-commands/okta";
 
