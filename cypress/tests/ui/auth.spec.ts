@@ -19,7 +19,7 @@ describe("User Sign-up and Login", function () {
 
   it("should redirect unauthenticated user to signin page", function () {
     cy.visit("/personal");
-    cy.location("pathname").should("equal", "/signin");
+    cy.location("pathname").should("equal", "/signin-fail");
     cy.visualSnapshot("Redirect to SignIn");
   });
 
