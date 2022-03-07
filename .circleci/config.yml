@@ -7,26 +7,26 @@ jobs:
     steps:
       - checkout
       # restore folders with npm dependencies and Cypress binaty
-      - restore_cache:
-          keys:
-            - cache-{{ checksum "package.json" }}
+      # - restore_cache:
+      #     keys:
+      #       - cache-{{ checksum "package.json" }}
       # install npm dependencies and Cypress binary
       # if they were cached, this step is super quick
       - run:
           name: "Install dependencies"
-          command: npm ci
-      - run: npm run cy:verify
+          command: yarn install --frozen-lockfile
+      # - run: npm run cy:verify
       # save npm dependencies and Cypress binary for future runs
-      - save_cache:
-          key: cache-{{ checksum "package.json" }}
-          paths:
-           - ~/.npm
-           - ~/.cache
+      # - save_cache:
+      #     key: cache-{{ checksum "package.json" }}
+      #     paths:
+      #      - ~/.npm
+      #      - ~/.cache
       # start server before starting tests
       - run:
-          command: npm start
+          command: yarn dev
           background: true
-      - run: npm run e2e:record
+      - run: npx cypress run
 
 workflows:
   build:
