@@ -14,7 +14,7 @@ jobs:
       # if they were cached, this step is super quick
       - run:
           name: "Install dependencies"
-          command: yarn install --frozen-lockfile
+          command: yarn install --frozen-lockfile --ignore-engines
       # - run: npm run cy:verify
       # save npm dependencies and Cypress binary for future runs
       # - save_cache:
