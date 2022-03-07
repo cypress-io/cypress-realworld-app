@@ -25,7 +25,6 @@ jobs:
       # start server before starting tests
       - run:
           command: yarn dev
-          background: true
       - run: npx cypress run
 
 workflows:
