@@ -1,33 +1,7 @@
 version: 2.1
-
-jobs:
-  E2E-tests:
-    docker:
-      - image: cypress/base:14
-    steps:
-      - checkout
-      # restore folders with npm dependencies and Cypress binaty
-      # - restore_cache:
-      #     keys:
-      #       - cache-{{ checksum "package.json" }}
-      # install npm dependencies and Cypress binary
-      # if they were cached, this step is super quick
-      - run:
-          name: "Install dependencies"
-          command: yarn install --frozen-lockfile --ignore-engines
-      # - run: npm run cy:verify
-      # save npm dependencies and Cypress binary for future runs
-      # - save_cache:
-      #     key: cache-{{ checksum "package.json" }}
-      #     paths:
-      #      - ~/.npm
-      #      - ~/.cache
-      # start server before starting tests
-      - run:
-          command: yarn dev
-      - run: npx cypress run
-
+orbs:
+  cypress: cypress-io/cypress@1
 workflows:
   build:
     jobs:
-      - E2E-tests
+      - cypress/run
