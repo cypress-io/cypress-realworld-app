@@ -5,7 +5,7 @@ orbs:
 executors:
   with-chrome:
     docker:
-      - image: 'cypress/base:14.15.0'
+      - image: 'cypress/base:16.0.0'
 
 
 workflows:
