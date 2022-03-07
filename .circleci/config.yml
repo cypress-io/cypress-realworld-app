@@ -14,3 +14,4 @@ workflows:
       - cypress/run:
           yarn: true
           executor: node16
+          start: yarn dev
