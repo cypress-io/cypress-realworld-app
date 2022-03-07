@@ -1,7 +1,10 @@
 version: 2.1
-
-docker:
-  - image: cypress/base:14.15.0
+jobs:
+  build:
+    docker:
+      - image: cypress/base:14.15.0
+    steps:
+      - checkout
 
 
 orbs:
