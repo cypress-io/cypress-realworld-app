@@ -3,7 +3,7 @@ orbs:
   cypress: cypress-io/cypress@1.29.0
 
 executors:
-  with-chrome:
+  node16:
     docker:
       - image: 'cypress/base:16.0.0'
 
@@ -13,4 +13,4 @@ workflows:
     jobs:
       - cypress/run:
           yarn: true
-          executor: with-chrome
+          executor: node16
