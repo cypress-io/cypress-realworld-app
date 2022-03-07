@@ -15,3 +15,5 @@ workflows:
           yarn: true
           executor: node16
           start: yarn dev
+          wait-on: 'http://localhost:3000'
+
