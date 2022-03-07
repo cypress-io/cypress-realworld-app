@@ -1,26 +1,34 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  E2E-tests:
     docker:
-      - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+      - image: cypress/base:14
     steps:
       - checkout
+      # restore folders with npm dependencies and Cypress binaty
+      - restore_cache:
+          keys:
+            - cache-{{ checksum "package.json" }}
+      # install npm dependencies and Cypress binary
+      # if they were cached, this step is super quick
       - run:
-          name: "Say hello2"
-          command: "echo Hello, World!"
+          name: "Install dependencies"
+          command: npm ci
+      - run: npm run cy:verify
+      # save npm dependencies and Cypress binary for future runs
+      - save_cache:
+          key: cache-{{ checksum "package.json" }}
+          paths:
+           - ~/.npm
+           - ~/.cache
+      # start server before starting tests
+      - run:
+          command: npm start
+          background: true
+      - run: npm run e2e:record
 
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  build:
     jobs:
-      - say-hello
+      - E2E-tests
