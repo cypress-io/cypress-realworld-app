@@ -8,6 +8,7 @@ describe('login', () => {
         
         cy.get('[data-test="sidenav-user-balance"]').should('be.visible')
 
+        cy.log('hej')
 
     });
 })
