@@ -1,0 +1,19 @@
+version: 2.1
+orbs:
+  cypress: cypress-io/cypress@1.29.0
+
+executors:
+  node16:
+    docker:
+      - image: 'cypress/base:16.0.0'
+
+
+workflows:
+  build:
+    jobs:
+      - cypress/run:
+          yarn: true
+          executor: node16
+          start: yarn dev
+          wait-on: 'http://localhost:3000'
+
