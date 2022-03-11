@@ -1,213 +1,26 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-orbs:
-  cypress: cypress-io/cypress@1.29.0
-  codecov: codecov/codecov@1.2.3 #
-  win: circleci/windows@2.4.1
 
-executors:
-  with-chrome-and-firefox:
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+jobs:
+  say-hello:
+    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
+    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
-      - image: "cypress/browsers:node14.17.0-chrome88-ff89"
-    resource_class: medium+
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-commands:
-  report-coverage:
-    description: |
-      Store coverage report as an artifact and send it to Codecov service.
+      - image: cimg/base:stable
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
-      - store_artifacts:
-          path: coverage
-      - run: npx nyc report --reporter=text || true
-      - codecov/upload:
-          file: coverage/coverage-final.json
+      - checkout
+      - run:
+          name: "Say hello"
+          command: "echo Hello, World!"
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-linux-workflow: &linux-workflow
-  jobs:
-    # Setup
-    #  1. Install Cypress
-    #  2. Validate types
-    #  3. Run server unit-tests
-    - cypress/install:
-        name: "Setup Linux"
-        yarn: true
-        executor: with-chrome-and-firefox
-        build: "yarn build:ci"
-        post-steps:
-          - run:
-              name: Print machine info ℹ️
-              command: yarn cypress info
-          - run:
-              name: Check Types
-              command: yarn types
-          - run:
-              name: Lint Files
-              command: yarn lint
-          - run:
-              name: Run Unit Tests
-              command: yarn test:unit:ci
-
-    # Run API tests against backend server
-    - cypress/run:
-        name: "API Tests"
-        browser: chrome
-        spec: cypress/tests/api/*
-        executor: with-chrome-and-firefox
-        wait-on: "http://localhost:3000"
-        yarn: true
-        start: yarn start:ci
-        record: true
-        parallel: true
-        parallelism: 5
-        ci-build-id: ${CIRCLE_SHA1:0:8}
-        group: API
-        requires:
-          - Setup Linux
-        post-steps:
-          - report-coverage
-
-    # Run E2E tests in Chrome
-    - cypress/run:
-        name: "UI Tests - Chrome"
-        browser: chrome
-        spec: cypress/tests/ui/*
-        executor: with-chrome-and-firefox
-        wait-on: "http://localhost:3000"
-        command-prefix: npx percy exec --
-        yarn: true
-        start: yarn start:ci
-        record: true
-        parallel: true
-        parallelism: 5
-        ci-build-id: ${CIRCLE_SHA1:0:8}
-        group: "UI - Chrome"
-        requires:
-          - Setup Linux
-        post-steps:
-          - report-coverage
-
-    # Run E2E tests in Chrome with mobile device viewport
-    - cypress/run:
-        name: "UI Tests - Chrome - Mobile"
-        browser: chrome
-        spec: cypress/tests/ui/*
-        config: "viewportWidth=375,viewportHeight=667"
-        executor: with-chrome-and-firefox
-        wait-on: "http://localhost:3000"
-        yarn: true
-        start: yarn start:ci
-        record: true
-        parallel: true
-        parallelism: 5
-        ci-build-id: ${CIRCLE_SHA1:0:8}
-        group: "UI - Chrome - Mobile"
-        requires:
-          - Setup Linux
-        post-steps:
-          - report-coverage
-
-    # Run E2E tests in Firefox
-    - cypress/run:
-        name: "UI Tests - Firefox"
-        browser: firefox
-        spec: cypress/tests/ui/*
-        executor: with-chrome-and-firefox
-        wait-on: "http://localhost:3000"
-        yarn: true
-        start: yarn start:ci
-        record: true
-        parallel: true
-        parallelism: 5
-        ci-build-id: ${CIRCLE_SHA1:0:8}
-        group: "UI - Firefox"
-        requires:
-          - Setup Linux
-        post-steps:
-          - report-coverage
-
-    # Run E2E tests in Firefox with mobile device viewport
-    - cypress/run:
-        name: "UI Tests - Firefox - Mobile"
-        browser: firefox
-        spec: cypress/tests/ui/*
-        config: viewportWidth=375,viewportHeight=667
-        executor: with-chrome-and-firefox
-        wait-on: "http://localhost:3000"
-        yarn: true
-        start: yarn start:ci
-        record: true
-        parallel: true
-        parallelism: 5
-        ci-build-id: ${CIRCLE_SHA1:0:8}
-        group: "UI - Firefox - Mobile"
-        requires:
-          - Setup Linux
-        post-steps:
-          - report-coverage
-
-windows-workflow: &windows-workflow
-  jobs:
-    # Setup
-    #  1. Install Cypress
-    #  2. Validate types
-    #  3. Run server unit-tests
-    - cypress/install:
-        name: "Setup Windows"
-        yarn: true
-        executor:
-          # executor comes from the "windows" orb
-          name: win/default
-          shell: bash.exe
-          size: large
-        pre-steps:
-          - run:
-              name: Disabling Windows Defender
-              shell: powershell.exe
-              command: Set-MpPreference -DisableRealtimeMonitoring $true
-        build: yarn build:ci
-        post-steps:
-          - run:
-              name: Cypress info
-              command: yarn cypress info
-          - run:
-              name: Cypress cache list
-              command: yarn cypress cache list
-          - run:
-              name: Check Types
-              command: yarn types
-          - run:
-              name: Lint Files
-              command: yarn lint
-          - run:
-              name: Run Unit Tests
-              command: yarn test:unit:ci
-
-    # Run E2E tests in Windows in Electron
-    - cypress/run:
-        name: "UI Tests - Electron - Windows"
-        spec: cypress/tests/ui/*
-        executor:
-          # executor comes from the "windows" orb
-          name: win/default
-          shell: bash.exe
-        wait-on: "http://localhost:3000"
-        yarn: true
-        start: yarn start:ci
-        record: true
-        parallel: true
-        parallelism: 5
-        ci-build-id: ${CIRCLE_SHA1:0:8}
-        group: "UI - Electron - Windows"
-        requires:
-          - Setup Windows
-        post-steps:
-          - report-coverage
-        no-workspace: true
-        timeout: 30m
-
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  linux:
-    <<: *linux-workflow
-  windows:
-    <<: *windows-workflow
+  say-hello-workflow:
+    jobs:
+      - say-hello
