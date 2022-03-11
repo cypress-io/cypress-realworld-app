@@ -3,9 +3,14 @@ version: 2.1
 orbs:
   cypress: cypress-io/cypress@1.29.0
 
-
+executors: 
+  node14:
+    docker:
+      - image: cypress/base:14.17.0
 workflows:
   e2e:
     jobs:
       - cypress/run:
           yarn: true
+          executor: node 14
+          
