@@ -14,3 +14,4 @@ workflows:
           yarn: true
           executor: node14
           start: yarn dev
+          wait-on: 'http://localhost:3000'
