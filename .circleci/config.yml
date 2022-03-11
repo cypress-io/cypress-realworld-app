@@ -8,5 +8,4 @@ workflows:
   e2e:
     jobs:
       - cypress/run
-      
-
+        yarn: true
