@@ -6,7 +6,7 @@ describe('login', () => {
         cy.get('#password').type("s3cret")
         cy.get('[data-test="signin-submit"]').click()
         
-        cy.get('[data-test="sidenav-user-balance"]').should('be.visible')
+        cy.get('[data-test="sidenav-user-balance"]').should('not.be.visible')
 
 
     });
