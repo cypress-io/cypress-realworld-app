@@ -12,5 +12,4 @@ workflows:
     jobs:
       - cypress/run:
           yarn: true
-          executor: node 14
-          
+          executor: node14
