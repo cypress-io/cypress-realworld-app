@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone the github repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
