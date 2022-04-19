@@ -6,7 +6,7 @@ import {
   CreateTransactionMachineContext,
   CreateTransactionMachineEvents,
 } from "../machines/createTransactionMachine";
-import { useService } from "@xstate/react";
+import { useActor } from "@xstate/react";
 import { formatAmount } from "../utils/transactionUtils";
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +31,7 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
 }) => {
   const history = useHistory();
   const classes = useStyles();
-  const [createTransactionState, sendCreateTransaction] = useService(createTransactionService);
+  const [createTransactionState, sendCreateTransaction] = useActor(createTransactionService);
 
   const receiver = createTransactionState?.context?.receiver;
   const transactionDetails = createTransactionState?.context?.transactionDetails;

@@ -3,7 +3,7 @@ import { makeStyles, Paper, Typography, Grid } from "@material-ui/core";
 import UserSettingsForm from "../components/UserSettingsForm";
 import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
-import { useService } from "@xstate/react";
+import { useActor } from "@xstate/react";
 import PersonalSettingsIllustration from "../components/SvgUndrawPersonalSettingsKihd";
 
 const useStyles = makeStyles((theme) => ({
@@ -21,7 +21,7 @@ export interface Props {
 
 const UserSettingsContainer: React.FC<Props> = ({ authService }) => {
   const classes = useStyles();
-  const [authState, sendAuth] = useService(authService);
+  const [authState, sendAuth] = useActor(authService);
 
   const currentUser = authState?.context?.user;
   const updateUser = (payload: any) => sendAuth({ type: "UPDATE", ...payload });
