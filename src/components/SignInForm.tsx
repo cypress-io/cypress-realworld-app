@@ -1,6 +1,6 @@
 import React from "react";
 import { Interpreter } from "xstate";
-import { useService } from "@xstate/react";
+import { useActor } from "@xstate/react";
 import { Link } from "react-router-dom";
 import {
   Button,
@@ -58,7 +58,7 @@ export interface Props {
 
 const SignInForm: React.FC<Props> = ({ authService }) => {
   const classes = useStyles();
-  const [authState, sendAuth] = useService(authService);
+  const [authState, sendAuth] = useActor(authService);
   const initialValues: SignInPayload = {
     username: "",
     password: "",

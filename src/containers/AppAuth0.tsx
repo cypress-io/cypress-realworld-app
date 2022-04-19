@@ -1,6 +1,6 @@
 /* istanbul ignore next */
 import React, { useEffect } from "react";
-import { useService, useMachine } from "@xstate/react";
+import { useActor, useMachine } from "@xstate/react";
 import { makeStyles } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 const AppAuth0: React.FC = () => {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
   const classes = useStyles();
-  const [authState] = useService(authService);
+  const [authState] = useActor(authService);
   const [, , notificationsService] = useMachine(notificationsMachine);
 
   const [, , snackbarService] = useMachine(snackbarMachine);
