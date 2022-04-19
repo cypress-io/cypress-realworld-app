@@ -1,5 +1,5 @@
 import React from "react";
-import { useService } from "@xstate/react";
+import { useActor } from "@xstate/react";
 import { Interpreter } from "xstate";
 import { Link } from "react-router-dom";
 import {
@@ -57,7 +57,7 @@ export interface Props {
 
 const SignUpForm: React.FC<Props> = ({ authService }) => {
   const classes = useStyles();
-  const [, sendAuth] = useService(authService);
+  const [, sendAuth] = useActor(authService);
   const initialValues: SignUpPayload & { confirmPassword: string } = {
     firstName: "",
     lastName: "",
