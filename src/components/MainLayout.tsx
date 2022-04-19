@@ -1,13 +1,19 @@
 import React, { useEffect } from "react";
 import { useMachine } from "@xstate/react";
-import { Interpreter } from "xstate";
+import {
+  BaseActionObject,
+  Interpreter,
+  ResolveTypegenMeta,
+  ServiceMap,
+  TypegenDisabled,
+} from "xstate";
 import { makeStyles, Container, Grid, useMediaQuery, useTheme } from "@material-ui/core";
 
 import Footer from "./Footer";
 import NavBar from "./NavBar";
 import NavDrawer from "./NavDrawer";
-import { DataContext, DataEvents } from "../machines/dataMachine";
-import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import { DataContext, DataEvents, DataSchema } from "../machines/dataMachine";
+import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from "../machines/authMachine";
 import { drawerMachine } from "../machines/drawerMachine";
 
 const useStyles = makeStyles((theme) => ({
@@ -41,8 +47,14 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   children: React.ReactNode;
-  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
-  notificationsService: Interpreter<DataContext, any, DataEvents, any>;
+  authService: Interpreter<AuthMachineContext, AuthMachineSchema, AuthMachineEvents, any, any>;
+  notificationsService: Interpreter<
+    DataContext,
+    DataSchema,
+    DataEvents,
+    any,
+    ResolveTypegenMeta<TypegenDisabled, DataEvents, BaseActionObject, ServiceMap>
+  >;
 }
 
 const MainLayout: React.FC<Props> = ({ children, notificationsService, authService }) => {

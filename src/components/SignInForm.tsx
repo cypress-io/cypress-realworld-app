@@ -1,6 +1,6 @@
 import React from "react";
 import { Interpreter } from "xstate";
-import { useService } from "@xstate/react";
+import { useActor } from "@xstate/react";
 import { Link } from "react-router-dom";
 import {
   Button,
@@ -20,7 +20,7 @@ import { string, object } from "yup";
 import RWALogo from "./SvgRwaLogo";
 import Footer from "./Footer";
 import { SignInPayload } from "../models";
-import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from "../machines/authMachine";
 import { Alert } from "@material-ui/lab";
 
 const validationSchema = object({
@@ -53,12 +53,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export interface Props {
-  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
+  authService: Interpreter<AuthMachineContext, AuthMachineSchema, AuthMachineEvents, any, any>;
 }
 
 const SignInForm: React.FC<Props> = ({ authService }) => {
   const classes = useStyles();
-  const [authState, sendAuth] = useService(authService);
+  const [authState, sendAuth] = useActor(authService);
   const initialValues: SignInPayload = {
     username: "",
     password: "",

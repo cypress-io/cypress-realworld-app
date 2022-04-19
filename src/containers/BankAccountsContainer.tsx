@@ -1,17 +1,29 @@
 import React, { useEffect } from "react";
-import { useService } from "@xstate/react";
-import { Interpreter } from "xstate";
+import { useActor } from "@xstate/react";
+import {
+  BaseActionObject,
+  Interpreter,
+  ResolveTypegenMeta,
+  ServiceMap,
+  TypegenDisabled,
+} from "xstate";
 import { Link as RouterLink, useRouteMatch } from "react-router-dom";
 import { makeStyles, Grid, Button, Paper, Typography } from "@material-ui/core";
 
-import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
-import { DataContext, DataEvents } from "../machines/dataMachine";
+import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from "../machines/authMachine";
+import { DataContext, DataEvents, DataSchema } from "../machines/dataMachine";
 import BankAccountForm from "../components/BankAccountForm";
 import BankAccountList from "../components/BankAccountList";
 
 export interface Props {
-  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
-  bankAccountsService: Interpreter<DataContext, any, DataEvents, any>;
+  authService: Interpreter<AuthMachineContext, AuthMachineSchema, AuthMachineEvents, any, any>;
+  bankAccountsService: Interpreter<
+    DataContext,
+    DataSchema,
+    DataEvents,
+    any,
+    ResolveTypegenMeta<TypegenDisabled, DataEvents, BaseActionObject, ServiceMap>
+  >;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -26,8 +38,8 @@ const useStyles = makeStyles((theme) => ({
 const BankAccountsContainer: React.FC<Props> = ({ authService, bankAccountsService }) => {
   const match = useRouteMatch();
   const classes = useStyles();
-  const [authState] = useService(authService);
-  const [bankAccountsState, sendBankAccounts] = useService(bankAccountsService);
+  const [authState] = useActor(authService);
+  const [bankAccountsState, sendBankAccounts] = useActor(bankAccountsService);
 
   const currentUser = authState?.context.user;
 
