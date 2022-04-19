@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import { Interpreter } from "xstate";
 import { isEmpty } from "lodash/fp";
-import { useService, useMachine } from "@xstate/react";
+import { useActor, useMachine } from "@xstate/react";
 
 import { userOnboardingMachine } from "../machines/userOnboardingMachine";
 import BankAccountForm from "../components/BankAccountForm";
@@ -30,8 +30,8 @@ export interface Props {
 const UserOnboardingContainer: React.FC<Props> = ({ authService, bankAccountsService }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  const [bankAccountsState, sendBankAccounts] = useService(bankAccountsService);
-  const [authState, sendAuth] = useService(authService);
+  const [bankAccountsState, sendBankAccounts] = useActor(bankAccountsService);
+  const [authState, sendAuth] = useActor(authService);
   const [userOnboardingState, sendUserOnboarding] = useMachine(userOnboardingMachine);
 
   const currentUser = authState?.context?.user;

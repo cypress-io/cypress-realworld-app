@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useService, useMachine } from "@xstate/react";
+import { useActor, useMachine } from "@xstate/react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container, CssBaseline } from "@material-ui/core";
 
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 /* istanbul ignore next */
 const AppGoogle: React.FC = () => {
   const classes = useStyles();
-  const [authState] = useService(authService);
+  const [authState] = useActor(authService);
   const [, , notificationsService] = useMachine(notificationsMachine);
 
   const [, , snackbarService] = useMachine(snackbarMachine);
