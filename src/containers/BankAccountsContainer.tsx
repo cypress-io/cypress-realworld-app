@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useService } from "@xstate/react";
+import { useActor } from "@xstate/react";
 import { Interpreter } from "xstate";
 import { Link as RouterLink, useRouteMatch } from "react-router-dom";
 import { makeStyles, Grid, Button, Paper, Typography } from "@material-ui/core";
@@ -26,8 +26,8 @@ const useStyles = makeStyles((theme) => ({
 const BankAccountsContainer: React.FC<Props> = ({ authService, bankAccountsService }) => {
   const match = useRouteMatch();
   const classes = useStyles();
-  const [authState] = useService(authService);
-  const [bankAccountsState, sendBankAccounts] = useService(bankAccountsService);
+  const [authState] = useActor(authService);
+  const [bankAccountsState, sendBankAccounts] = useActor(bankAccountsService);
 
   const currentUser = authState?.context.user;
 
