@@ -1,12 +1,6 @@
 import React, { useEffect } from "react";
 import { Switch } from "react-router";
-import {
-  BaseActionObject,
-  Interpreter,
-  ResolveTypegenMeta,
-  ServiceMap,
-  TypegenDisabled,
-} from "xstate";
+import { Interpreter } from "xstate";
 import MainLayout from "../components/MainLayout";
 import PrivateRoute from "../components/PrivateRoute";
 import TransactionsContainer from "./TransactionsContainer";
