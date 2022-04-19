@@ -12,7 +12,7 @@ import TransactionDetailContainer from "./TransactionDetailContainer";
 import { DataContext, DataSchema, DataEvents } from "../machines/dataMachine";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import { SnackbarContext, SnackbarSchema, SnackbarEvents } from "../machines/snackbarMachine";
-import { useService } from "@xstate/react";
+import { useActor } from "@xstate/react";
 import UserOnboardingContainer from "./UserOnboardingContainer";
 
 export interface Props {
@@ -30,7 +30,7 @@ const PrivateRoutesContainer: React.FC<Props> = ({
   snackbarService,
   bankAccountsService,
 }) => {
-  const [, sendNotifications] = useService(notificationsService);
+  const [, sendNotifications] = useActor(notificationsService);
 
   useEffect(() => {
     sendNotifications({ type: "FETCH" });
