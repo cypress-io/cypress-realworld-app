@@ -10,14 +10,14 @@ import BankAccountsContainer from "./BankAccountsContainer";
 import TransactionCreateContainer from "./TransactionCreateContainer";
 import TransactionDetailContainer from "./TransactionDetailContainer";
 import { DataContext, DataSchema, DataEvents } from "../machines/dataMachine";
-import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from "../machines/authMachine";
 import { SnackbarContext, SnackbarSchema, SnackbarEvents } from "../machines/snackbarMachine";
 import { useActor } from "@xstate/react";
 import UserOnboardingContainer from "./UserOnboardingContainer";
 
 export interface Props {
   isLoggedIn: boolean;
-  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
+  authService: Interpreter<AuthMachineContext, AuthMachineSchema, AuthMachineEvents, any, any>;
   notificationsService: Interpreter<DataContext, DataSchema, DataEvents, any>;
   snackbarService: Interpreter<SnackbarContext, SnackbarSchema, SnackbarEvents, any>;
   bankAccountsService: Interpreter<DataContext, any, DataEvents, any>;

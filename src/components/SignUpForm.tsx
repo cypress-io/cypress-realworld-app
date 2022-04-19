@@ -18,7 +18,7 @@ import { string, object, ref } from "yup";
 import RWALogo from "./SvgRwaLogo";
 import Footer from "./Footer";
 import { SignUpPayload } from "../models";
-import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from "../machines/authMachine";
 
 const validationSchema = object({
   firstName: string().required("First Name is required"),
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export interface Props {
-  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
+  authService: Interpreter<AuthMachineContext, AuthMachineSchema, AuthMachineEvents, any, any>;
 }
 
 const SignUpForm: React.FC<Props> = ({ authService }) => {
