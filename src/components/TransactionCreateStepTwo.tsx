@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface NumberFormatCustomProps {
-  inputRef: (instance: NumberFormat | null) => void;
+  inputRef: (el: HTMLInputElement) => void;
   onChange: (event: { target: { value: string } }) => void;
 }
 
