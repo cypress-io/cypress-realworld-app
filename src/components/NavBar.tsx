@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import { Interpreter } from "xstate";
-import { useService } from "@xstate/react";
+import { useActor } from "@xstate/react";
 import {
   makeStyles,
   AppBar,
@@ -87,7 +87,7 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
   const match = useLocation();
   const classes = useStyles();
   const theme = useTheme();
-  const [notificationsState] = useService(notificationsService);
+  const [notificationsState] = useActor(notificationsService);
 
   const allNotifications = notificationsState?.context?.results;
   const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));

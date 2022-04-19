@@ -1,6 +1,6 @@
 /* istanbul ignore next */
 import React, { useEffect } from "react";
-import { useService, useMachine } from "@xstate/react";
+import { useActor, useMachine } from "@xstate/react";
 import { makeStyles } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 // @ts-ignore
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 const AppOkta: React.FC = () => {
   const { authState: oktaAuthState, oktaAuth: oktaAuthService } = useOktaAuth();
   const classes = useStyles();
-  const [authState] = useService(authService);
+  const [authState] = useActor(authService);
   const [, , notificationsService] = useMachine(notificationsMachine);
 
   const [, , snackbarService] = useMachine(snackbarMachine);
