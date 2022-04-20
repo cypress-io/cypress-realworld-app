@@ -117,7 +117,7 @@
     {
       "groupName": "Misc dev tooling",
       "matchPackageNames": [
-        "faker",
+        "@faker-js/faker",
         "json",
         "lowdb",
         "start-server-and-test",
