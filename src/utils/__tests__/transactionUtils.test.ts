@@ -6,7 +6,7 @@ import {
   getQueryWithoutAmountFields,
   getQueryWithoutFilterFields,
 } from "../transactionUtils";
-import faker from "faker";
+import { faker } from "@faker-js/faker";
 import {
   Transaction,
   TransactionRequestStatus,

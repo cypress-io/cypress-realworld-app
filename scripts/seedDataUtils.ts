@@ -2,7 +2,7 @@
 require("dotenv").config();
 
 import shortid from "shortid";
-import faker from "faker";
+import { faker } from "@faker-js/faker";
 import bcrypt from "bcryptjs";
 import {
   map,

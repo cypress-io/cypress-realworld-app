@@ -11,7 +11,7 @@ import {
   LikeNotification,
   CommentNotification,
 } from "../models";
-import faker from "faker";
+import { faker } from "@faker-js/faker";
 import Dinero from "dinero.js";
 import {
   flow,

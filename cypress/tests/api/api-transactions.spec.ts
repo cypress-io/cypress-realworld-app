@@ -1,4 +1,4 @@
-import faker from "faker";
+import { faker } from "@faker-js/faker";
 import { isEqual } from "lodash/fp";
 import { User, NotificationType, Transaction, BankAccount } from "../../../src/models";
 
