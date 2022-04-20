@@ -1,6 +1,12 @@
 import React, { useEffect } from "react";
 import { Switch } from "react-router";
-import { Interpreter } from "xstate";
+import {
+  BaseActionObject,
+  Interpreter,
+  ResolveTypegenMeta,
+  ServiceMap,
+  TypegenDisabled,
+} from "xstate";
 import MainLayout from "../components/MainLayout";
 import PrivateRoute from "../components/PrivateRoute";
 import TransactionsContainer from "./TransactionsContainer";
@@ -18,9 +24,27 @@ import UserOnboardingContainer from "./UserOnboardingContainer";
 export interface Props {
   isLoggedIn: boolean;
   authService: Interpreter<AuthMachineContext, AuthMachineSchema, AuthMachineEvents, any, any>;
-  notificationsService: Interpreter<DataContext, DataSchema, DataEvents, any>;
-  snackbarService: Interpreter<SnackbarContext, SnackbarSchema, SnackbarEvents, any>;
-  bankAccountsService: Interpreter<DataContext, any, DataEvents, any>;
+  notificationsService: Interpreter<
+    DataContext,
+    DataSchema,
+    DataEvents,
+    any,
+    ResolveTypegenMeta<TypegenDisabled, DataEvents, BaseActionObject, ServiceMap>
+  >;
+  snackbarService: Interpreter<
+    SnackbarContext,
+    SnackbarSchema,
+    SnackbarEvents,
+    any,
+    ResolveTypegenMeta<TypegenDisabled, SnackbarEvents, BaseActionObject, ServiceMap>
+  >;
+  bankAccountsService: Interpreter<
+    DataContext,
+    DataSchema,
+    DataEvents,
+    any,
+    ResolveTypegenMeta<TypegenDisabled, DataEvents, BaseActionObject, ServiceMap>
+  >;
 }
 
 const PrivateRoutesContainer: React.FC<Props> = ({

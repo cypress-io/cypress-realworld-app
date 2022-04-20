@@ -1,6 +1,12 @@
 import React from "react";
 import clsx from "clsx";
-import { Interpreter } from "xstate";
+import {
+  BaseActionObject,
+  Interpreter,
+  ResolveTypegenMeta,
+  ServiceMap,
+  TypegenDisabled,
+} from "xstate";
 import { useActor } from "@xstate/react";
 import {
   makeStyles,
@@ -21,7 +27,7 @@ import {
 } from "@material-ui/icons";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
-import { DataContext, DataEvents } from "../machines/dataMachine";
+import { DataContext, DataEvents, DataSchema } from "../machines/dataMachine";
 import TransactionNavTabs from "./TransactionNavTabs";
 import RWALogo from "./SvgRwaLogo";
 import RWALogoIcon from "./SvgRwaIconLogo";
@@ -80,7 +86,13 @@ const useStyles = makeStyles((theme) => ({
 interface NavBarProps {
   drawerOpen: boolean;
   toggleDrawer: Function;
-  notificationsService: Interpreter<DataContext, any, DataEvents, any>;
+  notificationsService: Interpreter<
+    DataContext,
+    DataSchema,
+    DataEvents,
+    any,
+    ResolveTypegenMeta<TypegenDisabled, DataEvents, BaseActionObject, ServiceMap>
+  >;
 }
 
 const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notificationsService }) => {

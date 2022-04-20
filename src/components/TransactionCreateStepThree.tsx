@@ -1,10 +1,17 @@
 import React from "react";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import { Paper, Typography, Grid, Avatar, Box, Button, makeStyles } from "@material-ui/core";
-import { Interpreter } from "xstate";
+import {
+  BaseActionObject,
+  Interpreter,
+  ResolveTypegenMeta,
+  ServiceMap,
+  TypegenDisabled,
+} from "xstate";
 import {
   CreateTransactionMachineContext,
   CreateTransactionMachineEvents,
+  CreateTransactionMachineSchema,
 } from "../machines/createTransactionMachine";
 import { useActor } from "@xstate/react";
 import { formatAmount } from "../utils/transactionUtils";
@@ -20,9 +27,15 @@ const useStyles = makeStyles((theme) => ({
 export interface TransactionCreateStepThreeProps {
   createTransactionService: Interpreter<
     CreateTransactionMachineContext,
-    any,
+    CreateTransactionMachineSchema,
     CreateTransactionMachineEvents,
-    any
+    any,
+    ResolveTypegenMeta<
+      TypegenDisabled,
+      CreateTransactionMachineEvents,
+      BaseActionObject,
+      ServiceMap
+    >
   >;
 }
 
