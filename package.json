@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "1.9.0",
-    "@aws-amplify/ui-react": "2.15.3",
+    "@aws-amplify/ui-react": "1.2.26",
     "@graphql-tools/graphql-file-loader": "7.3.10",
     "@graphql-tools/load": "7.5.9",
     "@material-ui/core": "4.12.4",
@@ -49,6 +49,7 @@
   "devDependencies": {
     "@cypress/code-coverage": "3.9.12",
     "@cypress/instrument-cra": "1.4.0",
+    "@faker-js/faker": "6.1.2",
     "@percy/cypress": "2.3.4",
     "@types/bcryptjs": "2.4.2",
     "@types/bluebird": "3.5.36",
@@ -98,7 +99,6 @@
     "express-paginate": "1.0.2",
     "express-session": "1.17.2",
     "express-validator": "6.14.0",
-    "@faker-js/faker": "6.1.2",
     "fuse.js": "6.5.3",
     "graphql": "16.3.0",
     "graphql-tools": "8.2.7",
