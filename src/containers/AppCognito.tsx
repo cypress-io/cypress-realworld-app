@@ -9,10 +9,9 @@ import { authService } from "../machines/authMachine";
 import AlertBar from "../components/AlertBar";
 import { bankAccountsMachine } from "../machines/bankAccountsMachine";
 import PrivateRoutesContainer from "./PrivateRoutesContainer";
-import { Amplify, Auth } from "aws-amplify";
-import { Authenticator } from "@aws-amplify/ui-react";
+import Amplify, { Auth } from "aws-amplify";
+import { AmplifyAuthenticator, AmplifySignUp, AmplifySignIn } from "@aws-amplify/ui-react";
 import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components";
-import "@aws-amplify/ui-react/styles.css";
 
 // @ts-ignore
 import awsConfig from "../aws-exports";
@@ -81,7 +80,10 @@ const AppCognito: React.FC = /* istanbul ignore next */ () => {
   ) : (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <Authenticator />
+      <AmplifyAuthenticator usernameAlias="email">
+        <AmplifySignUp slot="sign-up" usernameAlias="email" />
+        <AmplifySignIn slot="sign-in" usernameAlias="email" />
+      </AmplifyAuthenticator>
     </Container>
   );
 };
