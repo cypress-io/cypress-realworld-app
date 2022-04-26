@@ -1,4 +1,4 @@
-image: cypress/browsers:node14.17.0-chrome88-ff89
+image: cypress/browsers:node16.14.0-slim-chrome99-ff97
 
 api-tests: &api-tests
   name: "API Tests"
