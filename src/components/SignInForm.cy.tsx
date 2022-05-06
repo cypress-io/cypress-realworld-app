@@ -1,5 +1,4 @@
 import * as React from "react";
-import { mount } from "@cypress/react";
 import { interpret } from "xstate";
 import { MemoryRouter } from "react-router-dom";
 import SignInForm from "./SignInForm";
@@ -32,7 +31,7 @@ describe("SignInForm", () => {
   });
 
   it("submits the username and password to the backend", () => {
-    mount(
+    cy.mount(
       <MemoryRouter>
         <SignInForm authService={authService} />
       </MemoryRouter>
