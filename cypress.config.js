@@ -16,7 +16,6 @@ dotenv.config();
 module.exports = defineConfig({
   //nodeVersion: "system",
   projectId: "7s5okt",
-  integrationFolder: "cypress/tests",
   env: {
     apiUrl: "http://localhost:3001",
     mobileViewportWidthBreakpoint: 414,
