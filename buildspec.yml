@@ -14,7 +14,7 @@ batch:
         compute-type:
           - BUILD_GENERAL1_MEDIUM
         image:
-          - public.ecr.aws/cypress-io/cypress/browsers:node14.16.0-chrome90-ff88
+          - public.ecr.aws/cypress-io/cypress/browsers:node16.14.2-slim-chrome100-ff99-edge
         variables:
           CY_GROUP_SPEC:
             - "UI - Chrome|chrome|cypress/tests/ui/*"
