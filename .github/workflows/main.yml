@@ -8,7 +8,9 @@ on:
 jobs:
   install:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node16.14.2-slim-chrome100-ff99-edge
+    container:
+      image: cypress/browsers:node16.14.2-slim-chrome100-ff99-edge
+      options: --user 1001
     steps:
       - name: Checkout
         uses: actions/checkout@v3
