@@ -23,8 +23,7 @@ import bankTransferRoutes from "./banktransfer-routes";
 import testDataRoutes from "./testdata-routes";
 import { checkAuth0Jwt, verifyOktaToken, checkCognitoJwt, checkGoogleJwt } from "./helpers";
 import resolvers from "./graphql/resolvers";
-import { frontendPort } from "../src/utils/portUtils";
-import { getBackendPort } from "./config";
+import { frontendPort, getBackendPort } from "../src/utils/portUtils";
 
 require("dotenv").config();
 
@@ -114,5 +113,5 @@ app.use("/bankTransfers", bankTransferRoutes);
 
 app.use(express.static(join(__dirname, "../public")));
 
-getBackendPort().then((port:number) => app.listen(port));
+getBackendPort().then((port) => app.listen(port));
 
