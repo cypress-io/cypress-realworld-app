@@ -1,6 +1,6 @@
 {
   "baseUrl": "http://localhost:3000",
-  "projectId": "7s5okt",
+  "projectId": "w64rca",
   "integrationFolder": "cypress/tests",
   "viewportHeight": 1000,
   "viewportWidth": 1280,
