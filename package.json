@@ -49,7 +49,7 @@
     "yup": "0.32.11"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "3.9.12",
+    "@cypress/code-coverage": "^3.10.0",
     "@cypress/instrument-cra": "1.4.0",
     "@faker-js/faker": "6.1.2",
     "@percy/cypress": "2.3.4",
