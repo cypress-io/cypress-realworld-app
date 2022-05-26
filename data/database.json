@@ -74,6 +74,17 @@
       "balance": 75369,
       "createdAt": "2020-02-11T21:26:46.510Z",
       "modifiedAt": "2020-05-21T15:15:33.944Z"
+    },
+    {
+      "id": "EJc4AtF_s",
+      "uuid": "89e1a987-44c6-45f4-a58a-88de203a479a",
+      "firstName": "jireh",
+      "lastName": "maddox",
+      "username": "maddox.version1",
+      "password": "$2a$10$AbU/r1ZfK5jtJNx2QS7WBuyB7Ij6RzhjDs5EXef9fGSun4QWX/oom",
+      "balance": 0,
+      "createdAt": "2022-05-26T14:51:41.357Z",
+      "modifiedAt": "2022-05-26T14:51:41.357Z"
     }
   ],
   "contacts": [
@@ -253,6 +264,17 @@
       "isDeleted": false,
       "createdAt": "2019-09-30T14:20:07.043Z",
       "modifiedAt": "2020-05-21T22:40:28.910Z"
+    },
+    {
+      "id": "RRkH_T5K4",
+      "uuid": "9cc0eb69-651f-4319-ae24-d143e0668eec",
+      "userId": "EJc4AtF_s",
+      "bankName": "Banking1",
+      "accountNumber": "111111111",
+      "routingNumber": "111111111",
+      "isDeleted": false,
+      "createdAt": "2022-05-26T14:53:00.332Z",
+      "modifiedAt": "2022-05-26T14:53:00.332Z"
     }
   ],
   "transactions": [
