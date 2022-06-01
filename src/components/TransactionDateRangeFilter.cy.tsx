@@ -8,7 +8,7 @@ describe("Transaction Date Range Filter", () => {
     const filterDateRangeSpy = cy.spy();
     const resetDateRangeSpy = cy.spy();
 
-    mount(
+    cy.mount(
       <TransactionDateRangeFilter
         filterDateRange={filterDateRangeSpy}
         dateRangeFilters={{}}
@@ -44,7 +44,7 @@ describe("Transaction Date Range Filter", () => {
     const dateRangeStart = startOfDay(new Date(2014, 1, 1));
     const dateRangeEnd = endOfDayUTC(addDays(dateRangeStart, 1));
 
-    mount(
+    cy.mount(
       <TransactionDateRangeFilter
         filterDateRange={filterDateRangeSpy}
         dateRangeFilters={{}}
