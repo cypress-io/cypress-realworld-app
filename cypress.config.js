@@ -7,6 +7,7 @@ import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
 import { defineConfig } from "cypress";
 import "@cypress/instrument-cra";
+const { devServer } = require("@cypress/react/plugins/react-scripts");
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
@@ -53,10 +54,7 @@ module.exports = defineConfig({
     googleClientSecret: process.env.REACT_APP_GOOGLE_CLIENT_SECRET,
   },
   component: {
-    devServer: {
-      framework: "create-react-app",
-      bundler: "webpack",
-    },
+    devServer,
     specPattern: "src/**/*.cy.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/component.ts",
     setupNodeEvents(on, config) {
