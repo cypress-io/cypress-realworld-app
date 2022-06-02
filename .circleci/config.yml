@@ -57,6 +57,7 @@ linux-workflow: &linux-workflow
         command: yarn test:component:ci
         executor: with-chrome-and-firefox
         wait-on: "http://localhost:3000"
+        component: true
         yarn: true
         start: yarn start:ci
         record: true
