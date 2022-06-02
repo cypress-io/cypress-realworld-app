@@ -97,6 +97,7 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
           color="primary"
           variant="outlined"
           onClick={handleDateRangeClick}
+          data-test="transaction-list-filter-date-range-button"
           label={`Date: ${dateRangeLabel(dateRangeFilters)}`}
           deleteIcon={<CancelIcon data-test="transaction-list-filter-date-clear-button" />}
           onDelete={() => {
