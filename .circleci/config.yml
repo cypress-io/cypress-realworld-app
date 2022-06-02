@@ -54,12 +54,9 @@ linux-workflow: &linux-workflow
     # Run Cypress Component tests
     - cypress/run:
         name: "Cypress Component Tests"
-        # command: yarn test:component:ci
         executor: with-chrome-and-firefox
-        wait-on: "http://localhost:3000"
-        component: true
         yarn: true
-        start: yarn start:ci
+        component: true
         record: true
         parallel: true
         parallelism: 5
