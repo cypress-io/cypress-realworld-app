@@ -1,10 +1,10 @@
-import * as React from "react";
+import { mount } from "@cypress/react";
 import { MemoryRouter } from "react-router-dom";
 import TransactionsContainer from "./TransactionsContainer";
 
 describe("Transactions Container", () => {
   it("should not render transactions", () => {
-    cy.mount(
+    mount(
       <MemoryRouter initialEntries={["/"]}>
         <TransactionsContainer />
       </MemoryRouter>
@@ -15,7 +15,7 @@ describe("Transactions Container", () => {
     cy.intercept("http://localhost:3001/transactions/*", {
       fixture: "public-transactions.json",
     });
-    cy.mount(
+    mount(
       <MemoryRouter initialEntries={["/"]}>
         <TransactionsContainer />
       </MemoryRouter>
@@ -27,7 +27,7 @@ describe("Transactions Container", () => {
     cy.intercept("http://localhost:3001/transactions/*", {
       fixture: "public-transactions.json",
     });
-    cy.mount(
+    mount(
       <MemoryRouter initialEntries={["/contacts"]}>
         <TransactionsContainer />
       </MemoryRouter>
@@ -39,7 +39,7 @@ describe("Transactions Container", () => {
     cy.intercept("http://localhost:3001/transactions/*", {
       fixture: "public-transactions.json",
     });
-    cy.mount(
+    mount(
       <MemoryRouter initialEntries={["/personal"]}>
         <TransactionsContainer />
       </MemoryRouter>

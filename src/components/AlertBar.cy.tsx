@@ -1,5 +1,5 @@
-import * as React from "react";
 import { startCase } from "lodash";
+import { mount } from "@cypress/react";
 import { interpret } from "xstate";
 import AlertBar from "./AlertBar";
 import { Severities, snackbarMachine } from "../machines/snackbarMachine";
@@ -20,7 +20,7 @@ describe("Alert Bar with state", () => {
       snackbarService.send(payload);
       expect(snackbarService.state.value).to.equal("visible");
 
-      cy.mount(<AlertBar snackbarService={snackbarService} />);
+      mount(<AlertBar snackbarService={snackbarService} />);
       cy.get("[data-test*=alert-bar]")
         .should("contain", payload.message)
         .and("have.class", `MuiAlert-filled${startCase(severity)}`);

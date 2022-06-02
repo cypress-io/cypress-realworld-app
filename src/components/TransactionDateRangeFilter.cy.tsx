@@ -1,4 +1,5 @@
 import * as React from "react";
+import { mount } from "@cypress/react";
 import { addDays, format as formatDate, startOfDay } from "date-fns";
 import TransactionDateRangeFilter from "./TransactionDateRangeFilter";
 import { endOfDayUTC } from "../utils/transactionUtils";
@@ -8,7 +9,7 @@ describe("Transaction Date Range Filter", () => {
     const filterDateRangeSpy = cy.spy();
     const resetDateRangeSpy = cy.spy();
 
-    cy.mount(
+    mount(
       <TransactionDateRangeFilter
         filterDateRange={filterDateRangeSpy}
         dateRangeFilters={{}}
@@ -26,7 +27,7 @@ describe("Transaction Date Range Filter", () => {
       dateRangeEnd: new Date("Dec 05 2030").toISOString(),
     };
 
-    cy.mount(
+    mount(
       <TransactionDateRangeFilter
         filterDateRange={filterDateRangeSpy}
         dateRangeFilters={dateRangeFilters}
@@ -44,7 +45,7 @@ describe("Transaction Date Range Filter", () => {
     const dateRangeStart = startOfDay(new Date(2014, 1, 1));
     const dateRangeEnd = endOfDayUTC(addDays(dateRangeStart, 1));
 
-    cy.mount(
+    mount(
       <TransactionDateRangeFilter
         filterDateRange={filterDateRangeSpy}
         dateRangeFilters={{}}
