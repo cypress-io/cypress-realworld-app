@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Set committer info
@@ -42,7 +42,7 @@ jobs:
         run: git push origin ${{ steps.gen-names.outputs.branch_name }}
         if: ${{ steps.check-conflict.outputs.merge_conflict }}
       - name: Create Pull Request
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         with:
           script: |
             const pull = await github.pulls.create({

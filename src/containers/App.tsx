@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { useService, useMachine } from "@xstate/react";
+import { useActor, useMachine } from "@xstate/react";
 import { makeStyles } from "@material-ui/core";
 import { CssBaseline } from "@material-ui/core";
 
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 const App: React.FC = () => {
   const classes = useStyles();
-  const [authState] = useService(authService);
+  const [authState] = useActor(authService);
   const [, , notificationsService] = useMachine(notificationsMachine);
 
   const [, , snackbarService] = useMachine(snackbarMachine);

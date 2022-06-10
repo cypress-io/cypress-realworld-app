@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useMachine, useService } from "@xstate/react";
+import { useMachine, useActor } from "@xstate/react";
 import { User, TransactionPayload } from "../models";
 import TransactionCreateStepOne from "../components/TransactionCreateStepOne";
 import TransactionCreateStepTwo from "../components/TransactionCreateStepTwo";
@@ -7,19 +7,31 @@ import TransactionCreateStepThree from "../components/TransactionCreateStepThree
 import { createTransactionMachine } from "../machines/createTransactionMachine";
 import { usersMachine } from "../machines/usersMachine";
 import { debounce } from "lodash/fp";
-import { Interpreter } from "xstate";
-import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import {
+  BaseActionObject,
+  Interpreter,
+  ResolveTypegenMeta,
+  ServiceMap,
+  TypegenDisabled,
+} from "xstate";
+import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from "../machines/authMachine";
 import { SnackbarSchema, SnackbarContext, SnackbarEvents } from "../machines/snackbarMachine";
 import { Stepper, Step, StepLabel } from "@material-ui/core";
 
 export interface Props {
-  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
-  snackbarService: Interpreter<SnackbarContext, SnackbarSchema, SnackbarEvents, any>;
+  authService: Interpreter<AuthMachineContext, AuthMachineSchema, AuthMachineEvents, any, any>;
+  snackbarService: Interpreter<
+    SnackbarContext,
+    SnackbarSchema,
+    SnackbarEvents,
+    any,
+    ResolveTypegenMeta<TypegenDisabled, SnackbarEvents, BaseActionObject, ServiceMap>
+  >;
 }
 
 const TransactionCreateContainer: React.FC<Props> = ({ authService, snackbarService }) => {
-  const [authState] = useService(authService);
-  const [, sendSnackbar] = useService(snackbarService);
+  const [authState] = useActor(authService);
+  const [, sendSnackbar] = useActor(snackbarService);
 
   const [createTransactionState, sendCreateTransaction, createTransactionService] =
     useMachine(createTransactionMachine);

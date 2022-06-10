@@ -1,4 +1,6 @@
-import faker from "faker";
+/// <reference types="jest" />
+
+import { faker } from "@faker-js/faker";
 import {
   getBankAccountById,
   getBankAccountsByUserId,

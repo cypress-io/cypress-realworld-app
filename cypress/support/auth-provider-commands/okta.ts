@@ -7,7 +7,7 @@ import { OktaAuth } from "@okta/okta-auth-js";
 import { frontendPort } from "../../../src/utils/portUtils";
 
 // Okta
-Cypress.Commands.add("loginByOktaApi", (username: string, password: string) => {
+Cypress.Commands.add("loginByOktaApi", (username: string, password?: string) => {
   const log = Cypress.log({
     displayName: "OKTA LOGIN",
     message: [`🔐 Authenticating | ${username}`],

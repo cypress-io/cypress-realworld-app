@@ -1,7 +1,7 @@
 // check this file using TypeScript if available
 // @ts-check
 
-import faker from "faker";
+import { faker } from "@faker-js/faker";
 import { User, BankAccount } from "../../../src/models";
 
 const apiBankAccounts = `${Cypress.env("apiUrl")}/bankAccounts`;

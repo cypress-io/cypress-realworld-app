@@ -1,3 +1,4 @@
+import "../../support/auth-provider-commands/cognito";
 import { isMobile } from "../../support/utils";
 
 if (Cypress.env("cognito_username")) {

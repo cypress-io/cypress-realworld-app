@@ -44,8 +44,8 @@ declare namespace Cypress {
      */
     visualSnapshot(maybeName?): Chainable<any>;
 
-    getBySel(dataTestAttribute: string, args?: any): Chainable<Element>;
-    getBySelLike(dataTestPrefixAttribute: string, args?: any): Chainable<Element>;
+    getBySel(dataTestAttribute: string, args?: any): Chainable<JQuery<HTMLElement>>;
+    getBySelLike(dataTestPrefixAttribute: string, args?: any): Chainable<JQuery<HTMLElement>>;
 
     /**
      *  Cypress task for directly querying to the database within tests
@@ -73,7 +73,7 @@ declare namespace Cypress {
     /**
      * Filter for data entities via database query
      */
-    database(operation: "filter", entity: string, query?: object, log?: boolean): Chainable<any[]>;
+    database(operation: "filter", entity: string, query?: object, log?: boolean): Chainable<any>;
 
     /**
      * Fetch React component instance associated with received element subject
@@ -123,7 +123,7 @@ declare namespace Cypress {
     /**
      * Logs out via bypassing UI by triggering XState logout event
      */
-    logoutByXstate(): Chainable<void>;
+    logoutByXstate(): Chainable<string>;
 
     /**
      * Logs in via Auth0 API

@@ -1,6 +1,12 @@
 import React, { useEffect } from "react";
 import { Switch } from "react-router";
-import { Interpreter } from "xstate";
+import {
+  BaseActionObject,
+  Interpreter,
+  ResolveTypegenMeta,
+  ServiceMap,
+  TypegenDisabled,
+} from "xstate";
 import MainLayout from "../components/MainLayout";
 import PrivateRoute from "../components/PrivateRoute";
 import TransactionsContainer from "./TransactionsContainer";
@@ -10,17 +16,35 @@ import BankAccountsContainer from "./BankAccountsContainer";
 import TransactionCreateContainer from "./TransactionCreateContainer";
 import TransactionDetailContainer from "./TransactionDetailContainer";
 import { DataContext, DataSchema, DataEvents } from "../machines/dataMachine";
-import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from "../machines/authMachine";
 import { SnackbarContext, SnackbarSchema, SnackbarEvents } from "../machines/snackbarMachine";
-import { useService } from "@xstate/react";
+import { useActor } from "@xstate/react";
 import UserOnboardingContainer from "./UserOnboardingContainer";
 
 export interface Props {
   isLoggedIn: boolean;
-  authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
-  notificationsService: Interpreter<DataContext, DataSchema, DataEvents, any>;
-  snackbarService: Interpreter<SnackbarContext, SnackbarSchema, SnackbarEvents, any>;
-  bankAccountsService: Interpreter<DataContext, any, DataEvents, any>;
+  authService: Interpreter<AuthMachineContext, AuthMachineSchema, AuthMachineEvents, any, any>;
+  notificationsService: Interpreter<
+    DataContext,
+    DataSchema,
+    DataEvents,
+    any,
+    ResolveTypegenMeta<TypegenDisabled, DataEvents, BaseActionObject, ServiceMap>
+  >;
+  snackbarService: Interpreter<
+    SnackbarContext,
+    SnackbarSchema,
+    SnackbarEvents,
+    any,
+    ResolveTypegenMeta<TypegenDisabled, SnackbarEvents, BaseActionObject, ServiceMap>
+  >;
+  bankAccountsService: Interpreter<
+    DataContext,
+    DataSchema,
+    DataEvents,
+    any,
+    ResolveTypegenMeta<TypegenDisabled, DataEvents, BaseActionObject, ServiceMap>
+  >;
 }
 
 const PrivateRoutesContainer: React.FC<Props> = ({
@@ -30,7 +54,7 @@ const PrivateRoutesContainer: React.FC<Props> = ({
   snackbarService,
   bankAccountsService,
 }) => {
-  const [, sendNotifications] = useService(notificationsService);
+  const [, sendNotifications] = useActor(notificationsService);
 
   useEffect(() => {
     sendNotifications({ type: "FETCH" });
