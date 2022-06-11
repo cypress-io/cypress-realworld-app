@@ -74,6 +74,72 @@
       "balance": 75369,
       "createdAt": "2020-02-11T21:26:46.510Z",
       "modifiedAt": "2020-05-21T15:15:33.944Z"
+    },
+    {
+      "id": "mfAd6sZwH",
+      "uuid": "2d97df69-ac85-4a12-8002-cd639e6b5edb",
+      "firstName": "Abel",
+      "lastName": "Fernandez",
+      "username": "Abel1",
+      "password": "$2a$10$1rVXv68SyD5LL3mV8rC.ruzBecv6SI8JGvsK1yyl.9zuFEURo1YhK",
+      "balance": 0,
+      "createdAt": "2022-06-11T10:47:14.270Z",
+      "modifiedAt": "2022-06-11T10:47:14.271Z"
+    },
+    {
+      "id": "Wh6jywohU",
+      "uuid": "315c09c6-c20b-41db-a75d-e4093046ef12",
+      "firstName": "Abel",
+      "lastName": "Fernandez",
+      "username": "Abel1",
+      "password": "$2a$10$dgNVnrKDG4cZqd6eDFo.HuodZNP/zIzRpxRDn71c1JV.N6Hw6HyWG",
+      "balance": 0,
+      "createdAt": "2022-06-11T10:49:16.150Z",
+      "modifiedAt": "2022-06-11T10:49:16.150Z"
+    },
+    {
+      "id": "LLfSyHAvF",
+      "uuid": "b655db7c-8dce-4c3c-9383-b1f6b479424a",
+      "firstName": "Abel",
+      "lastName": "Fernandez",
+      "username": "Abel1",
+      "password": "$2a$10$csM71AsX1puMyGBJ5InR2e2PTle662c2rkDPg2gxp74zsU8JkT1Ce",
+      "balance": 0,
+      "createdAt": "2022-06-11T10:49:56.456Z",
+      "modifiedAt": "2022-06-11T10:49:56.456Z"
+    },
+    {
+      "id": "G25z0SBZ6",
+      "uuid": "05bad42c-d4c5-44a0-8bff-2843993361f3",
+      "firstName": "Abel",
+      "lastName": "Fernandez",
+      "username": "Abel1",
+      "password": "$2a$10$2XdJb5BJ04JH6l/nRX5L6u5ZBF7FNLy5YJniqvS28HJkZ/Fdtoj1K",
+      "balance": 0,
+      "createdAt": "2022-06-11T10:50:21.034Z",
+      "modifiedAt": "2022-06-11T10:50:21.034Z"
+    },
+    {
+      "id": "yyiQYBIiU",
+      "uuid": "ce527545-e157-4381-893f-f25eee6da6d1",
+      "firstName": "Abel",
+      "lastName": "Fernandez",
+      "username": "Abel1",
+      "password": "$2a$10$Q27DzctAmpy8rYa9zj3AUOJY88J7i5flLVUl14tfvzgVryJ0Cr0eS",
+      "balance": 0,
+      "createdAt": "2022-06-11T10:53:12.590Z",
+      "modifiedAt": "2022-06-11T10:53:12.590Z"
+    },
+    {
+      "id": "nLvmfnT0_",
+      "uuid": "cfe298e1-0498-4933-b77f-72503e1f222b",
+      "firstName": "Abel",
+      "lastName": "Fernandez",
+      "username": "Abel1",
+      "password": "$2a$10$KOYAxIzRvdJKbn8lP.jSIe426tTnSu0AKepttCJG53JG7ZvOu9POG",
+      "balance": 0,
+      "createdAt": "2022-06-11T10:53:28.917Z",
+      "modifiedAt": "2022-06-11T10:53:28.917Z"
     }
   ],
   "contacts": [
