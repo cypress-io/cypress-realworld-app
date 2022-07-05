@@ -67,13 +67,10 @@ jobs:
       - name: __e Dir
         run: ls /__e
 
-      - name: Start server
-        run: yarn start:ci
-
       - name: "UI Tests - Chrome"
         uses: replayio/action-cypress@v0.1.3
         with:
-          command: npx cypress run --spec "cypress/tests/ui/*"
+          command: npm run test:e2e -- --
           browser: "Replay Chromium"
           apiKey: ${{ secrets.CYPRESS_REPLAY_API_KEY }}
           public: true
