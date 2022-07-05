@@ -102,7 +102,6 @@ jobs:
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           browser: chrome
-          group: "UI - Chrome"
           spec: cypress/tests/ui/*
           config-file: cypress.config.js
         env:
@@ -145,7 +144,6 @@ jobs:
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           browser: chrome
-          group: "UI - Chrome - Mobile"
           spec: cypress/tests/ui/*
           config-file: cypress.config.js
         env:
@@ -186,7 +184,6 @@ jobs:
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           browser: firefox
-          group: "UI - Firefox"
           spec: cypress/tests/ui/*
           config-file: cypress.config.js
         env:
@@ -228,7 +225,6 @@ jobs:
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           browser: firefox
-          group: "UI - Firefox - Mobile"
           spec: cypress/tests/ui/*
           config-file: cypress.config.js
         env:
@@ -265,7 +261,6 @@ jobs:
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
-          group: "UI - Electron - Windows"
           spec: cypress/tests/ui/*
           config-file: cypress.config.js
         env:
