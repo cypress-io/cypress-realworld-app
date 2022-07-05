@@ -1,9 +1,8 @@
 name: Cypress Tests
 
 on:
-  push:
-    branches-ignore:
-      - "renovate/**"
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   install:
@@ -74,3 +73,5 @@ jobs:
           browser: "Replay Chromium"
           apiKey: ${{ secrets.CYPRESS_REPLAY_API_KEY }}
           public: true
+          issue-number: ${{ github.event.pull_request.number }}
+          upload-all: true
