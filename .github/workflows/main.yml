@@ -75,5 +75,5 @@ jobs:
         with:
           command: npx cypress run --spec "cypress/tests/ui/*"
           browser: "Replay Chromium"
-          apiKey: { { secrets.CYPRESS_REPLAY_API_KEY } }
+          apiKey: ${{ secrets.CYPRESS_REPLAY_API_KEY }}
           public: true
