@@ -3992,17 +3992,17 @@
     schema-utils "^2.6.5"
     source-map "^0.7.3"
 
-"@replayio/cypress@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@replayio/cypress/-/cypress-0.1.0.tgz#21f57f47350d4402c4e901eacd81527cdcb4b4a1"
-  integrity sha512-4hViIlbkt0OBe3CuKt9O5dXbNe3HWB7mWCp6tyvSr2IOXr9cHBHFX7rbTF4zLzK9JX2sfEI8iHF5tqD8QGtflQ==
+"@replayio/cypress@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@replayio/cypress/-/cypress-0.2.2.tgz#011bfb36ac98270d8b9c1a8b38d52938533b8bbf"
+  integrity sha512-4puJRKqJWn5+XBvetNDuCdpPFUFD4ZI5itdR9/nOwBy4PtMItPPH4S80yxvJev3JROX5pbm1LJzceqSHG0lk7Q==
   dependencies:
-    "@replayio/replay" "^0.4.1"
+    "@replayio/replay" "^0.4.4"
 
-"@replayio/replay@^0.4.1":
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/@replayio/replay/-/replay-0.4.2.tgz#68c3f5210f96dfcedf7b65bfb4244e76293cc4cb"
-  integrity sha512-Nz2iXfUSheH7yuUxRAd9S+nvATUMCGvUojW9uh5NYigApR2AF13obeNzuYKQSKIta0rfQrHrBFbKOXi2Uz1jTg==
+"@replayio/replay@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@replayio/replay/-/replay-0.4.4.tgz#07b894ba239764d2394775c1293f20ad8bdf8d89"
+  integrity sha512-9/JqnwcAqHU1HbVyUXYuf0ZmsxFRQX2THfhbsK2C65LpSUJoII8cKJmLnmazxHf06DzK4aLtWGQAUGB9DqOmIg==
   dependencies:
     "@replayio/sourcemap-upload" "^1.0.1"
     commander "^7.2.0"
