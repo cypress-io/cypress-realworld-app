@@ -36,7 +36,7 @@ jobs:
           if-no-files-found: error
           path: build
 
-  ui-chrome-tests:
+  ui-tests:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
