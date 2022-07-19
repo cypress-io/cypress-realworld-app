@@ -59,14 +59,9 @@ if (process.env.REACT_APP_AUTH0) {
   ReactDOM.render(
     <Router history={history}>
       <ThemeProvider theme={theme}>
-        {process.env.REACT_APP_OKTA ? (
-          /* istanbul ignore next */
-          <Security oktaAuth={oktaAuth}>
-            <AppOkta />
-          </Security>
-        ) : (
-          <App />
-        )}
+        <Security oktaAuth={oktaAuth}>
+          <AppOkta />
+        </Security>
       </ThemeProvider>
     </Router>,
     document.getElementById("root")
