@@ -3253,7 +3253,7 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@cypress/code-coverage@^3.10.0-dev.1":
+"@cypress/code-coverage@3.10.0-dev.1":
   version "3.10.0-dev.1"
   resolved "https://registry.yarnpkg.com/@cypress/code-coverage/-/code-coverage-3.10.0-dev.1.tgz#a1e11cee2eca00fdd4c109e67e98987f572306c3"
   integrity sha512-jL4ia/5gwk6Td3AXhTBNbpl2COwmuiuQ5DMUdGlk3l087BQMUd8ky5sSNCSaaShPdmX0JPtTYO7kVsCXecyQoA==
@@ -3282,7 +3282,7 @@
   resolved "https://registry.yarnpkg.com/@cypress/mount-utils/-/mount-utils-1.0.2.tgz#afbc4f8c350b7cd86edc5ad0db0cbe1e0181edc8"
   integrity sha512-Fn3fdTiyayHoy8Ol0RSu4MlBH2maQ2ZEXeEVKl/zHHXEQpld5HX3vdNLhK5YLij8cLynA4DxOT/nO9iEnIiOXw==
 
-"@cypress/react@^5.10.0":
+"@cypress/react@5.12.0":
   version "5.12.0"
   resolved "https://registry.yarnpkg.com/@cypress/react/-/react-5.12.0.tgz#f68e3e08bdbf6644f81246e0ca6ba9d8bbd6fb8d"
   integrity sha512-SfkXf9Mg03gsOziOTo8oVhhwnEPF/3Vw13t9wE2crmRZsbLg1IaFKYDFKIvcMq821TDWkiU+xfjRZsOTQ05+LA==
@@ -3316,7 +3316,7 @@
     tunnel-agent "^0.6.0"
     uuid "^8.3.2"
 
-"@cypress/webpack-dev-server@^1.6.0":
+"@cypress/webpack-dev-server@1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@cypress/webpack-dev-server/-/webpack-dev-server-1.8.0.tgz#d16b7b71c55f716e1f8b72bb1db78866d1d8933e"
   integrity sha512-0Luj/mXHavJTjvdJxPuCVeub/VcIVBnpw0SC+oivtrzPNOuhjPendKDw5LIiohQRwQDdWVjP5lXREFBMbYdyxA==
@@ -7456,7 +7456,7 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=
 
-cypress@^10.7.0:
+cypress@10.7.0:
   version "10.7.0"
   resolved "https://registry.yarnpkg.com/cypress/-/cypress-10.7.0.tgz#2d37f8b9751c6de33ee48639cb7e67a2ce593231"
   integrity sha512-gTFvjrUoBnqPPOu9Vl5SBHuFlzx/Wxg/ZXIz2H4lzoOLFelKeF7mbwYUOzgzgF0oieU2WhJAestQdkgwJMMTvQ==
