@@ -175,7 +175,7 @@ Support for 3rd party authentication is available in the application to demonstr
 
 ### Auth0
 
-The [Auth0](https://auth0.com/) tests have been rewritten to take advantage of our new (currently experimental) [`cy.session`](https://docs.cypress.io/api/commands/session) and [`cy.origin`](https://docs.cypress.io/api/commands/origin) commands.
+The [Auth0](https://auth0.com/) tests have been rewritten to take advantage of our (currently experimental) [`cy.session`](https://docs.cypress.io/api/commands/session) and [`cy.origin`](https://docs.cypress.io/api/commands/origin) commands.
 
 Prerequisites include an Auth0 account and a Tenant configured for use with a SPA. Environment variables from Auth0 are to be placed in the [.env](./.env). For more details see [Auth0 Application Setup](http://on.cypress.io/auth0#Auth0-Application-Setup) and [Setting Auth0 app credentials in Cypress](http://on.cypress.io/auth0#Setting-Auth0-app-credentials-in-Cypress).
 

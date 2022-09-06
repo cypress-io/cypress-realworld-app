@@ -3,7 +3,7 @@
 
 // Note: this function leaves you on a blank page, so you must call cy.visit()
 // afterwards, before continuing with your test.
-Cypress.Commands.add("loginByAuth0Api", (username: string, password: string) => {
+Cypress.Commands.add("loginToAuth0", (username: string, password: string) => {
   const log = Cypress.log({
     displayName: "AUTH0 LOGIN",
     message: [`🔐 Authenticating | ${username}`],
