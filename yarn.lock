@@ -4022,6 +4022,48 @@
     schema-utils "^2.6.5"
     source-map "^0.7.3"
 
+"@replayio/cypress@^0.2.18":
+  version "0.2.18"
+  resolved "https://registry.yarnpkg.com/@replayio/cypress/-/cypress-0.2.18.tgz#d190d5ef113ed67e0175142daa82b30bcbbe18da"
+  integrity sha512-P6v3QxCfU1asTC0p4GC7G7UNhhXIQ0uV2jCfgTMhnANyZgQlenVkHabKVfbk3kzYV/n9WcWtFa42svN0IokBYg==
+  dependencies:
+    "@replayio/replay" "^0.9.5"
+    "@replayio/test-utils" "^0.1.2"
+    uuid "^8.3.2"
+
+"@replayio/replay@^0.9.5":
+  version "0.9.5"
+  resolved "https://registry.yarnpkg.com/@replayio/replay/-/replay-0.9.5.tgz#f27d02662a1b9b17ca1b07d964a5c9b8b6bf9642"
+  integrity sha512-Xfjq+/PSXanNmnLiaYcQA6uHEeLPLR6tiB+c1btdddSYrgxDWg24kE0Bej1Rtn3sqBu2iHX7JdxzWkyFDNaRyg==
+  dependencies:
+    "@replayio/sourcemap-upload" "^1.0.3"
+    commander "^7.2.0"
+    is-uuid "^1.0.2"
+    jsonata "^1.8.6"
+    superstruct "^0.15.4"
+    text-table "^0.2.0"
+    ws "^7.5.0"
+
+"@replayio/sourcemap-upload@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@replayio/sourcemap-upload/-/sourcemap-upload-1.0.3.tgz#e492f27e5d96aeb576057d6a05f948f3f977544a"
+  integrity sha512-k/po0EklaH3BxDnK8iZFn37y1aTiYpvD9CLPueIBCRsmiUxdMz3fh6EEGtUXuDcU5dCp7gQdacTXknRZq4dbNg==
+  dependencies:
+    commander "^7.2.0"
+    debug "^4.3.1"
+    glob "^7.1.6"
+    node-fetch "^2.6.1"
+    string.prototype.matchall "^4.0.5"
+
+"@replayio/test-utils@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@replayio/test-utils/-/test-utils-0.1.2.tgz#4210462a2a8898338909b030c5aafc5826b1a150"
+  integrity sha512-GTOsWCFNUwkV+ri0nV9rdtbAHhjJTZKYVLQtvTckD9W9DCIsr2YD5C2dKuLf3iSUfbD4je++We6l0CnTwRWI5w==
+  dependencies:
+    "@replayio/replay" "^0.9.5"
+    node-fetch "^2.6.7"
+    uuid "^8.3.2"
+
 "@rollup/plugin-node-resolve@^7.1.1":
   version "7.1.3"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-node-resolve/-/plugin-node-resolve-7.1.3.tgz#80de384edfbd7bfc9101164910f86078151a3eca"
@@ -6847,6 +6889,11 @@ commander@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-5.1.0.tgz#46abbd1652f8e059bddaef99bbdcb2ad9cf179ae"
   integrity sha512-P0CysNDQ7rtVw4QIQtm+MRxV66vKFSvlsQvGYXZWR3qFU0jlMKHZZZgw8e+8DSah4UDKMqnknRDQz+xuQXQ/Zg==
+
+commander@^7.2.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-7.2.0.tgz#a36cb57d0b501ce108e4d20559a150a391d97ab7"
+  integrity sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==
 
 common-tags@^1.8.0:
   version "1.8.0"
@@ -10661,6 +10708,11 @@ is-unicode-supported@^0.1.0:
   resolved "https://registry.yarnpkg.com/is-unicode-supported/-/is-unicode-supported-0.1.0.tgz#3f26c76a809593b52bfa2ecb5710ed2779b522a7"
   integrity sha512-knxG2q4UC3u8stRGyAVJCOdxFmv5DZiRcdlIaAQXAbSfJya+OhopNotLQrstBhququ4ZpuKbDc/8S6mgXgPFPw==
 
+is-uuid@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/is-uuid/-/is-uuid-1.0.2.tgz#ad1898ddf154947c25c8e54966f48604e9caecc4"
+  integrity sha512-tCByphFcJgf2qmiMo5hMCgNAquNSagOetVetDvBXswGkNfoyEMvGH1yDlF8cbZbKnbVBr4Y5/rlpMz9umxyBkQ==
+
 is-windows@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/is-windows/-/is-windows-1.0.2.tgz#d1850eb9791ecd18e6182ce12a30f396634bb19d"
@@ -11419,6 +11471,11 @@ json@11.0.0:
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/json/-/json-11.0.0.tgz#2e84493134e2f42c131165aa22a124df38b3a3ee"
   integrity sha512-N/ITv3Yw9Za8cGxuQqSqrq6RHnlaHWZkAFavcfpH/R52522c26EbihMxnY7A1chxfXJ4d+cEFIsyTgfi9GihrA==
+
+jsonata@^1.8.6:
+  version "1.8.6"
+  resolved "https://registry.yarnpkg.com/jsonata/-/jsonata-1.8.6.tgz#e5f0e6ace870a34bac881a182ca2b31227122791"
+  integrity sha512-ZH2TPYdNP2JecOl/HvrH47Xc+9imibEMQ4YqKy/F/FrM+2a6vfbGxeCX23dB9Fr6uvGwv+ghf1KxWB3iZk09wA==
 
 jsonfile@^4.0.0:
   version "4.0.0"
@@ -12566,6 +12623,13 @@ node-fetch@^2.6.1:
   version "2.6.4"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.4.tgz#7f1d13b8f9ff0c1a994dc6f73c69f7d652c7ace2"
   integrity sha512-aD1fO+xtLiSCc9vuD+sYMxpIuQyhHscGSkBEo2o5LTV/3bTEAYvdUii29n8LlO5uLCmWdGP7uVUVXFo5SRdkLA==
+  dependencies:
+    whatwg-url "^5.0.0"
+
+node-fetch@^2.6.7:
+  version "2.6.7"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
+  integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
   dependencies:
     whatwg-url "^5.0.0"
 
@@ -16250,6 +16314,11 @@ stylehacks@^4.0.0:
     postcss "^7.0.0"
     postcss-selector-parser "^3.0.0"
 
+superstruct@^0.15.4:
+  version "0.15.5"
+  resolved "https://registry.yarnpkg.com/superstruct/-/superstruct-0.15.5.tgz#0f0a8d3ce31313f0d84c6096cd4fa1bfdedc9dab"
+  integrity sha512-4AOeU+P5UuE/4nOUkmcQdW5y7i9ndt1cQd/3iUe+LTz3RxESf/W/5lg4B74HbDMMv8PHnPnGCQFH45kBcrQYoQ==
+
 supports-color@^5.0.0, supports-color@^5.3.0, supports-color@^5.4.0, supports-color@^5.5.0:
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-5.5.0.tgz#e2e69a44ac8772f78a1ec0b35b689df6530efc8f"
@@ -17811,6 +17880,11 @@ ws@^7.2.3, ws@^7.4.6:
   version "7.5.5"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.5.tgz#8b4bc4af518cfabd0473ae4f99144287b33eb881"
   integrity sha512-BAkMFcAzl8as1G/hArkxOxq3G7pjUqQ3gzYbLL0/5zNkph70e+lCoxBGnm6AW1+/aiNeV4fnKqZ8m4GZewmH2w==
+
+ws@^7.5.0:
+  version "7.5.9"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.9.tgz#54fa7db29f4c7cec68b1ddd3a89de099942bb591"
+  integrity sha512-F+P9Jil7UiSKSkppIiD94dN07AwvFixvLIj1Og1Rl9GGMuNipJnV9JzjD6XuqmAeiswGvUmNLjr5cFuXwNS77Q==
 
 xdg-basedir@^4.0.0:
   version "4.0.0"
