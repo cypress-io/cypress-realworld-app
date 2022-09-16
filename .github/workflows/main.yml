@@ -38,7 +38,6 @@ jobs:
 
   ui-chrome-tests-record:
     name: UI tests (record)
-    timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
       image: cypress/browsers:node16.13.0-chrome95-ff94
@@ -163,7 +162,6 @@ jobs:
 
   ui-chrome-tests-original:
     name: UI tests (original)
-    timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
       image: cypress/browsers:node16.13.0-chrome95-ff94
