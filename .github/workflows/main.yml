@@ -79,9 +79,6 @@ jobs:
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           browser: 'Replay Chromium'
-          record: true
-          parallel: true
-          group: "UI - Chrome"
           spec: cypress/tests/ui/*
           config-file: cypress.config.js
         # env:
@@ -147,9 +144,6 @@ jobs:
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           browser: 'Replay Chromium'
-          record: true
-          parallel: true
-          group: "UI - Chrome"
           spec: cypress/tests/ui/*
           config-file: cypress.config.js
         # env:
@@ -210,9 +204,6 @@ jobs:
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           browser: chrome
-          record: true
-          parallel: true
-          group: "UI - Chrome"
           spec: cypress/tests/ui/*
           config-file: cypress.config.js
         # env:
@@ -260,7 +251,6 @@ jobs:
   #         browser: chrome
   #         record: true
   #         parallel: true
-  #         group: "UI - Chrome - Mobile"
   #         spec: cypress/tests/ui/*
   #         config-file: cypress.config.js
   #       # env:
