@@ -8,6 +8,7 @@ import codeCoverageTask from "@cypress/code-coverage/task";
 import { defineConfig } from "cypress";
 import "@cypress/instrument-cra";
 const { devServer } = require("@cypress/react/plugins/react-scripts");
+const cypressReplay = require("@replayio/cypress");
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
@@ -69,6 +70,8 @@ module.exports = defineConfig({
     viewportHeight: 1000,
     viewportWidth: 1280,
     setupNodeEvents(on, config) {
+      cypressReplay.default(on, config);
+
       const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 
       const queryDatabase = ({ entity, query }, callback) => {
