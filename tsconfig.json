@@ -22,7 +22,6 @@
     "src/**/*.cy.{js,ts,jsx,tsx}",
     "scripts",
     "backend",
-    "src/__tests__",
-    "cypress/support/component.ts"
+    "src/__tests__"
   ]
 }
