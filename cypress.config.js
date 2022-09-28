@@ -3,7 +3,6 @@ import _ from "lodash";
 import axios from "axios";
 import dotenv from "dotenv";
 import Promise from "bluebird";
-import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
 import { defineConfig } from "cypress";
 import "@cypress/instrument-cra";
@@ -81,7 +80,6 @@ module.exports = defineConfig({
       };
 
       on("task", {
-        percyHealthCheck,
         async "db:seed"() {
           // seed database with test data
           const { data } = await axios.post(`${testDataApiEndpoint}/seed`);
