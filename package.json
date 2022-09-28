@@ -54,7 +54,8 @@
     "@cypress/react": "^5.10.0",
     "@cypress/webpack-dev-server": "^1.6.0",
     "@faker-js/faker": "6.1.2",
-    "@percy/cypress": "2.3.4",
+    "@percy/cypress": "3.1.2",
+    "@percy/cli":"1.10.4",
     "@types/bcryptjs": "2.4.2",
     "@types/bluebird": "3.5.36",
     "@types/connect-flash": "0.0.37",
@@ -92,7 +93,7 @@
     "concurrently": "7.1.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-    "cypress": "^10.7.0",
+    "cypress": "^10.0.3",
     "dotenv": "16.0.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-cypress": "2.12.1",
@@ -223,7 +224,7 @@
     ]
   },
   "percy": {
-    "version": 1,
+    "version": 2,
     "snapshot": {
       "widths": [
         1280
