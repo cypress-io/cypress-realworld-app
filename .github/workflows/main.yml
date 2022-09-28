@@ -9,7 +9,7 @@ jobs:
         with:
           node-version: '14'
       - run: yarn install
-      - uses: cypress-io/github-action@v2
+      - uses: cypress-io/github-action@v4.2.0
         # the entire command will automatically be prefixed with "npm"
           # and we need the second "npm" to execute "cypress run ..." command line.
       - name: Run tests
