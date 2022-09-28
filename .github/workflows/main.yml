@@ -8,7 +8,19 @@ jobs:
       - uses: actions/setup-node@v2-beta
         with:
           node-version: '14'
+      - name: Cypress install
+        uses: cypress-io/github-action@v4
+        with:
+          runTests: false
+      # report machine parameters
       - run: yarn install
+      - run: yarn cypress info
+      - run: node --version
+      - run: node -p 'os.cpus()'
+      - run: yarn types
+      - run: yarn lint
+      - run: yarn test:unit:ci
+      - run: yarn build:ci
         # the entire command will automatically be prefixed with "npm"
           # and we need the second "npm" to execute "cypress run ..." command line.
       - name: Run tests
