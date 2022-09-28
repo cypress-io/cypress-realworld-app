@@ -54,7 +54,7 @@ module.exports = defineConfig({
   },
   component: {
     devServer,
-    specPattern: "src/**/*.cy.{js,jsx,ts,tsx}",
+    specPattern: "src/**/SignInForm.cy.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/component.ts",
     setupNodeEvents(on, config) {
       codeCoverageTask(on, config);
