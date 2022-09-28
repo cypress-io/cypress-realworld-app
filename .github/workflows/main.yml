@@ -13,7 +13,6 @@ jobs:
         with:
           runTests: false
       # report machine parameters
-      - run: yarn install
       - run: yarn cypress info
       - run: node --version
       - run: node -p 'os.cpus()'
