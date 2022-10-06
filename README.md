@@ -42,7 +42,7 @@ A payment application to demonstrate <strong>real-world</strong> usage of <a hre
 
 ---
 
-## Features
+## Features test
 
 🛠 Built with [React][reactjs], [XState][xstate], [Express][express], [lowdb][lowdb], [Material-UI][material-ui] and [TypeScript][typescript]  
 ⚡️ Zero database dependencies  
