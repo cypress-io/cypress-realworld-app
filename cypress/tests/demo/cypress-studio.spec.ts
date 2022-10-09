@@ -10,6 +10,7 @@ describe("Cypress Studio Demo", function () {
   });
   it("create new transaction", function () {
     // Extend test with Cypress Studio
+    cy.wait(100000);
   });
   it("create new bank account", function () {
     // Extend test with Cypress Studio
