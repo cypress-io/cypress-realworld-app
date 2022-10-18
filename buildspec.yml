@@ -56,7 +56,7 @@ phases:
       - echo $CY_BROWSER
       - echo $CY_SPEC
       - echo $CY_CONFIG
-      - yarn install --frozen-lockfile
+      - yarn install --frozen-lockfile –ignore-engines
   pre_build:
     commands:
       - yarn types
