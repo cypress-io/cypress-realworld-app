@@ -75,6 +75,7 @@ jobs:
         run: ls /__e
 
       - name: Set test start
+        if: always()
         id: recordStart
         run: echo "time=`date +%s`" >> $GITHUB_OUTPUT
 
@@ -102,6 +103,7 @@ jobs:
           RECORD_REPLAY_METADATA_FILE: /tmp/replay-metadata
 
       - name: Set upload start
+        if: always()
         id: uploadStart
         run: echo "time=`date +%s`" >> $GITHUB_OUTPUT
 
@@ -113,6 +115,7 @@ jobs:
           api-key: rwk_wayprCcrJi5pM4VNN0kWHkc1AUWfqFyS1musJwdqtC4
 
       - name: Set duration in output
+        if: always()
         id: end
         run: | 
           echo "recordDuration=$((${{ steps.uploadStart.outputs.time }} - ${{ steps.recordStart.outputs.time }}))" >> $GITHUB_OUTPUT
@@ -216,6 +219,7 @@ jobs:
         run: ls /__e
 
       - name: Set test start
+        if: always()
         id: start
         run: echo "time=`date +%s`" >> $GITHUB_OUTPUT
 
@@ -237,6 +241,7 @@ jobs:
         #   DEBUG: "cypress:server:args"
 
       - name: Set duration in output
+        if: always()
         id: end
         run: echo "duration=$((`date +%s` - ${{ steps.start.outputs.time }}))" >> $GITHUB_OUTPUT
   upload-benchmarks:
