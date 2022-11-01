@@ -2,6 +2,7 @@
 import "@cypress/code-coverage/support";
 import "./commands";
 import { isMobile } from "./utils";
+require("@replayio/cypress/support");
 
 beforeEach(() => {
   // cy.intercept middleware to remove 'if-none-match' headers from all requests
