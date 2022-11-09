@@ -6,8 +6,7 @@ if (Cypress.env("cognito_username")) {
     beforeEach(function () {
       cy.task("db:seed");
 
-      cy.server();
-      cy.route("POST", "/bankAccounts").as("createBankAccount");
+      cy.intercept("POST", "/bankAccounts").as("createBankAccount");
 
       cy.loginByCognitoApi(Cypress.env("cognito_username"), Cypress.env("cognito_password"));
     });
