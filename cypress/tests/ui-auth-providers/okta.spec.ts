@@ -5,8 +5,7 @@ if (Cypress.env("okta_client_id")) {
     beforeEach(function () {
       cy.task("db:seed");
 
-      cy.server();
-      cy.route("POST", "/bankAccounts").as("createBankAccount");
+      cy.intercept("POST", "/bankAccounts").as("createBankAccount");
 
       cy.loginByOktaApi(Cypress.env("okta_username"), Cypress.env("okta_password"));
     });
