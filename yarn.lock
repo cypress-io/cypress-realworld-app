@@ -4022,13 +4022,13 @@
     schema-utils "^2.6.5"
     source-map "^0.7.3"
 
-"@replayio/cypress@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@replayio/cypress/-/cypress-0.3.5.tgz#435744dc0390ce62af156411fe592355ef930c85"
-  integrity sha512-x8bvKJQRX4j44n2Rw+ylIe9BnJAm9SPbOniHIdq5MyxJCVyN9rRJHfdYJQNBBPr/+iqTbtNufCgIuPzLl6nDjg==
+"@replayio/cypress@^0.3.9":
+  version "0.3.9"
+  resolved "https://registry.yarnpkg.com/@replayio/cypress/-/cypress-0.3.9.tgz#e48de799c13847b314115a992431b4055a6cdc1c"
+  integrity sha512-tOUaNMmfQID2IXQRL/XKcgcXFoL6KMsTBKWLOMvMF8wVxs+UQSqqIY7aMwvTFIeBamjxQQmQkEMgZ+7UHZ58jQ==
   dependencies:
     "@replayio/replay" "^0.10.3"
-    "@replayio/test-utils" "^0.2.4"
+    "@replayio/test-utils" "^0.3.1"
     uuid "^8.3.2"
 
 "@replayio/replay@^0.10.3":
@@ -4056,10 +4056,10 @@
     node-fetch "^2.6.1"
     string.prototype.matchall "^4.0.5"
 
-"@replayio/test-utils@^0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@replayio/test-utils/-/test-utils-0.2.4.tgz#b56db176acebf655e317b42332a490f3f3e22430"
-  integrity sha512-8u3gIr/cN9ygrpQX71Q3j/eNbSA73yBFz5FLw3lrBBiKNziQb12mAHtUHQoqpWTDH2N4dxzNnlab0UCqxUs44Q==
+"@replayio/test-utils@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@replayio/test-utils/-/test-utils-0.3.1.tgz#6428c73a38320c561995d7c057d6da9227cef263"
+  integrity sha512-whuwq21j9rEzukDGEWxc7fYnWhz0sXI0kso1y1Qp+FA8HZcfcjJ23CDk82SLjIl20QQGaHm9ch9IaZXetfO4nQ==
   dependencies:
     "@replayio/replay" "^0.10.3"
     "@types/node-fetch" "^2.6.2"
