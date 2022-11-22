@@ -18,7 +18,7 @@ Cypress.Commands.add("loginToAuth0", (username: string, password: string) => {
     cy.visit("/");
 
     // Login on Auth0.
-    cy.origin("auth0.com", { args }, ({ username, password }) => {
+    cy.origin("dev-ufts63sf.us.auth0.com", { args }, ({ username, password }) => {
       cy.get("input#username").type(username);
       cy.get("input#password").type(password);
       cy.contains("button[value=default]", "Continue").click();
@@ -27,9 +27,13 @@ Cypress.Commands.add("loginToAuth0", (username: string, password: string) => {
 
     // Wait for RWA to save auth token to localstorage before saving session.
     cy.url().should((url) => {
-      expect(url).to.contain(Cypress.config("baseUrl"));
+      expect(url).to.contain(Cypress.config("baseUrl")); // <-- We're on baseUrl here
       expect(localStorage.getItem("authAccessToken")).to.exist;
     });
+  }, {
+    validate: () => {
+      cy.url().should("contain", Cypress.config("baseUrl")); // <-- This fails because we're on blank now
+    }
   });
 
   log.snapshot("after");
