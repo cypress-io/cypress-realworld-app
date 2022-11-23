@@ -13,28 +13,29 @@ Cypress.Commands.add("loginToAuth0", (username: string, password: string) => {
   log.snapshot("before");
 
   const args = { username, password };
-  cy.session(args, () => {
-    // App landing page redirects to Auth0.
-    cy.visit("/");
+  cy.session(
+    args,
+    () => {
+      // App landing page redirects to Auth0.
+      cy.visit("/");
 
-    // Login on Auth0.
-    cy.origin("dev-ufts63sf.us.auth0.com", { args }, ({ username, password }) => {
-      cy.get("input#username").type(username);
-      cy.get("input#password").type(password);
-      cy.contains("button[value=default]", "Continue").click();
-    });
-    // Auth0 redirects back to RWA.
+      // Login on Auth0.
+      cy.origin(Cypress.env("auth0_domain"), { args }, ({ username, password }) => {
+        cy.get("input#username").type(username);
+        cy.get("input#password").type(password);
+        cy.contains("button[value=default]", "Continue").click();
+      });
 
-    // Wait for RWA to save auth token to localstorage before saving session.
-    cy.url().should((url) => {
-      expect(url).to.contain(Cypress.config("baseUrl")); // <-- We're on baseUrl here
-      expect(localStorage.getItem("authAccessToken")).to.exist;
-    });
-  }, {
-    validate: () => {
-      cy.url().should("contain", Cypress.config("baseUrl")); // <-- This fails because we're on blank now
+      // Ensure Auth0 has redirected us back to the RWA.
+      cy.url().should("equal", "http://localhost:3000/");
+    },
+    {
+      validate: () => {
+        // Validate presence of access token in localStorage.
+        cy.wrap(localStorage).invoke("getItem", "authAccessToken").should("exist");
+      },
     }
-  });
+  );
 
   log.snapshot("after");
   log.end();

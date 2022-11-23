@@ -30,6 +30,7 @@ module.exports = defineConfig({
     // Auth0
     auth0_username: process.env.AUTH0_USERNAME,
     auth0_password: process.env.AUTH0_PASSWORD,
+    auth0_domain: process.env.REACT_APP_AUTH0_DOMAIN,
 
     // Okta
     okta_username: process.env.OKTA_USERNAME,
