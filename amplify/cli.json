@@ -1,0 +1,61 @@
+{
+  "features": {
+    "graphqltransformer": {
+      "addmissingownerfields": false,
+      "improvepluralization": false,
+      "validatetypenamereservedwords": true,
+      "useexperimentalpipelinedtransformer": false,
+      "enableiterativegsiupdates": false,
+      "secondarykeyasgsi": false,
+      "skipoverridemutationinputtypes": false,
+      "transformerversion": 1,
+      "suppressschemamigrationprompt": true,
+      "securityenhancementnotification": true,
+      "showfieldauthnotification": true,
+      "usesubusernamefordefaultidentityclaim": true,
+      "usefieldnameforprimarykeyconnectionfield": false,
+      "enableautoindexquerynames": false,
+      "respectprimarykeyattributesonconnectionfield": false,
+      "shoulddeepmergedirectiveconfigdefaults": false,
+      "populateownerfieldforstaticgroupauth": false,
+      "securityEnhancementNotification": false,
+      "showFieldAuthNotification": false
+    },
+    "frontend-ios": {
+      "enablexcodeintegration": false
+    },
+    "auth": {
+      "enablecaseinsensitivity": false,
+      "useinclusiveterminology": false,
+      "breakcirculardependency": false,
+      "forcealiasattributes": false,
+      "useenabledmfas": false
+    },
+    "codegen": {
+      "useappsyncmodelgenplugin": false,
+      "usedocsgeneratorplugin": false,
+      "usetypesgeneratorplugin": false,
+      "cleangeneratedmodelsdirectory": false,
+      "retaincasestyle": false,
+      "addtimestampfields": false,
+      "handlelistnullabilitytransparently": false,
+      "emitauthprovider": false,
+      "generateindexrules": false,
+      "enabledartnullsafety": false
+    },
+    "appsync": {
+      "generategraphqlpermissions": false
+    },
+    "latestregionsupport": {
+      "pinpoint": 0,
+      "translate": 0,
+      "transcribe": 0,
+      "rekognition": 0,
+      "textract": 0,
+      "comprehend": 0
+    },
+    "project": {
+      "overrides": true
+    }
+  }
+}

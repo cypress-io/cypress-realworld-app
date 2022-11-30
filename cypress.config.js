@@ -41,6 +41,8 @@ module.exports = defineConfig({
     // Amazon Cognito
     cognito_username: process.env.AWS_COGNITO_USERNAME,
     cognito_password: process.env.AWS_COGNITO_PASSWORD,
+    cognito_domain: process.env.AWS_COGNITO_DOMAIN,
+    cognito_programmatic_login: false,
     awsConfig: awsConfig.default,
 
     // Google
@@ -63,7 +65,8 @@ module.exports = defineConfig({
     supportFile: "cypress/support/e2e.ts",
     viewportHeight: 1000,
     viewportWidth: 1280,
-    experimentalSessionAndOrigin: !!process.env.REACT_APP_AUTH0_CLIENTID,
+    experimentalSessionAndOrigin:
+      !!process.env.REACT_APP_AUTH0_CLIENTID || !!process.env.AWS_COGNITO_DOMAIN,
     setupNodeEvents(on, config) {
       const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 
