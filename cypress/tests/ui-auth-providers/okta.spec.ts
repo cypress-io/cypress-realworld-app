@@ -1,6 +1,6 @@
 import { isMobile } from "../../support/utils";
 
-if (Cypress.env("okta_client_id")) {
+if (Cypress.env("okta_programmatic_login")) {
   describe("Okta", function () {
     beforeEach(function () {
       cy.task("db:seed");
@@ -43,6 +43,25 @@ if (Cypress.env("okta_client_id")) {
 
     it("shows onboarding", function () {
       cy.contains("Get Started").should("be.visible");
+    });
+  });
+} else {
+  describe("Okta", function () {
+    beforeEach(function () {
+      cy.task("db:seed");
+
+      cy.loginByOkta(Cypress.env("okta_username"), Cypress.env("okta_password"));
+      cy.visit("/");
+    });
+
+    it("verifies signed in user does not have a bank account", function () {
+      cy.get('[data-test="sidenav-bankaccounts"]').click();
+      cy.get('[data-test="empty-list-header"]').should("be.visible");
+    });
+
+    it("verifies signed in user does not have any notifications", function () {
+      cy.get('[data-test="sidenav-notifications"]').click();
+      cy.get('[data-test="empty-list-header"]').should("be.visible");
     });
   });
 }

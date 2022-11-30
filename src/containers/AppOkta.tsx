@@ -39,7 +39,7 @@ const AppOkta: React.FC = () => {
   const [, , bankAccountsService] = useMachine(bankAccountsMachine);
 
   // @ts-ignore
-  if (window.Cypress) {
+  if (window.Cypress && process.env.REACT_APP_OKTA_PROGRAMMATIC) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       const okta = JSON.parse(localStorage.getItem("oktaCypress")!);
@@ -89,6 +89,7 @@ const AppOkta: React.FC = () => {
   );
 };
 
-//@ts-ignore
-let appOkta = window.Cypress ? AppOkta : withOktaAuth(AppOkta);
+let appOkta =
+  //@ts-ignore
+  window.Cypress && process.env.REACT_APP_OKTA_PROGRAMMATIC ? AppOkta : withOktaAuth(AppOkta);
 export default appOkta;
