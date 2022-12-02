@@ -68,7 +68,6 @@ Cypress.Commands.add("loginByOkta", (username: string, password: string) => {
       Cypress.log({
         displayName: "OKTA LOGIN",
         message: [`🔐 Authenticating | ${username}`],
-        autoEnd: false,
       });
 
       cy.visit("/");
