@@ -37,6 +37,7 @@ module.exports = defineConfig({
     okta_password: process.env.OKTA_PASSWORD,
     okta_domain: process.env.REACT_APP_OKTA_DOMAIN,
     okta_client_id: process.env.REACT_APP_OKTA_CLIENTID,
+    okta_programmatic_login: process.env.OKTA_PROGRAMMATIC_LOGIN || false,
 
     // Amazon Cognito
     cognito_username: process.env.AWS_COGNITO_USERNAME,
@@ -66,7 +67,9 @@ module.exports = defineConfig({
     viewportHeight: 1000,
     viewportWidth: 1280,
     experimentalSessionAndOrigin:
-      !!process.env.REACT_APP_AUTH0_CLIENTID || !!process.env.AWS_COGNITO_DOMAIN,
+      !!process.env.REACT_APP_AUTH0_CLIENTID ||
+      !!process.env.AWS_COGNITO_DOMAIN ||
+      !process.env.OKTA_PROGRAMMATIC_LOGIN,
     setupNodeEvents(on, config) {
       const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 

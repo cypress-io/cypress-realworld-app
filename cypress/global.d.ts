@@ -116,6 +116,11 @@ declare namespace Cypress {
     loginByOktaApi(username: string, password?: string): Chainable<Response>;
 
     /**
+     * Logs-in user by navigating to Okta tenant with cy.origin()
+     */
+    loginByOkta(username: string, password: string): Chainable<Response>;
+
+    /**
      * Logs in bypassing UI by triggering XState login event
      */
     loginByXstate(username: string, password?: string): Chainable<any>;
