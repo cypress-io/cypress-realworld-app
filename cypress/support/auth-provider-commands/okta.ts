@@ -11,7 +11,6 @@ Cypress.Commands.add("loginByOktaApi", (username: string, password?: string) => 
   const log = Cypress.log({
     displayName: "OKTA LOGIN",
     message: [`🔐 Authenticating | ${username}`],
-    // @ts-ignore
     autoEnd: false,
   });
 
@@ -69,7 +68,6 @@ Cypress.Commands.add("loginByOkta", (username: string, password: string) => {
       Cypress.log({
         displayName: "OKTA LOGIN",
         message: [`🔐 Authenticating | ${username}`],
-        // @ts-ignore
         autoEnd: false,
       });
 
