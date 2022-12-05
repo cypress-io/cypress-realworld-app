@@ -92,6 +92,15 @@ Cypress.Commands.add("loginByCognito", (username, password) => {
     {
       validate() {
         cy.visit("/");
+        /**
+         * NOTE: We recommend validating sessions by either validating
+         * localStorage or cookies values, or possibly accessing an
+         * endpoint to validate that the correct user is logged.
+         *
+         * This example is here for brevity to make sure
+         * our user is directly taken to the onboarding flow
+         * and not blocked by a login screen
+         */
         // revalidate our session to make sure we are logged in
         cy.contains("Get Started").should("be.visible");
       },
