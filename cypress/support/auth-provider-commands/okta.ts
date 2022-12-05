@@ -89,6 +89,12 @@ Cypress.Commands.add("loginByOkta", (username: string, password: string) => {
     {
       validate() {
         cy.visit("/");
+        /**
+         * NOTE: We recommend validating sessions by either validating
+         * localStorage or cookies values, or possibly accessing an
+         * endpoint to validate that the correct user is logged.
+         */
+        // revalidate our session to make sure we are logged in
         cy.get('[data-test="sidenav-username"]').should("contain", username);
       },
     }
