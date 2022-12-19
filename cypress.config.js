@@ -7,6 +7,7 @@ import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
 import { defineConfig } from "cypress";
 import "@cypress/instrument-cra";
+import { writeFileSync } from "fs";
 const { devServer } = require("@cypress/react/plugins/react-scripts");
 const cypressReplay = require("@replayio/cypress");
 
@@ -71,6 +72,13 @@ module.exports = defineConfig({
     viewportWidth: 1280,
     setupNodeEvents(on, config) {
       cypressReplay.default(on, config);
+
+      on("after:run", (afterRun) => {
+        const data = JSON.stringify(afterRun.totalDuration);
+        const filename = "duration.json";
+        writeFileSync(filename, data);
+        console.log("cypress-json-results: wrote results to %s", filename);
+      });
 
       const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 

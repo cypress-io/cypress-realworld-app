@@ -65,11 +65,6 @@ jobs:
       - name: __e Dir
         run: ls /__e
 
-      - name: Set test start
-        if: always()
-        id: recordStart
-        run: echo "time=`date +%s`" >> $GITHUB_OUTPUT
-
       - name: "UI Tests - Chrome"
         uses: cypress-io/github-action@v4
         with:
@@ -93,6 +88,13 @@ jobs:
           RECORD_ALL_CONTENT: 1
           RECORD_REPLAY_METADATA_FILE: /tmp/replay-metadata
 
+      - name: Parse test run duration
+        id: set_var
+        if: always()
+        run: |
+          content=`cat duration.json`
+          echo "::set-output name=duration::$content"
+
       - name: Set upload start
         if: always()
         id: uploadStart
@@ -109,8 +111,8 @@ jobs:
         if: always()
         id: end
         run: | 
-          echo "recordDuration=$((${{ steps.uploadStart.outputs.time }} - ${{ steps.recordStart.outputs.time }}))" >> $GITHUB_OUTPUT
-          echo "uploadDuration=$((`date +%s` - ${{ steps.uploadStart.outputs.time }}))" >> $GITHUB_OUTPUT
+          echo "recordDuration=${{fromJson(steps.set_var.outputs.duration)}}" >> $GITHUB_OUTPUT
+          echo "uploadDuration=$(((`date +%s` - ${{ steps.uploadStart.outputs.time }}) * 1000))" >> $GITHUB_OUTPUT
 
   no-record:
     name: UI tests (no record)
@@ -120,6 +122,8 @@ jobs:
       image: cypress/browsers:node16.13.0-chrome95-ff94
       options: --user 1001
     needs: install
+    outputs:
+      noRecordDuration: ${{steps.end.outputs.noRecordDuration}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -162,6 +166,17 @@ jobs:
           RECORD_REPLAY_METADATA_FILE: /tmp/replay-metadata
           RECORD_REPLAY_DRIVER: /tmp/not-here
 
+      - name: Parse test run duration
+        id: set_var
+        if: always()
+        run: |
+          content=`cat duration.json`
+          echo "::set-output name=duration::$content"
+
+      - name: Set duration in output
+        if: always()
+        id: end
+        run: echo "noRecordDuration=${{fromJson(steps.set_var.outputs.duration)}}" >> $GITHUB_OUTPUT
 
   original:
     name: UI tests (original)
@@ -171,7 +186,7 @@ jobs:
       options: --user 1001
     needs: install
     outputs:
-     duration: ${{steps.end.outputs.duration}}
+      originalDuration: ${{steps.end.outputs.originalDuration}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -213,21 +228,33 @@ jobs:
         #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         #   DEBUG: "cypress:server:args"
 
-      - name: Set duration in output
+      - name: Parse test run duration
+        id: set_var
         if: always()
+        run: |
+          content=`cat duration.json`
+          echo "::set-output name=duration::$content"
+
+      - name: Set duration in output
         id: end
-        run: echo "duration=$((`date +%s` - ${{ steps.start.outputs.time }}))" >> $GITHUB_OUTPUT
+        if: always()
+        run: echo "originalDuration=${{fromJson(steps.set_var.outputs.duration)}}" >> $GITHUB_OUTPUT
+
   upload-benchmarks:
     name: Upload benchmarks
     runs-on: ubuntu-latest
-    needs: [record, original]
+    needs: [record, no-record, original]
+    if: always()
     steps:
       - run: |
-          echo "Original Duration: ${{ needs.original.outputs.duration }}"
           echo "Record Duration: ${{ needs.record.outputs.recordDuration }}"
+          echo "No Record Duration: ${{ needs.no-record.outputs.noRecordDuration }}"
+          echo "Original Duration: ${{ needs.original.outputs.originalDuration }}"
           echo "Upload Duration: ${{ needs.record.outputs.uploadDuration }}"
       - name: Fetch API Data 📦
         uses: JamesIves/fetch-api-data-action@v2
+        # Don't upload metrics for pull requests, so our stats are clean
+        if: ${{ github.ref_name == 'main' }}
         with:
           endpoint: "https://telemetry.replay.io"
-          configuration: '{ "method": "POST", "body": {"event": "Webhook", "source": "metrics", "name": "action-finished", "project": "cypress-realworld-app", "originalDuration": "${{ needs.original.outputs.duration }}", "recordDuration": "${{ needs.record.outputs.recordDuration }}", "uploadDuration": "${{ needs.record.outputs.uploadDuration }}"} }'
+          configuration: '{ "method": "POST", "body": {"event": "Webhook", "source": "metrics", "name": "action-finished-2", "project": "cypress-realworld-app", "originalDuration": "${{ needs.original.outputs.originalDuration }}", "recordDuration": "${{ needs.record.outputs.recordDuration }}", "noRecordDuration": "${{ needs.no-record.outputs.noRecordDuration }}", "uploadDuration": "${{ needs.record.outputs.uploadDuration }}"} }'
