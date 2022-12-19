@@ -254,7 +254,7 @@ jobs:
       - name: Fetch API Data 📦
         uses: JamesIves/fetch-api-data-action@v2
         # Don't upload metrics for pull requests, so our stats are clean
-        if: ${{ github.ref_name == 'main' }}
+        if: ${{ github.ref_name == 'develop' }}
         with:
           endpoint: "https://telemetry.replay.io"
           configuration: '{ "method": "POST", "body": {"event": "Webhook", "source": "metrics", "name": "action-finished-2", "project": "cypress-realworld-app", "originalDuration": "${{ needs.original.outputs.originalDuration }}", "recordDuration": "${{ needs.record.outputs.recordDuration }}", "noRecordDuration": "${{ needs.no-record.outputs.noRecordDuration }}", "uploadDuration": "${{ needs.record.outputs.uploadDuration }}"} }'
