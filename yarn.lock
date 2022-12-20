@@ -4022,20 +4022,20 @@
     schema-utils "^2.6.5"
     source-map "^0.7.3"
 
-"@replayio/cypress@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@replayio/cypress/-/cypress-0.4.3.tgz#c40df475754201b7d12b7312b005acee185f4515"
-  integrity sha512-CKgq5c4ud84L+gL48WORylusybCbuvN7Bqh2XoZEGWgTvTfbFfy943YbMrghowv1+F0nkQbDGMb3ul4iWcwyYw==
+"@replayio/cypress@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@replayio/cypress/-/cypress-0.4.4.tgz#18237bb3b105e7dbe023d21877b34eb3cfde543b"
+  integrity sha512-Kmb5fG8EAOBa+jhYlTGipc1a4HG2+NL8Y6LOg7fCazAotT05VXifCLe2ClWyQDV83gN3gfEJ1OLN5nr3mNNm3Q==
   dependencies:
-    "@replayio/replay" "^0.10.6"
-    "@replayio/test-utils" "^0.3.4"
+    "@replayio/replay" "^0.10.7"
+    "@replayio/test-utils" "^0.3.5"
     semver "^7.3.8"
     uuid "^8.3.2"
 
-"@replayio/replay@^0.10.6":
-  version "0.10.6"
-  resolved "https://registry.yarnpkg.com/@replayio/replay/-/replay-0.10.6.tgz#b86596d5934f9121057c9f50b1e7ab5f66d5701a"
-  integrity sha512-U4rFSKzcG69UduV4LVPSCCnvcoF2ogXLHc0mHEUgd195puhTsZcLZPV4byXCzIUCLR+tkJNrWBPcM9Nwn5JauQ==
+"@replayio/replay@^0.10.7":
+  version "0.10.7"
+  resolved "https://registry.yarnpkg.com/@replayio/replay/-/replay-0.10.7.tgz#55b2d619e8344f308a0bdbd5925ff50c755ff29b"
+  integrity sha512-1gssO66mf+IuC7vOKXleqEmLTkX04aRQAdxrU8GwEMpQupMwKP6gIVelZCmt0gfATcHMB7MbetgGEOhMq1j93Q==
   dependencies:
     "@replayio/sourcemap-upload" "^1.0.5"
     commander "^7.2.0"
@@ -4057,12 +4057,12 @@
     node-fetch "^2.6.1"
     string.prototype.matchall "^4.0.5"
 
-"@replayio/test-utils@^0.3.4":
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/@replayio/test-utils/-/test-utils-0.3.4.tgz#6bb78700994f61177193da8903584a9ae398f27a"
-  integrity sha512-5kkfRWZnDth/SdbvEAliD+fanrT0BG8uPzn+dqGYREr8e58GiL/bf0uOtrurIhzuQoKBSseYtmL2amdqIg27ng==
+"@replayio/test-utils@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@replayio/test-utils/-/test-utils-0.3.5.tgz#eb1c762a9561a325bcac665a8434616b0ceb7a92"
+  integrity sha512-/0L86mXgJnfo4PuQsGe8QMboFYHbY/5aarmw2MJCts97csEooRceZwSftu1GKZKEmzdeDAOAWbOZnNLyIM0vHA==
   dependencies:
-    "@replayio/replay" "^0.10.6"
+    "@replayio/replay" "^0.10.7"
     "@types/node-fetch" "^2.6.2"
     node-fetch "^2.6.7"
     uuid "^8.3.2"
