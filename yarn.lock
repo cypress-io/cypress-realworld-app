@@ -4022,10 +4022,10 @@
     schema-utils "^2.6.5"
     source-map "^0.7.3"
 
-"@replayio/cypress@^0.4.4":
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/@replayio/cypress/-/cypress-0.4.4.tgz#18237bb3b105e7dbe023d21877b34eb3cfde543b"
-  integrity sha512-Kmb5fG8EAOBa+jhYlTGipc1a4HG2+NL8Y6LOg7fCazAotT05VXifCLe2ClWyQDV83gN3gfEJ1OLN5nr3mNNm3Q==
+"@replayio/cypress@^0.4.6":
+  version "0.4.6"
+  resolved "https://registry.yarnpkg.com/@replayio/cypress/-/cypress-0.4.6.tgz#4cc626efa9d7b929f8d03c6aa1e7063e4a5b3a7c"
+  integrity sha512-OwybXWDfZFJNyilWzWQRvZEg69xayR+W0T8W4XsU6SHzj72RyVmoUSvhCyksyPd4q+FUzMTPSah/8bhHUqdneQ==
   dependencies:
     "@replayio/replay" "^0.10.7"
     "@replayio/test-utils" "^0.3.5"
