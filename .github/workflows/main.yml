@@ -1,8 +1,8 @@
 name: E2E Test
 
-on: 
+on:
   schedule:
-    - cron: '0 * * * *'
+    - cron: "0 * * * *"
   push:
   workflow_dispatch:
 
@@ -71,7 +71,7 @@ jobs:
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
-          browser: 'Replay Chromium'
+          browser: "Replay Chromium"
           spec: cypress/tests/ui/*
           config-file: cypress.config.js
         # env:
@@ -105,7 +105,7 @@ jobs:
 
       - name: Upload replays
         if: ${{ always() }}
-        uses: replayio/action-upload@v0.4.3
+        uses: replayio/action-upload@v0.4.7
         with:
           public: true
           api-key: rwk_wayprCcrJi5pM4VNN0kWHkc1AUWfqFyS1musJwdqtC4
@@ -113,7 +113,7 @@ jobs:
       - name: Set duration in output
         if: always()
         id: end
-        run: | 
+        run: |
           echo "recordDuration=${{fromJson(steps.set_var.outputs.duration)}}" >> $GITHUB_OUTPUT
           echo "uploadDuration=$(((`date +%s` - ${{ steps.uploadStart.outputs.time }}) * 1000))" >> $GITHUB_OUTPUT
 
@@ -152,7 +152,7 @@ jobs:
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
-          browser: 'Replay Chromium'
+          browser: "Replay Chromium"
           spec: cypress/tests/ui/*
           config-file: cypress.config.js
         # env:
