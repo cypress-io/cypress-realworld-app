@@ -14,7 +14,7 @@ Cypress.Commands.add("loginToAuth0", (username: string, password: string) => {
 
   const args = { username, password };
   cy.session(
-    args,
+    `auth0-${username}`,
     () => {
       // App landing page redirects to Auth0.
       cy.visit("/");
@@ -32,7 +32,7 @@ Cypress.Commands.add("loginToAuth0", (username: string, password: string) => {
     {
       validate: () => {
         // Validate presence of access token in localStorage.
-        cy.wrap(localStorage).invoke("getItem", "authAccessToken").should("exist");
+        cy.wrap(localStorage).invoke("getItem", "authState").should("exist");
       },
     }
   );
