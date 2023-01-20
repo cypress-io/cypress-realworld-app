@@ -87,9 +87,9 @@ jobs:
           RECORD_REPLAY_WEBHOOK_URL: ${{ secrets.RECORD_REPLAY_WEBHOOK_URL }}
           RECORD_ALL_CONTENT: 1
           RECORD_REPLAY_METADATA_FILE: /tmp/replay-metadata
-          # These two are here to help with measuring the true overhead by disabling diagnostics
-          RECORD_REPLAY_DISABLE_ASSERTS: 1
-          RECORD_REPLAY_DISABLE_SOURCEMAP_COLLECTION: 1
+          # # These two are here to help with measuring the true overhead by disabling diagnostics
+          # RECORD_REPLAY_DISABLE_ASSERTS: 1
+          # RECORD_REPLAY_DISABLE_SOURCEMAP_COLLECTION: 1
 
       - name: Parse test run duration
         id: set_var
