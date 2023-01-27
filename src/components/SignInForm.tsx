@@ -15,7 +15,7 @@ import {
   Container,
 } from "@material-ui/core";
 import { Formik, Form, Field, FieldProps } from "formik";
-import { string, object } from "yup";
+import { number, object } from "yup";
 
 import RWALogo from "./SvgRwaLogo";
 import Footer from "./Footer";
@@ -24,7 +24,7 @@ import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from "../mac
 import { Alert } from "@material-ui/lab";
 
 const validationSchema = object({
-  username: string().required("Username is required"),
+  username: number().required("Username is required"),
   password: string()
     .min(4, "Password must contain at least 4 characters")
     .required("Enter your password"),
