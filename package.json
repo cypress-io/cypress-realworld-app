@@ -26,7 +26,7 @@
     "@okta/okta-auth-js": "4.9.2",
     "@okta/okta-react": "4.1.0",
     "@types/detect-port": "^1.3.2",
-    "@xstate/react": "2.0.0",
+    "@xstate/react": "2.0.1",
     "aws-amplify": "4.3.20",
     "axios": "0.26.1",
     "clsx": "1.1.1",
@@ -45,7 +45,7 @@
     "react-virtualized": "9.22.3",
     "shortid": "2.2.16",
     "uuid": "8.3.2",
-    "xstate": "4.31.0",
+    "xstate": "4.35.4",
     "yup": "0.32.11"
   },
   "devDependencies": {
