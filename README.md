@@ -9,8 +9,8 @@
 </p>
 
 <p align="center">
-   <a href="https://dashboard.cypress.io/projects/7s5okt/runs">
-    <img src="https://img.shields.io/endpoint?url=https://dashboard.cypress.io/badge/detailed/7s5okt/develop&style=flat&logo=cypress" />
+   <a href="https://cloud.cypress.io/projects/7s5okt/runs">
+    <img src="https://img.shields.io/endpoint?url=https://cloud.cypress.io/badge/detailed/7s5okt/develop&style=flat&logo=cypress" />
   </a>
 
   <a href="https://codecov.io/gh/cypress-io/cypress-realworld-app">
@@ -49,7 +49,7 @@ A payment application to demonstrate <strong>real-world</strong> usage of <a hre
 🚀 Full-stack [Express][express]/[React][reactjs] application with real-world features and tests  
 👮‍♂️ Local Authentication  
 🔥 Database Seeding with End-to-end Tests  
-💻 CI/CD + [Cypress Dashboard][cypressdashboard]
+💻 CI/CD + [Cypress Cloud][cypresscloud]
 
 ## Getting Started
 
@@ -64,14 +64,14 @@ The app is bundled with [example data](./data/database.json) (`data/database.jso
 
 ### Prerequisites
 
-The only requirement for this project is to have [Node.js](https://nodejs.org/en/) **version 14** installed on your machine. Refer to the [.node-version](./.node-version) file for the exact version.
+The only requirement for this project is to have [Node.js](https://nodejs.org/en/) installed on your machine. Refer to the [.node-version](./.node-version) file for the exact version.
 
 TypeScript will be added as a local dependency to the project, so no need to install it.
 
 ### Installation
 
 ```shell
-yarn install
+yarn
 ```
 
 #### Mac M1 chip users will need to prepend `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true`.
@@ -100,27 +100,26 @@ yarn cypress:open
 
 > 🚩 **Note**
 >
-> If you have changed the default ports, then you need to update Cypress configuration file (`cypress.json`) locally.
-> There are three properties that you need to update in `cypress.json`: `baseUrl`, `apiUrl`, and `url`.
-> The port number in `baseUrl` corresponds to `PORT` variable in `.env` file. Similarly, the port number in `apiUrl` and `url` correspond to `REACT_APP_BACKEND_PORT`.
-> For example, if you have changed `PORT` to `13000` and `REACT_APP_BACKEND_PORT` to `13001` in `.env` file, then your `cypress.json` should look similar to the following snippet:
+> If you have changed the default ports, then you need to update Cypress configuration file (`cypress.config.js`) locally.
+> There are three properties that you need to update in `cypress.config.js`: `e2e.baseUrl`, `env.apiUrl`, and `env.url`.
+> The port number in `e2e.baseUrl` corresponds to `PORT` variable in `.env` file. Similarly, the port number in `env.apiUrl` and `env.url` correspond to `REACT_APP_BACKEND_PORT`.
+> For example, if you have changed `PORT` to `13000` and `REACT_APP_BACKEND_PORT` to `13001` in `.env` file, then your `cypress.config.js` should look similar to the following snippet:
 >
-> ```json
+> ```js
 > {
->   "baseUrl": "http://localhost:13000",
->   /* Omitted for brevity */
->   "env": {
->     "apiUrl": "http://localhost:13001",
->     /* Omitted for brevity */
->     "codeCoverage": {
->       "url": "http://localhost:13001/__coverage__"
->     }
+>   env: {
+>     apiUrl: "http://localhost:13001",
+>     codeCoverage: {
+>       url: "http://localhost:13001/__coverage__"
+>     },
 >   },
->   "experimentalStudio": true
+>   e2e: {
+>     baseUrl: "http://localhost:13000"
+>   }
 > }
 > ```
 >
-> Avoid committing the modified `cypress.json` into Git since the CI environments still expect the application to be run on default ports.
+> Avoid committing the modified `cypress.config.js` into Git since the CI environments still expect the application to be run on default ports.
 
 ## Tests
 
@@ -224,7 +223,7 @@ This project is licensed under the terms of the [MIT license](/LICENSE).
 [express]: https://expressjs.com
 [lowdb]: https://github.com/typicode/lowdb
 [typescript]: https://typescriptlang.org
-[cypressdashboard]: https://dashboard.cypress.io/projects/7s5okt/runs
+[cypresscloud]: https://cloud.cypress.io/projects/7s5okt/runs
 [material-ui]: https://material-ui.com
 [okta]: https://okta.com
 [auth0]: https://auth0.com
