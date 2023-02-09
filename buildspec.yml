@@ -32,7 +32,7 @@ batch:
 phases:
   install:
     commands:
-      # Set COMMIT_INFO variables to send Git specifics to Cypress Dashboard when recording
+      # Set COMMIT_INFO variables to send Git specifics to Cypress Cloud when recording
       # https://docs.cypress.io/guides/continuous-integration/introduction#Git-information
       - export COMMIT_INFO_BRANCH="$(git rev-parse HEAD | xargs git name-rev | cut -d' ' -f2 | sed 's/remotes\/origin\///g')"
       - export COMMIT_INFO_MESSAGE="$(git log -1 --pretty=%B)"
