@@ -35,7 +35,7 @@ describe("Transactions Container", () => {
     cy.get(".MuiListSubheader-root").should("contain", "Contacts");
   });
   it("should render personal transactions", () => {
-    cy.intercept("http://localhost:3001/transactions/*", {
+    cy.intercept("http://localhost:3001/transactions", {
       fixture: "public-transactions.json",
     });
     cy.mount(
