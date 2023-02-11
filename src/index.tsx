@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Router } from "react-router-dom";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core";
+import { createTheme, ThemeProvider } from "@material-ui/core";
 import { Auth0Provider } from "@auth0/auth0-react";
 /* istanbul ignore next */
 // @ts-ignore
@@ -15,7 +15,7 @@ import AppOkta from "./containers/AppOkta";
 import AppCognito from "./containers/AppCognito";
 import { history } from "./utils/historyUtils";
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     secondary: {
       main: "#fff",
