@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   form: {
-    width: "100%",  // Note that internet explorer is no more supported in most browsers
+    width: "100%",
     marginTop: theme.spacing(1),
   },
   submit: {
