@@ -11,7 +11,6 @@ Cypress.Commands.add("loginByOktaApi", (username: string, password?: string) => 
   const log = Cypress.log({
     displayName: "OKTA LOGIN",
     message: [`🔐 Authenticating | ${username}`],
-    // @ts-ignore
     autoEnd: false,
   });
 
@@ -59,4 +58,45 @@ Cypress.Commands.add("loginByOktaApi", (username: string, password?: string) => 
   });
 
   cy.visit("/");
+});
+
+// Okta
+Cypress.Commands.add("loginByOkta", (username: string, password: string) => {
+  cy.session(
+    `okta-${username}`,
+    () => {
+      Cypress.log({
+        displayName: "OKTA LOGIN",
+        message: [`🔐 Authenticating | ${username}`],
+      });
+
+      cy.visit("/");
+
+      cy.origin(
+        Cypress.env("okta_domain"),
+        { args: { username, password } },
+        ({ username, password }) => {
+          cy.get('input[name="identifier"]').type(username);
+          cy.get('input[name="credentials.passcode"]').type(password, {
+            log: false,
+          });
+          cy.get('[type="submit"]').click();
+        }
+      );
+
+      cy.get('[data-test="sidenav-username"]').should("contain", username);
+    },
+    {
+      validate() {
+        cy.visit("/");
+        /**
+         * NOTE: We recommend validating sessions by either validating
+         * localStorage or cookies values, or possibly accessing an
+         * endpoint to validate that the correct user is logged.
+         */
+        // revalidate our session to make sure we are logged in
+        cy.get('[data-test="sidenav-username"]').should("contain", username);
+      },
+    }
+  );
 });

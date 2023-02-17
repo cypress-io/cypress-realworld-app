@@ -7,7 +7,6 @@ import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
 import { defineConfig } from "cypress";
 import "@cypress/instrument-cra";
-const { devServer } = require("@cypress/react/plugins/react-scripts");
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
@@ -16,6 +15,9 @@ const awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
 
 module.exports = defineConfig({
   projectId: "7s5okt",
+  retries: {
+    runMode: 2,
+  },
   env: {
     apiUrl: "http://localhost:3001",
     mobileViewportWidthBreakpoint: 414,
@@ -31,21 +33,19 @@ module.exports = defineConfig({
     auth0_username: process.env.AUTH0_USERNAME,
     auth0_password: process.env.AUTH0_PASSWORD,
     auth0_domain: process.env.REACT_APP_AUTH0_DOMAIN,
-    auth0_audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-    auth0_scope: process.env.REACT_APP_AUTH0_SCOPE,
-    auth0_client_id: process.env.REACT_APP_AUTH0_CLIENTID,
-    auth0_client_secret: process.env.AUTH0_CLIENT_SECRET,
-    auth_token_name: process.env.REACT_APP_AUTH_TOKEN_NAME,
 
     // Okta
     okta_username: process.env.OKTA_USERNAME,
     okta_password: process.env.OKTA_PASSWORD,
     okta_domain: process.env.REACT_APP_OKTA_DOMAIN,
     okta_client_id: process.env.REACT_APP_OKTA_CLIENTID,
+    okta_programmatic_login: process.env.OKTA_PROGRAMMATIC_LOGIN || false,
 
     // Amazon Cognito
     cognito_username: process.env.AWS_COGNITO_USERNAME,
     cognito_password: process.env.AWS_COGNITO_PASSWORD,
+    cognito_domain: process.env.AWS_COGNITO_DOMAIN,
+    cognito_programmatic_login: false,
     awsConfig: awsConfig.default,
 
     // Google
@@ -54,7 +54,10 @@ module.exports = defineConfig({
     googleClientSecret: process.env.REACT_APP_GOOGLE_CLIENT_SECRET,
   },
   component: {
-    devServer,
+    devServer: {
+      framework: "create-react-app",
+      bundler: "webpack",
+    },
     specPattern: "src/**/*.cy.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/component.ts",
     setupNodeEvents(on, config) {

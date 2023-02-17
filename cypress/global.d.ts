@@ -116,6 +116,11 @@ declare namespace Cypress {
     loginByOktaApi(username: string, password?: string): Chainable<Response>;
 
     /**
+     * Logs-in user by navigating to Okta tenant with cy.origin()
+     */
+    loginByOkta(username: string, password: string): Chainable<Response>;
+
+    /**
      * Logs in bypassing UI by triggering XState login event
      */
     loginByXstate(username: string, password?: string): Chainable<any>;
@@ -126,9 +131,9 @@ declare namespace Cypress {
     logoutByXstate(): Chainable<string>;
 
     /**
-     * Logs in via Auth0 API
+     * Logs in via Auth0 login page
      */
-    loginByAuth0Api(username: string, password?: string): Chainable<any>;
+    loginToAuth0(username: string, password: string): Chainable<any>;
 
     /**
      * Switch current user by logging out current user and logging as user with specified username
@@ -144,5 +149,10 @@ declare namespace Cypress {
      * Logs in to AWS Cognito via Amplify Auth API bypassing UI using Cypress Task
      */
     loginByCognitoApi(username: string, password: string): Chainable<any>;
+
+    /**
+     * Logs in to AWS Cognito Federated via cy.origin()
+     */
+    loginByCognito(username: string, password: string): Chainable<any>;
   }
 }

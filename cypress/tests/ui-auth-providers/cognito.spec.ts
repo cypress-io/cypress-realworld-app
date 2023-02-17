@@ -2,49 +2,84 @@ import "../../support/auth-provider-commands/cognito";
 import { isMobile } from "../../support/utils";
 
 if (Cypress.env("cognito_username")) {
-  describe("AWS Cognito", function () {
-    beforeEach(function () {
-      cy.task("db:seed");
+  // Sign in with AWS
+  if (Cypress.env("cognito_programmatic_login")) {
+    describe("AWS Cognito", function () {
+      beforeEach(function () {
+        cy.task("db:seed");
 
-      cy.server();
-      cy.route("POST", "/bankAccounts").as("createBankAccount");
+        cy.intercept("POST", "/bankAccounts").as("createBankAccount");
 
-      cy.loginByCognitoApi(Cypress.env("cognito_username"), Cypress.env("cognito_password"));
+        cy.loginByCognitoApi(Cypress.env("cognito_username"), Cypress.env("cognito_password"));
+      });
+
+      it("should allow a visitor to login, onboard and logout", function () {
+        cy.contains("Get Started").should("be.visible");
+
+        // Onboarding
+        cy.getBySel("user-onboarding-dialog").should("be.visible");
+        cy.getBySel("user-onboarding-next").click();
+
+        cy.getBySel("user-onboarding-dialog-title").should("contain", "Create Bank Account");
+
+        cy.getBySelLike("bankName-input").type("The Best Bank");
+        cy.getBySelLike("accountNumber-input").type("123456789");
+        cy.getBySelLike("routingNumber-input").type("987654321");
+        cy.getBySelLike("submit").click();
+
+        cy.wait("@createBankAccount");
+
+        cy.getBySel("user-onboarding-dialog-title").should("contain", "Finished");
+        cy.getBySel("user-onboarding-dialog-content").should("contain", "You're all set!");
+        cy.getBySel("user-onboarding-next").click();
+
+        cy.getBySel("transaction-list").should("be.visible");
+
+        // Logout User
+        if (isMobile()) {
+          cy.getBySel("sidenav-toggle").click();
+        }
+        cy.getBySel("sidenav-signout").click();
+
+        cy.location("pathname").should("eq", "/");
+      });
+
+      it("shows onboarding", function () {
+        cy.contains("Get Started").should("be.visible");
+      });
     });
+  } else {
+    describe("AWS Cognito", function () {
+      beforeEach(function () {
+        cy.task("db:seed");
+        cy.loginByCognito(Cypress.env("cognito_username"), Cypress.env("cognito_password"));
+        cy.visit("/");
+      });
 
-    it("should allow a visitor to login, onboard and logout", function () {
-      cy.contains("Get Started").should("be.visible");
+      it("shows onboarding", function () {
+        cy.contains("Get Started").should("be.visible");
+      });
 
-      // Onboarding
-      cy.getBySel("user-onboarding-dialog").should("be.visible");
-      cy.getBySel("user-onboarding-next").click();
+      it("should allow a visitor to login, onboard and logout", function () {
+        cy.contains("Get Started").should("be.visible");
 
-      cy.getBySel("user-onboarding-dialog-title").should("contain", "Create Bank Account");
+        // Onboarding
+        cy.getBySel("user-onboarding-dialog").should("be.visible");
+        cy.getBySel("user-onboarding-next").click();
 
-      cy.getBySelLike("bankName-input").type("The Best Bank");
-      cy.getBySelLike("accountNumber-input").type("123456789");
-      cy.getBySelLike("routingNumber-input").type("987654321");
-      cy.getBySelLike("submit").click();
+        cy.getBySel("user-onboarding-dialog-title").should("contain", "Create Bank Account");
 
-      cy.wait("@createBankAccount");
+        cy.getBySelLike("bankName-input").type("The Best Bank");
+        cy.getBySelLike("accountNumber-input").type("123456789");
+        cy.getBySelLike("routingNumber-input").type("987654321");
+        cy.getBySelLike("submit").click();
 
-      cy.getBySel("user-onboarding-dialog-title").should("contain", "Finished");
-      cy.getBySel("user-onboarding-dialog-content").should("contain", "You're all set!");
-      cy.getBySel("user-onboarding-next").click();
+        cy.getBySel("user-onboarding-dialog-title").should("contain", "Finished");
+        cy.getBySel("user-onboarding-dialog-content").should("contain", "You're all set!");
+        cy.getBySel("user-onboarding-next").click();
 
-      cy.getBySel("transaction-list").should("be.visible");
-
-      // Logout User
-      if (isMobile()) {
-        cy.getBySel("sidenav-toggle").click();
-      }
-      cy.getBySel("sidenav-signout").click();
-
-      cy.location("pathname").should("eq", "/");
+        cy.getBySel("transaction-list").should("be.visible");
+      });
     });
-
-    it("shows onboarding", function () {
-      cy.contains("Get Started").should("be.visible");
-    });
-  });
+  }
 }

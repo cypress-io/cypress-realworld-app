@@ -1,14 +1,16 @@
 {
+  "version": "1",
+  "cognitoConfig": {
     "identityPoolName": "cypressrealworldapp3a466349_identitypool_3a466349",
     "allowUnauthenticatedIdentities": false,
     "resourceNameTruncated": "cypres3a466349",
     "userPoolName": "cypressrealworldapp3a466349_userpool_3a466349",
     "autoVerifiedAttributes": [
-        "email"
+      "email"
     ],
     "mfaConfiguration": "OFF",
     "mfaTypes": [
-        "SMS Text Message"
+      "SMS Text Message"
     ],
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
@@ -18,37 +20,48 @@
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
     "requiredAttributes": [
-        "email"
+      "email"
     ],
+    "aliasAttributes": [],
     "userpoolClientGenerateSecret": true,
     "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [
-        "email"
+      "email"
     ],
     "userpoolClientReadAttributes": [
-        "email"
+      "email"
     ],
     "userpoolClientLambdaRole": "cypres3a466349_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "3a466349",
-    "resourceName": "cypressrealworldapp3a466349",
     "authSelections": "identityPoolAndUserPool",
+    "resourceName": "cypressrealworldapp3a466349",
+    "useDefault": "defaultSocial",
+    "sharedId": "3a466349",
+    "userPoolGroupList": [],
+    "usernameAttributes": [
+      "email"
+    ],
     "authRoleArn": {
-        "Fn::GetAtt": [
-            "AuthRole",
-            "Arn"
-        ]
+      "Fn::GetAtt": [
+        "AuthRole",
+        "Arn"
+      ]
     },
     "unauthRoleArn": {
-        "Fn::GetAtt": [
-            "UnauthRole",
-            "Arn"
-        ]
+      "Fn::GetAtt": [
+        "UnauthRole",
+        "Arn"
+      ]
     },
-    "useDefault": "default",
-    "usernameAttributes": [
-        "email"
-    ],
-    "userPoolGroupList": [],
-    "dependsOn": []
-}
+    "breakCircularDependency": false,
+    "useEnabledMfas": false,
+    "dependsOn": [],
+    "hostedUI": true,
+    "hostedUIDomainName": "cypressrealworldapp637ae3a1-637ae3a1",
+    "authProvidersUserPool": [],
+    "hostedUIProviderMeta": "[]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/\"],\"LogoutURLs\":[\"http://localhost:3000/\"]}",
+    "serviceName": "Cognito",
+    "authProviders": []
+  }
+} 

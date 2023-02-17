@@ -4,3 +4,5 @@
 data
 build
 coverage
+amplify/*
+aws-exports*

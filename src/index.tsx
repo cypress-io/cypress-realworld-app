@@ -1,7 +1,7 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { Router } from "react-router-dom";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core";
+import { createTheme, ThemeProvider } from "@material-ui/core";
 import { Auth0Provider } from "@auth0/auth0-react";
 /* istanbul ignore next */
 // @ts-ignore
@@ -15,7 +15,7 @@ import AppOkta from "./containers/AppOkta";
 import AppCognito from "./containers/AppCognito";
 import { history } from "./utils/historyUtils";
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     secondary: {
       main: "#fff",
@@ -28,9 +28,11 @@ const onRedirectCallback = (appState: any) => {
   history.replace((appState && appState.returnTo) || window.location.pathname);
 };
 
+const root = createRoot(document.getElementById("root"));
+
 /* istanbul ignore if */
 if (process.env.REACT_APP_AUTH0) {
-  ReactDOM.render(
+  root.render(
     <Auth0Provider
       domain={process.env.REACT_APP_AUTH0_DOMAIN!}
       clientId={process.env.REACT_APP_AUTH0_CLIENTID!}
@@ -45,8 +47,7 @@ if (process.env.REACT_APP_AUTH0) {
           <AppAuth0 />
         </ThemeProvider>
       </Router>
-    </Auth0Provider>,
-    document.getElementById("root")
+    </Auth0Provider>
   );
 } else if (process.env.REACT_APP_OKTA) {
   const oktaAuth = new OktaAuth({
@@ -56,43 +57,39 @@ if (process.env.REACT_APP_AUTH0) {
   });
 
   /* istanbul ignore next */
-  ReactDOM.render(
+  root.render(
     <Router history={history}>
       <ThemeProvider theme={theme}>
         <Security oktaAuth={oktaAuth}>
           <AppOkta />
         </Security>
       </ThemeProvider>
-    </Router>,
-    document.getElementById("root")
+    </Router>
   );
 } else if (process.env.REACT_APP_AWS_COGNITO) {
   /* istanbul ignore next */
-  ReactDOM.render(
+  root.render(
     <Router history={history}>
       <ThemeProvider theme={theme}>
         <AppCognito />
       </ThemeProvider>
-    </Router>,
-    document.getElementById("root")
+    </Router>
   );
 } else if (process.env.REACT_APP_GOOGLE) {
   /* istanbul ignore next */
-  ReactDOM.render(
+  root.render(
     <Router history={history}>
       <ThemeProvider theme={theme}>
         <AppGoogle />
       </ThemeProvider>
-    </Router>,
-    document.getElementById("root")
+    </Router>
   );
 } else {
-  ReactDOM.render(
+  root.render(
     <Router history={history}>
       <ThemeProvider theme={theme}>
         <App />
       </ThemeProvider>
-    </Router>,
-    document.getElementById("root")
+    </Router>
   );
 }
