@@ -7,7 +7,7 @@ orbs:
 executors:
   with-chrome-and-firefox:
     docker:
-      - image: "cypress/browsers:node16.14.2-slim-chrome100-ff99-edge"
+      - image: "cypress/browsers:node16.16.0-chrome105-ff104-edge"
     resource_class: large
     environment:
       PERCY_TOKEN:
