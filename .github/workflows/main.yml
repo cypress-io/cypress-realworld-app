@@ -36,12 +36,16 @@ jobs:
           path: build
 
   install-windows:
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
+          # The default install for the job is node 18+ 
+          # which has some compatibility issues with openSSL inside this windows job.
+          # Node 18 updated with OpenSSL provider which causes this compatibility issue
+          # downgrading node to v16 to use the openssl-legacy-provider by default to prevent this issue
           node-version: '16'
 
       - name: Cypress install
@@ -257,7 +261,7 @@ jobs:
 
   ui-windows-tests:
     timeout-minutes: 40
-    runs-on: windows-2019
+    runs-on: windows-2022
     needs: install-windows
     strategy:
       # when one test fails, DO NOT cancel the other
