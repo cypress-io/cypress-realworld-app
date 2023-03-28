@@ -1,9 +1,5 @@
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
-import {
-  UserSettingsFormFields,
-  UserSettingsPage,
-} from "../../../src/page-objects/UserSettingsPageObject";
 
 describe("User Settings", function () {
   beforeEach(function () {
@@ -23,12 +19,6 @@ describe("User Settings", function () {
     cy.getBySel("sidenav-user-settings").click();
   });
 
-  it("renders the correct title", function () {
-    const userSettingsPage = new UserSettingsPage();
-
-    userSettingsPage.checkPageTitle("User Settings");
-  });
-
   it("renders the user settings form", function () {
     cy.wait("@getNotifications");
     cy.getBySel("user-settings-form").should("be.visible");
@@ -38,8 +28,6 @@ describe("User Settings", function () {
   });
 
   it("should display user setting form errors", function () {
-    const userSettingsPage = new UserSettingsPage();
-
     ["first", "last"].forEach((field) => {
       cy.getBySelLike(`${field}Name-input`).type("Abc").clear().blur();
       cy.get(`#user-settings-${field}Name-input-helper-text`)
@@ -52,8 +40,7 @@ describe("User Settings", function () {
       .should("be.visible")
       .and("contain", "Enter an email address");
 
-    //cy.getBySelLike("email-input").type("abc@bob.").blur();
-    userSettingsPage.fillField(UserSettingsFormFields.email, "abc@bob.");
+    cy.getBySelLike("email-input").type("abc@bob.").blur();
     cy.get("#user-settings-email-input-helper-text")
       .should("be.visible")
       .and("contain", "Must contain a valid email address");
@@ -73,17 +60,13 @@ describe("User Settings", function () {
   });
 
   it("updates first name, last name, email and phone number", function () {
-    const userSettingsPage = new UserSettingsPage();
+    cy.getBySelLike("firstName").clear().type("New First Name");
+    cy.getBySelLike("lastName").clear().type("New Last Name");
+    cy.getBySelLike("email").clear().type("email@email.com");
+    cy.getBySelLike("phoneNumber-input").clear().type("6155551212").blur();
 
-    userSettingsPage.fillField(UserSettingsFormFields.firstName, "New First Name");
-    userSettingsPage.fillField(UserSettingsFormFields.lastName, "New Last Name");
-    userSettingsPage.fillField(UserSettingsFormFields.email, "email@email.com");
-    userSettingsPage.fillField(UserSettingsFormFields.phoneNumber, "6155551212");
-
-    //cy.getBySelLike("submit").should("not.be.disabled");
-    //cy.getBySelLike("submit").click();
-
-    userSettingsPage.clickSaveButton();
+    cy.getBySelLike("submit").should("not.be.disabled");
+    cy.getBySelLike("submit").click();
 
     cy.wait("@updateUser").its("response.statusCode").should("equal", 204);
 

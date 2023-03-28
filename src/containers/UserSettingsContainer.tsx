@@ -28,7 +28,13 @@ const UserSettingsContainer: React.FC<Props> = ({ authService }) => {
 
   return (
     <Paper className={classes.paper}>
-      <Typography component="h2" variant="h6" color="primary" gutterBottom>
+      <Typography
+        id={"user-settings-title"}
+        component="h2"
+        variant="h6"
+        color="primary"
+        gutterBottom
+      >
         User Settings
       </Typography>
       <Grid container spacing={2} direction="row" justify="flex-start" alignItems="flex-start">
