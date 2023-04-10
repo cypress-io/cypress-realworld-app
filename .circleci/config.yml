@@ -35,115 +35,147 @@ commands:
     steps:
       - attach_workspace:
           at: ~/
+  # Setup
+  #  1. Install Cypress
+  #  2. Validate types
+  #  3. Run server unit-tests
+  setup_project_and_cypress:
+    steps:
+      - cypress/install:
+          package-manager: yarn
+      - run:
+          name: Build CI ℹ️
+          command: yarn build:ci
+      - run:
+          name: Print machine info ℹ️
+          command: yarn cypress info
+      - run:
+          name: Check Types
+          command: yarn types
+      - run:
+          name: Lint Files
+          command: yarn lint
+      - run:
+          name: Run Unit Tests
+          command: yarn test:unit:ci
+      - persist_ws
+  cypress_tests:
+    parameters:
+      browser:
+        type: string
+        default: chrome
+      specPattern:
+        type: string
+        default: ''
+      ciBuildId:
+        type: string
+      group:
+        type: string
+      isMobile:
+        type: boolean
+        default: false
+      isComponent:
+        type: boolean
+        default: false
+    steps:
+      - attach_ws
+      - when:
+          condition:
+            and:
+              - equal: [ true, << parameters.isComponent >>]
+          steps:
+            - cypress/run-tests:
+                cypress-command: yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --component
+      - when:
+          condition:
+            and:
+              - equal: [ true, << parameters.isMobile >>]
+          steps:
+            - cypress/run-tests:
+                # wait-on: "http://localhost:3000"
+                start-command: yarn start:ci
+                cypress-command: yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --spec=<<parameters.specPattern>> --browser=<<parameters.browser>> --config viewportWidth=375,viewportHeight=667
+      - when:
+          condition:
+            and:
+              - equal: [ false, << parameters.isMobile >>]
+              - equal: [ false, << parameters.isComponent >>]
+          steps:
+            - cypress/run-tests:
+                # wait-on: "http://localhost:3000"
+                start-command: yarn start:ci
+                cypress-command: yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --spec=<<parameters.specPattern>> --browser=<<parameters.browser>>
+      - report-coverage
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Jobs ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 jobs:
-    # Setup
-    #  1. Install Cypress
-    #  2. Validate types
-    #  3. Run server unit-tests
-    setup_project_and_cypress:
-      executor: with-chrome-and-firefox
-      steps:
-        - cypress/install:
-            package-manager: yarn
-        - run:
-            name: Build CI ℹ️
-            command: yarn build:ci
-        - run:
-            name: Print machine info ℹ️
-            command: yarn cypress info
-        - run:
-            name: Check Types
-            command: yarn types
-        - run:
-            name: Lint Files
-            command: yarn lint
-        - run:
-            name: Run Unit Tests
-            command: yarn test:unit:ci
-        - persist_ws
-    cypress_tests:
-      executor: with-chrome-and-firefox
-      parallelism: 5
-      parameters:
-        browser:
-          type: string
-          default: chrome
-        specPattern:
-          type: string
-          default: ''
-        ciBuildId:
-          type: string
-        group:
-          type: string
-        isMobile:
-          type: boolean
-          default: false
-        isComponent:
-          type: boolean
-          default: false
-      steps:
-        - attach_ws
-        - when:
-            condition:
-              and:
-                - equal: [ true, << parameters.isComponent >>]
-            steps:
-              - cypress/run-tests:
-                  cypress-command: yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --component
-        - when:
-            condition:
-              and:
-                - equal: [ true, << parameters.isMobile >>]
-            steps:
-              - cypress/run-tests:
-                  # wait-on: "http://localhost:3000"
-                  start-command: yarn start:ci
-                  cypress-command: yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --spec=<<parameters.specPattern>> --browser=<<parameters.browser>> --config viewportWidth=375,viewportHeight=667
-        - when:
-            condition:
-              and:
-                - equal: [ false, << parameters.isMobile >>]
-                - equal: [ false, << parameters.isComponent >>]
-            steps:
-              - cypress/run-tests:
-                  # wait-on: "http://localhost:3000"
-                  start-command: yarn start:ci
-                  cypress-command: yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --spec=<<parameters.specPattern>> --browser=<<parameters.browser>>
-        - report-coverage
+  setup_project_and_cypress_linux:
+    executor: with-chrome-and-firefox
+    steps: 
+      - setup_project_and_cypress
+  cypress_tests_linux:
+    executor: with-chrome-and-firefox
+    parallelism: 5
+    parameters:
+      browser:
+        type: string
+        default: chrome
+      specPattern:
+        type: string
+        default: ''
+      ciBuildId:
+        type: string
+      group:
+        type: string
+      isMobile:
+        type: boolean
+        default: false
+      isComponent:
+        type: boolean
+        default: false
+    steps: 
+      - cypress_tests:
+          browser: <<parameters.browser>>
+          specPattern: <<parameters.specPattern>> 
+          ciBuildId: <<parameters.ciBuildId>> 
+          group: <<parameters.group>> 
+          isMobile: <<parameters.isMobile>>
+          isComponent: <<parameters.isComponent>> 
+
+  
+   
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 linux-workflow: &linux-workflow
   jobs:
-    - setup_project_and_cypress
+    - setup_project_and_cypress_linux
     # Run Cypress Component tests
-    - cypress_tests:
+    - cypress_tests_linux:
         name: "Cypress Component Tests"
         ciBuildId: ${CIRCLE_SHA1:0:8}
         group: Component
         requires:
-          - setup_project_and_cypress
+          - setup_project_and_cypress_linux
     # Run API tests against backend server
-    - cypress_tests:
+    - cypress_tests_linux:
         name: "Cypress API Tests"
         browser: chrome
         specPattern: "cypress/tests/api/*"
         ciBuildId: ${CIRCLE_SHA1:0:8}
         group: API
         requires:
-          - setup_project_and_cypress
+          - setup_project_and_cypress_linux
     # Run E2E tests in Chrome
-    - cypress_tests:
+    - cypress_tests_linux:
         name: "UI Tests - Chrome"
         browser: chrome
         specPattern: "cypress/tests/ui/*"
         ciBuildId: ${CIRCLE_SHA1:0:8}
         group: "UI - Chrome"
         requires:
-          - setup_project_and_cypress
+          - setup_project_and_cypress_linux
     # Run E2E tests in Chrome with mobile device viewport
-    - cypress_tests:
+    - cypress_tests_linux:
         name: "UI Tests - Chrome - Mobile"
         browser: chrome
         specPattern: "cypress/tests/ui/*"
@@ -151,18 +183,18 @@ linux-workflow: &linux-workflow
         group: "UI - Chrome - Mobile"
         isMobile: true
         requires:
-          - setup_project_and_cypress
+          - setup_project_and_cypress_linux
     # Run E2E tests in Firefox
-    - cypress_tests:
+    - cypress_tests_linux:
         name: "UI Tests - Firefox"
         browser: firefox
         specPattern: "cypress/tests/ui/*"
         ciBuildId: ${CIRCLE_SHA1:0:8}
         group: "UI - Firefox"
         requires:
-          - setup_project_and_cypress
+          - setup_project_and_cypress_linux
     # Run E2E tests in Firefox with mobile device viewport
-    - cypress_tests:
+    - cypress_tests_linux:
         name: "UI Tests - Firefox - Mobile"
         browser: firefox
         specPattern: "cypress/tests/ui/*"
@@ -170,7 +202,7 @@ linux-workflow: &linux-workflow
         group: "UI - Firefox - Mobile"
         isMobile: true
         requires:
-          - setup_project_and_cypress
+          - setup_project_and_cypress_linux
 
 # windows-workflow: &windows-workflow
 #   jobs:
