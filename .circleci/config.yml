@@ -98,7 +98,6 @@ commands:
               - equal: [ true, << parameters.isMobile >>]
           steps:
             - cypress/run-tests:
-                # wait-on: "http://localhost:3000"
                 start-command: yarn start:ci
                 cypress-command: yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --spec=<<parameters.specPattern>> --browser=<<parameters.browser>> --config viewportWidth=375,viewportHeight=667
       - when:
@@ -108,7 +107,6 @@ commands:
               - equal: [ false, << parameters.isComponent >>]
           steps:
             - cypress/run-tests:
-                # wait-on: "http://localhost:3000"
                 start-command: yarn start:ci
                 cypress-command: yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --spec=<<parameters.specPattern>> --browser=<<parameters.browser>>
       - report-coverage
@@ -190,7 +188,6 @@ jobs:
           group: <<parameters.group>> 
           isMobile: <<parameters.isMobile>>
           isComponent: <<parameters.isComponent>>
-          # no_output_timeout: 30m
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 linux-workflow: &linux-workflow
