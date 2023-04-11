@@ -265,7 +265,7 @@ windows-workflow: &windows-workflow
           - setup_project_and_cypress_windows
 
 workflows:
-  # linux:
-  #   <<: *linux-workflow
+  linux:
+    <<: *linux-workflow
   windows:
     <<: *windows-workflow
