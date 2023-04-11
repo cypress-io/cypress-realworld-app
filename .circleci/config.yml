@@ -195,14 +195,15 @@ jobs:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 linux-workflow: &linux-workflow
   jobs:
-    - setup_project_and_cypress_linux
+    - setup_project_and_cypress_linux:
+        name: "Setup Linux"
     # Run Cypress Component tests
     - cypress_tests_linux:
         name: "Cypress Component Tests"
         ciBuildId: ${CIRCLE_SHA1:0:8}
         group: Component
         requires:
-          - setup_project_and_cypress_linux
+          - Setup Linux
     # Run API tests against backend server
     - cypress_tests_linux:
         name: "Cypress API Tests"
@@ -211,7 +212,7 @@ linux-workflow: &linux-workflow
         ciBuildId: ${CIRCLE_SHA1:0:8}
         group: API
         requires:
-          - setup_project_and_cypress_linux
+          - Setup Linux
     # Run E2E tests in Chrome
     - cypress_tests_linux:
         name: "UI Tests - Chrome"
@@ -220,7 +221,7 @@ linux-workflow: &linux-workflow
         ciBuildId: ${CIRCLE_SHA1:0:8}
         group: "UI - Chrome"
         requires:
-          - setup_project_and_cypress_linux
+          - Setup Linux
     # Run E2E tests in Chrome with mobile device viewport
     - cypress_tests_linux:
         name: "UI Tests - Chrome - Mobile"
@@ -230,7 +231,7 @@ linux-workflow: &linux-workflow
         group: "UI - Chrome - Mobile"
         isMobile: true
         requires:
-          - setup_project_and_cypress_linux
+          - Setup Linux
     # Run E2E tests in Firefox
     - cypress_tests_linux:
         name: "UI Tests - Firefox"
@@ -239,7 +240,7 @@ linux-workflow: &linux-workflow
         ciBuildId: ${CIRCLE_SHA1:0:8}
         group: "UI - Firefox"
         requires:
-          - setup_project_and_cypress_linux
+          - Setup Linux
     # Run E2E tests in Firefox with mobile device viewport
     - cypress_tests_linux:
         name: "UI Tests - Firefox - Mobile"
@@ -249,11 +250,12 @@ linux-workflow: &linux-workflow
         group: "UI - Firefox - Mobile"
         isMobile: true
         requires:
-          - setup_project_and_cypress_linux
+          - Setup Linux
 
 windows-workflow: &windows-workflow
   jobs:
-    - setup_project_and_cypress_windows
+    - setup_project_and_cypress_windows:
+        name: "Setup Windows"
     # Run E2E tests in Windows in Electron
     - cypress_tests_windows:
         name: "UI Tests - Electron - Windows"
@@ -262,7 +264,7 @@ windows-workflow: &windows-workflow
         ciBuildId: ${CIRCLE_SHA1:0:8}
         group: "UI - Electron - Windows"
         requires:
-          - setup_project_and_cypress_windows
+          - Setup Windows
 
 workflows:
   linux:
