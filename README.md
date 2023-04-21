@@ -20,7 +20,7 @@
   <a href="https://percy.io/cypress-io/cypress-realworld-app">
     <img src="https://percy.io/static/images/percy-badge.svg" />
   </a>
-  
+
    <a href="#contributors-">
     <img src="https://img.shields.io/badge/all_contributors-6-green.svg?style=flat" />
   </a>
@@ -44,11 +44,11 @@ A payment application to demonstrate <strong>real-world</strong> usage of <a hre
 
 ## Features
 
-🛠 Built with [React][reactjs], [XState][xstate], [Express][express], [lowdb][lowdb], [Material-UI][material-ui] and [TypeScript][typescript]  
-⚡️ Zero database dependencies  
-🚀 Full-stack [Express][express]/[React][reactjs] application with real-world features and tests  
-👮‍♂️ Local Authentication  
-🔥 Database Seeding with End-to-end Tests  
+🛠 Built with [React][reactjs], [XState][xstate], [Express][express], [lowdb][lowdb], [Material-UI][material-ui] and [TypeScript][typescript]
+⚡️ Zero database dependencies
+🚀 Full-stack [Express][express]/[React][reactjs] application with real-world features and tests
+👮‍♂️ Local Authentication
+🔥 Database Seeding with End-to-end Tests
 💻 CI/CD + [Cypress Cloud][cypresscloud]
 
 ## Getting Started
@@ -59,7 +59,7 @@ The app is bundled with [example data](./data/database.json) (`data/database.jso
 
 > 🚩 **Note**
 >
-> You can login to the app with any of the [example app users](./data/database.json#L2). The default password for all users is `s3cret`.  
+> You can login to the app with any of the [example app users](./data/database.json#L2). The default password for all users is `s3cret`.
 > Example users can be seen by running `yarn list:dev:users`.
 
 ### Prerequisites
@@ -174,7 +174,7 @@ Support for 3rd party authentication is available in the application to demonstr
 
 ### Auth0
 
-The [Auth0](https://auth0.com/) tests have been rewritten to take advantage of our (currently experimental) [`cy.session`](https://docs.cypress.io/api/commands/session) and [`cy.origin`](https://docs.cypress.io/api/commands/origin) commands.
+The [Auth0](https://auth0.com/) tests have been rewritten to take advantage of our [`cy.session`](https://docs.cypress.io/api/commands/session) and [`cy.origin`](https://docs.cypress.io/api/commands/origin) commands.
 
 Prerequisites include an Auth0 account and a Tenant configured for use with a SPA. Environment variables from Auth0 are to be placed in the [.env](./.env). For more details see [Auth0 Application Setup](http://on.cypress.io/auth0#Auth0-Application-Setup) and [Setting Auth0 app credentials in Cypress](http://on.cypress.io/auth0#Setting-Auth0-app-credentials-in-Cypress).
 
