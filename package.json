@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/cypress-io/cypress-realworld-app.git"
   },
-  "author": "Cypress DX Team",
+  "author": "Cypress-io",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/cypress-io/cypress-realworld-app/issues"
