@@ -64,7 +64,21 @@ The app is bundled with [example data](./data/database.json) (`data/database.jso
 
 ### Prerequisites
 
-The only requirement for this project is to have [Node.js](https://nodejs.org/en/) installed on your machine. Refer to the [.node-version](./.node-version) file for the exact version.
+This project requires [Node.js](https://nodejs.org/en/) to be installed on your machine. Refer to the [.node-version](./.node-version) file for the exact version.
+
+[Yarn Classic](https://classic.yarnpkg.com/) is also required. Once you have [Node.js](https://nodejs.org/en/) installed, execute the following to install the correct version of `yarn`.
+
+```bash
+npm install yarn -g
+```
+
+The following command allows you to check that you have Yarn Classic (version 1) installed and active:
+
+```bash
+yarn -v
+```
+
+**This project is not compatible with [Yarn Modern](https://yarnpkg.com/) (version 2 and later).**
 
 TypeScript will be added as a local dependency to the project, so no need to install it.
 
