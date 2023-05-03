@@ -27,59 +27,65 @@ describe("Notifications", function () {
 
   describe("notifications from user interactions", function () {
     // this test is flaky since the "like" api has an inconsistent response time
-    it("FLAKE User A likes a transaction of User B; User B gets notification that User A liked transaction ", function () {
-      cy.loginByXstate(ctx.userA.username);
-      cy.wait("@getNotifications");
+    it(
+      "FLAKE User A likes a transaction of User B; User B gets notification that User A liked transaction ",
+      // NOTE: this test seems to have issues in Firefox UI/Mobile tests due to an issue with the Base Button component in MUI v4
+      // we should try unskipping this test in Firefox once we upgrade MUI to v5+. @see https://github.com/cypress-io/cypress-realworld-app/issues/1278
+      { browser: { name: "!firefox" } },
+      function () {
+        cy.loginByXstate(ctx.userA.username);
+        cy.wait("@getNotifications");
 
-      cy.database("find", "transactions", { senderId: ctx.userB.id }).then(
-        (transaction: Transaction) => {
-          cy.visit(`/transaction/${transaction.id}`);
-        }
-      );
+        cy.database("find", "transactions", { senderId: ctx.userB.id }).then(
+          (transaction: Transaction) => {
+            cy.visit(`/transaction/${transaction.id}`);
+          }
+        );
 
-      cy.log("🚩 Renders the notifications badge with count");
-      cy.wait("@getNotifications")
-        .its("response.body.results.length")
-        .then((notificationCount) => {
-          cy.getBySel("nav-top-notifications-count").should("have.text", `${notificationCount}`);
+        cy.log("🚩 Renders the notifications badge with count");
+        cy.wait("@getNotifications")
+          .its("response.body.results.length")
+          .then((notificationCount) => {
+            cy.getBySel("nav-top-notifications-count").should("have.text", `${notificationCount}`);
+          });
+        cy.visualSnapshot("Renders the notifications badge with count");
+
+        const likesCountSelector = "[data-test*=transaction-like-count]";
+        cy.contains(likesCountSelector, 0);
+        cy.getBySelLike("like-button").click();
+        // a successful "like" should disable the button and increment
+        // the number of likes
+        cy.getBySelLike("like-button").should("be.disabled");
+        cy.contains(likesCountSelector, 1);
+        cy.visualSnapshot("Like Count Incremented");
+
+        cy.switchUserByXstate(ctx.userB.username);
+        cy.visualSnapshot(`Switch to User ${ctx.userB.username}`);
+
+        cy.wait("@getNotifications")
+          .its("response.body.results.length")
+          .as("preDismissedNotificationCount");
+
+        cy.visit("/notifications");
+
+        cy.wait("@getNotifications");
+
+        cy.getBySelLike("notification-list-item")
+          .should("have.length", 9)
+          .first()
+          .should("contain", ctx.userA?.firstName)
+          .and("contain", "liked");
+
+        cy.log("🚩 Marks notification as read");
+        cy.getBySelLike("notification-mark-read").first().click({ force: true });
+        cy.wait("@updateNotification");
+
+        cy.get("@preDismissedNotificationCount").then((count) => {
+          cy.getBySelLike("notification-list-item").should("have.length.lessThan", Number(count));
         });
-      cy.visualSnapshot("Renders the notifications badge with count");
-
-      const likesCountSelector = "[data-test*=transaction-like-count]";
-      cy.contains(likesCountSelector, 0);
-      cy.getBySelLike("like-button").click();
-      // a successful "like" should disable the button and increment
-      // the number of likes
-      cy.getBySelLike("like-button").should("be.disabled");
-      cy.contains(likesCountSelector, 1);
-      cy.visualSnapshot("Like Count Incremented");
-
-      cy.switchUserByXstate(ctx.userB.username);
-      cy.visualSnapshot(`Switch to User ${ctx.userB.username}`);
-
-      cy.wait("@getNotifications")
-        .its("response.body.results.length")
-        .as("preDismissedNotificationCount");
-
-      cy.visit("/notifications");
-
-      cy.wait("@getNotifications");
-
-      cy.getBySelLike("notification-list-item")
-        .should("have.length", 9)
-        .first()
-        .should("contain", ctx.userA?.firstName)
-        .and("contain", "liked");
-
-      cy.log("🚩 Marks notification as read");
-      cy.getBySelLike("notification-mark-read").first().click({ force: true });
-      cy.wait("@updateNotification");
-
-      cy.get("@preDismissedNotificationCount").then((count) => {
-        cy.getBySelLike("notification-list-item").should("have.length.lessThan", Number(count));
-      });
-      cy.visualSnapshot("Notification count after notification dismissed");
-    });
+        cy.visualSnapshot("Notification count after notification dismissed");
+      }
+    );
 
     it("User C likes a transaction between User A and User B; User A and User B get notifications that User C liked transaction", function () {
       cy.loginByXstate(ctx.userC.username);
