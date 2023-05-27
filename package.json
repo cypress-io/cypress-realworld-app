@@ -12,7 +12,7 @@
     "url": "https://github.com/cypress-io/cypress-realworld-app/issues"
   },
   "engines": {
-    "node": ">=12.22.0"
+    "node": "^16.16.0"
   },
   "dependencies": {
     "@auth0/auth0-react": "1.9.0",
