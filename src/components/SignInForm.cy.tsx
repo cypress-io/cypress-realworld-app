@@ -17,7 +17,7 @@ describe("SignInForm", () => {
         firstName: "Edgar",
         lastName: "Johns",
         username: "Katharina_Bernier",
-        password: "$2a$10$5PXHGtcsckWtAprT5/JmluhR13f16BL8SIGhvAKNP.Dhxkt69FfzW",
+        password: "$2a$10$5PXHGtcsckWtAprT5/JmluhR13f16BL8SIGhvAKNP.Dhxkt69FfzWKe",
         email: "Norene39@yahoo.com",
         phoneNumber: "625-316-9882",
         avatar: "https://cypress-realworld-app-svgs.s3.amazonaws.com/t45AiwidW.svg",
@@ -37,7 +37,7 @@ describe("SignInForm", () => {
     );
     cy.get("[data-test*=signin-username]").type("Katharina_Bernier");
     cy.get("[data-test*=signin-password]").type("s3cret");
-    cy.get("[data-test*=signin-submit]").click(); //.should("be.disabled");
+    cy.get("[data-test*=signin-submit]").click().should("be.disabled");
 
     cy.wait("@loginPost");
 
