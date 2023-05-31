@@ -253,16 +253,6 @@
       "isDeleted": false,
       "createdAt": "2019-09-30T14:20:07.043Z",
       "modifiedAt": "2020-05-21T22:40:28.910Z"
-    },
-    {
-      "id": "BnFx1aBAM",
-      "uuid": "492f8922-8699-4738-96d9-fc717445be29",
-      "bankName": "The Best Bank",
-      "accountNumber": "123456789",
-      "routingNumber": "987654321",
-      "isDeleted": false,
-      "createdAt": "2022-11-30T19:27:10.571Z",
-      "modifiedAt": "2022-11-30T19:27:10.571Z"
     }
   ],
   "transactions": [
