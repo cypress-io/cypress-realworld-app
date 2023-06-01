@@ -42,7 +42,7 @@
     "react-number-format": "4.9.4",
     "react-router": "5.3.4",
     "react-router-dom": "5.3.4",
-    "react-virtualized": "9.22.3",
+    "react-virtualized": "9.22.5",
     "shortid": "2.2.16",
     "uuid": "8.3.2",
     "xstate": "4.35.4",
