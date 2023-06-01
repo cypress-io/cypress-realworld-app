@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   cypress: cypress-io/cypress@3.1.2
   codecov: codecov/codecov@1.2.3 #
-  win: circleci/windows@4.1.1
+  win: circleci/windows@5.0.0
 
 executors:
   with-chrome-and-firefox:
@@ -38,6 +38,21 @@ commands:
     steps:
       - attach_workspace:
           at: ~/
+
+  # Setup Windows
+  # 1. Add nvm and install node 16.16.0
+  # 2. Install yarn
+  setup_node_and_yarn_windows:
+    steps:
+      - run:
+          name: Install node 16
+          command: nvm install 16.16.0
+      - run:
+          name: Use node 16
+          command: nvm use 16.16.0
+      - run:
+          name: Install yarn
+          command: npm i --location=global yarn
   # Setup
   #  1. Install Cypress
   #  2. Validate types
@@ -124,6 +139,7 @@ jobs:
       shell: bash.exe
       size: large
     steps:
+      - setup_node_and_yarn_windows
       - run:
           name: Disabling Windows Defender
           shell: powershell.exe
@@ -180,7 +196,8 @@ jobs:
       isComponent:
         type: boolean
         default: false
-    steps: 
+    steps:
+      - setup_node_and_yarn_windows
       - cypress_tests:
           browser: <<parameters.browser>>
           specPattern: <<parameters.specPattern>> 
