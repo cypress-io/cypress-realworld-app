@@ -14,8 +14,8 @@ describe("SignInForm", () => {
       user: {
         id: "t45AiwidW",
         uuid: "6383f84e-b511-44c5-a835-3ece1d781fa8",
-        firstName: "Edgar",
-        lastName: "Johns",
+        firstName: "Katharina",
+        lastName: "Bernier",
         username: "Katharina_Bernier",
         password: "$2a$10$5PXHGtcsckWtAprT5/JmluhR13f16BL8SIGhvAKNP.Dhxkt69FfzW",
         email: "Norene39@yahoo.com",
