@@ -1,5 +1,5 @@
 import { APIRequestContext, ElementHandle, Locator, Page, test as base } from "@playwright/test";
-import { User } from "../src/models";
+import { BankAccount, User } from "../src/models";
 
 class APIClient {
   #apiRequestContext: APIRequestContext;

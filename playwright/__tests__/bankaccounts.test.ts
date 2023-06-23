@@ -42,7 +42,7 @@ test.describe("Bank Accounts", () => {
       expect(accounts).toBe(2);
     });
 
-    test.only("Bank Account form error validations", async ({ page }) => {
+    test("Bank Account form error validations", async ({ page }) => {
       await page.getByTestId("sidenav-bankaccounts").click();
 
       // Check for navigation
@@ -51,8 +51,6 @@ test.describe("Bank Accounts", () => {
       await page.getByTestId("bankaccount-new").click();
       // Fill the input
       await page.getByPlaceholder("Bank Name").fill("The");
-
-      await page.pause();
 
       // Clear the input and trigger blur
       await page.getByPlaceholder("Bank Name").fill("");
@@ -116,6 +114,57 @@ test.describe("Bank Accounts", () => {
       expect(
         await page.locator("#bankaccount-accountNumber-input-helper-text").textContent()
       ).toContain("Must contain no more than 12 digits");
+    });
+
+    test("Soft deletes a bank account", async ({ page, backend }) => {
+      await backend.seedDB();
+      await page.getByTestId("sidenav-bankaccounts").click();
+
+      // Check for navigation
+      expect(page.url()).toMatch("/bankaccounts");
+
+      // Click on the delete button for the first bank account
+      await page.getByTestIdLike("delete").first().click();
+
+      // Check that the first bank account in the list is marked as deleted
+      await page.getByTestIdLike("bankaccount-list-item").waitFor({ state: "visible" });
+      const bankAccounts = await page.getByTestIdLike("bankaccount-list-item").textContent();
+      expect(bankAccounts).toContain("Deleted");
+    });
+
+    test.only("Renders an empty bank account list state with onboarding modal", async ({
+      page,
+    }) => {
+      await page.route("**/*", (route, request) => {
+        if (request.postData()?.includes("ListBankAccount")) {
+          const response = {
+            status: 200,
+            headers: { "Access-Control-Allow-Origin": "*" },
+            contentType: "application/json",
+            body: JSON.stringify({ data: { listBankAccount: [] } }),
+          };
+
+          return route.fulfill(response);
+        }
+        return route.continue();
+      });
+
+      await page.getByTestId("sidenav-bankaccounts").click();
+
+      // Check for navigation
+      expect(page.url()).toMatch("/bankaccounts");
+
+      // Check that the bank account list does not exist
+      const bankAccountList = await page.getByTestId("bankaccount-list").isVisible();
+      expect(bankAccountList).toBe(false);
+
+      // Check that the empty list header is displayed
+      const emptyListHeader = await page.getByTestId("empty-list-header").textContent();
+      expect(emptyListHeader).toContain("No Bank Accounts");
+
+      // Check that the notifications count exists
+      const notificationsCount = await page.getByTestId("nav-top-notifications-count").isVisible();
+      expect(notificationsCount).toBe(true);
     });
   });
 });
