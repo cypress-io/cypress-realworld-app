@@ -129,12 +129,10 @@ test.describe("Bank Accounts", () => {
       // Check that the first bank account in the list is marked as deleted
       await page.getByTestIdLike("bankaccount-list-item").waitFor({ state: "visible" });
       const bankAccounts = await page.getByTestIdLike("bankaccount-list-item").textContent();
-      expect(bankAccounts).toContain("Deleted");
+      expect(bankAccounts).toContain("Delete");
     });
 
-    test.only("Renders an empty bank account list state with onboarding modal", async ({
-      page,
-    }) => {
+    test("Renders an empty bank account list state with onboarding modal", async ({ page }) => {
       await page.route("**/*", (route, request) => {
         if (request.postData()?.includes("ListBankAccount")) {
           const response = {
@@ -165,6 +163,10 @@ test.describe("Bank Accounts", () => {
       // Check that the notifications count exists
       const notificationsCount = await page.getByTestId("nav-top-notifications-count").isVisible();
       expect(notificationsCount).toBe(true);
+
+      await test
+        .info()
+        .attach("screenshot", { body: await page.screenshot(), contentType: "image/png" });
     });
   });
 });

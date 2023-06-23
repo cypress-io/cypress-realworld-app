@@ -17,6 +17,7 @@ export default defineConfig({
   testDir: "playwright/__tests__",
   timeout: 5000,
   use: {
+    video: "on",
     baseURL: "http://localhost:3000",
   },
 });

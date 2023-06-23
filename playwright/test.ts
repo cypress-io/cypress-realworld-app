@@ -1,5 +1,5 @@
 import { APIRequestContext, ElementHandle, Locator, Page, test as base } from "@playwright/test";
-import { BankAccount, User } from "../src/models";
+import { User } from "../src/models";
 
 class APIClient {
   #apiRequestContext: APIRequestContext;
@@ -82,6 +82,7 @@ export const test = base.extend<TestFixtures>({
     // 🤮 we have to do this due to non-standard data-test attributes
     page.getByTestId = (testId: string) => page.locator(`[data-test="${testId}"]`);
     page.getByTestIdLike = (testId: string) => page.locator(`[data-test*="${testId}"]`);
+
     await use(page);
   },
 
