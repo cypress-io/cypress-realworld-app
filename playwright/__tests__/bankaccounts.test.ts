@@ -23,9 +23,12 @@ test.describe("Bank Accounts", () => {
       // Check for navigation
       expect(page.url()).toMatch("/bankaccounts/new");
 
+      await page.visualSnapshot("Display New Bank Account Form");
+
       await page.getByPlaceholder("Bank Name").fill("The Best Bank");
       await page.getByPlaceholder("Routing Number").fill("987654321");
       await page.getByPlaceholder("Account Number").fill("123456789");
+      await page.visualSnapshot("Fill out New Bank Account Form");
 
       await page.getByTestId("bankaccount-submit").click();
 
@@ -40,6 +43,7 @@ test.describe("Bank Accounts", () => {
 
       // Expect two bank accounts in the list
       expect(accounts).toBe(2);
+      await page.visualSnapshot("Bank Account Created");
     });
 
     test("Bank Account form error validations", async ({ page }) => {
@@ -114,6 +118,7 @@ test.describe("Bank Accounts", () => {
       expect(
         await page.locator("#bankaccount-accountNumber-input-helper-text").textContent()
       ).toContain("Must contain no more than 12 digits");
+      await page.visualSnapshot("Bank Account Form with Errors and Submit button disabled");
     });
 
     test("Soft deletes a bank account", async ({ page, backend }) => {
@@ -130,6 +135,7 @@ test.describe("Bank Accounts", () => {
       await page.getByTestIdLike("bankaccount-list-item").waitFor({ state: "visible" });
       const bankAccounts = await page.getByTestIdLike("bankaccount-list-item").textContent();
       expect(bankAccounts).toContain("Delete");
+      await page.visualSnapshot("Soft Delete Bank Account");
     });
 
     test("Renders an empty bank account list state with onboarding modal", async ({ page }) => {
@@ -164,9 +170,7 @@ test.describe("Bank Accounts", () => {
       const notificationsCount = await page.getByTestId("nav-top-notifications-count").isVisible();
       expect(notificationsCount).toBe(true);
 
-      await test
-        .info()
-        .attach("screenshot", { body: await page.screenshot(), contentType: "image/png" });
+      await page.visualSnapshot("User Onboarding Dialog is Visible");
     });
   });
 });

@@ -1,4 +1,5 @@
-import { APIRequestContext, ElementHandle, Locator, Page, test as base } from "@playwright/test";
+import snapshot from "@percy/playwright";
+import { APIRequestContext, Locator, Page, test as base } from "@playwright/test";
 import { User } from "../src/models";
 
 class APIClient {
@@ -60,6 +61,7 @@ interface TestFixtures {
   loginByXstate: (username: string, password?: string) => void;
   page: Page & {
     getByTestIdLike: (testId: string) => Locator;
+    visualSnapshot: (name: string) => Promise<void>;
   };
 }
 
@@ -82,6 +84,14 @@ export const test = base.extend<TestFixtures>({
     // 🤮 we have to do this due to non-standard data-test attributes
     page.getByTestId = (testId: string) => page.locator(`[data-test="${testId}"]`);
     page.getByTestIdLike = (testId: string) => page.locator(`[data-test*="${testId}"]`);
+
+    // Add the familiar visualSnapshot API to the page
+    page.visualSnapshot = async (name: string) => {
+      // Could not setup Percy with playwright-test
+      // we are taking a screenshot instead to simulate Percy
+      await page.screenshot();
+      await snapshot(page, name);
+    };
 
     await use(page);
   },
