@@ -28,17 +28,17 @@
     tslib "^2.3.0"
     zen-observable-ts "^1.2.0"
 
-"@auth0/auth0-react@2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@auth0/auth0-react/-/auth0-react-2.1.0.tgz#cadb561fb3994fd3e63040da1bfc714947ac07ea"
-  integrity sha512-+86qLx97BcSwL/ZwIzGq9jFa5SaV5z7goLU5gi+4R9KhzDg9vhmmZ+iQWW0GMiuwjJ8vcfX4hRTD6iF0DbGZWw==
+"@auth0/auth0-react@2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@auth0/auth0-react/-/auth0-react-2.1.1.tgz#69caec80ddcde6f7312677e9522997441419e8ec"
+  integrity sha512-KOFdTaFvashPX1o3h3ARYSCtR0qMya1ia57rSL2q7yggKv7PijHI/cKoG/gDvLA2G0M1qoCR3eACGDgHxstO3Q==
   dependencies:
-    "@auth0/auth0-spa-js" "^2.0.4"
+    "@auth0/auth0-spa-js" "^2.0.8"
 
-"@auth0/auth0-spa-js@^2.0.4":
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/@auth0/auth0-spa-js/-/auth0-spa-js-2.0.7.tgz#9da04e610223267cd96f93c46129847a8a53aaf2"
-  integrity sha512-iQ22AZCqOMG0q8/YPkvT4lGe2gsaopZ2kZb2cIBa7w+0hhGJhl6ANpFI6FzAKMzGRGmVocKxYdHha7lxAhbyPA==
+"@auth0/auth0-spa-js@^2.0.8":
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/@auth0/auth0-spa-js/-/auth0-spa-js-2.0.8.tgz#42a8e5aad043e66dbba2a8fadc086a46bf0d021f"
+  integrity sha512-qCgWZS58S69WCg2ybd+SDiaw3ahBVJ4/tSFWMtIpc//Fq8kRHGwMOmgpNKVAFrpHG0ck2oWFGrpylxoto8Z0mA==
 
 "@aws-amplify/analytics@5.2.31":
   version "5.2.31"
