@@ -49,6 +49,7 @@
     "yup": "0.32.11"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "@cypress/code-coverage": "^3.10.0-dev.1",
     "@cypress/instrument-cra": "1.4.0",
     "@cypress/webpack-dev-server": "^1.6.0",
