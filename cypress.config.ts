@@ -6,7 +6,7 @@ import Promise from "bluebird";
 import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
 import { defineConfig } from "cypress";
-import "@cypress/instrument-cra";
+// import "@cypress/instrument-cra";
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
@@ -55,8 +55,8 @@ module.exports = defineConfig({
   },
   component: {
     devServer: {
-      framework: "create-react-app",
-      bundler: "webpack",
+      framework: "react",
+      bundler: "vite",
     },
     specPattern: "src/**/*.cy.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/component.ts",
@@ -71,6 +71,7 @@ module.exports = defineConfig({
     supportFile: "cypress/support/e2e.ts",
     viewportHeight: 1000,
     viewportWidth: 1280,
+    experimentalRunAllSpecs: true,
     setupNodeEvents(on, config) {
       const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 
