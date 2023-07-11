@@ -12,7 +12,7 @@ import App from "./containers/App";
 import AppGoogle from "./containers/AppGoogle";
 import AppAuth0 from "./containers/AppAuth0";
 import AppOkta from "./containers/AppOkta";
-import AppCognito from "./containers/AppCognito";
+// import AppCognito from "./containers/AppCognito";
 import { history } from "./utils/historyUtils";
 
 const theme = createTheme({
@@ -28,17 +28,17 @@ const onRedirectCallback = (appState: any) => {
   history.replace((appState && appState.returnTo) || window.location.pathname);
 };
 
-const root = createRoot(document.getElementById("root"));
+const root = createRoot(document.getElementById("root")!);
 
 /* istanbul ignore if */
-if (process.env.REACT_APP_AUTH0) {
+if (process.env.VITE_APP_AUTH0) {
   root.render(
     <Auth0Provider
-      domain={process.env.REACT_APP_AUTH0_DOMAIN!}
-      clientId={process.env.REACT_APP_AUTH0_CLIENTID!}
+      domain={process.env.VITE_APP_AUTH0_DOMAIN!}
+      clientId={process.env.VITE_APP_AUTH0_CLIENTID!}
       redirectUri={window.location.origin}
-      audience={process.env.REACT_APP_AUTH0_AUDIENCE}
-      scope={process.env.REACT_APP_AUTH0_SCOPE}
+      audience={process.env.VITE_APP_AUTH0_AUDIENCE}
+      scope={process.env.VITE_APP_AUTH0_SCOPE}
       onRedirectCallback={onRedirectCallback}
       cacheLocation="localstorage"
     >
@@ -49,13 +49,12 @@ if (process.env.REACT_APP_AUTH0) {
       </Router>
     </Auth0Provider>
   );
-} else if (process.env.REACT_APP_OKTA) {
+} else if (process.env.VITE_APP_OKTA) {
   const oktaAuth = new OktaAuth({
-    issuer: `https://${process.env.REACT_APP_OKTA_DOMAIN}/oauth2/default`,
-    clientId: process.env.REACT_APP_OKTA_CLIENTID,
+    issuer: `https://${process.env.VITE_APP_OKTA_DOMAIN}/oauth2/default`,
+    clientId: process.env.VITE_APP_OKTA_CLIENTID,
     redirectUri: window.location.origin + "/implicit/callback",
   });
-
   /* istanbul ignore next */
   root.render(
     <Router history={history}>
@@ -66,16 +65,16 @@ if (process.env.REACT_APP_AUTH0) {
       </ThemeProvider>
     </Router>
   );
-} else if (process.env.REACT_APP_AWS_COGNITO) {
-  /* istanbul ignore next */
-  root.render(
-    <Router history={history}>
-      <ThemeProvider theme={theme}>
-        <AppCognito />
-      </ThemeProvider>
-    </Router>
-  );
-} else if (process.env.REACT_APP_GOOGLE) {
+  // } else if (process.env.VITE_APP_AWS_COGNITO) {
+  //   //   /* istanbul ignore next */
+  //   root.render(
+  //     <Router history={history}>
+  //       <ThemeProvider theme={theme}>
+  //         <AppCognito />
+  //       </ThemeProvider>
+  //     </Router>
+  //   );
+} else if (process.env.VITE_APP_GOOGLE) {
   /* istanbul ignore next */
   root.render(
     <Router history={history}>

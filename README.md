@@ -103,7 +103,7 @@ yarn dev
 > 🚩 **Note**
 >
 > The app will run on port `3000` (frontend) and `3001` (API backend) by default. Please make sure there are no other applications or services running on both ports.
-> If you want to change the default ports, you can do so by modifying `PORT` and `REACT_APP_BACKEND_PORT` variables in `.env` file.
+> If you want to change the default ports, you can do so by modifying `PORT` and `VITE_BACKEND_PORT` variables in `.env` file.
 > However, make sure the modified port numbers in `.env` are not committed into Git since the CI environments still expect the application to run on the default ports.
 
 ### Start Cypress
@@ -116,8 +116,8 @@ yarn cypress:open
 >
 > If you have changed the default ports, then you need to update Cypress configuration file (`cypress.config.js`) locally.
 > There are three properties that you need to update in `cypress.config.js`: `e2e.baseUrl`, `env.apiUrl`, and `env.url`.
-> The port number in `e2e.baseUrl` corresponds to `PORT` variable in `.env` file. Similarly, the port number in `env.apiUrl` and `env.url` correspond to `REACT_APP_BACKEND_PORT`.
-> For example, if you have changed `PORT` to `13000` and `REACT_APP_BACKEND_PORT` to `13001` in `.env` file, then your `cypress.config.js` should look similar to the following snippet:
+> The port number in `e2e.baseUrl` corresponds to `PORT` variable in `.env` file. Similarly, the port number in `env.apiUrl` and `env.url` correspond to `VITE_BACKEND_PORT`.
+> For example, if you have changed `PORT` to `13000` and `VITE_BACKEND_PORT` to `13001` in `.env` file, then your `cypress.config.js` should look similar to the following snippet:
 >
 > ```js
 > {
