@@ -15,7 +15,11 @@ export default defineConfig(({ command, mode }) => {
     build: {
       outDir: "build",
     },
-
     plugins: [react(), eslint()],
+    test: {
+      environment: "jsdom",
+      setupFiles: "./src/setup-tests.js",
+      exclude: ["node_modules", "cypress", "dist"],
+    },
   };
 });
