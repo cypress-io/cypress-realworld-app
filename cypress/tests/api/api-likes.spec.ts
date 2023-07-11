@@ -13,6 +13,11 @@ type TestLikesCtx = {
 describe("Likes API", function () {
   let ctx: TestLikesCtx = {};
 
+  before(() => {
+    // Hacky workaround to have the e2e tests pass when cy.visit('http://localhost:3000') is called
+    cy.request("GET", "/");
+  });
+
   beforeEach(function () {
     cy.task("db:seed");
 

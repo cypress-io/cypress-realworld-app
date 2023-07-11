@@ -16,6 +16,11 @@ const apiTransactions = `${Cypress.env("apiUrl")}/transactions`;
 describe("Transactions API", function () {
   let ctx: TestTransactionsCtx = {};
 
+  before(() => {
+    // Hacky workaround to have the e2e tests pass when cy.visit('http://localhost:3000') is called
+    cy.request("GET", "/");
+  });
+
   const isSenderOrReceiver = ({ senderId, receiverId }: Transaction) =>
     isEqual(senderId, ctx.authenticatedUser!.id) || isEqual(receiverId, ctx.authenticatedUser!.id);
 
