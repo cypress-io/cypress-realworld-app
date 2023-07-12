@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -25,6 +25,14 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- to get aws amplify to work with vite -->
+    <script>
+      window.global = window;
+      window.process = {
+        env: { DEBUG: undefined },
+      };
+      var exports = {};
+    </script>
     <script type="module" src="/src/index.tsx"></script>
     <!--
       This HTML file is a template.

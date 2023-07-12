@@ -27,6 +27,15 @@ export default defineConfig(({ command, mode }) => {
         forceBuildInstrument: true,
       }),
     ],
+    // to get aws amplify to work with vite
+    resolve: {
+      alias: [
+        {
+          find: "./runtimeConfig",
+          replacement: "./runtimeConfig.browser", // ensures browser compatible version of AWS JS SDK is used
+        },
+      ],
+    },
     test: {
       environment: "jsdom",
       setupFiles: "./src/setup-tests.js",

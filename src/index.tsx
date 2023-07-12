@@ -12,7 +12,7 @@ import App from "./containers/App";
 import AppGoogle from "./containers/AppGoogle";
 import AppAuth0 from "./containers/AppAuth0";
 import AppOkta from "./containers/AppOkta";
-// import AppCognito from "./containers/AppCognito";
+import AppCognito from "./containers/AppCognito";
 import { history } from "./utils/historyUtils";
 
 const theme = createTheme({
@@ -65,15 +65,15 @@ if (process.env.VITE_APP_AUTH0) {
       </ThemeProvider>
     </Router>
   );
-  // } else if (process.env.VITE_APP_AWS_COGNITO) {
-  //   //   /* istanbul ignore next */
-  //   root.render(
-  //     <Router history={history}>
-  //       <ThemeProvider theme={theme}>
-  //         <AppCognito />
-  //       </ThemeProvider>
-  //     </Router>
-  //   );
+} else if (process.env.VITE_APP_AWS_COGNITO) {
+  /* istanbul ignore next */
+  root.render(
+    <Router history={history}>
+      <ThemeProvider theme={theme}>
+        <AppCognito />
+      </ThemeProvider>
+    </Router>
+  );
 } else if (process.env.VITE_APP_GOOGLE) {
   /* istanbul ignore next */
   root.render(

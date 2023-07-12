@@ -137,11 +137,12 @@ yarn cypress:open
 
 ## Tests
 
-| Type | Location                                 |
-| ---- | ---------------------------------------- |
-| api  | [cypress/tests/api](./cypress/tests/api) |
-| ui   | [cypress/tests/ui](./cypress/tests/ui)   |
-| unit | [`src/__tests__`](./src/__tests__)       |
+| Type      | Location                                 |
+| --------- | ---------------------------------------- |
+| api       | [cypress/tests/api](./cypress/tests/api) |
+| ui        | [cypress/tests/ui](./cypress/tests/ui)   |
+| component | [src/(next to component)](./src)         |
+| unit      | [`src/__tests__`](./src/__tests__)       |
 
 ## Database
 
