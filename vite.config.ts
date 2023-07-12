@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import eslint from "vite-plugin-eslint";
+import istanbul from "vite-plugin-istanbul";
 
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), "VITE");
@@ -14,8 +15,18 @@ export default defineConfig(({ command, mode }) => {
     },
     build: {
       outDir: "build",
+      sourcemap: true,
     },
-    plugins: [react(), eslint()],
+    plugins: [
+      react(),
+      eslint(),
+      istanbul({
+        cypress: true,
+        requireEnv: true,
+        exclude: ["node_modules", "cypress", "dist"],
+        forceBuildInstrument: true,
+      }),
+    ],
     test: {
       environment: "jsdom",
       setupFiles: "./src/setup-tests.js",

@@ -6,7 +6,6 @@ import Promise from "bluebird";
 import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
 import { defineConfig } from "cypress";
-// import "@cypress/instrument-cra";
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
