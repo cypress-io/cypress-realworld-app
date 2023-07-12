@@ -114,10 +114,10 @@ yarn cypress:open
 
 > 🚩 **Note**
 >
-> If you have changed the default ports, then you need to update Cypress configuration file (`cypress.config.js`) locally.
-> There are three properties that you need to update in `cypress.config.js`: `e2e.baseUrl`, `env.apiUrl`, and `env.url`.
+> If you have changed the default ports, then you need to update Cypress configuration file (`cypress.config.ts`) locally.
+> There are three properties that you need to update in `cypress.config.ts`: `e2e.baseUrl`, `env.apiUrl`, and `env.url`.
 > The port number in `e2e.baseUrl` corresponds to `PORT` variable in `.env` file. Similarly, the port number in `env.apiUrl` and `env.url` correspond to `VITE_BACKEND_PORT`.
-> For example, if you have changed `PORT` to `13000` and `VITE_BACKEND_PORT` to `13001` in `.env` file, then your `cypress.config.js` should look similar to the following snippet:
+> For example, if you have changed `PORT` to `13000` and `VITE_BACKEND_PORT` to `13001` in `.env` file, then your `cypress.config.ts` should look similar to the following snippet:
 >
 > ```js
 > {
@@ -133,7 +133,7 @@ yarn cypress:open
 > }
 > ```
 >
-> Avoid committing the modified `cypress.config.js` into Git since the CI environments still expect the application to be run on default ports.
+> Avoid committing the modified `cypress.config.ts` into Git since the CI environments still expect the application to be run on default ports.
 
 ## Tests
 

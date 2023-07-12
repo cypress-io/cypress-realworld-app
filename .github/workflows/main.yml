@@ -46,7 +46,7 @@ jobs:
           # which has some compatibility issues with openSSL inside this windows job.
           # Node 18 updated with OpenSSL provider which causes this compatibility issue
           # downgrading node to v16 to use the openssl-legacy-provider by default to prevent this issue
-          node-version: '16.16.0'
+          node-version: "16.16.0"
 
       - name: Cypress install
         uses: cypress-io/github-action@v5
@@ -113,7 +113,7 @@ jobs:
           parallel: true
           group: "UI - Chrome"
           spec: cypress/tests/ui/*
-          config-file: cypress.config.js
+          config-file: cypress.config.ts
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -160,7 +160,7 @@ jobs:
           parallel: true
           group: "UI - Chrome - Mobile"
           spec: cypress/tests/ui/*
-          config-file: cypress.config.js
+          config-file: cypress.config.ts
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -205,7 +205,7 @@ jobs:
           parallel: true
           group: "UI - Firefox"
           spec: cypress/tests/ui/*
-          config-file: cypress.config.js
+          config-file: cypress.config.ts
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -251,7 +251,7 @@ jobs:
           parallel: true
           group: "UI - Firefox - Mobile"
           spec: cypress/tests/ui/*
-          config-file: cypress.config.js
+          config-file: cypress.config.ts
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -277,7 +277,7 @@ jobs:
         uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '16.16.0'
+          node-version: "16.16.0"
 
       - name: Download the build folders
         uses: actions/download-artifact@v3
@@ -295,7 +295,7 @@ jobs:
           parallel: true
           group: "UI - Electron - Windows"
           spec: cypress/tests/ui/*
-          config-file: cypress.config.js
+          config-file: cypress.config.ts
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
