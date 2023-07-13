@@ -22,6 +22,7 @@ commands:
       - store_artifacts:
           path: coverage
       - run: npx nyc report --reporter=text || true
+      - run: apt-get update && apt-get install -y curl
       - codecov/upload:
           file: coverage/coverage-final.json
   persist_ws:
