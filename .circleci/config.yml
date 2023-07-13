@@ -7,7 +7,7 @@ orbs:
 executors:
   with-chrome-and-firefox:
     docker:
-      - image: "cypress/browsers:node16.16.0-chrome105-ff104-edge"
+      - image: "node-18.16.0-chrome-112.0.5615.121-1-ff-112.0.1-edge-112.0.1722.48-1"
     resource_class: large
     environment:
       PERCY_TOKEN:
@@ -28,11 +28,11 @@ commands:
     steps:
       - persist_to_workspace:
           paths:
-              # for linux builds
-              - .cache/Cypress
-              # for windows builds
-              - AppData/Local/Cypress/Cache
-              - project
+            # for linux builds
+            - .cache/Cypress
+            # for windows builds
+            - AppData/Local/Cypress/Cache
+            - project
           root: ~/
   attach_ws:
     steps:
@@ -40,16 +40,16 @@ commands:
           at: ~/
 
   # Setup Windows
-  # 1. Add nvm and install node 16.16.0
+  # 1. Add nvm and install node 18.16.0
   # 2. Install yarn
   setup_node_and_yarn_windows:
     steps:
       - run:
-          name: Install node 16
-          command: nvm install 16.16.0
+          name: Install node 18
+          command: nvm install 18.16.0
       - run:
-          name: Use node 16
-          command: nvm use 16.16.0
+          name: Use node 18
+          command: nvm use 18.16.0
       - run:
           name: Install yarn
           command: npm i --location=global yarn
@@ -87,7 +87,7 @@ commands:
         default: chrome
       specPattern:
         type: string
-        default: ''
+        default: ""
       ciBuildId:
         type: string
       group:
@@ -103,14 +103,14 @@ commands:
       - when:
           condition:
             and:
-              - equal: [ true, << parameters.isComponent >>]
+              - equal: [true, << parameters.isComponent >>]
           steps:
             - cypress/run-tests:
                 cypress-command: yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --component
       - when:
           condition:
             and:
-              - equal: [ true, << parameters.isMobile >>]
+              - equal: [true, << parameters.isMobile >>]
           steps:
             - cypress/run-tests:
                 start-command: yarn start:ci
@@ -118,8 +118,8 @@ commands:
       - when:
           condition:
             and:
-              - equal: [ false, << parameters.isMobile >>]
-              - equal: [ false, << parameters.isComponent >>]
+              - equal: [false, << parameters.isMobile >>]
+              - equal: [false, << parameters.isComponent >>]
           steps:
             - cypress/run-tests:
                 start-command: yarn start:ci
@@ -130,7 +130,7 @@ commands:
 jobs:
   setup_project_and_cypress_linux:
     executor: with-chrome-and-firefox
-    steps: 
+    steps:
       - setup_project_and_cypress
   setup_project_and_cypress_windows:
     executor:
@@ -154,7 +154,7 @@ jobs:
         default: chrome
       specPattern:
         type: string
-        default: ''
+        default: ""
       ciBuildId:
         type: string
       group:
@@ -165,14 +165,14 @@ jobs:
       isComponent:
         type: boolean
         default: false
-    steps: 
+    steps:
       - cypress_tests:
           browser: <<parameters.browser>>
-          specPattern: <<parameters.specPattern>> 
-          ciBuildId: <<parameters.ciBuildId>> 
-          group: <<parameters.group>> 
+          specPattern: <<parameters.specPattern>>
+          ciBuildId: <<parameters.ciBuildId>>
+          group: <<parameters.group>>
           isMobile: <<parameters.isMobile>>
-          isComponent: <<parameters.isComponent>> 
+          isComponent: <<parameters.isComponent>>
   cypress_tests_windows:
     executor:
       # executor comes from the "windows" orb
@@ -185,7 +185,7 @@ jobs:
         default: chrome
       specPattern:
         type: string
-        default: ''
+        default: ""
       ciBuildId:
         type: string
       group:
@@ -200,9 +200,9 @@ jobs:
       - setup_node_and_yarn_windows
       - cypress_tests:
           browser: <<parameters.browser>>
-          specPattern: <<parameters.specPattern>> 
-          ciBuildId: <<parameters.ciBuildId>> 
-          group: <<parameters.group>> 
+          specPattern: <<parameters.specPattern>>
+          ciBuildId: <<parameters.ciBuildId>>
+          group: <<parameters.group>>
           isMobile: <<parameters.isMobile>>
           isComponent: <<parameters.isComponent>>
 

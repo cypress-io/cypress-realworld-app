@@ -9,7 +9,7 @@ jobs:
   install:
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node16.16.0-chrome105-ff104-edge
+      image: node-18.16.0-chrome-112.0.5615.121-1-ff-112.0.1-edge-112.0.1722.48-1
       options: --user 1001
     steps:
       - name: Checkout
@@ -42,11 +42,7 @@ jobs:
         uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          # The default install for the job is node 18+
-          # which has some compatibility issues with openSSL inside this windows job.
-          # Node 18 updated with OpenSSL provider which causes this compatibility issue
-          # downgrading node to v16 to use the openssl-legacy-provider by default to prevent this issue
-          node-version: "16.16.0"
+          node-version: "18.16.0"
 
       - name: Cypress install
         uses: cypress-io/github-action@v5
@@ -71,7 +67,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node16.16.0-chrome105-ff104-edge
+      image: node-18.16.0-chrome-112.0.5615.121-1-ff-112.0.1-edge-112.0.1722.48-1
       options: --user 1001
     needs: install
     strategy:
@@ -126,7 +122,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node16.16.0-chrome105-ff104-edge
+      image: node-18.16.0-chrome-112.0.5615.121-1-ff-112.0.1-edge-112.0.1722.48-1
       options: --user 1001
     needs: install
     strategy:
@@ -172,7 +168,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node16.16.0-chrome105-ff104-edge
+      image: node-18.16.0-chrome-112.0.5615.121-1-ff-112.0.1-edge-112.0.1722.48-1
       options: --user 1001
     needs: install
     strategy:
@@ -217,7 +213,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node16.16.0-chrome105-ff104-edge
+      image: node-18.16.0-chrome-112.0.5615.121-1-ff-112.0.1-edge-112.0.1722.48-1
       options: --user 1001
     needs: install
     strategy:
@@ -277,7 +273,7 @@ jobs:
         uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "16.16.0"
+          node-version: "18.16.0"
 
       - name: Download the build folders
         uses: actions/download-artifact@v3
