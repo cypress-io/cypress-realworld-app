@@ -139,6 +139,7 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",
+    "dev:coverage": "cross-env NODE_ENV=development CYPRESS_COVERAGE=true concurrently yarn:start:react yarn:start:api:watch",
     "dev:auth0": "cross-env VITE_AUTH0=true NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",
     "dev:okta": "cross-env VITE_OKTA=true NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",
     "dev:cognito": "cross-env VITE_AWS_COGNITO=true NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",

@@ -161,6 +161,7 @@ yarn cypress:open
 | Script         | Description                                                                                                                                                                       |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | dev            | Starts backend in watch mode and frontend                                                                                                                                         |
+| dev:coverage   | Starts backend in watch mode and frontend with instrumented code coverage enabled                                                                                                 |
 | dev:auth0      | Starts backend in watch mode and frontend; [Uses Auth0 for Authentication](#auth0) > [Read Guide](http://on.cypress.io/auth0)                                                     |
 | dev:okta       | Starts backend in watch mode and frontend; [Uses Okta for Authentication](#okta) > [Read Guide](http://on.cypress.io/okta)                                                        |
 | dev:cognito    | Starts backend in watch mode and frontend; [Uses Cognito for Authentication](#amazon-cognito) > [Read Guide](http://on.cypress.io/amazon-cognito)                                 |
@@ -180,12 +181,20 @@ The Cypress Real-World App uses the [@cypress/code-coverage](https://github.com/
 
 To generate a code coverage report:
 
-1. Run `yarn cypress:run --env coverage=true` and wait for the test run to complete.
-2. Once the test run is complete, you can view the report at `coverage/index.html`.
+1. Start the development server with coverage enabled by running `yarn dev:coverage`.
+2. Run `yarn cypress:run --env coverage=true` and wait for the test run to complete.
+3. Once the test run is complete, you can view the report at `coverage/index.html`.
 
 ## 3rd Party Authentication Providers
 
-Support for 3rd party authentication is available in the application to demonstrate the concept and commands needed for programmatic login.
+Support for 3rd party authentication is available in the application to demonstrate the concepts on logging in with a 3rd party provider.
+
+The app contains different entry points for each provider. There is a separate **index** file for each provider, and to use one, you must replace the current **index.tsx** file with the desired one. The following providers are supported:
+
+- [Auth0](#auth0) (index.auth0.tsx)
+- [Okta](#okta) (index.okta.tsx)
+- [Amazon Cognito](#amazon-cognito) (index.cognito.tsx)
+- [Google](#google) (index.google.tsx)
 
 ### Auth0
 
@@ -193,7 +202,7 @@ The [Auth0](https://auth0.com/) tests have been rewritten to take advantage of o
 
 Prerequisites include an Auth0 account and a Tenant configured for use with a SPA. Environment variables from Auth0 are to be placed in the [.env](./.env). For more details see [Auth0 Application Setup](http://on.cypress.io/auth0#Auth0-Application-Setup) and [Setting Auth0 app credentials in Cypress](http://on.cypress.io/auth0#Setting-Auth0-app-credentials-in-Cypress).
 
-Start the application with `yarn dev:auth0` and run Cypress with `yarn cypress:open`.
+To start the application with Auth0, replace the current **src/index.tsx** file with the **src/index.auth0.tsx** file and start the application with `yarn dev:auth0` and run Cypress with `yarn cypress:open`.
 
 The only passing spec on this branch will be the [auth0 spec](./cypress/tests/ui-auth-providers/auth0.spec.ts); all others will fail. Please note that your test user will need to authorize your Auth0 app before the tests will pass.
 
@@ -203,7 +212,7 @@ A [guide has been written with detail around adapting the RWA](http://on.cypress
 
 Prerequisites include an [Okta][okta] account and [application configured for use with a SPA][oktacreateapp]. Environment variables from [Okta][okta] are to be placed in the [.env](./.env).
 
-Start the application with `yarn dev:okta` and run Cypress with `yarn cypress:open`.
+To start the application with Okta, replace the current **src/index.tsx** file with the **src/index.okta.tsx** file and start the application with `yarn dev:okta` and run Cypress with `yarn cypress:open`.
 
 The **only passing spec on this branch** will be the [okta spec](./cypress/tests/ui-auth-providers/okta.spec.ts); all others will fail.
 
@@ -213,7 +222,7 @@ A [guide has been written with detail around adapting the RWA](http://on.cypress
 
 Prerequisites include an [Amazon Cognito][cognito] account. Environment variables from [Amazon Cognito][cognito] are provided by the [AWS Amplify CLI][awsamplify].
 
-Start the application with `yarn dev:cognito` and run Cypress with `yarn cypress:open`.
+To start the application with Cognito, replace the current **src/index.tsx** file with the **src/index.cognito.tsx** file and start the application with `yarn dev:cognito` and run Cypress with `yarn cypress:open`.
 
 The **only passing spec on this branch** will be the [cognito spec](./cypress/tests/ui-auth-providers/cognito.spec.ts); all others will fail.
 
@@ -223,7 +232,7 @@ A [guide has been written with detail around adapting the RWA](https://docs.cypr
 
 Prerequisites include an [Google][google] account. Environment variables from [Google][google] are to be placed in the [.env](./.env).
 
-Start the application with `yarn dev:google` and run Cypress with `yarn cypress:open`.
+To start the application with Google, replace the current **src/index.tsx** file with the **src/index.google.tsx** file and start the application with `yarn dev:google` and run Cypress with `yarn cypress:open`.
 
 The **only passing spec** when run with `yarn dev:google` will be the [google spec](./cypress/tests/ui-auth-providers/google.spec.ts); all others will fail.
 
