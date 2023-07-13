@@ -22,7 +22,6 @@ commands:
       - store_artifacts:
           path: coverage
       - run: npx nyc report --reporter=text || true
-      - run: apt-get update && apt-get install -y curl
       - codecov/upload:
           file: coverage/coverage-final.json
   persist_ws:
@@ -39,7 +38,11 @@ commands:
     steps:
       - attach_workspace:
           at: ~/
-
+  setup_linux:
+    steps:
+      - run:
+          name: Install curl
+          command: apt-get update && apt-get install -y curl
   # Setup Windows
   # 1. Add nvm and install node 18.16.0
   # 2. Install yarn
@@ -132,6 +135,7 @@ jobs:
   setup_project_and_cypress_linux:
     executor: with-chrome-and-firefox
     steps:
+      - setup_linux
       - setup_project_and_cypress
   setup_project_and_cypress_windows:
     executor:
