@@ -39,15 +39,6 @@ const AppCognito: React.FC = /* istanbul ignore next */ () => {
 
   const [, , bankAccountsService] = useMachine(bankAccountsMachine);
 
-  // useEffect(() => {
-  //   return onAuthUIStateChange((nextAuthState, authData) => {
-  //     console.log("authData: ", authData);
-  //     if (nextAuthState === AuthState.SignedIn) {
-  //       authService.send("COGNITO", { user: authData });
-  //     }
-  //   });
-  // }, []);
-
   const { route, signOut, user } = useAuthenticator();
 
   useEffect(() => {
