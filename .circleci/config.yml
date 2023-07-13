@@ -135,7 +135,6 @@ jobs:
   setup_project_and_cypress_linux:
     executor: with-chrome-and-firefox
     steps:
-      - setup_linux
       - setup_project_and_cypress
   setup_project_and_cypress_windows:
     executor:
@@ -171,6 +170,7 @@ jobs:
         type: boolean
         default: false
     steps:
+      - setup_linux
       - cypress_tests:
           browser: <<parameters.browser>>
           specPattern: <<parameters.specPattern>>
