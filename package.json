@@ -191,6 +191,9 @@
     "codesandbox:start": "NODE_ENV=development TSC_COMPILE_ON_ERROR=true concurrently \"vite\" yarn:start:api:codesandbox",
     "postinstall": "husky install && patch-package"
   },
+  "engines": {
+    "node": "^16.16.0 || ^18.0.0 || >=20.0.0"
+  },
   "eslintConfig": {
     "env": {
       "cypress/globals": true
