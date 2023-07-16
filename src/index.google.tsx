@@ -2,7 +2,8 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { Router } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@material-ui/core";
-import App from "./containers/App";
+
+import AppGoogle from "./containers/AppGoogle";
 import { history } from "./utils/historyUtils";
 
 const theme = createTheme({
@@ -15,10 +16,15 @@ const theme = createTheme({
 
 const root = createRoot(document.getElementById("root")!);
 
-root.render(
-  <Router history={history}>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
-  </Router>
-);
+if (process.env.VITE_APP_GOOGLE) {
+  /* istanbul ignore next */
+  root.render(
+    <Router history={history}>
+      <ThemeProvider theme={theme}>
+        <AppGoogle />
+      </ThemeProvider>
+    </Router>
+  );
+} else {
+  console.error("Google is not configured.");
+}
