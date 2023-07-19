@@ -1,4 +1,5 @@
-import { describe, expect, it, beforeEach } from "vitest";
+/// <reference types="jest" />
+
 import { faker } from "@faker-js/faker";
 import {
   getBankAccountById,

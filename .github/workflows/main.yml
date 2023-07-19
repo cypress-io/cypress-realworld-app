@@ -9,7 +9,7 @@ jobs:
   install:
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
+      image: cypress/browsers:node16.16.0-chrome105-ff104-edge
       options: --user 1001
     steps:
       - name: Checkout
@@ -42,7 +42,11 @@ jobs:
         uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "18.16.0"
+          # The default install for the job is node 18+
+          # which has some compatibility issues with openSSL inside this windows job.
+          # Node 18 updated with OpenSSL provider which causes this compatibility issue
+          # downgrading node to v16 to use the openssl-legacy-provider by default to prevent this issue
+          node-version: '16.16.0'
 
       - name: Cypress install
         uses: cypress-io/github-action@v5
@@ -67,7 +71,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
+      image: cypress/browsers:node16.16.0-chrome105-ff104-edge
       options: --user 1001
     needs: install
     strategy:
@@ -109,7 +113,7 @@ jobs:
           parallel: true
           group: "UI - Chrome"
           spec: cypress/tests/ui/*
-          config-file: cypress.config.ts
+          config-file: cypress.config.js
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -122,7 +126,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
+      image: cypress/browsers:node16.16.0-chrome105-ff104-edge
       options: --user 1001
     needs: install
     strategy:
@@ -156,7 +160,7 @@ jobs:
           parallel: true
           group: "UI - Chrome - Mobile"
           spec: cypress/tests/ui/*
-          config-file: cypress.config.ts
+          config-file: cypress.config.js
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -168,7 +172,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
+      image: cypress/browsers:node16.16.0-chrome105-ff104-edge
       options: --user 1001
     needs: install
     strategy:
@@ -201,7 +205,7 @@ jobs:
           parallel: true
           group: "UI - Firefox"
           spec: cypress/tests/ui/*
-          config-file: cypress.config.ts
+          config-file: cypress.config.js
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -213,7 +217,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
+      image: cypress/browsers:node16.16.0-chrome105-ff104-edge
       options: --user 1001
     needs: install
     strategy:
@@ -247,7 +251,7 @@ jobs:
           parallel: true
           group: "UI - Firefox - Mobile"
           spec: cypress/tests/ui/*
-          config-file: cypress.config.ts
+          config-file: cypress.config.js
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -273,7 +277,7 @@ jobs:
         uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "18.16.0"
+          node-version: '16.16.0'
 
       - name: Download the build folders
         uses: actions/download-artifact@v3
@@ -291,7 +295,7 @@ jobs:
           parallel: true
           group: "UI - Electron - Windows"
           spec: cypress/tests/ui/*
-          config-file: cypress.config.ts
+          config-file: cypress.config.js
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}

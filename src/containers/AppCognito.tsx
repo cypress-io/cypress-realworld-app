@@ -9,8 +9,9 @@ import { authService } from "../machines/authMachine";
 import AlertBar from "../components/AlertBar";
 import { bankAccountsMachine } from "../machines/bankAccountsMachine";
 import PrivateRoutesContainer from "./PrivateRoutesContainer";
-import { Amplify } from "aws-amplify";
-import { Authenticator, useAuthenticator } from "@aws-amplify/ui-react";
+import { Amplify, Auth } from "aws-amplify";
+import { AmplifyAuthenticator, AmplifySignUp, AmplifySignIn } from "@aws-amplify/ui-react";
+import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components";
 
 // @ts-ignore
 import awsConfig from "../aws-exports";
@@ -39,23 +40,23 @@ const AppCognito: React.FC = /* istanbul ignore next */ () => {
 
   const [, , bankAccountsService] = useMachine(bankAccountsMachine);
 
-  const { route, signOut, user } = useAuthenticator();
-
   useEffect(() => {
-    console.log("auth route: ", route);
-    if (route === "authenticated") {
-      authService.send("COGNITO", { user });
-    }
-  }, [route, user]);
+    return onAuthUIStateChange((nextAuthState, authData) => {
+      console.log("authData: ", authData);
+      if (nextAuthState === AuthState.SignedIn) {
+        authService.send("COGNITO", { user: authData });
+      }
+    });
+  }, []);
 
   useEffect(() => {
     authService.onEvent(async (event) => {
       if (event.type === "done.invoke.performLogout") {
         console.log("AppCognito authService.onEvent done.invoke.performLogout");
-        await signOut();
+        await Auth.signOut();
       }
     });
-  }, [signOut]);
+  }, []);
 
   const isLoggedIn =
     authState.matches("authorized") ||
@@ -79,14 +80,10 @@ const AppCognito: React.FC = /* istanbul ignore next */ () => {
   ) : (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <Authenticator>
-        {({ signOut, user }) => (
-          <main>
-            <h1>Hello {user?.username}</h1>
-            <button onClick={signOut}>Sign out</button>
-          </main>
-        )}
-      </Authenticator>
+      <AmplifyAuthenticator usernameAlias="email">
+        <AmplifySignUp slot="sign-up" usernameAlias="email" />
+        <AmplifySignIn slot="sign-in" usernameAlias="email" />
+      </AmplifyAuthenticator>
     </Container>
   );
 };
