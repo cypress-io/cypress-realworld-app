@@ -1,4 +1,3 @@
-import { describe, expect, it, beforeEach } from "vitest";
 import { seedDatabase, getAllUsers, searchUsers } from "../../backend/database";
 
 import { User } from "../models";

@@ -6,6 +6,7 @@ import Promise from "bluebird";
 import { percyHealthCheck } from "@percy/cypress/task";
 import codeCoverageTask from "@cypress/code-coverage/task";
 import { defineConfig } from "cypress";
+import "@cypress/instrument-cra";
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
@@ -31,13 +32,13 @@ module.exports = defineConfig({
     // Auth0
     auth0_username: process.env.AUTH0_USERNAME,
     auth0_password: process.env.AUTH0_PASSWORD,
-    auth0_domain: process.env.VITE_AUTH0_DOMAIN,
+    auth0_domain: process.env.REACT_APP_AUTH0_DOMAIN,
 
     // Okta
     okta_username: process.env.OKTA_USERNAME,
     okta_password: process.env.OKTA_PASSWORD,
-    okta_domain: process.env.VITE_OKTA_DOMAIN,
-    okta_client_id: process.env.VITE_OKTA_CLIENTID,
+    okta_domain: process.env.REACT_APP_OKTA_DOMAIN,
+    okta_client_id: process.env.REACT_APP_OKTA_CLIENTID,
     okta_programmatic_login: process.env.OKTA_PROGRAMMATIC_LOGIN || false,
 
     // Amazon Cognito
@@ -49,13 +50,13 @@ module.exports = defineConfig({
 
     // Google
     googleRefreshToken: process.env.GOOGLE_REFRESH_TOKEN,
-    googleClientId: process.env.VITE_GOOGLE_CLIENTID,
-    googleClientSecret: process.env.VITE_GOOGLE_CLIENT_SECRET,
+    googleClientId: process.env.REACT_APP_GOOGLE_CLIENTID,
+    googleClientSecret: process.env.REACT_APP_GOOGLE_CLIENT_SECRET,
   },
   component: {
     devServer: {
-      framework: "react",
-      bundler: "vite",
+      framework: "create-react-app",
+      bundler: "webpack",
     },
     specPattern: "src/**/*.cy.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/component.ts",
@@ -70,7 +71,6 @@ module.exports = defineConfig({
     supportFile: "cypress/support/e2e.ts",
     viewportHeight: 1000,
     viewportWidth: 1280,
-    experimentalRunAllSpecs: true,
     setupNodeEvents(on, config) {
       const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 
