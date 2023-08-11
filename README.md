@@ -88,7 +88,7 @@ TypeScript will be added as a local dependency to the project, so no need to ins
 yarn
 ```
 
-#### Mac M1 chip users will need to prepend `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true`.
+#### Mac users with M-series chips will need to prepend `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true`.
 
 ```shell
 PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true yarn install

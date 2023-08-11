@@ -15,7 +15,7 @@
     "node": "^16.16.0"
   },
   "dependencies": {
-    "@auth0/auth0-react": "2.1.0",
+    "@auth0/auth0-react": "2.1.1",
     "@aws-amplify/ui-react": "1.2.26",
     "@graphql-tools/graphql-file-loader": "7.3.10",
     "@graphql-tools/load": "7.5.9",
@@ -49,6 +49,7 @@
     "yup": "0.32.11"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "@cypress/code-coverage": "^3.10.0-dev.1",
     "@cypress/instrument-cra": "1.4.0",
     "@cypress/webpack-dev-server": "^1.6.0",
