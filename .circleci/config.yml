@@ -7,7 +7,7 @@ orbs:
 executors:
   with-chrome-and-firefox:
     docker:
-      - image: "cypress/browsers:node16.16.0-chrome105-ff104-edge"
+      - image: "cypress/browsers-internal:node18.15.0-chrome114-ff115"
     resource_class: large
     environment:
       PERCY_TOKEN:
@@ -40,16 +40,16 @@ commands:
           at: ~/
 
   # Setup Windows
-  # 1. Add nvm and install node 16.16.0
+  # 1. Add nvm and install node 18.15.0
   # 2. Install yarn
   setup_node_and_yarn_windows:
     steps:
       - run:
-          name: Install node 16
-          command: nvm install 16.16.0
+          name: Install node 18
+          command: nvm install 18.15.0
       - run:
-          name: Use node 16
-          command: nvm use 16.16.0
+          name: Use node 18
+          command: nvm use 18.15.0
       - run:
           name: Install yarn
           command: npm i --location=global yarn
