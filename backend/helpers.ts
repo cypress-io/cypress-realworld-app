@@ -17,22 +17,22 @@ const auth0JwtConfig = {
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: `https://${process.env.REACT_APP_AUTH0_DOMAIN}/.well-known/jwks.json`,
+    jwksUri: `https://${process.env.VITE_AUTH0_DOMAIN}/.well-known/jwks.json`,
   }),
 
   // Validate the audience and the issuer.
-  audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-  issuer: `https://${process.env.REACT_APP_AUTH0_DOMAIN}/`,
+  audience: process.env.VITE_AUTH0_AUDIENCE,
+  issuer: `https://${process.env.VITE_AUTH0_DOMAIN}/`,
   algorithms: ["RS256"],
 };
 
 // Okta Validate the JWT Signature
 const oktaJwtVerifier = new OktaJwtVerifier({
-  issuer: `https://${process.env.REACT_APP_OKTA_DOMAIN}/oauth2/default`,
-  clientId: process.env.REACT_APP_OKTA_CLIENTID,
+  issuer: `https://${process.env.VITE_OKTA_DOMAIN}/oauth2/default`,
+  clientId: process.env.VITE_OKTA_CLIENTID,
   assertClaims: {
     aud: "api://default",
-    cid: process.env.REACT_APP_OKTA_CLIENTID,
+    cid: process.env.VITE_OKTA_CLIENTID,
   },
 });
 const googleJwtConfig = {
@@ -44,7 +44,7 @@ const googleJwtConfig = {
   }),
 
   // Validate the audience and the issuer.
-  audience: process.env.REACT_APP_GOOGLE_CLIENTID,
+  audience: process.env.VITE_GOOGLE_CLIENTID,
   issuer: "accounts.google.com",
   algorithms: ["RS256"],
 };

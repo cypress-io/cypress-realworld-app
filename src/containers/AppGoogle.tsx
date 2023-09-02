@@ -53,7 +53,7 @@ const AppGoogle: React.FC = () => {
   } else {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useGoogleLogin({
-      clientId: process.env.REACT_APP_GOOGLE_CLIENTID!,
+      clientId: process.env.VITE_GOOGLE_CLIENTID!,
       onSuccess: (res) => {
         console.log("onSuccess", res);
         // @ts-ignore
@@ -85,7 +85,7 @@ const AppGoogle: React.FC = () => {
           <CssBaseline />
           <div className={classes.paper}>
             <GoogleLogin
-              clientId={process.env.REACT_APP_GOOGLE_CLIENTID!}
+              clientId={process.env.VITE_GOOGLE_CLIENTID!}
               buttonText="Login"
               cookiePolicy={"single_host_origin"}
             />
