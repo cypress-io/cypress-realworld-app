@@ -192,7 +192,7 @@
     "postinstall": "husky install && patch-package"
   },
   "engines": {
-    "node": "^16.16.0 || ^18.0.0 || >=20.0.0"
+    "node": "^18.0.0 || >=20.0.0"
   },
   "eslintConfig": {
     "env": {
