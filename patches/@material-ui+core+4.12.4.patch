@@ -1,0 +1,103 @@
+diff --git a/node_modules/@material-ui/core/ButtonBase/ButtonBase.js b/node_modules/@material-ui/core/ButtonBase/ButtonBase.js
+index 4972129..6516a00 100644
+--- a/node_modules/@material-ui/core/ButtonBase/ButtonBase.js
++++ b/node_modules/@material-ui/core/ButtonBase/ButtonBase.js
+@@ -158,11 +158,23 @@ var ButtonBase = /*#__PURE__*/React.forwardRef(function ButtonBase(props, ref) {
+       }
+     };
+   }, []);
++
++  var _React$useState2 = React.useState(false),
++    mountedState = _React$useState2[0],
++    setMountedState = _React$useState2[1];
++
++  React.useEffect(function () {
++    setMountedState(true);
++  }, []);
++  var enableTouchRipple = mountedState && !disableRipple && !disabled;
++
+   React.useEffect(function () {
+-    if (focusVisible && focusRipple && !disableRipple) {
+-      rippleRef.current.pulsate();
++    if (focusVisible && focusRipple && !disableRipple && mountedState) {
++      if (rippleRef.current) {
++        rippleRef.current.pulsate();
++      }
+     }
+-  }, [disableRipple, focusRipple, focusVisible]);
++  }, [disableRipple, focusRipple, focusVisible, mountedState]);
+ 
+   function useRippleHandler(rippleAction, eventCallback) {
+     var skipRippleAction = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : disableTouchRipple;
+@@ -269,7 +281,9 @@ var ButtonBase = /*#__PURE__*/React.forwardRef(function ButtonBase(props, ref) {
+       keydownRef.current = false;
+       event.persist();
+       rippleRef.current.stop(event, function () {
+-        rippleRef.current.pulsate(event);
++        if (rippleRef.current) {
++          rippleRef.current.pulsate(event);
++        }
+       });
+     }
+ 
+@@ -305,15 +319,6 @@ var ButtonBase = /*#__PURE__*/React.forwardRef(function ButtonBase(props, ref) {
+   var handleOwnRef = (0, _useForkRef.default)(focusVisibleRef, buttonRef);
+   var handleRef = (0, _useForkRef.default)(handleUserRef, handleOwnRef);
+ 
+-  var _React$useState2 = React.useState(false),
+-      mountedState = _React$useState2[0],
+-      setMountedState = _React$useState2[1];
+-
+-  React.useEffect(function () {
+-    setMountedState(true);
+-  }, []);
+-  var enableTouchRipple = mountedState && !disableRipple && !disabled;
+-
+   if (process.env.NODE_ENV !== 'production') {
+     // eslint-disable-next-line react-hooks/rules-of-hooks
+     React.useEffect(function () {
+diff --git a/node_modules/@material-ui/core/es/ButtonBase/ButtonBase.js b/node_modules/@material-ui/core/es/ButtonBase/ButtonBase.js
+index b4be26f..06b0d63 100644
+--- a/node_modules/@material-ui/core/es/ButtonBase/ButtonBase.js
++++ b/node_modules/@material-ui/core/es/ButtonBase/ButtonBase.js
+@@ -125,7 +125,9 @@ const ButtonBase = /*#__PURE__*/React.forwardRef(function ButtonBase(props, ref)
+   }), []);
+   React.useEffect(() => {
+     if (focusVisible && focusRipple && !disableRipple) {
+-      rippleRef.current.pulsate();
++      if (rippleRef.current) {
++        rippleRef.current.pulsate();
++      }
+     }
+   }, [disableRipple, focusRipple, focusVisible]);
+ 
+diff --git a/node_modules/@material-ui/core/esm/ButtonBase/ButtonBase.js b/node_modules/@material-ui/core/esm/ButtonBase/ButtonBase.js
+index 58cfc64..de2db57 100644
+--- a/node_modules/@material-ui/core/esm/ButtonBase/ButtonBase.js
++++ b/node_modules/@material-ui/core/esm/ButtonBase/ButtonBase.js
+@@ -136,7 +136,9 @@ var ButtonBase = /*#__PURE__*/React.forwardRef(function ButtonBase(props, ref) {
+   }, []);
+   React.useEffect(function () {
+     if (focusVisible && focusRipple && !disableRipple) {
+-      rippleRef.current.pulsate();
++      if (rippleRef.current) {
++        rippleRef.current.pulsate();
++      }
+     }
+   }, [disableRipple, focusRipple, focusVisible]);
+ 
+diff --git a/node_modules/@material-ui/core/umd/material-ui.development.js b/node_modules/@material-ui/core/umd/material-ui.development.js
+index ad23fd3..fb4cb53 100644
+--- a/node_modules/@material-ui/core/umd/material-ui.development.js
++++ b/node_modules/@material-ui/core/umd/material-ui.development.js
+@@ -11208,7 +11208,9 @@
+     }, []);
+     React.useEffect(function () {
+       if (focusVisible && focusRipple && !disableRipple) {
+-        rippleRef.current.pulsate();
++        if (rippleRef.current) {
++          rippleRef.current.pulsate();
++        }
+       }
+     }, [disableRipple, focusRipple, focusVisible]);
+ 

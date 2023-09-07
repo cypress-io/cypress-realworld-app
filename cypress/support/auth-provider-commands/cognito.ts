@@ -1,4 +1,4 @@
-import Amplify, { Auth } from "aws-amplify";
+import { Amplify, Auth } from "aws-amplify";
 
 Amplify.configure(Cypress.env("awsConfig"));
 
