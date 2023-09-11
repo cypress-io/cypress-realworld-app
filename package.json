@@ -240,5 +240,6 @@
       "html",
       "json"
     ]
-  }
+  },
+  "packageManager": "yarn@1.22.19"
 }

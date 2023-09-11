@@ -2,8 +2,6 @@
 
 # dependencies
 /node_modules
-/.pnp
-.pnp.js
 
 # testing
 /coverage
@@ -43,3 +41,14 @@ amplifyconfiguration.json
 amplify-build-config.json
 amplify-gradle-config.json
 amplifytools.xcconfig
+
+# Yarn
+# See https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+# without zero installs
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

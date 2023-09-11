@@ -66,21 +66,17 @@ The app is bundled with [example data](./data/database.json) (`data/database.jso
 
 This project requires [Node.js](https://nodejs.org/en/) to be installed on your machine. Refer to the [.node-version](./.node-version) file for the exact version.
 
-[Yarn Classic](https://classic.yarnpkg.com/) is also required. Once you have [Node.js](https://nodejs.org/en/) installed, execute the following to install the correct version of `yarn`.
+[Yarn Classic](https://classic.yarnpkg.com/) is also required. Once you have [Node.js](https://nodejs.org/en/) installed, execute the following to install the npm module [yarn](https://www.npmjs.com/package/yarn) (Classic - version 1) globally.
 
-```bash
-npm install yarn -g
+```shell
+npm install yarn@latest -g
 ```
 
-The following command allows you to check that you have Yarn Classic (version 1) installed and active:
+If you have Node.js' experimental [Corepack](https://nodejs.org/dist/latest/docs/api/corepack.html) feature enabled, then you should skip the step `npm install yarn@latest -g` to install Yarn Classic globally. The RWA project is locally configured for `Corepack` to use Yarn Classic (version 1).
 
-```bash
-yarn -v
-```
+#### Yarn Modern
 
 **This project is not compatible with [Yarn Modern](https://yarnpkg.com/) (version 2 and later).**
-
-TypeScript will be added as a local dependency to the project, so no need to install it.
 
 ### Installation
 
