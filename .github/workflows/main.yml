@@ -89,9 +89,6 @@ jobs:
           name: build
           path: build
 
-      - name: Cypress info
-        run: npx cypress info
-
       - name: Node info
         run: node -v
 
@@ -101,6 +98,7 @@ jobs:
       - name: "UI Tests - Chrome"
         uses: cypress-io/github-action@v6
         with:
+          build: yarn cypress info
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
