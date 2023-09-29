@@ -49,12 +49,9 @@ describe("Edit existing user", function () {
       cy.getBySel("sidenav-user-settings").click();
 
     });
-    // go to sign up page and register
     it("should edit an existing user", function () {
       cy.visit('/user/settings')
       // tracking using a random ID
-
-      
       const userId = Cypress._.random(1000, 9999);
       const newName = `Name${userId}`
       const newLast = `T${userId}`
@@ -83,7 +80,6 @@ describe("Edit existing user", function () {
           expect(user.phoneNumber).to.equal(newNumber);
         } else {
           cy.log(`User with email "${testEmail}" not found in the database.`);
-          // You might want to handle this case accordingly, e.g., fail the test or perform some other action.
         }
       })
     });
