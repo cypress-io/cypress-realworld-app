@@ -1,5 +1,5 @@
 {
   "trailingComma": "es5",
-  "printWidth": 100,
+  "printWidth": 160,
   "endOfLine": "auto"
 }
