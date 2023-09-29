@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+
+  frontend:
+    build: .
+    volumes:
+      - './src:/app/src'
+      - './public:/app/public'
+      - './scripts:/app/scripts'
+      - './data:/app/data'
+      - './backend:/app/backend'
+      - './tsconfig.json:/app/tsconfig.json'
+      - './tsconfig.tsnode.json:/app/tsconfig.tsnode.json'
+      - './vite.config.ts:/app/vite.config.ts'
+      - './renovate.json:/app/renovate.json'
+      - './index.html:/app/index.html'
+    ports:
+      - '3000:3000'
+      - '3001:3001'
+    env_file:
+      - .env
+
+  # backend:
+  #   build: .
+  #   volumes:
+  #     - './src:/app/src'
+  #     - './backend:/app/backend'
+  #     - './scripts:/app/scripts'
+  #     - './data:/app/data'
+  #     - './tsconfig.json:/app/tsconfig.json'
+  #     - './tsconfig.tsnode.json:/app/tsconfig.tsnode.json'
+  #   ports:
+  #     - '3001:3001'
