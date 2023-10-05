@@ -79,11 +79,6 @@
       "matchPackageNames": ["xstate", "@xstate/react"]
     },
     {
-      "groupName": "ESLint and Prettier",
-      "matchPackageNames": ["eslint", "prettier"],
-      "matchPackagePatterns": ["^eslint-config-", "^eslint-plugin-"]
-    },
-    {
       "groupName": "Express",
       "matchPackageNames": ["express", "morgan", "nodemon", "cors", "bcryptjs"],
       "matchPackagePatterns": ["^express-", "^passport-"]

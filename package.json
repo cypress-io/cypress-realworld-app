@@ -180,22 +180,6 @@
   "engines": {
     "node": "^18.0.0 || >=20.0.0"
   },
-  "eslintConfig": {
-    "env": {
-      "cypress/globals": true
-    },
-    "extends": [
-      "react-app",
-      "plugin:prettier/recommended",
-      "plugin:cypress/recommended"
-    ],
-    "plugins": [
-      "cypress"
-    ],
-    "rules": {
-      "no-unused-expressions": 0
-    }
-  },
   "husky": {
     "hooks": {
       "pre-push": "yarn types"
