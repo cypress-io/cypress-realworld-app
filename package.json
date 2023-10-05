@@ -95,11 +95,6 @@
     "cross-env": "7.0.3",
     "cypress": "^13.0.0",
     "dotenv": "16.0.0",
-    "eslint": "^8.44.0",
-    "eslint-config-prettier": "8.5.0",
-    "eslint-config-react-app": "^7.0.1",
-    "eslint-plugin-cypress": "2.12.1",
-    "eslint-plugin-prettier": "^5.0.0",
     "express": "4.17.3",
     "express-graphql": "0.12.0",
     "express-jwt": "6.1.1",
@@ -124,12 +119,10 @@
     "passport": "0.6.0",
     "passport-local": "1.0.0",
     "patch-package": "^7.0.0",
-    "prettier": "^3.0.0",
     "start-server-and-test": "1.14.0",
     "ts-node": "10.7.0",
     "typescript": "4.6.3",
     "vite": "^4.4.2",
-    "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-istanbul": "^4.1.0",
     "vitest": "^0.33.0"
   },
@@ -150,8 +143,6 @@
     "prestart:ci": "yarn predev:cognito:ci",
     "start:react": "vite",
     "start:empty": "cross-env NODE_ENV=development EMPTY_SEED=true concurrently yarn:start:react yarn:start:api:watch",
-    "lint": "eslint && prettier --check \"**/**.{ts,js,tsx}\" \"*.{json,md,yml}\"",
-    "list:dev:users": "cat data/database.json | json -a users | json -a id username",
     "types": "tsc --noEmit",
     "precypress:open": "yarn predev:cognito:ci",
     "cypress:open": "cypress open",
@@ -168,7 +159,6 @@
     "start:api": "yarn tsnode --files backend/app.ts",
     "start:api:watch": "nodemon --exec yarn tsnode --watch 'backend' backend/app.ts",
     "start:react:proxy-server": "yarn tsnode scripts/testServer.ts",
-    "prettier": "prettier --write '**/**.{ts,js,tsx}' '*.{json,md,yml}'",
     "tsnode": "nyc --silent ts-node -P tsconfig.tsnode.json",
     "tsnode:not-instrumented": "ts-node -P tsconfig.tsnode.json",
     "db:seed": "yarn tsnode scripts/generateSeedData",
@@ -200,8 +190,7 @@
       "plugin:cypress/recommended"
     ],
     "plugins": [
-      "cypress",
-      "prettier"
+      "cypress"
     ],
     "rules": {
       "no-unused-expressions": 0
