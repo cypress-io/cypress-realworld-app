@@ -4,19 +4,6 @@ services:
 
   frontend:
     build: .
-    volumes:
-      - './src:/app/src'
-      - './public:/app/public'
-      - './scripts:/app/scripts'
-      - './data:/app/data'
-      - './backend:/app/backend'
-      - './tsconfig.json:/app/tsconfig.json'
-      - './tsconfig.tsnode.json:/app/tsconfig.tsnode.json'
-      - './vite.config.ts:/app/vite.config.ts'
-      - './renovate.json:/app/renovate.json'
-      - './index.html:/app/index.html'
-      - '.prettierignore:/app/.prettierignore'
-      - '.prettierrc:/app/.prettierignore'
     ports:
       - '3000:3000'
       - '3001:3001'
