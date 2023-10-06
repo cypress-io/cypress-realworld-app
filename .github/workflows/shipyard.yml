@@ -22,7 +22,7 @@ jobs:
       - run: yarn types
 
       - name: Integrate Shipyard
-        uses: shipyard/shipyard-action@1.0.0
+        uses: shipyard/github-action/fetch-shipyard-env@1.0.1
         env:
           SHIPYARD_API_TOKEN: ${{ secrets.SHIPYARD_API_TOKEN }}
 
