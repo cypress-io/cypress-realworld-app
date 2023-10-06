@@ -9,13 +9,13 @@ services:
       - '3000:3000'
     env_file:
       - .env
-  backend:
-    build: .
-    ports:
-      - '3001:3001'
-    env_file:
-      - .env
-    volumes:
-      - './data:/data'
+  # backend:
+  #   build: .
+  #   ports:
+  #     - '3001:3001'
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - './data:/data'
 
 
