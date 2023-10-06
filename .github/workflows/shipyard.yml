@@ -3,27 +3,32 @@ name: Run E2E Tests
 on: [push]
 
 jobs:
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+  run-cypress-tests:
+    runs-on: ubuntu-22.04
+    container:
+      image: cypress/browsers:node18.12.0-chrome106-ff106
+      options: --user 1001
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Cypress install
-      uses: cypress-io/github-action@v6
-      with:
-        runTests: false
-    - run: yarn cypress info
-    - run: node --version
-    - run: node -p 'os.cpus()'
-    - run: yarn types
+      - name: Cypress install
+        uses: cypress-io/github-action@v6
+        with:
+          runTests: false
+      - run: yarn cypress info
+      - run: node --version
+      - run: node -p 'os.cpus()'
+      - run: yarn types
 
-    - name: Integrate Shipyard
-      uses: shipyard/shipyard-action@1.0.0
-      env:
-        SHIPYARD_API_TOKEN: ${{ secrets.SHIPYARD_API_TOKEN }}
+      - name: Integrate Shipyard
+        uses: shipyard/shipyard-action@1.0.0
+        env:
+          SHIPYARD_API_TOKEN: ${{ secrets.SHIPYARD_API_TOKEN }}
 
-    - name: Run E2E tests against the ephemeral environment
-      run: yarn cypress:run --spec "cypress/tests/shipyard/manage-user.tsx"
-      shell: bash
-      env:
-          CYPRESS_BASE_URL: $SHIPYARD_ENVIRONMENT_URL
-          CYPRESS_BYPASS_TOKEN: $SHIPYARD_BYPASS_TOKEN}
+      - name: Run E2E tests against the ephemeral environment
+        run: yarn cypress:run --spec "cypress/tests/shipyard/manage-user.tsx"
+        shell: bash
+        env:
+            CYPRESS_BASE_URL: $SHIPYARD_ENVIRONMENT_URL
+            CYPRESS_BYPASS_TOKEN: $SHIPYARD_BYPASS_TOKEN}
