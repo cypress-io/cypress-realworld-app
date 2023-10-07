@@ -20,6 +20,11 @@ jobs:
       - run: node --version
       - run: node -p 'os.cpus()'
       - run: yarn types
+      
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
 
       - name: Integrate Shipyard
         uses: shipyard/github-action/fetch-shipyard-env@1.0.1
