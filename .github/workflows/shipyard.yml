@@ -28,12 +28,13 @@ jobs:
 
       - name: Integrate Shipyard
         uses: shipyard/github-action/fetch-shipyard-env@1.0.1
-        env:
-          SHIPYARD_API_TOKEN: ${{ secrets.SHIPYARD_API_TOKEN }}
+        with:
+          api-token: ${{ secrets.SHIPYARD_API_TOKEN }}
+          timeout-minutes: "10"
 
       - name: Run E2E tests against the ephemeral environment
         run: yarn cypress:run --spec "cypress/tests/shipyard/manage-user.tsx"
         shell: bash
         env:
-            CYPRESS_BASE_URL: $SHIPYARD_ENVIRONMENT_URL
-            #CYPRESS_BYPASS_TOKEN: $SHIPYARD_BYPASS_TOKEN}
+            CYPRESS_BASE_URL: ${{ secrets.SHIPYARD_ENVIRONMENT_URL }}
+            CYPRESS_BYPASS_TOKEN: ${{ secrets.SHIPYARD_BYPASS_TOKEN }}
