@@ -21,6 +21,13 @@ jobs:
       - run: node -p 'os.cpus()'
       - run: yarn types
       
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - name: Install dependencies
+        run: npm install
+        
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
