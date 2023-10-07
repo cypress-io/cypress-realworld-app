@@ -3,6 +3,7 @@ import detect from "detect-port";
 
 export const frontendPort = process.env.PORT;
 export const backendPort = process.env.VITE_BACKEND_PORT;
+export const targetUrl = process.env.SHIPYARD_DOMAIN_BACKEND ?  `https://${process.env.SHIPYARD_DOMAIN_BACKEND}` : `http://localhost:${backendPort}`
 
 export const getBackendPort = async () => {
   return detect(Number(backendPort))

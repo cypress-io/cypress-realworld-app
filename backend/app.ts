@@ -28,7 +28,7 @@ import { frontendPort, getBackendPort } from "../src/utils/portUtils";
 require("dotenv").config();
 
 const corsOption = {
-  origin: `http://localhost:${frontendPort}`,
+  origin: process.env.SHIPYARD_DOMAIN_FRONTEND ? `https://${process.env.SHIPYARD_DOMAIN_FRONTEND}` : `http://localhost:${frontendPort}`,
   credentials: true,
 };
 

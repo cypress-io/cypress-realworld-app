@@ -1,13 +1,13 @@
 import { isEmpty, omit } from "lodash/fp";
 import { dataMachine } from "./dataMachine";
 import { httpClient } from "../utils/asyncUtils";
-import { backendPort } from "../utils/portUtils";
+import { targetUrl } from "../utils/portUtils";
 
 export const notificationsMachine = dataMachine("notifications").withConfig({
   services: {
     fetchData: async (ctx, event: any) => {
       const payload = omit("type", event);
-      const resp = await httpClient.get(`http://localhost:${backendPort}/notifications`, {
+      const resp = await httpClient.get(`${targetUrl}/notifications`, {
         params: !isEmpty(payload) && event.type === "FETCH" ? payload : undefined,
       });
       return resp.data;
@@ -15,7 +15,7 @@ export const notificationsMachine = dataMachine("notifications").withConfig({
     updateData: async (ctx, event: any) => {
       const payload = omit("type", event);
       const resp = await httpClient.patch(
-        `http://localhost:${backendPort}/notifications/${payload.id}`,
+        `${targetUrl}/notifications/${payload.id}`,
         payload
       );
       return resp.data;

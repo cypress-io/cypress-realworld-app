@@ -7,7 +7,5 @@ RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true yarn install
 
 COPY . .
 
-EXPOSE 3000
-
 # start app
 CMD ["yarn", "dev"]
