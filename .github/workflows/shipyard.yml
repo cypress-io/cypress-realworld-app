@@ -36,4 +36,4 @@ jobs:
         shell: bash
         env:
             CYPRESS_BASE_URL: $SHIPYARD_ENVIRONMENT_URL
-            CYPRESS_BYPASS_TOKEN: $SHIPYARD_BYPASS_TOKEN}
+            #CYPRESS_BYPASS_TOKEN: $SHIPYARD_BYPASS_TOKEN}
