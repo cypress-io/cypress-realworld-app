@@ -2,8 +2,8 @@ import { User } from "models";
 
 describe("Create new user", function () {
   beforeEach(function () {
-    console.log(process.env.SHIPYARD_DOMAIN_FRONTEND)
-    const urlToVisit = "/signup" + "?shipyard_token=" + Cypress.env("BYPASS_TOKEN");
+    //console.log(process.env.SHIPYARD_DOMAIN_FRONTEND)
+    const urlToVisit = process.env.SHIPYARD_DOMAIN_FRONTEND + "/signup" + "?shipyard_token=" + Cypress.env("BYPASS_TOKEN");
     cy.visit(urlToVisit);
     cy.task("db:seed");
   });
