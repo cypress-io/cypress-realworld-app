@@ -86,7 +86,7 @@ const COMMENT_TABLE = "comments";
 const NOTIFICATION_TABLE = "notifications";
 const BANK_TRANSFER_TABLE = "banktransfers";
 
-const databaseFile = path.join(__dirname, "../data/database.json");
+const databaseFile = path.join(__dirname, "../data/database/database.json");
 const adapter = new FileSync<DbSchema>(databaseFile);
 
 const db = low(adapter);

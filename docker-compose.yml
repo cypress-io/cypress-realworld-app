@@ -22,5 +22,10 @@ services:
         SHIPYARD_DOMAIN_FRONTEND: ${SHIPYARD_DOMAIN_FRONTEND-}
     ports:
       - '3001:3001'
+    volumes:
+      - 'dbdata:/app/data/database'
     env_file:
       - .env
+
+volumes:
+  dbdata:
