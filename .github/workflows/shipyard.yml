@@ -48,7 +48,7 @@ jobs:
       - name: Run E2E tests against the ephemeral environment
         run: |
           echo $SHIPYARD_ENVIRONMENT_URL
-          yarn cypress:run --spec "cypress/tests/shipyard/manage-user.tsx"
+          yarn cypress:run --spec "cypress/tests/shipyard/manage-user.spec.ts"
         shell: bash
         env:
             CYPRESS_BASE_URL: ${{ env.CYPRESS_BASE_URL }}
