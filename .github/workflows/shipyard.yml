@@ -41,9 +41,8 @@ jobs:
           app-name: "cypress-realworld-app"
       - name: Print Env Data
         run: |
-          export CYPRESS_BASE_URL=${SHIPYARD_ENVIRONMENT_URL}
-          export CYPRESS_BYPASS_TOKEN=${SHIPYARD_BYPASS_TOKEN}
-          export CYPRESS_ENVIRONMENT_URL="https://${SHIPYARD_ENVIRONMENT_URL}"
+          echo "CYPRESS_BASE_URL=${SHIPYARD_ENVIRONMENT_URL}" >> $GITHUB_ENV
+          echo "CYPRESS_BYPASS_TOKEN=${SHIPYARD_BYPASS_TOKEN}" >> $GITHUB_ENV
           env | grep -e SHIPYARD -e CYPRESS
         shell: bash
       - name: Run E2E tests against the ephemeral environment
@@ -52,5 +51,5 @@ jobs:
           yarn cypress:run --spec "cypress/tests/shipyard/manage-user.tsx"
         shell: bash
         env:
-            CYPRESS_BASE_URL: $SHIPYARD_ENVIRONMENT_URL
-            CYPRESS_BYPASS_TOKEN: $SHIPYARD_BYPASS_TOKEN
+            CYPRESS_BASE_URL: ${{ env.CYPRESS_BASE_URL }}
+            CYPRESS_BYPASS_TOKEN: ${{ env.CYPRESS_BYPASS_TOKEN }}
