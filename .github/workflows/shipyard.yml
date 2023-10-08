@@ -51,5 +51,5 @@ jobs:
         run: yarn cypress:run --spec "cypress/tests/shipyard/manage-user.tsx"
         shell: bash
         env:
-            CYPRESS_BASE_URL: ${SHIPYARD_ENVIRONMENT_URL}
-            CYPRESS_BYPASS_TOKEN: ${SHIPYARD_BYPASS_TOKEN}
+            CYPRESS_BASE_URL: ${{SHIPYARD_ENVIRONMENT_URL}}
+            CYPRESS_BYPASS_TOKEN: ${{SHIPYARD_BYPASS_TOKEN}}
