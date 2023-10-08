@@ -40,7 +40,7 @@ describe("Edit existing user", function () {
     beforeEach(function () {
       const urlToVisit = "https://frontend-cypress-realworld-app.dev.nbeck415.shipyard.host/";
       cy.visit(urlToVisit);
-      cy.task("db:seed");
+      //cy.task("db:seed");
 
       cy.intercept("PATCH", "/users/*").as("updateUser");
       cy.intercept("GET", "/notifications*").as("getNotifications");
