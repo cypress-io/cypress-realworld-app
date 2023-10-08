@@ -43,6 +43,7 @@ jobs:
         run: |
           export CYPRESS_BASE_URL=${SHIPYARD_ENVIRONMENT_URL}
           export CYPRESS_BYPASS_TOKEN=${SHIPYARD_BYPASS_TOKEN}
+          export CYPRESS_ENVIRONMENT_URL="https://${SHIPYARD_ENVIRONMENT_URL}"
           env | grep -e SHIPYARD -e CYPRESS
         shell: bash
         
