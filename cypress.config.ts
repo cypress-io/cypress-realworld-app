@@ -18,7 +18,7 @@ module.exports = defineConfig({
     runMode: 2,
   },
   env: {
-    apiUrl: "http://localhost:3001",
+    apiUrl: process.env.SHIPYARD_DOMAIN_BACKEND,
     mobileViewportWidthBreakpoint: 414,
     coverage: false,
     codeCoverage: {
@@ -65,7 +65,7 @@ module.exports = defineConfig({
     },
   },
   e2e: {
-    baseUrl: "http://0.0.0.0:3000",
+    baseUrl: process.env.SHIPYARD_DOMAIN_FRONTEND,
     specPattern: "cypress/tests/**/*.spec.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/e2e.ts",
     viewportHeight: 1000,
