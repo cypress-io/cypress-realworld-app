@@ -10,7 +10,7 @@ import { defineConfig } from "cypress";
 dotenv.config({ path: ".env.local" });
 dotenv.config();
 
-const awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
+//const awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
 
 module.exports = defineConfig({
   projectId: "7s5okt",
@@ -41,11 +41,11 @@ module.exports = defineConfig({
     okta_programmatic_login: process.env.OKTA_PROGRAMMATIC_LOGIN || false,
 
     // Amazon Cognito
-    cognito_username: process.env.AWS_COGNITO_USERNAME,
-    cognito_password: process.env.AWS_COGNITO_PASSWORD,
-    cognito_domain: process.env.AWS_COGNITO_DOMAIN,
+    cognito_username: process.env._COGNITO_USERNAME,
+    cognito_password: process.env._COGNITO_PASSWORD,
+    cognito_domain: process.env._COGNITO_DOMAIN,
     cognito_programmatic_login: false,
-    awsConfig: awsConfig.default,
+    //awsConfig: awsConfig.default,
 
     // Google
     googleRefreshToken: process.env.GOOGLE_REFRESH_TOKEN,
