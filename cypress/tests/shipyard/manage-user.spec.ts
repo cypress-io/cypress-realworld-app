@@ -2,11 +2,13 @@ import { User } from "models";
 
 describe("Create new user", function () {
   beforeEach(function () {
+    const urlToVisit = "/signup" + "?shipyard_token=" + Cypress.env("BYPASS_TOKEN");
+    cy.visit(urlToVisit);
     cy.task("db:seed");
   });
   // go to sign up page and register
   it("should create a new user", function () {
-    cy.visit('/signup')
+    //cy.visit('/signup')
     // tracking using a random ID
     const userId = Cypress._.random(1000, 9999);
     const username = `user${userId}`;
@@ -35,6 +37,8 @@ describe("Create new user", function () {
 describe("Edit existing user", function () {
     const testEmail = "Norene39@yahoo.com"
     beforeEach(function () {
+      const urlToVisit = "/" + "?shipyard_token=" + Cypress.env("BYPASS_TOKEN");
+      cy.visit(urlToVisit);
       cy.task("db:seed");
 
       cy.intercept("PATCH", "/users/*").as("updateUser");
