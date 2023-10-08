@@ -3,7 +3,7 @@ import { User } from "models";
 describe("Create new user", function () {
   beforeEach(function () {
     //console.log(process.env.SHIPYARD_DOMAIN_FRONTEND)
-    const urlToVisit = process.env.SHIPYARD_DOMAIN_FRONTEND + "/signup" + "?shipyard_token=" + Cypress.env("BYPASS_TOKEN");
+    const urlToVisit = "https://frontend-cypress-realworld-app.dev.nbeck415.shipyard.host" + "/signup" + "?shipyard_token=" + Cypress.env("BYPASS_TOKEN");
     cy.visit(urlToVisit);
     cy.task("db:seed");
   });
