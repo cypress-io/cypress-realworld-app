@@ -4,6 +4,9 @@ describe("Create new user", function () {
   beforeEach(function () {
     //console.log(process.env.SHIPYARD_DOMAIN_FRONTEND)
     const urlToVisit = "/signup";
+    cy.url().then((url) => {
+      cy.log(`Current URL: ${url}`);
+    });
     cy.visit(urlToVisit);
     //cy.task("db:seed");
   });
