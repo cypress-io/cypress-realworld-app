@@ -3,7 +3,7 @@ import { User } from "models";
 describe("Create new user", function () {
   beforeEach(function () {
     //console.log(process.env.SHIPYARD_DOMAIN_FRONTEND)
-    const urlToVisit = "https://frontend-cypress-realworld-app.dev.nbeck415.shipyard.host" + "/signup";
+    const urlToVisit = "/signup";
     cy.visit(urlToVisit);
     cy.task("db:seed");
   });
@@ -38,7 +38,7 @@ describe("Create new user", function () {
 describe("Edit existing user", function () {
     const testEmail = "Norene39@yahoo.com"
     beforeEach(function () {
-      const urlToVisit = "https://frontend-cypress-realworld-app.dev.nbeck415.shipyard.host/";
+      const urlToVisit = "/";
       cy.visit(urlToVisit);
       //cy.task("db:seed");
 

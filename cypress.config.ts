@@ -22,7 +22,7 @@ module.exports = defineConfig({
     mobileViewportWidthBreakpoint: 414,
     coverage: false,
     codeCoverage: {
-      url: "http://localhost:3001/__coverage__",
+      url: `https://${process.env.SHIPYARD_DOMAIN_BACKEND}/__coverage__`,
       exclude: "cypress/**/*.*",
     },
     defaultPassword: process.env.SEED_DEFAULT_USER_PASSWORD,
@@ -65,7 +65,7 @@ module.exports = defineConfig({
     },
   },
   e2e: {
-    baseUrl: `https://${process.env.SHIPYARD_DOMAIN_FRONTEND}`,
+    baseUrl: `https://frontend-${process.env.SHIPYARD_DOMAIN_FRONTEND}`,
     specPattern: "cypress/tests/**/*.spec.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/e2e.ts",
     viewportHeight: 1000,
