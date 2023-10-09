@@ -5,7 +5,7 @@ describe("Create new user", function () {
     //console.log(process.env.SHIPYARD_DOMAIN_FRONTEND)
     const urlToVisit = "/signup";
     cy.visit(urlToVisit);
-    cy.task("db:seed");
+    //cy.task("db:seed");
   });
   // go to sign up page and register
   it("should create a new user", function () {

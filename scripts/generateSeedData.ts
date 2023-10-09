@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import { buildDatabase } from "./seedDataUtils";
-import { TDatabase } from "../data/database";
+import { TDatabase } from "../backend/database";
 const testSeed: TDatabase = buildDatabase();
 
 const fileData = JSON.stringify(testSeed, null, 2);
