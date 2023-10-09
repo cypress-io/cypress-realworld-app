@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "https://frontend-cypress-realworld-app.dev.nbeck415.shipyard.host",
+    "baseUrl": "src",
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

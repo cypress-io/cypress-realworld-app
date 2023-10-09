@@ -4,7 +4,7 @@ require("dotenv").config();
 module.exports = function (app) {
   app.use(
     createProxyMiddleware(["/login", "/callback", "/logout", "/checkAuth", "graphql"], {
-      target: "http://cypress-realworld-app.dev.nbeck415.shipyard.host",
+      target: `http://localhost:${process.env.BACKEND_PORT}`,
       changeOrigin: true,
       logLevel: "debug",
     })

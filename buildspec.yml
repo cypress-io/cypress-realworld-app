@@ -65,5 +65,5 @@ phases:
       - yarn build:ci
   build:
     commands:
-      - yarn start:ci & npx wait-on https://frontend-cypress-realworld-app.dev.nbeck415.shipyard.host
+      - yarn start:ci & npx wait-on http://localhost:3000
       - npx cypress run --record --parallel --browser $CY_BROWSER --ci-build-id $CODEBUILD_INITIATOR --group "$CY_GROUP" --spec "$CY_SPEC" --config "$CY_CONFIG"
