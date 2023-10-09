@@ -14,11 +14,13 @@ dotenv.config();
 
 module.exports = defineConfig({
   projectId: "7s5okt",
+  video: true,
   retries: {
     runMode: 2,
   },
   env: {
-    apiUrl: process.env.SHIPYARD_DOMAIN_BACKEND,
+    apiUrl: `https://${process.env.SHIPYARD_DOMAIN_BACKEND}`,
+    url: `https://${process.env.SHIPYARD_DOMAIN_BACKEND}`,
     mobileViewportWidthBreakpoint: 414,
     coverage: false,
     codeCoverage: {
@@ -65,8 +67,7 @@ module.exports = defineConfig({
     },
   },
   e2e: {
-    //baseUrl: `https://${process.env.SHIPYARD_DOMAIN_FRONTEND}`,
-    baseUrl: "https://frontend-cypress-realworld-app.dev.nbeck415.shipyard.host",
+    baseUrl: `https://${process.env.SHIPYARD_DOMAIN_FRONTEND}`,
     specPattern: "cypress/tests/**/*.spec.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/e2e.ts",
     viewportHeight: 1000,
