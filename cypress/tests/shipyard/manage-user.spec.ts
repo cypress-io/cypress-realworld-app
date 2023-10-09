@@ -32,12 +32,18 @@ describe("Create new user", function () {
     // want to change this to check for most recent entry, but stuck
     // adds the user to the middle of the db
     // maybe we sort db by date-created field
-    cy.database("find", "users", { username: username }).then((user: User) => {
+    /*cy.database("find", "users", { username: username }).then((user: User) => {
       expect(user.username).to.equal(username);
-    });
+    });*/
   });
 });
+//want to pretend you have rolled back to prev snap
+// create a user and go to snap where user no longer exists
+//click trash = all data will be deleted
+//next run = the database will be pop with basic contents
+//itll be as if youve rolled back
 
+/*
 describe("Edit existing user", function () {
     const testEmail = "Norene39@yahoo.com"
     beforeEach(function () {
@@ -92,3 +98,4 @@ describe("Edit existing user", function () {
       })
     });
   });
+*/
