@@ -16,6 +16,13 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           runTests: false
+      - name: Save build folder
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          if-no-files-found: error
+          path: dist
+      
       - run: yarn cypress info
       - run: node --version
       - run: node -p 'os.cpus()'
@@ -53,8 +60,3 @@ jobs:
         env:
             CYPRESS_BASE_URL: ${{ env.CYPRESS_BASE_URL }}
             CYPRESS_BYPASS_TOKEN: ${{ env.CYPRESS_BYPASS_TOKEN }}
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v3
-        with:
-          name: cypress-screenshot
-          path: /home/runner/work/cypress-realworld-app/cypress-realworld-app/cypress/screenshots/manage-user.spec.ts/  
