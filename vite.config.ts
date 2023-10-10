@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import istanbul from "vite-plugin-istanbul";
+import ViteCors from "vite-plugin-cors";
 
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -54,6 +55,10 @@ export default defineConfig(({ command, mode }) => {
         requireEnv: true,
         exclude: ["node_modules", "cypress", "dist"],
         forceBuildInstrument: true,
+      }),
+      ViteCors({
+        origin: "*", // You can replace '*' with the specific origin you want to allow.
+        credentials: true,
       }),
       // HACK to fix weirdly-included import
       // https://github.com/bvaughn/react-virtualized/issues/1632
