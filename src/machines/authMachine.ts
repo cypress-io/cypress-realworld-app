@@ -154,6 +154,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         return resp.data;
       },
       performLogin: async (ctx, event) => {
+        console.log("AK:", targetUrl);
         return await httpClient
           .post(`${targetUrl}/login`, event)
           .then(({ data }) => {
@@ -214,10 +215,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       },
       updateProfile: async (ctx, event: any) => {
         const payload = omit("type", event);
-        const resp = await httpClient.patch(
-          `${targetUrl}/users/${payload.id}`,
-          payload
-        );
+        const resp = await httpClient.patch(`${targetUrl}/users/${payload.id}`, payload);
         return resp.data;
       },
       performLogout: async (ctx, event) => {
@@ -232,10 +230,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         };
 
         // Set Access Token in Local Storage for API calls
-        localStorage.setItem(
-          process.env.VITE_AUTH_TOKEN_NAME!,
-          event.user.signInUserSession.accessToken.jwtToken
-        );
+        localStorage.setItem(process.env.VITE_AUTH_TOKEN_NAME!, event.user.signInUserSession.accessToken.jwtToken);
 
         return Promise.resolve(ourUser);
       },
