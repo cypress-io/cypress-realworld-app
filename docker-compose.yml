@@ -16,8 +16,8 @@ services:
   backend:
     build:
       context: '.'
-    labels:
-      shipyard.route: '/'
+    #labels:
+      #shipyard.route: '/'
     environment:
         SHIPYARD_DOMAIN_FRONTEND: ${SHIPYARD_DOMAIN_FRONTEND-}
     ports:
