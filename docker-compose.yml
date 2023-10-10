@@ -6,6 +6,7 @@ services:
       context: '.'
     labels:
       shipyard.route: '/'
+      shipyard.primary-route: 'true'
     environment:
         SHIPYARD_DOMAIN_BACKEND: ${SHIPYARD_DOMAIN_BACKEND-}
     ports:
@@ -16,8 +17,8 @@ services:
   backend:
     build:
       context: '.'
-    #labels:
-      #shipyard.route: '/'
+    labels:
+      shipyard.route: '/api'
     environment:
         SHIPYARD_DOMAIN_FRONTEND: ${SHIPYARD_DOMAIN_FRONTEND-}
     ports:
