@@ -19,8 +19,10 @@ module.exports = defineConfig({
     runMode: 2,
   },
   env: {
-    apiUrl: `https://${process.env.SHIPYARD_DOMAIN_BACKEND}`,
-    url: `https://${process.env.SHIPYARD_DOMAIN_BACKEND}`,
+    //apiUrl: `https://${process.env.SHIPYARD_DOMAIN_BACKEND}`,
+    //url: `https://${process.env.SHIPYARD_DOMAIN_BACKEND}`,
+    apiUrl: "https://backend:3001",
+    url: "https://backend:3001",
     mobileViewportWidthBreakpoint: 414,
     coverage: false,
     codeCoverage: {
