@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const httpClient = axios.create({
-  withCredentials: true,
+  withCredentials: false,
 });
 
 httpClient.interceptors.request.use((config) => {
