@@ -21,12 +21,12 @@ module.exports = defineConfig({
   env: {
     //apiUrl: `https://${process.env.SHIPYARD_DOMAIN_BACKEND}`,
     //url: `https://${process.env.SHIPYARD_DOMAIN_BACKEND}`,
-    apiUrl: "https://backend:3001",
-    url: "https://backend:3001",
+    apiUrl: "http://backend:3001",
+    url: "http://backend:3001",
     mobileViewportWidthBreakpoint: 414,
     coverage: false,
     codeCoverage: {
-      url: `https://${process.env.SHIPYARD_DOMAIN_BACKEND}/__coverage__`,
+      url: `http://${process.env.SHIPYARD_DOMAIN_BACKEND}/__coverage__`,
       exclude: "cypress/**/*.*",
     },
     defaultPassword: process.env.SEED_DEFAULT_USER_PASSWORD,
