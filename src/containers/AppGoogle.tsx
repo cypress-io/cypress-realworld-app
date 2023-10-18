@@ -9,7 +9,7 @@ import { authService } from "../machines/authMachine";
 import AlertBar from "../components/AlertBar";
 import { bankAccountsMachine } from "../machines/bankAccountsMachine";
 import PrivateRoutesContainer from "./PrivateRoutesContainer";
-import { GoogleLogin, useGoogleLogin } from "react-google-login";
+import { GoogleLogin, useGoogleLogin } from "@matheusluizn/react-google-login";
 
 // @ts-ignore
 if (window.Cypress) {
