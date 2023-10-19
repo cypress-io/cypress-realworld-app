@@ -10,7 +10,6 @@ executors:
       - image: "cypress/browsers:node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1"
     resource_class: large
     environment:
-      PERCY_TOKEN:
       CYPRESS_coverage: false
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -102,6 +101,9 @@ commands:
       isComponent:
         type: boolean
         default: false
+      recordPercy:
+        type: boolean
+        default: false
     steps:
       - attach_ws
       - when:
@@ -125,9 +127,22 @@ commands:
               - equal: [false, << parameters.isMobile >>]
               - equal: [false, << parameters.isComponent >>]
           steps:
-            - cypress/run-tests:
-                start-command: yarn start:ci
-                cypress-command: yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --spec=<<parameters.specPattern>> --browser=<<parameters.browser>>
+            - when:
+                condition:
+                  and:
+                    - equal: [true, <<parameters.recordPercy>>]
+                steps:
+                  - cypress/run-tests:
+                      start-command: yarn start:ci
+                      cypress-command: yarn percy exec -- yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --spec=<<parameters.specPattern>> --browser=<<parameters.browser>>
+            - when:
+                condition:
+                  and:
+                    - equal: [false, <<parameters.recordPercy>>]
+                steps:
+                  - cypress/run-tests:
+                      start-command: yarn start:ci
+                      cypress-command: yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --spec=<<parameters.specPattern>> --browser=<<parameters.browser>>
       - report-coverage
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Jobs ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -169,6 +184,9 @@ jobs:
       isComponent:
         type: boolean
         default: false
+      recordPercy:
+        type: boolean
+        default: false
     steps:
       - setup_linux
       - cypress_tests:
@@ -178,6 +196,7 @@ jobs:
           group: <<parameters.group>>
           isMobile: <<parameters.isMobile>>
           isComponent: <<parameters.isComponent>>
+          recordPercy: <<parameters.recordPercy>>
   cypress_tests_windows:
     executor:
       # executor comes from the "windows" orb
@@ -239,6 +258,7 @@ linux-workflow: &linux-workflow
         specPattern: "cypress/tests/ui/*"
         ciBuildId: ${CIRCLE_SHA1:0:8}
         group: "UI - Chrome"
+        recordPercy: true
         requires:
           - Setup Linux
     # Run E2E tests in Chrome with mobile device viewport
