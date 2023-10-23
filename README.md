@@ -1,5 +1,6 @@
 <p align="center">
-  <img alt="Cypress Real World App Logo" src="./src/svgs/rwa-logo.svg" />
+  <img alt="Cypress Real World App Logo" src="./src/svgs/rwa-logo-light.svg#gh-dark-mode-only" />
+  <img alt="Cypress Real World App Logo" src="./src/svgs/rwa-logo.svg#gh-light-mode-only" />
 </p>
 
 <p align="center">
