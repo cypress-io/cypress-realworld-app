@@ -90,7 +90,7 @@
     },
     {
       "groupName": "AWS / Amplify",
-      "matchPackageNames": ["aws-sdk", "@aws-amplify/ui-react", "aws-amplify"]
+      "matchPackageNames": ["@aws-amplify/ui-react", "aws-amplify"]
     },
     {
       "groupName": "Testing / coverage",
