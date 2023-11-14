@@ -12,16 +12,12 @@
 </p>
 
 <p align="center">
-   <a href="https://cloud.cypress.io/projects/7s5okt/runs">
-    <img src="https://img.shields.io/endpoint?url=https://cloud.cypress.io/badge/detailed/7s5okt/develop&style=flat&logo=cypress" />
+   <a href="https://cloud.cypress.io/projects/srgsys/runs">
+    <img src="https://img.shields.io/endpoint?url=https://cloud.cypress.io/badge/detailed/srgsys/develop&style=flat&logo=cypress" />
   </a>
 
-  <a href="https://codecov.io/gh/cypress-io/cypress-realworld-app">
-    <img src="https://codecov.io/gh/cypress-io/cypress-realworld-app/branch/develop/graph/badge.svg" />
-  </a>
-
-  <a href="https://percy.io/cypress-io/cypress-realworld-app">
-    <img src="https://percy.io/static/images/percy-badge.svg" />
+  <a href="https://codecov.io/gh/francisduvivier/cypress-realworld-app">
+    <img src="https://codecov.io/gh/francisduvivier/cypress-realworld-app/branch/develop/graph/badge.svg" />
   </a>
 
    <a href="#contributors-">
@@ -246,7 +242,7 @@ This project is licensed under the terms of the [MIT license](/LICENSE).
 [express]: https://expressjs.com
 [lowdb]: https://github.com/typicode/lowdb
 [typescript]: https://typescriptlang.org
-[cypresscloud]: https://cloud.cypress.io/projects/7s5okt/runs
+[cypresscloud]: https://cloud.cypress.io/projects/srgsys/runs
 [material-ui]: https://material-ui.com
 [okta]: https://okta.com
 [auth0]: https://auth0.com
