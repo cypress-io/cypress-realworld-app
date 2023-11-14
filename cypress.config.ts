@@ -12,7 +12,7 @@ dotenv.config();
 const awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
 
 module.exports = defineConfig({
-  projectId: "7s5okt",
+  projectId: "srgsys",
   retries: {
     runMode: 2,
   },
