@@ -145,7 +145,7 @@ jobs:
       - name: "UI Tests - Chrome - Mobile"
         uses: cypress-io/github-action@v6
         with:
-          config: "viewportWidth=375,viewportHeight=667"
+          config: "'{"e2e":{"viewportWidth":375,"viewportHeight":667}}"
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
@@ -236,7 +236,7 @@ jobs:
       - name: "UI Tests - Firefox - Mobile"
         uses: cypress-io/github-action@v6
         with:
-          config: "viewportWidth=375,viewportHeight=667"
+          config: "'{"e2e":{"viewportWidth":375,"viewportHeight":667}}"
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
