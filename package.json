@@ -243,5 +243,8 @@
       "json"
     ]
   },
-  "packageManager": "yarn@1.22.19"
+  "packageManager": "yarn@1.22.19",
+  "volta": {
+    "node": "20.9.0"
+  }
 }
