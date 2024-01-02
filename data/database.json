@@ -206,7 +206,7 @@
       "bankName": "O'Hara - Labadie Bank",
       "accountNumber": "6123387981",
       "routingNumber": "851823229",
-      "isDeleted": true,
+      "isDeleted": false,
       "createdAt": "2020-05-09T07:57:26.947Z",
       "modifiedAt": "2020-05-21T22:18:50.916Z"
     },
