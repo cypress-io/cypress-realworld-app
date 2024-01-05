@@ -28,6 +28,7 @@ commands:
           paths:
             # for linux builds
             - .cache/Cypress
+            - project
           root: ~/
   attach_ws:
     steps:
