@@ -2,7 +2,6 @@ version: 2.1
 orbs:
   cypress: cypress-io/cypress@3.2.0
   codecov: codecov/codecov@1.2.3 #
-  win: circleci/windows@5.0.0
 
 executors:
   with-chrome-and-firefox:
@@ -29,8 +28,6 @@ commands:
           paths:
             # for linux builds
             - .cache/Cypress
-            # for windows builds
-            - AppData/Local/Cypress/Cache
             - project
           root: ~/
   attach_ws:
@@ -42,20 +39,6 @@ commands:
       - run:
           name: Install curl
           command: apt-get update && apt-get install -y curl
-  # Setup Windows
-  # 1. Add nvm and install node 18.16.0
-  # 2. Install yarn
-  setup_node_and_yarn_windows:
-    steps:
-      - run:
-          name: Install node 18
-          command: nvm install 18.16.0
-      - run:
-          name: Use node 18
-          command: nvm use 18.16.0
-      - run:
-          name: Install yarn
-          command: npm i --location=global yarn
   # Setup
   #  1. Install Cypress
   #  2. Validate types
@@ -151,19 +134,6 @@ jobs:
     executor: with-chrome-and-firefox
     steps:
       - setup_project_and_cypress
-  setup_project_and_cypress_windows:
-    executor:
-      # executor comes from the "windows" orb
-      name: win/default
-      shell: bash.exe
-      size: large
-    steps:
-      - setup_node_and_yarn_windows
-      - run:
-          name: Disabling Windows Defender
-          shell: powershell.exe
-          command: Set-MpPreference -DisableRealtimeMonitoring $true
-      - setup_project_and_cypress
   cypress_tests_linux:
     executor: with-chrome-and-firefox
     parallelism: 5
@@ -197,38 +167,6 @@ jobs:
           isMobile: <<parameters.isMobile>>
           isComponent: <<parameters.isComponent>>
           recordPercy: <<parameters.recordPercy>>
-  cypress_tests_windows:
-    executor:
-      # executor comes from the "windows" orb
-      name: win/default
-      shell: bash.exe
-    parallelism: 5
-    parameters:
-      browser:
-        type: string
-        default: chrome
-      specPattern:
-        type: string
-        default: ""
-      ciBuildId:
-        type: string
-      group:
-        type: string
-      isMobile:
-        type: boolean
-        default: false
-      isComponent:
-        type: boolean
-        default: false
-    steps:
-      - setup_node_and_yarn_windows
-      - cypress_tests:
-          browser: <<parameters.browser>>
-          specPattern: <<parameters.specPattern>>
-          ciBuildId: <<parameters.ciBuildId>>
-          group: <<parameters.group>>
-          isMobile: <<parameters.isMobile>>
-          isComponent: <<parameters.isComponent>>
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 linux-workflow: &linux-workflow
@@ -291,22 +229,6 @@ linux-workflow: &linux-workflow
         requires:
           - Setup Linux
 
-windows-workflow: &windows-workflow
-  jobs:
-    - setup_project_and_cypress_windows:
-        name: "Setup Windows"
-    # Run E2E tests in Windows in Electron
-    - cypress_tests_windows:
-        name: "UI Tests - Electron - Windows"
-        browser: electron
-        specPattern: "cypress/tests/ui/*"
-        ciBuildId: ${CIRCLE_SHA1:0:8}
-        group: "UI - Electron - Windows"
-        requires:
-          - Setup Windows
-
 workflows:
   linux:
     <<: *linux-workflow
-  windows:
-    <<: *windows-workflow
