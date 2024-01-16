@@ -8,7 +8,7 @@ type NewTransactionTestCtx = {
   contact?: User;
 };
 
-describe.skip("New Transaction", function () {
+describe("New Transaction", function () {
   const ctx: NewTransactionTestCtx = {};
 
   beforeEach(function () {
@@ -88,7 +88,7 @@ describe.skip("New Transaction", function () {
     cy.visualSnapshot("Personal List Validate Transaction in List");
   });
 
-  it("navigates to the new transaction form, selects a user and submits a transaction request", function () {
+  it.skip("navigates to the new transaction form, selects a user and submits a transaction request", function () {
     const request = {
       amount: "95",
       description: "Fancy Hotel 🏨",
@@ -117,7 +117,7 @@ describe.skip("New Transaction", function () {
     cy.visualSnapshot("Transaction Item Description in List");
   });
 
-  it("displays new transaction errors", function () {
+  it.skip("displays new transaction errors", function () {
     cy.getBySelLike("new-transaction").click();
     cy.wait("@allUsers");
 
@@ -138,7 +138,7 @@ describe.skip("New Transaction", function () {
     cy.visualSnapshot("New Transaction Errors with Submit Payment/Request Buttons Disabled");
   });
 
-  it("submits a transaction payment and verifies the deposit for the receiver", function () {
+  it.skip("submits a transaction payment and verifies the deposit for the receiver", function () {
     cy.getBySel("nav-top-new-transaction").click();
 
     const transactionPayload = {
@@ -191,7 +191,7 @@ describe.skip("New Transaction", function () {
     cy.visualSnapshot("Verify Updated Sender Account Balance");
   });
 
-  it("submits a transaction request and accepts the request for the receiver", function () {
+  it.skip("submits a transaction request and accepts the request for the receiver", function () {
     const transactionPayload = {
       transactionType: "request",
       amount: 100,
@@ -242,7 +242,7 @@ describe.skip("New Transaction", function () {
     cy.visualSnapshot("Verify Updated Sender Account Balance");
   });
 
-  context("searches for a user by attribute", function () {
+  context.skip("searches for a user by attribute", function () {
     const searchAttrs: (keyof User)[] = [
       "firstName",
       "lastName",
