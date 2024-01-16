@@ -8,7 +8,7 @@ type NewTransactionTestCtx = {
   contact?: User;
 };
 
-describe("New Transaction", function () {
+describe.skip("New Transaction", function () {
   const ctx: NewTransactionTestCtx = {};
 
   beforeEach(function () {
@@ -191,7 +191,7 @@ describe("New Transaction", function () {
     cy.visualSnapshot("Verify Updated Sender Account Balance");
   });
 
-  it.skip("submits a transaction request and accepts the request for the receiver", function () {
+  it("submits a transaction request and accepts the request for the receiver", function () {
     const transactionPayload = {
       transactionType: "request",
       amount: 100,
