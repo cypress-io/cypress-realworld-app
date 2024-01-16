@@ -151,7 +151,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
                 disabled={currentUserLikesTransaction(currentUser, transaction)}
                 onClick={() => transactionLike(transaction.id)}
                 data-test={`transaction-like-button-${transaction.id}`}
-                data-cy-ui-group={`transaction-like-button`}
+                data-cy-ui-id={`transaction-like-button`}
               >
                 <LikeIcon />
               </IconButton>
@@ -171,7 +171,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
                         })
                       }
                       data-test={`transaction-accept-request-${transaction.id}`}
-                      data-cy-ui-group={`transaction-accept-request`}
+                      data-cy-ui-id={`transaction-accept-request`}
                     >
                       Accept Request
                     </Button>
@@ -186,7 +186,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
                         })
                       }
                       data-test={`transaction-reject-request-${transaction.id}`}
-                      data-cy-ui-group={`transaction-reject-request`}
+                      data-cy-ui-id={`transaction-reject-request`}
                     >
                       Reject Request
                     </Button>
