@@ -88,7 +88,7 @@ describe("New Transaction", function () {
     cy.visualSnapshot("Personal List Validate Transaction in List");
   });
 
-  it.skip("navigates to the new transaction form, selects a user and submits a transaction request", function () {
+  it("navigates to the new transaction form, selects a user and submits a transaction request", function () {
     const request = {
       amount: "95",
       description: "Fancy Hotel 🏨",
