@@ -50,7 +50,10 @@ const CommentForm: React.FC<CommentFormProps> = ({ transactionId, transactionCom
                   id={`transaction-comment-input-${transactionId}`}
                   type="text"
                   placeholder="Write a comment..."
-                  inputProps={{ "data-test": `transaction-comment-input-${transactionId}` }}
+                  inputProps={{
+                    "data-test": `transaction-comment-input-${transactionId}`,
+                    "data-cy-ui-group": `transaction-comment-input`
+                  }}
                   error={meta.touched && Boolean(meta.error)}
                   helperText={meta.touched ? meta.error : ""}
                   {...field}

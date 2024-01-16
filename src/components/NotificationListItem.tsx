@@ -89,6 +89,7 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
           color="primary"
           onClick={() => updateNotification({ id: notification.id, isRead: true })}
           data-test={`notification-mark-read-${notification.id}`}
+          data-cy-ui-group="notification-mark-read"
         >
           <CheckIcon />
         </IconButton>
@@ -99,6 +100,7 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
           size="small"
           onClick={() => updateNotification({ id: notification.id, isRead: true })}
           data-test={`notification-mark-read-${notification.id}`}
+          data-cy-ui-group="notification-mark-read"
         >
           Dismiss
         </Button>
