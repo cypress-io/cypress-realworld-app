@@ -40,7 +40,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-infinite-calendar": "2.3.1",
-    "react-number-format": "4.9.4",
+    "react-number-format": "5.3.1",
     "react-router": "5.3.4",
     "react-router-dom": "5.3.4",
     "react-virtualized": "9.22.5",
