@@ -12,7 +12,7 @@
     "url": "https://github.com/cypress-io/cypress-realworld-app/issues"
   },
   "dependencies": {
-    "@auth0/auth0-react": "2.1.1",
+    "@auth0/auth0-react": "2.2.4",
     "@aws-amplify/ui-react": "^5.0.4",
     "@babel/core": "7.23.9",
     "@babel/plugin-syntax-flow": "^7.14.5",
