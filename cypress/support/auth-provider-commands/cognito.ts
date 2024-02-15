@@ -1,4 +1,5 @@
-import { Amplify, Auth } from "aws-amplify";
+import { Amplify } from "aws-amplify";
+import { signIn } from "aws-amplify/auth";
 
 Amplify.configure(Cypress.env("awsConfig"));
 
@@ -13,9 +14,9 @@ Cypress.Commands.add("loginByCognitoApi", (username, password) => {
 
   log.snapshot("before");
 
-  const signIn = Auth.signIn({ username, password });
+  const signedIn = signIn({ username, password });
 
-  cy.wrap(signIn, { log: false }).then((cognitoResponse: any) => {
+  cy.wrap(signedIn, { log: false }).then((cognitoResponse: any) => {
     const keyPrefixWithUsername = `${cognitoResponse.keyPrefix}.${cognitoResponse.username}`;
     window.localStorage.setItem(
       `${keyPrefixWithUsername}.idToken`,
