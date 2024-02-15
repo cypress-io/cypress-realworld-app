@@ -11,13 +11,18 @@ dotenv.config();
 
 const awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
 
+let apiUrl = process.env.API_URL || "http://localhost:3001";
+if (apiUrl.endsWith("/")) {
+  apiUrl = apiUrl.slice(0, -1);
+}
+
 module.exports = defineConfig({
   projectId: "7s5okt",
   retries: {
     runMode: 2,
   },
   env: {
-    apiUrl: "http://localhost:3001",
+    apiUrl: apiUrl,
     mobileViewportWidthBreakpoint: 414,
     coverage: false,
     codeCoverage: {

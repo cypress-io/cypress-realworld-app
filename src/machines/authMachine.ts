@@ -3,7 +3,7 @@ import { omit } from "lodash/fp";
 import { httpClient } from "../utils/asyncUtils";
 import { history } from "../utils/historyUtils";
 import { User } from "../models";
-import { backendPort } from "../utils/portUtils";
+import { apiUrl } from "../utils/apiUtils";
 
 export interface AuthMachineSchema {
   states: {
@@ -180,7 +180,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
         return Promise.resolve({ user });
       },
       getUserProfile: async (ctx, event) => {
-        const resp = await httpClient.get(`http://localhost:${backendPort}/checkAuth`);
+        const resp = await httpClient.get(`${apiUrl}/checkAuth`);
         return resp.data;
       },
       getGoogleUserProfile: /* istanbul ignore next */ (ctx, event: any) => {

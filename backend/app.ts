@@ -27,8 +27,14 @@ import { frontendPort, getBackendPort } from "../src/utils/portUtils";
 
 require("dotenv").config();
 
+let corsOrigins = (process.env.CORS_ORIGINS || "").split(",").map((o) => o.trim());
+if (corsOrigins.length < 1) {
+  // fall back to local development if environment doesn't have CORS_ORIGINS
+  corsOrigins = [`http://localhost:${frontendPort}`];
+}
+
 const corsOption = {
-  origin: `http://localhost:${frontendPort}`,
+  origin: corsOrigins,
   credentials: true,
 };
 
