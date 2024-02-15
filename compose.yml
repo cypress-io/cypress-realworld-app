@@ -7,3 +7,9 @@ services:
       - "3001:3001"
     environment:
       NODE_ENV: development
+  frontend:
+    build:
+        context: .
+        dockerfile: frontend.Dockerfile
+    ports:
+      - "3000:3000"

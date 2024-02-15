@@ -5,16 +5,12 @@ import dotenv from "dotenv";
 import Promise from "bluebird";
 import codeCoverageTask from "@cypress/code-coverage/task";
 import { defineConfig } from "cypress";
+import { apiUrl } from "./src/utils/apiUtils";
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
 
 const awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
-
-let apiUrl = process.env.API_URL || "http://localhost:3001";
-if (apiUrl.endsWith("/")) {
-  apiUrl = apiUrl.slice(0, -1);
-}
 
 module.exports = defineConfig({
   projectId: "7s5okt",
