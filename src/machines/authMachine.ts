@@ -214,10 +214,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       },
       updateProfile: async (ctx, event: any) => {
         const payload = omit("type", event);
-        const resp = await httpClient.patch(
-          `${apiUrl}/users/${payload.id}`,
-          payload
-        );
+        const resp = await httpClient.patch(`${apiUrl}/users/${payload.id}`, payload);
         return resp.data;
       },
       performLogout: async (ctx, event) => {
