@@ -8,85 +8,12 @@ env:
   NULLSTONE_STACK: demo-cypress
 
 jobs:
-  build-backend:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Set up Nullstone
-        uses: nullstone-io/setup-nullstone-action@v0
-      - name: Build backend docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile
-          push: false
-          tags: backend
-      - name: Save Docker image
-        run: |
-          docker save backend -o backend.tar
-      - name: Upload Docker image as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: backend
-          path: backend.tar
-  deploy-backend:
-    runs-on: ubuntu-latest
-    needs: [build-backend, ephemeral-env-up]
-    env:
-      NULLSTONE_APP: realworld-api
-      NULLSTONE_ENV: ${{ needs.ephemeral-env-up.outputs.env_name }}
-    steps:
-      - name: Set up Nullstone
-        uses: nullstone-io/setup-nullstone-action@v0
-      - name: Download Docker image from artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: backend
-      - name: Load Docker image
-        run: |
-          docker load -i backend.tar
-      - name: Push docker image
-        run: nullstone push --source=backend
-      - name: Deploy
-        run: nullstone deploy
-
-  build-frontend:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-  deploy-frontend:
-    runs-on: ubuntu-latest
-    needs: [build-frontend, ephemeral-env-up]
-    env:
-      NULLSTONE_APP: realworld-api
-      NULLSTONE_ENV: ${{ needs.ephemeral-env-up.outputs.env_name }}
-    steps:
-      - name: Set up Nullstone
-        uses: nullstone-io/setup-nullstone-action@v0
-      - name: Download Docker image from artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: backend
-      - name: Load Docker image
-        run: |
-          docker load -i backend.tar
-      - name: Push docker image
-        run: nullstone push --source=backend
-      - name: Deploy
-        run: nullstone deploy
-
-  ephemeral-env-up:
+  create-ephemeral-env:
     runs-on: ubuntu-latest
     if: github.event.label.name == 'e2e'
     outputs:
       env_name: ${{ steps.create.outputs.env_name }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
       - name: Set up Nullstone
         uses: nullstone-io/setup-nullstone-action@v0
       - id: create
@@ -96,33 +23,112 @@ jobs:
           echo "env_name=${env_name}" >> "$GITHUB_OUTPUT"
           echo "NULLSTONE_ENV=${env_name}" >> $GITHUB_ENV
           echo "New unique environment name: ${env_name}"
+  ephemeral-env-up:
+    runs-on: ubuntu-latest
+    needs: [create-ephemeral-env]
+    env:
+      NULLSTONE_ENV: ${{ needs.create-ephemeral-env.outputs.env_name }}
+    steps:
+      - name: Set up Nullstone
+        uses: nullstone-io/setup-nullstone-action@v0
       - name: Launch Ephemeral Env
         run: nullstone envs up
   ephemeral-env-down:
     runs-on: ubuntu-latest
     if: ${{ always() }}
-    needs: [e2e-tests, ephemeral-env-up]
+    needs: [e2e-tests, create-ephemeral-env]
     env:
-      NULLSTONE_ENV: ${{ needs.ephemeral-env-up.outputs.env_name }}
+      NULLSTONE_ENV: ${{ needs.create-ephemeral-env.outputs.env_name }}
     steps:
       - name: Set up Nullstone
         uses: nullstone-io/setup-nullstone-action@v0
       - name: Destroy ephemeral env
         run: nullstone envs down
 
-  db-seeds:
+  backend:
     runs-on: ubuntu-latest
-    needs: [deploy-backend]
+    needs: [create-ephemeral-env]
+    env:
+      NULLSTONE_APP: realworld-api
+      NULLSTONE_ENV: ${{ needs.create-ephemeral-env.outputs.env_name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Build backend docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: backend
+      - name: Set up Nullstone
+        uses: nullstone-io/setup-nullstone-action@v0
+      - name: Push docker image
+        run: nullstone push --source=backend
+      - name: Deploy
+        run: nullstone deploy
+  frontend:
+    name: "Deploy Frontend"
+    runs-on: ubuntu-latest
+    needs: [create-ephemeral-env]
+    env:
+      NULLSTONE_APP: realworld-app
+      NULLSTONE_BLOCK: realworld-app
+      NULLSTONE_ENV: ${{ needs.create-ephemeral-env.outputs.env_name }}
+    outputs:
+      public_url: ${{ steps.public-url.outputs.public_url }}
+    steps:
+      - name: 'Setup jq'
+        uses: dcarbone/install-jq-action@v2
+      - name: Set up Nullstone
+        uses: nullstone-io/setup-nullstone-action@v0
+      - name: Push docker image
+        run: nullstone push --source=backend
+      - name: Deploy
+        run: nullstone deploy --wait
+      - id: public-url
+        name: Retrieve frontend public URL
+        run: |
+          echo "public_url=$(nullstone outputs --plain | jq -r '.public_urls[0]')" >> "$GITHUB_OUTPUT"
+
+  db-seed:
+    runs-on: ubuntu-latest
+    needs: [create-ephemeral-env, backend]
+    env:
+      NULLSTONE_ENV: ${{ needs.create-ephemeral-env.outputs.env_name }}
     steps:
       - name: Set up Nullstone
         uses: nullstone-io/setup-nullstone-action@v0
       - name: Run seeds
-        run: nullstone exec --app=realworld-migrations
+        run: nullstone exec --app=realworld-api yarn db:seed
 
   e2e-tests:
+    timeout-minutes: 15
     runs-on: ubuntu-latest
-    needs: [deploy-frontend, deploy-backend, db-seeds]
+    container:
+      image: cypress/browsers:node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
+      options: --user 1001
+    needs: [create-ephemeral-env, frontend, backend, db-seed]
+    env:
+      NULLSTONE_ENV: ${{ needs.create-ephemeral-env.outputs.env_name }}
+      APP_URL: ${{ needs.frontend.outputs.public_url }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+      - name: "UI Tests - Chrome"
+        uses: cypress-io/github-action@v6
+        with:
+          build: yarn cypress info
+          browser: chrome
+          record: true
+          parallel: true
+          group: "UI - Chrome"
+          spec: cypress/tests/ui/*
+          config-file: cypress.config.ts
+        env:
+          # Recommended: pass the GitHub token lets this action correctly
+          # determine the unique run id necessary to re-run the checks
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEBUG: "cypress:server:args"
