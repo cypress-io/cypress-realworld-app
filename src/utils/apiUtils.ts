@@ -7,4 +7,4 @@ const trimEnd = (s: string, suffix: string): string => {
   return s;
 };
 
-export const apiUrl = trimEnd(process.env.API_URL || `http://localhost:${backendPort}`, "/")
+export const apiUrl = trimEnd(process.env.API_URL || `http://localhost:${backendPort}`, "/");
