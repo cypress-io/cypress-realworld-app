@@ -7,9 +7,12 @@ services:
       - "3001:3001"
     environment:
       NODE_ENV: development
+      CORS_ORIGINS: http://localhost:3000
   frontend:
     build:
         context: .
         dockerfile: frontend.Dockerfile
     ports:
       - "3000:3000"
+    environment:
+      API_URL: http://localhost:3001
