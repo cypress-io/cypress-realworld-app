@@ -2,6 +2,7 @@ import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import eslint from "vite-plugin-eslint";
 import istanbul from "vite-plugin-istanbul";
+import fixReactVirtualized from 'esbuild-plugin-react-virtualized';
 
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), "VITE");
@@ -40,6 +41,11 @@ export default defineConfig(({ command, mode }) => {
       environment: "jsdom",
       setupFiles: "./src/setup-tests.js",
       exclude: ["node_modules", "cypress", "dist"],
+    },
+    optimizeDeps: {
+      esbuildOptions: {
+        plugins: [fixReactVirtualized], // See https://github.com/bvaughn/react-virtualized/issues/1722
+      },
     },
   };
 });

@@ -34,6 +34,7 @@
     "date-fns": "2.30.0",
     "detect-port": "^1.5.1",
     "dinero.js": "1.9.1",
+    "esbuild-plugin-react-virtualized": "^1.0.4",
     "formik": "2.4.5",
     "history": "4.10.1",
     "postinstall-postinstall": "^2.1.0",
