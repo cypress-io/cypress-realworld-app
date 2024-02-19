@@ -19,10 +19,10 @@ const theme = createTheme({
 
 const root = createRoot(document.getElementById("root")!);
 
-if (process.env.VITE_APP_OKTA) {
+if (process.env.VITE_OKTA) {
   const oktaAuth = new OktaAuth({
-    issuer: `https://${process.env.VITE_APP_OKTA_DOMAIN}/oauth2/default`,
-    clientId: process.env.VITE_APP_OKTA_CLIENTID,
+    issuer: `https://${process.env.VITE_OKTA_DOMAIN}/oauth2/default`,
+    clientId: process.env.VITE_OKTA_CLIENTID,
     redirectUri: window.location.origin + "/implicit/callback",
   });
   /* istanbul ignore next */
