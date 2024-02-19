@@ -26,5 +26,5 @@ if (process.env.VITE_APP_AWS_COGNITO) {
     </Router>
   );
 } else {
-  console.error("Cogntio is not configured.");
+  console.error("Cognito is not configured.");
 }
