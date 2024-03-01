@@ -14044,12 +14044,13 @@ vite-plugin-eslint@^1.8.1:
     "@types/eslint" "^8.4.5"
     rollup "^2.77.2"
 
-vite-plugin-istanbul@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/vite-plugin-istanbul/-/vite-plugin-istanbul-4.1.0.tgz#d58245969997d87a4d471d7ad9f53f4970d6c940"
-  integrity sha512-d8FRxaswOUYlGqCCNv2BTbt9pyqt7J4RPgab3WmMf+T2TflLlCmC7S26zDRfL9Ve4JSHrcf5bdzt+E0n9CrPvA==
+vite-plugin-istanbul@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/vite-plugin-istanbul/-/vite-plugin-istanbul-5.0.0.tgz#7539d76d7c3cafb7b3b0f2371a4e3a69031dcd44"
+  integrity sha512-Tg9zDmm/u4SdEDFbEWHBz7mmFe7jhLRmArA2XCmw5yydEFCARU9r4TxqFFnBFWCL63D9A7XA7VELulOO5T5o/g==
   dependencies:
     "@istanbuljs/load-nyc-config" "^1.1.0"
+    espree "^9.6.1"
     istanbul-lib-instrument "^5.1.0"
     picocolors "^1.0.0"
     test-exclude "^6.0.0"
