@@ -236,7 +236,7 @@ Prerequisites include an [Amazon Cognito][cognito] account. Environment variable
 
 The test knobs are in a few places:
 
-- The .env file has `VITE_AUTH_TOKEN_NAME` and vars beginning `AWS_COGNITO`. Be careful not to commit any secrets.
+- The `.env` file has `VITE_AUTH_TOKEN_NAME` and vars beginning `AWS_COGNITO`. Be careful not to commit any secrets.
 - Both `scripts/mock-aws-exports.js` and `scripts/mock-aws-exports-es5.js` must have the same data; only their export statements differ. These files can be edited manually or exported from the amplify CLI.
 - `cypress.config.ts` has `cognito_programmatic_login` to control flavor of the test.
 
