@@ -22,14 +22,14 @@ const onRedirectCallback = (appState: any) => {
 const root = createRoot(document.getElementById("root")!);
 
 /* istanbul ignore if */
-if (process.env.VITE_APP_AUTH0) {
+if (process.env.VITE_AUTH0) {
   root.render(
     <Auth0Provider
-      domain={process.env.VITE_APP_AUTH0_DOMAIN!}
-      clientId={process.env.VITE_APP_AUTH0_CLIENTID!}
+      domain={process.env.VITE_AUTH0_DOMAIN!}
+      clientId={process.env.VITE_AUTH0_CLIENTID!}
       redirectUri={window.location.origin}
-      audience={process.env.VITE_APP_AUTH0_AUDIENCE}
-      scope={process.env.VITE_APP_AUTH0_SCOPE}
+      audience={process.env.VITE_AUTH0_AUDIENCE}
+      scope={process.env.VITE_AUTH0_SCOPE}
       onRedirectCallback={onRedirectCallback}
       cacheLocation="localstorage"
     >

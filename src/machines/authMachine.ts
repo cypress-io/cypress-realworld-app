@@ -227,15 +227,12 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       getCognitoUserProfile: /* istanbul ignore next */ (ctx, event: any) => {
         // Map Cognito User fields to our User Model
         const ourUser = {
-          id: event.user.sub,
-          email: event.user.email,
+          id: event.userSub,
+          email: event.email,
         };
 
         // Set Access Token in Local Storage for API calls
-        localStorage.setItem(
-          process.env.VITE_AUTH_TOKEN_NAME!,
-          event.user.signInUserSession.accessToken.jwtToken
-        );
+        localStorage.setItem(process.env.VITE_AUTH_TOKEN_NAME!, event.accessTokenJwtString);
 
         return Promise.resolve(ourUser);
       },

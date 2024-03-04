@@ -16,7 +16,7 @@ const theme = createTheme({
 
 const root = createRoot(document.getElementById("root")!);
 
-if (process.env.VITE_APP_GOOGLE) {
+if (process.env.VITE_GOOGLE) {
   /* istanbul ignore next */
   root.render(
     <Router history={history}>
