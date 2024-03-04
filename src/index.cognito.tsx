@@ -16,7 +16,7 @@ const theme = createTheme({
 
 const root = createRoot(document.getElementById("root")!);
 
-if (process.env.VITE_APP_AWS_COGNITO) {
+if (process.env.VITE_AWS_COGNITO) {
   /* istanbul ignore next */
   root.render(
     <Router history={history}>
@@ -26,5 +26,5 @@ if (process.env.VITE_APP_AWS_COGNITO) {
     </Router>
   );
 } else {
-  console.error("Cogntio is not configured.");
+  console.error("Cognito is not configured.");
 }
