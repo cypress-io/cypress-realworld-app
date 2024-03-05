@@ -59,6 +59,8 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
     }
   }
 
+  const removePx = (str: string) => +str.slice(0, str.length - 2);
+
   return (
     <InfiniteLoader
       isRowLoaded={isRowLoaded}
@@ -72,9 +74,9 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
             rowCount={itemCount}
             ref={registerChild}
             onRowsRendered={onRowsRendered}
-            height={isXsBreakpoint ? theme.spacing(74) : theme.spacing(88)}
-            width={isXsBreakpoint ? theme.spacing(38) : theme.spacing(110)}
-            rowHeight={isXsBreakpoint ? theme.spacing(28) : theme.spacing(16)}
+            height={isXsBreakpoint ? removePx(theme.spacing(74)) : removePx(theme.spacing(88))}
+            width={isXsBreakpoint ? removePx(theme.spacing(38)) : removePx(theme.spacing(110))}
+            rowHeight={isXsBreakpoint ? removePx(theme.spacing(28)) : removePx(theme.spacing(16))}
             rowRenderer={rowRenderer}
           />
         </div>
