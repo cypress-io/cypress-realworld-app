@@ -1,20 +1,20 @@
 import React from "react";
 import { Typography } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { TransactionResponseItem } from "../models";
 import { isRequestTransaction, formatAmount } from "../utils/transactionUtils";
 
 const useStyles = makeStyles((theme) => ({
   amountPositive: {
     fontSize: 24,
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down("md")]: {
       fontSize: theme.typography.body1.fontSize,
     },
     color: "#4CAF50",
   },
   amountNegative: {
     fontSize: 24,
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down("md")]: {
       fontSize: theme.typography.body1.fontSize,
     },
     color: "red",

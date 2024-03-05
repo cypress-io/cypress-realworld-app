@@ -19,7 +19,7 @@ import {
   useMediaQuery,
   Link,
 } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import {
   Menu as MenuIcon,
   Notifications as NotificationsIcon,
@@ -113,7 +113,8 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
           color="inherit"
           aria-label="open drawer"
           onClick={() => toggleDrawer()}
-          size="large">
+          size="large"
+        >
           <MenuIcon data-test="drawer-icon" />
         </IconButton>
         <Typography
@@ -128,7 +129,8 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
             to="/"
             style={{ color: "#fff", textDecoration: "none" }}
             component={RouterLink}
-            underline="hover">
+            underline="hover"
+          >
             {xsBreakpoint ? (
               <RWALogoIcon className={classes.logo} />
             ) : (
@@ -151,7 +153,8 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
           component={RouterLink}
           to="/notifications"
           data-test="nav-top-notifications-link"
-          size="large">
+          size="large"
+        >
           <Badge
             badgeContent={allNotifications ? allNotifications.length : undefined}
             data-test="nav-top-notifications-count"

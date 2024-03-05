@@ -1,6 +1,6 @@
 import React from "react";
 import { TextField, Button, Grid } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object, mixed } from "yup";
 import { User, DefaultPrivacyLevel, UserSettingsPayload } from "../models";
@@ -131,7 +131,13 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({ userProfile, updateUser
               />
             )}
           </Field>
-          <Grid container spacing={2} direction="row" justifyContent="flex-start" alignItems="flex-start">
+          <Grid
+            container
+            spacing={2}
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="flex-start"
+          >
             <Grid item>
               <Button
                 type="submit"

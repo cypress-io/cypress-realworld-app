@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Typography, Grid, Avatar, Paper, IconButton } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
-import { AvatarGroup } from '@mui/material';
+import makeStyles from "@mui/styles/makeStyles";
+import { AvatarGroup } from "@mui/material";
 import { ThumbUpAltOutlined as LikeIcon, CommentRounded as CommentIcon } from "@mui/icons-material";
 import { TransactionResponseItem, TransactionRequestStatus, User } from "../models";
 import CommentForm from "./CommentForm";
@@ -142,7 +142,13 @@ const TransactionDetail: React.FC<TransactionProps> = ({
       </Grid>
       <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
         <Grid item>
-          <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
+          <Grid
+            container
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="center"
+            spacing={2}
+          >
             <Grid item data-test={`transaction-like-count-${transaction.id}`}>
               {transaction.likes ? transaction.likes.length : 0}{" "}
             </Grid>
@@ -152,7 +158,8 @@ const TransactionDetail: React.FC<TransactionProps> = ({
                 disabled={currentUserLikesTransaction(currentUser, transaction)}
                 onClick={() => transactionLike(transaction.id)}
                 data-test={`transaction-like-button-${transaction.id}`}
-                size="large">
+                size="large"
+              >
                 <LikeIcon />
               </IconButton>
             </Grid>

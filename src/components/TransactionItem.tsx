@@ -1,9 +1,18 @@
 import React from "react";
 import { useHistory } from "react-router";
-import { ListItem, Typography, Grid, Avatar, ListItemAvatar, Paper, Badge, Theme } from "@mui/material";
-import withStyles from '@mui/styles/withStyles';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
+import {
+  ListItem,
+  Typography,
+  Grid,
+  Avatar,
+  ListItemAvatar,
+  Paper,
+  Badge,
+  Theme,
+} from "@mui/material";
+import withStyles from "@mui/styles/withStyles";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 import { ThumbUpAltOutlined as LikeIcon, CommentRounded as CommentIcon } from "@mui/icons-material";
 import { TransactionResponseItem } from "../models";
 import TransactionTitle from "./TransactionTitle";
@@ -22,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(2),
   },
   socialStats: {
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down("md")]: {
       marginTop: theme.spacing(2),
     },
   },

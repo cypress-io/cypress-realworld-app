@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useActor, useMachine } from "@xstate/react";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { Container, CssBaseline } from "@mui/material";
 
 import { snackbarMachine } from "../machines/snackbarMachine";

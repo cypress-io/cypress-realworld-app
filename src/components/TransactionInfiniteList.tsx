@@ -1,7 +1,7 @@
 import React from "react";
 import { get } from "lodash/fp";
 import { useTheme, useMediaQuery, Divider } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { InfiniteLoader, List, Index } from "react-virtualized";
 import "react-virtualized/styles.css"; // only needs to be imported once
 
@@ -31,8 +31,8 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
 }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const isXsBreakpoint = useMediaQuery(theme.breakpoints.down('sm'));
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isXsBreakpoint = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const itemCount = pagination.hasNextPages ? transactions.length + 1 : transactions.length;
 

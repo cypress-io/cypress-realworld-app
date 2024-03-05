@@ -9,7 +9,7 @@ import {
 } from "xstate";
 import { SnackbarContext, SnackbarSchema, SnackbarEvents } from "../machines/snackbarMachine";
 import { useActor } from "@xstate/react";
-import { Alert } from '@mui/material';
+import { Alert } from "@mui/material";
 
 interface Props {
   snackbarService: Interpreter<

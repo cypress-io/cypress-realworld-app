@@ -16,7 +16,7 @@ import {
   Avatar,
   Typography,
 } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { Link as RouterLink } from "react-router-dom";
 import {
   Home as HomeIcon,

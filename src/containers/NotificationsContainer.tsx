@@ -8,7 +8,7 @@ import {
 } from "xstate";
 import { useActor } from "@xstate/react";
 import { Paper, Typography } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { NotificationUpdatePayload } from "../models";
 import NotificationList from "../components/NotificationList";
 import { DataContext, DataSchema, DataEvents } from "../machines/dataMachine";

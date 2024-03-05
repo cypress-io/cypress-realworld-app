@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { Paper, Button, ListSubheader, Grid } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { Link as RouterLink } from "react-router-dom";
 import { isEmpty } from "lodash/fp";
 

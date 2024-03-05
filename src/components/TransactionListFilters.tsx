@@ -1,6 +1,6 @@
 import React from "react";
 import { Paper, Grid } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { TransactionDateRangePayload, TransactionAmountRangePayload } from "../models";
 import TransactionListDateRangeFilter from "./TransactionDateRangeFilter";
 import TransactionListAmountRangeFilter from "./TransactionListAmountRangeFilter";
@@ -39,7 +39,13 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
 
   return (
     <Paper className={classes.paper} elevation={0}>
-      <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
+      <Grid
+        container
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="flex-start"
+        spacing={1}
+      >
         <Grid item>
           <TransactionListDateRangeFilter
             filterDateRange={filterDateRange}

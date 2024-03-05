@@ -1,7 +1,7 @@
 import React from "react";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import { Paper, Typography, Grid, Avatar, Box, Button } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import {
   BaseActionObject,
   Interpreter,
@@ -60,7 +60,13 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
         height={200}
         style={{ paddingTop: "5%" }}
       >
-        <Grid container direction="row" justifyContent="space-around" alignItems="center" spacing={4}>
+        <Grid
+          container
+          direction="row"
+          justifyContent="space-around"
+          alignItems="center"
+          spacing={4}
+        >
           <Grid item>
             <Grid container direction="column" justifyContent="flex-start" alignItems="center">
               <Grid item>

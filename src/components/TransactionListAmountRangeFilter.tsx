@@ -10,7 +10,7 @@ import {
   useMediaQuery,
   Drawer,
 } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { ArrowDropDown as ArrowDropDownIcon } from "@mui/icons-material";
 import { TransactionAmountRangePayload } from "../models";
 import {

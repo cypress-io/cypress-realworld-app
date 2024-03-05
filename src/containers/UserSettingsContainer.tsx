@@ -1,6 +1,6 @@
 import React from "react";
 import { Paper, Typography, Grid } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import UserSettingsForm from "../components/UserSettingsForm";
 import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
@@ -32,7 +32,13 @@ const UserSettingsContainer: React.FC<Props> = ({ authService }) => {
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
         User Settings
       </Typography>
-      <Grid container spacing={2} direction="row" justifyContent="flex-start" alignItems="flex-start">
+      <Grid
+        container
+        spacing={2}
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="flex-start"
+      >
         <Grid item>
           <PersonalSettingsIllustration style={{ height: 200, width: 300 }} />
         </Grid>

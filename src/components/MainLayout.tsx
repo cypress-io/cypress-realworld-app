@@ -9,7 +9,7 @@ import {
 } from "xstate";
 import { Container, Grid, useMediaQuery, useTheme } from "@mui/material";
 
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 
 import Footer from "./Footer";
 import NavBar from "./NavBar";

@@ -16,7 +16,7 @@ import {
   ListItem,
   IconButton,
 } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import {
   isCommentNotification,
   isLikeNotification,
@@ -89,7 +89,8 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
           color="primary"
           onClick={() => updateNotification({ id: notification.id, isRead: true })}
           data-test={`notification-mark-read-${notification.id}`}
-          size="large">
+          size="large"
+        >
           <CheckIcon />
         </IconButton>
       )}

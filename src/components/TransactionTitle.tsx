@@ -1,25 +1,25 @@
 import React from "react";
 import { Typography } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { TransactionResponseItem } from "../models";
 import { isRequestTransaction, isAcceptedRequestTransaction } from "../utils/transactionUtils";
 
 const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: 18,
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down("md")]: {
       fontSize: theme.typography.fontSize,
     },
   },
   titleAction: {
     fontSize: 18,
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down("md")]: {
       fontSize: theme.typography.fontSize,
     },
   },
   titleName: {
     fontSize: 18,
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down("md")]: {
       fontSize: theme.typography.fontSize,
     },
     color: "#1A202C",
