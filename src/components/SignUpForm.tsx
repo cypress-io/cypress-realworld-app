@@ -2,16 +2,8 @@ import React from "react";
 import { useActor } from "@xstate/react";
 import { Interpreter } from "xstate";
 import { Link } from "react-router-dom";
-import {
-  Button,
-  Container,
-  CssBaseline,
-  TextField,
-  Grid,
-  Box,
-  Typography,
-  makeStyles,
-} from "@material-ui/core";
+import { Button, Container, CssBaseline, TextField, Grid, Box, Typography } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object, ref } from "yup";
 

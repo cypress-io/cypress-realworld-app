@@ -1,7 +1,8 @@
 import React from "react";
-import { Button, Typography, Grid, Avatar, Paper, IconButton, makeStyles } from "@material-ui/core";
-import { AvatarGroup } from "@material-ui/lab";
-import { ThumbUpAltOutlined as LikeIcon, CommentRounded as CommentIcon } from "@material-ui/icons";
+import { Button, Typography, Grid, Avatar, Paper, IconButton } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import { AvatarGroup } from '@mui/material';
+import { ThumbUpAltOutlined as LikeIcon, CommentRounded as CommentIcon } from "@mui/icons-material";
 import { TransactionResponseItem, TransactionRequestStatus, User } from "../models";
 import CommentForm from "./CommentForm";
 import {
@@ -101,7 +102,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
       <Grid
         container
         direction="row"
-        justify="space-between"
+        justifyContent="space-between"
         alignItems="center"
         data-test={`transaction-item-${transaction.id}`}
       >
@@ -118,7 +119,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
               src={transaction.receiverAvatar}
             />
           </AvatarGroup>
-          <Grid container direction="column" justify="flex-start" alignItems="flex-start">
+          <Grid container direction="column" justifyContent="flex-start" alignItems="flex-start">
             <Grid item></Grid>
             <Grid item>
               <TransactionTitle transaction={transaction} />
@@ -139,9 +140,9 @@ const TransactionDetail: React.FC<TransactionProps> = ({
           <TransactionAmount transaction={transaction} />
         </Grid>
       </Grid>
-      <Grid container direction="row" justify="flex-start" alignItems="center" spacing={2}>
+      <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
         <Grid item>
-          <Grid container direction="row" justify="flex-start" alignItems="center" spacing={2}>
+          <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
             <Grid item data-test={`transaction-like-count-${transaction.id}`}>
               {transaction.likes ? transaction.likes.length : 0}{" "}
             </Grid>
@@ -151,7 +152,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
                 disabled={currentUserLikesTransaction(currentUser, transaction)}
                 onClick={() => transactionLike(transaction.id)}
                 data-test={`transaction-like-button-${transaction.id}`}
-              >
+                size="large">
                 <LikeIcon />
               </IconButton>
             </Grid>

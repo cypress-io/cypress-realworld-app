@@ -1,19 +1,10 @@
 import React from "react";
 import { useHistory } from "react-router";
-import {
-  ListItem,
-  Typography,
-  Grid,
-  Avatar,
-  ListItemAvatar,
-  Paper,
-  Badge,
-  withStyles,
-  Theme,
-  createStyles,
-  makeStyles,
-} from "@material-ui/core";
-import { ThumbUpAltOutlined as LikeIcon, CommentRounded as CommentIcon } from "@material-ui/icons";
+import { ListItem, Typography, Grid, Avatar, ListItemAvatar, Paper, Badge, Theme } from "@mui/material";
+import withStyles from '@mui/styles/withStyles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import { ThumbUpAltOutlined as LikeIcon, CommentRounded as CommentIcon } from "@mui/icons-material";
 import { TransactionResponseItem } from "../models";
 import TransactionTitle from "./TransactionTitle";
 import TransactionAmount from "./TransactionAmount";
@@ -31,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(2),
   },
   socialStats: {
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down('md')]: {
       marginTop: theme.spacing(2),
     },
   },
@@ -79,7 +70,7 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
           <Grid item>
             <ListItemAvatar>
               <Badge
-                overlap="circle"
+                overlap="circular"
                 anchorOrigin={{
                   vertical: "bottom",
                   horizontal: "right",
@@ -100,7 +91,7 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
                 <Grid
                   container
                   direction="row"
-                  justify="flex-start"
+                  justifyContent="flex-start"
                   alignItems="flex-start"
                   spacing={1}
                   className={classes.socialStats}

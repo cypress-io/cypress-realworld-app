@@ -6,17 +6,17 @@ import {
   Payment as PaymentIcon,
   CommentRounded as CommentIcon,
   MonetizationOn as MonetizationOnIcon,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
 import {
   Button,
-  makeStyles,
   ListItemIcon,
   ListItemText,
   useTheme,
   useMediaQuery,
   ListItem,
   IconButton,
-} from "@material-ui/core";
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import {
   isCommentNotification,
   isLikeNotification,
@@ -89,7 +89,7 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
           color="primary"
           onClick={() => updateNotification({ id: notification.id, isRead: true })}
           data-test={`notification-mark-read-${notification.id}`}
-        >
+          size="large">
           <CheckIcon />
         </IconButton>
       )}

@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
-import { makeStyles, Paper, Button, ListSubheader, Grid } from "@material-ui/core";
+import { Paper, Button, ListSubheader, Grid } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { Link as RouterLink } from "react-router-dom";
 import { isEmpty } from "lodash/fp";
 
@@ -56,7 +57,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
           <Grid
             container
             direction="column"
-            justify="center"
+            justifyContent="center"
             alignItems="center"
             style={{ width: "100%" }}
             spacing={2}

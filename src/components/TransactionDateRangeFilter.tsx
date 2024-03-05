@@ -1,16 +1,8 @@
 import React from "react";
 import { format as formatDate } from "date-fns";
-import {
-  Popover,
-  Chip,
-  useTheme,
-  makeStyles,
-  Drawer,
-  Button,
-  useMediaQuery,
-  colors,
-} from "@material-ui/core";
-import { ArrowDropDown as ArrowDropDownIcon, Cancel as CancelIcon } from "@material-ui/icons";
+import { Popover, Chip, useTheme, Drawer, Button, useMediaQuery, colors } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import { ArrowDropDown as ArrowDropDownIcon, Cancel as CancelIcon } from "@mui/icons-material";
 import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
 
 import "react-infinite-calendar/styles.css";
@@ -28,7 +20,7 @@ export type TransactionListDateRangeFilterProps = {
 
 const useStyles = makeStyles((theme) => ({
   popover: {
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down('md')]: {
       top: 0,
       left: 0,
       right: 0,

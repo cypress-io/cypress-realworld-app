@@ -1,18 +1,25 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { Router } from "react-router-dom";
-import { createTheme, ThemeProvider } from "@material-ui/core";
+import { createTheme, ThemeProvider, Theme, StyledEngineProvider, adaptV4Theme } from "@mui/material";
 import { Auth0Provider } from "@auth0/auth0-react";
 import AppAuth0 from "./containers/AppAuth0";
 import { history } from "./utils/historyUtils";
 
-const theme = createTheme({
+
+declare module '@mui/styles/defaultTheme' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
+
+
+const theme = createTheme(adaptV4Theme({
   palette: {
     secondary: {
       main: "#fff",
     },
   },
-});
+}));
 
 /* istanbul ignore next */
 const onRedirectCallback = (appState: any) => {
@@ -34,9 +41,11 @@ if (process.env.VITE_AUTH0) {
       cacheLocation="localstorage"
     >
       <Router history={history}>
-        <ThemeProvider theme={theme}>
-          <AppAuth0 />
-        </ThemeProvider>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={theme}>
+            <AppAuth0 />
+          </ThemeProvider>
+        </StyledEngineProvider>
       </Router>
     </Auth0Provider>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs, Tab } from "@material-ui/core";
+import { Tabs, Tab } from "@mui/material";
 import { Link, useRouteMatch } from "react-router-dom";
 
 export default function TransactionNavTabs() {

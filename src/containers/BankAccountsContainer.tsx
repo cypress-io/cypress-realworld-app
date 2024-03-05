@@ -8,7 +8,9 @@ import {
   TypegenDisabled,
 } from "xstate";
 import { Link as RouterLink, useRouteMatch } from "react-router-dom";
-import { makeStyles, Grid, Button, Paper, Typography } from "@material-ui/core";
+import { Grid, Button, Paper, Typography } from "@mui/material";
+
+import makeStyles from '@mui/styles/makeStyles';
 
 import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from "../machines/authMachine";
 import { DataContext, DataEvents, DataSchema } from "../machines/dataMachine";
@@ -68,7 +70,7 @@ const BankAccountsContainer: React.FC<Props> = ({ authService, bankAccountsServi
 
   return (
     <Paper className={classes.paper}>
-      <Grid container direction="row" justify="space-between" alignItems="center">
+      <Grid container direction="row" justifyContent="space-between" alignItems="center">
         <Grid item>
           <Typography component="h2" variant="h6" color="primary" gutterBottom>
             Bank Accounts

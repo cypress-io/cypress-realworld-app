@@ -11,9 +11,9 @@ import {
   Grid,
   Box,
   Typography,
-  makeStyles,
   Container,
-} from "@material-ui/core";
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 
@@ -21,7 +21,7 @@ import RWALogo from "./SvgRwaLogo";
 import Footer from "./Footer";
 import { SignInPayload } from "../models";
 import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from "../machines/authMachine";
-import { Alert } from "@material-ui/lab";
+import { Alert } from '@mui/material';
 
 const validationSchema = object({
   username: string().required("Username is required"),

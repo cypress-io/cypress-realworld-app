@@ -9,7 +9,6 @@ import {
 } from "xstate";
 import { useActor } from "@xstate/react";
 import {
-  makeStyles,
   AppBar,
   Toolbar,
   Typography,
@@ -19,12 +18,13 @@ import {
   useTheme,
   useMediaQuery,
   Link,
-} from "@material-ui/core";
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import {
   Menu as MenuIcon,
   Notifications as NotificationsIcon,
   AttachMoney as AttachMoneyIcon,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
 import { DataContext, DataEvents, DataSchema } from "../machines/dataMachine";
@@ -113,7 +113,7 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
           color="inherit"
           aria-label="open drawer"
           onClick={() => toggleDrawer()}
-        >
+          size="large">
           <MenuIcon data-test="drawer-icon" />
         </IconButton>
         <Typography
@@ -147,7 +147,7 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
           component={RouterLink}
           to="/notifications"
           data-test="nav-top-notifications-link"
-        >
+          size="large">
           <Badge
             badgeContent={allNotifications ? allNotifications.length : undefined}
             data-test="nav-top-notifications-count"

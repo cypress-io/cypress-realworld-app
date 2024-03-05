@@ -1,8 +1,8 @@
 /* istanbul ignore next */
 import React, { useEffect } from "react";
 import { useActor, useMachine } from "@xstate/react";
-import { makeStyles } from "@material-ui/core/styles";
-import { CssBaseline } from "@material-ui/core";
+import makeStyles from '@mui/styles/makeStyles';
+import { CssBaseline } from "@mui/material";
 // @ts-ignore
 import { LoginCallback, SecureRoute, useOktaAuth, withOktaAuth } from "@okta/okta-react";
 import { Route } from "react-router-dom";

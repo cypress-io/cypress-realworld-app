@@ -1,8 +1,8 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { useActor, useMachine } from "@xstate/react";
-import { makeStyles } from "@material-ui/core";
-import { CssBaseline } from "@material-ui/core";
+import makeStyles from '@mui/styles/makeStyles';
+import { CssBaseline } from "@mui/material";
 
 import { snackbarMachine } from "../machines/snackbarMachine";
 import { notificationsMachine } from "../machines/notificationsMachine";

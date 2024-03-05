@@ -6,7 +6,6 @@ import clsx from "clsx";
 import {
   useMediaQuery,
   useTheme,
-  makeStyles,
   Drawer,
   List,
   Divider,
@@ -16,7 +15,8 @@ import {
   Grid,
   Avatar,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { Link as RouterLink } from "react-router-dom";
 import {
   Home as HomeIcon,
@@ -24,7 +24,7 @@ import {
   ExitToApp as LogoutIcon,
   Notifications as NotificationsIcon,
   AccountBalance as AccountBalanceIcon,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
 
 import { formatAmount } from "../utils/transactionUtils";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
@@ -194,7 +194,7 @@ const NavDrawer: React.FC<Props> = ({
       <Grid
         container
         direction="row"
-        justify="space-between"
+        justifyContent="space-between"
         alignItems="center"
         className={drawerOpen ? classes.userProfile : classes.userProfileHidden}
       >
@@ -233,7 +233,7 @@ const NavDrawer: React.FC<Props> = ({
       <Grid
         container
         direction="row"
-        justify="space-between"
+        justifyContent="space-between"
         alignItems="center"
         className={drawerOpen ? classes.userProfile : classes.userProfileHidden}
       >
