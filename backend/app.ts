@@ -95,6 +95,7 @@ if (process.env.VITE_GOOGLE) {
   app.use(checkGoogleJwt);
 }
 
+app.use("/graphql", gqlPlaygroundRoutes);
 app.use(
   "/graphql",
   createHandler({
@@ -104,7 +105,6 @@ app.use(
     },
   })
 );
-app.use("/gql-playground", gqlPlaygroundRoutes);
 app.use("/users", userRoutes);
 app.use("/contacts", contactRoutes);
 app.use("/bankAccounts", bankAccountRoutes);
