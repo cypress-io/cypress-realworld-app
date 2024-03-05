@@ -124,7 +124,11 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
           className={classes.title}
           data-test="app-name-logo"
         >
-          <Link to="/" style={{ color: "#fff", textDecoration: "none" }} component={RouterLink}>
+          <Link
+            to="/"
+            style={{ color: "#fff", textDecoration: "none" }}
+            component={RouterLink}
+            underline="hover">
             {xsBreakpoint ? (
               <RWALogoIcon className={classes.logo} />
             ) : (
