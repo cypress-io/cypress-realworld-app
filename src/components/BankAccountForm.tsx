@@ -1,6 +1,6 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import { TextField, Button, Grid } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 import { BankAccountPayload, User } from "../models";
@@ -17,18 +17,28 @@ const validationSchema = object({
     .required("Enter a valid bank account number"),
 });
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
+const PREFIX = "BankAccountForm";
+
+const classes = {
+  paper: `${PREFIX}-paper`,
+  form: `${PREFIX}-form`,
+  submit: `${PREFIX}-submit`,
+};
+
+const StyledFormik = styled(Formik)(({ theme }) => ({
+  [`& .${classes.paper}`]: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   },
-  form: {
+
+  [`& .${classes.form}`]: {
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
-  submit: {
+
+  [`& .${classes.submit}`]: {
     margin: theme.spacing(3, 0, 2),
   },
 }));
@@ -45,7 +55,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
   onboarding,
 }) => {
   const history = useHistory();
-  const classes = useStyles();
+
   const initialValues: BankAccountPayload = {
     userId,
     bankName: "",
@@ -54,7 +64,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
   };
 
   return (
-    <Formik
+    <StyledFormik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
@@ -143,7 +153,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
           </Grid>
         </Form>
       )}
-    </Formik>
+    </StyledFormik>
   );
 };
 
