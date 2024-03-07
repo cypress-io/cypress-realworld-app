@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import { useHistory } from "react-router";
 import {
   ListItem,
@@ -10,35 +11,48 @@ import {
   Badge,
   Theme,
 } from "@mui/material";
-import withStyles from "@mui/styles/withStyles";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 import { ThumbUpAltOutlined as LikeIcon, CommentRounded as CommentIcon } from "@mui/icons-material";
 import { TransactionResponseItem } from "../models";
 import TransactionTitle from "./TransactionTitle";
 import TransactionAmount from "./TransactionAmount";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
+const PREFIX = "TransactionItem";
+
+const classes = {
+  root: `${PREFIX}-root`,
+  paper: `${PREFIX}-paper`,
+  avatar: `${PREFIX}-avatar`,
+  socialStats: `${PREFIX}-socialStats`,
+  countIcons: `${PREFIX}-countIcons`,
+  countText: `${PREFIX}-countText`,
+};
+
+const StyledListItem = styled(ListItem)(({ theme }) => ({
+  [`& .${classes.root}`]: {
     flexGrow: 1,
   },
-  paper: {
+
+  [`& .${classes.paper}`]: {
     padding: theme.spacing(0),
     margin: "auto",
     width: "100%",
   },
-  avatar: {
+
+  [`& .${classes.avatar}`]: {
     width: theme.spacing(2),
   },
-  socialStats: {
+
+  [`& .${classes.socialStats}`]: {
     [theme.breakpoints.down("md")]: {
       marginTop: theme.spacing(2),
     },
   },
-  countIcons: {
+
+  [`& .${classes.countIcons}`]: {
     color: theme.palette.grey[400],
   },
-  countText: {
+
+  [`& .${classes.countText}`]: {
     color: theme.palette.grey[400],
     marginTop: 2,
     height: theme.spacing(2),
@@ -50,18 +64,15 @@ type TransactionProps = {
   transaction: TransactionResponseItem;
 };
 
-const SmallAvatar = withStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: 22,
-      height: 22,
-      border: `2px solid ${theme.palette.background.paper}`,
-    },
-  })
-)(Avatar);
+const SmallAvatar = styled(Avatar)(({ theme }: { theme: Theme }) => {
+  return {
+    width: 22,
+    height: 22,
+    border: `2px solid ${theme.palette.background.paper}`,
+  };
+});
 
 const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
-  const classes = useStyles();
   const history = useHistory();
 
   const showTransactionDetail = (transactionId: string) => {
@@ -69,7 +80,7 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
   };
 
   return (
-    <ListItem
+    <StyledListItem
       data-test={`transaction-item-${transaction.id}`}
       alignItems="flex-start"
       onClick={() => showTransactionDetail(transaction.id)}
@@ -84,7 +95,14 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
                   vertical: "bottom",
                   horizontal: "right",
                 }}
-                badgeContent={<SmallAvatar src={transaction.receiverAvatar} />}
+                badgeContent={
+                  <SmallAvatar
+                    src={transaction.receiverAvatar}
+                    classes={{
+                      root: classes.root,
+                    }}
+                  />
+                }
               >
                 <Avatar src={transaction.senderAvatar} />
               </Badge>
@@ -130,7 +148,7 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
           </Grid>
         </Grid>
       </Paper>
-    </ListItem>
+    </StyledListItem>
   );
 };
 
