@@ -1,5 +1,7 @@
 import React from "react";
 
+import { styled } from "@mui/material/styles";
+
 import {
   Check as CheckIcon,
   ThumbUpAltOutlined as LikeIcon,
@@ -16,7 +18,6 @@ import {
   ListItem,
   IconButton,
 } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import {
   isCommentNotification,
   isLikeNotification,
@@ -31,20 +32,30 @@ export interface NotificationListItemProps {
   updateNotification: Function;
 }
 
-const useStyles = makeStyles({
-  card: {
+const PREFIX = "NotificationListItem";
+
+const classes = {
+  card: `${PREFIX}-card`,
+  title: `${PREFIX}-title`,
+  green: `${PREFIX}-green`,
+  red: `${PREFIX}-red`,
+  blue: `${PREFIX}-blue`,
+};
+
+const StyledListItem = styled(ListItem)({
+  [`& .${classes.card}`]: {
     minWidth: "100%",
   },
-  title: {
+  [`& .${classes.title}`]: {
     fontSize: 18,
   },
-  green: {
+  [`& .${classes.green}`]: {
     color: "#4CAF50",
   },
-  red: {
+  [`& .${classes.red}`]: {
     color: "red",
   },
-  blue: {
+  [`& .${classes.blue}`]: {
     color: "blue",
   },
 });
@@ -53,7 +64,6 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
   notification,
   updateNotification,
 }) => {
-  const classes = useStyles();
   const theme = useTheme();
   let listItemText = undefined;
   let listItemIcon = undefined;
@@ -80,7 +90,7 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
   }
 
   return (
-    <ListItem data-test={`notification-list-item-${notification.id}`}>
+    <StyledListItem data-test={`notification-list-item-${notification.id}`}>
       <ListItemIcon>{listItemIcon!}</ListItemIcon>
       <ListItemText primary={listItemText} />
       {xsBreakpoint && (
@@ -104,7 +114,7 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
           Dismiss
         </Button>
       )}
-    </ListItem>
+    </StyledListItem>
   );
 };
 
