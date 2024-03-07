@@ -15,11 +15,6 @@ import { Security } from "@okta/okta-react";
 import { history } from "./utils/historyUtils";
 import AppOkta from "./containers/AppOkta";
 
-declare module "@mui/styles/defaultTheme" {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultTheme extends Theme {}
-}
-
 const theme = createTheme(
   adaptV4Theme({
     palette: {

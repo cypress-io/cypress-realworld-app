@@ -12,11 +12,6 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import AppAuth0 from "./containers/AppAuth0";
 import { history } from "./utils/historyUtils";
 
-declare module "@mui/styles/defaultTheme" {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultTheme extends Theme {}
-}
-
 const theme = createTheme(
   adaptV4Theme({
     palette: {

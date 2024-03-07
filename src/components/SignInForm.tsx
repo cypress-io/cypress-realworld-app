@@ -13,8 +13,6 @@ import {
   Box,
   Typography,
   Container,
-  ContainerProps,
-  ContainerTypeMap,
 } from "@mui/material";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
