@@ -1,7 +1,7 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import { Paper, Typography, Grid, Avatar, Box, Button } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import {
   BaseActionObject,
   Interpreter,
@@ -17,8 +17,14 @@ import {
 import { useActor } from "@xstate/react";
 import { formatAmount } from "../utils/transactionUtils";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
+const PREFIX = "TransactionCreateStepThree";
+
+const classes = {
+  paper: `${PREFIX}-paper`,
+};
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  [`&.${classes.paper}`]: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -44,14 +50,14 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
   createTransactionService,
 }) => {
   const history = useHistory();
-  const classes = useStyles();
+
   const [createTransactionState, sendCreateTransaction] = useActor(createTransactionService);
 
   const receiver = createTransactionState?.context?.receiver;
   const transactionDetails = createTransactionState?.context?.transactionDetails;
 
   return (
-    <Paper className={classes.paper} elevation={0}>
+    <StyledPaper className={classes.paper} elevation={0}>
       <Box
         display="flex"
         justifyContent="center"
@@ -134,7 +140,7 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
           </Grid>
         </Grid>
       </Box>
-    </Paper>
+    </StyledPaper>
   );
 };
 
