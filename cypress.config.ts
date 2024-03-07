@@ -9,7 +9,13 @@ import { defineConfig } from "cypress";
 dotenv.config({ path: ".env.local" });
 dotenv.config();
 
-const awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
+let awsConfig = {
+  default: undefined,
+};
+
+try {
+  awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
+} catch (e) {}
 
 module.exports = defineConfig({
   projectId: "7s5okt",
