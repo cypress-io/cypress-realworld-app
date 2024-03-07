@@ -1,6 +1,6 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import { Button, Typography, Grid, Avatar, Paper, IconButton } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { AvatarGroup } from "@mui/material";
 import { ThumbUpAltOutlined as LikeIcon, CommentRounded as CommentIcon } from "@mui/icons-material";
 import { TransactionResponseItem, TransactionRequestStatus, User } from "../models";
@@ -14,34 +14,53 @@ import CommentsList from "./CommentList";
 import TransactionTitle from "./TransactionTitle";
 import TransactionAmount from "./TransactionAmount";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
+const PREFIX = "TransactionDetail";
+
+const classes = {
+  paper: `${PREFIX}-paper`,
+  paperComments: `${PREFIX}-paperComments`,
+  avatar: `${PREFIX}-avatar`,
+  headline: `${PREFIX}-headline`,
+  avatarLarge: `${PREFIX}-avatarLarge`,
+  avatarGroup: `${PREFIX}-avatarGroup`,
+  redButton: `${PREFIX}-redButton`,
+  greenButton: `${PREFIX}-greenButton`,
+};
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  [`&.${classes.paper}`]: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
   },
-  paperComments: {
+
+  [`& .${classes.paperComments}`]: {
     marginTop: theme.spacing(6),
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
   },
-  avatar: {
+
+  [`& .${classes.avatar}`]: {
     width: theme.spacing(2),
   },
-  headline: {
+
+  [`& .${classes.headline}`]: {
     marginTop: theme.spacing(4),
   },
-  avatarLarge: {
+
+  [`& .${classes.avatarLarge}`]: {
     width: theme.spacing(7),
     height: theme.spacing(7),
   },
-  avatarGroup: {
+
+  [`& .${classes.avatarGroup}`]: {
     margin: 10,
   },
-  redButton: {
+
+  [`& .${classes.redButton}`]: {
     backgrounColor: "red",
     color: "#ffffff",
     backgroundColor: "red",
@@ -55,7 +74,8 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: "none",
     },
   },
-  greenButton: {
+
+  [`& .${classes.greenButton}`]: {
     marginRight: theme.spacing(2),
     color: "#ffffff",
     backgroundColor: "#00C853",
@@ -86,10 +106,8 @@ const TransactionDetail: React.FC<TransactionProps> = ({
   transactionUpdate,
   currentUser,
 }) => {
-  const classes = useStyles();
-
   return (
-    <Paper className={classes.paper}>
+    <StyledPaper className={classes.paper}>
       <Typography
         component="h2"
         variant="h6"
@@ -215,7 +233,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
           <CommentsList comments={transaction.comments} />
         </Paper>
       )}
-    </Paper>
+    </StyledPaper>
   );
 };
 
