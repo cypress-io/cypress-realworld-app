@@ -1,13 +1,19 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import { Paper, Grid } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { TransactionDateRangePayload, TransactionAmountRangePayload } from "../models";
 import TransactionListDateRangeFilter from "./TransactionDateRangeFilter";
 import TransactionListAmountRangeFilter from "./TransactionListAmountRangeFilter";
 import { debounce } from "lodash/fp";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
+const PREFIX = "TransactionListFilters";
+
+const classes = {
+  paper: `${PREFIX}-paper`,
+};
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  [`&.${classes.paper}`]: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
@@ -26,8 +32,6 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
   dateRangeFilters,
   amountRangeFilters,
 }) => {
-  const classes = useStyles();
-
   const filterDateRange = (payload: TransactionDateRangePayload) =>
     sendFilterEvent("DATE_FILTER", payload);
   const resetDateRange = () => sendFilterEvent("DATE_RESET");
@@ -38,7 +42,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
   const resetAmountRange = () => sendFilterEvent("AMOUNT_RESET");
 
   return (
-    <Paper className={classes.paper} elevation={0}>
+    <StyledPaper className={classes.paper} elevation={0}>
       <Grid
         container
         direction="row"
@@ -61,7 +65,7 @@ const TransactionListFilters: React.FC<TransactionListFiltersProps> = ({
           />
         </Grid>
       </Grid>
-    </Paper>
+    </StyledPaper>
   );
 };
 
