@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import { Interpreter } from "xstate";
 import { useActor } from "@xstate/react";
 import { Link } from "react-router-dom";
@@ -12,8 +13,9 @@ import {
   Box,
   Typography,
   Container,
+  ContainerProps,
+  ContainerTypeMap,
 } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 
@@ -30,34 +32,47 @@ const validationSchema = object({
     .required("Enter your password"),
 });
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
+const PREFIX = "SignInForm";
+
+const classes = {
+  paper: `${PREFIX}-paper`,
+  logo: `${PREFIX}-logo`,
+  form: `${PREFIX}-form`,
+  submit: `${PREFIX}-submit`,
+  alertMessage: `${PREFIX}-alertMessage`,
+};
+
+const StyledContainer = styled(Container)(({ theme }) => ({
+  [`& .${classes.paper}`]: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   },
-  logo: {
+
+  [`& .${classes.logo}`]: {
     color: theme.palette.primary.main,
   },
-  form: {
+
+  [`& .${classes.form}`]: {
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
-  submit: {
+
+  [`& .${classes.submit}`]: {
     margin: theme.spacing(3, 0, 2),
   },
-  alertMessage: {
+
+  [`& .${classes.alertMessage}`]: {
     marginBottom: theme.spacing(2),
   },
-}));
+})) as typeof Container;
 
 export interface Props {
   authService: Interpreter<AuthMachineContext, AuthMachineSchema, AuthMachineEvents, any, any>;
 }
 
 const SignInForm: React.FC<Props> = ({ authService }) => {
-  const classes = useStyles();
   const [authState, sendAuth] = useActor(authService);
   const initialValues: SignInPayload = {
     username: "",
@@ -68,7 +83,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
   const signInPending = (payload: SignInPayload) => sendAuth({ type: "LOGIN", ...payload });
 
   return (
-    <Container component="main" maxWidth="xs">
+    <StyledContainer component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         {authState.context?.message && (
@@ -164,7 +179,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
       <Box mt={8}>
         <Footer />
       </Box>
-    </Container>
+    </StyledContainer>
   );
 };
 
