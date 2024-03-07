@@ -1,23 +1,33 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { TransactionResponseItem } from "../models";
 import { isRequestTransaction, isAcceptedRequestTransaction } from "../utils/transactionUtils";
 
-const useStyles = makeStyles((theme) => ({
-  title: {
+const PREFIX = "TransactionTitle";
+
+const classes = {
+  title: `${PREFIX}-title`,
+  titleAction: `${PREFIX}-titleAction`,
+  titleName: `${PREFIX}-titleName`,
+};
+
+const StyledTypography = styled(Typography)(({ theme }) => ({
+  [`&.${classes.title}`]: {
     fontSize: 18,
     [theme.breakpoints.down("md")]: {
       fontSize: theme.typography.fontSize,
     },
   },
-  titleAction: {
+
+  [`& .${classes.titleAction}`]: {
     fontSize: 18,
     [theme.breakpoints.down("md")]: {
       fontSize: theme.typography.fontSize,
     },
   },
-  titleName: {
+
+  [`& .${classes.titleName}`]: {
     fontSize: 18,
     [theme.breakpoints.down("md")]: {
       fontSize: theme.typography.fontSize,
@@ -29,10 +39,8 @@ const useStyles = makeStyles((theme) => ({
 const TransactionTitle: React.FC<{
   transaction: TransactionResponseItem;
 }> = ({ transaction }) => {
-  const classes = useStyles();
-
   return (
-    <Typography color="textSecondary" className={classes.title} gutterBottom>
+    <StyledTypography color="textSecondary" className={classes.title} gutterBottom>
       <Typography
         data-test={`transaction-sender-${transaction.id}`}
         className={classes.titleName}
@@ -61,7 +69,7 @@ const TransactionTitle: React.FC<{
       >
         {transaction.receiverName}
       </Typography>
-    </Typography>
+    </StyledTypography>
   );
 };
 
