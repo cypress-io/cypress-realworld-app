@@ -55,6 +55,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(
+  // @ts-ignore
   session({
     secret: "session secret",
     resave: false,
@@ -62,9 +63,11 @@ app.use(
     unset: "destroy",
   })
 );
+// @ts-ignore
 app.use(passport.initialize());
 app.use(passport.session());
 
+// @ts-ignore
 app.use(paginate.middleware(+process.env.PAGINATION_PAGE_SIZE!));
 
 /* istanbul ignore next */
