@@ -1,12 +1,18 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import { Paper } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import UsersList from "./UsersList";
 import { User } from "../models";
 import UserListSearchForm from "./UserListSearchForm";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
+const PREFIX = "TransactionCreateStepOne";
+
+const classes = {
+  paper: `${PREFIX}-paper`,
+};
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  [`&.${classes.paper}`]: {
     //marginTop: theme.spacing(2),
     padding: theme.spacing(2),
     display: "flex",
@@ -26,13 +32,11 @@ const TransactionCreateStepOne: React.FC<TransactionCreateStepOneProps> = ({
   userListSearch,
   users,
 }) => {
-  const classes = useStyles();
-
   return (
-    <Paper className={classes.paper} elevation={0}>
+    <StyledPaper className={classes.paper} elevation={0}>
       <UserListSearchForm userListSearch={userListSearch} />
       <UsersList users={users} setReceiver={setReceiver} />
-    </Paper>
+    </StyledPaper>
   );
 };
 
