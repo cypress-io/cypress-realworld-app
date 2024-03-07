@@ -1,21 +1,21 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import { get } from "lodash/fp";
 import { useTheme, useMediaQuery, Divider } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { InfiniteLoader, List, Index } from "react-virtualized";
 import "react-virtualized/styles.css"; // only needs to be imported once
 
 import TransactionItem from "./TransactionItem";
 import { TransactionResponseItem, TransactionPagination } from "../models";
 
-export interface TransactionListProps {
-  transactions: TransactionResponseItem[];
-  loadNextPage: Function;
-  pagination: TransactionPagination;
-}
+const PREFIX = "TransactionInfiniteList";
 
-const useStyles = makeStyles((theme) => ({
-  transactionList: {
+const classes = {
+  transactionList: `${PREFIX}-transactionList`,
+};
+
+const StyledInfiniteLoader = styled(InfiniteLoader)(({ theme }) => ({
+  [`& .${classes.transactionList}`]: {
     width: "100%",
     minHeight: "80vh",
     display: "flex",
@@ -24,12 +24,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+export interface TransactionListProps {
+  transactions: TransactionResponseItem[];
+  loadNextPage: Function;
+  pagination: TransactionPagination;
+}
+
 const TransactionInfiniteList: React.FC<TransactionListProps> = ({
   transactions,
   loadNextPage,
   pagination,
 }) => {
-  const classes = useStyles();
   const theme = useTheme();
   const isXsBreakpoint = useMediaQuery(theme.breakpoints.down("sm"));
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -62,7 +67,7 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
   const removePx = (str: string) => +str.slice(0, str.length - 2);
 
   return (
-    <InfiniteLoader
+    <StyledInfiniteLoader
       isRowLoaded={isRowLoaded}
       loadMoreRows={loadMoreItems}
       rowCount={itemCount}
@@ -81,7 +86,7 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
           />
         </div>
       )}
-    </InfiniteLoader>
+    </StyledInfiniteLoader>
   );
 };
 

@@ -1,16 +1,23 @@
 import React, { useRef } from "react";
+import { styled } from "@mui/material/styles";
 import { TextField } from "@mui/material";
 
-import makeStyles from "@mui/styles/makeStyles";
+const PREFIX = "UserListSearchForm";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
+const classes = {
+  paper: `${PREFIX}-paper`,
+  form: `${PREFIX}-form`,
+};
+
+const Root = styled("div")(({ theme }) => ({
+  [`& .${classes.paper}`]: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   },
-  form: {
+
+  [`& .${classes.form}`]: {
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
@@ -21,11 +28,10 @@ export interface UserListSearchFormProps {
 }
 
 const UserListSearchForm: React.FC<UserListSearchFormProps> = ({ userListSearch }) => {
-  const classes = useStyles();
   const inputEl = useRef<HTMLInputElement>(null);
 
   return (
-    <div>
+    <Root>
       <form className={classes.form}>
         <TextField
           variant="outlined"
@@ -48,7 +54,7 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({ userListSearch 
           }}
         />
       </form>
-    </div>
+    </Root>
   );
 };
 
