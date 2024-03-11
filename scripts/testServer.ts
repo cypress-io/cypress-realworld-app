@@ -8,6 +8,7 @@ const app = express();
 
 setupProxy(app);
 
+// @ts-expect-error
 app.use(history());
 app.use(express.static(path.join(__dirname, "../build")));
 
