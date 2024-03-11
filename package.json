@@ -123,7 +123,7 @@
     "nodemon": "2.0.22",
     "npm": "^9.8.0",
     "nyc": "15.1.0",
-    "passport": "0.5.0",
+    "passport": "0.6.0",
     "passport-local": "1.0.0",
     "patch-package": "^7.0.0",
     "prettier": "^3.0.0",
