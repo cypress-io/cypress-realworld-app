@@ -116,10 +116,8 @@ Cypress.Commands.add("reactComponent", { prevSubject: "element" }, ($el) => {
 });
 
 Cypress.Commands.add("setTransactionAmountRange", (min, max) => {
-  // eslint-disable-next-line cypress/unsafe-to-chain-command
-  cy.getBySel("transaction-list-filter-amount-range-button")
-    .scrollIntoView()
-    .click({ force: true });
+  cy.getBySel("transaction-list-filter-amount-range-button").scrollIntoView();
+  cy.getBySel("transaction-list-filter-amount-range-button").click({ force: true });
 
   return cy
     .getBySelLike("filter-amount-range-slider")
