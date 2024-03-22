@@ -1,10 +1,10 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { Router } from "react-router-dom";
+import { Router, withRouter } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@material-ui/core";
 
 // @ts-ignore
-import { OktaAuth } from "@okta/okta-auth-js";
+import { OktaAuth, toRelativeUrl } from "@okta/okta-auth-js";
 import { Security } from "@okta/okta-react";
 import { history } from "./utils/historyUtils";
 import AppOkta from "./containers/AppOkta";
@@ -25,13 +25,23 @@ if (process.env.VITE_OKTA) {
     clientId: process.env.VITE_OKTA_CLIENTID,
     redirectUri: window.location.origin + "/implicit/callback",
   });
+
+  const AppWithRouter = withRouter(({ history }) => {
+    const restoreOriginalUri = (_oktaAuth, originalUri) =>
+      history.replace(toRelativeUrl(originalUri || "/", window.location.origin));
+
+    return (
+      <Security oktaAuth={oktaAuth} restoreOriginalUri={restoreOriginalUri}>
+        <AppOkta />
+      </Security>
+    );
+  });
+
   /* istanbul ignore next */
   root.render(
     <Router history={history}>
       <ThemeProvider theme={theme}>
-        <Security oktaAuth={oktaAuth}>
-          <AppOkta />
-        </Security>
+        <AppWithRouter />
       </ThemeProvider>
     </Router>
   );
