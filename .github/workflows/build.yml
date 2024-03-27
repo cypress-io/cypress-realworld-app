@@ -1,0 +1,23 @@
+name: CI-Build
+
+on: 
+  push:
+    branches:
+      - cypress-rwa
+    pull_request:
+      branches:
+        - cypress-rwa
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run tests
+        run: yarn test
