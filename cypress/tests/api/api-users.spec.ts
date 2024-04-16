@@ -135,6 +135,25 @@ describe("Users API", function () {
       });
     });
 
+    it("creates a new user with an account balance in cents", function () {
+      const firstName = faker.name.firstName();
+
+      cy.request("POST", `${apiUsers}`, {
+        firstName,
+        lastName: faker.name.lastName(),
+        username: faker.internet.userName(),
+        password: faker.internet.password(),
+        email: faker.internet.email(),
+        phoneNumber: faker.phone.phoneNumber(),
+        avatar: faker.internet.avatar(),
+        balance: 100_00,
+      }).then((response) => {
+        expect(response.status).to.eq(201);
+        expect(response.body.user).to.contain({ firstName });
+        expect(response.body.user.balance).to.equal(100_00);
+      });
+    });
+
     it("error when invalid field sent", function () {
       cy.request({
         method: "POST",
