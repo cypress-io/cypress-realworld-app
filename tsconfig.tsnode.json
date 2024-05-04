@@ -2,6 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
-    "isolatedModules": false
+    "isolatedModules": false,
+    "types": ["node"]
   }
 }
