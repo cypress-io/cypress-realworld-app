@@ -6,7 +6,7 @@ import session from "express-session";
 import bodyParser from "body-parser";
 import cors from "cors";
 import paginate from "express-paginate";
-import { createHandler } from "graphql-http/lib/use/express";
+import { createHandler as graphqlHandler } from "graphql-http/lib/use/express";
 import { loadSchemaSync } from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { addResolversToSchema } from "@graphql-tools/schema";
