@@ -98,7 +98,7 @@ if (process.env.VITE_GOOGLE) {
 app.use("/graphql", gqlPlaygroundRoutes);
 app.use(
   "/graphql",
-  createHandler({
+  graphqlHandler({
     schema: schemaWithResolvers,
     context: async (req, _args) => {
       return { user: req.raw.user };
