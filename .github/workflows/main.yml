@@ -2,6 +2,8 @@ name: Cypress Tests
 
 on:
   push:
+    branches:
+      - develop
     branches-ignore:
       - "renovate/**"
 
