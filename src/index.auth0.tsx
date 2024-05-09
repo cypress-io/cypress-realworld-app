@@ -41,5 +41,5 @@ if (process.env.VITE_AUTH0) {
     </Auth0Provider>
   );
 } else {
-  console.error("Auth0 is not configured.");
+  console.error("Auth0 is not configuredd.");
 }
