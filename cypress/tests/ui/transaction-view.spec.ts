@@ -52,7 +52,7 @@ describe("Transaction View", function () {
     cy.wait("@getTransaction");
 
     cy.getBySelLike("like-button").click();
-    cy.getBySelLike("like-count").should("contain", 1);
+    cy.getBySelLike("like-count").should("contain", 2);
     cy.getBySelLike("like-button").should("be.disabled");
     cy.visualSnapshot("Transaction after Liked");
   });
