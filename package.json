@@ -150,7 +150,7 @@
     "start": "cross-env NODE_ENV=development concurrently yarn:start:react yarn:start:api",
     "start:ci": "cross-env NODE_ENV=test concurrently yarn:start:react:proxy-server yarn:start:api",
     "prestart:ci": "yarn predev:cognito:ci",
-    "start:react": "vite",
+    "start:react": "vite --host",
     "start:empty": "cross-env NODE_ENV=development EMPTY_SEED=true concurrently yarn:start:react yarn:start:api:watch",
     "lint": "eslint && prettier --check \"**/**.{ts,js,tsx}\" \"*.{json,md,yml}\"",
     "list:dev:users": "cat data/database.json | json -a users | json -a id username",
