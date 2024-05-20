@@ -101,6 +101,7 @@ describe("Bank Accounts API", function () {
           }`,
       }).then((response) => {
         expect(response.status).to.eq(200);
+        expect(JSON.stringify(response.body.errors || "notThere")).to.eq('"notThere"');
         expect(response.body.data.listBankAccount[0].userId).to.eq(userId);
       });
     });
