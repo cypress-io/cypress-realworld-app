@@ -6,7 +6,7 @@ import session from "express-session";
 import bodyParser from "body-parser";
 import cors from "cors";
 import paginate from "express-paginate";
-import { graphqlHTTP } from "express-graphql";
+import { createHandler as graphqlHandler } from "graphql-http/lib/use/express";
 import { loadSchemaSync } from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { addResolversToSchema } from "@graphql-tools/schema";
@@ -15,6 +15,7 @@ import auth from "./auth";
 import userRoutes from "./user-routes";
 import contactRoutes from "./contact-routes";
 import bankAccountRoutes from "./bankaccount-routes";
+import gqlPlaygroundRoutes from "./gql-playground-routes";
 import transactionRoutes from "./transaction-routes";
 import likeRoutes from "./like-routes";
 import commentRoutes from "./comment-routes";
@@ -97,14 +98,16 @@ if (process.env.VITE_GOOGLE) {
   app.use(checkGoogleJwt);
 }
 
+app.use("/graphql", gqlPlaygroundRoutes);
 app.use(
   "/graphql",
-  graphqlHTTP({
+  graphqlHandler({
     schema: schemaWithResolvers,
-    graphiql: true,
+    context: async (req, _args) => {
+      return { user: req.raw.user };
+    },
   })
 );
-
 app.use("/users", userRoutes);
 app.use("/contacts", contactRoutes);
 app.use("/bankAccounts", bankAccountRoutes);
