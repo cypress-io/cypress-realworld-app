@@ -58,6 +58,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 
   [`& .${classes.avatarGroup}`]: {
     margin: 10,
+    flexDirection: "unset",
   },
 
   [`& .${classes.redButton}`]: {
