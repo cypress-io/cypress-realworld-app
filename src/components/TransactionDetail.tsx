@@ -58,7 +58,6 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 
   [`& .${classes.avatarGroup}`]: {
     margin: 10,
-    flexDirection: "unset",
   },
 
   [`& .${classes.redButton}`]: {
@@ -126,18 +125,22 @@ const TransactionDetail: React.FC<TransactionProps> = ({
         data-test={`transaction-item-${transaction.id}`}
       >
         <Grid item className={classes.headline}>
-          <AvatarGroup className={classes.avatarGroup} max={2}>
-            <Avatar
-              data-test="transaction-sender-avatar"
-              className={classes.avatarLarge}
-              src={transaction.senderAvatar}
-            />
-            <Avatar
-              data-test="transaction-receiver-avatar"
-              className={classes.avatarLarge}
-              src={transaction.receiverAvatar}
-            />
-          </AvatarGroup>
+          <Grid container direction="row">
+            <AvatarGroup className={classes.avatarGroup} max={2}>
+              <Avatar
+                data-test="transaction-sender-avatar"
+                className={classes.avatarLarge}
+                src={transaction.senderAvatar}
+              />
+              <Avatar
+                data-test="transaction-receiver-avatar"
+                className={classes.avatarLarge}
+                src={transaction.receiverAvatar}
+              />
+            </AvatarGroup>
+            {/* eat up space to right of AvatarGroup: */}
+            <Grid item sx={{ width: "100%" }} />
+          </Grid>
           <Grid container direction="column" justifyContent="flex-start" alignItems="flex-start">
             <Grid item></Grid>
             <Grid item>
