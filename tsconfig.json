@@ -16,7 +16,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "noFallthroughCasesInSwitch": true,
-    "types": ["cypress"],
+    "types": ["cypress"]
   },
   "include": [
     "src/**/*.cy.{js,ts,jsx,tsx}",
@@ -24,6 +24,6 @@
     "backend",
     "src/__tests__",
     "cypress.d.ts",
-    "src/utils/portUtils.ts",
-  ],
+    "src/utils/portUtils.ts"
+  ]
 }
