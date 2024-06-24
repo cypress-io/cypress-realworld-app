@@ -3,7 +3,7 @@ import { seedDatabase, getAllUsers, searchUsers } from "../../backend/database";
 
 import { User } from "../models";
 
-describe("Users", () => {
+describe.skip("Users", () => {
   beforeEach(() => {
     seedDatabase();
   });

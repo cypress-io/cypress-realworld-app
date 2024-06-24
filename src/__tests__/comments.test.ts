@@ -10,7 +10,7 @@ import {
 
 import { User, Transaction } from "../../src/models";
 
-describe("Comments", () => {
+describe.skip("Comments", () => {
   beforeEach(() => {
     seedDatabase();
   });

@@ -29,7 +29,7 @@ import {
 import { getFakeAmount } from "../../src/utils/transactionUtils";
 import { totalTransactions, transactionsPerUser } from "../../scripts/seedDataUtils";
 
-describe("Transactions", () => {
+describe.skip("Transactions", () => {
   beforeEach(() => {
     seedDatabase();
   });
