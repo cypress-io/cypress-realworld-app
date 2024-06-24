@@ -80,6 +80,7 @@ export const verifyOktaToken = (req: Request, res: Response, next: NextFunction)
 
 // Amazon Cognito Validate the JWT Signature
 // https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-verifying-a-jwt.html#amazon-cognito-user-pools-using-tokens-step-2
+// @ts-ignore
 const userPoolId = awsConfig.Auth.Cognito.userPoolId;
 const region = userPoolId.split("_")[0];
 const awsCognitoJwtConfig = {
