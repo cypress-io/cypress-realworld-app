@@ -31,12 +31,12 @@ jobs:
       #- run: yarn test:unit:ci
       # - run: yarn build:ci
 
-      - name: Save build folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: build
-          if-no-files-found: error
-          path: build
+      # - name: Save build folder
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: build
+      #     if-no-files-found: error
+      #     path: build
 
   ui-chrome-tests:
     timeout-minutes: 15
