@@ -1,5 +1,6 @@
 // @ts-check
 import "@cypress/code-coverage/support";
+import "@replayio/cypress/support";
 import "./commands";
 import { isMobile } from "./utils";
 
