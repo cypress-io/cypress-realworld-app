@@ -87,6 +87,7 @@ jobs:
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEBUG: "cypress:server:args"
+          REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY }}
 
   # ui-chrome-mobile-tests:
   #   timeout-minutes: 15
