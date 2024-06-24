@@ -57,6 +57,7 @@
     "@faker-js/faker": "6.1.2",
     "@percy/cli": "^1.27.4",
     "@percy/cypress": "3.1.2",
+    "@replayio/cypress": "^3.0.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@types/bcryptjs": "2.4.2",
