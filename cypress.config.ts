@@ -7,6 +7,7 @@ import codeCoverageTask from "@cypress/code-coverage/task";
 import { devServer } from "@cypress/vite-dev-server";
 import { defineConfig } from "cypress";
 import { mergeConfig, loadEnv } from "vite";
+import { plugin as replayPlugin, wrapOn } from "@replayio/cypress";
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
@@ -97,8 +98,16 @@ module.exports = defineConfig({
     viewportHeight: 1000,
     viewportWidth: 1280,
     experimentalRunAllSpecs: true,
-    setupNodeEvents(on, config) {
+    setupNodeEvents(cyOn, config) {
       const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
+
+      const on = wrapOn(cyOn);
+
+      replayPlugin(on, config, {
+        upload: true, // automatically upload your replays to DevTools
+
+        apiKey: process.env.REPLAY_API_KEY,
+      });
 
       const queryDatabase = ({ entity, query }, callback) => {
         const fetchData = async (attrs) => {
