@@ -74,7 +74,7 @@ jobs:
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
-          #browser: chrome
+          browser: "replay-chromium"
           #record: true
           # parallel: true
           # group: "UI - Chrome"
