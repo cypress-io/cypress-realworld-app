@@ -76,13 +76,13 @@ jobs:
           wait-on-timeout: 120
           browser: chrome
           #record: true
-          parallel: true
-          group: "UI - Chrome"
+          # parallel: true
+          # group: "UI - Chrome"
           spec: cypress/tests/ui/*
           config-file: cypress.config.ts
         env:
-          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+          # CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # Recommended: pass the GitHub token lets this action correctly
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
