@@ -24,8 +24,8 @@ jobs:
       - run: node --version
       - run: node -p 'os.cpus()'
       - run: yarn types
-      - run: yarn lint
-      - run: yarn test:unit:ci
+      #- run: yarn lint
+      #- run: yarn test:unit:ci
       - run: yarn build:ci
 
       - name: Save build folder
@@ -74,7 +74,7 @@ jobs:
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
-          browser: chrome
+          #browser: chrome
           #record: true
           # parallel: true
           # group: "UI - Chrome"

@@ -10,7 +10,7 @@ import {
 } from "../../backend/database";
 import { User } from "../../src/models/user";
 import { BankAccount } from "../../src/models/bankaccount";
-describe.only("BankAccounts", () => {
+describe("BankAccounts", () => {
   beforeEach(() => {
     seedDatabase();
   });
