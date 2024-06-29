@@ -40,7 +40,8 @@ describe("Transaction View", function () {
   });
 
   it("transactions navigation tabs are hidden on a transaction view page", function () {
-    cy.getBySelLike("transaction-item").first().click();
+    // { force: true } is a workaround for https://github.com/cypress-io/cypress/issues/29776
+    cy.getBySelLike("transaction-item").first().click({ force: true });
     cy.location("pathname").should("include", "/transaction");
     cy.getBySel("nav-transaction-tabs").should("not.exist");
     cy.getBySel("transaction-detail-header").should("be.visible");
@@ -48,7 +49,8 @@ describe("Transaction View", function () {
   });
 
   it("likes a transaction", function () {
-    cy.getBySelLike("transaction-item").first().click();
+    // { force: true } is a workaround for https://github.com/cypress-io/cypress/issues/29776
+    cy.getBySelLike("transaction-item").first().click({ force: true });
     cy.wait("@getTransaction");
 
     cy.getBySelLike("like-button").click();
@@ -58,7 +60,8 @@ describe("Transaction View", function () {
   });
 
   it("comments on a transaction", function () {
-    cy.getBySelLike("transaction-item").first().click();
+    // { force: true } is a workaround for https://github.com/cypress-io/cypress/issues/29776
+    cy.getBySelLike("transaction-item").first().click({ force: true });
     cy.wait("@getTransaction");
 
     const comments = ["Thank you!", "Appreciate it."];
