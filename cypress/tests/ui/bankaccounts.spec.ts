@@ -7,7 +7,7 @@ type BankAccountsTestCtx = {
   user?: User;
 };
 
-describe.skip("Bank Accounts", function () {
+describe("Bank Accounts", function () {
   const ctx: BankAccountsTestCtx = {};
 
   beforeEach(function () {
@@ -128,7 +128,7 @@ describe.skip("Bank Accounts", function () {
     cy.visualSnapshot("Bank Account Form with Errors and Submit button disabled");
   });
 
-  it("soft deletes a bank account", function () {
+  it.only("soft deletes a bank account", function () {
     cy.visit("/bankaccounts");
     cy.getBySelLike("delete").first().click();
 
