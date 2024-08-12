@@ -97,7 +97,7 @@
     "cross-env": "7.0.3",
     "cypress": "^13.7.1",
     "dotenv": "16.0.0",
-    "eslint": "^8.44.0",
+    "eslint": "^8.57.0",
     "eslint-config-prettier": "8.10.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-cypress": "2.15.2",
@@ -192,23 +192,6 @@
   },
   "engines": {
     "node": "^18.0.0 || >=20.0.0"
-  },
-  "eslintConfig": {
-    "env": {
-      "cypress/globals": true
-    },
-    "extends": [
-      "react-app",
-      "plugin:prettier/recommended",
-      "plugin:cypress/recommended"
-    ],
-    "plugins": [
-      "cypress",
-      "prettier"
-    ],
-    "rules": {
-      "no-unused-expressions": 0
-    }
   },
   "husky": {
     "hooks": {
