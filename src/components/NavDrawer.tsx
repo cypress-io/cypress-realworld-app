@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import { head } from "lodash/fp";
 import { Interpreter } from "xstate";
 import { useActor } from "@xstate/react";
@@ -6,7 +7,6 @@ import clsx from "clsx";
 import {
   useMediaQuery,
   useTheme,
-  makeStyles,
   Drawer,
   List,
   Divider,
@@ -16,7 +16,7 @@ import {
   Grid,
   Avatar,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import {
   Home as HomeIcon,
@@ -24,10 +24,91 @@ import {
   ExitToApp as LogoutIcon,
   Notifications as NotificationsIcon,
   AccountBalance as AccountBalanceIcon,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
 
 import { formatAmount } from "../utils/transactionUtils";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+
+const PREFIX = "NavDrawer";
+
+const classes = {
+  toolbar: `${PREFIX}-toolbar`,
+  toolbarIcon: `${PREFIX}-toolbarIcon`,
+  drawerPaper: `${PREFIX}-drawerPaper`,
+  drawerPaperClose: `${PREFIX}-drawerPaperClose`,
+  userProfile: `${PREFIX}-userProfile`,
+  userProfileHidden: `${PREFIX}-userProfileHidden`,
+  avatar: `${PREFIX}-avatar`,
+  accountBalance: `${PREFIX}-accountBalance`,
+  amount: `${PREFIX}-amount`,
+  accountBalanceHidden: `${PREFIX}-accountBalanceHidden`,
+  cypressLogo: `${PREFIX}-cypressLogo`,
+};
+
+const StyledDrawer = styled(Drawer)(({ theme }) => ({
+  [`& .${classes.toolbar}`]: {
+    paddingRight: 24, // keep right padding when drawer closed
+  },
+
+  [`& .${classes.toolbarIcon}`]: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: "0 8px",
+    ...theme.mixins.toolbar,
+  },
+
+  [`& .${classes.drawerPaper}`]: {
+    position: "relative",
+    whiteSpace: "nowrap",
+    width: drawerWidth,
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+
+  [`& .${classes.drawerPaperClose}`]: {
+    marginTop: 50,
+    overflowX: "hidden",
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    width: theme.spacing(7),
+    [theme.breakpoints.up("sm")]: {
+      width: theme.spacing(9),
+    },
+  },
+
+  [`& .${classes.userProfile}`]: {
+    padding: theme.spacing(2),
+  },
+
+  [`& .${classes.userProfileHidden}`]: {
+    display: "none",
+  },
+
+  [`& .${classes.avatar}`]: {
+    marginRight: theme.spacing(2),
+  },
+
+  [`& .${classes.accountBalance}`]: {
+    marginLeft: theme.spacing(2),
+  },
+
+  [`& .${classes.amount}`]: {
+    fontWeight: "bold",
+  },
+
+  [`& .${classes.accountBalanceHidden}`]: {
+    display: "none",
+  },
+
+  [`& .${classes.cypressLogo}`]: {
+    width: "40%",
+  },
+}));
 
 const drawerWidth = 240;
 
@@ -102,61 +183,6 @@ export const secondaryListItems = (signOutPending: Function) => (
   </div>
 );
 
-const useStyles = makeStyles((theme) => ({
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar,
-  },
-  drawerPaper: {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    marginTop: 50,
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9),
-    },
-  },
-  userProfile: {
-    padding: theme.spacing(2),
-  },
-  userProfileHidden: {
-    display: "none",
-  },
-  avatar: {
-    marginRight: theme.spacing(2),
-  },
-  accountBalance: {
-    marginLeft: theme.spacing(2),
-  },
-  amount: {
-    fontWeight: "bold",
-  },
-  accountBalanceHidden: {
-    display: "none",
-  },
-  cypressLogo: {
-    width: "40%",
-  },
-}));
-
 interface Props {
   closeMobileDrawer: () => void;
   toggleDrawer: () => void;
@@ -170,7 +196,6 @@ const NavDrawer: React.FC<Props> = ({
   drawerOpen,
   authService,
 }) => {
-  const classes = useStyles();
   const theme = useTheme();
   const [authState, sendAuth] = useActor(authService);
   const showTemporaryDrawer = useMediaQuery(theme.breakpoints.only("xs"));
@@ -179,7 +204,7 @@ const NavDrawer: React.FC<Props> = ({
   const signOut = () => sendAuth("LOGOUT");
 
   return (
-    <Drawer
+    <StyledDrawer
       data-test="sidenav"
       variant={showTemporaryDrawer ? "temporary" : "persistent"}
       classes={{
@@ -194,7 +219,7 @@ const NavDrawer: React.FC<Props> = ({
       <Grid
         container
         direction="row"
-        justify="space-between"
+        justifyContent="space-between"
         alignItems="center"
         className={drawerOpen ? classes.userProfile : classes.userProfileHidden}
       >
@@ -233,7 +258,7 @@ const NavDrawer: React.FC<Props> = ({
       <Grid
         container
         direction="row"
-        justify="space-between"
+        justifyContent="space-between"
         alignItems="center"
         className={drawerOpen ? classes.userProfile : classes.userProfileHidden}
       >
@@ -267,7 +292,7 @@ const NavDrawer: React.FC<Props> = ({
           <List>{secondaryListItems(signOut)}</List>
         </Grid>
       </Grid>
-    </Drawer>
+    </StyledDrawer>
   );
 };
 

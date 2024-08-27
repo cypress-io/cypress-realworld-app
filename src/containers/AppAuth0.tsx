@@ -1,8 +1,8 @@
 /* istanbul ignore next */
 import React, { useEffect } from "react";
+import { styled } from "@mui/material/styles";
 import { useActor, useMachine } from "@xstate/react";
-import { makeStyles } from "@material-ui/core/styles";
-import { CssBaseline } from "@material-ui/core";
+import { CssBaseline } from "@mui/material";
 
 import { snackbarMachine } from "../machines/snackbarMachine";
 import { notificationsMachine } from "../machines/notificationsMachine";
@@ -12,6 +12,18 @@ import { bankAccountsMachine } from "../machines/bankAccountsMachine";
 import PrivateRoutesContainer from "./PrivateRoutesContainer";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 
+const PREFIX = "appAuth0";
+
+const classes = {
+  root: `${PREFIX}-root`,
+};
+
+const Root = styled("div")(({ theme }) => ({
+  [`&.${classes.root}`]: {
+    display: "flex",
+  },
+}));
+
 // @ts-ignore
 if (window.Cypress) {
   // Expose authService on window for Cypress
@@ -19,16 +31,10 @@ if (window.Cypress) {
   window.authService = authService;
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-}));
-
 /* istanbul ignore next */
 const AppAuth0: React.FC = () => {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
-  const classes = useStyles();
+
   const [authState] = useActor(authService);
   const [, , notificationsService] = useMachine(notificationsMachine);
 
@@ -50,7 +56,7 @@ const AppAuth0: React.FC = () => {
     authState.matches("updating");
 
   return (
-    <div className={classes.root}>
+    <Root className={classes.root}>
       <CssBaseline />
 
       {isLoggedIn && (
@@ -64,7 +70,7 @@ const AppAuth0: React.FC = () => {
       )}
 
       <AlertBar snackbarService={snackbarService} />
-    </div>
+    </Root>
   );
 };
 

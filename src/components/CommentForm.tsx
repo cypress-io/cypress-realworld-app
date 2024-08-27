@@ -1,5 +1,6 @@
 import React from "react";
-import { makeStyles, TextField } from "@material-ui/core";
+import { styled } from "@mui/material/styles";
+import { TextField } from "@mui/material";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 
@@ -7,14 +8,22 @@ const validationSchema = object({
   content: string(),
 });
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
+const PREFIX = "CommentForm";
+
+const classes = {
+  paper: `${PREFIX}-paper`,
+  form: `${PREFIX}-form`,
+};
+
+const Root = styled("div")(({ theme }) => ({
+  [`& .${classes.paper}`]: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   },
-  form: {
+
+  [`& .${classes.form}`]: {
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
@@ -26,11 +35,10 @@ export interface CommentFormProps {
 }
 
 const CommentForm: React.FC<CommentFormProps> = ({ transactionId, transactionComment }) => {
-  const classes = useStyles();
   const initialValues = { content: "" };
 
   return (
-    <div>
+    <Root>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -60,7 +68,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ transactionId, transactionCom
           </Form>
         )}
       </Formik>
-    </div>
+    </Root>
   );
 };
 

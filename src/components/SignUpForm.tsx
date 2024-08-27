@@ -1,17 +1,9 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import { useActor } from "@xstate/react";
 import { Interpreter } from "xstate";
 import { Link } from "react-router-dom";
-import {
-  Button,
-  Container,
-  CssBaseline,
-  TextField,
-  Grid,
-  Box,
-  Typography,
-  makeStyles,
-} from "@material-ui/core";
+import { Button, Container, CssBaseline, TextField, Grid, Box, Typography } from "@mui/material";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object, ref } from "yup";
 
@@ -19,6 +11,37 @@ import RWALogo from "./SvgRwaLogo";
 import Footer from "./Footer";
 import { SignUpPayload } from "../models";
 import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from "../machines/authMachine";
+
+const PREFIX = "SignUpForm";
+
+const classes = {
+  paper: `${PREFIX}-paper`,
+  logo: `${PREFIX}-logo`,
+  form: `${PREFIX}-form`,
+  submit: `${PREFIX}-submit`,
+};
+
+const StyledContainer = styled(Container)(({ theme }) => ({
+  [`& .${classes.paper}`]: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+
+  [`& .${classes.logo}`]: {
+    color: theme.palette.primary.main,
+  },
+
+  [`& .${classes.form}`]: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+
+  [`& .${classes.submit}`]: {
+    margin: theme.spacing(3, 0, 2),
+  },
+})) as typeof Container;
 
 const validationSchema = object({
   firstName: string().required("First Name is required"),
@@ -32,31 +55,11 @@ const validationSchema = object({
     .oneOf([ref("password")], "Password does not match"),
 });
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  logo: {
-    color: theme.palette.primary.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
 export interface Props {
   authService: Interpreter<AuthMachineContext, AuthMachineSchema, AuthMachineEvents, any, any>;
 }
 
 const SignUpForm: React.FC<Props> = ({ authService }) => {
-  const classes = useStyles();
   const [, sendAuth] = useActor(authService);
   const initialValues: SignUpPayload & { confirmPassword: string } = {
     firstName: "",
@@ -69,7 +72,7 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
   const signUpPending = (payload: SignUpPayload) => sendAuth({ type: "SIGNUP", ...payload });
 
   return (
-    <Container component="main" maxWidth="xs">
+    <StyledContainer component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <div>
@@ -198,7 +201,7 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
       <Box mt={8}>
         <Footer />
       </Box>
-    </Container>
+    </StyledContainer>
   );
 };
 

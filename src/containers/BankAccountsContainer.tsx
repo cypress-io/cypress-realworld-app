@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { styled } from "@mui/material/styles";
 import { useActor } from "@xstate/react";
 import {
   BaseActionObject,
@@ -8,7 +9,7 @@ import {
   TypegenDisabled,
 } from "xstate";
 import { Link as RouterLink, useRouteMatch } from "react-router-dom";
-import { makeStyles, Grid, Button, Paper, Typography } from "@material-ui/core";
+import { Grid, Button, Paper, Typography } from "@mui/material";
 
 import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from "../machines/authMachine";
 import { DataContext, DataEvents, DataSchema } from "../machines/dataMachine";
@@ -25,9 +26,14 @@ export interface Props {
     ResolveTypegenMeta<TypegenDisabled, DataEvents, BaseActionObject, ServiceMap>
   >;
 }
+const PREFIX = "BankAccountsContainer";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
+const classes = {
+  paper: `${PREFIX}-paper`,
+};
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  [`&.${classes.paper}`]: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
@@ -37,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 const BankAccountsContainer: React.FC<Props> = ({ authService, bankAccountsService }) => {
   const match = useRouteMatch();
-  const classes = useStyles();
+
   const [authState] = useActor(authService);
   const [bankAccountsState, sendBankAccounts] = useActor(bankAccountsService);
 
@@ -57,18 +63,18 @@ const BankAccountsContainer: React.FC<Props> = ({ authService, bankAccountsServi
 
   if (match.url === "/bankaccounts/new" && currentUser?.id) {
     return (
-      <Paper className={classes.paper}>
+      <StyledPaper className={classes.paper}>
         <Typography component="h2" variant="h6" color="primary" gutterBottom>
           Create Bank Account
         </Typography>
         <BankAccountForm userId={currentUser?.id} createBankAccount={createBankAccount} />
-      </Paper>
+      </StyledPaper>
     );
   }
 
   return (
-    <Paper className={classes.paper}>
-      <Grid container direction="row" justify="space-between" alignItems="center">
+    <StyledPaper className={classes.paper}>
+      <Grid container direction="row" justifyContent="space-between" alignItems="center">
         <Grid item>
           <Typography component="h2" variant="h6" color="primary" gutterBottom>
             Bank Accounts
@@ -91,7 +97,7 @@ const BankAccountsContainer: React.FC<Props> = ({ authService, bankAccountsServi
         bankAccounts={bankAccountsState?.context.results!}
         deleteBankAccount={deleteBankAccount}
       />
-    </Paper>
+    </StyledPaper>
   );
 };
 export default BankAccountsContainer;

@@ -1,5 +1,6 @@
 import React from "react";
-import { makeStyles, TextField, Button, Grid } from "@material-ui/core";
+import { styled } from "@mui/material/styles";
+import { TextField, Button, Grid } from "@mui/material";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 import { BankAccountPayload, User } from "../models";
@@ -16,18 +17,28 @@ const validationSchema = object({
     .required("Enter a valid bank account number"),
 });
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
+const PREFIX = "BankAccountForm";
+
+const classes = {
+  paper: `${PREFIX}-paper`,
+  form: `${PREFIX}-form`,
+  submit: `${PREFIX}-submit`,
+};
+
+const StyledFormik = styled(Formik)(({ theme }) => ({
+  [`& .${classes.paper}`]: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   },
-  form: {
+
+  [`& .${classes.form}`]: {
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
-  submit: {
+
+  [`& .${classes.submit}`]: {
     margin: theme.spacing(3, 0, 2),
   },
 }));
@@ -44,7 +55,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
   onboarding,
 }) => {
   const history = useHistory();
-  const classes = useStyles();
+
   const initialValues: BankAccountPayload = {
     userId,
     bankName: "",
@@ -53,7 +64,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
   };
 
   return (
-    <Formik
+    <StyledFormik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
@@ -119,7 +130,13 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
               />
             )}
           </Field>
-          <Grid container spacing={2} direction="row" justify="flex-start" alignItems="flex-start">
+          <Grid
+            container
+            spacing={2}
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="flex-start"
+          >
             <Grid item>
               <Button
                 type="submit"
@@ -136,7 +153,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
           </Grid>
         </Form>
       )}
-    </Formik>
+    </StyledFormik>
   );
 };
 

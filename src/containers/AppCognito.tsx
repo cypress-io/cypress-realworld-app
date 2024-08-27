@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
+import { styled } from "@mui/material/styles";
 import { useActor, useMachine } from "@xstate/react";
-import { makeStyles } from "@material-ui/core/styles";
-import { CssBaseline } from "@material-ui/core";
+import { CssBaseline } from "@mui/material";
 
 import { snackbarMachine } from "../machines/snackbarMachine";
 import { notificationsMachine } from "../machines/notificationsMachine";
@@ -14,6 +14,18 @@ import { fetchAuthSession, signInWithRedirect, signOut } from "aws-amplify/auth"
 
 // @ts-ignore
 import awsConfig from "../aws-exports";
+const PREFIX = "AppCognito";
+
+const classes = {
+  root: `${PREFIX}-root`,
+};
+
+const Root = styled("div")(({ theme }) => ({
+  [`&.${classes.root}`]: {
+    display: "flex",
+  },
+}));
+
 Amplify.configure(awsConfig as ResourcesConfig);
 
 // @ts-ignore
@@ -23,14 +35,7 @@ if (window.Cypress) {
   window.authService = authService;
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-}));
-
 const AppCognito: React.FC = /* istanbul ignore next */ () => {
-  const classes = useStyles();
   const [authState] = useActor(authService);
   const [, , notificationsService] = useMachine(notificationsMachine);
 
@@ -80,7 +85,7 @@ const AppCognito: React.FC = /* istanbul ignore next */ () => {
   }
 
   return (
-    <div className={classes.root}>
+    <Root className={classes.root}>
       <CssBaseline />
 
       <PrivateRoutesContainer
@@ -92,7 +97,7 @@ const AppCognito: React.FC = /* istanbul ignore next */ () => {
       />
 
       <AlertBar snackbarService={snackbarService} />
-    </div>
+    </Root>
   );
 };
 

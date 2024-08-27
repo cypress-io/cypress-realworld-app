@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import clsx from "clsx";
 import {
   BaseActionObject,
@@ -9,7 +10,6 @@ import {
 } from "xstate";
 import { useActor } from "@xstate/react";
 import {
-  makeStyles,
   AppBar,
   Toolbar,
   Typography,
@@ -19,12 +19,12 @@ import {
   useTheme,
   useMediaQuery,
   Link,
-} from "@material-ui/core";
+} from "@mui/material";
 import {
   Menu as MenuIcon,
   Notifications as NotificationsIcon,
   AttachMoney as AttachMoneyIcon,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
 import { DataContext, DataEvents, DataSchema } from "../machines/dataMachine";
@@ -34,18 +34,32 @@ import RWALogoIcon from "./SvgRwaIconLogo";
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme) => ({
-  toolbar: {
+const PREFIX = "NavBar";
+
+const classes = {
+  toolbar: `${PREFIX}-toolbar`,
+  appBar: `${PREFIX}-appBar`,
+  appBarShift: `${PREFIX}-appBarShift`,
+  menuButtonHidden: `${PREFIX}-menuButtonHidden`,
+  title: `${PREFIX}-title`,
+  logo: `${PREFIX}-logo`,
+  newTransactionButton: `${PREFIX}-newTransactionButton`,
+  customBadge: `${PREFIX}-customBadge`,
+};
+
+const StyledAppBar = styled(AppBar)(({ theme }) => ({
+  [`& .${classes.toolbar}`]: {
     paddingRight: 24, // keep right padding when drawer closed
   },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
+
+  [`&.${classes.appBar}`]: {
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
-  appBarShift: {
+
+  [`&.${classes.appBarShift}`]: {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(["width", "margin"], {
@@ -53,18 +67,22 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  menuButtonHidden: {
+
+  [`& .${classes.menuButtonHidden}`]: {
     display: "none",
   },
-  title: {
+
+  [`& .${classes.title}`]: {
     flexGrow: 1,
     textAlign: "center",
   },
-  logo: {
+
+  [`& .${classes.logo}`]: {
     color: "white",
     verticalAlign: "bottom",
   },
-  newTransactionButton: {
+
+  [`& .${classes.newTransactionButton}`]: {
     fontSize: 16,
     backgroundColor: "#00C853",
     paddingTop: 5,
@@ -77,7 +95,8 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: "none",
     },
   },
-  customBadge: {
+
+  [`& .${classes.customBadge}`]: {
     backgroundColor: "red",
     color: "white",
   },
@@ -97,7 +116,7 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notificationsService }) => {
   const match = useLocation();
-  const classes = useStyles();
+
   const theme = useTheme();
   const [notificationsState] = useActor(notificationsService);
 
@@ -105,7 +124,10 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
   const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
 
   return (
-    <AppBar position="absolute" className={clsx(classes.appBar, drawerOpen && classes.appBarShift)}>
+    <StyledAppBar
+      position="absolute"
+      className={clsx(classes.appBar, drawerOpen && classes.appBarShift)}
+    >
       <Toolbar className={classes.toolbar}>
         <IconButton
           data-test="sidenav-toggle"
@@ -113,6 +135,7 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
           color="inherit"
           aria-label="open drawer"
           onClick={() => toggleDrawer()}
+          size="large"
         >
           <MenuIcon data-test="drawer-icon" />
         </IconButton>
@@ -124,7 +147,12 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
           className={classes.title}
           data-test="app-name-logo"
         >
-          <Link to="/" style={{ color: "#fff", textDecoration: "none" }} component={RouterLink}>
+          <Link
+            to="/"
+            style={{ color: "#fff", textDecoration: "none" }}
+            component={RouterLink}
+            underline="hover"
+          >
             {xsBreakpoint ? (
               <RWALogoIcon className={classes.logo} />
             ) : (
@@ -147,6 +175,7 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
           component={RouterLink}
           to="/notifications"
           data-test="nav-top-notifications-link"
+          size="large"
         >
           <Badge
             badgeContent={allNotifications ? allNotifications.length : undefined}
@@ -160,7 +189,7 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
       {(match.pathname === "/" || RegExp("/(?:public|contacts|personal)").test(match.pathname)) && (
         <TransactionNavTabs />
       )}
-    </AppBar>
+    </StyledAppBar>
   );
 };
 

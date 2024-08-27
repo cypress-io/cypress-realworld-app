@@ -1,21 +1,30 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import { format as formatDate } from "date-fns";
-import {
-  Popover,
-  Chip,
-  useTheme,
-  makeStyles,
-  Drawer,
-  Button,
-  useMediaQuery,
-  colors,
-} from "@material-ui/core";
-import { ArrowDropDown as ArrowDropDownIcon, Cancel as CancelIcon } from "@material-ui/icons";
+import { Popover, Chip, useTheme, Drawer, Button, useMediaQuery, colors } from "@mui/material";
+import { ArrowDropDown as ArrowDropDownIcon, Cancel as CancelIcon } from "@mui/icons-material";
 import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
 
 import "react-infinite-calendar/styles.css";
 import { TransactionDateRangePayload } from "../models";
 import { hasDateQueryFields } from "../utils/transactionUtils";
+
+const PREFIX = "TransactionListDateRangeFilter";
+
+const classes = {
+  popover: `${PREFIX}-popover`,
+};
+
+const Root = styled("div")(({ theme }) => ({
+  [`& .${classes.popover}`]: {
+    [theme.breakpoints.down("md")]: {
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+    },
+  },
+}));
 
 const { indigo } = colors;
 const CalendarWithRange = withRange(Calendar);
@@ -26,23 +35,11 @@ export type TransactionListDateRangeFilterProps = {
   resetDateRange: Function;
 };
 
-const useStyles = makeStyles((theme) => ({
-  popover: {
-    [theme.breakpoints.down("sm")]: {
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-    },
-  },
-}));
-
 const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterProps> = ({
   filterDateRange,
   dateRangeFilters,
   resetDateRange,
 }) => {
-  const classes = useStyles();
   const theme = useTheme();
   const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
   const queryHasDateFields = dateRangeFilters && hasDateQueryFields(dateRangeFilters);
@@ -80,7 +77,7 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
   };
 
   return (
-    <div>
+    <Root>
       {!queryHasDateFields && (
         <Chip
           color="primary"
@@ -182,7 +179,7 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
           />
         </Drawer>
       )}
-    </div>
+    </Root>
   );
 };
 

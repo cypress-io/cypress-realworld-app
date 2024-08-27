@@ -16,7 +16,7 @@ import {
 } from "xstate";
 import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from "../machines/authMachine";
 import { SnackbarSchema, SnackbarContext, SnackbarEvents } from "../machines/snackbarMachine";
-import { Stepper, Step, StepLabel } from "@material-ui/core";
+import { Stepper, Step, StepLabel } from "@mui/material";
 
 export interface Props {
   authService: Interpreter<AuthMachineContext, AuthMachineSchema, AuthMachineEvents, any, any>;
