@@ -1,8 +1,8 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { useActor, useMachine } from "@xstate/react";
-import { makeStyles } from "@material-ui/core";
-import { CssBaseline } from "@material-ui/core";
+import { CssBaseline } from "@mui/material";
 
 import { snackbarMachine } from "../machines/snackbarMachine";
 import { notificationsMachine } from "../machines/notificationsMachine";
@@ -13,6 +13,18 @@ import SignUpForm from "../components/SignUpForm";
 import { bankAccountsMachine } from "../machines/bankAccountsMachine";
 import PrivateRoutesContainer from "./PrivateRoutesContainer";
 
+const PREFIX = "App";
+
+const classes = {
+  root: `${PREFIX}-root`,
+};
+
+const Root = styled("div")(({ theme }) => ({
+  [`&.${classes.root}`]: {
+    display: "flex",
+  },
+}));
+
 // @ts-ignore
 if (window.Cypress) {
   // Expose authService on window for Cypress
@@ -20,14 +32,7 @@ if (window.Cypress) {
   window.authService = authService;
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-}));
-
 const App: React.FC = () => {
-  const classes = useStyles();
   const [authState] = useActor(authService);
   const [, , notificationsService] = useMachine(notificationsMachine);
 
@@ -41,7 +46,7 @@ const App: React.FC = () => {
     authState.matches("updating");
 
   return (
-    <div className={classes.root}>
+    <Root className={classes.root}>
       <CssBaseline />
 
       {isLoggedIn && (
@@ -71,7 +76,7 @@ const App: React.FC = () => {
         </Switch>
       )}
       <AlertBar snackbarService={snackbarService} />
-    </div>
+    </Root>
   );
 };
 

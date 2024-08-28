@@ -68,7 +68,7 @@
     },
     {
       "groupName": "Material UI",
-      "matchPackagePatterns": ["^@material-ui/"]
+      "matchPackagePatterns": ["^@mui/"]
     },
     {
       "groupName": "Graphql",

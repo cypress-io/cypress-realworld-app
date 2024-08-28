@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Grid, colors } from "@material-ui/core";
+import { Box, Typography, Grid, colors } from "@mui/material";
 
 const { grey } = colors;
 
@@ -20,7 +20,7 @@ const EmptyList: React.FC<{ entity: string; children?: React.ReactNode }> = ({
       <Grid
         container
         direction="column"
-        justify="center"
+        justifyContent="center"
         alignItems="center"
         style={{ height: "100%", width: "100%" }}
         spacing={2}

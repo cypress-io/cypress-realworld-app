@@ -1,19 +1,35 @@
 import React, { useState } from "react";
+import { styled } from "@mui/material/styles";
 import NumberFormat from "react-number-format";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object, number } from "yup";
-import {
-  Paper,
-  Typography,
-  Button,
-  Grid,
-  Container,
-  Avatar,
-  Box,
-  TextField,
-  makeStyles,
-} from "@material-ui/core";
+import { Paper, Typography, Button, Grid, Container, Avatar, Box, TextField } from "@mui/material";
 import { User } from "../models";
+
+const PREFIX = "TransactionCreateStepTwo";
+
+const classes = {
+  paper: `${PREFIX}-paper`,
+  form: `${PREFIX}-form`,
+  submit: `${PREFIX}-submit`,
+};
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  [`&.${classes.paper}`]: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+
+  [`& .${classes.form}`]: {
+    width: "100%",
+    marginTop: theme.spacing(1),
+  },
+
+  [`& .${classes.submit}`]: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
 
 const validationSchema = object({
   amount: number().required("Please enter a valid amount"),
@@ -21,21 +37,6 @@ const validationSchema = object({
   senderId: string(),
   receiverId: string(),
 });
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  form: {
-    width: "100%",
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
 
 interface NumberFormatCustomProps {
   inputRef: (el: HTMLInputElement) => void;
@@ -84,7 +85,6 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
   createTransaction,
   showSnackbar,
 }) => {
-  const classes = useStyles();
   const [transactionType, setTransactionType] = useState<string>();
   const initialValues: FormValues = {
     amount: "",
@@ -94,9 +94,9 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
   };
 
   return (
-    <Paper className={classes.paper} elevation={0}>
+    <StyledPaper className={classes.paper} elevation={0}>
       <Box display="flex" height={200} alignItems="center" justifyContent="center">
-        <Grid container direction="column" justify="flex-start" alignItems="center">
+        <Grid container direction="column" justifyContent="flex-start" alignItems="center">
           <Grid item>
             <Avatar src={receiver.avatar} />
           </Grid>
@@ -167,7 +167,13 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                   />
                 )}
               </Field>
-              <Grid container spacing={2} direction="row" justify="center" alignItems="center">
+              <Grid
+                container
+                spacing={2}
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+              >
                 <Grid item>
                   <Button
                     type="submit"
@@ -201,7 +207,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
           )}
         </Formik>
       </Container>
-    </Paper>
+    </StyledPaper>
   );
 };
 

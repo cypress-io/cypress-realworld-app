@@ -1,5 +1,5 @@
 import React from "react";
-import { List } from "@material-ui/core";
+import { List } from "@mui/material";
 
 import CommentListItem from "./CommentListItem";
 import { Comment } from "../models";

@@ -1,9 +1,14 @@
 import React from "react";
-import { Skeleton } from "@material-ui/lab";
-import { makeStyles } from "@material-ui/core";
+import { styled } from "@mui/material/styles";
+import { Skeleton } from "@mui/material";
+const PREFIX = "ListSkeleton";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
+const classes = {
+  root: `${PREFIX}-root`,
+};
+
+const Root = styled("div")(({ theme }) => ({
+  [`&.${classes.root}`]: {
     minHeight: "100vh",
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
@@ -12,9 +17,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ListSkeleton = () => {
-  const classes = useStyles();
   return (
-    <div className={classes.root} data-test="list-skeleton">
+    <Root className={classes.root} data-test="list-skeleton">
       <br />
       <Skeleton />
       <Skeleton animation={false} />
@@ -59,7 +63,7 @@ const ListSkeleton = () => {
       <Skeleton />
       <Skeleton animation={false} />
       <Skeleton animation="wave" />
-    </div>
+    </Root>
   );
 };
 

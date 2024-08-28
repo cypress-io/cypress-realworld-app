@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
+import { styled } from "@mui/material/styles";
 import { useActor, useMachine } from "@xstate/react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Container, CssBaseline } from "@material-ui/core";
+import { Container, CssBaseline } from "@mui/material";
 
 import { snackbarMachine } from "../machines/snackbarMachine";
 import { notificationsMachine } from "../machines/notificationsMachine";
@@ -18,11 +18,19 @@ if (window.Cypress) {
   window.authService = authService;
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
+const PREFIX = "AppGoogle";
+
+const classes = {
+  root: `${PREFIX}-root`,
+  paper: `${PREFIX}-paper`,
+};
+
+const Root = styled("div")(({ theme }) => ({
+  [`&.${classes.root}`]: {
     display: "flex",
   },
-  paper: {
+
+  [`& .${classes.paper}`]: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
@@ -32,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
 
 /* istanbul ignore next */
 const AppGoogle: React.FC = () => {
-  const classes = useStyles();
   const [authState] = useActor(authService);
   const [, , notificationsService] = useMachine(notificationsMachine);
 
@@ -67,7 +74,7 @@ const AppGoogle: React.FC = () => {
   const isLoggedIn = authState.matches("authorized");
 
   return (
-    <div className={classes.root}>
+    <Root className={classes.root}>
       <CssBaseline />
 
       {isLoggedIn && (
@@ -94,7 +101,7 @@ const AppGoogle: React.FC = () => {
       )}
 
       <AlertBar snackbarService={snackbarService} />
-    </div>
+    </Root>
   );
 };
 

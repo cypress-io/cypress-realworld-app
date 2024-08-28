@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  makeStyles,
   Grid,
   Popover,
   Typography,
@@ -10,8 +9,8 @@ import {
   useTheme,
   useMediaQuery,
   Drawer,
-} from "@material-ui/core";
-import { ArrowDropDown as ArrowDropDownIcon } from "@material-ui/icons";
+} from "@mui/material";
+import { ArrowDropDown as ArrowDropDownIcon } from "@mui/icons-material";
 import { TransactionAmountRangePayload } from "../models";
 import {
   formatAmountRangeValues,
@@ -21,22 +20,6 @@ import {
   //hasAmountQueryFields
 } from "../utils/transactionUtils";
 import { first, last } from "lodash/fp";
-
-const useStyles = makeStyles((theme) => ({
-  amountRangeRoot: {
-    width: 300,
-    margin: 30,
-  },
-  amountRangeTitleRow: {
-    width: "100%",
-  },
-  amountRangeTitle: {
-    width: 225,
-  },
-  amountRangeSlider: {
-    width: 200,
-  },
-}));
 
 export type TransactionListAmountRangeFilterProps = {
   filterAmountRange: Function;
@@ -49,7 +32,6 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
   amountRangeFilters,
   resetAmountRange,
 }) => {
-  const classes = useStyles();
   const theme = useTheme();
   const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
 
@@ -82,20 +64,20 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
       data-test="transaction-list-filter-amount-range"
       container
       direction="column"
-      justify="flex-start"
+      justifyContent="flex-start"
       alignItems="flex-start"
       spacing={1}
-      className={classes.amountRangeRoot}
+      sx={{ width: "300px", margin: "30px" }}
     >
       <Grid item>
         <Grid
           container
           direction="row"
-          justify="space-between"
+          justifyContent="space-between"
           alignItems="center"
-          className={classes.amountRangeTitleRow}
+          sx={{ width: "100%" }}
         >
-          <Grid item className={classes.amountRangeTitle}>
+          <Grid item sx={{ width: "225px" }}>
             <Typography color="textSecondary" data-test="transaction-list-filter-amount-range-text">
               Amount Range: {formatAmountRangeValues(amountRangeValue)}
             </Typography>
@@ -116,7 +98,7 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
       <Grid item>
         <Slider
           data-test="transaction-list-filter-amount-range-slider"
-          className={classes.amountRangeSlider}
+          sx={{ width: "200px" }}
           value={amountRangeValue}
           min={0}
           max={100}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Snackbar } from "@material-ui/core";
+import { Snackbar } from "@mui/material";
 import {
   BaseActionObject,
   Interpreter,
@@ -9,7 +9,7 @@ import {
 } from "xstate";
 import { SnackbarContext, SnackbarSchema, SnackbarEvents } from "../machines/snackbarMachine";
 import { useActor } from "@xstate/react";
-import { Alert } from "@material-ui/lab";
+import { Alert } from "@mui/material";
 
 interface Props {
   snackbarService: Interpreter<
