@@ -113,7 +113,7 @@
     "graphql": "16.8.1",
     "graphql-http": "^1.22.0",
     "graphql-playground-middleware-express": "^1.7.23",
-    "graphql-tools": "8.2.7",
+    "graphql-tools": "8.3.20",
     "http-proxy-middleware": "0.19.1",
     "husky": "7.0.4",
     "istanbul-lib-coverage": "3.2.2",
