@@ -128,7 +128,7 @@
     "nyc": "15.1.0",
     "passport": "0.5.0",
     "passport-local": "1.0.0",
-    "patch-package": "^7.0.0",
+    "patch-package": "^8.0.0",
     "prettier": "^3.0.0",
     "start-server-and-test": "1.14.0",
     "ts-node": "10.9.2",
