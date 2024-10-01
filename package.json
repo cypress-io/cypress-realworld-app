@@ -136,7 +136,7 @@
     "vite": "^4.4.2",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-istanbul": "^4.1.0",
-    "vitest": "^0.33.0"
+    "vitest": "^2.0.0"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development concurrently yarn:start:react yarn:start:api:watch",
