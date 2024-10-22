@@ -110,7 +110,7 @@ export const getRandomTransactions = (baseCount: number, baseTransactions: Trans
   ).slice(0, baseCount);
 
 export const getUserAvatar = (identifier: string) => {
-  return `https://avatars.dicebear.com/api/human/${identifier}.svg`;
+  return `https://api.dicebear.com/9.x/pixel-art/svg?seed=${identifier}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
 };
 
 export const createFakeUser = (): User => {
