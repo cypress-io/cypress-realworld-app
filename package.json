@@ -114,7 +114,7 @@
     "graphql-http": "^1.22.0",
     "graphql-playground-middleware-express": "^1.7.23",
     "graphql-tools": "8.2.7",
-    "http-proxy-middleware": "0.19.1",
+    "http-proxy-middleware": "2.0.7",
     "husky": "7.0.4",
     "istanbul-lib-coverage": "3.2.2",
     "jsdom": "^22.1.0",
