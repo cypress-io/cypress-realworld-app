@@ -134,7 +134,7 @@
     "vite": "^4.4.2",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-istanbul": "^4.1.0",
-    "vitest": "^0.33.0",
+    "vitest": "^3.2.4",
     "wait-on": "^8.0.3"
   },
   "scripts": {
