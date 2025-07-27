@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import { format as formatDate } from "date-fns";
 import { Popover, Chip, useTheme, Drawer, Button, useMediaQuery, colors } from "@mui/material";
 import { ArrowDropDown as ArrowDropDownIcon, Cancel as CancelIcon } from "@mui/icons-material";
-import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
+import Calendar from 'react-calendar';
 
-import "react-infinite-calendar/styles.css";
-import { TransactionDateRangePayload } from "../models";
+import 'react-calendar/dist/Calendar.css';
+import { TransactionDateRangePayload, Value, ValuePiece } from "../models";
 import { hasDateQueryFields } from "../utils/transactionUtils";
 
 const PREFIX = "TransactionListDateRangeFilter";
@@ -27,7 +27,6 @@ const Root = styled("div")(({ theme }) => ({
 }));
 
 const { indigo } = colors;
-const CalendarWithRange = withRange(Calendar);
 
 export type TransactionListDateRangeFilterProps = {
   filterDateRange: Function;
@@ -43,15 +42,31 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
   const theme = useTheme();
   const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
   const queryHasDateFields = dateRangeFilters && hasDateQueryFields(dateRangeFilters);
+  const [calendarValue, setCalendarValue] = useState<Value>(null); 
+  const [filterDateRangeValue, setFilterDateRangevalue] = useState<TransactionDateRangePayload>({}); 
 
   const [dateRangeAnchorEl, setDateRangeAnchorEl] = React.useState<HTMLDivElement | null>(null);
 
-  const onCalendarSelect = (e: { eventType: number; start: any; end: any }) => {
-    if (e.eventType === 3) {
-      filterDateRange({
-        dateRangeStart: new Date(e.start.setUTCHours(0, 0, 0, 0)).toISOString(),
-        dateRangeEnd: new Date(e.end.setUTCHours(23, 59, 59, 999)).toISOString(),
-      });
+  const toUTCDateISO = (date: ValuePiece, start: boolean = true): string => {
+    const d = date instanceof Date ? new Date(date.getTime()) : new Date();
+      if (start) {
+        d.setUTCHours(18, 30, 0, 0);
+      } else {
+        d.setUTCHours(18, 29, 59, 999);
+      }
+    return d.toISOString();
+  };
+
+  const onCalendarSelect = (val: Value) => {
+    if (val && !(val instanceof Date)) {
+      const [rangeStart, rangeEnd]=val;
+      const calValue = {
+        dateRangeStart:  toUTCDateISO(rangeStart),
+        dateRangeEnd:  toUTCDateISO(rangeEnd,false),
+      };
+      setCalendarValue(val);
+      setFilterDateRangevalue(calValue);
+      filterDateRange(calValue);
       setDateRangeAnchorEl(null);
     }
   };
@@ -72,8 +87,11 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
   };
 
   const dateRangeLabel = (dateRangeFields: TransactionDateRangePayload) => {
+    if (dateRangeFields && !(dateRangeFields instanceof Date)) {
     const { dateRangeStart, dateRangeEnd } = dateRangeFields;
-    return `${formatButtonDate(dateRangeStart!)} - ${formatButtonDate(dateRangeEnd!)}`;
+    const label = `${formatButtonDate(dateRangeStart!)} - ${formatButtonDate(dateRangeEnd!)}`;
+    return label;
+    }
   };
 
   return (
@@ -95,9 +113,10 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
           variant="outlined"
           onClick={handleDateRangeClick}
           data-test="transaction-list-filter-date-range-button"
-          label={`Date: ${dateRangeLabel(dateRangeFilters)}`}
+          label={`Date: ${dateRangeLabel(filterDateRangeValue)}`}
           deleteIcon={<CancelIcon data-test="transaction-list-filter-date-clear-button" />}
           onDelete={() => {
+            setCalendarValue(null);
             resetDateRange();
           }}
         />
@@ -118,28 +137,12 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
           }}
           className={classes.popover}
         >
-          <InfiniteCalendar
-            data-test="transaction-list-filter-date-range"
-            width={xsBreakpoint ? window.innerWidth : 350}
-            height={xsBreakpoint ? window.innerHeight : 300}
-            rowHeight={50}
-            Component={CalendarWithRange}
-            selected={false}
-            onSelect={onCalendarSelect}
-            locale={{
-              headerFormat: "MMM Do",
-            }}
-            theme={{
-              accentColor: indigo["400"],
-              headerColor: indigo["500"],
-              weekdayColor: indigo["300"],
-              selectionColor: indigo["300"],
-              floatingNav: {
-                background: indigo["400"],
-                color: "#FFF",
-                chevron: "#FFA726",
-              },
-            }}
+          <RangeCalendar
+            onCalendarSelect={onCalendarSelect}
+            xsBreakpoint={xsBreakpoint}
+            color={indigo}
+            dataTest="transaction-list-filter-date-range"
+            defaultValue={calendarValue}
           />
         </Popover>
       )}
@@ -154,33 +157,63 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
           <Button data-test="date-range-filter-drawer-close" onClick={() => handleDateRangeClose()}>
             Close
           </Button>
-          <InfiniteCalendar
-            data-test="transaction-list-filter-date-range"
-            width={window.innerWidth}
-            height={window.innerHeight - 185}
-            rowHeight={50}
-            Component={CalendarWithRange}
-            selected={false}
-            onSelect={onCalendarSelect}
-            locale={{
-              headerFormat: "MMM Do",
-            }}
-            theme={{
-              accentColor: indigo["400"],
-              headerColor: indigo["500"],
-              weekdayColor: indigo["300"],
-              selectionColor: indigo["300"],
-              floatingNav: {
-                background: indigo["400"],
-                color: "#FFF",
-                chevron: "#FFA726",
-              },
-            }}
+          <RangeCalendar
+            onCalendarSelect={onCalendarSelect}
+            xsBreakpoint={xsBreakpoint}
+            color={indigo}
+            dataTest="transaction-list-filter-date-range"
+            defaultValue={calendarValue}
           />
         </Drawer>
       )}
     </Root>
   );
 };
+
+
+export function RangeCalendar({
+  onCalendarSelect,
+  xsBreakpoint,
+  color,
+  dataTest,
+  defaultValue
+}: {
+  onCalendarSelect: (value: Value) => void,
+  xsBreakpoint: boolean,
+  color: Record<string, string>,
+  dataTest: string,
+  defaultValue: Value
+}) {
+  const [value, setValue] = useState<Value>(defaultValue);
+
+  const width = xsBreakpoint ? window.innerWidth : 350;
+  const height = xsBreakpoint ? window.innerHeight : 300;
+
+  const handleChange = (val: Value, _: any) => {
+    setValue(val);
+    onCalendarSelect(val);
+  };
+
+  return (
+    <div
+      data-test={dataTest}
+      style={{
+        width,
+        maxWidth: "100%",
+        background: color["400"],
+        padding: 8,
+        borderRadius: 8,
+      }}
+    >
+      <Calendar
+        onChange={handleChange}
+        value={value}
+        selectRange={true}
+      />
+    </div>
+  );
+}
+
+
 
 export default TransactionListDateRangeFilter;

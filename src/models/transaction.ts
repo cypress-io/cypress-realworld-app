@@ -104,3 +104,7 @@ export type TransactionPagination = {
   hasNextPages: boolean;
   totalPages: number;
 };
+
+export type Range<T> = [T, T];
+export type ValuePiece = Date | null;
+export type Value = ValuePiece | Range<ValuePiece>;
