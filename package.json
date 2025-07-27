@@ -81,7 +81,6 @@
     "@types/passport": "1.0.16",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
-    "@types/react-infinite-calendar": "2.3.6",
     "@types/react-router": "5.1.18",
     "@types/react-router-dom": "5.3.3",
     "@types/react-virtualized": "9.21.21",
