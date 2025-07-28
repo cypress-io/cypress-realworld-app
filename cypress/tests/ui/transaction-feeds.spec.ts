@@ -8,7 +8,13 @@ import {
   TransactionStatus,
 } from "../../../src/models";
 import { addDays, isWithinInterval, startOfDay } from "date-fns";
-import { startOfDayUTC, endOfDayUTC } from "../../../src/utils/transactionUtils";
+import {
+  endOfDayUTC,
+  isoStringToLocalMidnightStart,
+  isoStringToLocalMidnightEnd,
+  isoStringToLocalDateFull,
+  localDateToIsoString,
+} from "../../../src/utils/transactionUtils";
 import { isMobile } from "../../support/utils";
 
 const { _ } = Cypress;
@@ -215,10 +221,10 @@ describe("Transaction Feed", function () {
     if (isMobile()) {
       it("closes date range picker modal", () => {
         cy.getBySelLike("filter-date-range-button").click({ force: true });
-        cy.get(".Cal__Header__root").should("be.visible");
+        cy.get(".react-calendar").should("be.visible");
         cy.visualSnapshot("Mobile Open Date Range Picker");
         cy.getBySel("date-range-filter-drawer-close").click();
-        cy.get(".Cal__Header__root").should("not.exist");
+        cy.get(".react-calendar").should("not.exist");
         cy.visualSnapshot("Mobile Close Date Range Picker");
       });
     }
@@ -226,8 +232,10 @@ describe("Transaction Feed", function () {
     _.each(feedViews, (feed, feedName) => {
       it(`filters ${feedName} transaction feed by date range`, function () {
         cy.database("find", "transactions").then((transaction: Transaction) => {
-          const dateRangeStart = startOfDay(new Date(transaction.createdAt));
-          const dateRangeEnd = endOfDayUTC(addDays(dateRangeStart, 1));
+          const dateRangeStart = isoStringToLocalMidnightStart(`${transaction.createdAt}`);
+          const dateRangeEnd = isoStringToLocalMidnightEnd(
+            addDays(startOfDay(transaction.createdAt), 1).toISOString()
+          );
 
           cy.getBySelLike(feed.tab).click();
           cy.getBySelLike(feed.tab).should("have.class", "Mui-selected");
@@ -242,16 +250,16 @@ describe("Transaction Feed", function () {
               cy.getBySelLike("transaction-item").should("have.length", transactions.length);
 
               transactions.forEach(({ createdAt }) => {
-                const createdAtDate = startOfDayUTC(new Date(createdAt));
+                const createdAtDate = isoStringToLocalDateFull(`${createdAt}`);
 
                 expect(
                   isWithinInterval(createdAtDate, {
-                    start: startOfDayUTC(dateRangeStart),
+                    start: dateRangeStart,
                     end: dateRangeEnd,
                   }),
-                  `transaction created date (${createdAtDate.toISOString()})
-                  is within ${dateRangeStart.toISOString()}
-                  and ${dateRangeEnd.toISOString()}`
+                  `transaction created date (${localDateToIsoString(createdAtDate)})
+                  is within ${localDateToIsoString(dateRangeStart)}
+                  and ${localDateToIsoString(dateRangeEnd)}`
                 ).to.equal(true);
               });
 

@@ -7,7 +7,7 @@ import Calendar from "react-calendar";
 
 import "react-calendar/dist/Calendar.css";
 import { TransactionDateRangePayload, Value, ValuePiece } from "../models";
-import { hasDateQueryFields } from "../utils/transactionUtils";
+import { hasDateQueryFields, localDateToUTCISOString } from "../utils/transactionUtils";
 
 const PREFIX = "TransactionListDateRangeFilter";
 
@@ -43,29 +43,17 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
   const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
   const queryHasDateFields = dateRangeFilters && hasDateQueryFields(dateRangeFilters);
   const [calendarValue, setCalendarValue] = useState<Value>(null);
-  const [filterDateRangeValue, setFilterDateRangevalue] = useState<TransactionDateRangePayload>({});
 
   const [dateRangeAnchorEl, setDateRangeAnchorEl] = React.useState<HTMLDivElement | null>(null);
-
-  const toUTCDateISO = (date: ValuePiece, start: boolean = true): string => {
-    const d = date instanceof Date ? new Date(date.getTime()) : new Date();
-    if (start) {
-      d.setUTCHours(18, 30, 0, 0);
-    } else {
-      d.setUTCHours(18, 29, 59, 999);
-    }
-    return d.toISOString();
-  };
 
   const onCalendarSelect = (val: Value) => {
     if (val && !(val instanceof Date)) {
       const [rangeStart, rangeEnd] = val;
       const calValue = {
-        dateRangeStart: toUTCDateISO(rangeStart),
-        dateRangeEnd: toUTCDateISO(rangeEnd, false),
+        dateRangeStart: localDateToUTCISOString(rangeStart),
+        dateRangeEnd: localDateToUTCISOString(rangeEnd),
       };
       setCalendarValue(val);
-      setFilterDateRangevalue(calValue);
       filterDateRange(calValue);
       setDateRangeAnchorEl(null);
     }
@@ -82,13 +70,13 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
   const dateRangeOpen = Boolean(dateRangeAnchorEl);
   const dateRangeId = dateRangeOpen ? "date-range-popover" : undefined;
 
-  const formatButtonDate = (date: string) => {
-    return formatDate(new Date(date), "MMM, d yyyy");
+  const formatButtonDate = (date: Date) => {
+    return formatDate(date, "MMM, d yyyy");
   };
 
-  const dateRangeLabel = (dateRangeFields: TransactionDateRangePayload) => {
+  const dateRangeLabel = (dateRangeFields: Value) => {
     if (dateRangeFields && !(dateRangeFields instanceof Date)) {
-      const { dateRangeStart, dateRangeEnd } = dateRangeFields;
+      const [dateRangeStart, dateRangeEnd] = dateRangeFields;
       const label = `${formatButtonDate(dateRangeStart!)} - ${formatButtonDate(dateRangeEnd!)}`;
       return label;
     }
@@ -113,7 +101,7 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
           variant="outlined"
           onClick={handleDateRangeClick}
           data-test="transaction-list-filter-date-range-button"
-          label={`Date: ${dateRangeLabel(filterDateRangeValue)}`}
+          label={`Date: ${dateRangeLabel(calendarValue)}`}
           deleteIcon={<CancelIcon data-test="transaction-list-filter-date-clear-button" />}
           onDelete={() => {
             setCalendarValue(null);

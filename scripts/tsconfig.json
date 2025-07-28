@@ -4,6 +4,6 @@
   "exclude": [],
   "compilerOptions": {
     "types": ["node"],
-    "isolatedModules": false,
-  },
+    "isolatedModules": false
+  }
 }
