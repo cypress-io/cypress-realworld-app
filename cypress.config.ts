@@ -114,6 +114,7 @@ module.exports = defineConfig({
         "file:preprocessor",
         webpackPreprocessor({
           webpackOptions: getWebpackOptions(),
+          typescript: require.resolve("typescript"),
         })
       );
 
