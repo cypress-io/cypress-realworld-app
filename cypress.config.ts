@@ -101,9 +101,9 @@ module.exports = defineConfig({
       const webpackPreprocessor = require("@cypress/webpack-batteries-included-preprocessor");
       const getWebpackOptions = () => {
         const options =
-          (webpackPreprocessor.default && webpackPreprocessor.default.getFullWebpackOptions
+          webpackPreprocessor.default && webpackPreprocessor.default.getFullWebpackOptions
             ? webpackPreprocessor.default.getFullWebpackOptions()
-            : webpackPreprocessor.getFullWebpackOptions());
+            : webpackPreprocessor.getFullWebpackOptions();
         options.resolve = options.resolve || {};
         options.resolve.fallback = options.resolve.fallback || {};
         // add built-ins as needed
