@@ -97,6 +97,26 @@ module.exports = defineConfig({
     experimentalRunAllSpecs: true,
     experimentalStudio: true,
     setupNodeEvents(on, config) {
+      // Configure webpack preprocessor with required built-in fallbacks
+      const webpackPreprocessor = require("@cypress/webpack-batteries-included-preprocessor");
+      const getWebpackOptions = () => {
+        const options =
+          (webpackPreprocessor.default && webpackPreprocessor.default.getFullWebpackOptions
+            ? webpackPreprocessor.default.getFullWebpackOptions()
+            : webpackPreprocessor.getFullWebpackOptions());
+        options.resolve = options.resolve || {};
+        options.resolve.fallback = options.resolve.fallback || {};
+        // add built-ins as needed
+        options.resolve.fallback.constants = require.resolve("constants-browserify");
+        return options;
+      };
+      on(
+        "file:preprocessor",
+        webpackPreprocessor({
+          webpackOptions: getWebpackOptions(),
+        })
+      );
+
       const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
 
       const queryDatabase = ({ entity, query }, callback) => {
