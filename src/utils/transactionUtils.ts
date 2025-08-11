@@ -30,6 +30,10 @@ import {
   map,
   drop,
 } from "lodash/fp";
+import { parseISO } from "date-fns";
+import { formatInTimeZone, fromZonedTime } from "date-fns-tz";
+
+const timezone = 'UTC'
 
 export const isRequestTransaction = (transaction: Transaction) =>
   flow(get("requestStatus"), negate(isEmpty))(transaction);
@@ -182,52 +186,43 @@ export const getPaginatedItems = (page: number, limit: number, items: any) => {
   };
 };
 
+const getDateParts = (isoString: string) => {
+  const date = parseISO(isoString)
+  const day = Number(formatInTimeZone(date, timezone, 'd'))
+  const month = Number(formatInTimeZone(date, timezone, 'M')) - 1
+  const year = Number(formatInTimeZone(date, timezone, 'Y'))
+  const hour = Number(formatInTimeZone(date, timezone, 'H'))
+  const minute = Number(formatInTimeZone(date, timezone, 'm'))
+  const second = Number(formatInTimeZone(date, timezone, 's'))
+  const ms = Number(formatInTimeZone(date, timezone, 'SSS'))
+  return { day, month, year, hour, minute, second, ms }
+}
+
 export function isoStringToLocalMidnightStart(isoString: string) {
-  const match = isoString.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (!match) throw new Error("Invalid ISO string format");
-  const [, year, month, day] = match;
-  return new Date(Number(year), Number(month) - 1, Number(day), 0, 0, 0, 0);
+  const { year, month, day } = getDateParts(isoString)
+  return new Date(year, month, day, 0, 0, 0, 0);
 }
 
 export function isoStringToLocalMidnightEnd(isoString: string) {
-  const match = isoString.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (!match) throw new Error("Invalid ISO string format");
-  const [, year, month, day] = match;
-  return new Date(Number(year), Number(month) - 1, Number(day), 23, 59, 59, 999);
+  const { year, month, day } = getDateParts(isoString)
+  return new Date(year, month, day, 23, 59, 59, 999);
 }
 
 export function isoStringToLocalDateFull(isoString: string): Date {
-  const match = isoString.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,3}))?/);
-  if (!match) throw new Error("Invalid ISO string format");
-  const [, year, month, day, hour, minute, second, ms = "0"] = match;
+  const { year, month, day, hour, minute, second, ms = 0} =  getDateParts(isoString)
   return new Date(
-    Number(year),
-    Number(month) - 1,
-    Number(day),
-    Number(hour),
-    Number(minute),
-    Number(second),
-    Number(ms)
+    year,
+    month,
+    day,
+    hour,
+    minute,
+    second,
+    ms
   );
 }
 
 export function localDateToIsoString(date: Date): string {
-  const pad = (num: number, size: number = 2) => String(num).padStart(size, "0");
-  const ms = date.getMilliseconds();
-  return [
-    date.getFullYear(),
-    "-",
-    pad(date.getMonth() + 1),
-    "-",
-    pad(date.getDate()),
-    "T",
-    pad(date.getHours()),
-    ":",
-    pad(date.getMinutes()),
-    ":",
-    pad(date.getSeconds()),
-    ms ? "." + String(ms).padStart(3, "0") : "",
-  ].join("");
+return fromZonedTime(date, timezone).toISOString()
 }
 
 export function localDateToUTCISOString(localDate: ValuePiece) {
