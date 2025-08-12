@@ -299,6 +299,13 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 
+## Useful Resources
+- [Cypress Documentation](https://docs.cypress.io/)
+- [React Documentation](https://reactjs.org/docs/getting-started.html)
+
+
+> 💡 **Tip**: You can check your Node.js version by running `node -v` in your terminal.
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!!
