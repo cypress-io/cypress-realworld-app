@@ -80,9 +80,16 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
             ref={registerChild}
             onRowsRendered={onRowsRendered}
             height={isXsBreakpoint ? removePx(theme.spacing(74)) : removePx(theme.spacing(88))}
-            width={isXsBreakpoint ? removePx(theme.spacing(38)) : removePx(theme.spacing(90))}
+            width={isXsBreakpoint ? removePx(theme.spacing(44)) : removePx(theme.spacing(90))}
             rowHeight={isXsBreakpoint ? removePx(theme.spacing(28)) : removePx(theme.spacing(16))}
             rowRenderer={rowRenderer}
+            style={{
+              width: "100%",
+              minHeight: "80vh",
+              display: "flex",
+              overflow: "auto",
+              flexDirection: "column",
+            }}
           />
         </div>
       )}

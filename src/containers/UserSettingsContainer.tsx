@@ -47,7 +47,7 @@ const UserSettingsContainer: React.FC<Props> = ({ authService }) => {
         <Grid item>
           <PersonalSettingsIllustration style={{ height: 200, width: 300 }} />
         </Grid>
-        <Grid item style={{ width: "50%" }}>
+        <Grid item>
           {currentUser && <UserSettingsForm userProfile={currentUser} updateUser={updateUser} />}
         </Grid>
       </Grid>

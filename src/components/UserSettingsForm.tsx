@@ -67,7 +67,6 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({ userProfile, updateUser
     >
       {({ isValid, isSubmitting }) => (
         <MarginHonoringDiv>
-          <Form data-test="user-settings-form">
             <Field name="firstName">
               {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
                 <TextField
@@ -75,13 +74,19 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({ userProfile, updateUser
                   margin="dense"
                   fullWidth
                   required
-                  id={"user-settings-firstName-input"}
+                  id={"firstName"}
                   type="text"
                   placeholder="First Name"
-                  inputProps={{ "data-test": "user-settings-firstName-input" }}
                   error={(touched || value !== initialValue) && Boolean(error)}
                   helperText={touched || value !== initialValue ? error : ""}
                   {...field}
+                  style={{
+                    width: "100%",
+                  }}
+                  inputProps={{
+                    "data-test": "firstName",
+                    style: { padding: "12px 16px" }
+                  }}
                 />
               )}
             </Field>
@@ -92,13 +97,19 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({ userProfile, updateUser
                   margin="dense"
                   fullWidth
                   required
-                  id={"user-settings-lastName-input"}
+                  id={"lastName"}
                   type="text"
                   placeholder="Last Name"
-                  inputProps={{ "data-test": "user-settings-lastName-input" }}
+                  inputProps={{ 
+                    "data-test": "lastName",
+                    style: { padding: "12px 16px" }
+                  }}
                   error={(touched || value !== initialValue) && Boolean(error)}
                   helperText={touched || value !== initialValue ? error : ""}
                   {...field}
+                  style={{
+                    width: "100%",
+                  }}
                 />
               )}
             </Field>
@@ -109,13 +120,19 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({ userProfile, updateUser
                   margin="dense"
                   fullWidth
                   required
-                  id={"user-settings-email-input"}
+                  id={"email"}
                   type="text"
                   placeholder="Email"
-                  inputProps={{ "data-test": "user-settings-email-input" }}
+                  inputProps={{ 
+                    "data-test": "user-settings-email",
+                    style: { padding: "12px 16px" }
+                  }}
                   error={(touched || value !== initialValue) && Boolean(error)}
                   helperText={touched || value !== initialValue ? error : ""}
                   {...field}
+                  style={{
+                    width: "100%",
+                  }}
                 />
               )}
             </Field>
@@ -126,24 +143,23 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({ userProfile, updateUser
                   margin="dense"
                   fullWidth
                   required
-                  id={"user-settings-phoneNumber-input"}
+                  id={"phoneNumber"}
                   type="text"
                   placeholder="Phone Number"
-                  inputProps={{ "data-test": "user-settings-phoneNumber-input" }}
+                  inputProps={{ 
+                    "data-test": "phoneNumber",
+                    style: { padding: "12px 16px" }
+                  }}
                   error={(touched || value !== initialValue) && Boolean(error)}
                   helperText={touched || value !== initialValue ? error : ""}
                   {...field}
+                  style={{
+                    width: "100%",
+                  }}
                 />
               )}
             </Field>
-            <Grid
-              container
-              spacing={2}
-              direction="row"
-              justifyContent="flex-start"
-              alignItems="flex-start"
-            >
-              <Grid item>
+
                 <Button
                   type="submit"
                   fullWidth
@@ -155,9 +171,7 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({ userProfile, updateUser
                 >
                   Save
                 </Button>
-              </Grid>
-            </Grid>
-          </Form>
+
         </MarginHonoringDiv>
       )}
     </StyledFormik>

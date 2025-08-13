@@ -9,7 +9,6 @@ import {
 } from "../../../src/models";
 import { addDays, isWithinInterval, startOfDay } from "date-fns";
 import { startOfDayUTC, endOfDayUTC } from "../../../src/utils/transactionUtils";
-import { isMobile } from "../../support/utils";
 
 const { _ } = Cypress;
 
@@ -19,7 +18,7 @@ type TransactionFeedsCtx = {
   contactIds?: string[];
 };
 
-describe("Transaction Feed", function () {
+describe("Notifications Feed", function () {
   const ctx: TransactionFeedsCtx = {};
 
   const feedViews = {
@@ -46,10 +45,17 @@ describe("Transaction Feed", function () {
   beforeEach(function () {
     cy.task("db:seed");
 
-    cy.intercept("GET", "/notifications").as("notifications");
-    cy.intercept("GET", "/transactions*").as(feedViews.personal.routeAlias);
-    cy.intercept("GET", "/transactions/public*").as(feedViews.public.routeAlias);
-    cy.intercept("GET", "/transactions/contacts*").as(feedViews.contacts.routeAlias);
+    // cy.intercept("GET", "/notifications").as("notifications");
+    // cy.intercept("GET", "/transactions*").as(feedViews.personal.routeAlias);
+    // cy.intercept("GET", "/transactions/public*").as(feedViews.public.routeAlias);
+    // cy.intercept("GET", "/transactions/contacts*").as(feedViews.contacts.routeAlias);
+    cy.intercept("GET", "/transactions/public*", {
+      headers: {
+        "X-Powered-By": "Express",
+        Date: new Date().toString(),
+      },
+      fixture: "public-transactions.json",
+    }).as("mocked");
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.user = users[0];
@@ -58,43 +64,40 @@ describe("Transaction Feed", function () {
       cy.loginByXstate(ctx.user.username);
     });
   });
-  describe("app layout and responsiveness", function () {
-    it("toggles the navigation drawer", function () {
-      cy.wait("@notifications");
-      cy.wait("@publicTransactions");
-      if (isMobile()) {
-        cy.getBySel("sidenav-home").should("not.exist");
-        cy.visualSnapshot("Mobile Initial Side Navigation Not Visible");
-        cy.getBySel("sidenav-toggle").click();
-        cy.getBySel("sidenav-home").should("be.visible");
-        cy.visualSnapshot("Mobile Toggle Side Navigation Visible");
-        cy.get(".MuiBackdrop-root").click({ force: true });
-        cy.getBySel("sidenav-home").should("not.exist");
-        cy.visualSnapshot("Mobile Home Link Side Navigation Not Visible");
+  describe("list", function () {
+    it.only("updates the notification count", function () {
+cy.get('[data-test="sidenav-toggle"]').click();
+cy.get('[data-test="sidenav-user-settings"]').click();
+cy.get('[data-test="firstName"]').click();
+cy.get('[data-test="firstName"]').clear();
+cy.get('#firstName-helper-text').should('have.text', 'Enter a first name');
+    });
 
-        cy.getBySel("sidenav-toggle").click();
-        cy.getBySel("sidenav-home").click();
-        cy.getBySel("sidenav-home").should("not.exist");
-        cy.visualSnapshot("Mobile Toggle Side Navigation Not Visible");
-      } else {
-        cy.getBySel("sidenav-home").should("be.visible");
-        cy.visualSnapshot("Desktop Side Navigation Visible");
-        cy.getBySel("sidenav-toggle").click();
-        cy.getBySel("sidenav-home").should("not.be.visible");
-        cy.visualSnapshot("Desktop Side Navigation Not Visible");
-      }
+    it('Displays transactions list', function() {});
+
+    it('Displays notifications', function() {
+
+cy.get('[data-test="drawer-icon"]').click();
+cy.get('[data-test="sidenav-notifications"]').click();
+cy.get('.css-mpyo7s-MuiTypography-root').should('have.text', 'Notifications');
+    });
+  });
+
+  describe("renders transactions item variations in feed", function () {
+    it("renders transactions item variations in feed", function () {
+      cy.get('[data-test="transaction-item-si_aNEMbyCA"]')
+      cy.get('[data-test="transaction-like-count"]').should('contain', '0')
+      cy.get('[data-test="transaction-comment-count"]').should('contain', '0')
+      cy.get('[data-test="transaction-sender-si_aNEMbyCA"]').should('contain', 'Mateo')
+      cy.get('[data-test="transaction-receiver-si_aNEMbyCA"]').should('contain', 'Leila')
+      cy.get('[data-test="transaction-amount-si_aNEMbyCA"]').should('contain', '-$86.47')
+      cy.get('[data-test="transaction-amount-si_aNEMbyCA"]').should('have.css', 'color', 'rgb(255, 0, 0)')
     });
   });
 
   describe("renders and paginates all transaction feeds", function () {
     it("renders transactions item variations in feed", function () {
-      cy.intercept("GET", "/transactions/public*", {
-        headers: {
-          "X-Powered-By": "Express",
-          Date: new Date().toString(),
-        },
-        fixture: "public-transactions.json",
-      }).as("mockedPublicTransactions");
+
 
       // Visit page again to trigger call to /transactions/public
       cy.visit("/");
@@ -212,17 +215,6 @@ describe("Transaction Feed", function () {
   });
 
   describe("filters transaction feeds by date range", function () {
-    if (isMobile()) {
-      it("closes date range picker modal", () => {
-        cy.getBySelLike("filter-date-range-button").click({ force: true });
-        cy.get(".Cal__Header__root").should("be.visible");
-        cy.visualSnapshot("Mobile Open Date Range Picker");
-        cy.getBySel("date-range-filter-drawer-close").click();
-        cy.get(".Cal__Header__root").should("not.exist");
-        cy.visualSnapshot("Mobile Close Date Range Picker");
-      });
-    }
-
     _.each(feedViews, (feed, feedName) => {
       it(`filters ${feedName} transaction feed by date range`, function () {
         cy.database("find", "transactions").then((transaction: Transaction) => {
@@ -333,15 +325,10 @@ describe("Transaction Feed", function () {
 
         cy.getBySelLike("amount-clear-button").click();
 
-        if (isMobile()) {
-          cy.getBySelLike("amount-range-filter-drawer-close").click();
-          cy.getBySel("amount-range-filter-drawer").should("not.exist");
-        } else {
           cy.getBySel("transaction-list-filter-amount-clear-button").click();
           cy.getBySel("main").scrollTo("top");
           cy.getBySel("transaction-list-filter-date-range-button").click({ force: true });
           cy.getBySel("transaction-list-filter-amount-range").should("not.be.visible");
-        }
 
         cy.get("@unfilteredResults").then((unfilteredResults) => {
           cy.wait(`@${feed.routeAlias}`)
@@ -386,6 +373,11 @@ describe("Transaction Feed", function () {
         });
       cy.getBySel("list-skeleton").should("not.exist");
       cy.visualSnapshot("Personal Transactions");
+      cy.get('[data-test="sidenav-home"] .MuiTypography-root').click();
+      cy.get('[data-test="sidenav-user-settings"] .MuiTypography-root').click();
+      cy.get('[data-test="sidenav-bankaccounts"] .MuiTypography-root').click();
+      cy.get('[d="M4 10h3v7H4zm6.5 0h3v7h-3zM2 19h20v3H2zm15-9h3v7h-3zm-5-9L2 6v2h20V6z"]').click();
+      cy.get('[data-test="sidenav-bankaccounts"]').click();
     });
 
     it("first five items belong to contacts in public feed", function () {

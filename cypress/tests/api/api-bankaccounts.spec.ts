@@ -22,7 +22,7 @@ describe("Bank Accounts API", function () {
   });
 
   beforeEach(function () {
-    cy.task("db:seed");
+    cy.task("db:seed", {log: false});
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.authenticatedUser = users[0];
