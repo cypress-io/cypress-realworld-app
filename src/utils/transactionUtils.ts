@@ -33,7 +33,7 @@ import {
 import { parseISO } from "date-fns";
 import { formatInTimeZone, fromZonedTime } from "date-fns-tz";
 
-const timezone = 'UTC'
+const timezone = "UTC";
 
 export const isRequestTransaction = (transaction: Transaction) =>
   flow(get("requestStatus"), negate(isEmpty))(transaction);
@@ -187,42 +187,34 @@ export const getPaginatedItems = (page: number, limit: number, items: any) => {
 };
 
 const getDateParts = (isoString: string) => {
-  const date = parseISO(isoString)
-  const day = Number(formatInTimeZone(date, timezone, 'd'))
-  const month = Number(formatInTimeZone(date, timezone, 'M')) - 1
-  const year = Number(formatInTimeZone(date, timezone, 'Y'))
-  const hour = Number(formatInTimeZone(date, timezone, 'H'))
-  const minute = Number(formatInTimeZone(date, timezone, 'm'))
-  const second = Number(formatInTimeZone(date, timezone, 's'))
-  const ms = Number(formatInTimeZone(date, timezone, 'SSS'))
-  return { day, month, year, hour, minute, second, ms }
-}
+  const date = parseISO(isoString);
+  const day = Number(formatInTimeZone(date, timezone, "d"));
+  const month = Number(formatInTimeZone(date, timezone, "M")) - 1;
+  const year = Number(formatInTimeZone(date, timezone, "Y"));
+  const hour = Number(formatInTimeZone(date, timezone, "H"));
+  const minute = Number(formatInTimeZone(date, timezone, "m"));
+  const second = Number(formatInTimeZone(date, timezone, "s"));
+  const ms = Number(formatInTimeZone(date, timezone, "SSS"));
+  return { day, month, year, hour, minute, second, ms };
+};
 
 export function isoStringToLocalMidnightStart(isoString: string) {
-  const { year, month, day } = getDateParts(isoString)
+  const { year, month, day } = getDateParts(isoString);
   return new Date(year, month, day, 0, 0, 0, 0);
 }
 
 export function isoStringToLocalMidnightEnd(isoString: string) {
-  const { year, month, day } = getDateParts(isoString)
+  const { year, month, day } = getDateParts(isoString);
   return new Date(year, month, day, 23, 59, 59, 999);
 }
 
 export function isoStringToLocalDateFull(isoString: string): Date {
-  const { year, month, day, hour, minute, second, ms = 0} =  getDateParts(isoString)
-  return new Date(
-    year,
-    month,
-    day,
-    hour,
-    minute,
-    second,
-    ms
-  );
+  const { year, month, day, hour, minute, second, ms = 0 } = getDateParts(isoString);
+  return new Date(year, month, day, hour, minute, second, ms);
 }
 
 export function localDateToIsoString(date: Date): string {
-return fromZonedTime(date, timezone).toISOString()
+  return fromZonedTime(date, timezone).toISOString();
 }
 
 export function localDateToUTCISOString(localDate: ValuePiece) {

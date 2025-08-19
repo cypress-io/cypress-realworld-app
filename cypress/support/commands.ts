@@ -285,8 +285,8 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
       .get(".react-calendar__navigation__label")
       .invoke("text")
       .then((label: string) => {
-        const parsedDate = parseDate(label, 'MMMM yyyy', new Date());
-        const monthsDiff = differenceInMonths(new Date(), parsedDate)
+        const parsedDate = parseDate(label, "MMMM yyyy", new Date());
+        const monthsDiff = differenceInMonths(new Date(), parsedDate);
 
         if (monthsDiff < 0) {
           for (let i = 0; i < Math.abs(monthsDiff); i++) {
