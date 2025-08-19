@@ -2,7 +2,7 @@
 ///<reference path="../global.d.ts" />
 
 import { pick } from "lodash/fp";
-import { format as formatDate } from "date-fns";
+import { differenceInMonths, parse as parseDate } from "date-fns";
 import { isMobile } from "./utils";
 
 // Import Cypress Percy plugin command (https://docs.percy.io/docs/cypress)
@@ -279,32 +279,14 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
   });
 
   const selectDate = (date: Date) => {
-    const targetYear = date.getFullYear();
-    const targetMonth = date.getMonth();
     const targetDay = date.getDate();
 
     return cy
       .get(".react-calendar__navigation__label")
       .invoke("text")
       .then((label: string) => {
-        const [currentMonthName, currentYearStr] = label.split(" ");
-        const currentYear = parseInt(currentYearStr);
-        const months = [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December",
-        ];
-        const currentMonth = months.indexOf(currentMonthName);
-        const monthsDiff = (targetYear - currentYear) * 12 + (targetMonth - currentMonth);
+        const parsedDate = parseDate(label, 'MMMM yyyy', new Date());
+        const monthsDiff = differenceInMonths(new Date(), parsedDate)
 
         if (monthsDiff < 0) {
           for (let i = 0; i < Math.abs(monthsDiff); i++) {

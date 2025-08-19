@@ -282,7 +282,7 @@ describe("Transaction Feed", function () {
       });
 
       it(`does not show ${feedName} transactions for out of range date limits`, function () {
-        const dateRangeStart = startOfDay(new Date(2014, 1, 1));
+        const dateRangeStart = startOfDay(new Date(2025, 7, 1));
         const dateRangeEnd = endOfDayUTC(addDays(dateRangeStart, 1));
 
         cy.getBySelLike(feed.tab).click();
