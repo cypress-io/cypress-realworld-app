@@ -28,8 +28,12 @@ const classes = {
 };
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
-  [`& .${classes.root}`]: {
+  [`&.${classes.root}`]: {
     flexGrow: 1,
+    "&:hover": {
+      backgroundColor: theme.palette.grey[50],
+    },
+    cursor: "pointer",
   },
 
   [`& .${classes.paper}`]: {
@@ -81,6 +85,7 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
 
   return (
     <StyledListItem
+      className={classes.root}
       data-test={`transaction-item-${transaction.id}`}
       alignItems="flex-start"
       onClick={() => showTransactionDetail(transaction.id)}
