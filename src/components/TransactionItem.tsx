@@ -30,8 +30,13 @@ const classes = {
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   [`&.${classes.root}`]: {
     flexGrow: 1,
+    transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+    borderLeft: "3px solid transparent",
     "&:hover": {
-      backgroundColor: theme.palette.grey[50],
+      backgroundColor: theme.palette.action.hover,
+      borderLeftColor: theme.palette.primary.main,
+      transform: "translateX(4px)",
+      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.12)",
     },
     cursor: "pointer",
   },
@@ -40,6 +45,8 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
     padding: theme.spacing(0),
     margin: "auto",
     width: "100%",
+    transition: "inherit",
+    backgroundColor: "transparent",
   },
 
   [`& .${classes.avatar}`]: {
