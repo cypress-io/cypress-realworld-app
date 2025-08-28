@@ -14,7 +14,7 @@ describe("Comments API", function () {
   let ctx: TestCommentsCtx = {};
 
   before(() => {
-    // Hacky workaround to have the e2e tests pass when cy.visit('http://localhost:3000') is called
+    // Hacky workaround to have the e2e tests pass when cy.visit('http://localhost:3002') is called
     cy.request("GET", "/");
   });
 

@@ -3,7 +3,7 @@
   "hardReloadOnChange": false,
   "template": "node",
   "container": {
-    "port": 3000,
+    "port": 3002,
     "startScript": "start:codesandbox"
   }
 }

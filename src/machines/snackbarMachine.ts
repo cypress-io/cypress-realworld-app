@@ -37,7 +37,7 @@ export const snackbarMachine = Machine<SnackbarContext, SnackbarSchema, Snackbar
         on: { HIDE: "invisible" },
         after: {
           // after 3 seconds, transition to invisible
-          3000: "invisible",
+          3002: "invisible",
         },
       },
     },

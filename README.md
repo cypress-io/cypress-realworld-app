@@ -105,7 +105,7 @@ yarn dev
 
 > 🚩 **Note**
 >
-> The app will run on port `3000` (frontend) and `3001` (API backend) by default. Please make sure there are no other applications or services running on both ports.
+> The app will run on port `3002` (frontend) and `3001` (API backend) by default. Please make sure there are no other applications or services running on both ports.
 > If you want to change the default ports, you can do so by modifying `PORT` and `VITE_BACKEND_PORT` variables in `.env` file.
 > However, make sure the modified port numbers in `.env` are not committed into Git since the CI environments still expect the application to run on the default ports.
 
@@ -120,7 +120,7 @@ yarn cypress:open
 > If you have changed the default ports, then you need to update Cypress configuration file (`cypress.config.ts`) locally.
 > There are three properties that you need to update in `cypress.config.ts`: `e2e.baseUrl`, `env.apiUrl`, and `env.url`.
 > The port number in `e2e.baseUrl` corresponds to `PORT` variable in `.env` file. Similarly, the port number in `env.apiUrl` and `env.url` correspond to `VITE_BACKEND_PORT`.
-> For example, if you have changed `PORT` to `13000` and `VITE_BACKEND_PORT` to `13001` in `.env` file, then your `cypress.config.ts` should look similar to the following snippet:
+> For example, if you have changed `PORT` to `13002` and `VITE_BACKEND_PORT` to `13001` in `.env` file, then your `cypress.config.ts` should look similar to the following snippet:
 >
 > ```js
 > {
@@ -131,7 +131,7 @@ yarn cypress:open
 >     },
 >   },
 >   e2e: {
->     baseUrl: "http://localhost:13000"
+>     baseUrl: "http://localhost:13002"
 >   }
 > }
 > ```
@@ -227,7 +227,7 @@ Prerequisites include an [Amazon Cognito][cognito] account. Environment variable
 
 - A user pool is required (identity pool is not used here)
   - The user pool must have a hosted UI domain configured, which must:
-    - allow callback and sign-out URLs of `http://localhost:3000/`,
+    - allow callback and sign-out URLs of `http://localhost:3002/`,
     - allow implicit grant Oauth grant type,
     - allow these OpenID Connect scopes:
       - aws.cognito.signin.user.admin
@@ -236,7 +236,7 @@ Prerequisites include an [Amazon Cognito][cognito] account. Environment variable
   - The user pool must have an app client configured, with:
     - enabled auth flow `ALLOW_USER_PASSWORD_AUTH`, only for programmatic login flavor of test.
     - The `cy.origin()` flavor of test only requires auth flow `ALLOW_USER_SRP_AUTH`, and does not require `ALLOW_USER_PASSWORD_AUTH`.
-  - The user pool must have a user corresponding to the `AWS_COGNITO` env vars mentioned below, and the user's Confirmation Status must be `Confirmed`. If it is `Force Reset Password`, then use a browser to log in once at `http://localhost:3000` while `yarn dev:cognito` is running to reset their password.
+  - The user pool must have a user corresponding to the `AWS_COGNITO` env vars mentioned below, and the user's Confirmation Status must be `Confirmed`. If it is `Force Reset Password`, then use a browser to log in once at `http://localhost:3002` while `yarn dev:cognito` is running to reset their password.
 
 The test knobs are in a few places:
 

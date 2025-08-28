@@ -27,7 +27,7 @@ Cypress.Commands.add("loginToAuth0", (username: string, password: string) => {
       });
 
       // Ensure Auth0 has redirected us back to the RWA.
-      cy.url().should("equal", "http://localhost:3000/");
+      cy.url().should("equal", "http://localhost:3002/");
     },
     {
       validate: () => {
