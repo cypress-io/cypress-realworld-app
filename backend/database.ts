@@ -104,7 +104,11 @@ export const seedDatabase = () => {
 export const getAllUsers = () => db.get(USER_TABLE).value();
 
 export const getAllPublicTransactions = () =>
-  db.get(TRANSACTION_TABLE).filter({ privacyLevel: DefaultPrivacyLevel.public }).value();
+  orderBy(
+    [(transaction: Transaction) => new Date(transaction.modifiedAt)],
+    ["desc"],
+    db.get(TRANSACTION_TABLE).filter({ privacyLevel: DefaultPrivacyLevel.public }).value()
+  );
 
 export const getAllForEntity = (entity: keyof DbSchema) => db.get(entity).value();
 
@@ -437,11 +441,15 @@ export const getContactIdsForUser = (userId: string): Contact["id"][] =>
   flow(getContactsByUserId, map("contactUserId"))(userId);
 
 export const getTransactionsForUserContacts = (userId: string, query?: object) =>
-  uniqBy(
-    "id",
-    flatMap(
-      (contactId) => getTransactionsForUserForApi(contactId, query),
-      getContactIdsForUser(userId)
+  orderBy(
+    [(transaction: TransactionResponseItem) => new Date(transaction.modifiedAt)],
+    ["desc"],
+    uniqBy(
+      "id",
+      flatMap(
+        (contactId) => getTransactionsForUserForApi(contactId, query),
+        getContactIdsForUser(userId)
+      )
     )
   );
 
