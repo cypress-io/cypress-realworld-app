@@ -1,7 +1,28 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import { ListItem, ListItemText, ListItemAvatar, Avatar, Grid } from "@mui/material";
 
 import { User } from "../models";
+
+const PREFIX = "UserListItem";
+
+const classes = {
+  root: `${PREFIX}-root`,
+};
+
+const StyledListItem = styled(ListItem)(({ theme }) => ({
+  [`&.${classes.root}`]: {
+    transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+    borderLeft: "3px solid transparent",
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: theme.palette.action.hover,
+      borderLeftColor: theme.palette.primary.main,
+      transform: "translateX(4px)",
+      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.12)",
+    },
+  },
+}));
 
 export interface UserListItemProps {
   user: User;
@@ -11,7 +32,11 @@ export interface UserListItemProps {
 
 const UserListItem: React.FC<UserListItemProps> = ({ user, setReceiver, index }) => {
   return (
-    <ListItem data-test={`user-list-item-${user.id}`} onClick={() => setReceiver(user)}>
+    <StyledListItem 
+      className={classes.root}
+      data-test={`user-list-item-${user.id}`} 
+      onClick={() => setReceiver(user)}
+    >
       <ListItemAvatar>
         <Avatar src={user.avatar} />
       </ListItemAvatar>
@@ -49,7 +74,7 @@ const UserListItem: React.FC<UserListItemProps> = ({ user, setReceiver, index })
           </span>
         }
       />
-    </ListItem>
+    </StyledListItem>
   );
 };
 
