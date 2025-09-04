@@ -46,6 +46,10 @@ import {
   NotificationResponseItem,
   TransactionQueryPayload,
   DefaultPrivacyLevel,
+  Loan,
+  LoanStatus,
+  LoanPayload,
+  LoanResponseItem,
 } from "../src/models";
 import Fuse from "fuse.js";
 import {
@@ -75,6 +79,7 @@ export type TDatabase = {
   comments: Comment[];
   notifications: NotificationType[];
   banktransfers: BankTransfer[];
+  loans: Loan[];
 };
 
 const USER_TABLE = "users";
@@ -85,6 +90,7 @@ const LIKE_TABLE = "likes";
 const COMMENT_TABLE = "comments";
 const NOTIFICATION_TABLE = "notifications";
 const BANK_TRANSFER_TABLE = "banktransfers";
+const LOAN_TABLE = "loans";
 
 const databaseFile = path.join(__dirname, "../data/database.json");
 const adapter = new FileSync<DbSchema>(databaseFile);
@@ -863,5 +869,51 @@ export const getTransactionsBy = (key: string, value: string) =>
 
 /* istanbul ignore next */
 export const getTransactionsByUserId = (userId: string) => getTransactionsBy("receiverId", userId);
+
+// Loan
+export const getLoanBy = (key: string, value: any): Loan => getBy(LOAN_TABLE, key, value);
+export const getLoansBy = (key: string, value: any): Loan[] => getAllBy(LOAN_TABLE, key, value);
+export const getLoanById = (id: string): Loan => getLoanBy("id", id);
+
+export const createLoan = (borrowerId: string, loanPayload: LoanPayload): Loan => {
+  const loan: Loan = {
+    id: shortid(),
+    uuid: v4(),
+    borrowerId,
+    lenderId: loanPayload.toUserId,
+    terms: {
+      amount: loanPayload.amount,
+      interestRate: loanPayload.interestRate,
+      durationMonths: loanPayload.durationMonths,
+    },
+    status: LoanStatus.pending,
+    createdAt: new Date(),
+    modifiedAt: new Date(),
+  };
+
+  const savedLoan = saveLoan(loan);
+  return savedLoan;
+};
+
+const saveLoan = (loan: Loan): Loan => {
+  db.get(LOAN_TABLE).push(loan).write();
+  return getLoanById(loan.id);
+};
+
+export const formatLoanForApiResponse = (loan: Loan): LoanResponseItem => {
+  const borrower = getUserById(loan.borrowerId);
+  const lender = getUserById(loan.lenderId);
+
+  const borrowerName = getFullNameForUser(loan.borrowerId);
+  const lenderName = getFullNameForUser(loan.lenderId);
+
+  return {
+    borrowerName,
+    lenderName,
+    borrowerAvatar: borrower.avatar,
+    lenderAvatar: lender.avatar,
+    ...loan,
+  };
+};
 
 export default db;

@@ -596,5 +596,6 @@ export const buildDatabase = () => {
     comments: seedComments,
     notifications: seedNotifications,
     banktransfers: seedBankTransfers,
+    loans: [],
   };
 };

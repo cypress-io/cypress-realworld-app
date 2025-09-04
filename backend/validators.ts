@@ -95,6 +95,13 @@ export const isTransactionPublicQSValidator = [
 
 export const isCommentValidator = body("content").isString().trim();
 
+export const isLoanPayloadValidator = [
+  body("toUserId").isString().trim().custom(isShortId),
+  body("amount").isFloat({ min: 0.01 }).toFloat(),
+  body("interestRate").optional({ checkFalsy: true }).isFloat({ min: 0 }).toFloat(),
+  body("durationMonths").isInt({ min: 1 }).toInt(),
+];
+
 export const isNotificationsBodyValidator = [
   body("items.*.type").isIn(NotificationsTypeValues).trim(),
   body("items.*.transactionId").custom(isShortId),
