@@ -32,9 +32,9 @@ export interface UserListItemProps {
 
 const UserListItem: React.FC<UserListItemProps> = ({ user, setReceiver, index }) => {
   return (
-    <StyledListItem 
+    <StyledListItem
       className={classes.root}
-      data-test={`user-list-item-${user.id}`} 
+      data-test={`user-list-item-${user.id}`}
       onClick={() => setReceiver(user)}
     >
       <ListItemAvatar>

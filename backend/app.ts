@@ -22,6 +22,7 @@ import commentRoutes from "./comment-routes";
 import notificationRoutes from "./notification-routes";
 import bankTransferRoutes from "./banktransfer-routes";
 import testDataRoutes from "./testdata-routes";
+import loanRoutes from "./loan-routes";
 import { checkAuth0Jwt, verifyOktaToken, checkCognitoJwt, checkGoogleJwt } from "./helpers";
 import resolvers from "./graphql/resolvers";
 import { frontendPort, getBackendPort } from "../src/utils/portUtils";
@@ -116,6 +117,7 @@ app.use("/likes", likeRoutes);
 app.use("/comments", commentRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/bankTransfers", bankTransferRoutes);
+app.use("/loans", loanRoutes);
 
 app.use(express.static(join(__dirname, "../public")));
 
