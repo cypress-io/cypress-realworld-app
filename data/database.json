@@ -10984,5 +10984,21 @@
       "createdAt": "2023-03-24T22:18:19.407Z",
       "modifiedAt": "2024-03-07T13:32:42.472Z"
     }
+  ],
+  "loans": [
+    {
+      "id": "4bvnUJPYa",
+      "uuid": "1b9d39c6-17e9-4491-8bc3-d3fd50a5275c",
+      "borrowerId": "GjWovtg2hr",
+      "lenderId": "M1ty1gR8B3",
+      "terms": {
+        "amount": 2000,
+        "interestRate": 4.5,
+        "durationMonths": 18
+      },
+      "status": "pending",
+      "createdAt": "2025-09-05T12:32:59.575Z",
+      "modifiedAt": "2025-09-05T12:32:59.575Z"
+    }
   ]
 }

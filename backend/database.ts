@@ -897,10 +897,24 @@ export const createLoan = (borrowerId: string, loanPayload: LoanPayload): Loan =
 
 const saveLoan = (loan: Loan): Loan => {
   db.get(LOAN_TABLE).push(loan).write();
+
+  // manual lookup after loan created
   return getLoanById(loan.id);
 };
 
 export const formatLoanForApiResponse = (loan: Loan): LoanResponseItem => {
+  if (!loan) {
+    throw new Error("Loan is undefined");
+  }
+  
+  if (!loan.borrowerId) {
+    throw new Error("Loan borrowerId is undefined");
+  }
+  
+  if (!loan.lenderId) {
+    throw new Error("Loan lenderId is undefined");
+  }
+
   const borrower = getUserById(loan.borrowerId);
   const lender = getUserById(loan.lenderId);
 
