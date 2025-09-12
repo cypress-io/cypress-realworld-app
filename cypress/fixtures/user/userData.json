@@ -1,0 +1,12 @@
+{
+    "successSignUp": {
+        "firstName": "Admin",
+        "lastName": "admin123",
+        "username": "admin",
+        "password": "1234",
+        "passwordB": "1234abc",
+        "confirmPassword": "1234",
+        "confirmPasswordB": "1234abc",
+        "differentPassword": "4321"
+    }
+}
