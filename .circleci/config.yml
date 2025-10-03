@@ -6,7 +6,7 @@ orbs:
 executors:
   with-chrome-and-firefox:
     docker:
-      - image: "cypress/browsers:22.16.0"
+      - image: "cypress/browsers:22.20.0"
     resource_class: large
     environment:
       CYPRESS_coverage: false
