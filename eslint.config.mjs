@@ -1,26 +1,20 @@
 import globals from 'globals'
-import { defineConfig } from 'eslint/config'
-import pluginJs from '@eslint/js'
-import pluginTs from 'typescript-eslint'
-import pluginTsParser from '@typescript-eslint/parser'
+import { defineConfig, globalIgnores } from 'eslint/config'
+import js from '@eslint/js'
+import tseslint from 'typescript-eslint'
 import pluginCypress from 'eslint-plugin-cypress'
 
 export default defineConfig([
-  {
-    ignores: ['build/'],
-  },
+  globalIgnores(['build/']),
   {
     files: ['**/*.ts'],
-    languageOptions: {
-      parser: pluginTsParser,
-    },
-  },
-  pluginJs.configs.recommended,
-  pluginTs.configs.recommended,
-  pluginCypress.configs.recommended,
-  {
+    extends: [
+      js.configs.recommended,
+      tseslint.configs.recommended,
+      pluginCypress.configs.recommended,
+    ],
     rules: {
-      // TO-DO review violations of disabled rules
+      // TODO: review violations of disabled rules
       'no-empty': 'off',
       'no-prototype-builtins': 'off',
       'no-undef': 'off',
@@ -38,9 +32,7 @@ export default defineConfig([
       '@typescript-eslint/triple-slash-reference': 'off',
     },
     languageOptions: {
-      globals: {
-        ...globals.node,
-      },
-    }
-  }
+      globals: globals.node,
+    },
+  },
 ])
