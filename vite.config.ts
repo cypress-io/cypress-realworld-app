@@ -40,6 +40,7 @@ export default defineConfig(({ mode }) => {
       environment: "jsdom",
       setupFiles: "./src/setup-tests.js",
       exclude: ["node_modules", "cypress", "dist"],
+      fileParallelism: false, // #1666: Run tests sequentially to avoid race conditions with shared database.json file.
     },
   };
 });
