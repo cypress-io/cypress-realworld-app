@@ -856,4 +856,17 @@ export const getTransactionsBy = (key: string, value: string) =>
 /* istanbul ignore next */
 export const getTransactionsByUserId = (userId: string) => getTransactionsBy("receiverId", userId);
 
+/* istanbul ignore next */
+export const cleanupDatabase = () => {
+  // Reset all tables to empty state
+  db.set(USER_TABLE, []).write();
+  db.set(CONTACT_TABLE, []).write();
+  db.set(BANK_ACCOUNT_TABLE, []).write();
+  db.set(TRANSACTION_TABLE, []).write();
+  db.set(LIKE_TABLE, []).write();
+  db.set(COMMENT_TABLE, []).write();
+  db.set(NOTIFICATION_TABLE, []).write();
+  db.set(BANK_TRANSFER_TABLE, []).write();
+};
+
 export default db;

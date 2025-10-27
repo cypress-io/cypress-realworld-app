@@ -1,0 +1,20 @@
+{
+  "name": "playwright-tests",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@faker-js/faker": "^10.1.0",
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.9.1"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:api": "playwright test tests/api/",
+    "test:ui": "playwright test tests/ui/",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui-mode": "playwright test --ui",
+    "report": "playwright show-report"
+  }
+}

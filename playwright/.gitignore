@@ -1,0 +1,9 @@
+# Test results
+test-results/
+playwright-report/
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log

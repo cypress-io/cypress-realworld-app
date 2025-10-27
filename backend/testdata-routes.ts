@@ -1,7 +1,7 @@
 ///<reference path="types.ts" />
 
 import express from "express";
-import { getAllForEntity, seedDatabase } from "./database";
+import { getAllForEntity, seedDatabase, cleanupDatabase } from "./database";
 import { validateMiddleware } from "./helpers";
 import { isValidEntityValidator } from "./validators";
 import { DbSchema } from "../src/models/db-schema";
@@ -12,6 +12,12 @@ const router = express.Router();
 //POST /testData/seed
 router.post("/seed", (req, res) => {
   seedDatabase();
+  res.sendStatus(200);
+});
+
+//POST /testData/cleanup
+router.post("/cleanup", (req, res) => {
+  cleanupDatabase();
   res.sendStatus(200);
 });
 

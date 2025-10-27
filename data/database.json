@@ -74,6 +74,171 @@
       "balance": 49474,
       "createdAt": "2023-12-07T04:39:38.383Z",
       "modifiedAt": "2024-03-07T00:07:36.510Z"
+    },
+    {
+      "id": "lyxSTva5e",
+      "uuid": "b1a68037-3517-42a0-ad79-0af6f3d7e8af",
+      "firstName": "Winifred",
+      "lastName": "Dietrich",
+      "username": "winifreddietrich58",
+      "password": "$2a$10$KtgIGgQDg7kGAXAHLtYHxucvTkz6RrwELsCzsOoCtKriDZAxpwoVm",
+      "balance": 0,
+      "createdAt": "2025-10-26T23:45:53.793Z",
+      "modifiedAt": "2025-10-26T23:45:53.793Z"
+    },
+    {
+      "id": "SaE7LpHIdg",
+      "uuid": "280dfd80-d6e1-4a24-81a8-73c5f60cba93",
+      "firstName": "Marta",
+      "lastName": "Leannon",
+      "username": "martaleannon23",
+      "password": "$2a$10$LALWESIwyP5gzp.STN/2ZetGIUBCI1ieAOF1QyZMZPOLO9CJAE8OW",
+      "balance": 0,
+      "createdAt": "2025-10-26T23:45:53.888Z",
+      "modifiedAt": "2025-10-26T23:45:53.888Z"
+    },
+    {
+      "id": "BGQp_e-U7",
+      "uuid": "ddb3e50c-5b64-426a-ad84-a892baa73fd8",
+      "firstName": "Abigail",
+      "lastName": "Fisher",
+      "username": "abigailfisher15",
+      "password": "$2a$10$Ce5HT6mQ0CgOlOb7dAdGgOZyop5amwsRhLQsD6UdFrPQUPsaDYS5S",
+      "balance": 0,
+      "createdAt": "2025-10-26T23:45:54.280Z",
+      "modifiedAt": "2025-10-26T23:45:54.280Z"
+    },
+    {
+      "id": "bE-JZpNyj",
+      "uuid": "f2024bbd-3e3d-41d8-a93c-b9bf7343c50f",
+      "firstName": "Queenie",
+      "lastName": "Huels",
+      "username": "queeniehuels34",
+      "password": "$2a$10$fJjNX/9uZZzWw9pezHFqLeQmLi9JbDN5mHUdRondQyhqaOxQCyyB6",
+      "balance": 0,
+      "createdAt": "2025-10-26T23:55:20.588Z",
+      "modifiedAt": "2025-10-26T23:55:20.588Z"
+    },
+    {
+      "id": "T4TemZT5Lb",
+      "uuid": "2e05bd7c-4e30-4a02-a4c0-376e6e65249b",
+      "firstName": "Eriberto",
+      "lastName": "Schuppe",
+      "username": "eribertoschuppe32",
+      "password": "$2a$10$/UBbIVRszjlIqEZ6gmuoFeHCVo7vmYViJLQztOkVSsuTYjJG.Hrba",
+      "balance": 0,
+      "createdAt": "2025-10-26T23:55:20.727Z",
+      "modifiedAt": "2025-10-26T23:55:20.727Z"
+    },
+    {
+      "id": "poPni71sI",
+      "uuid": "18af586e-b2e5-4989-a5a0-631deaedf9c2",
+      "firstName": "Raquel",
+      "lastName": "Schroeder",
+      "username": "raquelschroeder28",
+      "password": "$2a$10$/RqPWv5xesiSOIfRTrMMmu8YuqSYOidtKGVMHMbKsb3mHbnsv/ijW",
+      "balance": 0,
+      "createdAt": "2025-10-26T23:55:21.551Z",
+      "modifiedAt": "2025-10-26T23:55:21.551Z"
+    },
+    {
+      "id": "JivmQvhVO",
+      "uuid": "16c83622-17c2-4236-b42a-69a6730f0259",
+      "firstName": "Wyman",
+      "lastName": "Stamm",
+      "username": "wymanstamm44",
+      "password": "$2a$10$1Lr5uIYfzi3P42CWYDt6uOCbmBy6EkvZtxq7E.9tolOFEd13ELQAK",
+      "balance": 0,
+      "createdAt": "2025-10-27T00:02:02.731Z",
+      "modifiedAt": "2025-10-27T00:02:02.731Z"
+    },
+    {
+      "id": "t-8uWFH_YD",
+      "uuid": "5dfe0761-0732-446f-956e-882dbb23f4f1",
+      "firstName": "Shayna",
+      "lastName": "Hilpert",
+      "username": "shaynahilpert56",
+      "password": "$2a$10$QBvy3jI2Ev6pq0YT3mMA0O8IF2sZASmoI.RXXPgxL4QFTUCBr3KkC",
+      "balance": 0,
+      "createdAt": "2025-10-27T00:02:02.891Z",
+      "modifiedAt": "2025-10-27T00:02:02.891Z"
+    },
+    {
+      "id": "X6yUCv0sL",
+      "uuid": "2fdd3bea-2b84-426d-9a73-e4eafc8eda65",
+      "firstName": "Jayne",
+      "lastName": "Emmerich",
+      "username": "jayneemmerich95",
+      "password": "$2a$10$cz4JNZEOUw.8lEk7BsyVKen6tjEfHo6Dq6S7TXTtO67CgzNP8c.rm",
+      "balance": 0,
+      "createdAt": "2025-10-27T00:02:03.362Z",
+      "modifiedAt": "2025-10-27T00:02:03.362Z"
+    },
+    {
+      "id": "IynA2GebO",
+      "uuid": "f4f83564-7b02-4c7c-a91a-337aac9bbbef",
+      "firstName": "Harmony",
+      "lastName": "Mayert",
+      "username": "harmonymayert80",
+      "password": "$2a$10$5WTFFltSULT05Tlz3TWn3uUgl7KNhw5Xdb.I45aSNhzCPDLwDrI3O",
+      "balance": 0,
+      "createdAt": "2025-10-27T00:08:25.031Z",
+      "modifiedAt": "2025-10-27T00:08:25.031Z"
+    },
+    {
+      "id": "QKfWquvdR",
+      "uuid": "ab9e9a19-f793-49ac-aab4-ce2bb2681400",
+      "firstName": "Frida",
+      "lastName": "Schimmel-Schowalter",
+      "username": "fridaschimmel-schowalter65",
+      "password": "$2a$10$C8nDAzr5UAWSgD7dX52h7.z9KcFSZj5bK4HGDJnH6W1f4T.Q85ISy",
+      "balance": 0,
+      "createdAt": "2025-10-27T00:08:25.138Z",
+      "modifiedAt": "2025-10-27T00:08:25.138Z"
+    },
+    {
+      "id": "mW86jvzUJJ",
+      "uuid": "3f3df9fa-28bc-4ca7-bbd3-38a7a443ee51",
+      "firstName": "Olin",
+      "lastName": "Rutherford",
+      "username": "olinrutherford75",
+      "password": "$2a$10$jQkY0AlJ7e.yhTzZnDxyJuPhuOVNMvKtLr7UftKJO/pyblGdeRiOy",
+      "balance": 0,
+      "createdAt": "2025-10-27T00:08:26.052Z",
+      "modifiedAt": "2025-10-27T00:08:26.052Z"
+    },
+    {
+      "id": "9zN-flycB",
+      "uuid": "974a8ce9-30b3-4ad4-b1a4-0a798dae3ccb",
+      "firstName": "Wilford",
+      "lastName": "Rippin",
+      "username": "wilfordrippin41",
+      "password": "$2a$10$xrJBo.rwjRqAkk/kcehhlOZj88QEKGw0mDFNl94i4Q8ZKDiT8FUae",
+      "balance": 0,
+      "createdAt": "2025-10-27T00:10:48.373Z",
+      "modifiedAt": "2025-10-27T00:10:48.373Z"
+    },
+    {
+      "id": "80Vwqz1wpu",
+      "uuid": "61836562-88aa-4d6e-bef8-93ad0aae0b34",
+      "firstName": "Lola",
+      "lastName": "Kunze",
+      "username": "lolakunze53",
+      "password": "$2a$10$kvJiwlyG871Ko3QnmlEbO.dvLuN7MyBsKmQZ5ZpOyIYIJ.GCvx0Wm",
+      "balance": 0,
+      "createdAt": "2025-10-27T00:10:48.482Z",
+      "modifiedAt": "2025-10-27T00:10:48.482Z"
+    },
+    {
+      "id": "hAx6gBl4S",
+      "uuid": "a0f34c60-2276-4e55-bc36-2118275fe261",
+      "firstName": "Matt",
+      "lastName": "Kunze",
+      "username": "mattkunze67",
+      "password": "$2a$10$1wMrWazZy/td9yl0vcc4l.6q7HfNf6.wsxQi7FEK0FjoRUUAMLMGy",
+      "balance": 0,
+      "createdAt": "2025-10-27T00:10:49.069Z",
+      "modifiedAt": "2025-10-27T00:10:49.069Z"
     }
   ],
   "contacts": [
@@ -253,6 +418,61 @@
       "isDeleted": false,
       "createdAt": "2024-01-26T14:01:01.815Z",
       "modifiedAt": "2024-03-07T08:44:31.174Z"
+    },
+    {
+      "id": "RH_FOjA_n",
+      "uuid": "612b4fb7-d177-466e-8960-c8b62c304651",
+      "userId": "BGQp_e-U7",
+      "bankName": "The Best Bank",
+      "accountNumber": "123456789",
+      "routingNumber": "987654321",
+      "isDeleted": false,
+      "createdAt": "2025-10-26T23:45:55.554Z",
+      "modifiedAt": "2025-10-26T23:45:55.554Z"
+    },
+    {
+      "id": "5Ovxyjyvv",
+      "uuid": "c1774da9-a367-4496-bae3-4e80872fee6e",
+      "userId": "poPni71sI",
+      "bankName": "The Best Bank",
+      "accountNumber": "123456789",
+      "routingNumber": "987654321",
+      "isDeleted": false,
+      "createdAt": "2025-10-26T23:55:22.815Z",
+      "modifiedAt": "2025-10-26T23:55:22.815Z"
+    },
+    {
+      "id": "APUiDDHKGo",
+      "uuid": "aa359cc9-6a3e-462a-a589-4aea13b3a2d3",
+      "userId": "X6yUCv0sL",
+      "bankName": "The Best Bank",
+      "accountNumber": "123456789",
+      "routingNumber": "987654321",
+      "isDeleted": false,
+      "createdAt": "2025-10-27T00:02:03.745Z",
+      "modifiedAt": "2025-10-27T00:02:03.745Z"
+    },
+    {
+      "id": "o_DghsD8j",
+      "uuid": "420634be-7425-4172-a2cf-9d42097e0352",
+      "userId": "mW86jvzUJJ",
+      "bankName": "The Best Bank",
+      "accountNumber": "123456789",
+      "routingNumber": "987654321",
+      "isDeleted": false,
+      "createdAt": "2025-10-27T00:08:27.631Z",
+      "modifiedAt": "2025-10-27T00:08:27.631Z"
+    },
+    {
+      "id": "ZI-pXSWQJ",
+      "uuid": "7dc879ad-f1e8-41d3-9a55-80066bd6139b",
+      "userId": "hAx6gBl4S",
+      "bankName": "The Best Bank",
+      "accountNumber": "123456789",
+      "routingNumber": "987654321",
+      "isDeleted": false,
+      "createdAt": "2025-10-27T00:10:50.284Z",
+      "modifiedAt": "2025-10-27T00:10:50.284Z"
     }
   ],
   "transactions": [
