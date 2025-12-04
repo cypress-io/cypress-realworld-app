@@ -74,6 +74,72 @@
       "balance": 49474,
       "createdAt": "2023-12-07T04:39:38.383Z",
       "modifiedAt": "2024-03-07T00:07:36.510Z"
+    },
+    {
+      "id": "4xVAQEBEt",
+      "uuid": "971a415d-0c6f-4e6c-96d5-c669757f2341",
+      "firstName": "Robert",
+      "lastName": "Souza",
+      "username": "RS",
+      "password": "$2a$10$ekf7ktKhf9Q11Ox5QDkKjOBt9mPanFmd/f42AE2BTFPVknucTycjW",
+      "balance": 0,
+      "createdAt": "2025-12-04T01:37:17.592Z",
+      "modifiedAt": "2025-12-04T01:37:17.592Z"
+    },
+    {
+      "id": "CKJ4ehIhW",
+      "uuid": "2766548d-6c6f-4a9d-b5f9-05c1391bdb0f",
+      "firstName": "Robert",
+      "lastName": "Souza",
+      "username": "RS",
+      "password": "$2a$10$UM8pkDW2fddRTsytD98SROWz5VwxIGByvciRsVb0.hdqiQheaQJwG",
+      "balance": 0,
+      "createdAt": "2025-12-04T01:38:16.348Z",
+      "modifiedAt": "2025-12-04T01:38:16.348Z"
+    },
+    {
+      "id": "1EB90cjgT",
+      "uuid": "02ac1439-738c-40fc-8966-a2c5c589dbf5",
+      "firstName": "1452",
+      "lastName": "Souza",
+      "username": "RS",
+      "password": "$2a$10$VQVhEb1TexwYPF1SFvPgtOedMOF8zyIImpmNb9TQUz85XETZLcfiu",
+      "balance": 0,
+      "createdAt": "2025-12-04T01:43:38.715Z",
+      "modifiedAt": "2025-12-04T01:43:38.715Z"
+    },
+    {
+      "id": "cH9lU7n5x",
+      "uuid": "6a789770-58f9-4ef1-ac21-d6422003f470",
+      "firstName": ".",
+      "lastName": ".",
+      "username": ".",
+      "password": "$2a$10$6J4HxwfYi.ipeTYS6tkL1uMOtKBzM6hzDntupZsFWN5mK.wV8JuXO",
+      "balance": 0,
+      "createdAt": "2025-12-04T01:52:28.965Z",
+      "modifiedAt": "2025-12-04T01:52:28.965Z"
+    },
+    {
+      "id": "l8HUBUY92",
+      "uuid": "95858294-97e0-4373-876e-5b4439780610",
+      "firstName": "Robert",
+      "lastName": "Souza",
+      "username": "RS",
+      "password": "$2a$10$qWT2jxa5WOQmTfj30OfrIeu/j7GGRSFBDv47R4Du87HbsO2CWjRve",
+      "balance": 0,
+      "createdAt": "2025-12-04T01:54:49.123Z",
+      "modifiedAt": "2025-12-04T01:54:49.123Z"
+    },
+    {
+      "id": "j9Hj_WI6d",
+      "uuid": "6ad88141-be65-4d33-8e84-9d78205e0355",
+      "firstName": "1",
+      "lastName": "2",
+      "username": "3",
+      "password": "$2a$10$kJ5QrGde6v0TwaafVqOMye6kPFlVUj5.RdmsJ5dtmgkrdOAYukfzG",
+      "balance": 0,
+      "createdAt": "2025-12-04T01:55:21.035Z",
+      "modifiedAt": "2025-12-04T01:55:21.035Z"
     }
   ],
   "contacts": [
