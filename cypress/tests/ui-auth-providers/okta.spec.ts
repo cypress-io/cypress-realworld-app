@@ -8,7 +8,11 @@ if (Cypress.env("okta_username")) {
 
         cy.intercept("POST", "/bankAccounts").as("createBankAccount");
 
-        cy.loginByOktaApi(Cypress.env("okta_username"), Cypress.env("okta_password"));
+        cy.task<{ username: string; password: string }>("getOktaCredentials").then(
+          ({ username, password }) => {
+            cy.loginByOktaApi(username, password);
+          }
+        );
       });
 
       it("should allow a visitor to login, onboard and logout", function () {

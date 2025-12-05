@@ -35,28 +35,20 @@ export default defineConfig({
     paginationPageSize: process.env.PAGINATION_PAGE_SIZE,
 
     // Auth0
-    auth0_username: process.env.AUTH0_USERNAME,
-    auth0_password: process.env.AUTH0_PASSWORD,
     auth0_domain: process.env.VITE_AUTH0_DOMAIN,
 
     // Okta
-    okta_username: process.env.OKTA_USERNAME,
-    okta_password: process.env.OKTA_PASSWORD,
     okta_domain: process.env.VITE_OKTA_DOMAIN,
     okta_client_id: process.env.VITE_OKTA_CLIENTID,
     okta_programmatic_login: process.env.OKTA_PROGRAMMATIC_LOGIN || false,
 
     // Amazon Cognito
-    cognito_username: process.env.AWS_COGNITO_USERNAME,
-    cognito_password: process.env.AWS_COGNITO_PASSWORD,
     cognito_domain: process.env.AWS_COGNITO_DOMAIN,
     cognito_programmatic_login: false,
     awsConfig: awsConfig.default,
 
     // Google
-    googleRefreshToken: process.env.GOOGLE_REFRESH_TOKEN,
     googleClientId: process.env.VITE_GOOGLE_CLIENTID,
-    googleClientSecret: process.env.VITE_GOOGLE_CLIENT_SECRET,
   },
   component: {
     devServer: {
@@ -104,6 +96,38 @@ export default defineConfig({
         },
         "find:database"(queryPayload) {
           return queryDatabase(queryPayload, (data, attrs) => _.find(data.results, attrs));
+        },
+        getAuth0Credentials() {
+          const username = process.env.AUTH0_USERNAME;
+          const password = process.env.AUTH0_PASSWORD;
+          if (!username || !password) {
+            throw new Error("AUTH0_USERNAME and AUTH0_PASSWORD must be set");
+          }
+          return { username, password };
+        },
+        getOktaCredentials() {
+          const username = process.env.OKTA_USERNAME;
+          const password = process.env.OKTA_PASSWORD;
+          if (!username || !password) {
+            throw new Error("OKTA_USERNAME and OKTA_PASSWORD must be set");
+          }
+          return { username, password };
+        },
+        getCognitoCredentials() {
+          const username = process.env.AWS_COGNITO_USERNAME;
+          const password = process.env.AWS_COGNITO_PASSWORD;
+          if (!username || !password) {
+            throw new Error("AWS_COGNITO_USERNAME and AWS_COGNITO_PASSWORD must be set");
+          }
+          return { username, password };
+        },
+        getGoogleCredentials() {
+          const refreshToken = process.env.GOOGLE_REFRESH_TOKEN;
+          const clientSecret = process.env.VITE_GOOGLE_CLIENT_SECRET;
+          if (!refreshToken || !clientSecret) {
+            throw new Error("GOOGLE_REFRESH_TOKEN and VITE_GOOGLE_CLIENT_SECRET must be set");
+          }
+          return { refreshToken, clientSecret };
         },
       });
 

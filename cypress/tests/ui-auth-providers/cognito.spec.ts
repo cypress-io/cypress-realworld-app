@@ -11,7 +11,11 @@ if (Cypress.env("cognito_username")) {
 
         cy.intercept("POST", apiGraphQL).as("createBankAccount");
 
-        cy.loginByCognitoApi(Cypress.env("cognito_username"), Cypress.env("cognito_password"));
+        cy.task<{ username: string; password: string }>("getCognitoCredentials").then(
+          ({ username, password }) => {
+            cy.loginByCognitoApi(username, password);
+          }
+        );
       });
 
       it("should allow a visitor to login, onboard and logout", function () {

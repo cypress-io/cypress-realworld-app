@@ -5,7 +5,11 @@ if (Cypress.env("auth0_username")) {
     beforeEach(function () {
       cy.task("db:seed");
       cy.intercept("POST", "/graphql").as("createBankAccount");
-      cy.loginToAuth0(Cypress.env("auth0_username"), Cypress.env("auth0_password"));
+      cy.task<{ username: string; password: string }>("getAuth0Credentials").then(
+        ({ username, password }) => {
+          cy.loginToAuth0(username, password);
+        }
+      );
       cy.visit("/");
     });
 
