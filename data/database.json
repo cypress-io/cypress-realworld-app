@@ -74,6 +74,72 @@
       "balance": 49474,
       "createdAt": "2023-12-07T04:39:38.383Z",
       "modifiedAt": "2024-03-07T00:07:36.510Z"
+    },
+    {
+      "id": "hOfH0dYfd",
+      "uuid": "367ee718-ee89-4ffe-a763-c0c1f8851479",
+      "firstName": "Ted",
+      "lastName": "Parisian",
+      "username": "Heath93",
+      "password": "$2a$10$HD3LR8Q.OC64aWlFts.urO9vm6wrZRNCse13WlOBpZ8z9iWAZguvq",
+      "balance": 0,
+      "createdAt": "2026-01-18T21:34:30.130Z",
+      "modifiedAt": "2026-01-18T21:34:30.130Z"
+    },
+    {
+      "id": "YAWdEC9a4",
+      "uuid": "a4a17952-d591-4c8d-a73e-df91553666e9",
+      "firstName": "Ted",
+      "lastName": "Parisian",
+      "username": "Heath93",
+      "password": "$2a$10$m.MK3tUo2EEOr9zi1VSn4ucTfszIRXdla6gsCqjCJa.BQDUcJPtMq",
+      "balance": 0,
+      "createdAt": "2026-01-18T22:11:30.876Z",
+      "modifiedAt": "2026-01-18T22:11:30.876Z"
+    },
+    {
+      "id": "B0XGwF-Sc",
+      "uuid": "24b7429d-15d0-49ed-aece-55738651c529",
+      "firstName": "Ted",
+      "lastName": "Parisian",
+      "username": "Heath93",
+      "password": "$2a$10$Pv/6RYFcv2lwJjuTNfCNvOJY05gyZ/dD8DZ7UKY8ujAq14PoTxw9G",
+      "balance": 0,
+      "createdAt": "2026-01-18T22:12:40.102Z",
+      "modifiedAt": "2026-01-18T22:12:40.102Z"
+    },
+    {
+      "id": "TlqCpK22O",
+      "uuid": "39739b60-181e-4ea0-acc2-dfa47b1c057e",
+      "firstName": "Ted",
+      "lastName": "Parisian",
+      "username": "Heath93",
+      "password": "$2a$10$n9v.eSit7LM5YRV4HYpTG.rWoXx3.LXaBt4zFs3hQiD.17eRyvNn6",
+      "balance": 0,
+      "createdAt": "2026-01-18T22:13:07.104Z",
+      "modifiedAt": "2026-01-18T22:13:07.104Z"
+    },
+    {
+      "id": "IzRTXj461",
+      "uuid": "88045ec7-2c7b-4b97-b02c-44d70bd1a6ec",
+      "firstName": "Ted",
+      "lastName": "Parisian",
+      "username": "Heath93",
+      "password": "$2a$10$NEZRI0KEQsg8dbyOD4Fjwu1aowpRENEB2DlQEbk8NrmjKxYvH0PLa",
+      "balance": 0,
+      "createdAt": "2026-01-18T22:20:33.082Z",
+      "modifiedAt": "2026-01-18T22:20:33.082Z"
+    },
+    {
+      "id": "bFscak3rp",
+      "uuid": "7c641d58-fd73-4375-97f9-81c528cc920c",
+      "firstName": "Ted",
+      "lastName": "Parisian",
+      "username": "Heath93",
+      "password": "$2a$10$qwWHfyR5dsNcaYya0Ld/G.AZH9nAPM6YiiKdDumqd2PJrtCcZq5Xq",
+      "balance": 0,
+      "createdAt": "2026-01-18T22:39:37.949Z",
+      "modifiedAt": "2026-01-18T22:39:37.949Z"
     }
   ],
   "contacts": [
