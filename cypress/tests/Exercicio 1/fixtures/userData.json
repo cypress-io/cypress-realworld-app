@@ -1,0 +1,21 @@
+{
+  "userSucces": {
+    "username": "Arvilla_Hegmann",
+    "password": "s3cret"
+  },
+  "userFailed": {
+    "username": "TestUser",
+    "password": "Test"
+  },
+  "userValid": {
+    "firstName": "Ted",
+    "lastName": "Parisian",
+    "username": "Heath93",
+    "password": "s3cret",
+    "confirmPassword": "s3cret"
+ },
+ "incompleteUserdata": {
+    "firstName": "Darrel",
+    "lastName": "Ortiz"
+  }
+  }
