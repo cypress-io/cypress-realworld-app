@@ -546,7 +546,7 @@ export const createTransaction = (
   const savedTransaction = saveTransaction(transaction);
 
   // if payment, debit sender's balance for payment amount
-  if (isRequestTransaction(transaction)) {
+  if (isPayment(transaction)) {
     debitPayAppBalance(sender, transaction);
     creditPayAppBalance(receiver, transaction);
     updateTransactionById(transaction.id, {
