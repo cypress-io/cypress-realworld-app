@@ -258,6 +258,21 @@ To start the application with Google, replace the current **src/index.tsx** file
 
 The **only passing spec** when run with `yarn dev:google` will be the [google spec](./cypress/tests/ui-auth-providers/google.spec.ts); all others will fail.
 
+## Playwright Tests
+
+Authentication tests have been ported to Playwright. To run them:
+
+1. Make sure the app is running (`yarn dev`)
+2. Make sure `.env` file exists with `SEED_DEFAULT_USER_PASSWORD` set
+3. Install Playwright browsers: `npx playwright install`
+4. Run tests: `npx playwright test`
+
+Other useful commands:
+
+- `npx playwright test --headed` - run with visible browser
+- `npx playwright test --ui` - interactive UI mode
+- `npx playwright test -g "test name"` - run specific test
+
 ## License
 
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/cypress-io/cypress/blob/master/LICENSE)

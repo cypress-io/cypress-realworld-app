@@ -21,6 +21,10 @@ cypress/videos
 cypress/screenshots
 .nyc_output
 
+# Playwright
+test-results/
+playwright-report/
+
 # Ignore env local files - https://create-react-app.dev/docs/adding-custom-environment-variables/#what-other-env-files-can-be-used
 .env*.local
 
