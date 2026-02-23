@@ -3,7 +3,7 @@ import sendMoneyPage from "../pages/sendMoneyPage"
 import userData from "../fixtures/userData.json"
 
 describe('Send money', () => {
-
+  
   it('money successfully', () => {
     loginPage.visit()
     loginPage.loginSuccess(userData.userSuccess.username,userData.userSuccess.password)
