@@ -8,7 +8,7 @@ const Query = {
       /* istanbul ignore next */
     } catch (err: any) {
       /* istanbul ignore next */
-      throw new Error(err);
+      throw new Error(err); // eslint-disable-line preserve-caught-error
     }
   },
 };
