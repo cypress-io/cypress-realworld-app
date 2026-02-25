@@ -2,7 +2,7 @@
   import userData from '../fixtures/userData.json'
   import registrationPage from '../pages/registrationPage'
 
-describe('Usuário Registrado', () => {
+describe('Register User', () => {
 
   it('Register - Success', () => {
     registrationPage.openSignup()

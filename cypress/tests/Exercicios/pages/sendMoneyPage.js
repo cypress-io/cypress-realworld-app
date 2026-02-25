@@ -1,5 +1,5 @@
 class SendMoneyPage {
-  selectors() {
+  selectorsList() {
     return {
       newTransaction: '[data-test="nav-top-new-transaction"]',
       usersListItem: '[data-test="users-list"] li',
@@ -11,20 +11,20 @@ class SendMoneyPage {
   }
 
   moneySuccessfully() {
-  cy.get(this.selectors().newTransaction).click()
-  cy.get(this.selectors().usersListItem).first().click()
-  cy.get(this.selectors().amountInput).clear().type('50')
-  cy.get(this.selectors().descriptionInput).clear().type('Payment for services')
-  cy.get(this.selectors().submitButton).should('be.enabled').click()
+  cy.get(this.selectorsList().newTransaction).click()
+  cy.get(this.selectorsList().usersListItem).first().click()
+  cy.get(this.selectorsList().amountInput).clear().type('50')
+  cy.get(this.selectorsList().descriptionInput).clear().type('Payment for services')
+  cy.get(this.selectorsList().submitButton).should('be.enabled').click()
   cy.url().should('include', '/transaction')
 }
 
   insufficientBalance() {
-    cy.get(this.selectors().newTransaction).click()
-    cy.get(this.selectors().usersListItem).first().click()
-    cy.get(this.selectors().amountInput).clear().type('50000')
-    cy.get(this.selectors().descriptionInput).clear().type('Payment for services')
-    cy.get(this.selectors().submitButton).click()
+    cy.get(this.selectorsList().newTransaction).click()
+    cy.get(this.selectorsList().usersListItem).first().click()
+    cy.get(this.selectorsList().amountInput).clear().type('50000')
+    cy.get(this.selectorsList().descriptionInput).clear().type('Payment for services')
+    cy.get(this.selectorsList().submitButton).click()
     cy.url().should('include', '/transaction/new')
   }
 

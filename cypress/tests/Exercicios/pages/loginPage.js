@@ -1,5 +1,4 @@
 class LoginPage {
-
   selectorsList() {
     return {
       usernameField: '#username',
