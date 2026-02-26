@@ -12,7 +12,7 @@ class TransactionsPage {
 
   successfullyTransaction() {
     cy.get(this.selectorsList().accessAbaTransacoes).click()
-    cy.get(this.selectorsList().validatePaginaTransacoes).contains('Personal')
+    cy.contains(this.selectorsList().validatePaginaTransacoes,'Personal').should('be.visible')
     
   }
 
@@ -22,7 +22,7 @@ class TransactionsPage {
     cy.get(this.selectorsList().changeDataTransacoes).click({force: true})
     cy.get(this.selectorsList().currentDay).click({force: true})
     cy.get(this.selectorsList().currentDay).click({force: true})
-    cy.get(this.selectorsList().msgNoTransactions).contains('No Transactions')
+    cy.contains(this.selectorsList().msgNoTransactions, 'No Transactions').should('be.visible')
 
   }
 
