@@ -6,4 +6,8 @@ export class FieldComponent {
   get input(): Locator {
     return this.root.locator("input");
   }
+
+  get errorMessage(): Locator {
+    return this.root.locator("p.Mui-error");
+  }
 }

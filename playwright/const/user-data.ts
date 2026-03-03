@@ -4,7 +4,14 @@ if (!process.env.SEED_DEFAULT_USER_PASSWORD) {
 
 export const PASSWORD = process.env.SEED_DEFAULT_USER_PASSWORD;
 
-export const UserData = {
+export type UserData = {
+  firstName: string;
+  lastName: string;
+  username: string;
+  password: string;
+};
+
+export const defaultUserData: UserData = {
   firstName: "Bob",
   lastName: "Ross",
   username: "PainterJoy90",
