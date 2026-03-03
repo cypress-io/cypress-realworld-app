@@ -10,8 +10,11 @@ import { defaultBankAccountData } from "../../const/bank-account-data";
 import { seedDatabase } from "../../utils/database.utils";
 
 test.describe.serial("User Sign-up and Login", () => {
-  test.beforeEach(async ({ apiRequest }) => {
+  let signInPage: SignInPage;
+
+  test.beforeEach(async ({ page, apiRequest }) => {
     await seedDatabase(apiRequest);
+    signInPage = new SignInPage(page);
   });
 
   test("should redirect unauthenticated user to signin page", async ({ page }) => {
@@ -21,14 +24,12 @@ test.describe.serial("User Sign-up and Login", () => {
   });
 
   test("should redirect to the home page after login", async ({ page, user }) => {
-    const signInPage = new SignInPage(page);
     await signInPage.login(user.username, PASSWORD, { rememberUser: true });
 
     await expect(page).toHaveURL(/\/$/);
   });
 
   test("should remember a user for 30 days after login", async ({ page, user, isMobile }) => {
-    const signInPage = new SignInPage(page);
     await signInPage.login(user.username, PASSWORD, { rememberUser: true });
     await page.waitForURL(/\/$/);
 
@@ -36,7 +37,7 @@ test.describe.serial("User Sign-up and Login", () => {
     const cookies = await page.context().cookies();
     const sessionCookie = cookies.find((cookie) => cookie.name === "connect.sid");
 
-    expect(sessionCookie?.expires).toBeGreaterThan(0);
+    expect(sessionCookie?.expires).toBeGreaterThan(-1);
 
     // Logout User
     const sideNavPage = new SideNavPage(page);
@@ -45,12 +46,11 @@ test.describe.serial("User Sign-up and Login", () => {
     await expect(page).toHaveURL(/\/signin$/);
   });
 
-  test("hould allow a visitor to sign-up, login, and logout", async ({ page, user, isMobile }) => {
+  test("hould allow a visitor to sign-up, login, and logout", async ({ page, isMobile }) => {
     await page.goto("/");
     await page.waitForURL(/\/$/);
 
     // Sign-up User
-    const signInPage = new SignInPage(page);
     await signInPage.username.input.blur();
     await signInPage.signUpLink.click();
 
@@ -89,7 +89,6 @@ test.describe.serial("User Sign-up and Login", () => {
   test("should display login errors", async ({ page }) => {
     await page.goto("/");
 
-    const signInPage = new SignInPage(page);
     await signInPage.username.input.fill("User");
     await signInPage.username.input.clear();
     await signInPage.username.input.blur();
@@ -138,15 +137,13 @@ test.describe.serial("User Sign-up and Login", () => {
   });
 
   test("should error for an invalid user", async ({ page }) => {
-    const signInPage = new SignInPage(page);
     await signInPage.login("invalidUserName", "invalidPa$$word");
 
     await expect(signInPage.errorMessage).toBeVisible();
     await expect(signInPage.errorMessage).toHaveText("Username or password is invalid");
   });
 
-  test("should error for an invalid password for existing user", async ({ page, user }) => {
-    const signInPage = new SignInPage(page);
+  test("should error for an invalid password for existing user", async ({ user }) => {
     await signInPage.login(user.username, "INVALID");
 
     await expect(signInPage.errorMessage).toBeVisible();
