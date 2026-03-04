@@ -1,4 +1,4 @@
-import Dinero from "dinero.js";
+import { dinero, toDecimal, USD } from "dinero.js";
 import {
   User,
   Transaction,
@@ -119,9 +119,11 @@ describe("Transaction Feed", function () {
           cy.log("🚩Testing a paid payment transaction item");
           cy.contains("[data-test*='transaction-item']", "paid").within(($el) => {
             const transaction = getTransactionFromEl($el);
-            const formattedAmount = Dinero({
-              amount: transaction.amount,
-            }).toFormat();
+            const formattedAmount = toDecimal(
+              dinero({ amount: transaction.amount, currency: USD }),
+              ({ value }) =>
+                Number(value).toLocaleString("en-US", { style: "currency", currency: "USD" })
+            );
 
             expect([TransactionStatus.pending, TransactionStatus.complete]).to.include(
               transaction.status
@@ -143,9 +145,11 @@ describe("Transaction Feed", function () {
           cy.log("🚩Testing a charged payment transaction item");
           cy.contains("[data-test*='transaction-item']", "charged").within(($el) => {
             const transaction = getTransactionFromEl($el);
-            const formattedAmount = Dinero({
-              amount: transaction.amount,
-            }).toFormat();
+            const formattedAmount = toDecimal(
+              dinero({ amount: transaction.amount, currency: USD }),
+              ({ value }) =>
+                Number(value).toLocaleString("en-US", { style: "currency", currency: "USD" })
+            );
 
             expect(TransactionStatus.complete).to.equal(transaction.status);
 
@@ -159,9 +163,11 @@ describe("Transaction Feed", function () {
           cy.log("🚩Testing a requested payment transaction item");
           cy.contains("[data-test*='transaction-item']", "requested").within(($el) => {
             const transaction = getTransactionFromEl($el);
-            const formattedAmount = Dinero({
-              amount: transaction.amount,
-            }).toFormat();
+            const formattedAmount = toDecimal(
+              dinero({ amount: transaction.amount, currency: USD }),
+              ({ value }) =>
+                Number(value).toLocaleString("en-US", { style: "currency", currency: "USD" })
+            );
 
             expect([TransactionStatus.pending, TransactionStatus.complete]).to.include(
               transaction.status

@@ -3989,11 +3989,6 @@
   resolved "https://registry.yarnpkg.com/@types/detect-port/-/detect-port-1.3.5.tgz#deecde143245989dee0e82115f3caba5ee0ea747"
   integrity sha512-Rf3/lB9WkDfIL9eEKaSYKc+1L/rNVYBjThk22JTqQw0YozXarX8YljFAz+HCoC6h4B4KwCMsBPZHaFezwT4BNA==
 
-"@types/dinero.js@1.9.0":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@types/dinero.js/-/dinero.js-1.9.0.tgz#e11356764339e3d361d38bd54910282b106dc321"
-  integrity sha512-H2XdE6N/A2wJ/TJhGqeHDMUhCaey2R/Lcq9ichGBncKsFGvqrroXZWPNdDkCcgQOBPoCD4n9QuSBUC/35wuJiw==
-
 "@types/eslint-scope@^3.7.7":
   version "3.7.7"
   resolved "https://registry.yarnpkg.com/@types/eslint-scope/-/eslint-scope-3.7.7.tgz#3108bd5f18b0cdb277c867b3dd449c9ed7079ac5"
@@ -6316,10 +6311,10 @@ diff@^5.1.0:
   resolved "https://registry.yarnpkg.com/diff/-/diff-5.2.0.tgz#26ded047cd1179b78b9537d5ef725503ce1ae531"
   integrity sha512-uIFDxqpRZGZ6ThOk84hEfqWoHx2devRFvpTZcTHur85vImfaxUbTW9Ryh4CpCuDnToOP1CEtXKIgytHBPVff5A==
 
-dinero.js@1.9.1:
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/dinero.js/-/dinero.js-1.9.1.tgz#64b10ce7277a07805dac9c8cd6500e9b7d0aee96"
-  integrity sha512-1HXiF2vv3ZeRQ23yr+9lFxj/PbZqutuYWJnE0qfCB9xYBPnuaJ8lXtli1cJM0TvUXW1JTOaePldmqN5JVNxKSA==
+dinero.js@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/dinero.js/-/dinero.js-2.0.0.tgz#f5482ce00ee7911dd4c66d0e5da33e633ed8fb46"
+  integrity sha512-UTbFNSTA+7PBFQrubw004/mGxH8GPLL7a4NKoZJGISd9Pwe9YQsxJw+gO5kYRef0EiMLOptE6DH1mMBev7eQjQ==
 
 dir-glob@^3.0.1:
   version "3.0.1"

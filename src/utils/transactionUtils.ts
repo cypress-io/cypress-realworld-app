@@ -13,7 +13,7 @@ import {
   ValuePiece,
 } from "../models";
 import { faker } from "@faker-js/faker";
-import Dinero from "dinero.js";
+import { dinero, toDecimal, add, subtract, isPositive, toSnapshot, USD } from "dinero.js";
 import {
   flow,
   get,
@@ -57,33 +57,48 @@ export const getFakeAmount = (min: number = 1000, max: number = 50000) =>
   parseInt(faker.finance.amount(min, max), 10);
 
 /* istanbul ignore next */
-export const formatAmount = (amount: number) => Dinero({ amount }).toFormat();
+export const formatAmount = (amount: number) =>
+  toDecimal(dinero({ amount, currency: USD }), ({ value }) =>
+    Number(value).toLocaleString("en-US", { style: "currency", currency: "USD" })
+  );
 
 /* istanbul ignore next */
-export const formatAmountSlider = (amount: number) => Dinero({ amount }).toFormat("$0,0");
+export const formatAmountSlider = (amount: number) =>
+  toDecimal(dinero({ amount, currency: USD }), ({ value }) =>
+    Number(value).toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    })
+  );
 
 export const payAppDifference = curry((sender: User, transaction: Transaction) =>
-  Dinero({ amount: get("balance", sender) }).subtract(
-    Dinero({ amount: get("amount", transaction) })
+  subtract(
+    dinero({ amount: get("balance", sender) as number, currency: USD }),
+    dinero({ amount: get("amount", transaction) as number, currency: USD })
   )
 );
 
 export const payAppAddition = curry((sender: User, transaction: Transaction) =>
-  Dinero({ amount: get("balance", sender) }).add(Dinero({ amount: get("amount", transaction) }))
+  add(
+    dinero({ amount: get("balance", sender) as number, currency: USD }),
+    dinero({ amount: get("amount", transaction) as number, currency: USD })
+  )
 );
 
 export const getChargeAmount = (sender: User, transaction: Transaction) =>
-  Math.abs(payAppDifference(sender, transaction).getAmount());
+  Math.abs(toSnapshot(payAppDifference(sender, transaction)).amount);
 
 export const getTransferAmount = curry((sender: User, transaction: Transaction) =>
-  Math.abs(payAppDifference(sender, transaction).getAmount())
+  Math.abs(toSnapshot(payAppDifference(sender, transaction)).amount)
 );
 
 export const getPayAppCreditedAmount = (receiver: User, transaction: Transaction) =>
-  Math.abs(payAppAddition(receiver, transaction).getAmount());
+  Math.abs(toSnapshot(payAppAddition(receiver, transaction)).amount);
 
 export const hasSufficientFunds = (sender: User, transaction: Transaction) =>
-  payAppDifference(sender, transaction).isPositive();
+  isPositive(payAppDifference(sender, transaction));
 
 /* istanbul ignore next */
 export const receiverIsCurrentUser = (currentUser: User, transaction: Transaction) =>
