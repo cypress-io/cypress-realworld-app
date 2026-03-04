@@ -4912,11 +4912,6 @@
   resolved "https://registry.yarnpkg.com/@types/cors/-/cors-2.8.10.tgz#61cc8469849e5bcdd0c7044122265c39cec10cf4"
   integrity sha512-C7srjHiVG3Ey1nR6d511dtDkCEjxuN9W1HWAEjGq8kpcwmNM6JJkpC0xvabM7BXTG2wDq8Eu33iH9aQKa7IvLQ==
 
-"@types/dinero.js@1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@types/dinero.js/-/dinero.js-1.8.0.tgz#2ae41fc15c92dec3e66bdd9d694ae7252d7796ba"
-  integrity sha512-TMrK/Px4ep4nst8Mwq9Z4/dd4W9NvFdHRx5xAQwiWjzcHcus//kgA21bWaj0UhCHzyprwh19g5Mk2341UXjP0A==
-
 "@types/eslint@^7.2.6":
   version "7.2.6"
   resolved "https://registry.yarnpkg.com/@types/eslint/-/eslint-7.2.6.tgz#5e9aff555a975596c03a98b59ecd103decc70c3c"
@@ -8732,10 +8727,10 @@ dijkstrajs@^1.0.1:
   resolved "https://registry.yarnpkg.com/dijkstrajs/-/dijkstrajs-1.0.1.tgz#d3cd81221e3ea40742cfcde556d4e99e98ddc71b"
   integrity sha1-082BIh4+pAdCz83lVtTpnpjdxxs=
 
-dinero.js@1.8.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/dinero.js/-/dinero.js-1.8.1.tgz#775a647629b4195af9d02f46e9b7fa1fd81e906d"
-  integrity sha512-AQ09MDKonkGUrhBZZFx4tPTVcVJuHJ0VEA73LvcBoBB2eQSi1DbapeXj4wnUUpx1hVnPdyev1xPNnNMGy/Au0g==
+dinero.js@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/dinero.js/-/dinero.js-2.0.0.tgz#f5482ce00ee7911dd4c66d0e5da33e633ed8fb46"
+  integrity sha512-UTbFNSTA+7PBFQrubw004/mGxH8GPLL7a4NKoZJGISd9Pwe9YQsxJw+gO5kYRef0EiMLOptE6DH1mMBev7eQjQ==
 
 dir-glob@^3.0.1:
   version "3.0.1"

@@ -1,4 +1,4 @@
-import Dinero from "dinero.js";
+import { dinero, toDecimal, USD } from "dinero.js";
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
 
@@ -59,9 +59,9 @@ describe("New Transaction", function () {
       .should("be.visible")
       .and("have.text", "Transaction Submitted!");
 
-    const updatedAccountBalance = Dinero({
-      amount: ctx.user!.balance - parseInt(payment.amount) * 100,
-    }).toFormat();
+    const updatedAccountBalance = toDecimal(dinero({ amount: ctx.user!.balance - parseInt(payment.amount) * 100, currency: USD }), ({ value }) =>
+      Number(value).toLocaleString("en-US", { style: "currency", currency: "USD" })
+    );
 
     if (isMobile()) {
       cy.getBySel("sidenav-toggle").click();
@@ -179,9 +179,9 @@ describe("New Transaction", function () {
 
     cy.switchUserByXstate(ctx.contact!.username);
 
-    const updatedAccountBalance = Dinero({
-      amount: ctx.contact!.balance + transactionPayload.amount * 100,
-    }).toFormat();
+    const updatedAccountBalance = toDecimal(dinero({ amount: ctx.contact!.balance + transactionPayload.amount * 100, currency: USD }), ({ value }) =>
+      Number(value).toLocaleString("en-US", { style: "currency", currency: "USD" })
+    );
 
     if (isMobile()) {
       cy.getBySel("sidenav-toggle").click();
@@ -230,9 +230,9 @@ describe("New Transaction", function () {
 
     cy.switchUserByXstate(ctx.user!.username);
 
-    const updatedAccountBalance = Dinero({
-      amount: ctx.user!.balance + transactionPayload.amount * 100,
-    }).toFormat();
+    const updatedAccountBalance = toDecimal(dinero({ amount: ctx.user!.balance + transactionPayload.amount * 100, currency: USD }), ({ value }) =>
+      Number(value).toLocaleString("en-US", { style: "currency", currency: "USD" })
+    );
 
     if (isMobile()) {
       cy.getBySel("sidenav-toggle").click();
