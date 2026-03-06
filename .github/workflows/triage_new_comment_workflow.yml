@@ -1,5 +1,6 @@
 name: "Handle Comment Workflow"
 on:
+  workflow_dispatch:
   issue_comment:
     types:
       - created

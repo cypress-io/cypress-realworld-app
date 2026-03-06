@@ -1,5 +1,6 @@
 name: Merge develop into flake-demo
 on:
+  workflow_dispatch:
   push:
     branches:
       - develop
