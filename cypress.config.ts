@@ -31,7 +31,7 @@ export default defineConfig({
       url: "http://localhost:3001/__coverage__",
       exclude: "cypress/**/*.*",
     },
-    defaultPassword: process.env.SEED_DEFAULT_USER_PASSWORD,
+    defaultPassword: process.env.SEED_DEFAULT_USER_PASSWORD || "s3cret",
     paginationPageSize: process.env.PAGINATION_PAGE_SIZE,
 
     // Auth0
@@ -65,9 +65,10 @@ export default defineConfig({
   },
   e2e: {
     baseUrl: "http://localhost:3000",
-    specPattern: "cypress/tests/**/*.spec.{js,jsx,ts,tsx}",
+    specPattern: "cypress/tests/candidate/**/*.spec.{js,ts}",
     supportFile: "cypress/support/e2e.ts",
     viewportHeight: 1000,
+    fixturesFolder: "cypress/tests/candidate/fixtures",
     viewportWidth: 1280,
     experimentalRunAllSpecs: true,
     experimentalStudio: true,

@@ -60,7 +60,7 @@ Cypress.Commands.add("login", (username, password, { rememberUser = false } = {}
 
   log.snapshot("before");
 
-  cy.getBySel("signin-username").type(username);
+  cy.getBySel("").type(username);
   cy.getBySel("signin-password").type(password);
 
   if (rememberUser) {
