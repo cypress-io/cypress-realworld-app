@@ -153,10 +153,10 @@ da publicação.
 
 ### Escopo
 
--   Autenticação
--   Contas bancárias
--   Transações
--   APIs críticas
+- Autenticação
+- Contas bancárias
+- Transações
+- APIs críticas
 
 ### Estratégia
 
@@ -169,17 +169,17 @@ Executar:
 
 ### Critérios de entrada
 
--   Build estável
--   100% dos testes smoke aprovados
--   Ambiente disponível
--   Banco de dados seedado
+- Build estável
+- 100% dos testes smoke aprovados
+- Ambiente disponível
+- Banco de dados seedado
 
 ### Critérios de saída
 
--   Nenhum bug crítico ou bloqueante aberto
--   Testes exploratórios
--   Testes de regressão com no máximo falhas conhecidas documentadas
--   Documentação sobre o teste
+- Nenhum bug crítico ou bloqueante aberto
+- Testes exploratórios
+- Testes de regressão com no máximo falhas conhecidas documentadas
+- Documentação sobre o teste
 
 ### 🧾 Exemplos de Casos de Teste Manuais
 
@@ -188,6 +188,7 @@ TC-01 - Login com credenciais válidas
 Pré-condições: Usuário válido cadastrado no sistema
 
 Passos
+
 1. Acessar a página de login
 2. Inserir username válido
 3. Inserir senha válida
@@ -202,6 +203,7 @@ TC-02 - Login com senha inválida
 Pré-condições: Usuário válido cadastrado
 
 Passos
+
 1. Acessar página de login
 2. Inserir username válido
 3. Inserir senha inválida
@@ -216,6 +218,7 @@ TC-03 - Criar nova conta bancária
 Pré-condições: Usuário autenticado
 
 Passos:
+
 1. Acessar seção Bank Accounts
 2. Clicar em Create
 3. Informar nome do banco
@@ -233,6 +236,7 @@ TC-04 - Validação de campos obrigatórios na criação de conta bancária
 Pré-condições: Usuário autenticado
 
 Passos:
+
 1. Acessar seção Bank Accounts
 2. Clicar em Create
 3. Tentar salvar
@@ -246,6 +250,7 @@ TC-05 - Enviar pagamento para outro usuário
 Pré-condições: Usuário autenticado - Conta bancária cadastrada
 
 Passos:
+
 1. Clicar em New Transaction
 2. Selecionar usuário destinatário
 3. Informar valor da transação
@@ -261,6 +266,7 @@ TC-06 - Enviar pagamento com valor inválido
 Pré-condições: Usuário autenticado
 
 Passos:
+
 1. Clicar em New Transaction
 2. Selecionar usuário destinatário
 3. Informar valor da transação inválido (ex: negativo ou zero)
@@ -272,20 +278,22 @@ Resultado esperado: Sistema bloqueia envio - Mensagem de erro exibida ou botão 
 
 ### Modelo de Rastreabilidade
 
-  Feature         Caso de Teste   Bug       Release
-  --------------- --------------- --------- ---------
-  Login           TC-01           BUG-101   v1.3.0
-  Login           TC-02           BUG-102   v1.3.0
-  Bank Accounts   TC-03           BUG-120   v1.3.0
-  Bank Accounts   TC-04           BUG-121   v1.3.0
-  Transactions    TC-05           BUG-140   v1.3.0
-  Transactions    TC-06           BUG-141   v1.3.0
+Feature Caso de Teste Bug Release
+
+---
+
+Login TC-01 BUG-101 v1.3.0
+Login TC-02 BUG-102 v1.3.0
+Bank Accounts TC-03 BUG-120 v1.3.0
+Bank Accounts TC-04 BUG-121 v1.3.0
+Transactions TC-05 BUG-140 v1.3.0
+Transactions TC-06 BUG-141 v1.3.0
 
 Esse modelo permite:
 
--   rastrear impacto de mudanças
--   identificar rapidamente testes afetados
--   acompanhar qualidade por release
+- rastrear impacto de mudanças
+- identificar rapidamente testes afetados
+- acompanhar qualidade por release
 
 ---
 

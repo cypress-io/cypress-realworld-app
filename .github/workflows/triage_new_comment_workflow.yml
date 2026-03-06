@@ -1,4 +1,4 @@
-name: 'Handle Comment Workflow'
+name: "Handle Comment Workflow"
 on:
   issue_comment:
     types:

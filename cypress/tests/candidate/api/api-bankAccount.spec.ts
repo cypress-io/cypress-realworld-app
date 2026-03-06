@@ -9,9 +9,9 @@ describe("API - Bank Account", () => {
 
   it("deve criar uma bank account com usuário randômico", () => {
     // Gera dados aleatórios para evitar conflitos entre execuções
-    const bankName = `API Bank ${Date.now()}`
-    const routingNumber = Cypress._.random(100000000, 999999999).toString()
-    const accountNumber = Cypress._.random(100000000, 999999999).toString()
+    const bankName = `API Bank ${Date.now()}`;
+    const routingNumber = Cypress._.random(100000000, 999999999).toString();
+    const accountNumber = Cypress._.random(100000000, 999999999).toString();
 
     // Pega usuário randômico
     cy.get("@user").then((user: any) => {
@@ -21,9 +21,9 @@ describe("API - Bank Account", () => {
         password,
       }).then((loginResponse) => {
         // Valida sucesso do login
-        expect(loginResponse.status).to.eq(200)
+        expect(loginResponse.status).to.eq(200);
         // Pega token retornado pela autenticação
-        const token = loginResponse.body.accessToken
+        const token = loginResponse.body.accessToken;
         // Cria nova conta bancária via API
         cy.request({
           method: "POST",
