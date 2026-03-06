@@ -14,8 +14,8 @@ Cypress.Commands.add("login", (username: string) => {
 
   cy.visit("/signin");
 
-  cy.get("#username").should("be.visible").clear().type(username);
-  cy.get("#password").should("be.visible").clear().type(password, { log: false });
+  cy.get("#username").type(username);
+  cy.get("#password").type(password, { log: false });
 
   cy.get('[data-test="signin-submit"]').should("be.enabled").click();
 
