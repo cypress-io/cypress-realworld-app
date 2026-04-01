@@ -4,7 +4,7 @@ import loginPage from '../../pages/loginPage'
 describe('Login com sucesso', () => {
   it('Deve fazer login com um usuário válido', () => {
     loginPage.accessLoginPage()
-    loginPage.loginWithUser('Dina20', 's3cret')
+    loginPage.loginWithUser('Heath93', 's3cret')
     cy.url().should('not.include', '/signin')
 
   });
