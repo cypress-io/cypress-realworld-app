@@ -22,9 +22,6 @@ class RegisterPage {
     cy.get(this.selectors.signupButton).click()
   }
 
-  checkErrorMessage() {
-    cy.get(this.selectors.errorMessage).should('be.visible')
-  }
 }
 
 export default new RegisterPage()
