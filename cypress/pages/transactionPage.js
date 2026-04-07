@@ -1,28 +1,33 @@
 class TransactionPage {
   selectors = {
     newButton: "[href='/transaction/new']",
-    sendClient: "[data-test='user-list-item-WHjJ4qR2R2']",
+    userListItem: "[data-test^='user-list-item-']",
     valueField: "input[name='amount']",
     noteField: "[placeholder='Add a note']",
     payButton: "[data-test='transaction-create-submit-payment']",
     balanceValue: "[data-test='sidenav-user-balance']",
     successAlert: "[data-test='alert-bar-success']"
+    
   }
 
-  sendMoney() {
-    cy.get(this.selectors.newButton).click()
-    cy.get(this.selectors.sendClient).click()
-    cy.get(this.selectors.valueField).type("100")
-    cy.get(this.selectors.noteField).type("payment meat")
-    cy.get(this.selectors.payButton).click()
+  openNewTransaction() {
+    cy.get(this.selectors.newButton).should('be.visible').click()
+    cy.get(this.selectors.userListItem).should('have.length.greaterThan', 0)
   }
 
-  insufficientBalanceTransaction() {
-    cy.get(this.selectors.newButton).click()
-    cy.get(this.selectors.sendClient).click()
-    cy.get(this.selectors.valueField).type("40000000")
-    cy.get(this.selectors.noteField).type("teste saldo insuficiente")
-    cy.get(this.selectors.payButton).click()
+  selectUserById(userId) {
+    cy.get(`[data-test='user-list-item-${userId}']`)
+      .scrollIntoView()
+      .should('be.visible')
+      .click()
+  }
+
+  sendMoney(amount, note, userId) {
+    this.openNewTransaction()
+    this.selectUserById(userId)
+    cy.get(this.selectors.valueField).should('be.visible').type(amount)
+    cy.get(this.selectors.noteField).should('be.visible').type(note)
+    cy.get(this.selectors.payButton).should('be.visible').click()
   }
 
   checkBalance() {

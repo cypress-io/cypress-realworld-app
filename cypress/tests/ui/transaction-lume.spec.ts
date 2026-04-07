@@ -11,7 +11,8 @@ describe('Enviar dinheiro', () => {
 
   it('Deve enviar dinheiro com saldo suficiente', () => {
     transactionPage.checkBalance().invoke('text').then((balanceBefore) => {
-      transactionPage.sendMoney()
+      transactionPage.sendMoney("100", "payment test", "WHjJ4qR2R2")
+
 
       transactionPage.checkSuccessAlert()
         .should('be.visible')
@@ -22,20 +23,28 @@ describe('Enviar dinheiro', () => {
       })
     })
   })
+
   // BUG: sistema permite envio com saldo insuficiente
-  // não exibe mensagem "Insufficient Funds" e realiza a transação
-
+  // não exibe mensagem "Insufficient Funds" e realiza a transaçã
   it('Deve exibir mensagem de erro ao enviar dinheiro sem saldo suficiente', () => {
-    transactionPage.checkBalance().invoke('text').then((balanceBefore) => {
-      transactionPage.insufficientBalanceTransaction()
+    cy.get("[href='/transaction/new']").click()
+    cy.url().should('include', '/transaction/new')
 
-      cy.contains('Insufficient Funds').should('be.visible')
+    cy.get("[data-test='user-list-item-WHjJ4qR2R2']")
+      .scrollIntoView()
+      .should('be.visible')
+      .click()
 
-      transactionPage.checkBalance().invoke('text').then((balanceAfter) => {
-        expect(balanceAfter).to.eq(balanceBefore)
-      })
-    })
+    cy.get("input[name='amount']").should('be.visible').type("40000000")
+    cy.get("[placeholder='Add a note']").type("teste saldo insuficiente")
+    cy.get("[data-test='transaction-create-submit-payment']").click()
+
+    cy.contains('Insufficient Funds').should('be.visible')
   })
 
 })
+
+
+
+
 
