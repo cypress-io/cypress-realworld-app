@@ -1,0 +1,12 @@
+diff --git a/node_modules/react-virtualized/dist/es/WindowScroller/utils/onScroll.js b/node_modules/react-virtualized/dist/es/WindowScroller/utils/onScroll.js
+index d00f0f1..8bf5a05 100644
+--- a/node_modules/react-virtualized/dist/es/WindowScroller/utils/onScroll.js
++++ b/node_modules/react-virtualized/dist/es/WindowScroller/utils/onScroll.js
+@@ -71,4 +71,4 @@ export function unregisterScrollListener(component, element) {
+     }
+   }
+ }
+-import { bpfrpt_proptype_WindowScroller } from "../WindowScroller.js";
+\ No newline at end of file
++// import { bpfrpt_proptype_WindowScroller } from "../WindowScroller.js";
+\ No newline at end of file

@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.json",
+  "include": ["./**/*.ts", "../cypress.d.ts"],
+  "exclude": [],
+  "compilerOptions": {
+    "types": ["cypress", "@percy/cypress"],
+    "lib": ["es2015", "dom"],
+    "isolatedModules": false,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "noEmit": true,
+  },
+}

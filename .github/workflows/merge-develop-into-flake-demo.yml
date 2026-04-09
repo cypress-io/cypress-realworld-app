@@ -1,0 +1,73 @@
+name: Merge develop into flake-demo
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  merge-master-into-develop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set committer info
+        run: |
+          git config --local user.email "$(git log --format='%ae' HEAD^!)"
+          git config --local user.name "$(git log --format='%an' HEAD^!)"
+      - name: Checkout flake-demo branch
+        run: git checkout flake-demo
+      - name: Check for merge conflict
+        id: check-conflict
+        run: echo "name=merge_conflict::$(git merge-tree $(git merge-base HEAD develop) develop HEAD | egrep '<<<<<<<')" >> $GITHUB_OUTPUT
+      - name: Merge develop into flake-demo
+        run: git merge develop
+        if: ${{ !steps.check-conflict.outputs.merge_conflict }}
+      - name: Push
+        run: git push
+        if: ${{ !steps.check-conflict.outputs.merge_conflict }}
+      - name: Checkout develop
+        run: git checkout develop
+        if: ${{ steps.check-conflict.outputs.merge_conflict }}
+      - name: Determine name of new branch
+        id: gen-names
+        run: |
+          echo "name=sha::$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "name=branch_name::$(git rev-parse --short HEAD)-develop-into-flake-demo" >> $GITHUB_OUTPUT
+        if: ${{ steps.check-conflict.outputs.merge_conflict }}
+      - name: Create a copy of develop on a new branch
+        run: git checkout -b ${{ steps.gen-names.outputs.branch_name }} develop
+        if: ${{ steps.check-conflict.outputs.merge_conflict }}
+      - name: Push branch to remote
+        run: git push origin ${{ steps.gen-names.outputs.branch_name }}
+        if: ${{ steps.check-conflict.outputs.merge_conflict }}
+      - name: Create Pull Request
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pull = await github.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              base: 'flake-demo',
+              head: '${{ steps.gen-names.outputs.branch_name }}',
+              title: 'chore: merge develop (${{ steps.gen-names.outputs.sha }}) into flake-demo',
+              body: `There was a merge conflict when trying to automatically merge develop into flake-demo. Please resolve the conflict and complete the merge.
+
+              DO NOT SQUASH AND MERGE
+
+              @${context.actor}`,
+              maintainer_can_modify: true,
+            })
+            await github.pulls.requestReviewers({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pull.data.number,
+              reviewers: [context.actor],
+            })
+            await github.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pull.data.number,
+              labels: ['auto-merge'],
+            })
+        if: ${{ steps.check-conflict.outputs.merge_conflict }}

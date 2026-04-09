@@ -1,0 +1,133 @@
+{
+  "extends": ["config:base"],
+  "baseBranch": "develop",
+  "automerge": false,
+  "commitMessage": "{{semanticPrefix}}Update {{depName}} to {{newVersion}} 🌟",
+  "prTitle": "{{semanticPrefix}}{{#if isPin}}Pin{{else}}Update{{/if}} dependency {{depName}} to version {{#if isRange}}{{newVersion}}{{else}}{{#if isMajor}}{{newVersionMajor}}.x{{else}}{{newVersion}}{{/if}}{{/if}} 🌟",
+  "major": {
+    "automerge": false
+  },
+  "minor": {
+    "automerge": false
+  },
+
+  "prConcurrentLimit": 50,
+  "prHourlyLimit": 1,
+  "updateNotScheduled": false,
+  "timezone": "America/New_York",
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "masterIssue": true,
+  "schedule": ["before 3am on the first day of the month"],
+  "packageRules": [
+    {
+      "packageNames": ["cypress"],
+      "schedule": ["every weekday"]
+    },
+    {
+      "packageNames": ["babel-loader"],
+      "allowedVersions": "8.0.6"
+    },
+    {
+      "packageNames": ["@types/express"],
+      "allowedVersions": "4.17.2"
+    },
+    {
+      "packageNames": ["@types/express-serve-static-core"],
+      "allowedVersions": "4.17.2"
+    },
+    {
+      "groupName": "automergeTypesMinor",
+      "automerge": true,
+      "major": { "automerge": false },
+      "matchPackagePatterns": ["^@types/"]
+    },
+    {
+      "groupName": "devDeps",
+      "description": "automerge minor updates of widely used libraries in devDeps",
+      "automerge": true,
+      "matchUpdateTypes": ["minor"],
+      "matchDepTypes": ["devDependencies"]
+    },
+    {
+      "groupName": "Typescript",
+      "matchPackageNames": ["typescript", "ts-node"]
+    },
+    {
+      "groupName": "React",
+      "matchPackageNames": ["react", "react-dom", "react-scripts"]
+    },
+    {
+      "groupName": "React Router",
+      "matchPackageNames": ["react-router", "react-router-dom", "history"]
+    },
+    {
+      "groupName": "Okta",
+      "matchPackagePatterns": ["^@okta/"]
+    },
+    {
+      "groupName": "Material UI",
+      "matchPackagePatterns": ["^@mui/"]
+    },
+    {
+      "groupName": "Graphql",
+      "matchPackagePatterns": ["^graphql-"]
+    },
+    {
+      "groupName": "Xstate",
+      "matchPackageNames": ["xstate", "@xstate/react"]
+    },
+    {
+      "groupName": "ESLint and Prettier",
+      "matchPackageNames": ["eslint", "prettier"],
+      "matchPackagePatterns": ["^eslint-config-", "^eslint-plugin-"]
+    },
+    {
+      "groupName": "Express",
+      "matchPackageNames": ["express", "morgan", "nodemon", "cors", "bcryptjs"],
+      "matchPackagePatterns": ["^express-", "^passport-"]
+    },
+    {
+      "groupName": "AWS / Amplify",
+      "matchPackageNames": ["@aws-amplify/ui-react", "aws-amplify"]
+    },
+    {
+      "groupName": "Testing / coverage",
+      "matchPackageNames": ["nyc", "istanbul-lib-coverage", "@percy/cypress"],
+      "matchPackagePatterns": ["^cypress/"]
+    },
+    {
+      "groupName": "Misc FE libs",
+      "matchPackageNames": [
+        "uuid",
+        "shortid",
+        "yup",
+        "formik",
+        "dinero.js",
+        "date-fns",
+        "clsx",
+        "axios"
+      ]
+    },
+    {
+      "groupName": "Misc dev tooling",
+      "matchPackageNames": [
+        "@faker-js/faker",
+        "json",
+        "lowdb",
+        "start-server-and-test",
+        "ncp",
+        "jwks-rsa",
+        "husky",
+        "fuse.js",
+        "dotenv",
+        "crossenv",
+        "concurrently",
+        "uuid",
+        "shortid",
+        "yup"
+      ]
+    }
+  ]
+}

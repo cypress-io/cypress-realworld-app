@@ -1,0 +1,56 @@
+{
+	"files": [
+		"README.md"
+	],
+	"imageSize": 100,
+	"commit": false,
+	"contributors": [{
+			"login": "kevinold",
+			"name": "Kevin Old",
+			"avatar_url": "https://avatars0.githubusercontent.com/u/21967?v=4",
+			"profile": "http://www.kevinold.com",
+			"contributions": []
+		},
+		{
+			"login": "amirrustam",
+			"name": "Amir Rustamzadeh",
+			"avatar_url": "https://avatars0.githubusercontent.com/u/334337?v=4",
+			"profile": "https://twitter.com/amirrustam",
+			"contributions": []
+		},
+		{
+			"login": "brian-mann",
+			"name": "Brian Mann",
+			"avatar_url": "https://avatars2.githubusercontent.com/u/1268976?v=4",
+			"profile": "https://cypress.io",
+			"contributions": []
+		},
+		{
+			"login": "bahmutov",
+			"name": "Gleb Bahmutov",
+			"avatar_url": "https://avatars1.githubusercontent.com/u/2212006?v=4",
+			"profile": "https://glebbahmutov.com/",
+			"contributions": []
+		},
+		{
+			"login": "bencodezen",
+			"name": "Ben Hong",
+			"avatar_url": "https://avatars0.githubusercontent.com/u/4836334?v=4",
+			"profile": "http://www.bencodezen.io",
+			"contributions": []
+		},
+		{
+			"login": "davidkpiano",
+			"name": "David Khourshid",
+			"avatar_url": "https://avatars2.githubusercontent.com/u/1093738?v=4",
+			"profile": "https://github.com/davidkpiano",
+			"contributions": []
+		}
+	],
+	"contributorsPerLine": 7,
+	"projectName": "cypress-realworld-app",
+	"projectOwner": "cypress-io",
+	"repoType": "github",
+	"repoHost": "https://github.com",
+	"skipCi": true
+}
