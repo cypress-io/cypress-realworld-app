@@ -546,7 +546,7 @@ export const createTransaction = (
   const savedTransaction = saveTransaction(transaction);
 
   // if payment, debit sender's balance for payment amount
-  if (isPayment(transaction)) {
+  if (!isRequestTransaction(transaction)) {
     debitPayAppBalance(sender, transaction);
     creditPayAppBalance(receiver, transaction);
     updateTransactionById(transaction.id, {
@@ -581,7 +581,7 @@ export const updateTransactionById = (transactionId: string, edits: Partial<Tran
   const sender = getUserById(senderId);
   const receiver = getUserById(receiverId);
 
-  // if payment, debit sender's balance for payment amount
+  // if request, process the payment when accepted (debit receiver, credit sender)
   if (isRequestTransaction(transaction)) {
     debitPayAppBalance(receiver, transaction);
     creditPayAppBalance(sender, transaction);
