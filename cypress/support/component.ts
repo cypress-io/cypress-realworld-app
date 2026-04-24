@@ -1,4 +1,4 @@
-import "@cypress/code-coverage/support";
+import '@cypress/code-coverage/support'
 // ***********************************************************
 // This example support/component.ts is processed and
 // loaded automatically before your test files.
@@ -15,14 +15,14 @@ import "@cypress/code-coverage/support";
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import "./commands";
+import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
-import { mount } from "cypress/react";
+import { mount } from 'cypress/react'
 
-Cypress.Commands.add("mount", mount);
+Cypress.Commands.add('mount', mount)
 
 // Example use:
 // cy.mount(<MyComponent />)

@@ -13,15 +13,15 @@ import Promise from 'bluebird'
 import viteConfig from './vite.cypress.config.js'
 import cypressOnFix from 'cypress-on-fix'
 
-dotenv.config({ path: ".env.local" });
-dotenv.config();
+dotenv.config({ path: '.env.local' })
+dotenv.config()
 
 let awsConfig = {
-  default: undefined,
-};
+    default: undefined,
+}
 
 try {
-  awsConfig = require(path.join(__dirname, "./aws-exports-es5.js"));
+    awsConfig = require(path.join(__dirname, './aws-exports-es5.js'))
 } catch (e) {}
 
 export default defineConfig({
@@ -49,7 +49,7 @@ export default defineConfig({
         viewportHeight: 1000,
         viewportWidth: 1280,
         env: {
-            apiUrl: "http://localhost:3002",
+            apiUrl: 'http://localhost:3002',
             mobileViewportWidthBreakpoint: 414,
             coverage: false,
             codeCoverage: {
@@ -81,7 +81,7 @@ export default defineConfig({
             mapNodeCoverage: false,
             coverageMapPath: 'cypress/results/reports/coverage-map/coverage-map.json',
             nodeCoverageMapPath: 'cypress/results/reports/coverage-map/node-coverage-map.json',
-            
+
             // Verbose failures
             verboseFailures: process.env.VERBOSE_FAILURES === 'true' || false,
         },
@@ -105,17 +105,12 @@ export default defineConfig({
 async function setupNodeEvents(on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) {
     // Wrap 'on' to fix multiple plugin issue
     on = cypressOnFix(on)
-    
+
     // Utilize the Puppeteer browser instance and the Puppeteer API to interact with and automate the browser
     setup({
         on,
         onMessage: {
-            async waitForNetworkIdle(
-                browser: any,
-                timeout: number,
-                retryTimeout: number,
-                concurrency: number
-            ) {
+            async waitForNetworkIdle(browser: any, timeout: number, retryTimeout: number, concurrency: number) {
                 // Utilize the retry since the page may not have opened and loaded by the time this runs
                 const page = await configUtils.returnCypressPage(browser)
                 // Cypress will maintain focus on the Cypress tab within the browser. It's generally a good idea to bring the page to the front to interact with it.
@@ -168,17 +163,16 @@ async function setupNodeEvents(on: Cypress.PluginEvents, config: Cypress.PluginC
     // Once a reporter is chosen, pass the path dynamically
     configUtils.cleanReports('./cypress/results/reports')
 
+    const testDataApiEndpoint = `${config.env.apiUrl}/testData`
 
-    const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
-
-      const queryDatabase = ({ entity, query }: any, callback: any) => {
+    const queryDatabase = ({ entity, query }: any, callback: any) => {
         const fetchData = async (attrs: any) => {
-          const { data } = await axios.get(`${testDataApiEndpoint}/${entity}`);
-          return callback(data, attrs);
-        };
+            const { data } = await axios.get(`${testDataApiEndpoint}/${entity}`)
+            return callback(data, attrs)
+        }
 
-        return Array.isArray(query) ? Promise.map(query, fetchData) : fetchData(query);
-      };
+        return Array.isArray(query) ? Promise.map(query, fetchData) : fetchData(query)
+    }
 
     on('task', {
         logMsg(msg) {
@@ -208,50 +202,50 @@ async function setupNodeEvents(on: Cypress.PluginEvents, config: Cypress.PluginC
             }
             return null
         },
-        async "db:seed"() {
-          // seed database with test data
-          const { data } = await axios.post(`${testDataApiEndpoint}/seed`);
-          return data;
+        async 'db:seed'() {
+            // seed database with test data
+            const { data } = await axios.post(`${testDataApiEndpoint}/seed`)
+            return data
         },
 
         // fetch test data from a database (MySQL, PostgreSQL, etc...)
-        "filter:database"(queryPayload: any) {
-          return queryDatabase(queryPayload, (data: any, attrs: any) => _.filter(data.results, attrs));
+        'filter:database'(queryPayload: any) {
+            return queryDatabase(queryPayload, (data: any, attrs: any) => _.filter(data.results, attrs))
         },
-        "find:database"(queryPayload: any) {
-          return queryDatabase(queryPayload, (data: any, attrs: any) => _.find(data.results, attrs));
+        'find:database'(queryPayload: any) {
+            return queryDatabase(queryPayload, (data: any, attrs: any) => _.find(data.results, attrs))
         },
         getAuth0Credentials() {
-          const username = process.env.AUTH0_USERNAME;
-          const password = process.env.AUTH0_PASSWORD;
-          if (!username || !password) {
-            throw new Error("AUTH0_USERNAME and AUTH0_PASSWORD must be set");
-          }
-          return { username, password };
+            const username = process.env.AUTH0_USERNAME
+            const password = process.env.AUTH0_PASSWORD
+            if (!username || !password) {
+                throw new Error('AUTH0_USERNAME and AUTH0_PASSWORD must be set')
+            }
+            return { username, password }
         },
         getOktaCredentials() {
-          const username = process.env.OKTA_USERNAME;
-          const password = process.env.OKTA_PASSWORD;
-          if (!username || !password) {
-            throw new Error("OKTA_USERNAME and OKTA_PASSWORD must be set");
-          }
-          return { username, password };
+            const username = process.env.OKTA_USERNAME
+            const password = process.env.OKTA_PASSWORD
+            if (!username || !password) {
+                throw new Error('OKTA_USERNAME and OKTA_PASSWORD must be set')
+            }
+            return { username, password }
         },
         getCognitoCredentials() {
-          const username = process.env.AWS_COGNITO_USERNAME;
-          const password = process.env.AWS_COGNITO_PASSWORD;
-          if (!username || !password) {
-            throw new Error("AWS_COGNITO_USERNAME and AWS_COGNITO_PASSWORD must be set");
-          }
-          return { username, password };
+            const username = process.env.AWS_COGNITO_USERNAME
+            const password = process.env.AWS_COGNITO_PASSWORD
+            if (!username || !password) {
+                throw new Error('AWS_COGNITO_USERNAME and AWS_COGNITO_PASSWORD must be set')
+            }
+            return { username, password }
         },
         getGoogleCredentials() {
-          const refreshToken = process.env.GOOGLE_REFRESH_TOKEN;
-          const clientSecret = process.env.VITE_GOOGLE_CLIENT_SECRET;
-          if (!refreshToken || !clientSecret) {
-            throw new Error("GOOGLE_REFRESH_TOKEN and VITE_GOOGLE_CLIENT_SECRET must be set");
-          }
-          return { refreshToken, clientSecret };
+            const refreshToken = process.env.GOOGLE_REFRESH_TOKEN
+            const clientSecret = process.env.VITE_GOOGLE_CLIENT_SECRET
+            if (!refreshToken || !clientSecret) {
+                throw new Error('GOOGLE_REFRESH_TOKEN and VITE_GOOGLE_CLIENT_SECRET must be set')
+            }
+            return { refreshToken, clientSecret }
         },
     })
 
