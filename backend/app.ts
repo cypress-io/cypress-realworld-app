@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import { join } from "path";
 import logger from "morgan";
 import passport from "passport";
@@ -26,6 +26,19 @@ import { checkAuth0Jwt, verifyOktaToken, checkCognitoJwt, checkGoogleJwt } from 
 import resolvers from "./graphql/resolvers";
 import { frontendPort, getBackendPort } from "../src/utils/portUtils";
 
+// Type definition for coverage data
+type CoverageData = {
+  [key: string]: {
+    path: string;
+    s: { [key: string]: number };
+    f: { [key: string]: number };
+    b: { [key: string]: number[] };
+    statementMap?: any;
+    fnMap?: any;
+    branchMap?: any;
+  };
+};
+
 require("dotenv").config();
 
 const corsOption = {
@@ -47,7 +60,35 @@ const app = express();
 /* istanbul ignore next */
 // @ts-expect-error
 if (global.__coverage__) {
-  require("@cypress/code-coverage/middleware/express")(app);
+  // Coverage endpoint - only sends path + statement counts (s) to keep response size manageable
+  // The full coverage object with statementMap, fnMap, branchMap, f, b can exceed 100MB
+  app.get("/__coverage__", (req: Request, res: Response) => {
+    const globalWithCoverage = global as { __coverage__?: CoverageData };
+    const coverage = globalWithCoverage.__coverage__ || {};
+
+    // Strip to only what mapCoverage needs: path and statement execution counts (s)
+    const lightweight: { [key: string]: { path: string; s: { [key: string]: number } } } = {};
+    for (const [key, data] of Object.entries(coverage)) {
+      lightweight[key] = { path: data.path, s: data.s };
+    }
+
+    res.json(lightweight);
+  });
+
+  // Reset coverage counters between tests — zeroes all statement/function/branch counts
+  // without removing the instrumentation structure, so new coverage is tracked from scratch
+  app.delete("/__coverage__", (req: Request, res: Response) => {
+    const globalWithCoverage = global as { __coverage__?: CoverageData };
+    const coverage = globalWithCoverage.__coverage__;
+    if (coverage) {
+      for (const fileData of Object.values(coverage)) {
+        for (const key of Object.keys(fileData.s)) fileData.s[key] = 0;
+        for (const key of Object.keys(fileData.f)) fileData.f[key] = 0;
+        for (const key of Object.keys(fileData.b)) fileData.b[key] = fileData.b[key].map(() => 0);
+      }
+    }
+    res.json({ reset: true });
+  });
 }
 
 app.use(cors(corsOption));

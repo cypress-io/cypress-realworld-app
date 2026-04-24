@@ -1,0 +1,228 @@
+name: Cypress PR Regression
+run-name: Cypress PR Regression - PR#${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+env:
+  SPECS_PER_CONTAINER: 4
+  CYPRESS_BRANCH: main
+
+jobs:
+  init:
+    runs-on: ubuntu-latest
+    outputs:
+      MATRIX_CONFIG: ${{ steps.cypress-strategy-config.outputs.MATRIX_CONFIG }}
+      SPECS_PATTERN: ${{ steps.cypress-strategy-config.outputs.SPECS_PATTERN }}
+      RUN_FLAG: ${{ steps.cypress-strategy-config.outputs.RUN_FLAG }}
+      chrome_version: ${{ steps.find-chrome-version.outputs.version }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      # Caches ~/.cache/Cypress and ~/.npm
+      - name: NPM install
+        uses: cypress-io/github-action@v6
+        with:
+          install: true
+          runTests: false
+
+      - name: Get PR Files
+        id: get-pr
+        env:
+          PR_NUMBER: "${{ github.event.pull_request.number }}"
+          REPO_PATH: "${{ github.repository }}"
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        run: |
+          # Get list of changed files in the PR
+          FILES=$(gh pr view $PR_NUMBER --json files --jq '.files[].path' | tr '\n' ',' | sed 's/,$//')
+          echo "pr-files=$FILES" >> $GITHUB_OUTPUT
+          echo "Changed files: $FILES"
+
+      - name: Download Latest Coverage Map
+        id: download-coverage-map
+        run: |
+          # Download the latest coverage map artifact from the coverage-map-generation workflow
+          echo "Downloading latest coverage map artifact..."
+          
+          gh run list \
+            --workflow=coverage-map-generation.yml \
+            --status=success \
+            --limit=1 \
+            --json databaseId \
+            --jq '.[0].databaseId' > run_id.txt
+          
+          if [ -s run_id.txt ]; then
+            RUN_ID=$(cat run_id.txt)
+            echo "Found workflow run: $RUN_ID"
+            
+            gh run download $RUN_ID \
+              --name merged-coverage-map \
+              --dir .
+            
+            if [ -f "coverage-map.json" ]; then
+              echo "Coverage map downloaded successfully"
+              echo "has-coverage-map=true" >> $GITHUB_OUTPUT
+            else
+              echo "Coverage map file not found after download"
+              echo "has-coverage-map=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "No successful coverage-map-generation workflow runs found"
+            echo "has-coverage-map=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cypress Relevant Tests
+        if: steps.download-coverage-map.outputs.has-coverage-map == 'true'
+        id: cypress-relevant-tests
+        env:
+          MAP_FILE_PATH: coverage-map.json
+          PR_FILENAMES: ${{ steps.get-pr.outputs.pr-files }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: "${{ github.event.pull_request.number }}"
+          GITHUB_REPO_PATH: "${{ github.repository }}"
+          SPECS_PER_CONTAINER: ${{ env.SPECS_PER_CONTAINER }}
+        run: |
+          python .github/scripts/cypress-src-to-specs-filter.py
+
+      - name: Cypress Strategy Config
+        id: cypress-strategy-config
+        run: |
+          HAS_COVERAGE_MAP="${{ steps.download-coverage-map.outputs.has-coverage-map }}"
+          
+          if [[ "$HAS_COVERAGE_MAP" == "true" ]]; then
+            # Use filtered specs from coverage map
+            echo "RUN_FLAG=true" >> $GITHUB_OUTPUT
+            echo "SPECS_PATTERN=${{ steps.cypress-relevant-tests.outputs.spec-paths }}" >> $GITHUB_OUTPUT
+            echo "MATRIX_CONFIG=${{ steps.cypress-relevant-tests.outputs.cypress-matrix }}" >> $GITHUB_OUTPUT
+          else
+            # No coverage map available, run all tests
+            echo "RUN_FLAG=true" >> $GITHUB_OUTPUT
+            echo "SPECS_PATTERN=cypress/src/**/*.cy.{js,jsx,ts,tsx}" >> $GITHUB_OUTPUT
+            echo "MATRIX_CONFIG=[1, 2, 3, 4, 5]" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Echo Cypress Strategy Config
+        run: |
+          echo "RUN_FLAG: ${{ steps.cypress-strategy-config.outputs.RUN_FLAG }}"
+          echo "MATRIX_CONFIG: ${{ steps.cypress-strategy-config.outputs.MATRIX_CONFIG }}"
+          echo "SPECS_PATTERN: ${{ steps.cypress-strategy-config.outputs.SPECS_PATTERN }}"
+
+      - name: Setup Chrome and Get Version
+        uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: stable
+
+      - name: Extract Chrome Version
+        id: find-chrome-version
+        run: |
+          CHROME_VERSION=$(chrome --version | awk '{print $NF}')
+          echo "Chrome stable version: $CHROME_VERSION"
+          echo "version=$CHROME_VERSION" >> $GITHUB_OUTPUT
+
+  regression-testing:
+    needs: [init]
+    if: ${{ needs.init.outputs.RUN_FLAG == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: ${{ fromJson(needs.init.outputs.MATRIX_CONFIG) }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: |
+          npm ci
+          npm install -D cypress-split cypress-on-fix
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: ${{ needs.init.outputs.chrome_version }}
+
+      - name: Chrome Symlink
+        id: chrome-symlink
+        run: |
+          CHROME_PATH=$(which chrome)
+          echo "Chrome Path: $CHROME_PATH"
+          sudo ln -sf $CHROME_PATH /usr/local/bin/chrome
+
+      - name: Assert Chrome Version
+        run: |
+          echo "Chrome Version"
+          echo "--------------"
+          chrome --version
+          echo "--------------"
+
+      - name: Cypress Regression Tests
+        uses: cypress-io/github-action@v6
+        timeout-minutes: 20
+        with:
+          build: npx cypress info
+          start: npm run dev:coverage
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          config: numTestsKeptInMemory=0
+          install: false
+          browser: chrome
+          spec: ${{ needs.init.outputs.SPECS_PATTERN }}
+        env:
+          TZ: America/Los_Angeles
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_OPTIONS: '--max-old-space-size=4096'
+          SPLIT: ${{ strategy.job-total }}
+          SPLIT_INDEX: ${{ strategy.job-index }}
+
+      - name: Persist Test Artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-artifacts-${{ strategy.job-index }}
+          path: |
+            cypress/screenshots
+            cypress/videos
+          retention-days: 3
+          if-no-files-found: ignore
+
+  cypress-results:
+    name: Cypress Results
+    needs: [init, regression-testing]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Test Results
+        run: |
+          echo "## Cypress Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ needs.regression-testing.result }}" == "success" ]]; then
+            echo "✅ All tests passed!" >> $GITHUB_STEP_SUMMARY
+            echo "✅ Cypress tests passed"
+            exit 0
+          else
+            echo "❌ Tests failed. Check the workflow logs for details." >> $GITHUB_STEP_SUMMARY
+            echo "::error ::Cypress tests failed"
+            exit 1
+          fi

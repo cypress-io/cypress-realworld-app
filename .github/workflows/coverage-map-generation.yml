@@ -1,0 +1,143 @@
+name: Coverage Map Generation
+run-name: Coverage Map Generation
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: coverage-map-generation
+  cancel-in-progress: true
+
+env:
+  COVERAGE_MAP_PATH: 'cypress/results/reports/coverage-map'
+  COVERAGE_MAP_NAME: 'coverage-map.json'
+
+jobs:
+  init:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Caches ~/.cache/Cypress and ~/.npm
+      - name: NPM install
+        uses: cypress-io/github-action@v6
+        with:
+          install: true
+          runTests: false
+  coverage-tests:
+    needs: init
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2, 3, 4, 5]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm i
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: stable
+
+      - name: Get Chrome Path
+        id: which_chrome
+        run: echo "BROWSER=$(which chrome)" >> $GITHUB_OUTPUT
+
+      - name: Run UI Tests with Fullstack Coverage
+        uses: cypress-io/github-action@v6
+        timeout-minutes: 20
+        with:
+          build: npx cypress info
+          start: npm run dev:coverage
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          config: numTestsKeptInMemory=0
+          install: false
+          browser: ${{ steps.which_chrome.outputs.BROWSER }}
+          spec: cypress/src/ui/*
+        env:
+          TZ: America/Los_Angeles
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_OPTIONS: '--max-old-space-size=4096'
+          SPLIT: ${{ strategy.job-total }}
+          SPLIT_INDEX: ${{ strategy.job-index }}
+
+      - name: Rename Coverage Map
+        id: coverage-map
+        env:
+          FILE_PATH: ${{ env.COVERAGE_MAP_PATH }}
+          FILE_NAME: ${{ env.COVERAGE_MAP_NAME }}
+          JOB_INDEX: ${{ strategy.job-index }}
+        run: |
+          if [ -f "$FILE_PATH/$FILE_NAME" ]; then
+            mv $FILE_PATH/$FILE_NAME $FILE_PATH/coverage-e2e-$JOB_INDEX-$FILE_NAME
+            echo "MAP_PATH=$FILE_PATH/coverage-e2e-$JOB_INDEX-$FILE_NAME" >> $GITHUB_OUTPUT
+          else
+            echo "Coverage map not found: $FILE_PATH/$FILE_NAME (skipping)"
+          fi
+
+      - name: Persist Coverage Map
+        if: ${{ steps.coverage-map.outputs.MAP_PATH != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-e2e-${{ strategy.job-index }}
+          path: ${{ steps.coverage-map.outputs.MAP_PATH }}
+          retention-days: 1
+
+  coverage-map-merge:
+    needs: [init, coverage-tests]
+    if: ${{ always() && needs.coverage-tests.result == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download All Coverage Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Get Coverage Map Files
+        id: map-files
+        run: |
+          JSON_FILES=$(find artifacts -name '*coverage-map.json' | sed 's/\.\///g' | tr '\n' ' ')
+          echo "json-files=$JSON_FILES" >> $GITHUB_OUTPUT
+          echo "Coverage maps: $JSON_FILES"
+
+      - name: Merge Coverage Maps
+        if: ${{ steps.map-files.outputs.json-files != '' }}
+        env:
+          JSON_FILES: ${{ steps.map-files.outputs.json-files }}
+          MERGED_REPORT_PATH: artifacts/coverage-map.json
+        run: python .github/scripts/merge-coverage-map.py
+
+      - name: Upload Merged Coverage Map as Artifact
+        if: ${{ steps.map-files.outputs.json-files != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: merged-coverage-map
+          path: artifacts/coverage-map.json
+          retention-days: 30
+
+      - name: Summary
+        if: ${{ steps.map-files.outputs.json-files != '' }}
+        run: |
+          echo "## Coverage Map Generation Complete ✅" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The merged coverage map has been uploaded as an artifact." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Artifact Name:** merged-coverage-map" >> $GITHUB_STEP_SUMMARY
+          echo "**Retention:** 30 days" >> $GITHUB_STEP_SUMMARY
