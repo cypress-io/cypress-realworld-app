@@ -9,7 +9,7 @@
       "password": "$2a$10$nSaCsTPTtbbPTnFXBH0GZu0ExpNMud3d1IuKOC/6a9gwAHkdhppeu",
       "email": "Santos.Runte65@gmail.com",
       "phoneNumber": "398-225-9900",
-      "avatar": "https://avatars.dicebear.com/api/human/uBmeaz5pX.svg",
+      "avatar": "https://api.dicebear.com/9.x/pixel-art/svg?seed=Ted",
       "defaultPrivacyLevel": "public",
       "balance": 150953,
       "createdAt": "2023-03-09T22:26:40.101Z",
@@ -24,7 +24,7 @@
       "password": "$2a$10$nSaCsTPTtbbPTnFXBH0GZu0ExpNMud3d1IuKOC/6a9gwAHkdhppeu",
       "email": "Skyla.Stamm@yahoo.com",
       "phoneNumber": "410-786-2112",
-      "avatar": "https://avatars.dicebear.com/api/human/GjWovtg2hr.svg",
+      "avatar": "https://api.dicebear.com/9.x/pixel-art/svg?seed=Kristian",
       "defaultPrivacyLevel": "private",
       "balance": 93026,
       "createdAt": "2023-04-23T13:52:10.979Z",
@@ -39,7 +39,7 @@
       "password": "$2a$10$nSaCsTPTtbbPTnFXBH0GZu0ExpNMud3d1IuKOC/6a9gwAHkdhppeu",
       "email": "Marielle_Wiza@yahoo.com",
       "phoneNumber": "887-309-1593",
-      "avatar": "https://avatars.dicebear.com/api/human/_XblMqbuoP.svg",
+      "avatar": "https://api.dicebear.com/9.x/pixel-art/svg?seed=Darrel",
       "defaultPrivacyLevel": "contacts",
       "balance": 158880,
       "createdAt": "2023-05-21T05:01:54.594Z",
@@ -54,7 +54,7 @@
       "password": "$2a$10$nSaCsTPTtbbPTnFXBH0GZu0ExpNMud3d1IuKOC/6a9gwAHkdhppeu",
       "email": "Norma27@gmail.com",
       "phoneNumber": "467-316-5352",
-      "avatar": "https://avatars.dicebear.com/api/human/M1ty1gR8B3.svg",
+      "avatar": "https://api.dicebear.com/9.x/pixel-art/svg?seed=Ruthie",
       "defaultPrivacyLevel": "private",
       "balance": 117683,
       "createdAt": "2024-02-08T11:33:03.159Z",
@@ -69,7 +69,7 @@
       "password": "$2a$10$nSaCsTPTtbbPTnFXBH0GZu0ExpNMud3d1IuKOC/6a9gwAHkdhppeu",
       "email": "Nigel54@hotmail.com",
       "phoneNumber": "990-583-8419",
-      "avatar": "https://avatars.dicebear.com/api/human/WHjJ4qR2R2.svg",
+      "avatar": "https://api.dicebear.com/9.x/pixel-art/svg?seed=Lia",
       "defaultPrivacyLevel": "public",
       "balance": 49474,
       "createdAt": "2023-12-07T04:39:38.383Z",
@@ -10986,3 +10986,4 @@
     }
   ]
 }
+
