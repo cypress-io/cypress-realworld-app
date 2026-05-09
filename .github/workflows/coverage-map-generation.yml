@@ -19,12 +19,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'npm'
+
       # Caches ~/.cache/Cypress and ~/.npm
       - name: NPM install
         uses: cypress-io/github-action@v7
         with:
           install: true
           runTests: false
+
   coverage-tests:
     needs: init
     runs-on: ubuntu-latest
