@@ -73,7 +73,7 @@ jobs:
           config: numTestsKeptInMemory=0
           install: false
           browser: ${{ steps.which_chrome.outputs.BROWSER }}
-          spec: cypress/src/ui/*
+          spec: cypress/src/ui/*.spec.ts
         env:
           TZ: America/Los_Angeles
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
