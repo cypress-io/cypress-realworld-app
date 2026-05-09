@@ -21,6 +21,21 @@ cypress/videos
 cypress/screenshots
 .nyc_output
 
+# Cypress results
+cypress/results
+cypress/config/cucumber_json
+cypress.env.json
+
+# Secrets
+secrets.env.sh
+secrets.json
+
+# Factory Fixtures
+seleniumEasy.json
+
+# Debugging files
+cypress/fixtures/debug
+
 # Ignore env local files - https://create-react-app.dev/docs/adding-custom-environment-variables/#what-other-env-files-can-be-used
 .env*.local
 

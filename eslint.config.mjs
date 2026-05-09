@@ -1,38 +1,42 @@
-import globals from 'globals'
-import { defineConfig, globalIgnores } from 'eslint/config'
-import js from '@eslint/js'
-import tseslint from 'typescript-eslint'
-import pluginCypress from 'eslint-plugin-cypress'
+import cypress from 'eslint-plugin-cypress'
+import mocha from 'eslint-plugin-mocha'
+import chaiFriendly from 'eslint-plugin-chai-friendly'
+import sonarjs from 'eslint-plugin-sonarjs'
+import tsParser from '@typescript-eslint/parser'
 
-export default defineConfig([
-  globalIgnores(['build/']),
-  {
-    files: ['**/*.ts'],
-    extends: [
-      js.configs.recommended,
-      tseslint.configs.recommended,
-      pluginCypress.configs.recommended,
-    ],
-    rules: {
-      // TODO: review violations of disabled rules
-      'no-empty': 'off',
-      'no-prototype-builtins': 'off',
-      'no-undef': 'off',
-      'no-unused-vars': 'off',
-      'prefer-const': 'off',
-      '@typescript-eslint/ban-ts-comment': 'off',
-      '@typescript-eslint/no-empty-object-type': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
-      '@typescript-eslint/no-unsafe-function-type': 'off',
-      '@typescript-eslint/no-unused-expressions': 'off',
-      '@typescript-eslint/no-wrapper-object-types': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
-      '@typescript-eslint/no-require-imports': 'off',
-      '@typescript-eslint/triple-slash-reference': 'off',
+export default [
+    {
+        files: ['**/*.ts', '**/*.tsx'],
+        plugins: {
+            cypress,
+            mocha,
+            'chai-friendly': chaiFriendly,
+            sonarjs,
+        },
+        languageOptions: {
+            parser: tsParser,
+            parserOptions: {
+                ecmaVersion: 8,
+                ecmaFeatures: {
+                    jsx: true,
+                    modules: true,
+                },
+                sourceType: 'module',
+            },
+        },
+        rules: {
+            'cypress/no-assigning-return-values': 'error',
+            'cypress/no-unnecessary-waiting': 'warn',
+            'cypress/assertion-before-screenshot': 'warn',
+            'cypress/no-force': 'off',
+            'cypress/no-async-tests': 'error',
+            'cypress/no-pause': 'error',
+            'cypress/unsafe-to-chain-command': 'off',
+            'mocha/no-exclusive-tests': 'error',
+            'sonarjs/todo-tag': 'off',
+            'sonarjs/pseudo-random': 'off',
+            'sonarjs/no-nested-functions': 'off',
+            'sonarjs/no-nested-template-literals': 'off',
+        },
     },
-    languageOptions: {
-      globals: globals.node,
-    },
-  },
-])
+]
