@@ -68,7 +68,7 @@ jobs:
       - name: Start Dev Servers
         run: |
           npm run dev:coverage >> dev-servers-${{ strategy.job-index }}.log 2>&1 &
-          npx wait-on http://localhost:3000 http://localhost:3001 -t 120000
+          npx wait-on http://localhost:3000 http://localhost:3002 -t 120000
         env:
           NODE_ENV: development
           CYPRESS_COVERAGE: true
