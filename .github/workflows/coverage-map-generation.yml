@@ -62,6 +62,9 @@ jobs:
         id: which_chrome
         run: echo "BROWSER=$(which chrome)" >> $GITHUB_OUTPUT
 
+      - name: Setup Mock AWS Exports
+        run: npm run predev:cognito:ci
+
       - name: Run UI Tests with Fullstack Coverage
         uses: cypress-io/github-action@v7
         timeout-minutes: 20
