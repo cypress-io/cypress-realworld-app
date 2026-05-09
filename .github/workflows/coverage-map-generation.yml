@@ -17,11 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # Caches ~/.cache/Cypress and ~/.npm
       - name: NPM install
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           install: true
           runTests: false
@@ -35,19 +35,19 @@ jobs:
         containers: [1, 2, 3, 4, 5]
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
 
       - name: Install Dependencies
         run: npm i
 
       - name: Setup Chrome
-        uses: browser-actions/setup-chrome@latest
+        uses: browser-actions/setup-chrome@v2
         with:
           chrome-version: stable
 
@@ -56,7 +56,7 @@ jobs:
         run: echo "BROWSER=$(which chrome)" >> $GITHUB_OUTPUT
 
       - name: Run UI Tests with Fullstack Coverage
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         timeout-minutes: 20
         with:
           build: npx cypress info
@@ -90,7 +90,7 @@ jobs:
 
       - name: Persist Coverage Map
         if: ${{ steps.coverage-map.outputs.MAP_PATH != '' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-e2e-${{ strategy.job-index }}
           path: ${{ steps.coverage-map.outputs.MAP_PATH }}
@@ -102,10 +102,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download All Coverage Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: artifacts
           merge-multiple: true
@@ -126,7 +126,7 @@ jobs:
 
       - name: Upload Merged Coverage Map as Artifact
         if: ${{ steps.map-files.outputs.json-files != '' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: merged-coverage-map
           path: artifacts/coverage-map.json

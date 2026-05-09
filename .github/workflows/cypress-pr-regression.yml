@@ -24,14 +24,14 @@ jobs:
       chrome_version: ${{ steps.find-chrome-version.outputs.version }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
       # Caches ~/.cache/Cypress and ~/.npm
       - name: NPM install
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           install: true
           runTests: false
@@ -120,7 +120,7 @@ jobs:
           echo "SPECS_PATTERN: ${{ steps.cypress-strategy-config.outputs.SPECS_PATTERN }}"
 
       - name: Setup Chrome and Get Version
-        uses: browser-actions/setup-chrome@latest
+        uses: browser-actions/setup-chrome@v2
         with:
           chrome-version: stable
 
@@ -142,14 +142,14 @@ jobs:
         containers: ${{ fromJson(needs.init.outputs.MATRIX_CONFIG) }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
 
       - name: Install Dependencies
@@ -158,7 +158,7 @@ jobs:
           npm install -D cypress-split cypress-on-fix
 
       - name: Setup Chrome
-        uses: browser-actions/setup-chrome@latest
+        uses: browser-actions/setup-chrome@v2
         with:
           chrome-version: ${{ needs.init.outputs.chrome_version }}
 
@@ -177,7 +177,7 @@ jobs:
           echo "--------------"
 
       - name: Cypress Regression Tests
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         timeout-minutes: 20
         with:
           build: npx cypress info
@@ -197,7 +197,7 @@ jobs:
 
       - name: Persist Test Artifacts
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cypress-artifacts-${{ strategy.job-index }}
           path: |
