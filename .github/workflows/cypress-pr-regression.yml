@@ -4,7 +4,7 @@ run-name: Cypress PR Regression - PR#${{ github.event.pull_request.number }} ${{
 on:
   pull_request:
     types: [opened, reopened, synchronize]
-    branches: [main]
+    branches: [develop]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref_name }}
@@ -12,7 +12,7 @@ concurrency:
 
 env:
   SPECS_PER_CONTAINER: 4
-  CYPRESS_BRANCH: main
+  CYPRESS_BRANCH: develop
 
 jobs:
   init:
