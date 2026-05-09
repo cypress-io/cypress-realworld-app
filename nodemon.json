@@ -1,0 +1,9 @@
+{
+  "ignore": [
+    "cypress/**",
+    "coverage/**",
+    "*.log"
+  ],
+  "watch": ["backend"],
+  "ext": "ts,js,json"
+}

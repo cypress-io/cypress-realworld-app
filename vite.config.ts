@@ -31,6 +31,9 @@ export default defineConfig(async ({ mode }) => {
     },
     server: {
       port: 3000,
+      watch: {
+        ignored: ["**/cypress/**", "**/coverage/**"],
+      },
     },
     build: {
       outDir: "build",
