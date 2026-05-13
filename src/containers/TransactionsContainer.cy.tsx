@@ -11,7 +11,7 @@ describe("Transactions Container", () => {
     cy.get("[data-test*=empty-list-header]").should("exist");
   });
   it("should render public transactions", () => {
-    cy.intercept("http://localhost:3001/transactions/*", {
+    cy.intercept(`${Cypress.env("apiUrl")}/transactions/*`, {
       fixture: "public-transactions.json",
     });
     cy.mount(
@@ -23,7 +23,7 @@ describe("Transactions Container", () => {
     cy.get(".MuiListSubheader-root").should("contain", "Public");
   });
   it("should render contacts transactions", () => {
-    cy.intercept("http://localhost:3001/transactions/*", {
+    cy.intercept(`${Cypress.env("apiUrl")}/transactions/*`, {
       fixture: "public-transactions.json",
     });
     cy.mount(
@@ -35,7 +35,7 @@ describe("Transactions Container", () => {
     cy.get(".MuiListSubheader-root").should("contain", "Contacts");
   });
   it("should render personal transactions", () => {
-    cy.intercept("http://localhost:3001/transactions", {
+    cy.intercept(`${Cypress.env("apiUrl")}/transactions`, {
       fixture: "public-transactions.json",
     });
     cy.mount(

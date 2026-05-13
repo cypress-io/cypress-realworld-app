@@ -106,7 +106,7 @@ commands:
           steps:
             - cypress/run-tests:
                 start-command: yarn start:ci
-                cypress-command: yarn wait-on http://localhost:3001 && yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --spec=<<parameters.specPattern>> --browser=<<parameters.browser>> --config '{"e2e":{"viewportWidth":375,"viewportHeight":667}}'
+                cypress-command: yarn wait-on http://127.0.0.1:3001 && yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --spec=<<parameters.specPattern>> --browser=<<parameters.browser>> --config '{"e2e":{"viewportWidth":375,"viewportHeight":667}}'
       - when:
           condition:
             and:
@@ -120,7 +120,7 @@ commands:
                 steps:
                   - cypress/run-tests:
                       start-command: yarn start:ci
-                      cypress-command: yarn wait-on http://localhost:3001 && yarn percy exec -- yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --spec=<<parameters.specPattern>> --browser=<<parameters.browser>>
+                      cypress-command: yarn wait-on http://127.0.0.1:3001 && yarn percy exec -- yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --spec=<<parameters.specPattern>> --browser=<<parameters.browser>>
             - when:
                 condition:
                   and:
@@ -128,7 +128,7 @@ commands:
                 steps:
                   - cypress/run-tests:
                       start-command: yarn start:ci
-                      cypress-command: yarn wait-on http://localhost:3001 && yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --spec=<<parameters.specPattern>> --browser=<<parameters.browser>>
+                      cypress-command: yarn wait-on http://127.0.0.1:3001 && yarn cypress run --ci-build-id=<<parameters.ciBuildId>> --group="<<parameters.group>>" --record --parallel --spec=<<parameters.specPattern>> --browser=<<parameters.browser>>
       - report-coverage
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Jobs ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #

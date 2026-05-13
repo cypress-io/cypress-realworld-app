@@ -14,6 +14,7 @@ export default defineConfig(({ mode } = { mode: "development", command: "serve" 
          * so users can switch between CT and E2E testing without having to
          * stop/start the RWA dev server.
          */
+        host: loadEnv("development", process.cwd(), "VITE").VITE_DEV_HOST ?? "127.0.0.1",
         port: 3002,
       },
     })

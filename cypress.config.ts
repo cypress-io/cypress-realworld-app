@@ -10,6 +10,12 @@ import viteConfig from "./vite.cypress.config.ts";
 dotenv.config({ path: ".env.local" });
 dotenv.config();
 
+const devHost = process.env.VITE_DEV_HOST ?? "127.0.0.1";
+const frontendPort = process.env.PORT ?? "3000";
+const backendPort = process.env.VITE_BACKEND_PORT ?? "3001";
+const devFrontendOrigin = `http://${devHost}:${frontendPort}`;
+const devBackendOrigin = `http://${devHost}:${backendPort}`;
+
 let awsConfig = {
   default: undefined,
 };
@@ -24,11 +30,11 @@ export default defineConfig({
     runMode: 2,
   },
   env: {
-    apiUrl: "http://localhost:3001",
+    apiUrl: devBackendOrigin,
     mobileViewportWidthBreakpoint: 414,
     coverage: false,
     codeCoverage: {
-      url: "http://localhost:3001/__coverage__",
+      url: `${devBackendOrigin}/__coverage__`,
       exclude: "cypress/**/*.*",
     },
     defaultPassword: process.env.SEED_DEFAULT_USER_PASSWORD,
@@ -64,7 +70,7 @@ export default defineConfig({
     },
   },
   e2e: {
-    baseUrl: "http://localhost:3000",
+    baseUrl: devFrontendOrigin,
     specPattern: "cypress/tests/**/*.spec.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/e2e.ts",
     viewportHeight: 1000,

@@ -14,7 +14,7 @@ describe("Notifications API", function () {
   let ctx: TestNotificationsCtx = {};
 
   before(() => {
-    // Hacky workaround to have the e2e tests pass when cy.visit('http://localhost:3000') is called
+    // Prime the app origin (cy.request GET /) so API-only specs behave consistently with e2e baseUrl.
     cy.request("GET", "/");
   });
 

@@ -5,13 +5,16 @@ import istanbul from "vite-plugin-istanbul";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "VITE");
+  const devHost = env.VITE_DEV_HOST ?? "127.0.0.1";
+  const port = Number(process.env.PORT) || 3000;
   return {
     // expose all vite "VITE_*" variables as process.env.VITE_* in the browser
     define: {
       "process.env": env,
     },
     server: {
-      port: 3000,
+      host: devHost,
+      port,
     },
     build: {
       outDir: "build",
