@@ -354,7 +354,14 @@ describe("Transaction Feed", function () {
           cy.getBySel("transaction-list-filter-amount-clear-button").click();
           cy.getBySel("main").scrollTo("top");
           cy.getBySel("transaction-list-filter-date-range-button").click({ force: true });
-          cy.getBySel("transaction-list-filter-amount-range").should("not.be.visible");
+          // The amount-range filter lives inside an MUI Popover that
+          // unmounts when closed (keepMounted defaults to false). Assert
+          // the element no longer exists rather than relying on
+          // should('not.be.visible'), which depended on the legacy
+          // algorithm detecting the Grow transition's scale(0) as hidden —
+          // the modern Cypress 16 visibility algorithm doesn't analyze
+          // transforms.
+          cy.getBySel("transaction-list-filter-amount-range").should("not.exist");
         }
 
         cy.get("@unfilteredResults").then((unfilteredResults) => {
