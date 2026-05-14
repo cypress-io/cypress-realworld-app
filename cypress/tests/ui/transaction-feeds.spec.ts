@@ -352,16 +352,17 @@ describe("Transaction Feed", function () {
           cy.getBySel("amount-range-filter-drawer").should("not.exist");
         } else {
           cy.getBySel("transaction-list-filter-amount-clear-button").click();
+          // Dismiss the amount-range MUI Popover by clicking its backdrop
+          // before opening the date-range filter. The original test relied
+          // on the next button click implicitly closing the popover and
+          // legacy Cypress detecting the Grow transition's scale(0) as
+          // hidden — Cypress 16's modern visibility algorithm doesn't
+          // analyze transforms, so explicitly close the popover and assert
+          // its content is unmounted.
+          cy.get(".MuiBackdrop-root").click({ force: true });
+          cy.getBySel("transaction-list-filter-amount-range").should("not.exist");
           cy.getBySel("main").scrollTo("top");
           cy.getBySel("transaction-list-filter-date-range-button").click({ force: true });
-          // The amount-range filter lives inside an MUI Popover that
-          // unmounts when closed (keepMounted defaults to false). Assert
-          // the element no longer exists rather than relying on
-          // should('not.be.visible'), which depended on the legacy
-          // algorithm detecting the Grow transition's scale(0) as hidden —
-          // the modern Cypress 16 visibility algorithm doesn't analyze
-          // transforms.
-          cy.getBySel("transaction-list-filter-amount-range").should("not.exist");
         }
 
         cy.get("@unfilteredResults").then((unfilteredResults) => {
