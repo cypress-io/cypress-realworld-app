@@ -349,7 +349,10 @@ export const formatTransactionForApiResponse = (
   const receiverName = getFullNameForUser(transaction.receiverId);
   const senderName = getFullNameForUser(transaction.senderId);
   const likes = getLikesByTransactionId(transaction.id);
-  const comments = getCommentsByTransactionId(transaction.id);
+
+  // sort comments in random order to demonstrate flake that can occur from
+  // api responses that don't guarantee order
+  const comments = getCommentsByTransactionId(transaction.id).sort(() => 0.5 - Math.random());
 
   return {
     receiverName,
