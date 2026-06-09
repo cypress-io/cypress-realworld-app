@@ -98,7 +98,7 @@
     "connect-history-api-fallback": "1.6.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-    "cypress": "15.0.0",
+    "cypress": "15.17.0",
     "dotenv": "16.0.0",
     "eslint": "^10.0.2",
     "eslint-plugin-cypress": "^6.1.0",
