@@ -34,20 +34,16 @@ export default defineConfig({
     defaultPassword: process.env.SEED_DEFAULT_USER_PASSWORD,
     paginationPageSize: process.env.PAGINATION_PAGE_SIZE,
 
-    // Auth-provider credentials. These were previously injected as
-    // `CYPRESS_<key>` OS variables and read synchronously via Cypress.env().
-    // In Cypress 16 `CYPRESS_*` variables route to the private, Node-side
-    // `env` namespace (read async via cy.env()), so they are no longer
-    // visible to the synchronous, browser-side Cypress.expose() used by the
-    // auth-provider suite guards. Source them into `expose` here so those
-    // guards keep working and the credentials remain available browser-side
-    // for the provider login flows (same as the prior Cypress.env() behavior).
-    auth0_username: process.env.CYPRESS_auth0_username,
-    auth0_password: process.env.CYPRESS_auth0_password,
-    okta_username: process.env.CYPRESS_okta_username,
-    okta_password: process.env.CYPRESS_okta_password,
-    cognito_username: process.env.CYPRESS_cognito_username,
-    cognito_password: process.env.CYPRESS_cognito_password,
+    // Non-secret flags indicating whether each external auth provider's
+    // credentials are configured (via the `CYPRESS_<provider>_username` OS
+    // variables). These booleans are safe to expose to the browser and let
+    // the auth-provider suites decide synchronously whether to run. The
+    // credentials themselves are sensitive and are read Node-side via
+    // cy.env() so they never enter browser state — in Cypress 16 `CYPRESS_*`
+    // variables route to the private `env` namespace, not `expose`.
+    auth0_configured: Boolean(process.env.CYPRESS_auth0_username),
+    okta_configured: Boolean(process.env.CYPRESS_okta_username),
+    cognito_configured: Boolean(process.env.CYPRESS_cognito_username),
 
     // Auth0
     auth0_domain: process.env.VITE_AUTH0_DOMAIN,

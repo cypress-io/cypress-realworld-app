@@ -1,6 +1,6 @@
 import { isMobile } from "../../support/utils";
 
-if (Cypress.expose("okta_username")) {
+if (Cypress.expose("okta_configured")) {
   if (Cypress.expose("okta_programmatic_login")) {
     describe("Okta", function () {
       beforeEach(function () {
@@ -55,7 +55,11 @@ if (Cypress.expose("okta_username")) {
       beforeEach(function () {
         cy.task("db:seed");
 
-        cy.loginByOkta(Cypress.expose("okta_username"), Cypress.expose("okta_password"));
+        // Read the sensitive credentials Node-side so they never enter
+        // browser state (see the `*_configured` flags in cypress.config.ts).
+        cy.env(["okta_username", "okta_password"]).then(({ okta_username, okta_password }) => {
+          cy.loginByOkta(okta_username, okta_password);
+        });
         cy.visit("/");
       });
 

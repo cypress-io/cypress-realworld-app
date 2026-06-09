@@ -2,7 +2,7 @@ import "../../support/auth-provider-commands/cognito";
 import { isMobile } from "../../support/utils";
 const apiGraphQL = `${Cypress.expose("apiUrl")}/graphql`;
 
-if (Cypress.expose("cognito_username")) {
+if (Cypress.expose("cognito_configured")) {
   // Sign in with AWS
   if (Cypress.expose("cognito_programmatic_login")) {
     describe("AWS Cognito, programmatic login (cypress.config.ts#cognito_programmatic_login: true)", function () {
@@ -57,7 +57,13 @@ if (Cypress.expose("cognito_username")) {
     describe("AWS Cognito, cy.origin() login (cypress.config.ts#cognito_programmatic_login: false)", function () {
       beforeEach(function () {
         cy.task("db:seed");
-        cy.loginByCognito(Cypress.expose("cognito_username"), Cypress.expose("cognito_password"));
+        // Read the sensitive credentials Node-side so they never enter
+        // browser state (see the `*_configured` flags in cypress.config.ts).
+        cy.env(["cognito_username", "cognito_password"]).then(
+          ({ cognito_username, cognito_password }) => {
+            cy.loginByCognito(cognito_username, cognito_password);
+          }
+        );
         cy.visit("/");
       });
 
