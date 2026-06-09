@@ -20,7 +20,7 @@ Cypress.Commands.add("loginToAuth0", (username: string, password: string) => {
       cy.visit("/");
 
       // Login on Auth0.
-      cy.origin(Cypress.env("auth0_domain"), { args }, ({ username, password }) => {
+      cy.origin(Cypress.expose("auth0_domain"), { args }, ({ username, password }) => {
         cy.get("input#username").type(username);
         cy.get("input#password").type(password);
         cy.contains("button[value=default]", "Continue").click();

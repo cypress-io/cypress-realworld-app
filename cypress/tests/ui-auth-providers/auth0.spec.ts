@@ -1,6 +1,6 @@
 import { isMobile } from "../../support/utils";
 
-if (Cypress.env("auth0_username")) {
+if (Cypress.expose("auth0_username")) {
   describe("Auth0", function () {
     beforeEach(function () {
       cy.task("db:seed");

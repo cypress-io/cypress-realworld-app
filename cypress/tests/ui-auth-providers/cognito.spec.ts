@@ -1,10 +1,10 @@
 import "../../support/auth-provider-commands/cognito";
 import { isMobile } from "../../support/utils";
-const apiGraphQL = `${Cypress.env("apiUrl")}/graphql`;
+const apiGraphQL = `${Cypress.expose("apiUrl")}/graphql`;
 
-if (Cypress.env("cognito_username")) {
+if (Cypress.expose("cognito_username")) {
   // Sign in with AWS
-  if (Cypress.env("cognito_programmatic_login")) {
+  if (Cypress.expose("cognito_programmatic_login")) {
     describe("AWS Cognito, programmatic login (cypress.config.ts#cognito_programmatic_login: true)", function () {
       beforeEach(function () {
         cy.task("db:seed");
@@ -57,7 +57,7 @@ if (Cypress.env("cognito_username")) {
     describe("AWS Cognito, cy.origin() login (cypress.config.ts#cognito_programmatic_login: false)", function () {
       beforeEach(function () {
         cy.task("db:seed");
-        cy.loginByCognito(Cypress.env("cognito_username"), Cypress.env("cognito_password"));
+        cy.loginByCognito(Cypress.expose("cognito_username"), Cypress.expose("cognito_password"));
         cy.visit("/");
       });
 

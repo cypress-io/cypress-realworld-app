@@ -3,7 +3,7 @@
 
 import { User } from "../../../src/models";
 
-const apiTestData = `${Cypress.env("apiUrl")}/testData`;
+const apiTestData = `${Cypress.expose("apiUrl")}/testData`;
 
 type TestDataCtx = {
   authenticatedUser?: User;

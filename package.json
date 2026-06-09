@@ -55,7 +55,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "@babel/preset-env": "^7.28.0",
-    "@cypress/code-coverage": "^3.14.5",
+    "@cypress/code-coverage": "^4.0.3",
     "@cypress/instrument-cra": "1.4.0",
     "@eslint/js": "^10.0.1",
     "@faker-js/faker": "6.1.2",

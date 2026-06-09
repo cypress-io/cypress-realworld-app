@@ -3,7 +3,7 @@
 
 import { User, Like } from "../../../src/models";
 
-const apiLikes = `${Cypress.env("apiUrl")}/likes`;
+const apiLikes = `${Cypress.expose("apiUrl")}/likes`;
 
 type TestLikesCtx = {
   authenticatedUser?: User;

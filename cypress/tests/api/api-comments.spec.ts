@@ -3,7 +3,7 @@
 
 import { User, Comment } from "../../../src/models";
 
-const apiComments = `${Cypress.env("apiUrl")}/comments`;
+const apiComments = `${Cypress.expose("apiUrl")}/comments`;
 
 type TestCommentsCtx = {
   authenticatedUser?: User;

@@ -23,7 +23,7 @@ export default defineConfig({
   retries: {
     runMode: 2,
   },
-  env: {
+  expose: {
     apiUrl: "http://localhost:3001",
     mobileViewportWidthBreakpoint: 414,
     coverage: false,
@@ -72,7 +72,7 @@ export default defineConfig({
     experimentalRunAllSpecs: true,
     experimentalStudio: true,
     setupNodeEvents(on, config) {
-      const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
+      const testDataApiEndpoint = `${config.expose.apiUrl}/testData`;
 
       const queryDatabase = ({ entity, query }, callback) => {
         const fetchData = async (attrs) => {

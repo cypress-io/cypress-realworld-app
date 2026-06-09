@@ -85,8 +85,8 @@ Cypress.Commands.add("login", (username, password, { rememberUser = false } = {}
   });
 });
 
-Cypress.Commands.add("loginByApi", (username, password = Cypress.env("defaultPassword")) => {
-  return cy.request("POST", `${Cypress.env("apiUrl")}/login`, {
+Cypress.Commands.add("loginByApi", (username, password = Cypress.expose("defaultPassword")) => {
+  return cy.request("POST", `${Cypress.expose("apiUrl")}/login`, {
     username,
     password,
   });
@@ -127,7 +127,7 @@ Cypress.Commands.add("setTransactionAmountRange", (min, max) => {
     .invoke("onChange", null, [min / 10, max / 10]);
 });
 
-Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("defaultPassword")) => {
+Cypress.Commands.add("loginByXstate", (username, password = Cypress.expose("defaultPassword")) => {
   const log = Cypress.log({
     name: "loginbyxstate",
     displayName: "LOGIN BY XSTATE",
@@ -358,7 +358,7 @@ Cypress.Commands.add("loginByGoogleApi", () => {
         url: "https://www.googleapis.com/oauth2/v4/token",
         body: {
           grant_type: "refresh_token",
-          client_id: Cypress.env("googleClientId"),
+          client_id: Cypress.expose("googleClientId"),
           client_secret: clientSecret,
           refresh_token: refreshToken,
         },

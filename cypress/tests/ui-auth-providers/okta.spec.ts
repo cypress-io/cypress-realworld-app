@@ -1,7 +1,7 @@
 import { isMobile } from "../../support/utils";
 
-if (Cypress.env("okta_username")) {
-  if (Cypress.env("okta_programmatic_login")) {
+if (Cypress.expose("okta_username")) {
+  if (Cypress.expose("okta_programmatic_login")) {
     describe("Okta", function () {
       beforeEach(function () {
         cy.task("db:seed");
@@ -55,7 +55,7 @@ if (Cypress.env("okta_username")) {
       beforeEach(function () {
         cy.task("db:seed");
 
-        cy.loginByOkta(Cypress.env("okta_username"), Cypress.env("okta_password"));
+        cy.loginByOkta(Cypress.expose("okta_username"), Cypress.expose("okta_password"));
         cy.visit("/");
       });
 

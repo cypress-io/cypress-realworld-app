@@ -11,7 +11,7 @@ type TestTransactionsCtx = {
 };
 
 const getFakeAmount = () => parseInt(faker.finance.amount(), 10);
-const apiTransactions = `${Cypress.env("apiUrl")}/transactions`;
+const apiTransactions = `${Cypress.expose("apiUrl")}/transactions`;
 
 describe("Transactions API", function () {
   let ctx: TestTransactionsCtx = {};

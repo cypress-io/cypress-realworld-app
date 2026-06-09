@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { User } from "../../../src/models";
 
-const apiUsers = `${Cypress.env("apiUrl")}/users`;
+const apiUsers = `${Cypress.expose("apiUrl")}/users`;
 
 type TestUserCtx = {
   authenticatedUser?: User;
