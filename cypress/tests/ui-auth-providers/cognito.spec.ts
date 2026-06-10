@@ -62,9 +62,9 @@ if (Cypress.expose("cognito_configured")) {
         cy.env(["cognito_username", "cognito_password"]).then(
           ({ cognito_username, cognito_password }) => {
             cy.loginByCognito(cognito_username, cognito_password);
+            cy.visit("/");
           }
         );
-        cy.visit("/");
       });
 
       it("shows onboarding", function () {

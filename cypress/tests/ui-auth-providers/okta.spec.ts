@@ -59,8 +59,8 @@ if (Cypress.expose("okta_configured")) {
         // browser state (see the `*_configured` flags in cypress.config.ts).
         cy.env(["okta_username", "okta_password"]).then(({ okta_username, okta_password }) => {
           cy.loginByOkta(okta_username, okta_password);
+          cy.visit("/");
         });
-        cy.visit("/");
       });
 
       it("verifies signed in user does not have a bank account", function () {

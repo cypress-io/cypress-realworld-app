@@ -155,21 +155,21 @@ Cypress.Commands.add("loginByXstate", (username, password) => {
       ? cy.wrap(password, { log: false })
       : cy.env(["defaultPassword"]).then(({ defaultPassword }) => defaultPassword);
 
-  resolvePassword.then((pw) =>
-    cy
-      .window({ log: false })
-      .then((win) => win.authService.send("LOGIN", { username, password: pw }))
-  );
+  resolvePassword.then((pw) => {
+    cy.window({ log: false }).then((win) =>
+      win.authService.send("LOGIN", { username, password: pw })
+    );
 
-  cy.wait("@loginUser").then((loginUser) => {
-    log.set({
-      consoleProps() {
-        return {
-          username,
-          // @ts-ignore
-          userId: loginUser.response.body.user.id,
-        };
-      },
+    cy.wait("@loginUser").then((loginUser) => {
+      log.set({
+        consoleProps() {
+          return {
+            username,
+            // @ts-ignore
+            userId: loginUser.response.body.user.id,
+          };
+        },
+      });
     });
   });
 
