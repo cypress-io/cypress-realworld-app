@@ -36,13 +36,6 @@ export default defineConfig({
     },
     paginationPageSize: process.env.PAGINATION_PAGE_SIZE,
 
-    // Whether each auth provider's credentials are configured. Set in e2e
-    // setupNodeEvents from the resolved config.env so all sources are
-    // reflected (CYPRESS_* vars, --env, cypress.env.json).
-    auth0_configured: false,
-    okta_configured: false,
-    cognito_configured: false,
-
     // Auth0
     auth0_domain: process.env.VITE_AUTH0_DOMAIN,
 
