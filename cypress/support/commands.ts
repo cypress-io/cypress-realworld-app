@@ -85,11 +85,18 @@ Cypress.Commands.add("login", (username, password, { rememberUser = false } = {}
   });
 });
 
-Cypress.Commands.add("loginByApi", (username, password = Cypress.expose("defaultPassword")) => {
-  return cy.request("POST", `${Cypress.expose("apiUrl")}/login`, {
-    username,
-    password,
-  });
+Cypress.Commands.add("loginByApi", (username, password) => {
+  const sendLogin = (pw: string) =>
+    cy.request("POST", `${Cypress.expose("apiUrl")}/login`, {
+      username,
+      password: pw,
+    });
+
+  // The seed password is sensitive, so read it Node-side via cy.env()
+  // (rather than exposing it to the browser) when no password is provided.
+  return password !== undefined
+    ? sendLogin(password)
+    : cy.env(["defaultPassword"]).then(({ defaultPassword }) => sendLogin(defaultPassword));
 });
 
 Cypress.Commands.add("reactComponent", { prevSubject: "element" }, ($el) => {
@@ -127,7 +134,7 @@ Cypress.Commands.add("setTransactionAmountRange", (min, max) => {
     .invoke("onChange", null, [min / 10, max / 10]);
 });
 
-Cypress.Commands.add("loginByXstate", (username, password = Cypress.expose("defaultPassword")) => {
+Cypress.Commands.add("loginByXstate", (username, password) => {
   const log = Cypress.log({
     name: "loginbyxstate",
     displayName: "LOGIN BY XSTATE",
@@ -141,14 +148,24 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.expose("defa
     log.snapshot("before");
   });
 
-  cy.window({ log: false }).then((win) => win.authService.send("LOGIN", { username, password }));
+  // The seed password is sensitive, so read it Node-side via cy.env()
+  // (rather than exposing it to the browser) when no password is provided.
+  const resolvePassword =
+    password !== undefined
+      ? cy.wrap(password, { log: false })
+      : cy.env(["defaultPassword"]).then(({ defaultPassword }) => defaultPassword);
+
+  resolvePassword.then((pw) =>
+    cy
+      .window({ log: false })
+      .then((win) => win.authService.send("LOGIN", { username, password: pw }))
+  );
 
   cy.wait("@loginUser").then((loginUser) => {
     log.set({
       consoleProps() {
         return {
           username,
-          password,
           // @ts-ignore
           userId: loginUser.response.body.user.id,
         };

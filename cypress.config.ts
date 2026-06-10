@@ -23,6 +23,12 @@ export default defineConfig({
   retries: {
     runMode: 2,
   },
+  env: {
+    // Sensitive values read Node-side via cy.env() so they never enter
+    // browser state. The seed password is supplied via SEED_DEFAULT_USER_PASSWORD
+    // (not a CYPRESS_* variable), so it must be declared here to reach cy.env().
+    defaultPassword: process.env.SEED_DEFAULT_USER_PASSWORD,
+  },
   expose: {
     apiUrl: "http://localhost:3001",
     mobileViewportWidthBreakpoint: 414,
@@ -31,7 +37,6 @@ export default defineConfig({
       url: "http://localhost:3001/__coverage__",
       exclude: "cypress/**/*.*",
     },
-    defaultPassword: process.env.SEED_DEFAULT_USER_PASSWORD,
     paginationPageSize: process.env.PAGINATION_PAGE_SIZE,
 
     // Non-secret flags indicating whether each external auth provider's
