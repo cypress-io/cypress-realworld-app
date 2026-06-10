@@ -92,8 +92,6 @@ Cypress.Commands.add("loginByApi", (username, password) => {
       password: pw,
     });
 
-  // The seed password is sensitive, so read it Node-side via cy.env()
-  // (rather than exposing it to the browser) when no password is provided.
   return password !== undefined
     ? sendLogin(password)
     : cy.env(["defaultPassword"]).then(({ defaultPassword }) => sendLogin(defaultPassword));
@@ -148,8 +146,6 @@ Cypress.Commands.add("loginByXstate", (username, password) => {
     log.snapshot("before");
   });
 
-  // The seed password is sensitive, so read it Node-side via cy.env()
-  // (rather than exposing it to the browser) when no password is provided.
   const resolvePassword =
     password !== undefined
       ? cy.wrap(password, { log: false })

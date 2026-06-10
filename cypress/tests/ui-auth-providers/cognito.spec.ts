@@ -57,8 +57,6 @@ if (Cypress.expose("cognito_configured")) {
     describe("AWS Cognito, cy.origin() login (cypress.config.ts#cognito_programmatic_login: false)", function () {
       beforeEach(function () {
         cy.task("db:seed");
-        // Read the sensitive credentials Node-side so they never enter
-        // browser state (see the `*_configured` flags in cypress.config.ts).
         cy.env(["cognito_username", "cognito_password"]).then(
           ({ cognito_username, cognito_password }) => {
             cy.loginByCognito(cognito_username, cognito_password);

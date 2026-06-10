@@ -24,9 +24,6 @@ export default defineConfig({
     runMode: 2,
   },
   env: {
-    // Sensitive values read Node-side via cy.env() so they never enter
-    // browser state. The seed password is supplied via SEED_DEFAULT_USER_PASSWORD
-    // (not a CYPRESS_* variable), so it must be declared here to reach cy.env().
     defaultPassword: process.env.SEED_DEFAULT_USER_PASSWORD,
   },
   expose: {
@@ -39,13 +36,6 @@ export default defineConfig({
     },
     paginationPageSize: process.env.PAGINATION_PAGE_SIZE,
 
-    // Non-secret flags indicating whether each external auth provider's
-    // credentials are configured (via the `CYPRESS_<provider>_username` OS
-    // variables). These booleans are safe to expose to the browser and let
-    // the auth-provider suites decide synchronously whether to run. The
-    // credentials themselves are sensitive and are read Node-side via
-    // cy.env() so they never enter browser state — in Cypress 16 `CYPRESS_*`
-    // variables route to the private `env` namespace, not `expose`.
     auth0_configured: Boolean(process.env.CYPRESS_auth0_username),
     okta_configured: Boolean(process.env.CYPRESS_okta_username),
     cognito_configured: Boolean(process.env.CYPRESS_cognito_username),

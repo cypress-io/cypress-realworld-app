@@ -55,8 +55,6 @@ if (Cypress.expose("okta_configured")) {
       beforeEach(function () {
         cy.task("db:seed");
 
-        // Read the sensitive credentials Node-side so they never enter
-        // browser state (see the `*_configured` flags in cypress.config.ts).
         cy.env(["okta_username", "okta_password"]).then(({ okta_username, okta_password }) => {
           cy.loginByOkta(okta_username, okta_password);
           cy.visit("/");
