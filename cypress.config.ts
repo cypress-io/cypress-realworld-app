@@ -36,9 +36,12 @@ export default defineConfig({
     },
     paginationPageSize: process.env.PAGINATION_PAGE_SIZE,
 
-    auth0_configured: Boolean(process.env.CYPRESS_auth0_username),
-    okta_configured: Boolean(process.env.CYPRESS_okta_username),
-    cognito_configured: Boolean(process.env.CYPRESS_cognito_username),
+    // Whether each auth provider's credentials are configured. Set in e2e
+    // setupNodeEvents from the resolved config.env so all sources are
+    // reflected (CYPRESS_* vars, --env, cypress.env.json).
+    auth0_configured: false,
+    okta_configured: false,
+    cognito_configured: false,
 
     // Auth0
     auth0_domain: process.env.VITE_AUTH0_DOMAIN,
@@ -138,6 +141,14 @@ export default defineConfig({
       });
 
       codeCoverageTask(on, config);
+
+      // Derive the auth-provider guard flags from the fully-resolved
+      // config.env so every credential source is honored (CYPRESS_* vars,
+      // --env, cypress.env.json), matching the prior Cypress.env() guards.
+      config.expose.auth0_configured = Boolean(config.env.auth0_username);
+      config.expose.okta_configured = Boolean(config.env.okta_username);
+      config.expose.cognito_configured = Boolean(config.env.cognito_username);
+
       return config;
     },
   },
