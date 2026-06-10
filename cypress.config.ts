@@ -141,6 +141,8 @@ export default defineConfig({
       config.expose.auth0_configured = Boolean(config.env.auth0_username);
       config.expose.okta_configured = Boolean(config.env.okta_username);
       config.expose.cognito_configured = Boolean(config.env.cognito_username);
+      // Google's gate is its public client id, which already lives in expose.
+      config.expose.google_configured = Boolean(config.expose.googleClientId);
 
       return config;
     },

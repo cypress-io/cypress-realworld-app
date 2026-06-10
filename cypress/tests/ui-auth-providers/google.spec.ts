@@ -1,6 +1,6 @@
 import { isMobile } from "../../support/utils";
 
-if (Cypress.expose("googleClientId")) {
+if (Cypress.expose("google_configured")) {
   describe("Google", function () {
     beforeEach(function () {
       cy.task("db:seed");

@@ -146,12 +146,7 @@ Cypress.Commands.add("loginByXstate", (username, password) => {
     log.snapshot("before");
   });
 
-  const resolvePassword =
-    password !== undefined
-      ? cy.wrap(password, { log: false })
-      : cy.env(["defaultPassword"]).then(({ defaultPassword }) => defaultPassword);
-
-  resolvePassword.then((pw) => {
+  const doLogin = (pw: string) => {
     cy.window({ log: false }).then((win) =>
       win.authService.send("LOGIN", { username, password: pw })
     );
@@ -167,7 +162,13 @@ Cypress.Commands.add("loginByXstate", (username, password) => {
         },
       });
     });
-  });
+  };
+
+  if (password !== undefined) {
+    doLogin(password);
+  } else {
+    cy.env(["defaultPassword"]).then(({ defaultPassword }) => doLogin(defaultPassword));
+  }
 
   return cy
     .getBySel("list-skeleton")
