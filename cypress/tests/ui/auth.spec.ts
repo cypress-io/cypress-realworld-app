@@ -1,7 +1,7 @@
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
 
-const apiGraphQL = `${Cypress.env("apiUrl")}/graphql`;
+const apiGraphQL = `${Cypress.expose("apiUrl")}/graphql`;
 
 describe("User Sign-up and Login", function () {
   beforeEach(function () {

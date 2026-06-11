@@ -1,7 +1,7 @@
 import { Amplify } from "aws-amplify";
 import { fetchAuthSession, signIn } from "aws-amplify/auth";
 
-Amplify.configure(Cypress.env("awsConfig"));
+Amplify.configure(Cypress.expose("awsConfig"));
 
 const fetchJwts = async (username: string, password: string) => {
   const options = { authFlowType: "USER_PASSWORD_AUTH" as const };
@@ -62,7 +62,7 @@ Cypress.Commands.add("loginByCognito", (username, password) => {
       cy.visit("/");
 
       cy.origin(
-        Cypress.env("cognito_domain"),
+        Cypress.expose("cognito_domain"),
         {
           args: {
             username,

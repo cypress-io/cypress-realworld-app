@@ -85,11 +85,16 @@ Cypress.Commands.add("login", (username, password, { rememberUser = false } = {}
   });
 });
 
-Cypress.Commands.add("loginByApi", (username, password = Cypress.env("defaultPassword")) => {
-  return cy.request("POST", `${Cypress.env("apiUrl")}/login`, {
-    username,
-    password,
-  });
+Cypress.Commands.add("loginByApi", (username, password) => {
+  const sendLogin = (pw: string) =>
+    cy.request("POST", `${Cypress.expose("apiUrl")}/login`, {
+      username,
+      password: pw,
+    });
+
+  return password !== undefined
+    ? sendLogin(password)
+    : cy.env(["defaultPassword"]).then(({ defaultPassword }) => sendLogin(defaultPassword));
 });
 
 Cypress.Commands.add("reactComponent", { prevSubject: "element" }, ($el) => {
@@ -127,7 +132,7 @@ Cypress.Commands.add("setTransactionAmountRange", (min, max) => {
     .invoke("onChange", null, [min / 10, max / 10]);
 });
 
-Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("defaultPassword")) => {
+Cypress.Commands.add("loginByXstate", (username, password) => {
   const log = Cypress.log({
     name: "loginbyxstate",
     displayName: "LOGIN BY XSTATE",
@@ -141,20 +146,29 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
     log.snapshot("before");
   });
 
-  cy.window({ log: false }).then((win) => win.authService.send("LOGIN", { username, password }));
+  const doLogin = (pw: string) => {
+    cy.window({ log: false }).then((win) =>
+      win.authService.send("LOGIN", { username, password: pw })
+    );
 
-  cy.wait("@loginUser").then((loginUser) => {
-    log.set({
-      consoleProps() {
-        return {
-          username,
-          password,
-          // @ts-ignore
-          userId: loginUser.response.body.user.id,
-        };
-      },
+    cy.wait("@loginUser").then((loginUser) => {
+      log.set({
+        consoleProps() {
+          return {
+            username,
+            // @ts-ignore
+            userId: loginUser.response.body.user.id,
+          };
+        },
+      });
     });
-  });
+  };
+
+  if (password !== undefined) {
+    doLogin(password);
+  } else {
+    cy.env(["defaultPassword"]).then(({ defaultPassword }) => doLogin(defaultPassword));
+  }
 
   return cy
     .getBySel("list-skeleton")
@@ -358,7 +372,7 @@ Cypress.Commands.add("loginByGoogleApi", () => {
         url: "https://www.googleapis.com/oauth2/v4/token",
         body: {
           grant_type: "refresh_token",
-          client_id: Cypress.env("googleClientId"),
+          client_id: Cypress.expose("googleClientId"),
           client_secret: clientSecret,
           refresh_token: refreshToken,
         },

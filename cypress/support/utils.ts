@@ -1,3 +1,3 @@
 export const isMobile = () => {
-  return Cypress.config("viewportWidth") < Cypress.env("mobileViewportWidthBreakpoint");
+  return Cypress.config("viewportWidth") < Cypress.expose("mobileViewportWidthBreakpoint");
 };

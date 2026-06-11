@@ -1,6 +1,6 @@
 import { User, Contact } from "../../../src/models";
 
-const apiContacts = `${Cypress.env("apiUrl")}/contacts`;
+const apiContacts = `${Cypress.expose("apiUrl")}/contacts`;
 
 type TestContactsCtx = {
   allUsers?: User[];

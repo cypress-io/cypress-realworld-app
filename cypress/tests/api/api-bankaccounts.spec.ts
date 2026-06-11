@@ -4,8 +4,8 @@
 import { faker } from "@faker-js/faker";
 import { User, BankAccount } from "../../../src/models";
 
-const apiBankAccounts = `${Cypress.env("apiUrl")}/bankAccounts`;
-const apiGraphQL = `${Cypress.env("apiUrl")}/graphql`;
+const apiBankAccounts = `${Cypress.expose("apiUrl")}/bankAccounts`;
+const apiGraphQL = `${Cypress.expose("apiUrl")}/graphql`;
 
 type TestBankAccountsCtx = {
   allUsers?: User[];

@@ -18,7 +18,7 @@ Cypress.Commands.add("loginByOktaApi", (username: string, password?: string) => 
 
   cy.request({
     method: "POST",
-    url: `https://${Cypress.env("okta_domain")}/api/v1/authn`,
+    url: `https://${Cypress.expose("okta_domain")}/api/v1/authn`,
     body: {
       username,
       password,
@@ -26,8 +26,8 @@ Cypress.Commands.add("loginByOktaApi", (username: string, password?: string) => 
   }).then(({ body }) => {
     const user = body._embedded.user;
     const config = {
-      issuer: `https://${Cypress.env("okta_domain")}/oauth2/default`,
-      clientId: Cypress.env("okta_client_id"),
+      issuer: `https://${Cypress.expose("okta_domain")}/oauth2/default`,
+      clientId: Cypress.expose("okta_client_id"),
       redirectUri: `http://localhost:${frontendPort}/implicit/callback`,
       scope: ["openid", "email", "profile"],
     };
@@ -73,7 +73,7 @@ Cypress.Commands.add("loginByOkta", (username: string, password: string) => {
       cy.visit("/");
 
       cy.origin(
-        Cypress.env("okta_domain"),
+        Cypress.expose("okta_domain"),
         { args: { username, password } },
         ({ username, password }) => {
           cy.get('input[name="identifier"]').type(username);

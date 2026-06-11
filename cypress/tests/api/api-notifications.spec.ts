@@ -1,6 +1,6 @@
 import { User, NotificationType, Like, Comment, Transaction } from "../../../src/models";
 
-const apiNotifications = `${Cypress.env("apiUrl")}/notifications`;
+const apiNotifications = `${Cypress.expose("apiUrl")}/notifications`;
 
 type TestNotificationsCtx = {
   authenticatedUser?: User;

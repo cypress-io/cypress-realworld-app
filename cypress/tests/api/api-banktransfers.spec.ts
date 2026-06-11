@@ -1,6 +1,6 @@
 import { User } from "../../../src/models";
 
-const apiBankTransfer = `${Cypress.env("apiUrl")}/bankTransfers`;
+const apiBankTransfer = `${Cypress.expose("apiUrl")}/bankTransfers`;
 
 type TestBankTransferCtx = {
   authenticatedUser?: User;

@@ -24,6 +24,9 @@ export default defineConfig({
     runMode: 2,
   },
   env: {
+    defaultPassword: process.env.SEED_DEFAULT_USER_PASSWORD,
+  },
+  expose: {
     apiUrl: "http://localhost:3001",
     mobileViewportWidthBreakpoint: 414,
     coverage: false,
@@ -31,7 +34,6 @@ export default defineConfig({
       url: "http://localhost:3001/__coverage__",
       exclude: "cypress/**/*.*",
     },
-    defaultPassword: process.env.SEED_DEFAULT_USER_PASSWORD,
     paginationPageSize: process.env.PAGINATION_PAGE_SIZE,
 
     // Auth0
@@ -72,7 +74,7 @@ export default defineConfig({
     experimentalRunAllSpecs: true,
     experimentalStudio: true,
     setupNodeEvents(on, config) {
-      const testDataApiEndpoint = `${config.env.apiUrl}/testData`;
+      const testDataApiEndpoint = `${config.expose.apiUrl}/testData`;
 
       const queryDatabase = ({ entity, query }, callback) => {
         const fetchData = async (attrs) => {
@@ -132,6 +134,16 @@ export default defineConfig({
       });
 
       codeCoverageTask(on, config);
+
+      // Derive the auth-provider guard flags from the fully-resolved
+      // config.env so every credential source is honored (CYPRESS_* vars,
+      // --env, cypress.env.json), matching the prior Cypress.env() guards.
+      config.expose.auth0_configured = Boolean(config.env.auth0_username);
+      config.expose.okta_configured = Boolean(config.env.okta_username);
+      config.expose.cognito_configured = Boolean(config.env.cognito_username);
+      // Google's gate is its public client id, which already lives in expose.
+      config.expose.google_configured = Boolean(config.expose.googleClientId);
+
       return config;
     },
   },

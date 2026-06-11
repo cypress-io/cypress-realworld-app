@@ -197,7 +197,7 @@ describe("Transaction Feed", function () {
 
         cy.wait(`@${feed.routeAlias}`)
           .its("response.body.results")
-          .should("have.length", Cypress.env("paginationPageSize"));
+          .should("have.length", Cypress.expose("paginationPageSize"));
 
         cy.log("📃 Scroll to next page");
         cy.getBySel("transaction-list").children().scrollTo("bottom");
@@ -205,7 +205,7 @@ describe("Transaction Feed", function () {
         cy.wait(`@${feed.routeAlias}`)
           .its("response.body")
           .then(({ results, pageData }) => {
-            expect(results).have.length(Cypress.env("paginationPageSize"));
+            expect(results).have.length(Cypress.expose("paginationPageSize"));
             expect(pageData.page).to.equal(2);
             cy.visualSnapshot(`Paginate ${feedName} Next Page`);
             cy.nextTransactionFeedPage(feed.service, pageData.totalPages);
