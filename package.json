@@ -79,7 +79,7 @@
     "@types/lodash": "4.14.181",
     "@types/lowdb": "1.0.11",
     "@types/morgan": "1.9.3",
-    "@types/node": "^20.11.25",
+    "@types/node": "^22.10.0",
     "@types/passport": "1.0.16",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
@@ -193,7 +193,7 @@
     "postinstall": "husky install && patch-package"
   },
   "engines": {
-    "node": "^20.0.0 || ^22.0.0 || ^24.0.0"
+    "node": "^22.0.0 || ^24.0.0"
   },
   "husky": {
     "hooks": {
