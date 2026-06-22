@@ -48,7 +48,9 @@ describe("Transaction View", function () {
     cy.visualSnapshot("Transaction Navigation Tabs Hidden");
   });
 
-  it("likes a transaction", function () {
+  // This test is intentionally flaky and demonstrates what can happen
+  // with a slow api or inconsistent response time
+  it("FLAKE likes a transaction", function () {
     // { force: true } is a workaround for https://github.com/cypress-io/cypress/issues/29776
     cy.getBySelLike("transaction-item").first().click({ force: true });
     cy.wait("@getTransaction");
@@ -59,7 +61,9 @@ describe("Transaction View", function () {
     cy.visualSnapshot("Transaction after Liked");
   });
 
-  it("comments on a transaction", function () {
+  // This test is intentionally flaky since we test for comments in a specific order
+  // but the api response does not guarantee the data in a specific order
+  it("FLAKE comments on a transaction", function () {
     // { force: true } is a workaround for https://github.com/cypress-io/cypress/issues/29776
     cy.getBySelLike("transaction-item").first().click({ force: true });
     cy.wait("@getTransaction");
