@@ -72,10 +72,12 @@ This project requires [Node.js](https://nodejs.org/en/) to be installed on your 
 [Yarn Classic](https://classic.yarnpkg.com/) is also required. Once you have [Node.js](https://nodejs.org/en/) installed, execute the following to install the npm module [yarn](https://www.npmjs.com/package/yarn) (Classic - version 1) globally.
 
 ```shell
-npm install yarn@latest -g
+npm install yarn@1 -g
 ```
 
-If you have Node.js' experimental [Corepack](https://nodejs.org/dist/latest/docs/api/corepack.html) feature enabled, then you should skip the step `npm install yarn@latest -g` to install Yarn Classic globally. The RWA project is locally configured for `Corepack` to use Yarn Classic (version 1).
+If you have Node.js' experimental [Corepack](https://nodejs.org/dist/latest/docs/api/corepack.html) feature enabled,
+then you should skip the step `npm install yarn@1 -g` to install Yarn Classic globally.
+The RWA project is locally configured for `Corepack` to use Yarn Classic (version 1).
 
 #### Yarn Modern
 
