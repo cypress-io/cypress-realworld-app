@@ -120,13 +120,13 @@ yarn cypress:open
 > 🚩 **Note**
 >
 > If you have changed the default ports, then you need to update Cypress configuration file (`cypress.config.ts`) locally.
-> There are three properties that you need to update in `cypress.config.ts`: `e2e.baseUrl`, `env.apiUrl`, and `env.url`.
-> The port number in `e2e.baseUrl` corresponds to `PORT` variable in `.env` file. Similarly, the port number in `env.apiUrl` and `env.url` correspond to `VITE_BACKEND_PORT`.
+> There are three properties that you need to update in `cypress.config.ts`: `e2e.baseUrl`, `expose.apiUrl`, and `expose.codeCoverage.url`.
+> The port number in `e2e.baseUrl` corresponds to `PORT` variable in `.env` file. Similarly, the port number in `expose.apiUrl` and `expose.codeCoverage.url` correspond to `VITE_BACKEND_PORT`.
 > For example, if you have changed `PORT` to `13000` and `VITE_BACKEND_PORT` to `13001` in `.env` file, then your `cypress.config.ts` should look similar to the following snippet:
 >
 > ```js
 > {
->   env: {
+>   expose: {
 >     apiUrl: "http://localhost:13001",
 >     codeCoverage: {
 >       url: "http://localhost:13001/__coverage__"
