@@ -5,6 +5,7 @@ import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object, number } from "yup";
 import { Paper, Typography, Button, Grid, Container, Avatar, Box, TextField } from "@mui/material";
 import { User } from "../models";
+import { isDemoBreak } from "../utils/demoBreak";
 
 const PREFIX = "TransactionCreateStepTwo";
 
@@ -122,7 +123,8 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
             createTransaction({ transactionType, ...values });
             showSnackbar({
               severity: "success",
-              message: "Transaction Submitted!",
+              // DEMO BREAK: wrong copy → assertion failures against existing new-transaction specs
+              message: isDemoBreak() ? "Payment Completed!" : "Transaction Submitted!",
             });
           }}
         >

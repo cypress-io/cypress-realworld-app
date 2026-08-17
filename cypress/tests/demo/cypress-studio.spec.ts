@@ -8,10 +8,12 @@ describe("Cypress Studio Demo", function () {
       cy.login(user.username, "s3cret", { rememberUser: true });
     });
   });
-  it("create new transaction", function () {
-    // Extend test with Cypress Studio
-  });
-  it("create new bank account", function () {
-    // Extend test with Cypress Studio
+  // DEMO: pending tests for Cypress Cloud pending status
+  it("create new transaction");
+  it("create new bank account");
+
+  // DEMO: skipped status alongside pending in the same spec
+  it.skip("records a studio flow for notifications", function () {
+    cy.getBySel("nav-top-notifications-count").should("exist");
   });
 });

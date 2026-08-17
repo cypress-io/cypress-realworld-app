@@ -13,6 +13,7 @@ import {
 import CommentsList from "./CommentList";
 import TransactionTitle from "./TransactionTitle";
 import TransactionAmount from "./TransactionAmount";
+import { isDemoBreak } from "../utils/demoBreak";
 
 const PREFIX = "TransactionDetail";
 
@@ -178,7 +179,13 @@ const TransactionDetail: React.FC<TransactionProps> = ({
               <IconButton
                 color="primary"
                 disabled={currentUserLikesTransaction(currentUser, transaction)}
-                onClick={() => transactionLike(transaction.id)}
+                onClick={() => {
+                  // DEMO BREAK: uncaught app exception on like → Cloud "application error" failures
+                  if (isDemoBreak()) {
+                    throw new Error("DemoUncaughtException: like handler crashed (DEMO_BREAK)");
+                  }
+                  transactionLike(transaction.id);
+                }}
                 data-test={`transaction-like-button-${transaction.id}`}
                 size="large"
               >

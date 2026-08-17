@@ -5,9 +5,13 @@ import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 import { BankAccountPayload, User } from "../models";
 import { useHistory } from "react-router";
+import { isDemoBreak } from "../utils/demoBreak";
 
 const validationSchema = object({
-  bankName: string().min(5, "Must contain at least 5 characters").required("Enter a bank name"),
+  // DEMO BREAK: altered validation copy when enabled
+  bankName: string()
+    .min(5, isDemoBreak() ? "Bank name is too short" : "Must contain at least 5 characters")
+    .required(isDemoBreak() ? "Bank name missing" : "Enter a bank name"),
   routingNumber: string()
     .length(9, "Must contain a valid routing number")
     .required("Enter a valid bank routing number"),
@@ -144,7 +148,8 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
                 variant="contained"
                 color="primary"
                 className={classes.submit}
-                data-test="bankaccount-submit"
+                // DEMO BREAK: renamed test id → element-not-found / command timeouts
+                data-test={isDemoBreak() ? "bankaccount-save" : "bankaccount-submit"}
                 disabled={!isValid || isSubmitting}
               >
                 Save

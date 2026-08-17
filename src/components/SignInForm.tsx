@@ -22,11 +22,18 @@ import Footer from "./Footer";
 import { SignInPayload } from "../models";
 import { AuthMachineContext, AuthMachineEvents, AuthMachineSchema } from "../machines/authMachine";
 import { Alert } from "@mui/material";
+import { isDemoBreak } from "../utils/demoBreak";
 
 const validationSchema = object({
   username: string().required("Username is required"),
   password: string()
-    .min(4, "Password must contain at least 4 characters")
+    // DEMO BREAK: wrong validation copy → assertion failures in auth.spec
+    .min(
+      4,
+      isDemoBreak()
+        ? "Password is too short"
+        : "Password must contain at least 4 characters"
+    )
     .required("Enter your password"),
 });
 
