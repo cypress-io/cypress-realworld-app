@@ -17,7 +17,8 @@ const BankAccountListItem: React.FC<BankAccountListItemProps> = ({
       <Grid container direction="row" justifyContent="space-between" alignItems="flex-start">
         <Grid item>
           <Typography variant="body1" color="primary" gutterBottom>
-            {bankAccount.bankName} {bankAccount.isDeleted ? "(Deleted)" : undefined}
+            {bankAccount.bankName} ••••{bankAccount.accountNumber.slice(-3)}{" "}
+            {bankAccount.isDeleted ? "(Deleted)" : undefined}
           </Typography>
         </Grid>
         {!bankAccount.isDeleted && (
