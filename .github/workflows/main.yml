@@ -231,14 +231,48 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Full history so the "changed only" step below can diff the
+          # working branch against origin/develop (same reason as install,
+          # §3.5 of docs/pipeline-architecture.md).
+          fetch-depth: 0
 
       - name: Cypress install
         uses: cypress-io/github-action@v6
         with:
           runTests: false
 
-      - name: Component tests
+      - name: Component tests (full suite)
+        if: github.ref == 'refs/heads/develop'
         run: yarn test:component:ci
+
+      - name: Determine changed component specs
+        id: changed-specs
+        if: github.ref != 'refs/heads/develop'
+        run: |
+          # Every *.cy.tsx file is colocated with the component it tests
+          # (e.g. AlertBar.tsx / AlertBar.cy.tsx) — a reliable mapping E2E
+          # specs don't have. For each src/**/*.tsx changed since
+          # origin/develop, run its colocated *.cy.tsx if one exists; a
+          # *.cy.tsx changed directly maps to itself the same way.
+          changed=$(git diff --name-only origin/develop -- 'src/**/*.tsx')
+          specs=$(
+            for f in $changed; do
+              base="${f%.cy.tsx}"
+              base="${base%.tsx}"
+              candidate="${base}.cy.tsx"
+              [ -f "$candidate" ] && echo "$candidate"
+            done | sort -u | paste -sd, -
+          )
+          echo "specs=$specs" >> "$GITHUB_OUTPUT"
+
+      - name: Component tests (changed since develop)
+        if: github.ref != 'refs/heads/develop' && steps.changed-specs.outputs.specs != ''
+        run: yarn cypress run --component --spec "${{ steps.changed-specs.outputs.specs }}"
+
+      - name: Component tests skipped
+        if: github.ref != 'refs/heads/develop' && steps.changed-specs.outputs.specs == ''
+        run: echo "No component (or its colocated *.cy.tsx) changed since origin/develop — nothing to run."
 
   report-ci-failure:
     name: Report CI failure as ticket

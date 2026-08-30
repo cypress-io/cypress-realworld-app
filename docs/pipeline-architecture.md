@@ -16,6 +16,7 @@
    - 3.6 [`install` — build et artefact](#36-install--build-et-artefact)
 4. [Stage 2 — Test (E2E)](#4-stage-2--test-e2e)
    - 4.1 [`component-tests` — tests de composants](#41-component-tests--tests-de-composants-complémentaires-aux-4-jobs-e2e)
+   - 4.2 [Orchestration intelligente : component-tests ciblé, E2E complet](#42-orchestration-intelligente--component-tests-ciblé-e2e-toujours-complet)
 5. [Stage 3 — Report](#5-stage-3--report)
 6. [Ce qui reste à construire](#6-ce-qui-reste-à-construire)
 
@@ -399,6 +400,53 @@ Shift Left et rapidité de feedback (fiche DevSecOps, §1) : un composant cassé
 *Change Lead Time* : un signal de correction rapide et ciblé (quel composant, pas juste "le parcours de connexion a cassé quelque part"). Contribue à la couverture globale du projet sans alourdir le chemin critique du pipeline — ce job tourne en parallèle des 4 jobs E2E, pas après.
 
 **Bug applicatif découvert en branchant ce job** ([issue #3](https://github.com/johan-bouguermouh/m1-cicd/issues/3), fermée) : un des 13 tests (`TransactionDateRangeFilter.cy.tsx`) échouait de façon reproductible. Piste initiale (fuseau horaire) fausse — la vraie cause : l'état interne `calendarValue` du composant démarrait toujours à `null` sans jamais être initialisé depuis la prop `dateRangeFilters`. Impact réel pour un utilisateur, pas qu'un artefact de test : arriver sur une URL avec un filtre de dates déjà actif affichait `Date: undefined - undefined`. Corrigé directement dans `TransactionDateRangeFilter.tsx` (initialisation de l'état depuis la prop) plutôt que de garder le test en `.skip` — la baseline SCA (§3.1) documente une dette *acceptée en attendant mieux* ; ici, la correction était directe et à faible risque, donc pas de raison de la reporter.
+
+### 4.2 Orchestration intelligente : `component-tests` ciblé, E2E toujours complet
+
+Le principe posé en §3.5 pour les tests unitaires (suite complète sur `develop`, ciblé ailleurs) s'étend ici — mais pas uniformément aux deux familles de tests Cypress, et c'est un choix délibéré, pas un oubli comblé à moitié.
+
+**Extrait annoté**
+
+```yaml
+- name: Determine changed component specs
+  if: github.ref != 'refs/heads/develop'
+  run: |
+    changed=$(git diff --name-only origin/develop -- 'src/**/*.tsx')
+    specs=$(
+      for f in $changed; do
+        base="${f%.cy.tsx}"; base="${base%.tsx}"
+        candidate="${base}.cy.tsx"
+        [ -f "$candidate" ] && echo "$candidate"
+      done | sort -u | paste -sd, -
+    )
+    echo "specs=$specs" >> "$GITHUB_OUTPUT"
+
+- name: Component tests (changed since develop)
+  if: github.ref != 'refs/heads/develop' && steps.changed-specs.outputs.specs != ''
+  run: yarn cypress run --component --spec "${{ steps.changed-specs.outputs.specs }}"
+```
+
+**Vocabulaire**
+
+| Clé | Valeur | Rôle |
+|---|---|---|
+| `git diff --name-only origin/develop -- 'src/**/*.tsx'` | — | liste les fichiers `.tsx` modifiés par rapport à `origin/develop`, sans les diffs eux-mêmes (`--name-only`) ; le pathspec limite la recherche à `src/`, pas la config ou les workflows. |
+| `${f%.cy.tsx}` / `${base%.tsx}` | — | suppression de suffixe en Bash (`%motif` retire le plus court suffixe correspondant s'il existe, sinon ne change rien) : normalise `Component.tsx` **et** `Component.cy.tsx` vers le même radical `Component`, avant de reconstruire `Component.cy.tsx`. |
+| `sort -u` | — | déduplique la liste (utile si un composant *et* son test ont changé dans le même commit — les deux résolvent vers la même spec). |
+| `paste -sd, -` | — | assemble une liste de lignes en une seule chaîne séparée par des virgules — le format attendu par `cypress run --spec`. |
+| `steps.changed-specs.outputs.specs != ''` | — | si aucun composant testé n'a changé, aucune des deux étapes suivantes ne s'exécute — pas d'erreur "no specs found" côté Cypress. |
+
+**Pourquoi ce choix — et pourquoi pas pour les 4 jobs E2E**
+
+Chaque `*.cy.tsx` est **colocalisé** avec le composant qu'il teste (convention déjà en place dans ce repo, pas introduite pour l'occasion) — ça donne un mapping fichier-modifié → test-à-rejouer fiable, sans outil de graphe de dépendances. Les specs E2E (`cypress/tests/ui/*.spec.ts`) n'ont pas cette colocalisation : elles exercent des parcours à travers plusieurs pages et composants connectés, donc un changement dans `src/components/AnyForm.tsx` peut casser un parcours testé par une spec E2E qui ne mentionne jamais ce composant par son nom. Appliquer la même logique "changed only" aux 4 jobs E2E aurait exigé soit un vrai outil de graphe de dépendances (aucun candidat simple, gratuit, sans compte externe identifié), soit se limiter aux specs E2E elles-mêmes modifiées — ce qui aurait un vrai risque de faux négatif (une régression E2E provoquée par un fichier hors des specs ne serait jamais rejouée sur les branches de travail). Les 4 jobs E2E restent donc complets sur **toutes** les branches.
+
+**Règle d'or invoquée**
+
+Loi de Goodhart, encore (§3.5, §7 du doc invariants) : réduire arbitrairement la portée d'un filet de sécurité pour aller plus vite n'est un progrès que si le risque de faux négatif reste maîtrisé — ici il l'est pour les tests de composants (mapping fiable), pas pour l'E2E (aucun mapping fiable disponible sans outillage supplémentaire).
+
+**Ce que ça optimise**
+
+*Change Lead Time* sur les branches de travail pour la partie où le compromis est sûr, sans dégrader le *Change Fail Rate* sur la partie où il ne l'est pas — un arbitrage explicite plutôt qu'un raccourci uniforme.
 
 ---
 
