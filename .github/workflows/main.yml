@@ -216,6 +216,37 @@ jobs:
           spec: cypress/tests/ui/*
           config-file: cypress.config.ts
 
+  # Integration tests that hit the backend directly (cy.request), no UI
+  # navigation. Same specPattern/baseUrl as the UI specs (cypress.config.ts),
+  # so it needs the same app boot and build artifact. Kept full on every
+  # branch, same reasoning as the UI E2E jobs (§4.2 of the docs): no reliable
+  # colocation mapping to narrow it safely.
+  api-tests:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:22.20.0
+      options: --user 1001
+    needs: [install, sca, secrets-scan]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download the build folders
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: build
+
+      - name: "API Tests"
+        uses: cypress-io/github-action@v6
+        with:
+          start: yarn start:ci
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          spec: cypress/tests/api/*
+          config-file: cypress.config.ts
+
   # Mounts each React component in isolation via Cypress's component runner —
   # no full app boot (no wait-on/start:ci), so it doesn't need the `build`
   # artifact either. Much cheaper than the browser E2E jobs above; complements
@@ -287,6 +318,7 @@ jobs:
       - ui-chrome-mobile-tests
       - ui-firefox-tests
       - ui-firefox-mobile-tests
+      - api-tests
       - component-tests
     if: failure()
     permissions:

@@ -15,8 +15,10 @@
    - 3.5 [`install` — orchestration intelligente des tests unitaires](#35-install--orchestration-intelligente-des-tests-unitaires)
    - 3.6 [`install` — build et artefact](#36-install--build-et-artefact)
 4. [Stage 2 — Test (E2E)](#4-stage-2--test-e2e)
-   - 4.1 [`component-tests` — tests de composants](#41-component-tests--tests-de-composants-complémentaires-aux-4-jobs-e2e)
-   - 4.2 [Orchestration intelligente : component-tests ciblé, E2E complet](#42-orchestration-intelligente--component-tests-ciblé-e2e-toujours-complet)
+   - 4.1 [`api-tests` — tests d'intégration API](#41-api-tests--tests-dintégration-api)
+   - 4.2 [`component-tests` — tests de composants](#42-component-tests--tests-de-composants-complémentaires-aux-jobs-e2eapi)
+   - 4.3 [Orchestration intelligente : component-tests ciblé, E2E/API complets](#43-orchestration-intelligente--component-tests-ciblé-e2eapi-toujours-complets)
+   - 4.4 [Runners, cache et artefacts : ce qui se partage entre jobs](#44-runners-cache-et-artefacts--ce-qui-se-partage-entre-jobs-et-ce-qui-ne-se-partage-jamais)
 5. [Stage 3 — Report](#5-stage-3--report)
 6. [Ce qui reste à construire](#6-ce-qui-reste-à-construire)
 
@@ -363,7 +365,47 @@ Le DAG plutôt que le mode séquentiel par stage : "un job démarre dès que ses
 
 **Pour aller plus loin plus tard (voir §6)** : si le volume de specs grossit au point qu'un seul job par navigateur devienne trop lent, la bonne réponse est soit un compte Cypress Cloud (gratuit, réintroduit `record`/`parallel`), soit un partitionnement manuel des specs entre plusieurs jobs (`spec: cypress/tests/ui/a*,b*` etc.) — pas de réintroduire une matrice de containers sans mécanisme de répartition derrière.
 
-### 4.1 `component-tests` — tests de composants (complémentaires aux 4 jobs E2E)
+### 4.1 `api-tests` — tests d'intégration API
+
+**Extrait annoté**
+
+```yaml
+api-tests:
+  timeout-minutes: 15
+  needs: [install, sca, secrets-scan]
+  steps:
+    - uses: actions/download-artifact@v4
+      with:
+        name: build
+        path: build
+    - uses: cypress-io/github-action@v6
+      with:
+        start: yarn start:ci
+        wait-on: "http://localhost:3000"
+        spec: cypress/tests/api/*
+```
+
+**Vocabulaire**
+
+| Clé | Valeur | Rôle |
+|---|---|---|
+| `spec: cypress/tests/api/*` | — | ce repo a en réalité **trois** familles de tests Cypress : `cypress/tests/ui/*` (parcours UI, déjà couverts), `cypress/tests/api/*` (9 specs qui appellent directement le backend via `cy.request`, sans navigation UI — jamais branchées au pipeline avant ce commit), et `cypress/tests/ui-auth-providers/*` (Auth0/Cognito/Google/Okta, laissés de côté : chacun exige un compte/app OAuth externe, hors périmètre "zéro compte externe" posé pour ce projet). |
+| `start: yarn start:ci` / `wait-on` | identiques aux jobs UI | les specs API partagent le même `baseUrl`/`specPattern` dans `cypress.config.ts` (bloc `e2e`) que les specs UI — même serveur à démarrer, même artefact `build` nécessaire. |
+| *(absence de)* `browser:` | — | pas de variation navigateur pertinente pour des appels HTTP directs : un seul run suffit (le navigateur par défaut de Cypress, Electron), pas besoin de le dupliquer par Chrome/Firefox comme pour l'UI. |
+
+**Pourquoi ce choix**
+
+`package.json` avait déjà un script `test:api` dédié — un angle mort du pipeline plutôt qu'un choix délibéré. Ces tests valident le contrat de l'API indépendamment du rendu visuel (statuts HTTP, formes de réponse, règles métier serveur) : une régression backend peut ne jamais se voir dans un test UI qui ne vérifie que ce qui s'affiche à l'écran.
+
+**Règle d'or invoquée**
+
+Comme pour les jobs UI E2E (§4), pas de mapping fiable "fichier modifié → spec API concernée" sans outillage supplémentaire — ce job reste donc complet sur toutes les branches, même logique que §4.3.
+
+**Ce que ça optimise**
+
+*Change Fail Rate* : couvre une classe de régressions (contrat API) que ni les tests unitaires (composants isolés), ni les tests de composants (rendu React isolé), ni même les tests E2E UI (qui ne vérifient que ce qu'affiche le DOM) ne peuvent détecter de façon fiable.
+
+### 4.2 `component-tests` — tests de composants (complémentaires aux jobs E2E/API)
 
 **Extrait annoté**
 
@@ -401,7 +443,7 @@ Shift Left et rapidité de feedback (fiche DevSecOps, §1) : un composant cassé
 
 **Bug applicatif découvert en branchant ce job** ([issue #3](https://github.com/johan-bouguermouh/m1-cicd/issues/3), fermée) : un des 13 tests (`TransactionDateRangeFilter.cy.tsx`) échouait de façon reproductible. Piste initiale (fuseau horaire) fausse — la vraie cause : l'état interne `calendarValue` du composant démarrait toujours à `null` sans jamais être initialisé depuis la prop `dateRangeFilters`. Impact réel pour un utilisateur, pas qu'un artefact de test : arriver sur une URL avec un filtre de dates déjà actif affichait `Date: undefined - undefined`. Corrigé directement dans `TransactionDateRangeFilter.tsx` (initialisation de l'état depuis la prop) plutôt que de garder le test en `.skip` — la baseline SCA (§3.1) documente une dette *acceptée en attendant mieux* ; ici, la correction était directe et à faible risque, donc pas de raison de la reporter.
 
-### 4.2 Orchestration intelligente : `component-tests` ciblé, E2E toujours complet
+### 4.3 Orchestration intelligente : `component-tests` ciblé, E2E/API toujours complets
 
 Le principe posé en §3.5 pour les tests unitaires (suite complète sur `develop`, ciblé ailleurs) s'étend ici — mais pas uniformément aux deux familles de tests Cypress, et c'est un choix délibéré, pas un oubli comblé à moitié.
 
@@ -436,9 +478,9 @@ Le principe posé en §3.5 pour les tests unitaires (suite complète sur `develo
 | `paste -sd, -` | — | assemble une liste de lignes en une seule chaîne séparée par des virgules — le format attendu par `cypress run --spec`. |
 | `steps.changed-specs.outputs.specs != ''` | — | si aucun composant testé n'a changé, aucune des deux étapes suivantes ne s'exécute — pas d'erreur "no specs found" côté Cypress. |
 
-**Pourquoi ce choix — et pourquoi pas pour les 4 jobs E2E**
+**Pourquoi ce choix — et pourquoi pas pour les jobs E2E/API**
 
-Chaque `*.cy.tsx` est **colocalisé** avec le composant qu'il teste (convention déjà en place dans ce repo, pas introduite pour l'occasion) — ça donne un mapping fichier-modifié → test-à-rejouer fiable, sans outil de graphe de dépendances. Les specs E2E (`cypress/tests/ui/*.spec.ts`) n'ont pas cette colocalisation : elles exercent des parcours à travers plusieurs pages et composants connectés, donc un changement dans `src/components/AnyForm.tsx` peut casser un parcours testé par une spec E2E qui ne mentionne jamais ce composant par son nom. Appliquer la même logique "changed only" aux 4 jobs E2E aurait exigé soit un vrai outil de graphe de dépendances (aucun candidat simple, gratuit, sans compte externe identifié), soit se limiter aux specs E2E elles-mêmes modifiées — ce qui aurait un vrai risque de faux négatif (une régression E2E provoquée par un fichier hors des specs ne serait jamais rejouée sur les branches de travail). Les 4 jobs E2E restent donc complets sur **toutes** les branches.
+Chaque `*.cy.tsx` est **colocalisé** avec le composant qu'il teste (convention déjà en place dans ce repo, pas introduite pour l'occasion) — ça donne un mapping fichier-modifié → test-à-rejouer fiable, sans outil de graphe de dépendances. Ni les specs E2E (`cypress/tests/ui/*.spec.ts`) ni les specs API (`cypress/tests/api/*.spec.ts`, §4.1) n'ont cette colocalisation : les premières exercent des parcours à travers plusieurs pages et composants connectés, les secondes valident un contrat serveur qui peut casser sans qu'aucun fichier "spec-adjacent" n'ait changé (une migration de base de données, une règle métier modifiée dans une couche partagée). Un changement dans `src/components/AnyForm.tsx` peut casser un parcours E2E ou une règle testée côté API qui ne mentionnent jamais ce composant par son nom. Appliquer la même logique "changed only" à ces deux familles aurait exigé soit un vrai outil de graphe de dépendances (aucun candidat simple, gratuit, sans compte externe identifié), soit se limiter aux specs elles-mêmes modifiées — ce qui aurait un vrai risque de faux négatif. Les jobs E2E et `api-tests` restent donc complets sur **toutes** les branches.
 
 **Règle d'or invoquée**
 
@@ -447,6 +489,44 @@ Loi de Goodhart, encore (§3.5, §7 du doc invariants) : réduire arbitrairement
 **Ce que ça optimise**
 
 *Change Lead Time* sur les branches de travail pour la partie où le compromis est sûr, sans dégrader le *Change Fail Rate* sur la partie où il ne l'est pas — un arbitrage explicite plutôt qu'un raccourci uniforme.
+
+### 4.4 Runners, cache et artefacts : ce qui se partage entre jobs (et ce qui ne se partage jamais)
+
+Question légitime en observant que `api-tests` et les 4 jobs UI redémarrent chacun la même application : est-ce qu'on pourrait plutôt partager un environnement déjà démarré entre jobs ? Réponse courte : non pour le *process*, oui pour les *données* — et ce n'est pas la même chose. Ce qui suit est vérifié sur un run réel, pas déduit de la documentation.
+
+**Ce qui ne se partage jamais : un process en cours d'exécution**
+
+Un **Runner** GitHub Actions est une machine (ou un conteneur) **éphémère et isolée** : provisionnée pour un seul job, détruite à la fin. Aucun réseau partagé, aucun filesystem partagé entre deux jobs différents — même au sein d'un seul run. Un serveur démarré dans `install` n'existe plus quand `api-tests` démarre ailleurs ; chaque job qui a besoin de l'application doit la redémarrer, point final. C'est la contrepartie directe de la règle "runners éphémères" posée en §3.3 contre les attaques *poisoned cache* — la même isolation qui protège contre les fuites entre jobs empêche aussi tout partage de process vivant.
+
+**Ce qui se partage : des données, via deux mécanismes différents**
+
+| | **Cache** (`actions/cache`, utilisé en interne par `cypress-io/github-action`) | **Artefact** (`actions/upload-artifact` / `download-artifact`, §3.6) |
+|---|---|---|
+| Contenu ici | `node_modules/`, binaire Cypress | dossier `build/` (bundle applicatif compilé) |
+| Portée | **Persiste entre les runs** — un cache peuplé par un push d'hier est disponible dès le premier job du run d'aujourd'hui | Attaché à **une seule exécution** — généré et consommé dans le même run, jamais réutilisé d'un run à l'autre |
+| Garantie | *Best effort* — un job doit rester correct même si le cache est absent (première exécution, éviction, clé qui ne correspond plus) | *Obligatoire* — `install` échoue explicitement (`if-no-files-found: error`) si le build n'existe pas |
+| Clé | Hash de `yarn.lock` (+ OS/arch) — même lockfile = même cache, peu importe la branche ou le job | Nom fixe (`build`) partagé par tous les jobs du run qui le consomment |
+
+**Preuve sur un run réel** (job `install`, tout premier job du run — voir aussi `ui-chrome-tests` plus loin, avec les mêmes lignes) :
+
+```
+Cache hit for: yarn-linux-x64-2209564...
+Cache hit for: cypress-linux-x64-2209564...
+Cache Size: ~213 MB / ~682 MB — restored in ~15s
+yarn install v1.22.22   # prend quand même ~29s de plus, cache déjà restauré
+```
+
+Le cache est disponible dès le **premier** job du run — preuve qu'il a été peuplé par un push précédent sur cette branche, pas par un job antérieur du même run. C'est un comportement automatique de `cypress-io/github-action`, jamais configuré explicitement dans ce pipeline.
+
+**Pourquoi `yarn install` prend quand même ~30s avec un cache déjà restauré**
+
+Restaurer le cache (extraire l'archive) et *installer* ne sont pas la même opération : `yarn install` vérifie ensuite l'intégrité de tout l'arbre `node_modules` face à `yarn.lock`, puis exécute les hooks post-install (`husky install`, `patch-package` — nécessaire ici pour un correctif appliqué sur `react-virtualized`). Ce coût de vérification est incompressible sur ~2100 paquets ; ce n'est pas un défaut de cache à corriger, c'est le prix normal de la garantie de Reproductibilité (§7 du doc invariants — "même entrée, même sortie", pas d'installation qui dérive silencieusement du lockfile).
+
+**Ce que ça veut dire pour optimiser un pipeline, en pratique**
+
+1. Ne pas chercher à "fusionner des jobs pour partager un serveur démarré une fois" — le modèle d'exécution ne le permet pas, et le gain réel serait de toute façon marginal (~10s de boot mesurés en §4.1, pas le vrai coût).
+2. Le vrai levier de vitesse, c'est le **cache des dépendances** — vérifier qu'il existe et qu'il est correctement scopé (ici automatique via `cypress-io/github-action` ; ailleurs, `actions/setup-node` avec `cache: yarn` comme dans le job `sca`, §3.1).
+3. Ne jamais utiliser un artefact pour ce qu'un cache devrait faire (persister entre runs) ni l'inverse (un cache n'est jamais une garantie — un job qui *a besoin* d'un résultat précis d'un job précédent doit passer par un artefact, pas espérer un cache hit).
 
 ---
 
@@ -458,7 +538,7 @@ Documentation dédiée : [ci-failure-ticketing.md](ci-failure-ticketing.md) (le 
 
 ```yaml
 report-ci-failure:
-  needs: [sca, secrets-scan, install, ui-chrome-tests, ui-chrome-mobile-tests, ui-firefox-tests, ui-firefox-mobile-tests, component-tests]
+  needs: [sca, secrets-scan, install, ui-chrome-tests, ui-chrome-mobile-tests, ui-firefox-tests, ui-firefox-mobile-tests, api-tests, component-tests]
   if: failure()
   permissions:
     issues: write
@@ -469,7 +549,7 @@ report-ci-failure:
 
 | Clé | Valeur | Rôle |
 |---|---|---|
-| `needs` | liste des 8 jobs précédents (Stage 1 + Stage 2) | ce job attend la fin de **tous** les jobs, qu'ils réussissent ou échouent (par défaut `needs` sans autre condition n'exécute le job suivant que si tout a réussi — voir ligne suivante). |
+| `needs` | liste des 9 jobs précédents (Stage 1 + Stage 2) | ce job attend la fin de **tous** les jobs, qu'ils réussissent ou échouent (par défaut `needs` sans autre condition n'exécute le job suivant que si tout a réussi — voir ligne suivante). |
 | `if: failure()` | — | fonction spéciale des GitHub Actions : renvoie `true` si **au moins un** des jobs listés dans `needs` a échoué. Sans elle, ce job ne se déclencherait jamais (le comportement par défaut est d'annuler les jobs dépendants d'un job en échec). |
 | `permissions` | `issues: write`, `contents: read` | **restreint** explicitement les droits du `GITHUB_TOKEN` généré pour ce job à seulement ce dont il a besoin — créer/commenter des issues et lire le code. Par défaut, sans ce bloc, le token hériterait des permissions globales du repo (souvent plus larges). |
 
