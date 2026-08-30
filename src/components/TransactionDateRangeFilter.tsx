@@ -42,7 +42,11 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
   const theme = useTheme();
   const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
   const queryHasDateFields = dateRangeFilters && hasDateQueryFields(dateRangeFilters);
-  const [calendarValue, setCalendarValue] = useState<Value>(null);
+  const [calendarValue, setCalendarValue] = useState<Value>(() =>
+    queryHasDateFields
+      ? [new Date(dateRangeFilters.dateRangeStart!), new Date(dateRangeFilters.dateRangeEnd!)]
+      : null
+  );
 
   const [dateRangeAnchorEl, setDateRangeAnchorEl] = React.useState<HTMLDivElement | null>(null);
 

@@ -1,0 +1,450 @@
+name: CI — Validate, Security & Test
+
+# Runs on every push/synchronize to a PR targeting develop (continuous
+# feedback while a PR is open), and on every push directly to develop
+# itself (the merge/safety-net run). Nothing runs for a branch that hasn't
+# opened a PR yet — no CI noise on exploratory work-in-progress pushes.
+# branches-ignore for renovate/** is no longer needed: the `branches` filter
+# on pull_request matches the PR's *base* branch, not its head, so Renovate
+# PRs targeting develop are tested like any other PR — which is the point.
+on:
+  pull_request:
+    branches:
+      - develop
+  push:
+    branches:
+      - develop
+
+# Cancel a stale run of the same PR/branch as soon as a newer push lands,
+# instead of letting superseded commits keep occupying runners/Cypress
+# Cloud slots. github.head_ref is only set for pull_request events (the PR's
+# source branch); push events fall back to github.ref.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # --- Stage 1: Validate & Security ---
+  # These three jobs share no dependency on each other, so they start together
+  # (DAG parallelism) as soon as the workflow triggers.
+  sca:
+    name: SCA (dependency audit)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      # Blocks on any high/critical CVE in production dependencies that isn't
+      # already accounted for in the .audit-ci.jsonc baseline (see that file
+      # and docs/pipeline-architecture.md for the governance around it).
+      - name: Dependency vulnerability gate
+        run: yarn audit-ci --config .audit-ci.jsonc
+
+  secrets-scan:
+    name: Secret detection (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Full history so gitleaks catches a secret committed and later
+          # removed, not just what's in the current tree.
+          fetch-depth: 0
+
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  install:
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:22.20.0
+      options: --user 1001
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Full history (all branches) is required so `vitest --changed` can
+          # diff the working branch against origin/develop below.
+          fetch-depth: 0
+
+      - name: Cypress install
+        uses: cypress-io/github-action@v6
+        with:
+          runTests: false
+      # report machine parameters
+      - run: yarn cypress info
+      - run: node --version
+      - run: node -p 'os.cpus()'
+      - run: yarn types
+      - run: yarn lint
+
+      # Smart test orchestration: develop is the safety net and always runs the
+      # full unit suite; every other branch gets fast feedback by only running
+      # unit tests whose module graph touches a file changed since develop.
+      - name: Unit tests (full suite)
+        if: github.ref == 'refs/heads/develop'
+        run: yarn test:unit:ci
+
+      - name: Unit tests (changed since develop)
+        if: github.ref != 'refs/heads/develop'
+        run: yarn test:unit:ci --changed origin/develop
+
+      - run: yarn build:ci
+
+      - name: Save build folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          if-no-files-found: error
+          path: build
+
+  # No Cypress Cloud account backs this fork (CYPRESS_PROJECT_ID/RECORD_KEY
+  # were never configured) — record/parallel/group and the 5-container matrix
+  # were Cloud-only features (Cloud dynamically balances specs across
+  # containers; without it every container would just replay the full suite).
+  # Dropped entirely: with 7 UI specs, a single job per browser is enough —
+  # the 4 browsers still run in parallel via the normal GitHub Actions DAG.
+  ui-chrome-tests:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:22.20.0
+      options: --user 1001
+    # Stage 2 waits on all of Stage 1: the build (install) and both security
+    # gates. A critical CVE or a leaked secret should stop the E2E suite
+    # before it even starts, not just fail the pipeline afterwards.
+    needs: [install, sca, secrets-scan]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download the build folders
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: build
+
+      - name: "UI Tests - Chrome"
+        uses: cypress-io/github-action@v6
+        with:
+          start: yarn start:ci
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          browser: chrome
+          spec: cypress/tests/ui/*
+          config-file: cypress.config.ts
+
+  ui-chrome-mobile-tests:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:22.20.0
+      options: --user 1001
+    needs: [install, sca, secrets-scan]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download the build folders
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: build
+
+      - name: "UI Tests - Chrome - Mobile"
+        uses: cypress-io/github-action@v6
+        with:
+          config: '{"e2e":{"viewportWidth":375,"viewportHeight":667}}'
+          start: yarn start:ci
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          browser: chrome
+          spec: cypress/tests/ui/*
+          config-file: cypress.config.ts
+
+  ui-firefox-tests:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:22.20.0
+      options: --user 1001
+    needs: [install, sca, secrets-scan]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download the build folders
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: build
+
+      - name: "UI Tests - Firefox"
+        uses: cypress-io/github-action@v6
+        with:
+          start: yarn start:ci
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          browser: firefox
+          spec: cypress/tests/ui/*
+          config-file: cypress.config.ts
+
+  ui-firefox-mobile-tests:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:22.20.0
+      options: --user 1001
+    needs: [install, sca, secrets-scan]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download the build folders
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: build
+
+      - name: "UI Tests - Firefox - Mobile"
+        uses: cypress-io/github-action@v6
+        with:
+          config: '{"e2e":{"viewportWidth":375,"viewportHeight":667}}'
+          start: yarn start:ci
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          browser: firefox
+          spec: cypress/tests/ui/*
+          config-file: cypress.config.ts
+
+  # Integration tests that hit the backend directly (cy.request), no UI
+  # navigation. Same specPattern/baseUrl as the UI specs (cypress.config.ts),
+  # so it needs the same app boot and build artifact. Kept full on every
+  # branch, same reasoning as the UI E2E jobs (§4.2 of the docs): no reliable
+  # colocation mapping to narrow it safely.
+  api-tests:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:22.20.0
+      options: --user 1001
+    needs: [install, sca, secrets-scan]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download the build folders
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: build
+
+      - name: "API Tests"
+        uses: cypress-io/github-action@v6
+        with:
+          start: yarn start:ci
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          spec: cypress/tests/api/*
+          config-file: cypress.config.ts
+
+  # Mounts each React component in isolation via Cypress's component runner —
+  # no full app boot (no wait-on/start:ci), so it doesn't need the `build`
+  # artifact either. Much cheaper than the browser E2E jobs above; complements
+  # them rather than replacing them (component tests don't cover navigation
+  # or cross-page flows).
+  component-tests:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:22.20.0
+      options: --user 1001
+    needs: [install, sca, secrets-scan]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Full history so the "changed only" step below can diff the
+          # working branch against origin/develop (same reason as install,
+          # §3.5 of docs/pipeline-architecture.md).
+          fetch-depth: 0
+
+      - name: Cypress install
+        uses: cypress-io/github-action@v6
+        with:
+          runTests: false
+
+      - name: Component tests (full suite)
+        if: github.ref == 'refs/heads/develop'
+        run: yarn test:component:ci
+
+      - name: Determine changed component specs
+        id: changed-specs
+        if: github.ref != 'refs/heads/develop'
+        run: |
+          # Every *.cy.tsx file is colocated with the component it tests
+          # (e.g. AlertBar.tsx / AlertBar.cy.tsx) — a reliable mapping E2E
+          # specs don't have. For each src/**/*.tsx changed since
+          # origin/develop, run its colocated *.cy.tsx if one exists; a
+          # *.cy.tsx changed directly maps to itself the same way.
+          changed=$(git diff --name-only origin/develop -- 'src/**/*.tsx')
+          specs=$(
+            for f in $changed; do
+              base="${f%.cy.tsx}"
+              base="${base%.tsx}"
+              candidate="${base}.cy.tsx"
+              [ -f "$candidate" ] && echo "$candidate"
+            done | sort -u | paste -sd, -
+          )
+          echo "specs=$specs" >> "$GITHUB_OUTPUT"
+
+      - name: Component tests (changed since develop)
+        if: github.ref != 'refs/heads/develop' && steps.changed-specs.outputs.specs != ''
+        run: yarn cypress run --component --spec "${{ steps.changed-specs.outputs.specs }}"
+
+      - name: Component tests skipped
+        if: github.ref != 'refs/heads/develop' && steps.changed-specs.outputs.specs == ''
+        run: echo "No component (or its colocated *.cy.tsx) changed since origin/develop — nothing to run."
+
+  report-ci-failure:
+    name: Report CI failure as ticket
+    runs-on: ubuntu-latest
+    # Runs only if a preceding job failed; needs every job so it sees the
+    # overall pipeline result regardless of which stage broke.
+    needs:
+      - sca
+      - secrets-scan
+      - install
+      - ui-chrome-tests
+      - ui-chrome-mobile-tests
+      - ui-firefox-tests
+      - ui-firefox-mobile-tests
+      - api-tests
+      - component-tests
+    if: failure()
+    permissions:
+      issues: write
+      contents: read
+    steps:
+      - name: Create or update urgent issue
+        id: create-issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            // On a pull_request event, context.ref is the synthetic merge
+            // ref (refs/pull/N/merge), not a branch name — read the PR's
+            // actual source branch from the event payload instead.
+            const branch = context.payload.pull_request
+              ? context.payload.pull_request.head.ref
+              : context.ref.replace('refs/heads/', '');
+            const runUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
+            const title = `CI failure on ${branch} (run #${context.runNumber})`;
+
+            // Avoid spamming duplicate tickets for repeated failures on the same branch:
+            // append a comment to the existing open ticket instead of opening a new one.
+            const openFailures = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: 'open',
+              labels: 'ci-failure',
+              per_page: 50,
+            });
+            const existing = openFailures.data.find((i) =>
+              i.title.startsWith(`CI failure on ${branch} `)
+            );
+
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: existing.number,
+                body: `Nouvel échec sur la même branche : ${runUrl} (commit ${context.sha})`,
+              });
+              core.setOutput('issue_node_id', existing.node_id);
+              core.setOutput('issue_number', existing.number);
+              return;
+            }
+
+            const body = [
+              `**Pipeline en échec** sur la branche \`${branch}\`.`,
+              '',
+              `- Run : ${runUrl}`,
+              `- Commit : ${context.sha}`,
+              `- Déclenché par : @${context.actor}`,
+              '',
+              '_Ticket créé automatiquement par le job `report-ci-failure` (source: CI, severity: high)._',
+            ].join('\n');
+
+            const issue = await github.rest.issues.create({
+              owner,
+              repo,
+              title,
+              body,
+              labels: ['urgent', 'ci-failure', 'severity:high', 'source:ci'],
+            });
+            core.setOutput('issue_node_id', issue.data.node_id);
+            core.setOutput('issue_number', issue.data.number);
+
+      - name: Sync ticket to the DevSecOps board
+        # `secrets.*` isn't allowed inside `if:` expressions (GitHub Actions
+        # rejects the whole workflow file with "Unrecognized named-value:
+        # 'secrets'"), so the presence check happens inside the script instead,
+        # against the PROJECTS_TOKEN env var set below.
+        if: steps.create-issue.outputs.issue_node_id != ''
+        uses: actions/github-script@v7
+        env:
+          PROJECTS_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+        with:
+          github-token: ${{ secrets.PROJECTS_TOKEN }}
+          script: |
+            if (!process.env.PROJECTS_TOKEN) {
+              core.warning(
+                'PROJECTS_TOKEN secret is not set — ticket #${{ steps.create-issue.outputs.issue_number }} was created but not synced to the Project board. See docs/ci-failure-ticketing.md.'
+              );
+              return;
+            }
+
+            // Project #11 "M1 CI/CD — DevSecOps Board" (github.com/users/johan-bouguermouh/projects/11)
+            const projectId = 'PVT_kwHOBXl7n84Bh5q8';
+            const severityFieldId = 'PVTSSF_lAHOBXl7n84Bh5q8zhgzo7o';
+            const severityHighOptionId = '6a116782';
+            const sourceFieldId = 'PVTSSF_lAHOBXl7n84Bh5q8zhgzo7s';
+            const sourceCiOptionId = '38a4a3de';
+            const contentId = '${{ steps.create-issue.outputs.issue_node_id }}';
+
+            const added = await github.graphql(
+              `mutation($project: ID!, $content: ID!) {
+                addProjectV2ItemById(input: { projectId: $project, contentId: $content }) {
+                  item { id }
+                }
+              }`,
+              { project: projectId, content: contentId }
+            );
+            const itemId = added.addProjectV2ItemById.item.id;
+
+            const setField = (fieldId, optionId) =>
+              github.graphql(
+                `mutation($project: ID!, $item: ID!, $field: ID!, $value: String!) {
+                  updateProjectV2ItemFieldValue(
+                    input: { projectId: $project, itemId: $item, fieldId: $field, value: { singleSelectOptionId: $value } }
+                  ) {
+                    projectV2Item { id }
+                  }
+                }`,
+                { project: projectId, item: itemId, field: fieldId, value: optionId }
+              );
+
+            await setField(severityFieldId, severityHighOptionId);
+            await setField(sourceFieldId, sourceCiOptionId);

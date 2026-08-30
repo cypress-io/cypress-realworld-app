@@ -1,6 +1,6 @@
 # Ticketing automatique des échecs de CI
 
-Le job `report-ci-failure` de [.github/workflows/main.yml](../.github/workflows/main.yml)
+Le job `report-ci-failure` de [.github/workflows/ci.yml](../.github/workflows/ci.yml)
 s'exécute quand un des jobs de test échoue (`if: failure()`). Il :
 
 1. Crée une issue labellisée `urgent`, `ci-failure`, `severity:high`, `source:ci`

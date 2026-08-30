@@ -1,0 +1,44 @@
+{
+  "$schema": "https://github.com/IBM/audit-ci/raw/main/docs/schema.json",
+  // Only production dependencies are gated: what actually ships / runs, not build tooling.
+  "skip-dev": true,
+  // Block on high and critical only — moderate/low are real but too noisy to gate on for
+  // this project; they still show up in the report output, just don't fail the job.
+  "high": true,
+  "package-manager": "yarn",
+  "report-type": "full",
+
+  // Baseline of vulnerabilities inherited from the upstream cypress-realworld-app fork,
+  // captured 2026-08-30 via `yarn audit --groups dependencies`. Tracked in a GitHub issue
+  // (label source:security) — see docs/pipeline-architecture.md, section "SCA (audit des
+  // dépendances)". This list must only shrink as dependencies get upgraded: never add an
+  // entry here to silence a NEW finding without first opening/updating that issue.
+  "allowlist": [
+    "GHSA-28wg-ghj8-5hjv", // nanoid: non-secure generators can loop indefinitely with negative size
+    "GHSA-2v37-7h3g-55p8", // nanoid: custom generators can loop indefinitely when size is zero
+    "GHSA-3g43-6gmg-66jw", // axios: credential theft & response hijacking via prototype pollution gadget
+    "GHSA-43fc-jf86-j433", // axios: DoS via __proto__ key in mergeConfig
+    "GHSA-4c8g-83qw-93j6", // fast-uri: host confusion via failed IDN canonicalization
+    "GHSA-4hjh-wcwx-xvwj", // axios: DoS via lack of data size check
+    "GHSA-6chq-wfr3-2hj9", // axios: header injection via prototype pollution
+    "GHSA-7p8r-x3mc-p8w7", // fast-uri: host confusion via backslash authority introducer
+    "GHSA-8gc5-j5rx-235r", // fast-xml-parser: numeric entity expansion bypassing expansion limits
+    "GHSA-c2c7-rcm5-vvqj", // picomatch: ReDoS via extglob quantifiers
+    "GHSA-fjxv-7rqg-78g4", // form-data: unsafe random function for choosing boundary (critical)
+    "GHSA-hfxv-24rg-xrqf", // axios: ReDoS via cookie name injection
+    "GHSA-hmw2-7cc7-3qxx", // form-data: CRLF injection via unescaped multipart field names/filenames
+    "GHSA-j5f8-grm9-p9fc", // axios: Proxy-Authorization header leak on proxy re-evaluation
+    "GHSA-jmr7-xgp7-cmfj", // fast-xml-parser: DoS through entity expansion in DOCTYPE
+    "GHSA-jr5f-v2jv-69x6", // axios: SSRF and credential leakage via absolute URL
+    "GHSA-m7jm-9gc2-mpf2", // fast-xml-parser: entity encoding bypass via regex injection (critical)
+    "GHSA-p92q-9vqr-4j8v", // axios: Proxy-Authorization credential leak across HTTP->HTTPS redirect
+    "GHSA-pf86-5x62-jrwf", // axios: prototype pollution gadgets (response tampering, data exfiltration)
+    "GHSA-pjwm-pj3p-43mv", // axios: NO_PROXY bypass via IPv4-mapped IPv6 addresses
+    "GHSA-pmwg-cvhr-8vh7", // axios: NO_PROXY protection bypass via RFC 1122 loopback subnet
+    "GHSA-q3j6-qgpj-74h6", // fast-uri: path traversal via percent-encoded dot segments
+    "GHSA-qjx8-664m-686j", // js-cookie: prototype hijack in assign() enables cookie-attribute injection
+    "GHSA-r5fr-rjxr-66jc", // lodash / lodash-es: code injection via _.template imports key names
+    "GHSA-v2hh-gcrm-f6hx", // fast-uri: host confusion via literal backslash authority delimiter
+    "GHSA-v39h-62p7-jpjc" // fast-uri: host confusion via percent-encoded authority delimiters
+  ]
+}

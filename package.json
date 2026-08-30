@@ -92,6 +92,7 @@
     "@types/webpack-env": "1.16.4",
     "@types/yup": "0.29.13",
     "@vitejs/plugin-react": "^5.0.1",
+    "audit-ci": "7.1.0",
     "babel-loader": "^10.0.0",
     "bcryptjs": "2.4.3",
     "concurrently": "9.1.2",
