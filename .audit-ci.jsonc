@@ -37,7 +37,6 @@
     "GHSA-pmwg-cvhr-8vh7", // axios: NO_PROXY protection bypass via RFC 1122 loopback subnet
     "GHSA-q3j6-qgpj-74h6", // fast-uri: path traversal via percent-encoded dot segments
     "GHSA-qjx8-664m-686j", // js-cookie: prototype hijack in assign() enables cookie-attribute injection
-    "GHSA-r5fr-rjxr-66jc", // lodash / lodash-es: code injection via _.template imports key names
     "GHSA-v2hh-gcrm-f6hx", // fast-uri: host confusion via literal backslash authority delimiter
     "GHSA-v39h-62p7-jpjc" // fast-uri: host confusion via percent-encoded authority delimiters
   ]

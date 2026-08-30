@@ -20,6 +20,7 @@
    - 4.3 [Orchestration intelligente : component-tests ciblé, E2E/API complets](#43-orchestration-intelligente--component-tests-ciblé-e2eapi-toujours-complets)
    - 4.4 [Runners, cache et artefacts : ce qui se partage entre jobs](#44-runners-cache-et-artefacts--ce-qui-se-partage-entre-jobs-et-ce-qui-ne-se-partage-jamais)
 5. [Stage 3 — Report](#5-stage-3--report)
+   - 5.1 [Identifier le job en échec](#51-identifier-le-job-en-échec-pas-juste-le-pipeline-est-rouge)
 6. [Ce qui reste à construire](#6-ce-qui-reste-à-construire)
 
 Chaque section suit la même grille de lecture :
@@ -555,6 +556,7 @@ report-ci-failure:
   permissions:
     issues: write
     contents: read
+    actions: read
 ```
 
 **Vocabulaire**
@@ -563,7 +565,7 @@ report-ci-failure:
 |---|---|---|
 | `needs` | liste des 9 jobs précédents (Stage 1 + Stage 2) | ce job attend la fin de **tous** les jobs, qu'ils réussissent ou échouent (par défaut `needs` sans autre condition n'exécute le job suivant que si tout a réussi — voir ligne suivante). |
 | `if: failure()` | — | fonction spéciale des GitHub Actions : renvoie `true` si **au moins un** des jobs listés dans `needs` a échoué. Sans elle, ce job ne se déclencherait jamais (le comportement par défaut est d'annuler les jobs dépendants d'un job en échec). |
-| `permissions` | `issues: write`, `contents: read` | **restreint** explicitement les droits du `GITHUB_TOKEN` généré pour ce job à seulement ce dont il a besoin — créer/commenter des issues et lire le code. Par défaut, sans ce bloc, le token hériterait des permissions globales du repo (souvent plus larges). |
+| `permissions` | `issues: write`, `contents: read`, `actions: read` | **restreint** explicitement les droits du `GITHUB_TOKEN` généré pour ce job à seulement ce dont il a besoin — créer/commenter des issues, lire le code, et (depuis §5.1) lire la liste des jobs du run pour y pointer directement. Par défaut, sans ce bloc, le token hériterait des permissions globales du repo (souvent plus larges). |
 
 **Pourquoi ce choix**
 
@@ -581,6 +583,66 @@ Le principe de moindre privilège appliqué aux `permissions` prolonge, au nivea
 **Culture blameless** : le corps du ticket mentionne `@{context.actor}` (qui a déclenché le run) de façon factuelle, jamais accusatoire — cohérent avec la Culture Générative (typologie de Westrum) évoquée dans la fiche DevSecOps : l'alerte sert à apprendre, pas à désigner un responsable.
 
 **Prérequis découvert en pratique** : GitHub désactive les Issues par défaut sur un dépôt forké (`has_issues: false`). Sans les réactiver explicitement (`gh repo edit --enable-issues`), ce job échoue silencieusement à la création du ticket — à vérifier en premier si `report-ci-failure` ne produit jamais de ticket alors qu'il tourne.
+
+### 5.1 Identifier le job en échec, pas juste "le pipeline est rouge"
+
+La toute première version du ticket ne disait que "le pipeline a échoué sur telle branche", avec un lien vers le run entier — charge à la personne d'aller cliquer job par job pour trouver lequel a cassé. Un vrai test (voir [issue #8](https://github.com/johan-bouguermouh/m1-cicd/issues/8), fuite de secret déclenchée volontairement) a confirmé que ça manquait de précision.
+
+**Extrait annoté**
+
+```yaml
+- name: Create or update urgent issue
+  id: create-issue
+  uses: actions/github-script@v7
+  env:
+    NEEDS_JSON: ${{ toJSON(needs) }}
+  with:
+    script: |
+      // needs is keyed by job id ("sca"); the Jobs API only exposes each
+      // job's display name ("SCA (dependency audit)") — no shared key.
+      const jobDisplayNames = {
+        sca: 'SCA (dependency audit)',
+        'secrets-scan': 'Secret detection (gitleaks)',
+      };
+      const displayName = (id) => jobDisplayNames[id] ?? id;
+
+      const needsResults = JSON.parse(process.env.NEEDS_JSON);
+      const failedJobs = Object.entries(needsResults)
+        .filter(([, v]) => v.result === 'failure')
+        .map(([id]) => displayName(id));
+      const skippedJobs = Object.entries(needsResults)
+        .filter(([, v]) => v.result === 'skipped')
+        .map(([id]) => displayName(id));
+
+      const { data: runJobs } = await github.rest.actions.listJobsForWorkflowRun({
+        owner, repo, run_id: context.runId,
+      });
+      const jobUrl = (name) => runJobs.jobs.find((j) => j.name === name)?.html_url ?? runUrl;
+```
+
+**Vocabulaire**
+
+| Clé | Valeur | Rôle |
+|---|---|---|
+| `env.NEEDS_JSON: ${{ toJSON(needs) }}` | — | le contexte `needs` (résultat de chacun des 9 jobs listés dans `needs:` du job) n'est **pas** directement accessible depuis le script `actions/github-script` — seule l'expression `${{ ... }}` côté YAML peut le lire. `toJSON(needs)` le sérialise et le fait transiter par une variable d'environnement, lisible ensuite avec `JSON.parse` côté JS. |
+| `jobDisplayNames` | `{ sca: "SCA (dependency audit)", "secrets-scan": "Secret detection (gitleaks)" }` | **bug réel trouvé avant de tester** : `needs` est indexé par l'identifiant YAML du job (`sca`), mais `listJobsForWorkflowRun` ne connaît que le nom d'affichage (`name:`, ex. "SCA (dependency audit)") — sans cette table de correspondance, les deux seuls jobs ayant un `name:` personnalisé n'auraient jamais trouvé leur lien direct (silencieusement retombés sur le lien générique du run). Les 7 autres jobs n'ont pas de `name:` propre, donc leur id égale déjà leur nom d'affichage. |
+| `needsResults.<job>.result` | `"success"` \| `"failure"` \| `"skipped"` \| `"cancelled"` | le statut terminal de chaque job listé dans `needs` — c'est ce qui permet de distinguer "ce job a vraiment échoué" de "ce job n'a jamais tourné parce qu'une dépendance a échoué avant lui" (fail-fast, §4). |
+| `listJobsForWorkflowRun` | API REST (`GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs`) | seul moyen d'obtenir l'URL exacte de chaque job du run (`html_url`) — `needs` donne le *résultat*, pas de lien direct ; il faut recouper par nom de job. |
+| `permissions.actions: read` | ajouté à ce job | scope minimal supplémentaire nécessaire pour appeler `listJobsForWorkflowRun` — encore le principe de moindre privilège (§5), une permission de plus, jamais accordée par défaut. |
+
+**Pourquoi ce choix**
+
+Sur 9 jobs indépendants (dont 6 qui skip automatiquement dès qu'une gate de Stage 1 échoue), "le pipeline est rouge" est un signal quasiment inutile en pratique — il faut désigner *lequel* est en échec pour que le ticket soit actionnable dès l'ouverture, sans aller chercher soi-même dans les 9 jobs du run.
+
+**Règle d'or invoquée**
+
+Observabilité (doc invariants, §7) : "logs clairs, métriques de santé indispensables" — un ticket qui ne fait que confirmer un statut déjà visible dans l'interface GitHub n'ajoute aucune observabilité ; il faut qu'il pointe directement vers la cause.
+
+**Ce que ça optimise**
+
+*Failed Deployment Recovery Time* (DORA) : moins de temps passé à *localiser* le problème avant de pouvoir commencer à le corriger — le lien direct vers le job en échec retire une étape manuelle systématique.
+
+**Limite assumée** : ce niveau reste "quel job", pas "quelle ligne/quel test précis" — cette granularité-là dépend trop de la nature de chaque job (un rapport SARIF structuré pour `secrets-scan`, des logs à parser pour `sca`, des étapes multiples à l'intérieur d'un seul job pour `install`, des rapports Cypress pour les jobs E2E/API/composants) pour être traitée uniformément sans coût et fragilité très inégaux d'un job à l'autre. Envisagé comme amélioration ultérieure, job par job, pas comme un chantier unique.
 
 ---
 

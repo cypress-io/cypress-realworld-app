@@ -336,10 +336,17 @@ jobs:
     permissions:
       issues: write
       contents: read
+      # Needed only to look up each job's own URL via listJobsForWorkflowRun,
+      # so the ticket can link straight to the job(s) that actually failed.
+      actions: read
     steps:
       - name: Create or update urgent issue
         id: create-issue
         uses: actions/github-script@v7
+        # `needs` isn't available inside the script directly — pass each
+        # dependency's result through as JSON via env instead.
+        env:
+          NEEDS_JSON: ${{ toJSON(needs) }}
         with:
           script: |
             const { owner, repo } = context.repo;
@@ -351,6 +358,45 @@ jobs:
               : context.ref.replace('refs/heads/', '');
             const runUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
             const title = `CI failure on ${branch} (run #${context.runNumber})`;
+
+            // Which of the jobs listed in `needs` actually failed vs. were
+            // skipped as a fail-fast side effect (e.g. all 6 Stage 2 jobs
+            // skip automatically when a Stage 1 gate fails) — this is what
+            // turns "the pipeline is red" into "go look at secrets-scan".
+            //
+            // `needs` is keyed by job id (e.g. "sca"), but the Jobs API only
+            // exposes each job's *display* name (its `name:` field, e.g.
+            // "SCA (dependency audit)") — there's no shared key between the
+            // two. Map the two jobs that have a custom name explicitly; every
+            // other job's id already equals its display name. Keep this in
+            // sync if a job gains/loses a custom `name:`.
+            const jobDisplayNames = {
+              sca: 'SCA (dependency audit)',
+              'secrets-scan': 'Secret detection (gitleaks)',
+            };
+            const displayName = (id) => jobDisplayNames[id] ?? id;
+
+            const needsResults = JSON.parse(process.env.NEEDS_JSON);
+            const failedJobs = Object.entries(needsResults)
+              .filter(([, v]) => v.result === 'failure')
+              .map(([id]) => displayName(id));
+            const skippedJobs = Object.entries(needsResults)
+              .filter(([, v]) => v.result === 'skipped')
+              .map(([id]) => displayName(id));
+
+            const { data: runJobs } = await github.rest.actions.listJobsForWorkflowRun({
+              owner,
+              repo,
+              run_id: context.runId,
+            });
+            const jobUrl = (name) => runJobs.jobs.find((j) => j.name === name)?.html_url ?? runUrl;
+
+            const failedJobsSection = failedJobs.length
+              ? failedJobs.map((name) => `- [\`${name}\`](${jobUrl(name)})`).join('\n')
+              : '_Aucun job individuel signalé "failure" par `needs` — voir le run complet._';
+            const skippedNote = skippedJobs.length
+              ? `\n\n_Jobs non exécutés (dépendants d'un job en échec, fail-fast) : ${skippedJobs.map((n) => `\`${n}\``).join(', ')}._`
+              : '';
 
             // Avoid spamming duplicate tickets for repeated failures on the same branch:
             // append a comment to the existing open ticket instead of opening a new one.
@@ -366,11 +412,19 @@ jobs:
             );
 
             if (existing) {
+              const commentBody = [
+                `Nouvel échec sur la même branche : ${runUrl} (commit ${context.sha}).`,
+                failedJobs.length
+                  ? `Job(s) en échec : ${failedJobs.map((n) => `[\`${n}\`](${jobUrl(n)})`).join(', ')}.`
+                  : '',
+              ]
+                .filter(Boolean)
+                .join(' ');
               await github.rest.issues.createComment({
                 owner,
                 repo,
                 issue_number: existing.number,
-                body: `Nouvel échec sur la même branche : ${runUrl} (commit ${context.sha})`,
+                body: commentBody,
               });
               core.setOutput('issue_node_id', existing.node_id);
               core.setOutput('issue_number', existing.number);
@@ -379,6 +433,9 @@ jobs:
 
             const body = [
               `**Pipeline en échec** sur la branche \`${branch}\`.`,
+              '',
+              '**Job(s) en échec :**',
+              failedJobsSection + skippedNote,
               '',
               `- Run : ${runUrl}`,
               `- Commit : ${context.sha}`,
