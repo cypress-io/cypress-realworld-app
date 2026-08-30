@@ -48,12 +48,15 @@ Un script Bash lancé "à la main" ou en cron reste un artefact **artisanal** : 
 
 ```yaml
 on:
+  pull_request:
+    branches:
+      - develop
   push:
-    branches-ignore:
-      - "renovate/**"
+    branches:
+      - develop
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 ```
 
@@ -61,22 +64,31 @@ concurrency:
 
 | Clé | Valeur | Rôle |
 |---|---|---|
-| `on.push` | — | le pipeline se déclenche sur un événement Git (`push`), pas sur une tâche planifiée : c'est le critère "Événements Git" de la colonne "Pipeline" plutôt que "cron" de la colonne "Script". |
-| `branches-ignore` | `renovate/**` | exclut les branches créées automatiquement par le bot de mise à jour de dépendances — elles seront testées au moment de leur PR, pas besoin de dupliquer le run à chaque commit du bot. |
-| `concurrency.group` | `${{ github.workflow }}-${{ github.ref }}` | un identifiant unique par (workflow, branche). Deux pushs sur la **même** branche partagent le même groupe ; deux branches différentes ont chacune le leur. |
+| `on.pull_request.branches` | `develop` | déclenche à l'ouverture d'une PR ciblant `develop` **et** à chaque push ultérieur sur cette PR (`opened`, `synchronize`, `reopened` — comportement par défaut). Le filtre `branches` porte sur la branche **cible** (`develop`), pas sur la branche source — une PR depuis n'importe quelle branche (y compris `renovate/**`) déclenche donc le pipeline dès qu'elle vise `develop`. |
+| `on.push.branches` | `develop` | filet de sécurité final : re-déclenche sur le commit de merge lui-même, une fois la PR fusionnée. |
+| `github.head_ref` | — | disponible **seulement** sur un événement `pull_request` (nom de la branche source de la PR) ; vide sur un `push`. `github.head_ref \|\| github.ref` choisit l'un ou l'autre selon l'événement, pour que le regroupement de concurrency reste cohérent dans les deux cas. |
 | `concurrency.cancel-in-progress` | `true` | quand un nouveau run démarre dans un groupe où un run est déjà actif, l'ancien est annulé automatiquement. |
 
 **Pourquoi ce choix**
 
-Sans `concurrency`, pousser 3 commits rapprochés sur une branche fait tourner 3 pipelines complets en parallèle, dont 2 deviennent obsolètes avant même de finir (leurs résultats ne comptent plus, seul le dernier commit importe). Ça consomme des minutes GitHub Actions et des slots de parallélisation Cypress Cloud pour rien.
+Avant ce changement, le pipeline se déclenchait sur `push`, sur **toute** branche — y compris avant qu'aucune PR n'existe. Résultat : friction pour un développeur qui pousse des commits exploratoires sur sa branche perso (9 jobs à chaque fois, avant même d'avoir demandé une revue), et à l'inverse aucun signal continu une fois la PR ouverte au-delà du premier push. Avec `pull_request`, rien ne tourne tant qu'aucune PR n'existe ; une fois ouverte, le pipeline se redéclenche à **chaque** push sur cette PR — feedback continu, pas seulement au moment du merge.
 
 **Règle d'or invoquée**
 
-Le "Fail Fast" du document invariants ("on ne build pas une image si les tests échouent, pour optimiser coûts et temps de calcul") s'applique aussi *entre* les runs, pas seulement *entre* les stages d'un même run.
+"Continuous **Integration**" au sens propre : l'intégration (fusion vers la branche partagée) est l'événement qui compte le plus, pas chaque commit individuel sur une branche encore privée. Le "Fail Fast" du document invariants ("on ne build pas une image si les tests échouent, pour optimiser coûts et temps de calcul") s'applique ici au *moment* de déclenchement du pipeline entier, pas seulement à l'intérieur d'un run.
 
 **Ce que ça optimise**
 
-Réduction du **travail imprévu** (ici : du calcul redondant) — la fiche DevSecOps rappelle que les équipes de haute performance passent 21 % de leur temps sur du travail imprévu contre 27 % pour les autres ; chaque run redondant évité va dans ce sens. Indirectement, ça libère aussi de la capacité de calcul pour réduire le *Change Lead Time* des commits qui, eux, comptent.
+Réduction du **travail imprévu** perçu par les développeurs (fiche DevSecOps : les équipes de haute performance passent 21 % de leur temps sur du travail imprévu contre 27 % pour les autres) — moins de bruit CI sur du travail non encore proposé en revue, sans perdre de feedback une fois la PR ouverte. Sans `concurrency`, pousser plusieurs commits rapprochés sur une même PR ferait tourner plusieurs pipelines complets en parallèle, dont certains deviendraient obsolètes avant même de finir — `cancel-in-progress` évite ce gaspillage de minutes CI et de slots de parallélisation.
+
+**Complément indispensable — sans lequel ce déclencheur reste théorique** : une **règle de protection de branche** sur `develop`, posée via l'API (`PUT /repos/<owner>/<repo>/branches/develop/protection`), exigeant que les 9 checks de ce workflow (hors `Report CI failure as ticket`, conditionnel) passent avant de pouvoir merger. Sans elle, rien n'empêche de merger une PR dont le pipeline est rouge — le déclencheur détermine *quand* ça tourne, la protection de branche détermine si ça *compte* réellement.
+
+| Paramètre | Valeur | Rôle |
+|---|---|---|
+| `required_status_checks.strict` | `false` | ne force pas à remettre la PR à jour avec `develop` avant de merger si `develop` a bougé entre-temps — moins de friction pour un projet solo, au prix d'un risque résiduel (rare) de merger sur une base légèrement obsolète. |
+| `required_status_checks.contexts` | les 9 noms de checks | seuls ceux-là bloquent le merge ; un check qui n'existe pas encore sur une PR (ex. workflow pas encore lancé) bloque aussi, par construction. |
+| `enforce_admins` | `true` | la règle s'applique aussi au propriétaire du repo — pas de passe-droit qui viderait la protection de son sens sur un projet à un seul contributeur. |
+| `required_pull_request_reviews` | `null` | pas d'approbation obligatoire — un projet solo n'a personne d'autre pour approuver, l'exiger bloquerait toute PR. |
 
 ---
 

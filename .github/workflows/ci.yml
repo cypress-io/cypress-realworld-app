@@ -1,14 +1,26 @@
 name: CI — Validate, Security & Test
 
+# Runs on every push/synchronize to a PR targeting develop (continuous
+# feedback while a PR is open), and on every push directly to develop
+# itself (the merge/safety-net run). Nothing runs for a branch that hasn't
+# opened a PR yet — no CI noise on exploratory work-in-progress pushes.
+# branches-ignore for renovate/** is no longer needed: the `branches` filter
+# on pull_request matches the PR's *base* branch, not its head, so Renovate
+# PRs targeting develop are tested like any other PR — which is the point.
 on:
+  pull_request:
+    branches:
+      - develop
   push:
-    branches-ignore:
-      - "renovate/**"
+    branches:
+      - develop
 
-# Cancel a stale run of the same branch as soon as a newer push lands, instead
-# of letting superseded commits keep occupying runners/Cypress Cloud slots.
+# Cancel a stale run of the same PR/branch as soon as a newer push lands,
+# instead of letting superseded commits keep occupying runners/Cypress
+# Cloud slots. github.head_ref is only set for pull_request events (the PR's
+# source branch); push events fall back to github.ref.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -331,7 +343,12 @@ jobs:
         with:
           script: |
             const { owner, repo } = context.repo;
-            const branch = context.ref.replace('refs/heads/', '');
+            // On a pull_request event, context.ref is the synthetic merge
+            // ref (refs/pull/N/merge), not a branch name — read the PR's
+            // actual source branch from the event payload instead.
+            const branch = context.payload.pull_request
+              ? context.payload.pull_request.head.ref
+              : context.ref.replace('refs/heads/', '');
             const runUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
             const title = `CI failure on ${branch} (run #${context.runNumber})`;
 
