@@ -5,7 +5,54 @@ on:
     branches-ignore:
       - "renovate/**"
 
+# Cancel a stale run of the same branch as soon as a newer push lands, instead
+# of letting superseded commits keep occupying runners/Cypress Cloud slots.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  # --- Stage 1: Validate & Security ---
+  # These three jobs share no dependency on each other, so they start together
+  # (DAG parallelism) as soon as the workflow triggers.
+  sca:
+    name: SCA (dependency audit)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      # Blocks on any high/critical CVE in production dependencies that isn't
+      # already accounted for in the .audit-ci.jsonc baseline (see that file
+      # and docs/pipeline-architecture.md for the governance around it).
+      - name: Dependency vulnerability gate
+        run: yarn audit-ci --config .audit-ci.jsonc
+
+  secrets-scan:
+    name: Secret detection (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Full history so gitleaks catches a secret committed and later
+          # removed, not just what's in the current tree.
+          fetch-depth: 0
+
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   install:
     runs-on: ubuntu-latest
     container:
@@ -14,6 +61,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Full history (all branches) is required so `vitest --changed` can
+          # diff the working branch against origin/develop below.
+          fetch-depth: 0
 
       - name: Cypress install
         uses: cypress-io/github-action@v6
@@ -25,7 +76,18 @@ jobs:
       - run: node -p 'os.cpus()'
       - run: yarn types
       - run: yarn lint
-      - run: yarn test:unit:ci
+
+      # Smart test orchestration: develop is the safety net and always runs the
+      # full unit suite; every other branch gets fast feedback by only running
+      # unit tests whose module graph touches a file changed since develop.
+      - name: Unit tests (full suite)
+        if: github.ref == 'refs/heads/develop'
+        run: yarn test:unit:ci
+
+      - name: Unit tests (changed since develop)
+        if: github.ref != 'refs/heads/develop'
+        run: yarn test:unit:ci --changed origin/develop
+
       - run: yarn build:ci
 
       - name: Save build folder
@@ -41,7 +103,10 @@ jobs:
     container:
       image: cypress/browsers:22.20.0
       options: --user 1001
-    needs: install
+    # Stage 2 waits on all of Stage 1: the build (install) and both security
+    # gates. A critical CVE or a leaked secret should stop the expensive E2E
+    # matrix before it even starts, not just fail the pipeline afterwards.
+    needs: [install, sca, secrets-scan]
     strategy:
       # when one test fails, DO NOT cancel the other
       # containers, because this will kill Cypress processes
@@ -94,7 +159,10 @@ jobs:
     container:
       image: cypress/browsers:22.20.0
       options: --user 1001
-    needs: install
+    # Stage 2 waits on all of Stage 1: the build (install) and both security
+    # gates. A critical CVE or a leaked secret should stop the expensive E2E
+    # matrix before it even starts, not just fail the pipeline afterwards.
+    needs: [install, sca, secrets-scan]
     strategy:
       # when one test fails, DO NOT cancel the other
       # containers, because this will kill Cypress processes
@@ -140,7 +208,10 @@ jobs:
     container:
       image: cypress/browsers:22.20.0
       options: --user 1001
-    needs: install
+    # Stage 2 waits on all of Stage 1: the build (install) and both security
+    # gates. A critical CVE or a leaked secret should stop the expensive E2E
+    # matrix before it even starts, not just fail the pipeline afterwards.
+    needs: [install, sca, secrets-scan]
     strategy:
       # when one test fails, DO NOT cancel the other
       # containers, because this will kill Cypress processes
@@ -185,7 +256,10 @@ jobs:
     container:
       image: cypress/browsers:22.20.0
       options: --user 1001
-    needs: install
+    # Stage 2 waits on all of Stage 1: the build (install) and both security
+    # gates. A critical CVE or a leaked secret should stop the expensive E2E
+    # matrix before it even starts, not just fail the pipeline afterwards.
+    needs: [install, sca, secrets-scan]
     strategy:
       # when one test fails, DO NOT cancel the other
       # containers, because this will kill Cypress processes
@@ -231,6 +305,8 @@ jobs:
     # Runs only if a preceding job failed; needs every job so it sees the
     # overall pipeline result regardless of which stage broke.
     needs:
+      - sca
+      - secrets-scan
       - install
       - ui-chrome-tests
       - ui-chrome-mobile-tests
