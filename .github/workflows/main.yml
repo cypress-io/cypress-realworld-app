@@ -97,6 +97,12 @@ jobs:
           if-no-files-found: error
           path: build
 
+  # No Cypress Cloud account backs this fork (CYPRESS_PROJECT_ID/RECORD_KEY
+  # were never configured) — record/parallel/group and the 5-container matrix
+  # were Cloud-only features (Cloud dynamically balances specs across
+  # containers; without it every container would just replay the full suite).
+  # Dropped entirely: with 7 UI specs, a single job per browser is enough —
+  # the 4 browsers still run in parallel via the normal GitHub Actions DAG.
   ui-chrome-tests:
     timeout-minutes: 15
     runs-on: ubuntu-latest
@@ -104,18 +110,9 @@ jobs:
       image: cypress/browsers:22.20.0
       options: --user 1001
     # Stage 2 waits on all of Stage 1: the build (install) and both security
-    # gates. A critical CVE or a leaked secret should stop the expensive E2E
-    # matrix before it even starts, not just fail the pipeline afterwards.
+    # gates. A critical CVE or a leaked secret should stop the E2E suite
+    # before it even starts, not just fail the pipeline afterwards.
     needs: [install, sca, secrets-scan]
-    strategy:
-      # when one test fails, DO NOT cancel the other
-      # containers, because this will kill Cypress processes
-      # leaving Cypress Cloud hanging ...
-      # https://github.com/cypress-io/github-action/issues/48
-      fail-fast: false
-      matrix:
-        # run copies of the current job in parallel
-        containers: [1, 2, 3, 4, 5]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -126,32 +123,15 @@ jobs:
           name: build
           path: build
 
-      - name: Node info
-        run: node -v
-
-      - name: __e Dir
-        run: ls /__e
-
       - name: "UI Tests - Chrome"
         uses: cypress-io/github-action@v6
         with:
-          build: yarn cypress info
           start: yarn start:ci
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           browser: chrome
-          record: true
-          parallel: true
-          group: "UI - Chrome"
           spec: cypress/tests/ui/*
           config-file: cypress.config.ts
-        env:
-          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          # Recommended: pass the GitHub token lets this action correctly
-          # determine the unique run id necessary to re-run the checks
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEBUG: "cypress:server:args"
 
   ui-chrome-mobile-tests:
     timeout-minutes: 15
@@ -159,19 +139,7 @@ jobs:
     container:
       image: cypress/browsers:22.20.0
       options: --user 1001
-    # Stage 2 waits on all of Stage 1: the build (install) and both security
-    # gates. A critical CVE or a leaked secret should stop the expensive E2E
-    # matrix before it even starts, not just fail the pipeline afterwards.
     needs: [install, sca, secrets-scan]
-    strategy:
-      # when one test fails, DO NOT cancel the other
-      # containers, because this will kill Cypress processes
-      # leaving Cypress Cloud hanging ...
-      # https://github.com/cypress-io/github-action/issues/48
-      fail-fast: false
-      matrix:
-        # run copies of the current job in parallel
-        containers: [1, 2, 3, 4, 5]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -190,17 +158,8 @@ jobs:
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           browser: chrome
-          record: true
-          parallel: true
-          group: "UI - Chrome - Mobile"
           spec: cypress/tests/ui/*
           config-file: cypress.config.ts
-        env:
-          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          # Recommended: pass the GitHub token lets this action correctly
-          # determine the unique run id necessary to re-run the checks
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   ui-firefox-tests:
     timeout-minutes: 15
@@ -208,19 +167,7 @@ jobs:
     container:
       image: cypress/browsers:22.20.0
       options: --user 1001
-    # Stage 2 waits on all of Stage 1: the build (install) and both security
-    # gates. A critical CVE or a leaked secret should stop the expensive E2E
-    # matrix before it even starts, not just fail the pipeline afterwards.
     needs: [install, sca, secrets-scan]
-    strategy:
-      # when one test fails, DO NOT cancel the other
-      # containers, because this will kill Cypress processes
-      # leaving Cypress Cloud hanging ...
-      # https://github.com/cypress-io/github-action/issues/48
-      fail-fast: false
-      matrix:
-        # run copies of the current job in parallel
-        containers: [1, 2, 3, 4, 5]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -238,17 +185,8 @@ jobs:
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           browser: firefox
-          record: true
-          parallel: true
-          group: "UI - Firefox"
           spec: cypress/tests/ui/*
           config-file: cypress.config.ts
-        env:
-          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          # Recommended: pass the GitHub token lets this action correctly
-          # determine the unique run id necessary to re-run the checks
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   ui-firefox-mobile-tests:
     timeout-minutes: 15
@@ -256,19 +194,7 @@ jobs:
     container:
       image: cypress/browsers:22.20.0
       options: --user 1001
-    # Stage 2 waits on all of Stage 1: the build (install) and both security
-    # gates. A critical CVE or a leaked secret should stop the expensive E2E
-    # matrix before it even starts, not just fail the pipeline afterwards.
     needs: [install, sca, secrets-scan]
-    strategy:
-      # when one test fails, DO NOT cancel the other
-      # containers, because this will kill Cypress processes
-      # leaving Cypress Cloud hanging ...
-      # https://github.com/cypress-io/github-action/issues/48
-      fail-fast: false
-      matrix:
-        # run copies of the current job in parallel
-        containers: [1, 2, 3, 4, 5]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -287,17 +213,32 @@ jobs:
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           browser: firefox
-          record: true
-          parallel: true
-          group: "UI - Firefox - Mobile"
           spec: cypress/tests/ui/*
           config-file: cypress.config.ts
-        env:
-          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          # Recommended: pass the GitHub token lets this action correctly
-          # determine the unique run id necessary to re-run the checks
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Mounts each React component in isolation via Cypress's component runner —
+  # no full app boot (no wait-on/start:ci), so it doesn't need the `build`
+  # artifact either. Much cheaper than the browser E2E jobs above; complements
+  # them rather than replacing them (component tests don't cover navigation
+  # or cross-page flows).
+  component-tests:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:22.20.0
+      options: --user 1001
+    needs: [install, sca, secrets-scan]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cypress install
+        uses: cypress-io/github-action@v6
+        with:
+          runTests: false
+
+      - name: Component tests
+        run: yarn test:component:ci
 
   report-ci-failure:
     name: Report CI failure as ticket
@@ -312,6 +253,7 @@ jobs:
       - ui-chrome-mobile-tests
       - ui-firefox-tests
       - ui-firefox-mobile-tests
+      - component-tests
     if: failure()
     permissions:
       issues: write

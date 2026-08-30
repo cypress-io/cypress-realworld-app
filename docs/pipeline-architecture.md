@@ -15,6 +15,7 @@
    - 3.5 [`install` — orchestration intelligente des tests unitaires](#35-install--orchestration-intelligente-des-tests-unitaires)
    - 3.6 [`install` — build et artefact](#36-install--build-et-artefact)
 4. [Stage 2 — Test (E2E)](#4-stage-2--test-e2e)
+   - 4.1 [`component-tests` — tests de composants](#41-component-tests--tests-de-composants-complémentaires-aux-4-jobs-e2e)
 5. [Stage 3 — Report](#5-stage-3--report)
 6. [Ce qui reste à construire](#6-ce-qui-reste-à-construire)
 
@@ -318,16 +319,14 @@ Reproductibilité inter-jobs : les 4 jobs E2E s'exécutent tous sur le *même* b
 
 Quatre jobs quasi identiques : `ui-chrome-tests`, `ui-chrome-mobile-tests`, `ui-firefox-tests`, `ui-firefox-mobile-tests`.
 
+**⚠️ Historique de cette section (retour d'expérience réel, pas théorique)** : la version initiale reprenait telle quelle la config de l'upstream `cypress-io/cypress-realworld-app` — `record: true`, `parallel: true`, `group`, et une matrice `containers: [1, 2, 3, 4, 5]` par navigateur (20 slots au total). Ces options dépendent toutes d'un **compte Cypress Cloud** (dashboard hébergé, replay vidéo, et surtout la distribution dynamique des specs entre containers). Ce fork n'a jamais eu son propre projet Cypress Cloud — un premier run de test réel a fait échouer les 20 jobs simultanément avec `You passed the --record flag but did not provide us your Record Key`. Sans Cypress Cloud pour répartir les specs, faire tourner 5 copies du job aurait simplement rejoué 5 fois l'intégralité des 7 specs UI — aucun gain, juste 5× le coût. La matrice a donc été retirée, pas redimensionnée : sans le service qui la justifie, elle n'a plus de rôle.
+
 **Extrait annoté** (un seul des quatre, les autres ne changent que `browser` et la config viewport)
 
 ```yaml
 ui-chrome-tests:
   timeout-minutes: 15
   needs: [install, sca, secrets-scan]
-  strategy:
-    fail-fast: false
-    matrix:
-      containers: [1, 2, 3, 4, 5]
   steps:
     - uses: actions/download-artifact@v4
       with:
@@ -338,9 +337,6 @@ ui-chrome-tests:
         start: yarn start:ci
         wait-on: "http://localhost:3000"
         browser: chrome
-        record: true
-        parallel: true
-        group: "UI - Chrome"
         spec: cypress/tests/ui/*
 ```
 
@@ -348,26 +344,61 @@ ui-chrome-tests:
 
 | Clé | Valeur | Rôle |
 |---|---|---|
-| `needs: [install, sca, secrets-scan]` | — | déclare une dépendance sur **tout le Stage 1** : ce job n'attend pas seulement le build, mais aussi les deux gates de sécurité. C'est la brique du **DAG** — les 4 jobs E2E démarrent **en parallèle** entre eux dès que les trois jobs du Stage 1 sont verts, ils n'attendent pas l'un l'autre. |
-| `strategy.matrix.containers` | `[1, 2, 3, 4, 5]` | fait tourner **5 copies** du job en parallèle, chacune avec une valeur différente de `containers` (1 à 5) — ici la valeur elle-même n'est pas utilisée dans un `run`, elle sert uniquement à répéter le job 5 fois pour que Cypress Cloud (`parallel: true`) distribue les specs entre ces 5 exécutions. |
-| `fail-fast: false` | — | par défaut, si une des 5 copies échoue, GitHub Actions annule les autres. Ici on désactive ce comportement : un container qui plante ne doit pas tuer les autres processus Cypress en cours d'enregistrement côté Cypress Cloud. |
-| `record: true` / `parallel: true` | — | active l'enregistrement sur Cypress Cloud et la distribution intelligente des fichiers de specs entre les 5 containers (Cypress Cloud équilibre la charge en fonction des temps d'exécution passés). |
-| `group` | `"UI - Chrome"` | étiquette qui regroupe, côté Cypress Cloud, les résultats de ces 5 containers comme un seul run logique. |
+| `needs: [install, sca, secrets-scan]` | — | déclare une dépendance sur **tout le Stage 1** : ce job n'attend pas seulement le build, mais aussi les deux gates de sécurité. C'est la brique du **DAG** — les 4 jobs E2E démarrent **en parallèle** entre eux dès que les trois jobs du Stage 1 sont verts, ils n'attendent pas l'un l'autre. Ce parallélisme-là (entre les 4 navigateurs) est du DAG GitHub Actions natif — il ne dépend d'aucun service externe, contrairement à l'ancienne matrice de containers. |
 | `download-artifact` | `name: build` | récupère l'**artefact** produit par `install` (voir §3.6) — aucun rebuild ici. |
+| `cypress-io/github-action@v6` (sans `record`/`parallel`) | — | exécute Cypress **en local**, dans le conteneur du job : les résultats (vidéos, screenshots sur échec) restent sur le runner éphémère, rien n'est envoyé à un service externe. |
 
 **Pourquoi ce choix**
 
-Diviser l'exécution en 5 containers parallèles réduit le temps mur (*wall time*) du run E2E par un facteur proche de 5, au prix d'une consommation de minutes CI équivalente (le temps CPU total ne change pas, seule sa distribution dans le temps change). Attendre le Stage 1 en entier (pas seulement `install`) évite de payer ce coût quand un problème de sécurité aurait de toute façon invalidé le run.
+Diviser l'exécution en jobs parallèles par navigateur donne déjà l'essentiel du gain de temps pertinent vu le volume réel (7 specs UI) : un run par navigateur, pas cinq copies redondantes. Attendre le Stage 1 en entier (pas seulement `install`) évite de payer le coût des tests E2E quand un problème de sécurité aurait de toute façon invalidé le run.
 
 **Règle d'or invoquée**
 
-Le DAG plutôt que le mode séquentiel par stage : "un job démarre dès que ses dépendances directes sont satisfaites" (doc invariants, §3). Les 4 navigateurs n'ont aucune dépendance entre eux, seulement vis-à-vis du Stage 1 — les faire dépendre les uns des autres serait une régression vers le modèle séquentiel. Fail Fast à l'échelle du pipeline entier : `sca`/`secrets-scan` sont rapides (secondes à quelques minutes) comparés au coût des 20 jobs E2E — les faire gater le Stage 2 coûte très peu et évite de payer le prix fort pour un commit déjà disqualifié.
+Le DAG plutôt que le mode séquentiel par stage : "un job démarre dès que ses dépendances directes sont satisfaites" (doc invariants, §3). Les 4 navigateurs n'ont aucune dépendance entre eux, seulement vis-à-vis du Stage 1. Fail Fast à l'échelle du pipeline entier : `sca`/`secrets-scan` sont rapides (secondes à quelques minutes) comparés au coût des 4 jobs E2E — les faire gater le Stage 2 coûte très peu et évite de payer le prix fort pour un commit déjà disqualifié. Et surtout : **ne pas ajouter de parallélisme dont le mécanisme d'équilibrage de charge n'existe pas** — une matrice sans service pour la piloter n'optimise rien, elle gaspille des minutes CI.
 
 **Ce que ça optimise**
 
-*Deployment Frequency* / *Change Lead Time* : un run E2E de 5 × plus court permet, à volume de changement égal, plus de cycles de feedback par unité de temps.
+*Change Lead Time* : un job par navigateur reste rapide (7 specs) sans le surcoût de 5 copies redondantes ni la dépendance à un service tiers non configuré. *Reproductibilité* : le pipeline ne dépend plus d'un secret externe absent, il tourne intégralement avec ce que GitHub Actions fournit nativement.
 
-**⚠️ Point d'attention non résolu (voir §6)** : `[1, 2, 3, 4, 5]` est une valeur héritée du repo Cypress d'origine, dimensionnée pour son volume de specs. Ce fork n'a que 7 specs UI + 9 specs API — 5 containers par navigateur (20 slots au total sur les 4 jobs) est probablement surdimensionné. Une matrice mal dimensionnée n'est pas neutre : elle consomme plus de minutes CI et de slots de parallélisation Cypress Cloud que nécessaire, sans gain de vitesse au-delà du nombre réel de specs.
+**Pour aller plus loin plus tard (voir §6)** : si le volume de specs grossit au point qu'un seul job par navigateur devienne trop lent, la bonne réponse est soit un compte Cypress Cloud (gratuit, réintroduit `record`/`parallel`), soit un partitionnement manuel des specs entre plusieurs jobs (`spec: cypress/tests/ui/a*,b*` etc.) — pas de réintroduire une matrice de containers sans mécanisme de répartition derrière.
+
+### 4.1 `component-tests` — tests de composants (complémentaires aux 4 jobs E2E)
+
+**Extrait annoté**
+
+```yaml
+component-tests:
+  timeout-minutes: 15
+  needs: [install, sca, secrets-scan]
+  steps:
+    - uses: actions/checkout@v4
+    - uses: cypress-io/github-action@v6
+      with:
+        runTests: false
+    - run: yarn test:component:ci
+```
+
+**Vocabulaire**
+
+| Clé | Valeur | Rôle |
+|---|---|---|
+| `runTests: false` | — | comme dans `install` (§3.4) : installe dépendances + binaire Cypress sans lancer de tests, laisse le step suivant s'en charger explicitement. |
+| `yarn test:component:ci` | → `cypress run --component` | mode **Component Testing** de Cypress : chaque composant React est monté isolément (`cy.mount(...)`) par un petit serveur de dev (Vite), sans navigation dans l'application complète. |
+| *(absence de)* `download-artifact` | — | contrairement aux jobs E2E, ce job **n'a pas besoin** du `build` de production : il compile à la volée uniquement les composants testés, pas l'application entière packagée. |
+
+**Pourquoi ce choix**
+
+Ce repo avait déjà 5 fichiers `*.cy.tsx` (à côté des composants source, ex. `src/components/AlertBar.cy.tsx`) et un script `test:component:ci` dans `package.json` — jamais branchés au pipeline. Testés en local : 13 tests sur 5 fichiers en **moins de 20 secondes**, sans boot d'application (`wait-on`, port 3000) contrairement aux jobs E2E qui doivent démarrer tout le serveur avant de pouvoir cliquer sur quoi que ce soit. C'est une couche de test complémentaire, pas un remplacement : le Component Testing valide qu'un composant se comporte bien *isolément* (props, rendu, interactions locales) ; l'E2E valide les parcours *à travers* plusieurs pages/composants connectés. Les deux sont nécessaires pour la haute couverture visée par ce projet.
+
+**Règle d'or invoquée**
+
+Shift Left et rapidité de feedback (fiche DevSecOps, §1) : un composant cassé est détecté en quelques secondes, sans attendre qu'un des 4 jobs E2E navigateur (bien plus lents) le remarque indirectement à travers un parcours complet.
+
+**Ce que ça optimise**
+
+*Change Lead Time* : un signal de correction rapide et ciblé (quel composant, pas juste "le parcours de connexion a cassé quelque part"). Contribue à la couverture globale du projet sans alourdir le chemin critique du pipeline — ce job tourne en parallèle des 4 jobs E2E, pas après.
+
+**Dette découverte en branchant ce job** : un des 13 tests (`TransactionDateRangeFilter.cy.tsx`, test "should render a defined date range filter") échoue de façon reproductible — une assertion de date qui semble dépendre du fuseau horaire de la machine qui l'exécute. Marqué `it.skip(...)` avec renvoi vers un ticket dédié ([issue #3](https://github.com/johan-bouguermouh/m1-cicd/issues/3), label `source:manual`, `severity:medium`, ajouté au board #11) — même logique que la baseline SCA (§3.1) : documenter et suivre plutôt que bloquer aveuglément ou ignorer silencieusement.
 
 ---
 
@@ -379,7 +410,7 @@ Documentation dédiée : [ci-failure-ticketing.md](ci-failure-ticketing.md) (le 
 
 ```yaml
 report-ci-failure:
-  needs: [sca, secrets-scan, install, ui-chrome-tests, ui-chrome-mobile-tests, ui-firefox-tests, ui-firefox-mobile-tests]
+  needs: [sca, secrets-scan, install, ui-chrome-tests, ui-chrome-mobile-tests, ui-firefox-tests, ui-firefox-mobile-tests, component-tests]
   if: failure()
   permissions:
     issues: write
@@ -390,7 +421,7 @@ report-ci-failure:
 
 | Clé | Valeur | Rôle |
 |---|---|---|
-| `needs` | liste des 7 jobs précédents (Stage 1 + Stage 2) | ce job attend la fin de **tous** les jobs, qu'ils réussissent ou échouent (par défaut `needs` sans autre condition n'exécute le job suivant que si tout a réussi — voir ligne suivante). |
+| `needs` | liste des 8 jobs précédents (Stage 1 + Stage 2) | ce job attend la fin de **tous** les jobs, qu'ils réussissent ou échouent (par défaut `needs` sans autre condition n'exécute le job suivant que si tout a réussi — voir ligne suivante). |
 | `if: failure()` | — | fonction spéciale des GitHub Actions : renvoie `true` si **au moins un** des jobs listés dans `needs` a échoué. Sans elle, ce job ne se déclencherait jamais (le comportement par défaut est d'annuler les jobs dépendants d'un job en échec). |
 | `permissions` | `issues: write`, `contents: read` | **restreint** explicitement les droits du `GITHUB_TOKEN` généré pour ce job à seulement ce dont il a besoin — créer/commenter des issues et lire le code. Par défaut, sans ce bloc, le token hériterait des permissions globales du repo (souvent plus larges). |
 
@@ -417,7 +448,7 @@ Le principe de moindre privilège appliqué aux `permissions` prolonge, au nivea
 
 Points identifiés mais volontairement non traités à ce stade, pour rester incrémental :
 
-- **Dimensionnement de la matrice E2E** (§4) — vérifier le volume réel de specs avant de choisir un nombre de containers, plutôt que garder une valeur héritée.
+- **Compte Cypress Cloud** (§4) — délibérément non configuré pour l'instant (voir l'historique de la section) ; à reconsidérer si le volume de specs grossit au point qu'un partitionnement manuel des jobs E2E ne suffise plus.
 - **SAST "logique de code"** (fiche DevSecOps, §2.2) — `sca` et `secrets-scan` couvrent les dépendances et les secrets, mais pas l'analyse statique du code applicatif lui-même (ex. CodeQL) ; à évaluer.
 - **Mesure active des métriques DORA** — les données existent (timestamps d'issues, labels) mais rien ne les agrège pour l'instant ; à traiter une fois le pipeline complet, comme convenu.
 - **Cache explicite des dépendances dans `install`** — `cypress-io/github-action` gère déjà un cache implicite de `node_modules`/du binaire Cypress par défaut ; à vérifier/documenter plutôt qu'à dupliquer (le job `sca`, lui, a déjà un cache explicite via `actions/setup-node`).
