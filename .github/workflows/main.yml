@@ -373,11 +373,24 @@ jobs:
             core.setOutput('issue_number', issue.data.number);
 
       - name: Sync ticket to the DevSecOps board
-        if: steps.create-issue.outputs.issue_node_id != '' && secrets.PROJECTS_TOKEN != ''
+        # `secrets.*` isn't allowed inside `if:` expressions (GitHub Actions
+        # rejects the whole workflow file with "Unrecognized named-value:
+        # 'secrets'"), so the presence check happens inside the script instead,
+        # against the PROJECTS_TOKEN env var set below.
+        if: steps.create-issue.outputs.issue_node_id != ''
         uses: actions/github-script@v7
+        env:
+          PROJECTS_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
         with:
           github-token: ${{ secrets.PROJECTS_TOKEN }}
           script: |
+            if (!process.env.PROJECTS_TOKEN) {
+              core.warning(
+                'PROJECTS_TOKEN secret is not set — ticket #${{ steps.create-issue.outputs.issue_number }} was created but not synced to the Project board. See docs/ci-failure-ticketing.md.'
+              );
+              return;
+            }
+
             // Project #11 "M1 CI/CD — DevSecOps Board" (github.com/users/johan-bouguermouh/projects/11)
             const projectId = 'PVT_kwHOBXl7n84Bh5q8';
             const severityFieldId = 'PVTSSF_lAHOBXl7n84Bh5q8zhgzo7o';
@@ -410,8 +423,3 @@ jobs:
 
             await setField(severityFieldId, severityHighOptionId);
             await setField(sourceFieldId, sourceCiOptionId);
-
-      - name: Board sync skipped
-        if: steps.create-issue.outputs.issue_node_id != '' && secrets.PROJECTS_TOKEN == ''
-        run: |
-          echo "::warning::PROJECTS_TOKEN secret is not set — ticket #${{ steps.create-issue.outputs.issue_number }} was created but not synced to the Project board. See docs/ci-failure-ticketing.md."
