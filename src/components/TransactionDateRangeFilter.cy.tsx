@@ -18,10 +18,7 @@ describe("Transaction Date Range Filter", () => {
     cy.get("[data-test='transaction-list-filter-date-range-button']").should("contain", "ALL");
   });
 
-  // Skipped: flaky depending on the local timezone of the machine running it
-  // (the assertion reformats an ISO/UTC date through local time). Tracked in
-  // issue #3 — remove the .skip once the root cause is fixed, not before.
-  it.skip("should render a defined date range filter", () => {
+  it("should render a defined date range filter", () => {
     const filterDateRangeSpy = cy.spy();
     const resetDateRangeSpy = cy.spy();
     const dateRangeFilters = {
