@@ -74,6 +74,28 @@
       "balance": 49474,
       "createdAt": "2023-12-07T04:39:38.383Z",
       "modifiedAt": "2024-03-07T00:07:36.510Z"
+    },
+    {
+      "id": "-4sqyAuTN",
+      "uuid": "6786cb66-2871-4b3c-9f6b-b79613169146",
+      "firstName": "Johan",
+      "lastName": "Bouguermouh",
+      "username": "jJohanBouguermouh",
+      "password": "$2a$10$yw.fKd7A/2N6HiTMp/gsBOOtV8/s09FaTqEhm7pOteD56JKFVNEgK",
+      "balance": 0,
+      "createdAt": "2026-08-30T11:23:52.046Z",
+      "modifiedAt": "2026-08-30T11:23:52.046Z"
+    },
+    {
+      "id": "GgSe3eoMJ",
+      "uuid": "4c7e81d0-9079-42ca-ad13-e766fc8a22af",
+      "firstName": "Johan",
+      "lastName": "Bouguermouh",
+      "username": "JohanBouguermouh",
+      "password": "$2a$10$IK0cxvJ2tGtFsFom.yDbk.xfUZLbQYfzInlBJVR8sZFzlF3ExsND6",
+      "balance": 0,
+      "createdAt": "2026-08-30T11:24:53.596Z",
+      "modifiedAt": "2026-08-30T11:24:53.596Z"
     }
   ],
   "contacts": [
@@ -10986,4 +11008,3 @@
     }
   ]
 }
-
