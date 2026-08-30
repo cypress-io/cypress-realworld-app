@@ -1,4 +1,4 @@
-name: Cypress Tests
+name: CI — Validate, Security & Test
 
 on:
   push:

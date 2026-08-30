@@ -26,7 +26,7 @@ Chaque section suit la même grille de lecture :
 
 | Rubrique | Ce qu'elle répond |
 |---|---|
-| **Extrait annoté** | le YAML réellement présent dans [main.yml](../.github/workflows/main.yml) |
+| **Extrait annoté** | le YAML réellement présent dans [ci.yml](../.github/workflows/ci.yml) |
 | **Vocabulaire** | chaque clé/valeur utilisée et son rôle exact |
 | **Pourquoi ce choix** | le problème concret que ça résout |
 | **Règle d'or invoquée** | le principe (invariants CI/CD, DevSecOps) dont ça découle |
