@@ -38,7 +38,10 @@ const TransactionCreateContainer: React.FC<Props> = ({ authService, snackbarServ
 
   // Expose createTransactionService on window for Cypress
   // @ts-ignore
-  window.createTransactionService = createTransactionService;
+  if (window.Cypress) {
+    // @ts-ignore
+    window.createTransactionService = createTransactionService;
+  }
 
   const [usersState, sendUsers] = useMachine(usersMachine);
 
