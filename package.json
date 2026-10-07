@@ -161,6 +161,7 @@
     "precypress:open": "yarn predev:cognito:ci",
     "cypress:open": "cypress open",
     "cypress:open:mobile": "cypress open --config '{\"e2e\":{\"viewportWidth\":375,\"viewportHeight\":667}}'",
+    "precypress:run": "wait-on --timeout 60s http://localhost:3000 http://localhost:3001",
     "cypress:run": "cypress run",
     "cypress:run:component": "cypress run --component",
     "cypress:run:mobile": "cypress run --config '{\"e2e\":{\"viewportWidth\":375,\"viewportHeight\":667}}'",
