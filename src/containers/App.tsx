@@ -63,13 +63,13 @@ const App: React.FC = () => {
           <Route exact path="/signup">
             <SignUpForm authService={authService} />
           </Route>
-          <Route exact path="/signin">
+          <Route exact path="/login">
             <SignInForm authService={authService} />
           </Route>
           <Route path="/*">
             <Redirect
               to={{
-                pathname: "/signin",
+                pathname: "/login",
               }}
             />
           </Route>

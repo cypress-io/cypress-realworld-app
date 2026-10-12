@@ -150,7 +150,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
       performSignup: async (ctx, event) => {
         const payload = omit("type", event);
         const resp = await httpClient.post(`http://localhost:${backendPort}/users`, payload);
-        history.push("/signin");
+        history.push("/login");
         return resp.data;
       },
       performLogin: async (ctx, event) => {
@@ -239,7 +239,7 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
     },
     actions: {
       redirectHomeAfterLogin: async (ctx, event) => {
-        if (history.location.pathname === "/signin") {
+        if (history.location.pathname === "/login") {
           /* istanbul ignore next */
           window.location.pathname = "/";
         }
