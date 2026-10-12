@@ -61,7 +61,7 @@ const BankAccountsContainer: React.FC<Props> = ({ authService, bankAccountsServi
     sendBankAccounts("FETCH");
   }, [sendBankAccounts]);
 
-  if (match.url === "/bankaccounts/new" && currentUser?.id) {
+  if (match.url === "/accounts/new" && currentUser?.id) {
     return (
       <StyledPaper className={classes.paper}>
         <Typography component="h2" variant="h6" color="primary" gutterBottom>
@@ -77,7 +77,7 @@ const BankAccountsContainer: React.FC<Props> = ({ authService, bankAccountsServi
       <Grid container direction="row" justifyContent="space-between" alignItems="center">
         <Grid item>
           <Typography component="h2" variant="h6" color="primary" gutterBottom>
-            Bank Accounts
+            Linked Accounts
           </Typography>
         </Grid>
         <Grid item>
@@ -86,10 +86,10 @@ const BankAccountsContainer: React.FC<Props> = ({ authService, bankAccountsServi
             color="primary"
             size="large"
             component={RouterLink}
-            to="/bankaccounts/new"
+            to="/accounts/new"
             data-test="bankaccount-new"
           >
-            Add Account
+            Link New Account
           </Button>
         </Grid>
       </Grid>

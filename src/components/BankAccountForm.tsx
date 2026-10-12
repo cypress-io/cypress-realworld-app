@@ -2,7 +2,7 @@ import React from "react";
 import { styled } from "@mui/material/styles";
 import { TextField, Button, Grid } from "@mui/material";
 import { Formik, Form, Field, FieldProps } from "formik";
-import { string, object, ref } from "yup";
+import { string, object } from "yup";
 import { BankAccountPayload, User } from "../models";
 import { useHistory } from "react-router";
 
@@ -15,9 +15,6 @@ const validationSchema = object({
     .min(9, "Must contain at least 9 digits")
     .max(12, "Must contain no more than 12 digits")
     .required("Enter a valid bank account number"),
-  confirmAccountNumber: string()
-    .oneOf([ref("accountNumber")], "Account numbers must match")
-    .required("Confirm the bank account number"),
 });
 
 const PREFIX = "BankAccountForm";
@@ -59,12 +56,11 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
 }) => {
   const history = useHistory();
 
-  const initialValues: BankAccountPayload & { confirmAccountNumber: string } = {
+  const initialValues: BankAccountPayload = {
     userId,
     bankName: "",
     accountNumber: "",
     routingNumber: "",
-    confirmAccountNumber: "",
   };
 
   return (
@@ -78,7 +74,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
         createBankAccount({ bankName, routingNumber, accountNumber, userId });
 
         if (!onboarding) {
-          history.push("/bankaccounts");
+          history.push("/accounts");
         }
       }}
     >
@@ -135,23 +131,6 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
               />
             )}
           </Field>
-          <Field name="confirmAccountNumber">
-            {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
-              <TextField
-                variant="outlined"
-                margin="dense"
-                fullWidth
-                required
-                id={"bankaccount-confirmAccountNumber-input"}
-                type="text"
-                placeholder="Confirm Account Number"
-                data-test={"bankaccount-confirmAccountNumber-input"}
-                error={(touched || value !== initialValue) && Boolean(error)}
-                helperText={touched || value !== initialValue ? error : ""}
-                {...field}
-              />
-            )}
-          </Field>
           <Grid
             container
             spacing={2}
@@ -169,7 +148,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
                 data-test="bankaccount-submit"
                 disabled={!isValid || isSubmitting}
               >
-                Save
+                Link Account
               </Button>
             </Grid>
           </Grid>
