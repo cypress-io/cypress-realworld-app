@@ -24,7 +24,7 @@ const BankAccountList: React.FC<BankAccountListProps> = ({ bankAccounts, deleteB
           ))}
         </List>
       ) : (
-        <EmptyList entity="Bank Accounts" />
+        <EmptyList entity="Linked Accounts" />
       )}
     </>
   );

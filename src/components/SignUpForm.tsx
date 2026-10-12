@@ -213,7 +213,7 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
               </Button>
               <Grid container>
                 <Grid item>
-                  <Link to="/signin">{"Have an account? Sign In"}</Link>
+                  <Link to="/login">{"Have an account? Sign In"}</Link>
                 </Grid>
               </Grid>
             </Form>

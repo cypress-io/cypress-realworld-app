@@ -32,7 +32,9 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 }));
 
 const validationSchema = object({
-  amount: number().required("Please enter a valid amount"),
+  amount: number()
+    .max(40, "Payments are limited to $40")
+    .required("Please enter a valid amount"),
   description: string().required("Please enter a note"),
   reference: string().required("Please enter a payment reference"),
   senderId: string(),
@@ -143,7 +145,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                     autoFocus
                     id={"transaction-create-amount-input"}
                     type="text"
-                    placeholder="Amount"
+                    placeholder="USD amount"
                     data-test={"transaction-create-amount-input"}
                     error={(touched || value !== initialValue) && Boolean(error)}
                     helperText={touched || value !== initialValue ? error : ""}
@@ -207,7 +209,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                     disabled={!isValid || isSubmitting}
                     onClick={() => setTransactionType("request")}
                   >
-                    Request Money
+                    Ask for Money
                   </Button>
                 </Grid>
                 <Grid item>
@@ -221,7 +223,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                     disabled={!isValid || isSubmitting}
                     onClick={() => setTransactionType("payment")}
                   >
-                    Send Money
+                    Pay Now
                   </Button>
                 </Grid>
               </Grid>

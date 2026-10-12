@@ -121,7 +121,7 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
               to="/"
               data-test="new-transaction-return-to-transactions"
             >
-              Return To Transactions
+              Done
             </Button>
           </Grid>
           <Grid item>
@@ -135,7 +135,7 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
               }}
               data-test="new-transaction-create-another-transaction"
             >
-              Start Another Transaction
+              New Payment
             </Button>
           </Grid>
         </Grid>
