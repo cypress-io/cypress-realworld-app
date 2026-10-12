@@ -148,13 +148,13 @@ export const mainListItems = (
       // @ts-ignore
       onClick={() => showTemporaryDrawer && toggleDrawer()}
       component={RouterLink}
-      to="/bankaccounts"
+      to="/accounts"
       data-test="sidenav-bankaccounts"
     >
       <ListItemIcon>
         <AccountBalanceIcon />
       </ListItemIcon>
-      <ListItemText primary="Bank Accounts" />
+      <ListItemText primary="Linked Accounts" />
     </ListItem>
   </div>
 );
