@@ -148,7 +148,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
                 data-test="bankaccount-submit"
                 disabled={!isValid || isSubmitting}
               >
-                Link Account
+                Save Bank Account
               </Button>
             </Grid>
           </Grid>
