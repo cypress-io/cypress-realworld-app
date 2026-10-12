@@ -72,7 +72,6 @@ export interface Props {
 
 const SignInForm: React.FC<Props> = ({ authService }) => {
   const [authState, sendAuth] = useActor(authService);
-  const [showResetHelp, setShowResetHelp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const initialValues: SignInPayload = {
     username: "",
@@ -163,15 +162,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                 Sign In
               </Button>
               <Grid container>
-                <Grid item xs>
-                  <Button
-                    size="small"
-                    data-test="signin-forgot-password"
-                    onClick={() => setShowResetHelp(true)}
-                  >
-                    Forgot password?
-                  </Button>
-                </Grid>
+                <Grid item xs />
                 <Grid item>
                   <Link data-test="signup" to="/signup">
                     {"New here? Create an account"}
@@ -181,11 +172,6 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
             </Form>
           )}
         </Formik>
-        {showResetHelp && (
-          <Alert data-test="signin-reset-help" severity="info" sx={{ width: "100%", mt: 2 }}>
-            Ask your administrator to reset your password.
-          </Alert>
-        )}
       </div>
       <Box mt={8}>
         <Footer />
