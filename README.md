@@ -174,7 +174,7 @@ yarn cypress:open
 | start          | Starts backend and frontend                                                                                                                                                       |
 | types          | Validates types                                                                                                                                                                   |
 | db:seed        | Generates fresh database seeds for json files in /data                                                                                                                            |
-| start:empty    | Starts backend, frontend and Cypress with empty database seed                                                                                                                     |
+| start:empty    | Starts backend and frontend with empty database seed                                                                                                                     |
 | tsnode         | Customized ts-node command to get around react-scripts restrictions                                                                                                               |
 | list:dev:users | Provides id and username for users in the dev database                                                                                                                            |
 
