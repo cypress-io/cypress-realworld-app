@@ -107,6 +107,16 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({ userProfile, updateUser
                 />
               )}
             </Field>
+            <TextField
+              variant="outlined"
+              margin="dense"
+              fullWidth
+              id="user-settings-nickname-input"
+              type="text"
+              placeholder="Nickname (optional)"
+              helperText="Shown to your contacts instead of your full name"
+              inputProps={{ "data-test": "user-settings-nickname-input", maxLength: 20 }}
+            />
             <Field name="jobTitle">
               {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
                 <TextField
