@@ -86,7 +86,7 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService, bankAccountsSer
                 Real World App requires a Bank Account to perform transactions.
                 <br />
                 <br />
-                Click <b>Next</b> to begin setup of your Bank Account.
+                Click <b>Continue</b> to begin setup of your Bank Account.
               </DialogContentText>
             </>
           )}
@@ -126,7 +126,7 @@ const UserOnboardingContainer: React.FC<Props> = ({ authService, bankAccountsSer
           <Grid item>
             {!userOnboardingState.matches("stepTwo") && (
               <Button onClick={() => nextStep()} color="primary" data-test="user-onboarding-next">
-                {userOnboardingState.matches("stepThree") ? "Done" : "Next"}
+                {userOnboardingState.matches("stepThree") ? "Done" : "Continue"}
               </Button>
             )}
           </Grid>
