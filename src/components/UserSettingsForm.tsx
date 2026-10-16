@@ -107,23 +107,6 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({ userProfile, updateUser
                 />
               )}
             </Field>
-            <Field name="phoneNumber">
-              {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
-                <TextField
-                  variant="outlined"
-                  margin="dense"
-                  fullWidth
-                  required
-                  id={"user-settings-phoneNumber-input"}
-                  type="text"
-                  placeholder="Phone Number"
-                  inputProps={{ "data-test": "user-settings-phoneNumber-input" }}
-                  error={(touched || value !== initialValue) && Boolean(error)}
-                  helperText={touched || value !== initialValue ? error : ""}
-                  {...field}
-                />
-              )}
-            </Field>
             <Field name="jobTitle">
               {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
                 <TextField
