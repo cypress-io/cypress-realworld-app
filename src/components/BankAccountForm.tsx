@@ -1,6 +1,6 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
-import { TextField, Button, Grid } from "@mui/material";
+import { TextField, Button, Grid, Checkbox, FormControlLabel } from "@mui/material";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 import { BankAccountPayload, User } from "../models";
@@ -138,6 +138,12 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
             justifyContent="flex-start"
             alignItems="flex-start"
           >
+            <Grid item>
+              <FormControlLabel
+                control={<Checkbox color="primary" data-test="bankaccount-default-checkbox" />}
+                label="Make this my default account"
+              />
+            </Grid>
             <Grid item>
               <Button
                 type="submit"
