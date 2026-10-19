@@ -141,7 +141,7 @@ export const mainListItems = (
       <ListItemIcon>
         <PersonIcon />
       </ListItemIcon>
-      <ListItemText primary="My Account" />
+      <ListItemText primary="Profile" />
     </ListItem>
     <ListItem
       button
@@ -165,7 +165,7 @@ export const secondaryListItems = (signOutPending: Function) => (
       <ListItemIcon>
         <LogoutIcon />
       </ListItemIcon>
-      <ListItemText primary="Sign Out" />
+      <ListItemText primary="Log Out" />
     </ListItem>
   </div>
 );
