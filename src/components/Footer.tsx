@@ -7,7 +7,7 @@ export default function Footer() {
   return (
     <Container maxWidth="sm" style={{ marginTop: 50 }}>
       <Typography variant="body2" color="textSecondary" align="center">
-        Built by
+        Made by
         <a
           style={{ textDecoration: "none" }}
           target="_blank"
