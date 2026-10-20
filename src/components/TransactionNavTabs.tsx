@@ -30,7 +30,6 @@ export default function TransactionNavTabs() {
       data-test="nav-transaction-tabs"
     >
       <Tab label="Everyone" component={Link} to="/" data-test="nav-public-tab" />
-      <Tab label="Contacts" component={Link} to="/contacts" data-test="nav-contacts-tab" />
     </Tabs>
   );
 }
