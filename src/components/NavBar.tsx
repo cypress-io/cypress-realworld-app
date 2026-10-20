@@ -168,7 +168,7 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
           to="/transaction/new"
           data-test="nav-top-new-transaction"
         >
-          <AttachMoneyIcon /> Pay or Request
+          <AttachMoneyIcon /> Send or Request
         </Button>
       </Toolbar>
       {(match.pathname === "/" || RegExp("/(?:public|contacts|personal)").test(match.pathname)) && (
