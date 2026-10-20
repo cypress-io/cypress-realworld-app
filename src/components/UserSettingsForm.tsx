@@ -154,6 +154,17 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({ userProfile, updateUser
                   Update Profile
                 </Button>
               </Grid>
+              <Grid item>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  sx={{ marginTop: 3, marginLeft: 2, marginBottom: 2 }}
+                  data-test="user-settings-download-data"
+                  href="/users/me/export"
+                >
+                  Download my data
+                </Button>
+              </Grid>
             </Grid>
           </Form>
         </MarginHonoringDiv>
