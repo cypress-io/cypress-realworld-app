@@ -135,7 +135,7 @@ export const mainListItems = (
       // @ts-ignore
       onClick={() => showTemporaryDrawer && toggleDrawer()}
       component={RouterLink}
-      to="/settings/profile"
+      to="/account/profile"
       data-test="sidenav-user-settings"
     >
       <ListItemIcon>

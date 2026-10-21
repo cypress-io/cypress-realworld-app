@@ -165,6 +165,17 @@ const UserSettingsForm: React.FC<UserSettingsProps> = ({ userProfile, updateUser
                   Download my data
                 </Button>
               </Grid>
+              <Grid item>
+                <Button
+                  variant="text"
+                  color="secondary"
+                  sx={{ marginTop: 3, marginLeft: 2, marginBottom: 2 }}
+                  data-test="user-settings-reset-form"
+                  type="reset"
+                >
+                  Discard changes
+                </Button>
+              </Grid>
             </Grid>
           </Form>
         </MarginHonoringDiv>
