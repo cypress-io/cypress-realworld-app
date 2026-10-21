@@ -23,7 +23,6 @@ import {
   Person as PersonIcon,
   ExitToApp as LogoutIcon,
   Notifications as NotificationsIcon,
-  AccountBalance as AccountBalanceIcon,
 } from "@mui/icons-material";
 
 import { formatAmount } from "../utils/transactionUtils";
@@ -142,19 +141,6 @@ export const mainListItems = (
         <PersonIcon />
       </ListItemIcon>
       <ListItemText primary="Profile" />
-    </ListItem>
-    <ListItem
-      button
-      // @ts-ignore
-      onClick={() => showTemporaryDrawer && toggleDrawer()}
-      component={RouterLink}
-      to="/accounts"
-      data-test="sidenav-bankaccounts"
-    >
-      <ListItemIcon>
-        <AccountBalanceIcon />
-      </ListItemIcon>
-      <ListItemText primary="Linked Accounts" />
     </ListItem>
   </div>
 );
