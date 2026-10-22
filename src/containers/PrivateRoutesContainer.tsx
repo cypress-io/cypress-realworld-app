@@ -70,16 +70,10 @@ const PrivateRoutesContainer: React.FC<Props> = ({
         <PrivateRoute isLoggedIn={isLoggedIn} exact path={"/(public|contacts|personal)?"}>
           <TransactionsContainer />
         </PrivateRoute>
-        <PrivateRoute isLoggedIn={isLoggedIn} exact path="/user/settings">
+        <PrivateRoute isLoggedIn={isLoggedIn} exact path="/account/profile">
           <UserSettingsContainer authService={authService} />
         </PrivateRoute>
-        <PrivateRoute isLoggedIn={isLoggedIn} exact path="/notifications">
-          <NotificationsContainer
-            authService={authService}
-            notificationsService={notificationsService}
-          />
-        </PrivateRoute>
-        <PrivateRoute isLoggedIn={isLoggedIn} path="/bankaccounts*">
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/accounts*">
           <BankAccountsContainer
             authService={authService}
             bankAccountsService={bankAccountsService}

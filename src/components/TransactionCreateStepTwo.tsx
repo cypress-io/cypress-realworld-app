@@ -32,8 +32,11 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 }));
 
 const validationSchema = object({
-  amount: number().required("Please enter a valid amount"),
+  amount: number()
+    .max(40, "Payments are limited to $40")
+    .required("Please enter a valid amount"),
   description: string().required("Please enter a note"),
+  reference: string().required("Please enter a payment reference"),
   senderId: string(),
   receiverId: string(),
 });
@@ -75,6 +78,7 @@ export interface TransactionCreateStepTwoProps {
 interface FormValues {
   amount: number | "";
   description: string;
+  reference: string;
   senderId: string;
   receiverId: string;
 }
@@ -89,6 +93,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
   const initialValues: FormValues = {
     amount: "",
     description: "",
+    reference: "",
     senderId: sender.id,
     receiverId: receiver.id,
   };
@@ -119,7 +124,9 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
             // reset transactionType
             setTransactionType(undefined);
 
-            createTransaction({ transactionType, ...values });
+            // The payment reference is required on the form; it is not stored with the transaction.
+            const { reference, ...transaction } = values;
+            createTransaction({ transactionType, ...transaction });
             showSnackbar({
               severity: "success",
               message: "Transaction Submitted!",
@@ -138,7 +145,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                     autoFocus
                     id={"transaction-create-amount-input"}
                     type="text"
-                    placeholder="Amount"
+                    placeholder="USD amount"
                     data-test={"transaction-create-amount-input"}
                     error={(touched || value !== initialValue) && Boolean(error)}
                     helperText={touched || value !== initialValue ? error : ""}
@@ -167,6 +174,23 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                   />
                 )}
               </Field>
+              <Field name="reference">
+                {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
+                  <TextField
+                    variant="outlined"
+                    margin="dense"
+                    fullWidth
+                    required
+                    id={"transaction-create-reference-input"}
+                    type="text"
+                    placeholder="Payment reference"
+                    data-test={"transaction-create-reference-input"}
+                    error={(touched || value !== initialValue) && Boolean(error)}
+                    helperText={touched || value !== initialValue ? error : ""}
+                    {...field}
+                  />
+                )}
+              </Field>
               <Grid
                 container
                 spacing={2}
@@ -185,7 +209,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                     disabled={!isValid || isSubmitting}
                     onClick={() => setTransactionType("request")}
                   >
-                    Request
+                    Request Money
                   </Button>
                 </Grid>
                 <Grid item>
@@ -199,7 +223,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                     disabled={!isValid || isSubmitting}
                     onClick={() => setTransactionType("payment")}
                   >
-                    Pay
+                    Send Payment
                   </Button>
                 </Grid>
               </Grid>

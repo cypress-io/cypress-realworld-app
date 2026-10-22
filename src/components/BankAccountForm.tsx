@@ -1,6 +1,6 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
-import { TextField, Button, Grid } from "@mui/material";
+import { TextField, Button, Grid, Checkbox, FormControlLabel } from "@mui/material";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object } from "yup";
 import { BankAccountPayload, User } from "../models";
@@ -70,10 +70,11 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
       onSubmit={(values, { setSubmitting }) => {
         setSubmitting(true);
 
-        createBankAccount({ ...values, userId });
+        const { bankName, routingNumber, accountNumber } = values;
+        createBankAccount({ bankName, routingNumber, accountNumber, userId });
 
         if (!onboarding) {
-          history.push("/bankaccounts");
+          history.push("/accounts");
         }
       }}
     >
@@ -138,6 +139,12 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
             alignItems="flex-start"
           >
             <Grid item>
+              <FormControlLabel
+                control={<Checkbox color="primary" data-test="bankaccount-default-checkbox" />}
+                label="Make this my default account"
+              />
+            </Grid>
+            <Grid item>
               <Button
                 type="submit"
                 fullWidth
@@ -147,7 +154,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
                 data-test="bankaccount-submit"
                 disabled={!isValid || isSubmitting}
               >
-                Save
+                Save Bank Account
               </Button>
             </Grid>
           </Grid>

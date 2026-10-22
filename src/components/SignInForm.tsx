@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import { Interpreter } from "xstate";
 import { useActor } from "@xstate/react";
@@ -72,13 +72,13 @@ export interface Props {
 
 const SignInForm: React.FC<Props> = ({ authService }) => {
   const [authState, sendAuth] = useActor(authService);
+  const [showPassword, setShowPassword] = useState(false);
   const initialValues: SignInPayload = {
     username: "",
     password: "",
-    remember: undefined,
   };
 
-  const signInPending = (payload: SignInPayload) => sendAuth({ type: "LOGIN", ...payload });
+  const submitSignIn = (payload: SignInPayload) => sendAuth({ type: "LOGIN", ...payload });
 
   return (
     <StyledContainer component="main" maxWidth="xs">
@@ -93,7 +93,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
           <RWALogo className={classes.logo} />
         </div>
         <Typography component="h1" variant="h5">
-          Sign in
+          Welcome back
         </Typography>
         <Formik
           initialValues={initialValues}
@@ -101,7 +101,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
           onSubmit={async (values, { setSubmitting }) => {
             setSubmitting(true);
 
-            signInPending(values);
+            submitSignIn(values);
           }}
         >
           {({ isValid, isSubmitting }) => (
@@ -113,7 +113,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                     margin="normal"
                     fullWidth
                     id="username"
-                    label="Username"
+                    label="Email or username"
                     type="text"
                     autoFocus
                     data-test="signin-username"
@@ -130,7 +130,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                     margin="normal"
                     fullWidth
                     label="Password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     id="password"
                     data-test="signin-password"
                     error={touched && value !== initialValue && Boolean(error)}
@@ -141,13 +141,14 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
               </Field>
               <FormControlLabel
                 control={
-                  <Field name={"remember"}>
-                    {({ field }: FieldProps) => {
-                      return <Checkbox color="primary" data-test="signin-remember-me" {...field} />;
-                    }}
-                  </Field>
+                  <Checkbox
+                    color="primary"
+                    data-test="signin-show-password"
+                    checked={showPassword}
+                    onChange={(event) => setShowPassword(event.target.checked)}
+                  />
                 }
-                label="Remember me"
+                label="Show password"
               />
               <Button
                 type="submit"
@@ -158,15 +159,13 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                 data-test="signin-submit"
                 disabled={!isValid || isSubmitting}
               >
-                Sign In
+                Sign In for Access
               </Button>
               <Grid container>
-                <Grid item xs>
-                  {/*<Link to="/forgotpassword">Forgot password?</Link>*/}
-                </Grid>
+                <Grid item xs />
                 <Grid item>
                   <Link data-test="signup" to="/signup">
-                    {"Don't have an account? Sign Up"}
+                    {"New here? Create an account"}
                   </Link>
                 </Grid>
               </Grid>

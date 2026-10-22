@@ -23,7 +23,6 @@ import {
   Person as PersonIcon,
   ExitToApp as LogoutIcon,
   Notifications as NotificationsIcon,
-  AccountBalance as AccountBalanceIcon,
 } from "@mui/icons-material";
 
 import { formatAmount } from "../utils/transactionUtils";
@@ -128,46 +127,20 @@ export const mainListItems = (
       <ListItemIcon>
         <HomeIcon />
       </ListItemIcon>
-      <ListItemText primary="Home" />
+      <ListItemText primary="Dashboard" />
     </ListItem>
     <ListItem
       button
       // @ts-ignore
       onClick={() => showTemporaryDrawer && toggleDrawer()}
       component={RouterLink}
-      to="/user/settings"
+      to="/account/profile"
       data-test="sidenav-user-settings"
     >
       <ListItemIcon>
         <PersonIcon />
       </ListItemIcon>
-      <ListItemText primary="My Account" />
-    </ListItem>
-    <ListItem
-      button
-      // @ts-ignore
-      onClick={() => showTemporaryDrawer && toggleDrawer()}
-      component={RouterLink}
-      to="/bankaccounts"
-      data-test="sidenav-bankaccounts"
-    >
-      <ListItemIcon>
-        <AccountBalanceIcon />
-      </ListItemIcon>
-      <ListItemText primary="Bank Accounts" />
-    </ListItem>
-    <ListItem
-      button
-      // @ts-ignore
-      onClick={() => showTemporaryDrawer && toggleDrawer()}
-      component={RouterLink}
-      to="/notifications"
-      data-test="sidenav-notifications"
-    >
-      <ListItemIcon>
-        <NotificationsIcon />
-      </ListItemIcon>
-      <ListItemText primary="Notifications" />
+      <ListItemText primary="Profile" />
     </ListItem>
   </div>
 );
@@ -178,7 +151,7 @@ export const secondaryListItems = (signOutPending: Function) => (
       <ListItemIcon>
         <LogoutIcon />
       </ListItemIcon>
-      <ListItemText primary="Logout" />
+      <ListItemText primary="Log Out" />
     </ListItem>
   </div>
 );

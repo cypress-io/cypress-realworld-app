@@ -11,7 +11,7 @@ import {
   Badge,
   Theme,
 } from "@mui/material";
-import { ThumbUpAltOutlined as LikeIcon, CommentRounded as CommentIcon } from "@mui/icons-material";
+import { CommentRounded as CommentIcon } from "@mui/icons-material";
 import { TransactionResponseItem } from "../models";
 import TransactionTitle from "./TransactionTitle";
 import TransactionAmount from "./TransactionAmount";
@@ -123,14 +123,6 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
                   spacing={1}
                   className={classes.socialStats}
                 >
-                  <Grid item>
-                    <LikeIcon className={classes.countIcons} />
-                  </Grid>
-                  <Grid item>
-                    <Typography data-test="transaction-like-count" className={classes.countText}>
-                      {transaction.likes.length}
-                    </Typography>
-                  </Grid>
                   <Grid item>
                     <CommentIcon className={classes.countIcons} />
                   </Grid>
