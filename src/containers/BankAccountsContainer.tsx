@@ -89,7 +89,7 @@ const BankAccountsContainer: React.FC<Props> = ({ authService, bankAccountsServi
             to="/bankaccounts/new"
             data-test="bankaccount-new"
           >
-            Create
+            Add Account
           </Button>
         </Grid>
       </Grid>

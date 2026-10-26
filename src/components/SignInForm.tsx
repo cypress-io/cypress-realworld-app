@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import { Interpreter } from "xstate";
 import { useActor } from "@xstate/react";
@@ -72,13 +72,15 @@ export interface Props {
 
 const SignInForm: React.FC<Props> = ({ authService }) => {
   const [authState, sendAuth] = useActor(authService);
+  const [showResetHelp, setShowResetHelp] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const initialValues: SignInPayload = {
     username: "",
     password: "",
     remember: undefined,
   };
 
-  const signInPending = (payload: SignInPayload) => sendAuth({ type: "LOGIN", ...payload });
+  const submitSignIn = (payload: SignInPayload) => sendAuth({ type: "LOGIN", ...payload });
 
   return (
     <StyledContainer component="main" maxWidth="xs">
@@ -101,7 +103,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
           onSubmit={async (values, { setSubmitting }) => {
             setSubmitting(true);
 
-            signInPending(values);
+            submitSignIn(values);
           }}
         >
           {({ isValid, isSubmitting }) => (
@@ -113,7 +115,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                     margin="normal"
                     fullWidth
                     id="username"
-                    label="Username"
+                    label="Username or email"
                     type="text"
                     autoFocus
                     data-test="signin-username"
@@ -130,7 +132,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                     margin="normal"
                     fullWidth
                     label="Password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     id="password"
                     data-test="signin-password"
                     error={touched && value !== initialValue && Boolean(error)}
@@ -141,13 +143,24 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
               </Field>
               <FormControlLabel
                 control={
+                  <Checkbox
+                    color="primary"
+                    data-test="signin-show-password"
+                    checked={showPassword}
+                    onChange={(event) => setShowPassword(event.target.checked)}
+                  />
+                }
+                label="Show password"
+              />
+              <FormControlLabel
+                control={
                   <Field name={"remember"}>
                     {({ field }: FieldProps) => {
                       return <Checkbox color="primary" data-test="signin-remember-me" {...field} />;
                     }}
                   </Field>
                 }
-                label="Remember me"
+                label="Keep me signed in"
               />
               <Button
                 type="submit"
@@ -158,11 +171,17 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                 data-test="signin-submit"
                 disabled={!isValid || isSubmitting}
               >
-                Sign In
+                Log In
               </Button>
               <Grid container>
                 <Grid item xs>
-                  {/*<Link to="/forgotpassword">Forgot password?</Link>*/}
+                  <Button
+                    size="small"
+                    data-test="signin-forgot-password"
+                    onClick={() => setShowResetHelp(true)}
+                  >
+                    Forgot password?
+                  </Button>
                 </Grid>
                 <Grid item>
                   <Link data-test="signup" to="/signup">
@@ -173,6 +192,11 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
             </Form>
           )}
         </Formik>
+        {showResetHelp && (
+          <Alert data-test="signin-reset-help" severity="info" sx={{ width: "100%", mt: 2 }}>
+            Ask your administrator to reset your password.
+          </Alert>
+        )}
       </div>
       <Box mt={8}>
         <Footer />

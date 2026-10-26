@@ -40,7 +40,7 @@ const TransactionPersonalList: React.FC<TransactionPersonalListProps> = ({
     <>
       <TransactionList
         filterComponent={filterComponent}
-        header="Personal"
+        header=""
         transactions={results as TransactionResponseItem[]}
         isLoading={current.matches("loading")}
         loadNextPage={loadNextPage}

@@ -253,6 +253,17 @@
       "isDeleted": false,
       "createdAt": "2024-01-26T14:01:01.815Z",
       "modifiedAt": "2024-03-07T08:44:31.174Z"
+    },
+    {
+      "id": "ACsU0RLE5",
+      "uuid": "7f2b65fc-8766-4007-aecc-a3d04bca4928",
+      "userId": "uBmeaz5pX",
+      "bankName": "Impact Bank",
+      "accountNumber": "123456789",
+      "routingNumber": "987654321",
+      "isDeleted": false,
+      "createdAt": "2026-10-07T06:31:52.301Z",
+      "modifiedAt": "2026-10-07T06:31:52.301Z"
     }
   ],
   "transactions": [
@@ -10986,4 +10997,3 @@
     }
   ]
 }
-

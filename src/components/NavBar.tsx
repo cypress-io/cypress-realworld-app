@@ -170,21 +170,6 @@ const NavBar: React.FC<NavBarProps> = ({ drawerOpen, toggleDrawer, notifications
         >
           <AttachMoneyIcon /> New
         </Button>
-        <IconButton
-          color="inherit"
-          component={RouterLink}
-          to="/notifications"
-          data-test="nav-top-notifications-link"
-          size="large"
-        >
-          <Badge
-            badgeContent={allNotifications ? allNotifications.length : undefined}
-            data-test="nav-top-notifications-count"
-            classes={{ badge: classes.customBadge }}
-          >
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
       </Toolbar>
       {(match.pathname === "/" || RegExp("/(?:public|contacts|personal)").test(match.pathname)) && (
         <TransactionNavTabs />
