@@ -31,7 +31,7 @@
     "@xstate/react": "3.2.2",
     "aws-amplify": "^6.0.16",
     "axios": "0.28.1",
-    "clsx": "1.2.1",
+    "clsx": "2.1.1",
     "date-fns": "4.1.0",
     "date-fns-tz": "^3.2.0",
     "detect-port": "^1.5.1",
