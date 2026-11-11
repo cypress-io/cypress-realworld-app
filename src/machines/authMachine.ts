@@ -4,6 +4,7 @@ import { httpClient } from "../utils/asyncUtils";
 import { history } from "../utils/historyUtils";
 import { User } from "../models";
 import { backendPort } from "../utils/portUtils";
+import { isDemoBreak } from "../utils/demoBreak";
 
 export interface AuthMachineSchema {
   states: {
@@ -161,7 +162,12 @@ export const authMachine = Machine<AuthMachineContext, AuthMachineSchema, AuthMa
             return data;
           })
           .catch((error) => {
-            throw new Error("Username or password is invalid");
+            // DEMO BREAK: wrong auth error copy → assertion failures in auth.spec
+            throw new Error(
+              isDemoBreak()
+                ? "Invalid credentials"
+                : "Username or password is invalid"
+            );
           });
       },
       getOktaUserProfile: /* istanbul ignore next */ (ctx, event: any) => {

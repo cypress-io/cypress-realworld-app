@@ -10,6 +10,7 @@ import {
 } from "./database";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import { shortIdValidation, isBankAccountValidator } from "./validators";
+import { maybeChaosFail } from "./demoBreak";
 const router = express.Router();
 
 // Routes
@@ -40,6 +41,18 @@ router.get(
 
 //POST /bankAccounts (scoped-user)
 router.post("/", ensureAuthenticated, validateMiddleware(isBankAccountValidator), (req, res) => {
+  // DEMO BREAK: unreliable bank account creation (~30% success)
+  if (
+    maybeChaosFail(res, {
+      successRate: 0.3,
+      status: 500,
+      error: "BankAccountCreateFailed",
+      message: "Simulated failure creating bank account (DEMO_BREAK)",
+    })
+  ) {
+    return;
+  }
+
   /* istanbul ignore next */
   const account = createBankAccountForUser(req.user?.id!, req.body);
 

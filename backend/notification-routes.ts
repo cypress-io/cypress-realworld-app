@@ -12,12 +12,18 @@ import {
   shortIdValidation,
   isNotificationPatchValidator,
 } from "./validators";
+import { maybeChaosFail } from "./demoBreak";
 const router = express.Router();
 
 // Routes
 
 //GET /notifications/
 router.get("/", ensureAuthenticated, (req, res) => {
+  // DEMO BREAK: ~70% of notification fetches fail → flaky UI tests that wait on this API
+  if (maybeChaosFail(res, { successRate: 0.3 })) {
+    return;
+  }
+
   /* istanbul ignore next */
   const notifications = getUnreadNotificationsByUserId(req.user?.id!);
 

@@ -1,0 +1,266 @@
+name: Demo Data Pipeline
+
+on:
+  schedule:
+    # Weekdays: 7am, 11am, 3pm ET (12:00, 16:00, 20:00 UTC)
+    - cron: '0 12,16,20 * * 1-5'
+  pull_request:
+    branches: [develop]
+    types: [opened, synchronize]
+  workflow_dispatch:
+    inputs:
+      project:
+        description: 'Run a specific project (or "all")'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - web-app
+          - api-services
+          - mobile-web
+          - design-system
+          - admin-portal
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:22.20.0
+      options: --user 1001
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+
+      - name: Cypress install
+        uses: cypress-io/github-action@v6
+        with:
+          runTests: false
+
+      - name: Build app
+        run: yarn build:ci
+
+      - name: Save build folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          if-no-files-found: error
+          path: build
+
+  web-app:
+    if: >-
+      github.event_name == 'pull_request' ||
+      github.event_name == 'schedule' ||
+      github.event.inputs.project == 'all' ||
+      github.event.inputs.project == 'web-app'
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:22.20.0
+      options: --user 1001
+    needs: install
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2, 3, 4]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+
+      - name: Download the build folder
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: build
+
+      - name: "Web App - E2E Tests"
+        uses: cypress-io/github-action@v6
+        with:
+          start: yarn start:ci
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          browser: chrome
+          record: true
+          parallel: true
+          group: "Web App - Chrome"
+          spec: cypress/tests/ui/*
+          tag: scheduled,web-app
+          config-file: cypress.config.ts
+          config: "projectId=${{ vars.PROJECT_ID_WEB_APP }}"
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.RECORD_KEY_WEB_APP }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  api-services:
+    if: >-
+      github.event_name == 'pull_request' ||
+      github.event_name == 'schedule' ||
+      github.event.inputs.project == 'all' ||
+      github.event.inputs.project == 'api-services'
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:22.20.0
+      options: --user 1001
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+
+      - name: Download the build folder
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: build
+
+      - name: "API Services - Tests"
+        uses: cypress-io/github-action@v6
+        with:
+          start: yarn start:ci
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          browser: electron
+          record: true
+          group: "API Services"
+          spec: cypress/tests/api/*
+          tag: scheduled,api-services
+          config-file: cypress.config.ts
+          config: "projectId=${{ vars.PROJECT_ID_API }}"
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.RECORD_KEY_API }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  mobile-web:
+    if: >-
+      github.event_name == 'pull_request' ||
+      github.event_name == 'schedule' ||
+      github.event.inputs.project == 'all' ||
+      github.event.inputs.project == 'mobile-web'
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:22.20.0
+      options: --user 1001
+    needs: install
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2, 3]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+
+      - name: Download the build folder
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: build
+
+      - name: "Mobile Web - E2E Tests"
+        uses: cypress-io/github-action@v6
+        with:
+          start: yarn start:ci
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          browser: chrome
+          record: true
+          parallel: true
+          group: "Mobile Web - Chrome"
+          spec: cypress/tests/ui/*
+          tag: scheduled,mobile-web
+          config: '{"e2e":{"viewportWidth":375,"viewportHeight":812}}'
+          config-file: cypress.config.ts
+        env:
+          CYPRESS_PROJECT_ID: ${{ vars.PROJECT_ID_MOBILE }}
+          CYPRESS_RECORD_KEY: ${{ secrets.RECORD_KEY_MOBILE }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  design-system:
+    if: >-
+      github.event_name == 'pull_request' ||
+      github.event_name == 'schedule' ||
+      github.event.inputs.project == 'all' ||
+      github.event.inputs.project == 'design-system'
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:22.20.0
+      options: --user 1001
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+
+      - name: Download the build folder
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: build
+
+      - name: "Design System - Component Tests"
+        uses: cypress-io/github-action@v6
+        with:
+          start: yarn start:ci
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          browser: chrome
+          record: true
+          component: true
+          group: "Design System - Components"
+          tag: scheduled,design-system
+          config-file: cypress.config.ts
+          config: "projectId=${{ vars.PROJECT_ID_DESIGN_SYSTEM }}"
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.RECORD_KEY_DESIGN_SYSTEM }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  admin-portal:
+    if: >-
+      github.event_name == 'pull_request' ||
+      github.event_name == 'schedule' ||
+      github.event.inputs.project == 'all' ||
+      github.event.inputs.project == 'admin-portal'
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:22.20.0
+      options: --user 1001
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+
+      - name: Download the build folder
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: build
+
+      - name: "Admin Portal - E2E Tests"
+        uses: cypress-io/github-action@v6
+        with:
+          start: yarn start:ci
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          browser: chrome
+          record: true
+          group: "Admin Portal"
+          spec: "cypress/tests/ui/auth.spec.ts,cypress/tests/ui/bankaccounts.spec.ts,cypress/tests/ui/user-settings.spec.ts"
+          tag: scheduled,admin-portal
+          config-file: cypress.config.ts
+          config: "projectId=${{ vars.PROJECT_ID_ADMIN }}"
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.RECORD_KEY_ADMIN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

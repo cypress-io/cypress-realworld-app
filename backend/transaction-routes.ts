@@ -22,6 +22,7 @@ import {
   isTransactionPublicQSValidator,
 } from "./validators";
 import { getPaginatedItems } from "../src/utils/transactionUtils";
+import { maybeChaosDelay, maybeChaosFail } from "./demoBreak";
 const router = express.Router();
 
 // Routes
@@ -95,7 +96,10 @@ router.get(
   "/public",
   ensureAuthenticated,
   validateMiddleware(isTransactionPublicQSValidator),
-  (req, res) => {
+  async (req, res) => {
+    // DEMO BREAK: intermittent multi-second delay → command/request timeouts in feed tests
+    await maybeChaosDelay(10000, 0.35);
+
     const isFirstPage = (req.query.page as unknown as number) === 1;
 
     /* istanbul ignore next */
@@ -139,6 +143,18 @@ router.post(
   ensureAuthenticated,
   validateMiddleware(isTransactionPayloadValidator),
   (req, res) => {
+    // DEMO BREAK: ~70% of creates fail → flaky new-transaction / API create tests
+    if (
+      maybeChaosFail(res, {
+        successRate: 0.3,
+        status: 500,
+        error: "TransactionCreateFailed",
+        message: "Simulated failure creating transaction (DEMO_BREAK)",
+      })
+    ) {
+      return;
+    }
+
     const transactionPayload = req.body;
     const transactionType = transactionPayload.transactionType;
 

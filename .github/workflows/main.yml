@@ -4,6 +4,12 @@ on:
   push:
     branches-ignore:
       - "renovate/**"
+      # Demo branches - tested by demo-data-pipeline on PRs instead
+      - "feature/dark-mode-toggle"
+      - "fix/transaction-validation-messages"
+      - "feature/accessibility-audit"
+      - "fix/flaky-notification-badge"
+      - "feature/transaction-notes-ui"
 
 jobs:
   install:

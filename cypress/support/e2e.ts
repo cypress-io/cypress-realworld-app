@@ -3,6 +3,18 @@ import "@cypress/code-coverage/support";
 import "./commands";
 import { isMobile } from "./utils";
 
+const device =
+  Cypress.config('viewportWidth') < 768 ? 'mobile' : 'desktop'
+
+Cypress.on('url:changed', (url) => {
+  const next = new URL(url)
+  if (next.searchParams.get('cyDevice') === device) return
+  next.searchParams.set('cyDevice', device)
+  cy.window({ log: false }).then((win) => {
+    win.history.replaceState(win.history.state, '', next.pathname + next.search + next.hash)
+  })
+})
+
 beforeEach(() => {
   // cy.intercept middleware to remove 'if-none-match' headers from all requests
   // to prevent the server from returning cached responses of API requests

@@ -8,5 +8,6 @@ on:
       - opened
 jobs:
   add-to-triage-project-board:
+    if: github.repository != 'cypress-io/cypress-realworld-app-demo'
     uses: cypress-io/cypress/.github/workflows/triage_add_to_project.yml@develop
     secrets: inherit
