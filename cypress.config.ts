@@ -19,12 +19,14 @@ try {
 } catch (e) {}
 
 export default defineConfig({
-  // projectId: "7s5okt",
+  projectId: "pjmj9a",
   retries: {
     runMode: 2,
   },
   env: {
     apiUrl: "http://localhost:3001",
+    // Mirrors DEMO_BREAK in .env — used by specs that tighten timeouts for Cloud demos
+    demoBreak: process.env.DEMO_BREAK === "true",
     mobileViewportWidthBreakpoint: 414,
     coverage: false,
     codeCoverage: {
@@ -64,7 +66,8 @@ export default defineConfig({
     },
   },
   e2e: {
-    baseUrl: "http://localhost:3000",
+    // baseUrl is set in cypress/support/e2e.ts so Cypress does not
+    // block launch on localhost (needed for the kitchen-sink demo spec).
     specPattern: "cypress/tests/**/*.spec.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/e2e.ts",
     viewportHeight: 1000,

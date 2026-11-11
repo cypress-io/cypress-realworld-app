@@ -12,6 +12,8 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: 3000,
+      // Bind IPv4 so Cypress cy.request/baseUrl (127.0.0.1) can reach the app
+      host: "127.0.0.1",
     },
     build: {
       outDir: "build",

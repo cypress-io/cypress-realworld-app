@@ -1,0 +1,29 @@
+name: Kitchen Sink Demo
+
+on:
+  push:
+    branches-ignore:
+      - "renovate/**"
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  kitchen-sink:
+    name: Kitchen Sink
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:22.20.0
+      options: --user 1001
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Mark's Kitchen Sink tests
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          spec: cypress/tests/demo/kitchen-sink.spec.ts
+          config-file: cypress.kitchen-sink.config.ts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
