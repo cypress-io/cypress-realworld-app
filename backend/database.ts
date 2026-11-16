@@ -21,6 +21,7 @@ import {
 import { isWithinInterval } from "date-fns";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
+import Memory from "lowdb/adapters/Memory";
 import shortid from "shortid";
 import {
   BankAccount,
@@ -87,7 +88,14 @@ const NOTIFICATION_TABLE = "notifications";
 const BANK_TRANSFER_TABLE = "banktransfers";
 
 const databaseFile = path.join(__dirname, "../data/database.json");
-const adapter = new FileSync<DbSchema>(databaseFile);
+// Tests reseed and read data back through the API, so the test environment keeps the
+// database in memory rather than rewriting data/database.json on every change
+const adapter =
+  process.env.NODE_ENV === "test"
+    ? new Memory<DbSchema>(databaseFile, {
+        defaultValue: JSON.parse(fs.readFileSync(databaseFile, "utf-8")),
+      })
+    : new FileSync<DbSchema>(databaseFile);
 
 const db = low(adapter);
 

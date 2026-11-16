@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+import { getAvatarPath } from "./avatarUtils";
 import shortid from "shortid";
 import { faker } from "@faker-js/faker";
 import bcrypt from "bcryptjs";
@@ -108,9 +109,7 @@ export const getRandomTransactions = (baseCount: number, baseTransactions: Trans
     )
   ).slice(0, baseCount);
 
-export const getUserAvatar = (identifier: string) => {
-  return `https://api.dicebear.com/9.x/pixel-art/svg?seed=${encodeURIComponent(identifier)}`;
-};
+export const getUserAvatar = (identifier: string) => getAvatarPath(identifier);
 
 export const createFakeUser = (): User => {
   const id = shortid();

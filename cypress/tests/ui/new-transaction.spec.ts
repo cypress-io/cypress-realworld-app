@@ -30,7 +30,7 @@ describe("New Transaction", function () {
       ctx.user = users[0];
       ctx.contact = users[1];
 
-      return cy.loginByXstate(ctx.user.username);
+      return cy.loginByUi(ctx.user.username);
     });
   });
 
@@ -184,7 +184,7 @@ describe("New Transaction", function () {
     }
     cy.visualSnapshot("Transaction Payment Submitted Notification");
 
-    cy.switchUserByXstate(ctx.contact!.username);
+    cy.switchUser(ctx.contact!.username);
 
     const updatedAccountBalance = toDecimal(
       dinero({ amount: ctx.contact!.balance + transactionPayload.amount * 100, currency: USD }),
@@ -214,7 +214,7 @@ describe("New Transaction", function () {
     cy.getBySel("new-transaction-create-another-transaction").should("be.visible");
     cy.visualSnapshot("receiver - Transaction Payment Submitted Notification");
 
-    cy.switchUserByXstate(ctx.contact!.username);
+    cy.switchUser(ctx.contact!.username);
 
     cy.getBySelLike("personal-tab").click();
 
@@ -236,7 +236,7 @@ describe("New Transaction", function () {
     cy.getBySelLike("transaction-description").should("be.visible");
     cy.visualSnapshot("Accept Transaction Request");
 
-    cy.switchUserByXstate(ctx.user!.username);
+    cy.switchUser(ctx.user!.username);
 
     const updatedAccountBalance = toDecimal(
       dinero({ amount: ctx.user!.balance + transactionPayload.amount * 100, currency: USD }),

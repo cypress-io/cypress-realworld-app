@@ -9,7 +9,7 @@ describe("User Settings", function () {
     cy.intercept("GET", "/notifications*").as("getNotifications");
 
     cy.database("find", "users").then((user: User) => {
-      cy.loginByXstate(user.username);
+      cy.loginByUi(user.username);
     });
 
     if (isMobile()) {
