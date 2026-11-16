@@ -27,7 +27,7 @@ describe("Notifications", function () {
 
   describe("notifications from user interactions", function () {
     it("User A likes a transaction of User B; User B gets notification that User A liked transaction ", function () {
-      cy.loginByXstate(ctx.userA.username);
+      cy.loginByUi(ctx.userA.username);
       cy.wait("@getNotifications");
 
       cy.database("find", "transactions", { senderId: ctx.userB.id }).then(
@@ -53,7 +53,7 @@ describe("Notifications", function () {
       cy.contains(likesCountSelector, 1);
       cy.visualSnapshot("Like Count Incremented");
 
-      cy.switchUserByXstate(ctx.userB.username);
+      cy.switchUser(ctx.userB.username);
       cy.visualSnapshot(`Switch to User ${ctx.userB.username}`);
 
       cy.wait("@getNotifications")
@@ -81,7 +81,7 @@ describe("Notifications", function () {
     });
 
     it("User C likes a transaction between User A and User B; User A and User B get notifications that User C liked transaction", function () {
-      cy.loginByXstate(ctx.userC.username);
+      cy.loginByUi(ctx.userC.username);
 
       cy.database("find", "transactions", {
         senderId: ctx.userB.id,
@@ -97,7 +97,7 @@ describe("Notifications", function () {
       cy.contains(likesCountSelector, 1);
       cy.visualSnapshot("Like Count Incremented");
 
-      cy.switchUserByXstate(ctx.userA.username);
+      cy.switchUser(ctx.userA.username);
       cy.visualSnapshot(`Switch to User ${ctx.userA.username}`);
 
       cy.getBySelLike("notifications-link").click();
@@ -113,7 +113,7 @@ describe("Notifications", function () {
         .and("contain", "liked");
       cy.visualSnapshot("User A Notified of User B Like");
 
-      cy.switchUserByXstate(ctx.userB.username);
+      cy.switchUser(ctx.userB.username);
       cy.visualSnapshot(`Switch to User ${ctx.userB.username}`);
 
       cy.getBySelLike("notifications-link").click();
@@ -129,7 +129,7 @@ describe("Notifications", function () {
     });
 
     it("User A comments on a transaction of User B; User B gets notification that User A commented on their transaction", function () {
-      cy.loginByXstate(ctx.userA.username);
+      cy.loginByUi(ctx.userA.username);
       cy.visualSnapshot("Logged in as user A");
 
       cy.database("find", "transactions", { senderId: ctx.userB.id }).then(
@@ -142,7 +142,7 @@ describe("Notifications", function () {
 
       cy.wait("@postComment");
 
-      cy.switchUserByXstate(ctx.userB.username);
+      cy.switchUser(ctx.userB.username);
       cy.visualSnapshot(`Switch to User ${ctx.userB.username}`);
 
       cy.getBySelLike("notifications-link").click();
@@ -158,7 +158,7 @@ describe("Notifications", function () {
     });
 
     it("User C comments on a transaction between User A and User B; User A and B get notifications that User C commented on their transaction", function () {
-      cy.loginByXstate(ctx.userC.username);
+      cy.loginByUi(ctx.userC.username);
 
       cy.database("find", "transactions", {
         senderId: ctx.userB.id,
@@ -171,7 +171,7 @@ describe("Notifications", function () {
 
       cy.wait("@postComment");
 
-      cy.switchUserByXstate(ctx.userA.username);
+      cy.switchUser(ctx.userA.username);
       cy.visualSnapshot("Switch to User A");
       cy.visualSnapshot(`Switch to User ${ctx.userA.username}`);
 
@@ -186,7 +186,7 @@ describe("Notifications", function () {
         .and("contain", "commented");
       cy.visualSnapshot("User A Notified of User C Comment");
 
-      cy.switchUserByXstate(ctx.userB.username);
+      cy.switchUser(ctx.userB.username);
       cy.visualSnapshot(`Switch to User ${ctx.userB.username}`);
 
       cy.getBySelLike("notifications-link").click();
@@ -199,7 +199,7 @@ describe("Notifications", function () {
     });
 
     it("User A sends a payment to User B", function () {
-      cy.loginByXstate(ctx.userA.username);
+      cy.loginByUi(ctx.userA.username);
 
       cy.getBySelLike("new-transaction").click();
       cy.createTransaction({
@@ -211,7 +211,7 @@ describe("Notifications", function () {
       });
       cy.wait("@createTransaction");
 
-      cy.switchUserByXstate(ctx.userB.username);
+      cy.switchUser(ctx.userB.username);
       cy.visualSnapshot(`Switch to User ${ctx.userB.username}`);
 
       cy.getBySelLike("notifications-link").click();
@@ -225,7 +225,7 @@ describe("Notifications", function () {
     });
 
     it("User A sends a payment request to User C", function () {
-      cy.loginByXstate(ctx.userA.username);
+      cy.loginByUi(ctx.userA.username);
 
       cy.getBySelLike("new-transaction").click();
       cy.createTransaction({
@@ -237,7 +237,7 @@ describe("Notifications", function () {
       });
       cy.wait("@createTransaction");
 
-      cy.switchUserByXstate(ctx.userC.username);
+      cy.switchUser(ctx.userC.username);
       cy.visualSnapshot(`Switch to User ${ctx.userC.username}`);
 
       cy.getBySelLike("notifications-link").click();
@@ -251,7 +251,7 @@ describe("Notifications", function () {
   it("renders an empty notifications state", function () {
     cy.intercept("GET", "/notifications", []).as("notifications");
 
-    cy.loginByXstate(ctx.userA.username);
+    cy.loginByUi(ctx.userA.username);
 
     if (isMobile()) {
       cy.getBySel("sidenav-toggle").click();

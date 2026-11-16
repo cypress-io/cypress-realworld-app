@@ -20,6 +20,7 @@ try {
 
 export default defineConfig({
   projectId: "7s5okt",
+  experimentalWebKitSupport: true,
   retries: {
     runMode: 2,
   },

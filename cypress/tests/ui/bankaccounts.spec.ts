@@ -15,6 +15,13 @@ describe("Bank Accounts", function () {
 
     cy.intercept("GET", "/notifications").as("getNotifications");
 
+    cy.database("find", "users").then((user: User) => {
+      ctx.user = user;
+
+      return cy.loginByUi(ctx.user.username);
+    });
+
+    // Registered after logging in, so the aliases only match the test's own requests
     cy.intercept("POST", apiGraphQL, (req) => {
       const operationAliases: Record<string, string> = {
         ListBankAccount: "gqlListBankAccountQuery",
@@ -34,12 +41,6 @@ describe("Bank Accounts", function () {
         req.alias = operationAliases[operationName];
       }
     });
-
-    cy.database("find", "users").then((user: User) => {
-      ctx.user = user;
-
-      return cy.loginByXstate(ctx.user.username);
-    });
   });
 
   it("creates a new bank account", function () {
@@ -49,6 +50,8 @@ describe("Bank Accounts", function () {
     }
 
     cy.getBySel("sidenav-bankaccounts").click();
+    // The app ignores a new bank account while it is still fetching the list
+    cy.wait("@gqlListBankAccountQuery");
 
     cy.getBySel("bankaccount-new").click();
     cy.location("pathname").should("eq", "/bankaccounts/new");

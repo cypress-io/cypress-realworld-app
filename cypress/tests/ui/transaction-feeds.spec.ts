@@ -33,19 +33,16 @@ describe("Transaction Feed", function () {
       tab: "public-tab",
       tabLabel: "everyone",
       routeAlias: "publicTransactions",
-      service: "publicTransactionService",
     },
     contacts: {
       tab: "contacts-tab",
       tabLabel: "friends",
       routeAlias: "contactsTransactions",
-      service: "contactTransactionService",
     },
     personal: {
       tab: "personal-tab",
       tabLabel: "mine",
       routeAlias: "personalTransactions",
-      service: "personalTransactionService",
     },
   };
 
@@ -61,7 +58,7 @@ describe("Transaction Feed", function () {
       ctx.user = users[0];
       ctx.allUsers = users;
 
-      cy.loginByXstate(ctx.user.username);
+      cy.loginByUi(ctx.user.username);
     });
   });
   describe("app layout and responsiveness", function () {
@@ -199,20 +196,44 @@ describe("Transaction Feed", function () {
           .its("response.body.results")
           .should("have.length", Cypress.expose("paginationPageSize"));
 
+        const scrollHeight = () =>
+          cy.getBySel("transaction-list").children().invoke("prop", "scrollHeight");
+
         cy.log("📃 Scroll to next page");
+        // a static alias keeps this height, where a query alias would measure again when read
+        scrollHeight().as("firstPageHeight", { type: "static" });
         cy.getBySel("transaction-list").children().scrollTo("bottom");
 
-        cy.wait(`@${feed.routeAlias}`)
-          .its("response.body")
-          .then(({ results, pageData }) => {
-            expect(results).have.length(Cypress.expose("paginationPageSize"));
-            expect(pageData.page).to.equal(2);
-            cy.visualSnapshot(`Paginate ${feedName} Next Page`);
-            cy.nextTransactionFeedPage(feed.service, pageData.totalPages);
-          });
+        // Each scroll to the bottom loads the next page, until the feed has no more. A
+        // scroll only reaches past a page once it has rendered, so wait for the list to grow.
+        const scrollToLastPage = (body: any, heightBefore: number): Cypress.Chainable<any> => {
+          if (!body.pageData.hasNextPages) {
+            return cy.wrap(body, { log: false });
+          }
+
+          return scrollHeight()
+            .should("be.greaterThan", heightBefore)
+            .then((height) => {
+              cy.getBySel("transaction-list").children().scrollTo("bottom");
+
+              return cy
+                .wait(`@${feed.routeAlias}`)
+                .its("response.body")
+                .then((next) => scrollToLastPage(next, Number(height)));
+            });
+        };
 
         cy.wait(`@${feed.routeAlias}`)
           .its("response.body")
+          .then((body) => {
+            expect(body.results).have.length(Cypress.expose("paginationPageSize"));
+            expect(body.pageData.page).to.equal(2);
+            cy.visualSnapshot(`Paginate ${feedName} Next Page`);
+
+            return cy
+              .get("@firstPageHeight")
+              .then((firstPageHeight) => scrollToLastPage(body, Number(firstPageHeight)));
+          })
           .then(({ results, pageData }) => {
             expect(results).to.have.length.least(1);
             expect(pageData.page).to.equal(pageData.totalPages);
@@ -321,7 +342,7 @@ describe("Transaction Feed", function () {
 
         cy.wait(`@${feed.routeAlias}`).its("response.body.results").as("unfilteredResults");
 
-        cy.setTransactionAmountRange(dollarAmountRange.min, dollarAmountRange.max);
+        cy.setTransactionAmountRange(dollarAmountRange.min, dollarAmountRange.max, feed.routeAlias);
 
         cy.getBySelLike("filter-amount-range-text").should(
           "contain",
@@ -370,7 +391,7 @@ describe("Transaction Feed", function () {
         cy.getBySelLike(feed.tab).click();
         cy.wait(`@${feed.routeAlias}`);
 
-        cy.setTransactionAmountRange(550, 1000);
+        cy.setTransactionAmountRange(550, 1000, feed.routeAlias);
         cy.getBySelLike("filter-amount-range-text").should("contain", "$550 - $1,000");
         cy.wait(`@${feed.routeAlias}`);
 
