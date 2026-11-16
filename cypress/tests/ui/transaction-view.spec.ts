@@ -23,7 +23,7 @@ describe("Transaction View", function () {
     cy.database("find", "users").then((user: User) => {
       ctx.authenticatedUser = user;
 
-      cy.loginByXstate(ctx.authenticatedUser.username);
+      cy.loginByUi(ctx.authenticatedUser.username);
 
       cy.database("find", "transactions", {
         receiverId: ctx.authenticatedUser.id,

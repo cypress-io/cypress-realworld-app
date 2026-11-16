@@ -1,7 +1,6 @@
 // @ts-check
 ///<reference path="../global.d.ts" />
 
-import { pick } from "lodash/fp";
 import { differenceInMonths, parse as parseDate } from "date-fns";
 import { isMobile } from "./utils";
 
@@ -97,78 +96,106 @@ Cypress.Commands.add("loginByApi", (username, password) => {
     : cy.env(["defaultPassword"]).then(({ defaultPassword }) => sendLogin(defaultPassword));
 });
 
-Cypress.Commands.add("reactComponent", { prevSubject: "element" }, ($el) => {
-  if ($el.length !== 1) {
-    throw new Error(`cy.component() requires element of length 1 but got ${$el.length}`);
-  }
-  // Query for key starting with __reactInternalInstance$ for React v16.x
-  //
-  const key = Object.keys($el.get(0)).find((key) => key.startsWith("__reactFiber$"));
+// The slider moves whichever thumb is nearest a click to the click, and spans values 0 to
+// 100, which are tens of dollars. Returns the values to click, in order, to move the thumbs
+// from 0 and 100 to `min` and `max`, never clicking nearer the other thumb.
+const amountRangeClicks = (min: number, max: number) => {
+  const thumbs = [0, 100];
+  const clicks: number[] = [];
 
-  // @ts-ignore
-  const domFiber = $el.prop(key);
+  const moveThumb = (index: number, target: number) => {
+    while (thumbs[index] !== target) {
+      const midpoint = (thumbs[0] + thumbs[1]) / 2;
+      const reach =
+        index === 0
+          ? Math.min(target, Math.ceil(midpoint) - 1)
+          : Math.max(target, Math.floor(midpoint) + 1);
 
-  Cypress.log({
-    name: "component",
+      if (reach === thumbs[index]) {
+        throw new Error(`Can't click the amount range slider to ${min} - ${max}`);
+      }
+
+      thumbs[index] = reach;
+      clicks.push(reach);
+    }
+  };
+
+  moveThumb(1, max);
+  moveThumb(0, min);
+
+  return clicks;
+};
+
+Cypress.Commands.add("setTransactionAmountRange", (min, max, routeAlias) => {
+  cy.getBySel("transaction-list-filter-amount-range-button").scrollIntoView();
+  cy.getBySel("transaction-list-filter-amount-range-button").click({ force: true });
+  // The filter grows or slides in, and its width and position are only final once it has.
+  // Its first frame has no transform yet, but it also hasn't started fading in. The side nav
+  // is a drawer too, so this looks for the paper the slider is in.
+  cy.getBySelLike("filter-amount-range-slider")
+    .closest(".MuiPopover-paper, .MuiDrawer-paper")
+    .should("have.css", "opacity", "1")
+    .and("have.css", "transform", "none");
+
+  cy.getBySelLike("filter-amount-range-slider")
+    .invoke("outerWidth")
+    .then((width) => {
+      const clicks = amountRangeClicks(min / 10, max / 10);
+
+      clicks.forEach((value, index) => {
+        // Cypress rounds a click's coordinates up, so aiming half a pixel short of a value
+        // lands within half a pixel of it, closer than one step of the slider
+        cy.getBySelLike("filter-amount-range-slider").click(
+          (value / 100) * Number(width) - 0.5,
+          1,
+          {
+            force: true,
+          }
+        );
+
+        // Each click refetches the feed, so wait out every request but the last, which the
+        // test waits for itself
+        if (index < clicks.length - 1) {
+          cy.wait(`@${routeAlias}`);
+        }
+      });
+    });
+});
+
+let loginCount = 0;
+
+Cypress.Commands.add("loginByUi", (username, password) => {
+  const log = Cypress.log({
+    name: "loginByUi",
+    displayName: "LOGIN BY UI",
+    message: [`🔐 Authenticating | ${username}`],
+    autoEnd: false,
+    // cy.login logs the signed-in user's id from the login response
     consoleProps() {
-      return {
-        component: domFiber,
-      };
+      return { username };
     },
   });
 
-  return domFiber.return;
-});
+  // The app keeps the bank accounts it fetched across a logout, so if the next logout
+  // beats this fetch, the fetch fails and the next user sees the onboarding dialog for
+  // having no bank accounts. A fresh alias keeps an earlier login's fetch from matching.
+  const bankAccountsAlias = `loginBankAccounts${loginCount++}`;
 
-Cypress.Commands.add("setTransactionAmountRange", (min, max) => {
-  cy.getBySel("transaction-list-filter-amount-range-button").scrollIntoView();
-  cy.getBySel("transaction-list-filter-amount-range-button").click({ force: true });
-
-  return cy
-    .getBySelLike("filter-amount-range-slider")
-    .reactComponent()
-    .its("memoizedProps")
-    .its("ownerState")
-    .invoke("onChange", null, [min / 10, max / 10]);
-});
-
-Cypress.Commands.add("loginByXstate", (username, password) => {
-  const log = Cypress.log({
-    name: "loginbyxstate",
-    displayName: "LOGIN BY XSTATE",
-    message: [`🔐 Authenticating | ${username}`],
-    autoEnd: false,
+  cy.intercept("POST", "/graphql", (req) => {
+    if (req.body?.operationName === "ListBankAccount") {
+      req.alias = bankAccountsAlias;
+    }
   });
 
-  cy.intercept("POST", "/login").as("loginUser");
-  cy.intercept("GET", "/checkAuth").as("getUserProfile");
-  cy.visit("/signin", { log: false }).then(() => {
-    log.snapshot("before");
-  });
-
-  const doLogin = (pw: string) => {
-    cy.window({ log: false }).then((win) =>
-      win.authService.send("LOGIN", { username, password: pw })
-    );
-
-    cy.wait("@loginUser").then((loginUser) => {
-      log.set({
-        consoleProps() {
-          return {
-            username,
-            // @ts-ignore
-            userId: loginUser.response.body.user.id,
-          };
-        },
-      });
-    });
-  };
+  const doLogin = (pw: string) => cy.login(username, pw);
 
   if (password !== undefined) {
     doLogin(password);
   } else {
     cy.env(["defaultPassword"]).then(({ defaultPassword }) => doLogin(defaultPassword));
   }
+
+  cy.wait(`@${bankAccountsAlias}`);
 
   return cy
     .getBySel("list-skeleton")
@@ -179,19 +206,20 @@ Cypress.Commands.add("loginByXstate", (username, password) => {
     });
 });
 
-Cypress.Commands.add("logoutByXstate", () => {
+Cypress.Commands.add("logoutByUi", () => {
   const log = Cypress.log({
-    name: "logoutByXstate",
-    displayName: "LOGOUT BY XSTATE",
+    name: "logoutByUi",
+    displayName: "LOGOUT BY UI",
     message: [`🔒 Logging out current user`],
     // @ts-ignore
     autoEnd: false,
   });
 
-  cy.window({ log: false }).then((win) => {
-    log.snapshot("before");
-    win.authService.send("LOGOUT");
-  });
+  if (isMobile()) {
+    cy.getBySel("sidenav-toggle").click();
+  }
+
+  cy.getBySel("sidenav-signout").click();
 
   return cy
     .location("pathname")
@@ -202,9 +230,9 @@ Cypress.Commands.add("logoutByXstate", () => {
     });
 });
 
-Cypress.Commands.add("switchUserByXstate", (username) => {
-  cy.logoutByXstate();
-  return cy.loginByXstate(username).then(() => {
+Cypress.Commands.add("switchUser", (username) => {
+  cy.logoutByUi();
+  return cy.loginByUi(username).then(() => {
     if (isMobile()) {
       cy.getBySel("sidenav-toggle").click();
       cy.getBySel("sidenav-username").contains(username);
@@ -229,52 +257,17 @@ Cypress.Commands.add("createTransaction", (payload) => {
     },
   });
 
-  return cy
-    .window({ log: false })
-    .then((win) => {
-      log.snapshot("before");
-      win.createTransactionService.send("SET_USERS", payload);
+  cy.getBySel("user-list-search-input").type(payload.receiver.username, { force: true });
+  cy.getBySel(`user-list-item-${payload.receiver.id}`).click({ force: true });
+  cy.getBySelLike("amount-input").type(`${payload.amount}`);
+  cy.getBySelLike("description-input").type(payload.description);
 
-      const createPayload = pick(["amount", "description", "transactionType"], payload);
+  cy.getBySelLike(`submit-${payload.transactionType}`).click();
 
-      return win.createTransactionService.send("CREATE", {
-        ...createPayload,
-        senderId: payload.sender.id,
-        receiverId: payload.receiver.id,
-      });
-    })
-    .then(() => {
-      log.snapshot("after");
-      log.end();
-    });
-});
-
-Cypress.Commands.add("nextTransactionFeedPage", (service, page) => {
-  const log = Cypress.log({
-    name: "nextTransactionFeedPage",
-    displayName: "NEXT TRANSACTION FEED PAGE",
-    message: [`📃 Fetching page ${page} with ${service}`],
-    // @ts-ignore
-    autoEnd: false,
-    consoleProps() {
-      return {
-        service,
-        page,
-      };
-    },
+  return cy.then(() => {
+    log.snapshot("after");
+    log.end();
   });
-
-  return cy
-    .window({ log: false })
-    .then((win) => {
-      log.snapshot("before");
-      // @ts-ignore
-      return win[service].send("FETCH", { page });
-    })
-    .then(() => {
-      log.snapshot("after");
-      log.end();
-    });
 });
 
 Cypress.Commands.add("pickDateRange", (startDate, endDate) => {

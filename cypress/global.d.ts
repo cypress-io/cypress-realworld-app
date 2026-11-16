@@ -76,24 +76,15 @@ declare namespace Cypress {
     database(operation: "filter", entity: string, query?: object, log?: boolean): Chainable<any>;
 
     /**
-     * Fetch React component instance associated with received element subject
-     */
-    reactComponent(): Chainable<any>;
-
-    /**
      * Select data range within date range picker component
      */
     pickDateRange(startDate: Date, endDate: Date): Chainable<void>;
 
     /**
-     * Select transaction amount range
+     * Select transaction amount range by dragging the slider's thumbs. `routeAlias` is the
+     * feed's request alias, since each thumb moved refetches the feed.
      */
-    setTransactionAmountRange(min: number, max: number): Chainable<any>;
-
-    /**
-     * Paginate to the next page in transaction infinite-scroll pagination view
-     */
-    nextTransactionFeedPage(service: string, page: number): Chainable<any>;
+    setTransactionAmountRange(min: number, max: number, routeAlias: string): Chainable<any>;
 
     /**
      * Logs-in user by using UI
@@ -121,14 +112,14 @@ declare namespace Cypress {
     loginByOkta(username: string, password: string): Chainable<Response>;
 
     /**
-     * Logs in bypassing UI by triggering XState login event
+     * Logs in through the sign-in form and waits for the transaction feed
      */
-    loginByXstate(username: string, password?: string): Chainable<any>;
+    loginByUi(username: string, password?: string): Chainable<any>;
 
     /**
-     * Logs out via bypassing UI by triggering XState logout event
+     * Logs out through the side nav's sign out button
      */
-    logoutByXstate(): Chainable<string>;
+    logoutByUi(): Chainable<string>;
 
     /**
      * Logs in via Auth0 login page
@@ -138,10 +129,10 @@ declare namespace Cypress {
     /**
      * Switch current user by logging out current user and logging as user with specified username
      */
-    switchUserByXstate(username: string): Chainable<any>;
+    switchUser(username: string): Chainable<any>;
 
     /**
-     * Create Transaction via bypassing UI and using XState createTransactionService
+     * Create Transaction through the new transaction form, which must already be open
      */
     createTransaction(payload): Chainable<any>;
 
