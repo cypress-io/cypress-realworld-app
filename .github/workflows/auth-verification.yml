@@ -1,0 +1,76 @@
+# Runs the sign-in checks on every pull request so they can be required before merging.
+# Same checks as the verify-rwa skill (.claude/skills/verify-rwa), minus Cypress Cloud:
+# no secrets are needed, so this works on forks.
+name: Authentication verification
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: auth-verification-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  auth-verification:
+    # This job name is the status check you mark as required in the branch rules.
+    name: auth-verification
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      # Let Corepack fetch the Yarn version pinned in package.json without prompting.
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
+
+    steps:
+      - name: Check out the PR head commit
+        uses: actions/checkout@v7
+        with:
+          # Test the exact commit a reviewer signs off on, not GitHub's merge preview.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - name: Set up Node from .node-version
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+
+      - name: Use Yarn Classic from package.json (Corepack)
+        run: |
+          corepack enable
+          yarn --version
+
+      - name: Install dependencies and the Cypress binary (cached)
+        uses: cypress-io/github-action@v7
+        with:
+          runTests: false
+
+      - name: Type-check the app
+        run: yarn types
+
+      - name: Type-check the Cypress specs (yarn types skips cypress/)
+        run: npx tsc -p cypress/tsconfig.json --noEmit
+
+      - name: Run the sign-in tests against the dev server
+        uses: cypress-io/github-action@v7
+        with:
+          install: false
+          start: yarn dev
+          wait-on: "http://localhost:3000, http://localhost:3001/testData/users"
+          wait-on-timeout: 120
+          browser: chrome
+          spec: cypress/tests/ui/auth.spec.ts
+          config: video=true
+
+      - name: Upload screenshots and videos
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: auth-evidence-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            cypress/screenshots
+            cypress/videos
+          if-no-files-found: ignore
+          retention-days: 14
