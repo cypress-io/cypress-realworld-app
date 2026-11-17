@@ -76,6 +76,10 @@ reuse, and the ways a check can be misleading:
   go straight to `cypress run`.
 - **Other commands** (`yarn types`, `yarn lint`, unit tests): `exec <name> -- <command>` so they're logged
   with their exit codes. Re-running a check keeps both logs.
+- **Type-check what you changed.** `yarn types` uses the root `tsconfig.json`, which does **not** include
+  `cypress/`, so it passes even when a spec has type errors. For changed Cypress specs, run
+  `exec types-cypress -- npx tsc -p cypress/tsconfig.json --noEmit`. To lint only the changed files
+  (faster than the full `yarn lint`), run `exec lint -- "npx eslint <files> && npx prettier --check <files>"`.
 - **API probes** (curl examples in the feature map) are good supporting evidence. They don't replace a
   browser-level check of a UI change.
 
