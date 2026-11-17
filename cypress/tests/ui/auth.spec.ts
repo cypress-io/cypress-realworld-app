@@ -183,4 +183,42 @@ describe("User Sign-up and Login", function () {
       .and("have.text", "Username or password is invalid");
     cy.visualSnapshot("Sign In, Invalid Username, Username or Password is Invalid");
   });
+
+  it("should sign in after a failed attempt without reloading the page", function () {
+    cy.visit("/signin");
+    // A marker on the window object disappears if the page reloads.
+    cy.window().then((win) => {
+      (win as any).signinRetryMarker = true;
+    });
+
+    // First attempt: invalid credentials are rejected and the user stays signed out.
+    cy.login("invalidUserName", "invalidPa$$word");
+    cy.get("@loginUser").its("response.statusCode").should("equal", 401);
+    cy.getBySel("signin-error")
+      .should("be.visible")
+      .and("have.text", "Username or password is invalid");
+    cy.location("pathname").should("equal", "/signin");
+
+    // The sign-in form remounts after a failed attempt, so both fields are empty.
+    cy.getBySel("signin-username").find("input").should("have.value", "");
+    cy.getBySel("signin-password").find("input").should("have.value", "");
+
+    // Second attempt on the same page with valid seeded credentials.
+    cy.database("find", "users").then((user: User) => {
+      cy.getBySel("signin-username").type(user.username);
+      cy.getBySel("signin-password").type("s3cret");
+      cy.getBySel("signin-username").find("input").should("have.value", user.username);
+      cy.getBySel("signin-password").find("input").should("have.value", "s3cret");
+      cy.getBySel("signin-submit").should("be.enabled").click();
+
+      cy.wait("@loginUser").its("response.statusCode").should("equal", 200);
+      cy.location("pathname").should("equal", "/");
+      cy.getBySel("signin-error").should("not.exist");
+      cy.request(`${Cypress.expose("apiUrl")}/checkAuth`)
+        .its("body.user.username")
+        .should("equal", user.username);
+    });
+
+    cy.window().its("signinRetryMarker").should("equal", true);
+  });
 });
