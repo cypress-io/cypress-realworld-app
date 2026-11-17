@@ -12,7 +12,7 @@ All the fragile parts (ports, process cleanup on Windows, log capture, retry det
 helper script, so you don't have to rebuild them each time. Run it from the repo root:
 
 ```bash
-node .claude/skills/verify-rwa/scripts/rwa.mjs start                     # launch + doctor
+node .claude/skills/verify-rwa/scripts/rwa.mjs start                     # launch + doctor (add --port N for parallel runs)
 node .claude/skills/verify-rwa/scripts/rwa.mjs exec types -- yarn types  # any command, logged
 node .claude/skills/verify-rwa/scripts/rwa.mjs cypress cypress/tests/ui/auth.spec.ts
 node .claude/skills/verify-rwa/scripts/rwa.mjs stop                      # always, even after failures
@@ -28,10 +28,12 @@ Prerequisites, checked once per machine:
 - Yarn Classic 1.x. Corepack picks 1.22.22 from `packageManager`. Yarn 2 and later are not supported.
 - Cypress binary: run `yarn cypress verify` if Cypress has never run on this machine.
 
-`start` refuses to run if another verify run is active or if ports 3000/3001 are busy. Next it records
-the commit, branch, and uncommitted files, runs `yarn dev`, and waits up to 150 s for both
-services. `yarn dev` reseeds `data/database.json` from `data/database-seed.json`, then starts
-Vite (frontend, :3000) and Express via nodemon (API, :3001). Finally, `start` runs the doctor.
+`start` refuses to run if another verify run is active or if its ports are busy (default 3000 for the
+frontend and 3001 for the API; `--port N` uses N and N+1). Next it records the commit, branch,
+uncommitted files, and ports. It then runs the same steps as `yarn dev`: reseed `data/database.json`
+from `data/database-seed.json`, then start Vite (frontend) and Express via nodemon (API) under
+`concurrently`. The ports are explicit and Vite gets `--strictPort`. It waits up to 150 s for both
+services, then runs the doctor.
 
 | `start` exit | Meaning | What you do |
 |---|---|---|
@@ -44,13 +46,14 @@ Vite (frontend, :3000) and Express via nodemon (API, :3001). Finally, `start` ru
 ## 2. Doctor
 
 The doctor answers "is the thing I'm about to test actually my app, and is it usable?". It checks:
-- **Ownership:** the processes listening on :3000 and :3001 belong to this run's recorded process tree
+- **Ownership:** the processes listening on the run's frontend and API ports belong to this run's recorded process tree
   (Windows) or process group (Linux/macOS). A stale server from another session would otherwise
   make your tests pass or fail for reasons unrelated to your change.
-- **API:** `GET :3001/testData/users` returns seeded users.
-- **Frontend:** `GET :3000/signin` serves the app shell.
-- **Port:** Vite's own log says it bound :3000. Vite is not `strictPort`, so if 3000 is taken it
-  quietly moves to another port while tests keep hitting the old one.
+- **API:** `GET <api port>/testData/users` returns seeded users.
+- **Frontend:** `GET <frontend port>/signin` serves the app shell.
+- **Port:** Vite's own log says it bound the run's frontend port. Vite's config is not `strictPort`,
+  so anything that starts it without `--strictPort` can quietly move to another port while tests keep
+  hitting the old one.
 
 Run `doctor` again whenever results look strange, after a long pause, or after editing
 `backend/` (nodemon restarts the API).
@@ -85,6 +88,22 @@ reuse, and the ways a check can be misleading:
 
 Run one test command at a time per app instance. Every UI spec reseeds the database in
 `beforeEach` (`cy.task("db:seed")`), so two concurrent runs would overwrite each other's data.
+
+### Parallel runs
+
+To work on two tasks at once, give each one its own **git worktree** and its own **port base**. Each
+worktree has its own `data/database.json` and `.verify-runs/`, so data and evidence stay separate.
+
+```bash
+git worktree add ../wt-a -b <branch-a>      # keep the path short on Windows
+cd ../wt-a && yarn install --frozen-lockfile --prefer-offline
+node .claude/skills/verify-rwa/scripts/rwa.mjs start --port 3100    # API on 3101
+node .claude/skills/verify-rwa/scripts/rwa.mjs cypress cypress/tests/ui/auth.spec.ts
+```
+
+The `cypress` command points Cypress at the run's ports (`baseUrl` and `expose.apiUrl`), so don't
+call `yarn cypress:run` directly on non-default ports. Its pre-hook waits on 3000/3001. Use one verify
+run per worktree at a time.
 
 ## 4. Evidence and verdict
 
@@ -125,8 +144,8 @@ Not verified: <anything skipped and why, e.g. third-party auth specs need creden
 
 Always run `stop`, including after failures and BLOCKED results. It:
 - stops only the processes this run recorded (it never touches a port owner it didn't start)
-- waits for :3000 and :3001 to free up
-- restores `data/database.json` if it was clean at start. `yarn dev` rewrites it, and it must never
+- waits for the run's ports to free up
+- restores `data/database.json` if it was clean at start. The dev seeding rewrites it, and it must never
   be committed by accident.
 - lists any other files that changed during the run, then writes `summary.md`
 
