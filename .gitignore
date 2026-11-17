@@ -21,6 +21,9 @@ cypress/videos
 cypress/screenshots
 .nyc_output
 
+# Evidence from the verify-rwa skill (.claude/skills/verify-rwa)
+.verify-runs/
+
 # Ignore env local files - https://create-react-app.dev/docs/adding-custom-environment-variables/#what-other-env-files-can-be-used
 .env*.local
 

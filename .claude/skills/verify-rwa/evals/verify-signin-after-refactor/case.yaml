@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: verify-signin-after-refactor
+expected_outcome: |
+  The agent launches the app, confirms the instance is healthy and its own, runs the
+  sign-in Cypress spec headless, and reports PASS / FAIL / BLOCKED with the tested commit,
+  the commands and exit codes, whether any test needed a retry, and paths to saved evidence.
+  It confirms the "Username or password is invalid" error in a browser-level test, does not
+  modify application or test code, and leaves no servers running and no tracked files changed.
