@@ -156,10 +156,14 @@ describe("Bank Accounts", function () {
   // TODO: [enhancement] the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
   it("renders an empty bank account list state with onboarding modal", function () {
     cy.wait("@getNotifications");
+    // The home page shown after sign-in sends its own ListBankAccount request. Wait for it here, so it
+    // can't be the request that the stub below catches or that the wait after cy.visit yields.
+    cy.wait("@gqlListBankAccountQuery");
+
     cy.intercept("POST", apiGraphQL, (req) => {
       const { body } = req;
       if (body.hasOwnProperty("operationName") && body.operationName === "ListBankAccount") {
-        req.alias = "gqlListBankAccountQuery";
+        req.alias = "gqlEmptyListBankAccountQuery";
         req.continue((res) => {
           res.body.data.listBankAccount = [];
         });
@@ -168,7 +172,9 @@ describe("Bank Accounts", function () {
 
     cy.visit("/bankaccounts");
     cy.wait("@getNotifications");
-    cy.wait("@gqlListBankAccountQuery");
+    cy.wait("@gqlEmptyListBankAccountQuery")
+      .its("response.body.data.listBankAccount")
+      .should("have.length", 0);
 
     cy.getBySel("bankaccount-list").should("not.exist");
     cy.getBySel("empty-list-header").should("contain", "No Bank Accounts");

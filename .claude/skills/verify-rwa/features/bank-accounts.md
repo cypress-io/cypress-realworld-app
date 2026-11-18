@@ -104,7 +104,7 @@ Use `cy.getBySel("<name>")` (`[data-test=<name>]`) or `cy.getBySelLike("<part>")
 | Create from the list page | Sidenav → Create → `/bankaccounts/new`; after Save, 2 rows and the second contains "The Best Bank" | `bankaccounts.spec.ts` "creates a new bank account" |
 | Form validation | All 7 messages in the validation table appear (the spec blurs each field); a 9-digit routing number and 9- or 12-digit account numbers clear the helper text; Save is disabled at the end with errors showing | `bankaccounts.spec.ts` "should display bank account form errors" |
 | Soft delete | After `DeleteBankAccount`, a row contains "Deleted" | `bankaccounts.spec.ts` "soft deletes a bank account" |
-| Empty list | `bankaccount-list` absent, `empty-list-header` says "No Bank Accounts", onboarding dialog visible | `bankaccounts.spec.ts` "renders an empty bank account list state with onboarding modal" (the list response is **stubbed** to `[]`) |
+| Empty list | The `ListBankAccount` response from the `/bankaccounts` load has length 0; `bankaccount-list` absent, `empty-list-header` says "No Bank Accounts", onboarding dialog visible | `bankaccounts.spec.ts` "renders an empty bank account list state with onboarding modal" (the list response is **stubbed** to `[]`, under its own alias `@gqlEmptyListBankAccountQuery`) |
 | Create during onboarding | Next → "Create Bank Account" → Save → "Finished" / "You're all set!" → transaction list | `auth.spec.ts` "should allow a visitor to sign-up, login, and logout" (not run for this map) |
 | Database functions | List by user, get by id, create, soft delete | `src/__tests__/bankaccounts.test.ts` (Vitest, not run for this map) |
 | Letters in routing / account numbers | Accepted: "abcdefghi" in both passes validation, Save is enabled, and both values are stored as typed (mutation response and `/testData/bankaccounts`) | No repo test. Scratch spec passed with no retry on 2026-11-17 (run `20261118-000930`) |
@@ -154,13 +154,17 @@ examples above if the seed has changed.
 
 ## Misleading results and failure conditions
 
-- **The empty-state test's list wait is stale.** The page shown after sign-in already fires a
-  `ListBankAccount` request that nothing waits on. `cy.wait` yields the oldest unwaited request for an alias, so in "renders an empty
-  bank account list state…", `cy.wait("@gqlListBankAccountQuery")` after `cy.visit` returns that
-  earlier, **unstubbed** response. A scratch copy recorded `listBankAccount` length 1 there, not 0. The
-  test still passes because the assertions after it retry until the stubbed response renders. To wait on
-  the request from a specific page load, register a new `cy.intercept(...).as(...)` right before
-  `cy.visit` (this is what the "only account" probe does).
+- **Stale-wait trap: `@gqlListBankAccountQuery` also catches the sign-in request.** The page shown
+  after sign-in already fires one `ListBankAccount` request, and `cy.wait` yields the oldest unwaited
+  request for an alias, so a later wait on that alias can return this earlier, **unstubbed** response
+  (a scratch copy of the old empty-state test recorded length 1 there, not 0). "renders an empty bank
+  account list state…" now avoids this: it first waits `@gqlListBankAccountQuery` to use up the sign-in
+  request, then registers the stub under its own alias, `@gqlEmptyListBankAccountQuery`, right before
+  `cy.visit`, and asserts that the response it waited for has `data.listBankAccount` of length 0. So
+  the test proves the `/bankaccounts` load got the stubbed `[]`, then that the UI shows the empty state.
+  A scratch probe saw one sign-in request, none in the 5 s after it, and only the visit's request under
+  the new alias. With the stub removed, the test fails at the length-0 assertion (run
+  `20261118-040903`). Other tests that wait on a specific page load should do the same.
 - **The empty-state test doesn't use real empty data.** It rewrites the `ListBankAccount` response to
   `[]`. A user whose accounts are all soft-deleted never reaches the empty state (see Behaviors).
 - **Real empty data: `yarn start:empty`.** Its `prestart:empty` hook runs `db:seed:empty`, which copies
