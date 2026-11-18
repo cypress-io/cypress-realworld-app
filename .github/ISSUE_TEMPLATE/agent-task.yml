@@ -1,0 +1,55 @@
+name: Agent task
+description: A small, well-scoped task the agent pipeline can pick up. Add the agent-ready label only once every field is clear.
+title: "[agent] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The `run-agent-task` skill reads this issue as the task spec. It refuses issues with an empty
+        section, and it never goes beyond **Scope**. If the work needs more, the run stops and asks.
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: The problem, and what goes wrong today. Link code with file paths.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: The only files the agent may change. Everything else is read-only.
+      placeholder: |
+        - cypress/tests/ui/bankaccounts.spec.ts
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: One testable result per line, each naming the check that proves it. A check must cover the changed files.
+      placeholder: |
+        1. ... proven by `rwa.mjs cypress cypress/tests/ui/<spec>` (passes, no retries)
+        2. ... a scratch copy with <deliberate break> fails at <assertion>
+    validations:
+      required: true
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: Boundaries
+      description: What the agent must not do.
+      value: |
+        - Change only the files in Scope.
+        - Don't remove or weaken existing assertions.
+        - No `cy.wait(<ms>)` or other fixed sleeps.
+        - Never merge.
+    validations:
+      required: true
+  - type: input
+    id: base
+    attributes:
+      label: Base branch
+      description: The branch to start from and open the draft PR against.
+      value: develop
+    validations:
+      required: true
