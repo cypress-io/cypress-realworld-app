@@ -72,7 +72,6 @@ export default defineConfig({
     viewportHeight: 1000,
     viewportWidth: 1280,
     experimentalRunAllSpecs: true,
-    experimentalStudio: true,
     setupNodeEvents(on, config) {
       const testDataApiEndpoint = `${config.expose.apiUrl}/testData`;
 

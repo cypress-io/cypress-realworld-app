@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Helper for the verify-rwa skill. Run from the repo root:
-//   node .claude/skills/verify-rwa/scripts/rwa.mjs <start|doctor|exec|cypress|stop|status>
+//   node .claude/skills/verify-rwa/scripts/rwa.mjs <start [--port N]|doctor|exec|cypress|stop|status>
+// Ports: frontend N (default 3000), API N+1. Use different ports per git worktree to run in parallel.
 // Every run gets an evidence folder: .verify-runs/<runId>/ (git-ignored). runId is UTC time.
 import { spawn, spawnSync } from "node:child_process";
 import fs from "node:fs";
@@ -11,7 +12,9 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../..");
 const RUNS = path.join(ROOT, ".verify-runs");
 const STATE = path.join(RUNS, "current.json");
-const PORTS = { frontend: 3000, api: 3001 };
+const DEFAULT_PORT = 3000;
+const portsFor = (frontend) => ({ frontend, api: frontend + 1 });
+const runPorts = (run) => run.ports || portsFor(DEFAULT_PORT);
 const DB_FILE = "data/database.json";
 const IS_WIN = process.platform === "win32";
 const READY_TIMEOUT_S = 150;
@@ -123,6 +126,7 @@ function loadRun() {
 
 // ---------------------------------------------------------------- doctor
 async function doctor(run, { quiet = false } = {}) {
+  const PORTS = runPorts(run);
   const checks = [];
   const add = (name, ok, detail) => checks.push({ name, ok, detail });
 
@@ -149,11 +153,11 @@ async function doctor(run, { quiet = false } = {}) {
   add("frontend serves /signin", fe.status === 200 && fe.body.includes('id="root"'),
     `GET :${PORTS.frontend}/signin -> ${fe.status || fe.error}`);
 
-  // Vite is not strictPort: if 3000 was taken it silently moves on. Prove it bound 3000.
+  // Vite's own config is not strictPort: if the port were taken it would silently move on. Prove it bound ours.
   const logPath = path.join(ROOT, run.evidenceDir, "dev.log");
   const log = fs.existsSync(logPath) ? stripAnsi(fs.readFileSync(logPath, "utf8")) : "";
   const viteLine = (log.match(/Local:\s+(http:\/\/\S+)/) || [])[1] || "not found";
-  add("this run's Vite bound :3000", viteLine.includes(`:${PORTS.frontend}/`), `dev.log Local: ${viteLine}`);
+  add(`this run's Vite bound :${PORTS.frontend}`, viteLine.includes(`:${PORTS.frontend}/`), `dev.log Local: ${viteLine}`);
 
   const result = { ok: checks.every((c) => c.ok), at: new Date().toISOString(), checks };
   writeJson(path.join(ROOT, run.evidenceDir, "doctor.json"), result);
@@ -165,7 +169,21 @@ async function doctor(run, { quiet = false } = {}) {
 }
 
 // ---------------------------------------------------------------- start
-async function start() {
+function parsePort(args) {
+  const i = args.indexOf("--port");
+  const raw = i !== -1 ? args[i + 1] : process.env.RWA_PORT;
+  if (raw === undefined) return DEFAULT_PORT;
+  const n = Number(raw);
+  return Number.isInteger(n) && n >= 1024 && n < 65535 ? n : null;
+}
+
+async function start(args) {
+  const port = parsePort(args);
+  if (port === null) {
+    console.error("Usage: rwa.mjs start [--port N]   (N = frontend port, 1024-65534; the API uses N+1)");
+    return 2;
+  }
+  const PORTS = portsFor(port);
   const existing = readJson(STATE, null);
   if (existing && runAlive(existing)) {
     console.error(`A verify run is already active: ${existing.runId}. Reuse it, or run 'stop' first.`);
@@ -200,23 +218,32 @@ async function start() {
     dbCleanAtStart: git("status", "--porcelain", "--", DB_FILE) === "",
     node: process.version,
     platform: process.platform,
+    ports: PORTS,
   };
 
   // POSIX: detached = own process group, so 'stop' can signal the whole group.
   // Windows: NOT detached. A detached process has no console, so each child gets its own hidden
   // console and the servers' output never reaches dev.log.
+  // Same steps as 'yarn dev' (predev seeding, then React + API under concurrently), but with explicit
+  // ports: Vite gets --port/--strictPort (its config hard-codes 3000 and would silently move), the API
+  // and its CORS origin read VITE_BACKEND_PORT and PORT, and the browser bundle reads VITE_BACKEND_PORT.
   const out = fs.openSync(path.join(evidenceDir, "dev.log"), "w");
-  const child = spawn("yarn dev", {
+  const devCommand =
+    `yarn -s db:seed:dev && yarn -s concurrently -k -n react,api ` +
+    `"vite --port ${PORTS.frontend} --strictPort" "yarn -s start:api:watch"`;
+  run.devCommand = devCommand;
+  const child = spawn(devCommand, {
     cwd: ROOT,
     shell: true,
     detached: !IS_WIN,
     windowsHide: true,
     stdio: ["ignore", out, out],
+    env: { ...process.env, NODE_ENV: "development", PORT: String(PORTS.frontend), VITE_BACKEND_PORT: String(PORTS.api) },
   });
   child.unref();
   run.pid = child.pid;
   writeJson(STATE, run);
-  console.log(`run ${runId}: started 'yarn dev' (pid ${run.pid}), commit ${run.commit.slice(0, 7)} on ${run.branch}`);
+  console.log(`run ${runId}: started the app on :${PORTS.frontend} (API :${PORTS.api}), pid ${run.pid}, commit ${run.commit.slice(0, 7)} on ${run.branch}`);
   console.log(`evidence: ${run.evidenceDir}/`);
 
   const t0 = Date.now();
@@ -305,7 +332,9 @@ function cypress(args) {
     console.error("Usage: rwa.mjs cypress <spec> [more specs] [-- <extra 'cypress run' args, e.g. --component>]");
     return 2;
   }
-  const ev = loadRun().evidenceDir;
+  const run = loadRun();
+  const ev = run.evidenceDir;
+  const PORTS = runPorts(run);
   const scratch = `${ev}/scratch/`;
   const inScratch = specs.filter((s) => s.startsWith(scratch));
   if (inScratch.length && inScratch.length !== specs.length) {
@@ -314,6 +343,7 @@ function cypress(args) {
   }
   const name = "cypress-" + specs.map((s) => path.basename(s).replace(/\.(spec|cy)\.[jt]sx?$/, "")).join("+");
   const config = [
+    `baseUrl=http://localhost:${PORTS.frontend}`,
     "video=true",
     `videosFolder=${ev}/videos`,
     `screenshotsFolder=${ev}/screenshots`,
@@ -322,24 +352,28 @@ function cypress(args) {
   ];
   // One-off specs live in the run's scratch folder, outside the repo's specPattern.
   if (inScratch.length) config.push(`specPattern=${scratch}*`);
-  return exec(name, `yarn -s cypress run --spec "${specs.join(",")}" --config ${config.join(",")} ${extra.join(" ")}`.trim());
+  // apiUrl is read by cypress.config.ts tasks (db:seed, database lookups) and by cypress/support/e2e.ts.
+  const expose = `apiUrl=http://localhost:${PORTS.api}`;
+  return exec(name, `yarn -s cypress run --spec "${specs.join(",")}" --config ${config.join(",")} --expose ${expose} ${extra.join(" ")}`.trim());
 }
 
 // ---------------------------------------------------------------- stop
-async function stop() {
+async function stop(args) {
   const run = readJson(STATE, null);
   if (!run) {
+    const PORTS = portsFor(parsePort(args) ?? DEFAULT_PORT);
     console.log("No active verify run; nothing to stop.");
     for (const [name, port] of Object.entries(PORTS)) {
       if (await portInUse(port)) console.log(`Note: port ${port} (${name}) is in use by something this skill did not start. Left alone.`);
     }
     return 0;
   }
+  const PORTS = runPorts(run);
   const notes = [];
   if (IS_WIN) {
     const live = run.tree ? liveRecorded(run) : alive(run.pid) ? [{ pid: run.pid }] : [];
     for (const t of live) spawnSync("taskkill", ["/PID", String(t.pid), "/T", "/F"], { windowsHide: true });
-    notes.push(live.length ? `stopped ${live.length} recorded process(es) of this run's 'yarn dev' tree` : "this run's processes had already exited");
+    notes.push(live.length ? `stopped ${live.length} recorded process(es) of this run's app tree` : "this run's processes had already exited");
   } else if (runAlive(run)) {
     try {
       process.kill(-run.pid, "SIGTERM");
@@ -348,7 +382,7 @@ async function stop() {
     try {
       process.kill(-run.pid, "SIGKILL");
     } catch {}
-    notes.push(`stopped process group ${run.pid} ('yarn dev')`);
+    notes.push(`stopped process group ${run.pid} (the app)`);
   } else {
     notes.push("this run's processes had already exited");
   }
@@ -360,12 +394,12 @@ async function stop() {
     if (!busy.length) break;
     await sleep(1000);
   }
-  notes.push(busy.length ? `WARNING: still in use after stop: ${busy.join(", ")} - investigate, do not kill blindly` : "ports 3000/3001 free");
+  notes.push(busy.length ? `WARNING: still in use after stop: ${busy.join(", ")} - investigate, do not kill blindly` : `ports ${PORTS.frontend}/${PORTS.api} free`);
 
   const dbDirty = git("status", "--porcelain", "--", DB_FILE) !== "";
   if (dbDirty && run.dbCleanAtStart) {
     git("checkout", "--", DB_FILE);
-    notes.push(`restored ${DB_FILE} (rewritten by yarn dev's seeding)`);
+    notes.push(`restored ${DB_FILE} (rewritten by the dev seeding)`);
   } else if (dbDirty) {
     notes.push(`left ${DB_FILE} as is: it was already modified before this run started`);
   }
@@ -387,7 +421,7 @@ function writeSummary(run, notes) {
     `# Verify run ${run.runId}`,
     "",
     `- Commit: \`${run.commit}\` on \`${run.branch}\`${run.dirtyAtStart.length ? ` (uncommitted at start: ${run.dirtyAtStart.join(", ")})` : " (clean)"}`,
-    `- Started: ${run.startedAt} · Node ${run.node} · ${run.platform}`,
+    `- Started: ${run.startedAt} · Node ${run.node} · ${run.platform} · ports ${runPorts(run).frontend}/${runPorts(run).api}`,
     `- Doctor (last run): ${docs ? (docs.ok ? "healthy" : "UNHEALTHY") : "not run"}`,
     "",
     "| Check | Command | Exit | Time | Tests pass/fail/skip | Needed a retry |",
@@ -409,8 +443,9 @@ function writeSummary(run, notes) {
 }
 
 // ---------------------------------------------------------------- status
-async function status() {
+async function status(args) {
   const run = readJson(STATE, null);
+  const PORTS = run ? runPorts(run) : portsFor(parsePort(args) ?? DEFAULT_PORT);
   if (run) {
     const detail = IS_WIN && run.tree ? `${liveRecorded(run).length}/${run.tree.length} recorded processes alive` : `pid ${run.pid}`;
     console.log(`active run ${run.runId} (${runAlive(run) ? "alive" : "gone"}, ${detail}), evidence ${run.evidenceDir}/`);
@@ -426,15 +461,15 @@ async function status() {
 // trips a libuv assertion on Windows.
 const [cmd, ...rest] = process.argv.slice(2);
 const usage = () => {
-  console.error("Usage: rwa.mjs <start | doctor | exec <name> -- <command...> | cypress <spec...> | stop | status>");
+  console.error("Usage: rwa.mjs <start [--port N] | doctor | exec <name> -- <command...> | cypress <spec...> [-- args] | stop | status [--port N]>");
   return 2;
 };
 const commands = {
-  start,
+  start: () => start(rest),
   doctor: async () => ((await doctor(loadRun())).ok ? 0 : 5),
   exec: () => (rest.indexOf("--") === 1 && rest.length > 2 ? exec(rest[0], rest.slice(2).join(" ")) : usage()),
   cypress: () => cypress(rest),
-  stop,
-  status,
+  stop: () => stop(rest),
+  status: () => status(rest),
 };
 process.exitCode = await (commands[cmd] || usage)();
