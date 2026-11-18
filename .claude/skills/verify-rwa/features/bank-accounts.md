@@ -1,9 +1,9 @@
 # Feature map: bank accounts
 
 Listing, creating, and soft-deleting a signed-in user's bank accounts, plus the onboarding dialog
-that asks for one when the list is empty. Last verified at commit `3d8b9d0` (4 of 4 tests in
+that asks for one when the list is empty. Last verified at commit `b2ecdf1` (4 of 4 tests in
 `bankaccounts.spec.ts` passed with no retries, run on ports 3200/3201). Scratch and API probes were
-re-run at `68e8915`, whose app code is identical to `3d8b9d0` (only skill docs differ).
+re-run at `b9a1d39`, whose app code is identical to `b2ecdf1` (only skill docs differ).
 
 ## Starting state
 
@@ -125,7 +125,7 @@ in as the first seeded user with `cy.loginByApi`:
 | "/graphql" → "creates a new bank account" | 200; `createBankAccount.userId` is the signed-in user |
 | "/graphql" → "deletes a bank account" | 200 only. It doesn't check the result or `isDeleted` |
 
-Verified run (2026-11-17, commit `3d8b9d0`, clean tree, ports 3200/3201, Electron 146 headless,
+Verified run (2026-11-17, commit `b2ecdf1`, clean tree, ports 3200/3201, Electron 146 headless,
 Cypress 16.1.1): `rwa.mjs cypress cypress/tests/ui/bankaccounts.spec.ts` exited 0, 4 passing, 0 failing,
 0 retried, about 25 s (run `20261117-234821`).
 
