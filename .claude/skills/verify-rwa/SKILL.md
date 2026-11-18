@@ -66,6 +66,7 @@ reuse, and the ways a check can be misleading:
 | Feature | Map | Main spec |
 |---|---|---|
 | Authentication (sign-in, sign-up, sign-out) | [features/authentication.md](features/authentication.md) | `cypress/tests/ui/auth.spec.ts` |
+| Bank accounts (list, create, soft delete, empty state) | [features/bank-accounts.md](features/bank-accounts.md) | `cypress/tests/ui/bankaccounts.spec.ts` |
 
 - **Existing behavior:** run the relevant spec with `cypress <spec...>`. It runs headless and saves
   video and failure screenshots into the evidence folder. Every video from the run is kept.
@@ -165,8 +166,10 @@ feature map, also add it to the workflow's `spec` list if it should gate merges.
 
 - **Windows path length:** keep the clone at a short path (for example `C:\code\...`).
   Deep folders fail with `Filename too long` during clone and install.
-- **Pre-existing warnings are noise, not regressions:** the Electron browser deprecation,
-  `experimentalStudio` removal, the Vite CommonJS warning, and outdated `caniuse-lite`.
+- **Pre-existing warnings are noise, not regressions:** the Electron browser deprecation, the Vite
+  CommonJS warning, and outdated `caniuse-lite`. The "experimentalStudio option was removed" warning
+  is being removed by `chore/remove-experimental-studio` (task A), so expect it only on commits
+  without that change.
 - **Third-party sign-in** (Auth0, Okta, Cognito, Google) needs real credentials in `.env` and a different
   `yarn dev:*` script. This skill covers the default local sign-in only, so list those specs under "Not verified".
 
