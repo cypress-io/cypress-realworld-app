@@ -133,6 +133,15 @@ Always run `stop`, including after failures and BLOCKED results. It:
 Generated files that may remain are all git-ignored and harmless: `src/aws-exports.js`,
 `aws-exports-es5.js`, `.husky/_/`.
 
+## CI
+
+`.github/workflows/auth-verification.yml` runs the same core checks on every pull request (`yarn types`,
+the Cypress-spec type check, and `auth.spec.ts` in Chrome) and uploads screenshots and videos as an
+artifact. Its job name, `auth-verification`, is the status check to require before merging. It doesn't
+replace a local verify run: CI tests the PR head commit on Linux, while this skill gives you a doctor,
+ownership checks, and evidence on your own machine before you hand off. When you add a spec to the
+feature map, also add it to the workflow's `spec` list if it should gate merges.
+
 ## Gotchas
 
 - **Windows path length:** keep the clone at a short path (for example `C:\code\...`).
