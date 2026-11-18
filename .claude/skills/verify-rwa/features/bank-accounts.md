@@ -181,6 +181,9 @@ examples above if the seed has changed.
 - **GraphQL errors come back as HTTP 200.** Both kinds probed did: a resolver error (signed-out
   `listBankAccount`) and a validation error (`createBankAccount` with missing arguments), each with an
   `errors` array. `response.statusCode` alone doesn't prove success. Assert on `response.body.data`.
+  This holds for the default and axios `Accept` headers. With `Accept: application/graphql-response+json`,
+  a missing-argument validation error returns 400, while a resolver error stays 200 (review run
+  `20261118-001619`).
 - **REST intercepts don't match UI traffic.** Nothing in `src/` requests `/bankAccounts`. Intercept
   `POST /graphql` by `operationName` instead. `transaction-view.spec.ts` sets a `GET /bankAccounts`
   alias that it never waits on.
@@ -196,6 +199,8 @@ examples above if the seed has changed.
     runs showed it for `#bankAccounts`, `#notifications`, and `#publicTransactions`.
 - **Seed problems:** `cy.task("db:seed")` reloads `database-seed.json` before every test, so leftover
   data from an earlier run (or an empty database from `start:empty`) doesn't affect the spec. If that file
-  had no users, `cy.database("find", "users")` would yield nothing and the `beforeEach` would throw a
-  TypeError on `ctx.user.username` (from the code). If `db:seed` itself fails, check the doctor: the API is
+  had no users (or the users table were empty), the `find:database` task's `_.find(...)` returns
+  `undefined`, and Cypress fails the task before the `.then` runs: "CypressError: `cy.task('find:database')`
+  failed … The task 'find:database' returned undefined. You must return a value, null, or a promise that
+  resolves to a value or null" (seen in review run `20261118-001619`). If `db:seed` itself fails, check the doctor: the API is
   probably down or on another port.
