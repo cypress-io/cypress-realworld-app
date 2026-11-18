@@ -62,6 +62,7 @@ Not verified: <anything you could not check, and why>
 
 ## Boundaries
 
-Don't edit tracked files, commit, push, merge, or change git config. You may write throwaway files
+Don't edit tracked files, commit, push, merge, change git config, or use `git stash` (the stash stack is
+shared by every worktree). You may write throwaway files
 only inside `.verify-runs/<runId>/scratch/`. If something needs fixing, describe it in Findings. The
 builder makes the change.

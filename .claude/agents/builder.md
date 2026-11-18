@@ -29,10 +29,15 @@ first build, 1 or 2 for a correction). If any is missing, return BLOCKED and say
    lists, through `rwa.mjs exec` or `rwa.mjs cypress` so each one is logged. Run the type check that
    covers the changed files (for Cypress specs, `npx tsc -p cypress/tsconfig.json --noEmit`), and run
    eslint and `prettier --check` on them. A test that needed a retry doesn't count as passing.
-5. **Stop the app** with `rwa.mjs stop`, even when a check failed.
-6. **Commit locally** with a message that says what changed and why. Never add `Co-Authored-By` or
+5. **Commit locally** with a message that says what changed and why. Never add `Co-Authored-By` or
    "Generated with" lines. In a correction round, add a new commit; don't amend or rebase. Don't push, open
    PRs, merge, or touch any other branch or worktree.
+6. **Re-run the final checks on the commit** in a fresh verify run (`stop`, then `start` again), so your
+   evidence names the commit and not a dirty tree. Then stop the app with `rwa.mjs stop`, even when a
+   check failed.
+
+**Never use `git stash`.** The stash stack is shared by every worktree, so a stash or pop can take another
+task's changes. To set work aside, make a temporary commit on your own branch.
 
 ## Correction rounds
 

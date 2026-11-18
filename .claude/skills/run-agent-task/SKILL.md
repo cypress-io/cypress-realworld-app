@@ -110,18 +110,21 @@ criterion testable without guessing what the human wants, stop with
 ## 4. Environment
 
 ```bash
-git worktree add <worktree> -b <branch> origin/<base>
+git fetch origin <base> && git worktree add --no-track <worktree> -b <branch> origin/<base>
 cd <worktree> && yarn install --frozen-lockfile --prefer-offline   # about 3.5 min; run it in the background
 ```
 
-The worktree path must stay short (Windows MAX_PATH), and `claim` already picks one next to the main
+`--no-track` matters: with the base as upstream, a bare `git push` from the worktree would land on the
+base branch. The worktree path must stay short (Windows MAX_PATH), and `claim` already picks one next to the main
 checkout.
 
 ## 5. Build
 
 Launch the Builder as a **background** subagent. Use the `builder` agent type if it's loaded.
-Otherwise use `general-purpose`, and start the prompt with "Read `.claude/agents/builder.md` in the
-worktree and follow it exactly." Pass:
+Otherwise use `general-purpose`, and start the prompt with "Read `<main checkout>/.claude/agents/builder.md`
+and follow it exactly." Give the role file as an **absolute path in the main checkout**: the
+worktree's base branch may predate the pipeline, so its copy can be missing or old. Record the launch
+time (`date -u`) so you can compute the agent's minutes. Pass:
 
 - the handoff path
 - the worktree
@@ -144,7 +147,7 @@ When it returns:
 ## 6. Review
 
 Launch the Reviewer as a **background** subagent: the `reviewer` agent type, or `general-purpose`
-told to follow `.claude/agents/reviewer.md`. Pass:
+told to follow `<main checkout>/.claude/agents/reviewer.md` (absolute path, as for the Builder). Pass:
 
 - the acceptance criteria
 - the exact head and base SHAs
